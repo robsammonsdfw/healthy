@@ -56,7 +56,12 @@
     }
     
     [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.title = @"My Log";
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.title=@"My Log";
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
     lbl_dateHdr.textColor = AccentFontColor
     
@@ -398,8 +403,12 @@
         }
     }
         
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.title = @"My Log";
+    self.navigationItem.title=@"My Moves";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
     detailViewInView = NO;

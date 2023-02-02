@@ -188,8 +188,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         //                              @"2019/01/29"];
         
         //set title
+        [self.navigationController setNavigationBarHidden:NO];
+        [self.navigationController.navigationBar setTranslucent:NO];
+        [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+        self.navigationItem.hidesBackButton = YES;
         self.navigationItem.title=@"My Moves";
-        self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
         
         //set right navigation bar
         UIImage *btnImage1 = [[UIImage imageNamed:@"set32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -350,6 +355,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [soapWebService offlineSyncApi];
     [self loadTableData:self.date_currentDate];
 
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.title=@"My Moves";
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
 
 - (void)viewWillDisappear:(BOOL)animated

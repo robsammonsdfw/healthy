@@ -27,10 +27,6 @@
 #pragma mark VIEW LIFECYCLE
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationController setNavigationBarHidden:NO];
-    [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 //    CAGradientLayer *gradient = [CAGradientLayer layer];
 //    gradient.frame = self.navigationController.navigationBar.bounds;
 //    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor greenColor] CGColor], (id)[[UIColor yellowColor] CGColor], nil];
@@ -46,14 +42,17 @@
         self.showPopUpVw.hidden = true;
     }
     
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.title=@"My Goal";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-    
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeInfoLight];
     [btn1 addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchDown];
     btn1.tintColor = UIColor.whiteColor;
     UIBarButtonItem * infoButton = [[UIBarButtonItem alloc] initWithCustomView:btn1];
-    
-    self.navigationItem.title = @"My Goal";
     self.navigationItem.leftBarButtonItem = infoButton;
 
     _imgbg.backgroundColor=[UIColor whiteColor];
