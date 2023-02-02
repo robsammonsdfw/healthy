@@ -992,12 +992,12 @@ static inline UIColor *GetRandomUIColor()
     
     FMResultSet *rs = [db executeQuery:query];
     totalSugarValue = 0;
+    double totalSugarCalories = 0;
     while ([rs next]) {
         int fatGrams = [rs doubleForColumn:@"Fat"];
         double sugar = [rs doubleForColumn:@"Sugars"];
-        double sugarValue = [rs doubleForColumn:@"NumberOfServings"] * ((sugar * 3.8) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]);
-        sugarValue = (sugarValue/[dietmasterEngine getBMR]) * 100;
-        
+        double sugarValue = sugar * [rs doubleForColumn:@"NumberOfServings"] * ([rs doubleForColumn:@"GramWeight"] / 100 / [rs doubleForColumn:@"ServingSize"]);
+        totalSugarCalories += (sugarValue * 3.8);
         totalSugarValue += sugarValue;
         
         int totalFatCalories = [rs doubleForColumn:@"NumberOfServings"] * ((fatGrams * 9.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]);
@@ -1014,13 +1014,13 @@ static inline UIColor *GetRandomUIColor()
         
         int totalCalories = [rs doubleForColumn:@"NumberOfServings"] * (([rs doubleForColumn:@"Calories"] * ([rs doubleForColumn:@"GramWeight"] / 100)) / [rs doubleForColumn:@"ServingSize"]);
         
-        num_totalCalories = num_totalCalories + totalCalories;
+        num_totalCalories += totalCalories;
     }
    
     NSString *sugarStr = [NSString stringWithFormat:@"%.1f",totalSugarValue];
     lblSugar.text = [NSString stringWithFormat:@"%@",sugarStr];
     
-    if ((totalSugarValue > 10) || (totalSugarValue == 10))
+    if (totalSugarCalories / num_totalCalories > .1) //if sugar radio is > 10%
     {
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_suagrGraphImageVw setTintColor:[UIColor redColor]];
