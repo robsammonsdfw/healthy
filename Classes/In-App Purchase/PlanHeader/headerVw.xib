@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment version="2304" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="headerVw" rowHeight="85" id="KGk-i7-Jjw" customClass="headerVw">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6x5-iV-6gc">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="90 DAY PLANS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="NIz-M3-8hf">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <color key="textColor" red="0.97254901959999995" green="0.96862745100000003" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.18823529410000001" green="0.67450980390000004" blue="0.8862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="NIz-M3-8hf" secondAttribute="trailing" id="2p8-dm-yjP"/>
+                            <constraint firstAttribute="bottom" secondItem="NIz-M3-8hf" secondAttribute="bottom" id="68J-Jo-c6r"/>
+                            <constraint firstItem="NIz-M3-8hf" firstAttribute="top" secondItem="6x5-iV-6gc" secondAttribute="top" id="D2c-wr-Zn4"/>
+                            <constraint firstItem="NIz-M3-8hf" firstAttribute="leading" secondItem="6x5-iV-6gc" secondAttribute="leading" id="iw0-ln-O4M"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="6x5-iV-6gc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="EWf-6H-upB"/>
+                    <constraint firstAttribute="trailing" secondItem="6x5-iV-6gc" secondAttribute="trailing" id="cD0-Pb-OeL"/>
+                    <constraint firstItem="6x5-iV-6gc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="dpG-p9-C09"/>
+                    <constraint firstAttribute="bottom" secondItem="6x5-iV-6gc" secondAttribute="bottom" constant="10" id="pEn-0Q-87R"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="accentClrVw" destination="NIz-M3-8hf" id="SD8-gy-WYL"/>
+                <outlet property="planLbl" destination="NIz-M3-8hf" id="4qY-zy-BiV"/>
+            </connections>
+            <point key="canvasLocation" x="131.8840579710145" y="130.24553571428572"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PickerViewController" customModule="MyMoves" customModuleProvider="target">
+            <connections>
+                <outlet property="picker" destination="a6a-pw-Yfb" id="4DZ-25-KaC"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vRk-bm-7BZ">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <gestureRecognizers/>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="R9J-sh-VCB" appends="YES" id="Pyu-nU-KqZ"/>
+                    </connections>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vAa-eg-jCi">
+                    <rect key="frame" x="47" y="167" width="281" height="333.5"/>
+                    <subviews>
+                        <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a6a-pw-Yfb">
+                            <rect key="frame" x="0.0" y="0.0" width="281" height="293.5"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </pickerView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OlZ-Cb-wLr">
+                            <rect key="frame" x="0.0" y="293.5" width="281" height="40"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="W3h-Qm-G8j"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                            <state key="normal" title="SELECT">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="okButtonAction:" destination="-1" eventType="touchUpInside" id="Rsa-RN-1sP"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="OlZ-Cb-wLr" secondAttribute="trailing" id="7Ad-5P-h1c"/>
+                        <constraint firstItem="a6a-pw-Yfb" firstAttribute="leading" secondItem="vAa-eg-jCi" secondAttribute="leading" id="BS3-9q-ZWy"/>
+                        <constraint firstItem="OlZ-Cb-wLr" firstAttribute="leading" secondItem="vAa-eg-jCi" secondAttribute="leading" id="FMR-fk-dAV"/>
+                        <constraint firstItem="a6a-pw-Yfb" firstAttribute="top" secondItem="vAa-eg-jCi" secondAttribute="top" id="Yxy-qT-EuL"/>
+                        <constraint firstAttribute="bottom" secondItem="OlZ-Cb-wLr" secondAttribute="bottom" id="dpc-pq-2y4"/>
+                        <constraint firstAttribute="trailing" secondItem="a6a-pw-Yfb" secondAttribute="trailing" id="f9F-RA-kxp"/>
+                        <constraint firstItem="OlZ-Cb-wLr" firstAttribute="top" secondItem="a6a-pw-Yfb" secondAttribute="bottom" id="koj-8b-6DB"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="vRk-bm-7BZ" secondAttribute="trailing" id="2QT-6P-zfz"/>
+                <constraint firstItem="vRk-bm-7BZ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Kiz-rA-y1l"/>
+                <constraint firstAttribute="bottom" secondItem="vRk-bm-7BZ" secondAttribute="bottom" id="fR7-7Y-EMs"/>
+                <constraint firstItem="vAa-eg-jCi" firstAttribute="width" secondItem="vRk-bm-7BZ" secondAttribute="width" multiplier="0.75" id="jBD-sa-BN7"/>
+                <constraint firstItem="vRk-bm-7BZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="k4j-p9-THG"/>
+                <constraint firstItem="vAa-eg-jCi" firstAttribute="centerY" secondItem="vRk-bm-7BZ" secondAttribute="centerY" id="xat-v1-9er"/>
+                <constraint firstItem="vAa-eg-jCi" firstAttribute="height" secondItem="vRk-bm-7BZ" secondAttribute="height" multiplier="0.5" id="xoJ-KA-QZm"/>
+                <constraint firstItem="vAa-eg-jCi" firstAttribute="centerX" secondItem="vRk-bm-7BZ" secondAttribute="centerX" id="yUm-lm-zic"/>
+            </constraints>
+        </view>
+        <tapGestureRecognizer id="R9J-sh-VCB">
+            <connections>
+                <action selector="dismissOnTap:" destination="-1" id="FIg-7R-EdV"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+</document>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DailyActivityTypeVC">
+            <connections>
+                <outlet property="btnJobType1" destination="Mf4-Ez-rbW" id="sxL-zG-JnO"/>
+                <outlet property="btnJobType2" destination="68h-wp-5Et" id="9oV-Qd-Jlx"/>
+                <outlet property="btnJobType3" destination="eYA-VW-dKj" id="mE9-0i-lbb"/>
+                <outlet property="btnJobType4" destination="T8Z-nS-NA3" id="1F7-qc-6wn"/>
+                <outlet property="btnJobType5" destination="Nqs-ue-gQi" id="C9U-pf-vgq"/>
+                <outlet property="btnJobType6" destination="eJ9-A6-mU2" id="6Gd-jU-mb9"/>
+                <outlet property="btnJobType7" destination="cbz-Jn-mdA" id="fDH-Qh-fGE"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ufp-Yi-I3d">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="92"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Which of the following best describes how active you are in your daily job or professional?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aDx-XC-DHe">
+                            <rect key="frame" x="25" y="10" width="325" height="72"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="aDx-XC-DHe" secondAttribute="trailing" constant="25" id="MjO-hl-PLk"/>
+                        <constraint firstAttribute="bottom" secondItem="aDx-XC-DHe" secondAttribute="bottom" constant="10" id="dd1-sm-KnB"/>
+                        <constraint firstItem="aDx-XC-DHe" firstAttribute="top" secondItem="Ufp-Yi-I3d" secondAttribute="top" constant="10" id="hp8-Xc-l9h"/>
+                        <constraint firstItem="aDx-XC-DHe" firstAttribute="leading" secondItem="Ufp-Yi-I3d" secondAttribute="leading" constant="25" id="iqk-Fa-3Hi"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jc3-kp-xa4">
+                    <rect key="frame" x="0.0" y="92" width="375" height="160"/>
+                    <subviews>
+                        <button opaque="NO" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mf4-Ez-rbW">
+                            <rect key="frame" x="22" y="20" width="122" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="122" id="yht-rl-wYZ"/>
+                            </constraints>
+                            <state key="normal" title="  Sedentary" image="radio_btn.png">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" image="radio_btn_act.png"/>
+                            <connections>
+                                <action selector="btnJobType:" destination="-1" eventType="touchUpInside" id="iIR-py-o60"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="14" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="68h-wp-5Et">
+                            <rect key="frame" x="22" y="52" width="180" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="180" id="Ngc-00-80J"/>
+                            </constraints>
+                            <state key="normal" title="  Moderately Active" image="radio_btn.png">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" image="radio_btn_act.png"/>
+                            <connections>
+                                <action selector="btnJobType:" destination="-1" eventType="touchUpInside" id="rLu-P5-Dyq"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="15" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-VW-dKj">
+                            <rect key="frame" x="22" y="84" width="83" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="83" id="78K-EF-K5F"/>
+                            </constraints>
+                            <state key="normal" title="  Active" image="radio_btn.png">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" image="radio_btn_act.png"/>
+                            <connections>
+                                <action selector="btnJobType:" destination="-1" eventType="touchUpInside" id="hM0-U4-9Wu"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="16" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T8Z-nS-NA3">
+                            <rect key="frame" x="22" y="116" width="122" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="122" id="VLT-lx-lDO"/>
+                            </constraints>
+                            <state key="normal" title="  Very Active" image="radio_btn.png">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" image="radio_btn_act.png"/>
+                            <connections>
+                                <action selector="btnJobType:" destination="-1" eventType="touchUpInside" id="sL9-Fm-uPf"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="T8Z-nS-NA3" firstAttribute="top" secondItem="eYA-VW-dKj" secondAttribute="bottom" constant="10" id="49S-i9-W5N"/>
+                        <constraint firstItem="68h-wp-5Et" firstAttribute="top" secondItem="Mf4-Ez-rbW" secondAttribute="bottom" constant="10" id="CTu-SY-wxn"/>
+                        <constraint firstAttribute="height" constant="160" id="Fjs-7W-VNc"/>
+                        <constraint firstItem="T8Z-nS-NA3" firstAttribute="leading" secondItem="jc3-kp-xa4" secondAttribute="leading" constant="22" id="GP3-z9-IyD"/>
+                        <constraint firstItem="68h-wp-5Et" firstAttribute="leading" secondItem="jc3-kp-xa4" secondAttribute="leading" constant="22" id="KLo-x9-nCP"/>
+                        <constraint firstItem="eYA-VW-dKj" firstAttribute="top" secondItem="68h-wp-5Et" secondAttribute="bottom" constant="10" id="chx-PE-lhd"/>
+                        <constraint firstItem="eYA-VW-dKj" firstAttribute="leading" secondItem="jc3-kp-xa4" secondAttribute="leading" constant="22" id="pee-uZ-fPw"/>
+                        <constraint firstItem="Mf4-Ez-rbW" firstAttribute="top" secondItem="jc3-kp-xa4" secondAttribute="top" constant="20" id="sRL-aK-usw"/>
+                        <constraint firstItem="Mf4-Ez-rbW" firstAttribute="leading" secondItem="jc3-kp-xa4" secondAttribute="leading" constant="22" id="vdI-Yl-Juw"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ePd-5A-NPD">
+                    <rect key="frame" x="0.0" y="289" width="375" height="378"/>
+                    <subviews>
+                        <button opaque="NO" tag="17" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nqs-ue-gQi">
+                            <rect key="frame" x="30" y="20" width="137" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="35w-CH-y9f"/>
+                                <constraint firstAttribute="width" constant="137" id="wke-4J-rI8"/>
+                            </constraints>
+                            <state key="normal" title=" Type I" image="radio_btn.png">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" image="radio_btn_act.png"/>
+                            <connections>
+                                <action selector="btnJobType:" destination="-1" eventType="touchUpInside" id="iRb-Fg-KDr"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I can eat anything I want and not gain weight. I have a very hard time gaining weight." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rc8-Cv-hcp">
+                            <rect key="frame" x="55" y="47" width="305" height="54"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" tag="18" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eJ9-A6-mU2">
+                            <rect key="frame" x="30" y="116" width="164" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="164" id="UeK-VF-aSN"/>
+                                <constraint firstAttribute="height" constant="22" id="eES-MY-fZl"/>
+                            </constraints>
+                            <state key="normal" title=" Type II" image="radio_btn.png">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" image="radio_btn_act.png"/>
+                            <connections>
+                                <action selector="btnJobType:" destination="-1" eventType="touchUpInside" id="QJT-AH-ADT"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="19" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbz-Jn-mdA">
+                            <rect key="frame" x="30" y="194" width="137" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="137" id="Z1w-xS-LU2"/>
+                                <constraint firstAttribute="height" constant="22" id="aTj-WT-XtM"/>
+                            </constraints>
+                            <state key="normal" title=" Type III" image="radio_btn.png">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" image="radio_btn_act.png"/>
+                            <connections>
+                                <action selector="btnJobType:" destination="-1" eventType="touchUpInside" id="Ygh-Cx-HtR"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I can lose or gain weight by adjusting my activity level and eating habits." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z6M-W8-jQT">
+                            <rect key="frame" x="55" y="143" width="305" height="36"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I find it very hard to lose weight. I gain weight very easily and have to watch everything I eat." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6YC-r9-eMp">
+                            <rect key="frame" x="55" y="221" width="305" height="54"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJe-02-u04">
+                            <rect key="frame" x="0.0" y="323" width="187" height="55"/>
+                            <color key="backgroundColor" red="0.18823529410000001" green="0.7725490196" blue="1" alpha="0.90029633620000005" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="55" id="F4J-B2-aBM"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <state key="normal" title="Previous">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnPreviousClicked:" destination="-1" eventType="touchUpInside" id="7A9-Hs-LJz"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o7h-nU-kVD">
+                            <rect key="frame" x="188" y="323" width="187" height="55"/>
+                            <color key="backgroundColor" red="0.18823529410000001" green="0.7725490196" blue="1" alpha="0.90029633620000005" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="55" id="HSv-iG-IVf"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <state key="normal" title="Next">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnNextClicked:" destination="-1" eventType="touchUpInside" id="B7B-if-R6s"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="|" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uFA-0c-HYi">
+                            <rect key="frame" x="187" y="360" width="1" height="18"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="igX-5B-MRe"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="6YC-r9-eMp" firstAttribute="top" secondItem="cbz-Jn-mdA" secondAttribute="bottom" constant="5" id="0b6-ph-KYa"/>
+                        <constraint firstItem="uFA-0c-HYi" firstAttribute="leading" secondItem="cJe-02-u04" secondAttribute="trailing" id="89z-fH-9Rs"/>
+                        <constraint firstAttribute="trailing" secondItem="o7h-nU-kVD" secondAttribute="trailing" id="8iG-L3-x1C"/>
+                        <constraint firstItem="6YC-r9-eMp" firstAttribute="leading" secondItem="ePd-5A-NPD" secondAttribute="leading" constant="55" id="AiH-hr-aB0"/>
+                        <constraint firstItem="Rc8-Cv-hcp" firstAttribute="leading" secondItem="ePd-5A-NPD" secondAttribute="leading" constant="55" id="I8X-L4-Isc"/>
+                        <constraint firstItem="Z6M-W8-jQT" firstAttribute="top" secondItem="eJ9-A6-mU2" secondAttribute="bottom" constant="5" id="MrW-L5-4Ds"/>
+                        <constraint firstItem="Nqs-ue-gQi" firstAttribute="leading" secondItem="ePd-5A-NPD" secondAttribute="leading" constant="30" id="OGF-zo-hNS"/>
+                        <constraint firstAttribute="bottom" secondItem="uFA-0c-HYi" secondAttribute="bottom" id="OPM-fO-8iA"/>
+                        <constraint firstAttribute="bottom" secondItem="o7h-nU-kVD" secondAttribute="bottom" id="RWx-zQ-Mx9"/>
+                        <constraint firstAttribute="trailing" secondItem="6YC-r9-eMp" secondAttribute="trailing" constant="15" id="SDV-al-cpH"/>
+                        <constraint firstItem="cbz-Jn-mdA" firstAttribute="top" secondItem="Z6M-W8-jQT" secondAttribute="bottom" constant="15" id="VtR-SB-dkh"/>
+                        <constraint firstItem="uFA-0c-HYi" firstAttribute="centerX" secondItem="ePd-5A-NPD" secondAttribute="centerX" id="Zkx-MP-B4E"/>
+                        <constraint firstItem="eJ9-A6-mU2" firstAttribute="leading" secondItem="ePd-5A-NPD" secondAttribute="leading" constant="30" id="bJ7-jG-w8u"/>
+                        <constraint firstItem="Z6M-W8-jQT" firstAttribute="leading" secondItem="ePd-5A-NPD" secondAttribute="leading" constant="55" id="fi5-su-qjc"/>
+                        <constraint firstItem="Nqs-ue-gQi" firstAttribute="top" secondItem="ePd-5A-NPD" secondAttribute="top" constant="20" id="ibM-Tn-RK5"/>
+                        <constraint firstAttribute="bottom" secondItem="cJe-02-u04" secondAttribute="bottom" id="isp-lH-n0S"/>
+                        <constraint firstItem="Rc8-Cv-hcp" firstAttribute="top" secondItem="Nqs-ue-gQi" secondAttribute="bottom" constant="5" id="l6y-kQ-3rk"/>
+                        <constraint firstItem="cbz-Jn-mdA" firstAttribute="leading" secondItem="ePd-5A-NPD" secondAttribute="leading" constant="30" id="mKj-JW-Odg"/>
+                        <constraint firstItem="cJe-02-u04" firstAttribute="leading" secondItem="ePd-5A-NPD" secondAttribute="leading" id="qKb-Lj-Bbe"/>
+                        <constraint firstAttribute="trailing" secondItem="Z6M-W8-jQT" secondAttribute="trailing" constant="15" id="uG5-N7-5gb"/>
+                        <constraint firstAttribute="trailing" secondItem="Rc8-Cv-hcp" secondAttribute="trailing" constant="15" id="vsC-La-2qi"/>
+                        <constraint firstItem="eJ9-A6-mU2" firstAttribute="top" secondItem="Rc8-Cv-hcp" secondAttribute="bottom" constant="15" id="we7-Sh-ZM9"/>
+                        <constraint firstItem="o7h-nU-kVD" firstAttribute="leading" secondItem="uFA-0c-HYi" secondAttribute="trailing" id="wup-0A-0R2"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Body Type" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PbJ-nh-BIb">
+                    <rect key="frame" x="113" y="260" width="149.5" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="U7O-Zb-RHo"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="ePd-5A-NPD" firstAttribute="top" secondItem="PbJ-nh-BIb" secondAttribute="bottom" constant="8" id="5Hw-eX-FAW"/>
+                <constraint firstItem="PbJ-nh-BIb" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="99g-fD-af7"/>
+                <constraint firstItem="jc3-kp-xa4" firstAttribute="top" secondItem="Ufp-Yi-I3d" secondAttribute="bottom" id="FYz-Ix-MzM"/>
+                <constraint firstAttribute="trailing" secondItem="jc3-kp-xa4" secondAttribute="trailing" id="IhX-oa-flu"/>
+                <constraint firstItem="Ufp-Yi-I3d" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="MS2-Ob-ioY"/>
+                <constraint firstItem="PbJ-nh-BIb" firstAttribute="top" secondItem="jc3-kp-xa4" secondAttribute="bottom" constant="8" id="Ojg-Bw-8sM"/>
+                <constraint firstAttribute="trailing" secondItem="Ufp-Yi-I3d" secondAttribute="trailing" id="Po3-9X-mzj"/>
+                <constraint firstItem="ePd-5A-NPD" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Tk9-Xh-3b3"/>
+                <constraint firstItem="Ufp-Yi-I3d" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="bs0-6Z-S3N"/>
+                <constraint firstAttribute="trailing" secondItem="ePd-5A-NPD" secondAttribute="trailing" id="cuI-Id-6jR"/>
+                <constraint firstAttribute="bottom" secondItem="ePd-5A-NPD" secondAttribute="bottom" id="ulc-3k-mZ2"/>
+                <constraint firstItem="jc3-kp-xa4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="w9N-FS-Whr"/>
+            </constraints>
+            <point key="canvasLocation" x="117.59999999999999" y="43.628185907046479"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="radio_btn.png" width="20.5" height="20.5"/>
+        <image name="radio_btn_act.png" width="20.5" height="20.5"/>
+    </resources>
+</document>

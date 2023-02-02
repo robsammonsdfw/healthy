@@ -1,0 +1,100 @@
+//
+// Prefix header for all source files of the 'DietMasterGo' target in the 'DietMasterGo' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+    #import "Common.h"
+    #import "DietMasterGoAppDelegate.h"
+    #import <Security/Security.h>
+#endif
+
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+//#define NSLog(...)
+#define WEIGHT_ENTRY 0
+#define BODYFAT_ENTRY 1
+
+// Hardware Info
+#define   SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+
+#define IS_IPHONE_4 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+#define IS_IPHONE_X_XR_XS ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )812 ) < DBL_EPSILON )
+
+
+#define   IsIOS4_3        (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"4.3"))
+#define   IsIOS5          (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.0"))
+#define   IsIOS6          (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0"))
+#define   IsIOS7          (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0"))
+
+#define   IsIPad          isIPad()
+#define   IsIPhone        !isIPad()
+#define   IsRetina        isRetina()
+
+#define AppDel ((DietMasterGoAppDelegate *)[UIApplication sharedApplication].delegate)
+
+//Color
+#define RGB(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0] //UIColorFromRGB(0x#0084cb);
+
+//DMGOPLUS
+#define PrimaryColor UIColorFromRGB(0xF2C53D);
+#define PrimaryDarkColor UIColorFromRGB(0x444746);
+#define AccentColor UIColorFromRGB(0x000000);
+#define ProgressColor UIColorFromRGB(0x000000);
+
+//DMGOPLUS
+#define PrimaryFontColor [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1];
+#define PrimaryDarkFontColor [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1];
+#define AccentFontColor [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1];
+
+//DMGOPLUS
+#define graphGraindentColor [CPTGradient gradientWithBeginningColor:UIColorFromRGB(0x000000) endingColor:[CPTColor colorWithCGColor:UIColorFromRGB(0x000000).CGColor]]
+
+//HHT to change image color dynamically
+#define HeartImageColor [UIColor colorWithRed:0.0/255.0 green:105.0/255.0 blue:160.0/255.0 alpha:1];
+#define OwnerMessageImageColor [UIColor colorWithRed:0.0/255.0 green:105.0/255.0 blue:160.0/255.0 alpha:1];
+#define OpponentMessageImageColor [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:234.0/255.0 alpha:1];
+
+#define PLIST_NAME @"AppDefaults.plist"
+#define Support_Email @"apps.dmgo@dietmastersoftware.com"
+#define APP_NAME @"DietMaster Go"
+
+#pragma mark ----> In-App Purchase :-
+
+///One time account activation fee - Non-Consumable
+#define kOneTimeAccountActivationProductId @"com.dietmaster.dietmastergo.NonConsumable.ActivationFee"
+
+#pragma mark :- For Initial Payment
+//90 DAY PLANS
+#define Bronze90DayPID @"com.dietmastergoplus.Bronze.90DayPlan1" ///Bronze - 90 Day Plan
+#define Bronze90DayWebaddress @"https://dietmastersoftware.com/mdiet-checkout/?level=8" //Bronze - 90 Day Plan
+
+#define Silver90DayPID @"com.dietmaster.dietmastergoplus.Silver.90DayPlan1" ///Silver - 90 Day Plan
+#define Silver90DayWebaddress @"https://dietmastersoftware.com/mdiet-checkout/?level=9" //Bronze - 90 Day Plan
+
+#define Gold90DayPID @"com.dietmaster.dietmastergoplus.Gold.90DayPlan" ///Gold - 90 Day Plan
+#define Gold90DayWebaddress @"https://dietmastersoftware.com/mdiet-checkout/?level=10" //Gold - 90 Day Plan
+
+//ONE MONTH PLANS
+#define Bronze30DayPID @"com.dietmaster.dietmastergoplus.Bronze.30DayPlan" ///Bronze - 30 Day Plan
+#define Bronze30DayWebaddress @"https://dietmastersoftware.com/mdiet-checkout/?level=12" //Bronze - 30 Day Plan
+
+#define Silver30DayPID @"com.dietmaster.dietmastergoplus.Silver.30DayPlan" ///Silver - 30 Day Plan
+#define Silver30DayWebaddress @"https://dietmastersoftware.com/mdiet-checkout/?level=13" //Silver - 30 Day Plan
+
+#define Gold30DayPID @"com.dietmaster.dietmastergoplus.Gold.30DayPlan" ///Gold - 30 Day Plan
+#define Gold30DayWebaddress @"https://dietmastersoftware.com/mdiet-checkout/?level=14" //Bronze - 30 Day Plan
+
+#pragma mark :- After Initial Payment
+//90 DAY PLANS
+#define kBronze90DayPID @"com.dietmaster.dietmastergoplus.Bronze.90Dayplan.AfterInitialPurchase" ///Bronze - 90 Day Plan
+#define kSilver90DayPID @"com.dietmaster.dietmastergoplus.Silver.90Dayplan.AfterInitialPurchase" ///Silver - 90 Day Plan
+#define kGold90DayPID @"com.dietmaster.dietmastergoplus.Gold.90Dayplan.AfterInitialPurchase" ///Gold - 90 Day Plan
+
+//ONE MONTH PLANS
+//#define kBronze30DayPID @"com.dietmaster.dietmastergoplus.Bronze.OneMonthPlan.AfterInitialPurchase" ///Bronze - 30 Day Plan
+//#define kSilver30DayPID @"com.dietmaster.dietmastergoplus.Silver.OneMonthPlan.AfterInitialPurchase" ///Silver - 30 Day Plan
+//#define kGold30DayPID @"com.dietmaster.dietmastergoplus.Gold.OneMonthPlan.AfterInitialPurchase" ///Gold - 30 Day Plan

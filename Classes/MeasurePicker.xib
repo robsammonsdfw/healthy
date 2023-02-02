@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MeasurePicker">
+            <connections>
+                <outlet property="pickerView" destination="5" id="7"/>
+                <outlet property="view" destination="1" id="3"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Default_BG.png" translatesAutoresizingMaskIntoConstraints="NO" id="4">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XI4-tF-A2l">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                    <color key="backgroundColor" red="0.22330771934408278" green="0.22330771934408278" blue="0.22330771934408278" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="RJN-Xu-3uV"/>
+                    </constraints>
+                </view>
+                <navigationBar contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="11">
+                    <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                    <items>
+                        <navigationItem title="Select Measure" id="12">
+                            <barButtonItem key="leftBarButtonItem" title="Cancel" id="14">
+                                <connections>
+                                    <action selector="cancelSaveMeasure:" destination="-1" id="15"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem key="rightBarButtonItem" title="Save" style="done" id="13">
+                                <connections>
+                                    <action selector="sendMeasure:" destination="-1" id="16"/>
+                                </connections>
+                            </barButtonItem>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5">
+                    <rect key="frame" x="0.0" y="64" width="320" height="250"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="250" id="zr9-qz-SGf"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="8"/>
+                        <outlet property="delegate" destination="-1" id="9"/>
+                    </connections>
+                </pickerView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="XI4-tF-A2l" secondAttribute="trailing" id="70b-dK-IYv"/>
+                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GU3-wN-aOl"/>
+                <constraint firstItem="5" firstAttribute="top" secondItem="11" secondAttribute="bottom" id="NzK-vb-wAQ"/>
+                <constraint firstItem="5" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="RQj-Ms-Wxw"/>
+                <constraint firstItem="11" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Ry9-bF-Vvx"/>
+                <constraint firstItem="11" firstAttribute="top" secondItem="1" secondAttribute="top" constant="20" id="VNX-wD-QeY"/>
+                <constraint firstAttribute="trailing" secondItem="11" secondAttribute="trailing" id="Xy9-Vo-F2D"/>
+                <constraint firstItem="XI4-tF-A2l" firstAttribute="top" secondItem="1" secondAttribute="top" id="mbX-Fo-tjF"/>
+                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" id="q6t-0l-XCU"/>
+                <constraint firstAttribute="bottom" secondItem="4" secondAttribute="bottom" id="sFs-Bd-Hwb"/>
+                <constraint firstAttribute="trailing" secondItem="5" secondAttribute="trailing" id="tUC-AW-MdE"/>
+                <constraint firstAttribute="trailing" secondItem="4" secondAttribute="trailing" id="vbz-2h-CPd"/>
+                <constraint firstItem="XI4-tF-A2l" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="wSu-T9-xic"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="132.80000000000001" y="143.02848575712144"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Default_BG.png" width="320" height="480"/>
+    </resources>
+</document>

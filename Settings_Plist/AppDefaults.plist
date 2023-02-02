@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>app_name_short</key>
+	<string>DietMasterGoPlus</string>
+	<key>app_name_long</key>
+	<string>DietMasterGoPlus™</string>
+	<key>datecreated</key>
+	<string>2018-04-12</string>
+	<key>support_email</key>
+	<string>apps.dmgo@dietmastersoftware.com</string>
+	<key>lastupdate</key>
+	<string>2018-04-12</string>
+	<key>version</key>
+	<string>4.0</string>
+	<key>is_privatelabel</key>
+	<false/>
+	<key>account_code</key>
+	<string>dmg_mobile</string>
+</dict>
+</plist>
