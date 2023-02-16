@@ -841,6 +841,8 @@ static inline UIColor *GetRandomUIColor()
     [_cpfLbl release];
     [_gotoWorkout release];
     [_gotoScheduled release];
+    [lblCurrent_BMI release];
+    [lblBody_Fat release];
     [super dealloc];
     
     [lbl_CaloriesLogged release];
@@ -1223,7 +1225,7 @@ static inline UIColor *GetRandomUIColor()
         bodyFat = [rs doubleForColumn:@"bodyfat"];
     }
     percentBodyFatLabel.text = [NSString stringWithFormat:@"%.1f%%", bodyFat];
-    lblBody_Fat.text = [NSString stringWithFormat:@"%.1f%%", bodyFat];
+    lblBody_Fat.text = [NSString stringWithFormat:@"Body Fat: %.1f%%", bodyFat];
     [rs close];
     [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
 }
@@ -1598,8 +1600,7 @@ static inline UIColor *GetRandomUIColor()
 -(void)calculateBMI {
     double bodyMassIndex = currentWeight / (currentHeight * currentHeight) * 703;
     currentBMILabel.text = [NSString stringWithFormat:@"%.1f", bodyMassIndex];
-    lblCurrent_BMI.text = [NSString stringWithFormat:@"%.1f", bodyMassIndex];
-    
+    lblCurrent_BMI.text = [NSString stringWithFormat:@"BMI: %.1f", bodyMassIndex];
 }
 
 #pragma mark -
