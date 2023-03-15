@@ -716,8 +716,8 @@
         [prefs setBool:NO forKey:@"user_loggedin"];
         
         //keep these defaulted to app build hardcode. this effects CREATE USERS
-        [prefs setValue:@"3271" forKey:@"4409"];
-        [prefs setValue:@"p54118!" forKey:@"riggins1"];
+        [prefs setValue:@"3271" forKey:@"companyid_dietmastergo"];
+        [prefs setValue:@"p54118!" forKey:@"companyPassThru_dietmastergo"];
         
         [prefs synchronize];
         
