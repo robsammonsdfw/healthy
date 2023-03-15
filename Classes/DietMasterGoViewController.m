@@ -242,7 +242,7 @@ static inline UIColor *GetRandomUIColor()
     {
         if (index == 0)
         {
-            return PrimaryDarkColor
+            return AccentColor
         }
         else
         {
@@ -360,7 +360,7 @@ static inline UIColor *GetRandomUIColor()
 
 -(void)iconsColor:(UIImageView *)image
 {
-    UIColor *accentColor = AccentColor
+    UIColor *accentColor = PrimaryColor
 
     image.image = [image.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [image setTintColor:accentColor];
@@ -1029,7 +1029,7 @@ static inline UIColor *GetRandomUIColor()
     }
     else
     {
-        UIColor *accentColor = AccentColor
+        UIColor *accentColor = PrimaryColor
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_suagrGraphImageVw setTintColor:accentColor];
     }
