@@ -1020,7 +1020,7 @@ static inline UIColor *GetRandomUIColor()
     }
    
     NSString *sugarStr = [NSString stringWithFormat:@"%.1f",totalSugarValue];
-    lblSugar.text = [NSString stringWithFormat:@"%@",sugarStr];
+    lblSugar.text = [NSString stringWithFormat:@"%@g",sugarStr];
     
     if (totalSugarCalories / num_totalCalories > .1) //if sugar radio is > 10%
     {
