@@ -375,6 +375,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [prefs setValue:passwordField.text forKey:@"authkey_dietmastergo"];
         [prefs setValue:[dict valueForKey:@"FirstName"] forKey:@"FirstName_dietmastergo"];
         [prefs setValue:[dict valueForKey:@"LastName"] forKey:@"LastName_dietmastergo"];
+        [prefs setBool:NO forKey:@"logout_dietmastergo"];
+        [prefs setBool:YES forKey:@"user_loggedin"];
         
         [prefs synchronize];
         
@@ -409,7 +411,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     //HHT new exercise sync
     [dietmasterEngine.arrExerciseSyncNew removeAllObjects];
-    [dietmasterEngine syncDatabase];
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"userid_dietmastergo"] != nil) {
+       [dietmasterEngine syncDatabase];
+   }
 }
 
 - (void)getUserInfoFailed:(NSString *)failedMessage {
