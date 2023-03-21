@@ -44,16 +44,24 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad {
     
     /*==========================================To Enable & Disable Old design==========================================*/
-        [[NSUserDefaults standardUserDefaults]setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
-    //    [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"changeDesign"];          /// To Enable OLD DESIGN
+        [[NSUserDefaults standardUserDefaults]setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
+//        [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"switch"]; // To disable MyMoves
     /*================================================================================================================*/
 
+        
+    /*==========================================To Enable & Disable Old design==========================================*/
+            [[NSUserDefaults standardUserDefaults]setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
+        //    [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"changeDesign"];          /// To Enable OLD DESIGN
+    /*================================================================================================================*/
     
     if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"changeDesign"]  isEqual: @"NewDesign"])
     {
 //        appNameLabel.hidden = true;
 //        _imgtop.hidden = true;
-        _backgroundImgVw.image = [UIImage imageNamed:@"login-background.png"];
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"])
+            _backgroundImgVw.image = [UIImage imageNamed:@"login-background-plus.png"];
+        else
+            _backgroundImgVw.image = [UIImage imageNamed:@"login-background.png"];
     }
     else
     {
@@ -205,18 +213,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark BUTTON ACTIONS
 -(IBAction)sendLoginInfo:(id)sender {
-    
-    /*==========================================To Enable & Disable Old design==========================================*/
-        [[NSUserDefaults standardUserDefaults]setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
-//        [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"switch"]; // To disable MyMoves
-    /*================================================================================================================*/
-
-        
-    /*==========================================To Enable & Disable Old design==========================================*/
-            [[NSUserDefaults standardUserDefaults]setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
-        //    [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"changeDesign"];          /// To Enable OLD DESIGN
-    /*================================================================================================================*/
-        
     [usernameField resignFirstResponder];
     [passwordField resignFirstResponder];
     
