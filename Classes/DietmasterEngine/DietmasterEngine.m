@@ -838,7 +838,7 @@ static DietmasterEngine* _instance = nil;
     NSString *query;
     
     query = [NSString stringWithFormat:@"SELECT MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified "
-             " FROM Food_Log_Items WHERE LastModified > '%@' ", dateString];
+             " FROM Food_Log_Items WHERE LastModified > '%@' ", [dateString stringByReplacingOccurrencesOfString:@"T" withString:@""]];
     
     int resultCounts = 0;
     FMResultSet *rs = [db executeQuery:query];
@@ -1950,20 +1950,20 @@ static DietmasterEngine* _instance = nil;
 - (void)saveMealFailed:(NSString *)failedMessage {
     if (![failedMessage isEqualToString:@"error"]) {
         if ([failedMessage intValue] < 0) {
-            
-            FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-            if (![db open]) {
-            }
-            int mealIDToDelete = [failedMessage intValue];
-            [db beginTransaction];
-            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log WHERE MealID = %i", mealIDToDelete];
-            [db executeUpdate:updateSQL];
-            updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE MealID = %i", mealIDToDelete];
-            [db executeUpdate:updateSQL];
-            if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
+            //why were they deleting meals from the app if the same failed? that seems counter-intuitive
+//            FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+//            if (![db open]) {
+//            }
+//            int mealIDToDelete = [failedMessage intValue];
+//            [db beginTransaction];
+//            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log WHERE MealID = %i", mealIDToDelete];
+//            [db executeUpdate:updateSQL];
+//            updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE MealID = %i", mealIDToDelete];
+//            [db executeUpdate:updateSQL];
+//            if ([db hadError]) {
+//                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+//            }
+//            [db commit];
         }
     }
     
@@ -2668,10 +2668,8 @@ static DietmasterEngine* _instance = nil;
                     [dateformatter setTimeZone:[NSTimeZone systemTimeZone]];
                     lastUpdate = [dateformatter stringFromDate:[NSDate date]];
                 }
-                
-                [dateformatter release];
 
-                NSString *selectString = [NSString stringWithFormat:@"SELECT FoodID, MealCode FROM Food_Log_Items WHERE MealID = %i", [[dict valueForKey:@"MealID"] intValue]];
+                NSString *selectString = [NSString stringWithFormat:@"SELECT FoodID, MealCode, LastModified FROM Food_Log_Items WHERE MealID = %i", [[dict valueForKey:@"MealID"] intValue]];
                 
                 FMResultSet *rs = [db executeQuery:selectString];
                 NSMutableArray *existingLogItems = [[NSMutableArray alloc] init];
@@ -2679,7 +2677,9 @@ static DietmasterEngine* _instance = nil;
                 while ([rs next]) {
                     NSNumber *mealCode = [NSNumber numberWithInt:[rs intForColumn:@"MealCode"]];
                     NSNumber *foodId = [NSNumber numberWithInt:[rs intForColumn:@"FoodID"]];
-                    NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:mealCode, @"MealCode", foodId, @"FoodID", nil];
+                    NSString *foodlastmodified = [[rs stringForColumn:@"LastModified"] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+
+                    NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:mealCode, @"MealCode", foodId, @"FoodID", foodlastmodified, @"LastModified", nil];
                     [existingLogItems addObject:tempDict];
                 }
                 
@@ -2835,10 +2835,20 @@ static DietmasterEngine* _instance = nil;
                 }
                 
                 for(NSDictionary *itemToDelete in existingLogItems) {
-                    NSString *deleteFoodLogItem = [NSString stringWithFormat:@"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealCode = %i AND MealID = %i", [[itemToDelete valueForKey:@"FoodID"] intValue], [[itemToDelete valueForKey:@"MealCode"] intValue], [[dict valueForKey:@"MealID"] intValue]];
-                    
-                    [db executeUpdate:deleteFoodLogItem];
+                    NSDate *date1 = [dateformatter dateFromString:lastUpdate];
+                    NSDate *date2 = [dateformatter dateFromString:[[itemToDelete valueForKey:@"LastModified"] stringValue]];
+
+                    // if lastUpdate is more recent than LastModified, this item has been deleted
+                    NSComparisonResult result = [date1 compare:date2];
+                    if (result == NSOrderedDescending) {
+                        // NSLog(@"Date1 is later than Date2");
+                        NSString *deleteFoodLogItem = [NSString stringWithFormat:@"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealCode = %i AND MealID = %i", [[itemToDelete valueForKey:@"FoodID"] intValue], [[itemToDelete valueForKey:@"MealCode"] intValue], [[dict valueForKey:@"MealID"] intValue]];
+                        
+                        [db executeUpdate:deleteFoodLogItem];
+                    }
                 }
+                
+                [dateformatter release];
             }
             
             if ([db hadError]) {

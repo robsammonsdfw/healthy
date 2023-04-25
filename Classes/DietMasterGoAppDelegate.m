@@ -834,6 +834,7 @@
 }
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
+    NSLog(@"SYNC FAIL: %@", failedMessage);
     [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
@@ -841,6 +842,7 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:nil forKey:@"lastmodified"];
+    [prefs setValue:nil forKey:@"lastsyncdate"];
     [prefs synchronize];
         
     //HHT mail change
@@ -873,11 +875,13 @@
 }
 
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage {
+    NSLog(@"SYNC FAIL: %@", failedMessage);
     DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:nil forKey:@"lastmodified"];
+    [prefs setValue:nil forKey:@"lastsyncdate"];
     [prefs synchronize];
     
     [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];

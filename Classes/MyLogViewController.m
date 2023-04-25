@@ -408,7 +408,7 @@
     [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.title=@"My Moves";
+    self.navigationItem.title=@"My Log";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
     detailViewInView = NO;
@@ -1723,7 +1723,7 @@
                               [NSNumber numberWithDouble:[rs doubleForColumn:@"GramWeight"]], @"GramWeight",
                               [NSNumber numberWithDouble:[rs doubleForColumn:@"ServingSize"]], @"ServingSize",
                               
-                              [NSNumber numberWithInt:[rs intForColumn:@"Food_Log_Items_ID"]], @"FoodLogID",
+//                              [NSNumber numberWithInt:[rs intForColumn:@"Food_Log_Items_ID"]], @"FoodLogID",
                               [NSNumber numberWithInt:[rs intForColumn:@"MealID"]], @"FoodLogMealID",
                               [NSNumber numberWithInt:totalCalories], @"TotalCalories",
                               [NSNumber numberWithInt:[rs intForColumn:@"RecipeID"]], @"RecipeID",

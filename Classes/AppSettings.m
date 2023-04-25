@@ -1111,6 +1111,16 @@
 }
 
 -(void)getDataFailed:(NSString *)failedMessage {
+    NSLog(@"Err: %@", failedMessage);
+    if (pageNumberCounter > 1) {
+        //in process of syncing foods
+        //fail silently and continue processing
+        NSLog(@"sync foods error: page %d failed.", pageNumberCounter);
+        
+        pageNumberCounter++;
+        [self SyncFood];
+        return;
+    }
     [downSyncSpinner stopAnimating];
     UIAlertView *alert;
     alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];

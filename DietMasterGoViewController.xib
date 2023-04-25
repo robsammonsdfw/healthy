@@ -175,7 +175,7 @@
                                                     <rect key="frame" x="1" y="1" width="165" height="272"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="MKd-sT-jHS">
-                                                            <rect key="frame" x="0.0" y="5" width="165" height="102.66666666666667"/>
+                                                            <rect key="frame" x="0.0" y="1" width="165" height="102.66666666666667"/>
                                                             <subviews>
                                                                 <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="5kh-5t-COY" customClass="MCPieChartView">
                                                                     <rect key="frame" x="47.666666666666671" y="0.0" width="70" height="70"/>
@@ -205,7 +205,7 @@
                                                             </subviews>
                                                         </stackView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="FJc-Me-ICF">
-                                                            <rect key="frame" x="0.0" y="117.66666666666669" width="165" height="140"/>
+                                                            <rect key="frame" x="0.0" y="108.66666666666669" width="165" height="140"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- - - - - - - - - - - - - - - - -" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FI1-X4-yek">
                                                                     <rect key="frame" x="0.0" y="0.0" width="165" height="5"/>
@@ -301,8 +301,8 @@
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="MKd-sT-jHS" secondAttribute="trailing" id="2Ba-1S-zQc"/>
                                                         <constraint firstAttribute="trailing" secondItem="FJc-Me-ICF" secondAttribute="trailing" id="Anj-9g-tIG"/>
-                                                        <constraint firstItem="FJc-Me-ICF" firstAttribute="top" secondItem="MKd-sT-jHS" secondAttribute="bottom" constant="10" id="Ngx-sK-den"/>
-                                                        <constraint firstItem="MKd-sT-jHS" firstAttribute="top" secondItem="Y2H-gX-Baq" secondAttribute="top" constant="5" id="SD8-lN-jj2"/>
+                                                        <constraint firstItem="FJc-Me-ICF" firstAttribute="top" secondItem="MKd-sT-jHS" secondAttribute="bottom" constant="5" id="Ngx-sK-den"/>
+                                                        <constraint firstItem="MKd-sT-jHS" firstAttribute="top" secondItem="Y2H-gX-Baq" secondAttribute="top" constant="1" id="SD8-lN-jj2"/>
                                                         <constraint firstAttribute="trailing" secondItem="dyA-3U-A2k" secondAttribute="trailing" id="ibi-wI-8HZ"/>
                                                         <constraint firstItem="FJc-Me-ICF" firstAttribute="leading" secondItem="Y2H-gX-Baq" secondAttribute="leading" id="nx3-8j-Nw9"/>
                                                         <constraint firstItem="dyA-3U-A2k" firstAttribute="leading" secondItem="Y2H-gX-Baq" secondAttribute="leading" id="q63-Pc-q6l"/>
