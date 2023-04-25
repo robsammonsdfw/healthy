@@ -2839,9 +2839,11 @@ static DietmasterEngine* _instance = nil;
                     NSDate *date2 = [dateformatter dateFromString:[[itemToDelete valueForKey:@"LastModified"] stringValue]];
 
                     // if lastUpdate is more recent than LastModified, this item has been deleted
-                    NSComparisonResult result = [date1 compare:date2];
-                    if (result == NSOrderedDescending) {
-                        // NSLog(@"Date1 is later than Date2");
+                    NSTimeInterval timeInterval = [date2 timeIntervalSinceDate:date1];
+                    //if negative, food was added before sync
+                    //if more than 15min before, the food was deleted on the web so it should be deleted in the app
+                    if (timeInterval < -900) {
+                        //dates are more than an hour apart with date2 being in the future
                         NSString *deleteFoodLogItem = [NSString stringWithFormat:@"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealCode = %i AND MealID = %i", [[itemToDelete valueForKey:@"FoodID"] intValue], [[itemToDelete valueForKey:@"MealCode"] intValue], [[dict valueForKey:@"MealID"] intValue]];
                         
                         [db executeUpdate:deleteFoodLogItem];

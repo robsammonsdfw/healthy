@@ -846,11 +846,11 @@
     [prefs synchronize];
         
     //HHT mail change
-    UIAlertView *alert;
-    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
-    alert.tag = 1001;
-    [alert show];
-    [alert release];
+//    UIAlertView *alert;
+//    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
+//    alert.tag = 1001;
+//    [alert show];
+//    [alert release];
 }
 
 //UpSync
@@ -887,11 +887,11 @@
     [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
     
     //HHT mail change
-    UIAlertView *alert;
-    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
-    alert.tag = 1001;
-    [alert show];
-    [alert release];
+//    UIAlertView *alert;
+//    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
+//    alert.tag = 1001;
+//    [alert show];
+//    [alert release];
     
 }
 
