@@ -1439,14 +1439,14 @@
         else {
             //HHT change 28-11
             //YES means add LoggedExeTracking and no means not add
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == YES) {
-                int minutesExercised = [exerciseTimeMinutes intValue];
-                double totalCaloriesBurned = ([caloriesPerHour floatValue] / 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
-                num_totalCaloriesBurned = num_totalCaloriesBurned + totalCaloriesBurned;
-            }
-            else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
-                
-            }
+//            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == YES) {
+//                int minutesExercised = [exerciseTimeMinutes intValue];
+//                double totalCaloriesBurned = ([caloriesPerHour floatValue] / 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
+//                num_totalCaloriesBurned = num_totalCaloriesBurned + totalCaloriesBurned;
+//            }
+//            else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
+//                
+//            }
         }
     }
     
