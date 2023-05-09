@@ -238,21 +238,22 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     NSURL *url = [navigationAction.request URL];
-    if([url isFileURL])
+    if([url isFileURL]) {
         decisionHandler(WKNavigationActionPolicyAllow);
-
-    linkURL = [url retain];
-    UIAlertView *alert =
-        [[UIAlertView alloc]
-            initWithTitle: @"Open External Link"
-            message: @"Close this application and open link in Safari?"
-            delegate: nil
-            cancelButtonTitle: @"Cancel"
-            otherButtonTitles: @"OK", nil];
-    alert.delegate = self;
-    [alert show];
-    [alert release];
-    decisionHandler(WKNavigationActionPolicyCancel);
+    } else {
+        linkURL = [url retain];
+        UIAlertView *alert =
+            [[UIAlertView alloc]
+                initWithTitle: @"Open External Link"
+                message: @"Close this application and open link in Safari?"
+                delegate: nil
+                cancelButtonTitle: @"Cancel"
+                otherButtonTitles: @"OK", nil];
+        alert.delegate = self;
+        [alert show];
+        [alert release];
+        decisionHandler(WKNavigationActionPolicyCancel);
+    }
 }
 
 - (void)     alertView: (UIAlertView*) view
