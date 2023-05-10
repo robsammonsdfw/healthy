@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38B5029F2A0C524500A107FB /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B502942A0C524500A107FB /* MCSliceLayer.m */; };
+		38B502A02A0C524500A107FB /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B502952A0C524500A107FB /* MCPieChartView.m */; };
+		38B502A12A0C524500A107FB /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B502962A0C524500A107FB /* MCNewCustomLayer.m */; };
+		38B502A22A0C524500A107FB /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B5029D2A0C524500A107FB /* MCNewCustomLayeredView.m */; };
+		38B502A32A0C524500A107FB /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B5029E2A0C524500A107FB /* MCUtil.m */; };
 		4018F11E20DA437800FE1252 /* AppDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4018F11D20DA437800FE1252 /* AppDefaults.plist */; };
 		401B63A620B3FC64004453E7 /* owner_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3568E26F187EDBF7004A542C /* owner_bg@2x.png */; };
 		401B63A920B3FC64004453E7 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
@@ -562,11 +567,6 @@
 		4EA534167AB081724BB00A2B /* libPods-DietMasterGoPlus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DDD8F5E465723F2AAA8E6B /* libPods-DietMasterGoPlus.a */; };
 		650208B52500D34000F412B0 /* PopUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208B32500D34000F412B0 /* PopUpView.xib */; };
 		650208B62500D34000F412B0 /* PopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208B42500D34000F412B0 /* PopUpView.m */; };
-		650208C32500D42E00F412B0 /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208B72500D42D00F412B0 /* MCNewCustomLayeredView.m */; };
-		650208C42500D42E00F412B0 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208BA2500D42E00F412B0 /* MCPieChartView.m */; };
-		650208C52500D42E00F412B0 /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208BE2500D42E00F412B0 /* MCSliceLayer.m */; };
-		650208C62500D42E00F412B0 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208BF2500D42E00F412B0 /* MCNewCustomLayer.m */; };
-		650208C72500D42E00F412B0 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208C22500D42E00F412B0 /* MCUtil.m */; };
 		650208CB250152FA00F412B0 /* PurchaseIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */; };
 		650208CE2501531B00F412B0 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CD2501531A00F412B0 /* IAPHelper.m */; };
 		650208D22501535B00F412B0 /* UITextViewWorkaround.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D12501535B00F412B0 /* UITextViewWorkaround.m */; };
@@ -1460,6 +1460,18 @@
 		35E541DF1887BAD5004DECCF /* config-adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-adhoc.xcconfig"; sourceTree = "<group>"; };
 		35E541E01887BAD5004DECCF /* config-appstore.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-appstore.xcconfig"; sourceTree = "<group>"; };
 		35E541E11887BAD5004DECCF /* config-debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-debug.xcconfig"; sourceTree = "<group>"; };
+		38B502932A0C524500A107FB /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
+		38B502942A0C524500A107FB /* MCSliceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSliceLayer.m; sourceTree = "<group>"; };
+		38B502952A0C524500A107FB /* MCPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCPieChartView.m; sourceTree = "<group>"; };
+		38B502962A0C524500A107FB /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
+		38B502972A0C524500A107FB /* MCNewCustomLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNewCustomLayer.h; sourceTree = "<group>"; };
+		38B502982A0C524500A107FB /* MCUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCUtil.h; sourceTree = "<group>"; };
+		38B502992A0C524500A107FB /* MCPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCPieChartView.h; sourceTree = "<group>"; };
+		38B5029A2A0C524500A107FB /* MCNewCustomLayeredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNewCustomLayeredView.h; sourceTree = "<group>"; };
+		38B5029B2A0C524500A107FB /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"; sourceTree = "<group>"; };
+		38B5029C2A0C524500A107FB /* MCCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCCore.h; sourceTree = "<group>"; };
+		38B5029D2A0C524500A107FB /* MCNewCustomLayeredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayeredView.m; sourceTree = "<group>"; };
+		38B5029E2A0C524500A107FB /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
 		4018F11D20DA437800FE1252 /* AppDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppDefaults.plist; sourceTree = "<group>"; };
 		401B65BA20B3FC64004453E7 /* DietMasterGoPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DietMasterGoPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		402A3C0E21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesDetailFooterCollectionReusableView.h; sourceTree = "<group>"; };
@@ -1599,18 +1611,6 @@
 		650208B22500D34000F412B0 /* PopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopUpView.h; sourceTree = "<group>"; };
 		650208B32500D34000F412B0 /* PopUpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopUpView.xib; sourceTree = "<group>"; };
 		650208B42500D34000F412B0 /* PopUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopUpView.m; sourceTree = "<group>"; };
-		650208B72500D42D00F412B0 /* MCNewCustomLayeredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCNewCustomLayeredView.m; path = ../PNPieChartView/MCNewCustomLayeredView.m; sourceTree = "<group>"; };
-		650208B82500D42D00F412B0 /* MCPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCPieChartView.h; path = ../PNPieChartView/MCPieChartView.h; sourceTree = "<group>"; };
-		650208B92500D42D00F412B0 /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"; path = "../PNPieChartView/MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"; sourceTree = "<group>"; };
-		650208BA2500D42E00F412B0 /* MCPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCPieChartView.m; path = ../PNPieChartView/MCPieChartView.m; sourceTree = "<group>"; };
-		650208BB2500D42E00F412B0 /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCSliceLayer.h; path = ../PNPieChartView/MCSliceLayer.h; sourceTree = "<group>"; };
-		650208BC2500D42E00F412B0 /* MCNewCustomLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCNewCustomLayer.h; path = ../PNPieChartView/MCNewCustomLayer.h; sourceTree = "<group>"; };
-		650208BD2500D42E00F412B0 /* MCUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCUtil.h; path = ../PNPieChartView/MCUtil.h; sourceTree = "<group>"; };
-		650208BE2500D42E00F412B0 /* MCSliceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCSliceLayer.m; path = ../PNPieChartView/MCSliceLayer.m; sourceTree = "<group>"; };
-		650208BF2500D42E00F412B0 /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCNewCustomLayer.m; path = ../PNPieChartView/MCNewCustomLayer.m; sourceTree = "<group>"; };
-		650208C02500D42E00F412B0 /* MCCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCCore.h; path = ../PNPieChartView/MCCore.h; sourceTree = "<group>"; };
-		650208C12500D42E00F412B0 /* MCNewCustomLayeredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCNewCustomLayeredView.h; path = ../PNPieChartView/MCNewCustomLayeredView.h; sourceTree = "<group>"; };
-		650208C22500D42E00F412B0 /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCUtil.m; path = ../PNPieChartView/MCUtil.m; sourceTree = "<group>"; };
 		650208C9250152FA00F412B0 /* PurchaseIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseIAPHelper.h; sourceTree = "<group>"; };
 		650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseIAPHelper.m; sourceTree = "<group>"; };
 		650208CC2501531A00F412B0 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
@@ -3299,8 +3299,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				38B502922A0C517500A107FB /* MCPieChart */,
 				650208E72501552400F412B0 /* KeyChainWrapper */,
-				650208C82500D44200F412B0 /* MC PieChart */,
 				652B915624B92A72007B08ED /* GoogleService-Info.plist */,
 				65F2DE84249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.h */,
 				65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */,
@@ -3483,6 +3483,25 @@
 				3568E2B4187EDE40004A542C /* MNMBottomPullToRefreshView.m */,
 			);
 			path = MNMBottomPullToRefresh;
+			sourceTree = "<group>";
+		};
+		38B502922A0C517500A107FB /* MCPieChart */ = {
+			isa = PBXGroup;
+			children = (
+				38B5029C2A0C524500A107FB /* MCCore.h */,
+				38B502972A0C524500A107FB /* MCNewCustomLayer.h */,
+				38B502962A0C524500A107FB /* MCNewCustomLayer.m */,
+				38B5029A2A0C524500A107FB /* MCNewCustomLayeredView.h */,
+				38B5029D2A0C524500A107FB /* MCNewCustomLayeredView.m */,
+				38B5029B2A0C524500A107FB /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */,
+				38B502992A0C524500A107FB /* MCPieChartView.h */,
+				38B502952A0C524500A107FB /* MCPieChartView.m */,
+				38B502932A0C524500A107FB /* MCSliceLayer.h */,
+				38B502942A0C524500A107FB /* MCSliceLayer.m */,
+				38B502982A0C524500A107FB /* MCUtil.h */,
+				38B5029E2A0C524500A107FB /* MCUtil.m */,
+			);
+			path = MCPieChart;
 			sourceTree = "<group>";
 		};
 		402A3C4421F8B7C4005DEC50 /* FSCalendar */ = {
@@ -3751,25 +3770,6 @@
 				650208B32500D34000F412B0 /* PopUpView.xib */,
 			);
 			name = "Pop Up View";
-			sourceTree = "<group>";
-		};
-		650208C82500D44200F412B0 /* MC PieChart */ = {
-			isa = PBXGroup;
-			children = (
-				650208C02500D42E00F412B0 /* MCCore.h */,
-				650208BC2500D42E00F412B0 /* MCNewCustomLayer.h */,
-				650208BF2500D42E00F412B0 /* MCNewCustomLayer.m */,
-				650208C12500D42E00F412B0 /* MCNewCustomLayeredView.h */,
-				650208B72500D42D00F412B0 /* MCNewCustomLayeredView.m */,
-				650208B92500D42D00F412B0 /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */,
-				650208B82500D42D00F412B0 /* MCPieChartView.h */,
-				650208BA2500D42E00F412B0 /* MCPieChartView.m */,
-				650208BB2500D42E00F412B0 /* MCSliceLayer.h */,
-				650208BE2500D42E00F412B0 /* MCSliceLayer.m */,
-				650208BD2500D42E00F412B0 /* MCUtil.h */,
-				650208C22500D42E00F412B0 /* MCUtil.m */,
-			);
-			path = "MC PieChart";
 			sourceTree = "<group>";
 		};
 		650208CF2501535B00F412B0 /* UITextViewWorkaround */ = {
@@ -4448,6 +4448,7 @@
 				401B649720B3FC64004453E7 /* UserLoginWebService.m in Sources */,
 				401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */,
 				401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */,
+				38B5029F2A0C524500A107FB /* MCSliceLayer.m in Sources */,
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
 				401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */,
 				401B649C20B3FC64004453E7 /* PullRefreshTableViewController.m in Sources */,
@@ -4478,6 +4479,7 @@
 				401B64B020B3FC64004453E7 /* ZXEmailDoCoMoResultParser.m in Sources */,
 				401B64B120B3FC64004453E7 /* HPGrowingTextView.m in Sources */,
 				B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */,
+				38B502A32A0C524500A107FB /* MCUtil.m in Sources */,
 				401B64B220B3FC64004453E7 /* ZXExpandedProductParsedResult.m in Sources */,
 				401B64B320B3FC64004453E7 /* ZXExpandedProductResultParser.m in Sources */,
 				401B64B420B3FC64004453E7 /* ZXGeoParsedResult.m in Sources */,
@@ -4516,6 +4518,7 @@
 				401B64D120B3FC64004453E7 /* ZXImage.m in Sources */,
 				401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */,
 				401B64D320B3FC64004453E7 /* ZXMathUtils.m in Sources */,
+				38B502A02A0C524500A107FB /* MCPieChartView.m in Sources */,
 				401B64D420B3FC64004453E7 /* NSObject+Blocks.m in Sources */,
 				401B64D520B3FC64004453E7 /* ZXMonochromeRectangleDetector.m in Sources */,
 				401B64D620B3FC64004453E7 /* CXMLElement.m in Sources */,
@@ -4577,6 +4580,7 @@
 				401B650720B3FC64004453E7 /* ZXMultiDetector.m in Sources */,
 				65462D2626BD1DAF004D1654 /* UserGoalVC.m in Sources */,
 				401B650820B3FC64004453E7 /* ZXMultiFinderPatternFinder.m in Sources */,
+				38B502A12A0C524500A107FB /* MCNewCustomLayer.m in Sources */,
 				401B650920B3FC64004453E7 /* ZXQRCodeMultiReader.m in Sources */,
 				401B650A20B3FC64004453E7 /* ZXByQuadrantReader.m in Sources */,
 				401B650B20B3FC64004453E7 /* ZXGenericMultipleBarcodeReader.m in Sources */,
@@ -4611,7 +4615,6 @@
 				401B652420B3FC64004453E7 /* ZXRSSExpandedReader.m in Sources */,
 				401B652520B3FC64004453E7 /* ZXAbstractRSSReader.m in Sources */,
 				401B652620B3FC64004453E7 /* ZXDataCharacter.m in Sources */,
-				650208C72500D42E00F412B0 /* MCUtil.m in Sources */,
 				65462D2B26BD1DC3004D1654 /* OtherHealthServiceVC.m in Sources */,
 				401B652720B3FC64004453E7 /* SendView.m in Sources */,
 				401B652820B3FC64004453E7 /* ZXPair.m in Sources */,
@@ -4623,7 +4626,6 @@
 				401B652D20B3FC64004453E7 /* ZXCodaBarWriter.m in Sources */,
 				401B652E20B3FC64004453E7 /* ZXCode128Reader.m in Sources */,
 				401B652F20B3FC64004453E7 /* ZXCode128Writer.m in Sources */,
-				650208C32500D42E00F412B0 /* MCNewCustomLayeredView.m in Sources */,
 				401B653020B3FC64004453E7 /* ZXCode39Reader.m in Sources */,
 				401B653120B3FC64004453E7 /* ZXCode39Writer.m in Sources */,
 				401B653220B3FC64004453E7 /* Reachability.m in Sources */,
@@ -4639,7 +4641,6 @@
 				401B653B20B3FC64004453E7 /* ZXITFWriter.m in Sources */,
 				401B653C20B3FC64004453E7 /* ZXMultiFormatOneDReader.m in Sources */,
 				401B653D20B3FC64004453E7 /* ZXMultiFormatUPCEANReader.m in Sources */,
-				650208C62500D42E00F412B0 /* MCNewCustomLayer.m in Sources */,
 				401B653E20B3FC64004453E7 /* ZXOneDimensionalCodeWriter.m in Sources */,
 				401B653F20B3FC64004453E7 /* ZXOneDReader.m in Sources */,
 				401B654020B3FC64004453E7 /* ZXUPCAReader.m in Sources */,
@@ -4689,7 +4690,6 @@
 				401B656320B3FC64004453E7 /* ZXQRCodeVersion.m in Sources */,
 				401B656420B3FC64004453E7 /* ZXAlignmentPattern.m in Sources */,
 				401B656520B3FC64004453E7 /* ZXAlignmentPatternFinder.m in Sources */,
-				650208C52500D42E00F412B0 /* MCSliceLayer.m in Sources */,
 				401B656620B3FC64004453E7 /* CXMLNode.m in Sources */,
 				401B656720B3FC64004453E7 /* YLProgressBar.m in Sources */,
 				401B656820B3FC64004453E7 /* ZXFinderPatternFinder.m in Sources */,
@@ -4703,6 +4703,7 @@
 				401B656E20B3FC64004453E7 /* ZXQRCodeDetector.m in Sources */,
 				401B656F20B3FC64004453E7 /* ZXQRCodeFinderPattern.m in Sources */,
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,
+				38B502A22A0C524500A107FB /* MCNewCustomLayeredView.m in Sources */,
 				401B657020B3FC64004453E7 /* ZXBlockPair.m in Sources */,
 				402A3C6821F8B7C4005DEC50 /* FSCalendarDelegationProxy.m in Sources */,
 				401B657120B3FC64004453E7 /* ZXByteMatrix.m in Sources */,
@@ -4712,7 +4713,6 @@
 				401B657520B3FC64004453E7 /* ZXQRCode.m in Sources */,
 				401B657620B3FC64004453E7 /* ZXQRCodeReader.m in Sources */,
 				65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */,
-				650208C42500D42E00F412B0 /* MCPieChartView.m in Sources */,
 				401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */,
 				401B657820B3FC64004453E7 /* ZXQRCodeWriter.m in Sources */,
 				401B657920B3FC64004453E7 /* ZXBinarizer.m in Sources */,
@@ -4815,7 +4815,6 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -4882,7 +4881,6 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
