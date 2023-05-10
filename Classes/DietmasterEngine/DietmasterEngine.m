@@ -837,8 +837,12 @@ static DietmasterEngine* _instance = nil;
     
     NSString *query;
     
+    if (dateString != nil && [dateString containsString:@"T"]) {
+        dateString = [dateString stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    }
+    
     query = [NSString stringWithFormat:@"SELECT MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified "
-             " FROM Food_Log_Items WHERE LastModified > '%@' ", [dateString stringByReplacingOccurrencesOfString:@"T" withString:@""]];
+             " FROM Food_Log_Items WHERE LastModified > '%@' ", dateString];
     
     int resultCounts = 0;
     FMResultSet *rs = [db executeQuery:query];
