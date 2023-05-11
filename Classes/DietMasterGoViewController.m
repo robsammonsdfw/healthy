@@ -1276,8 +1276,11 @@ static inline UIColor *GetRandomUIColor()
     query = [NSString stringWithFormat:@"SELECT Exercise_Log.Exercise_Log_ID, Exercise_Log.ExerciseID, Exercise_Log.Exercise_Time_Minutes, Exercise_Log.Log_Date, Exercises.ActivityName, Exercises.CaloriesPerHour FROM Exercise_Log INNER JOIN Exercises ON Exercise_Log.ExerciseID = Exercises.ExerciseID WHERE (Exercise_Log.Log_Date BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) ORDER BY Log_Date", date_Today, date_Today];
     
     num_totalCaloriesBurned = 0;
+    num_totalCaloriesBurnedTracked = 0;
     
     FMResultSet *rs = [db executeQuery:query];
+    bool combineTrackingCalories =[[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"] == YES;
+    
     while ([rs next]) {
         
         NSNumber *exerciseTimeMinutes = [NSNumber numberWithInt:[rs intForColumn:@"Exercise_Time_Minutes"]];
@@ -1292,26 +1295,19 @@ static inline UIColor *GetRandomUIColor()
         if (exerciseID == 259) {
             
         }
-        //HHT apple watch 274 for step count
         else if (exerciseID == 274 || exerciseID == 276) {
             
         }
+        //HHT apple watch 274 for step count
         //HHT apple watch (272) calories apple watch
         else if (exerciseID == 257 || exerciseID == 267 || exerciseID == 272 || exerciseID == 275) {
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"]) {
-                num_totalCaloriesBurned = num_totalCaloriesBurned + minutesExercised;
+            num_totalCaloriesBurnedTracked += minutesExercised;
+            if (combineTrackingCalories) {
+                num_totalCaloriesBurned += minutesExercised;
             }
         }
         else {
-            //HHT change 28-11
-            //YES means add LoggedExeTracking and no means not add
-            
-//            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == YES) {
-                num_totalCaloriesBurned = num_totalCaloriesBurned + totalCaloriesBurned;
-//            }
-//            else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
-//
-//            }
+            num_totalCaloriesBurned += totalCaloriesBurned;
         }
     }
     
@@ -1325,16 +1321,24 @@ static inline UIColor *GetRandomUIColor()
 
 -(void)updateCalorieTotal {
     bool useCaloriesBurned = [[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == YES;
+    bool useCaloriesBurnedTracked =[[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"] == YES;    //if setting is not checked, add tracked callories into burned total to be included in net calculation
     double netCalories = 0;
     CGFloat caloriesREmaining = 0;
+
     if (useCaloriesBurned) {
         netCalories = num_BMR - num_totalCalories + num_totalCaloriesBurned;
         caloriesREmaining = (num_BMR - (num_totalCaloriesBurned * -1)) - num_totalCalories;
         num_totalCaloriesRemaining = num_BMR - (num_totalCaloriesBurned * -1) - num_totalCalories;
     } else {
-        netCalories = num_BMR - num_totalCalories;
-        caloriesREmaining = num_BMR - num_totalCalories;
-        num_totalCaloriesRemaining = num_BMR - num_totalCalories;
+        if (useCaloriesBurnedTracked) {
+            netCalories = num_BMR - num_totalCalories + num_totalCaloriesBurnedTracked;
+            caloriesREmaining = (num_BMR - (num_totalCaloriesBurnedTracked * -1)) - num_totalCalories;
+            num_totalCaloriesRemaining = num_BMR - (num_totalCaloriesBurnedTracked * -1) - num_totalCalories;
+        } else {
+            netCalories = num_BMR - num_totalCalories;
+            caloriesREmaining = num_BMR - num_totalCalories;
+            num_totalCaloriesRemaining = num_BMR - num_totalCalories;
+        }
     }
     
     //HHT Change 2018 (exercise / 2 )
@@ -1380,9 +1384,20 @@ static inline UIColor *GetRandomUIColor()
     if (useCaloriesBurned) {
         lblExerciseCalories.text = [NSString stringWithFormat:@"-%.0f", num_totalCaloriesBurned];
     } else {
-        lblExerciseCalories.text = @"-0";
+        if (useCaloriesBurnedTracked) {
+            lblExerciseCalories.text = [NSString stringWithFormat:@"-%.0f", num_totalCaloriesBurnedTracked];
+        } else {
+            lblExerciseCalories.text = @"-0";
+        }
     }
-    lblBurned.text = [NSString stringWithFormat:@"%.0f", num_totalCaloriesBurned];
+    
+    if (!useCaloriesBurnedTracked) {
+        lblBurned.text = [NSString stringWithFormat:@"%.0f", num_totalCaloriesBurned + num_totalCaloriesBurnedTracked];
+    } else {
+        lblBurned.text = [NSString stringWithFormat:@"%.0f", num_totalCaloriesBurned];
+    }
+    //if false, include in Burned tile, but don't add to Recommended tile.
+    
 //    lblSugar.text = [NSString stringWithFormat:@"%.1f", totalSugar];
 
     netCalorieLabel.text = [NSString stringWithFormat:@"%.0f", netCalories];

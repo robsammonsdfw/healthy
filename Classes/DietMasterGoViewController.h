@@ -75,6 +75,7 @@
     double num_Calories;
     double num_totalCalories;
     double num_totalCaloriesBurned;
+    double num_totalCaloriesBurnedTracked;
     double num_totalCaloriesRemaining;
 
     double actualCarb;
