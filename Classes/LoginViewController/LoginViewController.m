@@ -42,18 +42,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark - View lifecycle -
 - (void)viewDidLoad {
-    
-    /*==========================================To Enable & Disable Old design==========================================*/
-        [[NSUserDefaults standardUserDefaults]setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
-//        [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"switch"]; // To disable MyMoves
-    /*================================================================================================================*/
+    [super viewDidLoad];
 
-        
-    /*==========================================To Enable & Disable Old design==========================================*/
-            [[NSUserDefaults standardUserDefaults]setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
-        //    [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"changeDesign"];          /// To Enable OLD DESIGN
-    /*================================================================================================================*/
-    
     if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"changeDesign"]  isEqual: @"NewDesign"])
     {
 //        appNameLabel.hidden = true;
@@ -81,9 +71,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     
     self.imgtop.backgroundColor=PrimaryColor
-    
-    [super viewDidLoad];
-    
+        
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
     NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];

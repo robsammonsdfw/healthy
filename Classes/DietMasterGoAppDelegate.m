@@ -49,17 +49,18 @@
     [UITextViewWorkaround executeWorkaround];
     
     [PurchaseIAPHelper sharedInstance];
-    
-    /*==========================================To Enable & Disable MyMoves==========================================*/
+
+    // Note: See -checkUserLogin as it will wipe these values if the user is Logged out.
+    // -checkUserLogin will set the values to enable MyMoves and NewDesign.
+    /*==========================================To Enable & Disable MyMoves==========================*/
         [[NSUserDefaults standardUserDefaults]setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
 //        [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"switch"]; // To disable MyMoves
-    /*================================================================================================================*/
+    /*====================================================================================================*/
         
-
-    /*==========================================To Enable & Disable Old design==========================================*/
+    /*==========================================To Enable & Disable Old design=============================*/
         [[NSUserDefaults standardUserDefaults]setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
     //    [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"changeDesign"];          /// To Enable OLD DESIGN
-    /*================================================================================================================*/
+    /*=================================================================================================*/
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -719,6 +720,11 @@
         [prefs setValue:@"3271" forKey:@"companyid_dietmastergo"];
         [prefs setValue:@"p54118!" forKey:@"companyPassThru_dietmastergo"];
         
+        // Set MyMOves and NewDesign again here because -removePersistentDomainForName: wipes
+        // NSUserDefaults out.
+        [prefs setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
+        [prefs setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
+
         [prefs synchronize];
         
         [dietmasterEngine purgeGroceryListArray];
