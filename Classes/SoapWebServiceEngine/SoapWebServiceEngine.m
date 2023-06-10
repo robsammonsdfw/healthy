@@ -43,7 +43,7 @@
 @synthesize requestDict = _requestDict;
 -(void)callWebserviceForFoodNew:(NSDictionary *)requestDict withCompletion:(void (^)(id))completion
 {
-    NSLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine-ForNewFood");
+    //NSLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine-ForNewFood");
     
     [timeOutTimer invalidate];
     timeOutTimer = nil;
@@ -81,7 +81,7 @@
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=GetFoodNew"];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/GetFoodNew"];
     
-    NSLog(@"%@", soapMessage);
+    //NSLog(@"%@", soapMessage);
     
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
@@ -235,7 +235,7 @@
 
 -(void)callWebservice:(NSDictionary *)requestDict
 {
-    NSLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine - callwebservice");
+    //NSLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine - callwebservice");
     // Kill the timeout timer
     [timeOutTimer invalidate];
     timeOutTimer = nil;
@@ -612,7 +612,7 @@
         //					  "</soap:Body>"
         //					  "</soap:Envelope>"];
         
-        NSLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
+        //NSLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
     } else if ([requestType isEqualToString:@"SaveWeightLogs"]) {
         
         
@@ -712,7 +712,7 @@
                         [NSString stringWithFormat:@"%i",[[requestDict valueForKey:@"FoodKey"] intValue]],
                         [requestDict valueForKey:@"AuthKey"], [requestDict valueForKey:@"ScannedFood"]];
         
-        NSLog(@"requestType: %@",requestType);
+        //NSLog(@"requestType: %@",requestType);
         
         
     }
@@ -798,21 +798,21 @@
                         "</GetFoodNew>"
                         "</soap:Body>"
                         "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"], [[requestDict valueForKey:@"FoodKey"] intValue]];
-        NSLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
+        //NSLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
     }
     
     
     // Fix error causing string
     soapMessage = [soapMessage stringByReplacingOccurrencesOfString:@"&" withString:@"and"];
     
-    NSLog(@"%@", soapMessage);
+    //NSLog(@"%@", soapMessage);
     
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", requestType];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", requestType];
     
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     
-    NSLog(@"%@", url);
+    //NSLog(@"%@", url);
     
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
     NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[soapMessage length]];
@@ -846,7 +846,7 @@
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    NSLog(@"response is : %@", response);
+    //NSLog(@"response is : %@", response);
     [webData setLength: 0];
 }
 
