@@ -6,12 +6,19 @@
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
 #import "DetailViewController.h"
+#import "DietMasterGoPlus-Swift.h"
+
+@interface ManageFoods()
+
+/// Barcode Scanner.
+@property (nonatomic, strong) BarCodeScanner *barcodeScanner;
+
+@end
 
 @implementation ManageFoods
 
 @synthesize mainDelegate, scrollView, intFoodID, intCategoryID, strCategoryName, intMeasureID, strMeasureName;
 @synthesize selectedFoodDict;
-@synthesize barcodeScannerVC;
 @synthesize scannerDict, scanned_UPCA, scanned_factualID, scannerButton;
 
 static const int NUMBER_OF_TEXTFIELDS = 28;
@@ -43,7 +50,9 @@ CGPoint svos;
     reloadData = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(barcodeWasScanned:) name:@"BarcodeScanned" object:nil];
+                                             selector:@selector(barcodeWasScanned:)
+                                                 name:@"BarCodeScanned"
+                                               object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(factualAPISuccess:) name:@"FactualAPISuccess" object:nil];
     
@@ -52,7 +61,6 @@ CGPoint svos;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(foodWasSavedToCloud:) name:@"FoodWasSavedToCloud" object:nil];
     
-    barcodeScannerVC = nil;
     scannerDict = nil;
     scanned_UPCA = nil;
     scanned_UPCA = [[NSString alloc] initWithString:@"empty"];
@@ -73,7 +81,6 @@ CGPoint svos;
     tapGesture.numberOfTapsRequired = 1.0;
     tapGesture.numberOfTouchesRequired = 1.0;
     [scrollView addGestureRecognizer:tapGesture];
-    [tapGesture release];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
                                    initWithTitle: @"Back"
@@ -81,7 +88,6 @@ CGPoint svos;
                                    target: self action: @selector(customBackAction:)];
     
     [self.navigationItem setLeftBarButtonItem: backButton];
-    [backButton release];
     
     isSaved = YES;
     _savedFoodID = 0;
@@ -95,7 +101,7 @@ CGPoint svos;
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
@@ -150,7 +156,6 @@ CGPoint svos;
         imageView.userInteractionEnabled = YES;
         imageView.exclusiveTouch = YES;
         [self.view addSubview:imageView];
-        [imageView release];
         
         [UIView animateWithDuration: 0.5f
                               delay:0
@@ -172,42 +177,6 @@ CGPoint svos;
     }
 }
 
-//-(void)viewDidUnload {
-//    [super viewDidUnload];
-//    selectedFoodDict = nil;
-//    scannerButton = nil;
-//    barcodeScannerVC = nil;
-//    scanned_factualID = nil;
-//    scanned_UPCA = nil;
-//    [[NSNotificationCenter defaultCenter] removeObserver:self];
-//}
-
--(void)dealloc {
-    [super dealloc];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [selectCategoryButton release];
-    [selectMeasureButton release];
-    
-    [keyboardToolBar release];
-    [closeDoneButton release];
-    
-    barcodeScannerVC = nil;
-    [barcodeScannerVC release];
-    
-    scanned_UPCA = nil;
-    scanned_factualID = nil;
-    scannerButton = nil;
-    
-    selectedFoodDict = nil;
-    scannerButton = nil;
-    barcodeScannerVC = nil;
-    scanned_factualID = nil;
-    scanned_UPCA = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 #pragma mark BACK METHODS
 -(void)customBackAction:(id)sender {
     if (!isSaved) {
@@ -218,7 +187,6 @@ CGPoint svos;
         [alert addButtonWithTitle:@"No, Stay"];
         [alert setTag:770088];
         [alert show];
-        [alert release];
         return;
     }
     
@@ -321,14 +289,12 @@ CGPoint svos;
     FoodCategoryPicker *gcControl = [[FoodCategoryPicker alloc] initWithNibName:@"FoodCategoryPicker" bundle:nil];
     gcControl.delegate = self;
     [self presentViewController:gcControl animated:YES completion:nil];
-    [gcControl release];
 }
 
 - (IBAction) getMeasure:(id) sender {
     MeasurePicker *mpControl = [[MeasurePicker alloc] initWithNibName:@"MeasurePicker" bundle:nil];
     mpControl.delegate = self;
     [self presentViewController:mpControl animated:YES completion:nil];
-    [mpControl release];
 }
 
 -(void)didChooseCategory:(NSString *)chosenID withName:(NSString *)chosenName {
@@ -452,8 +418,6 @@ CGPoint svos;
                               nil];
         
         [selectedFoodDict setDictionary:dict];
-        [dict release];
-        
     }
     
     NSString *query2 = [NSString stringWithFormat: @"SELECT m.MeasureID, m.Description, fm.GramWeight FROM Measure m INNER JOIN FoodMeasure fm ON fm.MeasureID = m.MeasureID WHERE fm.FoodID = %i ORDER BY m.Description", foodID];
@@ -558,7 +522,6 @@ CGPoint svos;
         alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Category is Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert setTag:88];
         [alert show];
-        [alert release];
         return;
     }
     
@@ -568,7 +531,6 @@ CGPoint svos;
         alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Food Name, Measure, Category, Calories, Fat, Carbs & Protein are Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert setTag:88];
         [alert show];
-        [alert release];
         return;
     }
     else {
@@ -781,7 +743,6 @@ CGPoint svos;
         alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Category is Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert setTag:88];
         [alert show];
-        [alert release];
         return;
     }
     
@@ -791,7 +752,6 @@ CGPoint svos;
         alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Food Name, Measure, Category, Calories, Fat, Carbs & Protein are Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert setTag:88];
         [alert show];
-        [alert release];
         return;
     }
     else {
@@ -955,14 +915,13 @@ CGPoint svos;
 
 -(void)hudWasHidden:(MBProgressHUD *)hud {
     [HUD removeFromSuperview];
-    [HUD release];
     HUD = nil;
 }
 
 -(void)showCompleted {
     HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
     [self.navigationController.view addSubview:HUD];
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
+    HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
     HUD.mode = MBProgressHUDModeCustomView;
     HUD.delegate = nil;
     HUD.labelText = @"Completed";
@@ -974,61 +933,21 @@ CGPoint svos;
 }
 
 #pragma mark BARCODE SCANNER METHODS
--(void) readerControllerDidFailToRead: (ZBarReaderController*) reader withRetry: (BOOL) retry {
-    [reader dismissViewControllerAnimated:YES completion:nil];
+
+- (IBAction)loadBarcodeScanner:(id)sender {
+    self.barcodeScanner = [[BarCodeScanner alloc] init];
+    self.barcodeScanner.modalPresentationStyle = UIModalPresentationFullScreen;
+    [AppDel.window.rootViewController presentViewController:self.barcodeScanner animated:YES completion:Nil];
 }
 
--(void) imagePickerController: (UIImagePickerController*) reader didFinishPickingMediaWithInfo: (NSDictionary*) info {
-    id<NSFastEnumeration> results =
-    [info objectForKey: ZBarReaderControllerResults];
-    ZBarSymbol *symbol = nil;
-    for(symbol in results)
-        break;
+- (void)barcodeWasScanned:(NSNotification *)notification {
+    [self.barcodeScanner dismissViewControllerAnimated:YES completion:nil];
     
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-    [reader dismissViewControllerAnimated:YES completion:nil];
-    
-    //HHT to solve the issue after scan it will redirect to 0 index. we set this to 2. new (AppDel.selectedIndex)
-    [self.tabBarController setSelectedIndex:AppDel.selectedIndex];
-    
-    upcDict = [[NSDictionary alloc] initWithObjectsAndKeys: [NSString stringWithFormat:@"%@",symbol.data], @"UPC", nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BarcodeScanned" object:nil userInfo:upcDict];
-    [upcDict release];
-}
-
--(IBAction)loadBarcodeScanner:(id)sender {
-    ZBarReaderViewController *reader = [ZBarReaderViewController new];
-    reader.readerDelegate = self;
-    reader.supportedOrientationsMask = ZBarOrientationMaskAll;
-    ZBarImageScanner *scanner = reader.scanner;
-    [scanner setSymbology: nil config: ZBAR_CFG_ENABLE to: 0];
-    [scanner setSymbology: ZBAR_EAN13 config: ZBAR_CFG_ENABLE to:1];
-    [scanner setSymbology: ZBAR_UPCA config: ZBAR_CFG_ENABLE to:1];
-    [scanner setSymbology: ZBAR_CODE128 config: ZBAR_CFG_ENABLE to:1];
-    
-    [AppDel.window.rootViewController presentViewController:reader animated:YES completion:Nil];
-}
-
--(void)barcodeWasScanned:(NSNotification *)notification {
-    barcodeScannerVC = nil;
-    NSDictionary *upcDict2 = [notification userInfo];
+    NSDictionary *upcDict2 = (NSDictionary *)[notification object];
     
     [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
-    
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^ {
-    //        scanned_UPCA = nil;
-    //        scanned_UPCA = [[NSString alloc] initWithString:[upcDict2 valueForKey:@"UPC"]];
-    //        scanned_factualID = nil;
-    //        scanned_factualID = [[NSString alloc] initWithString:@"empty"];
-    //
-    //        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
-    //        [dietmasterEngine searchFactualDatabase:[upcDict2 valueForKey:@"UPC"]];
-    //    });
-    
-    //URL
-    //[upcDict2 valueForKey:@"UPC"]
     NSString *strURL = [NSString stringWithFormat:@"https://trackapi.nutritionix.com/v2/search/item?upc=%@",[upcDict2 valueForKey:@"UPC"]];
-    NSLog(@"%@",strURL);
+    //NSLog(@"%@",strURL);
     
     [self getApiCall:nil urlStr:strURL response:nil];
 }
@@ -1092,7 +1011,6 @@ CGPoint svos;
                 [alert addButtonWithTitle:@"Yes"];
                 [alert setTag:90099];
                 [alert show];
-                [alert release];
             }
             else {
                 [responseP addObject:jsonDictionary];
@@ -1122,9 +1040,6 @@ CGPoint svos;
                                  nil];
     SaveUPCDataWebService *webservice = [[SaveUPCDataWebService alloc] init];
     webservice.delegate = self;
-//    [webservice callWebservice:scannerDict];
-    [webservice release];
-    [dict release];
     
     //save found dict end
     
@@ -1238,7 +1153,6 @@ CGPoint svos;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Nutritional information found! Please confirm values then select Category." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:123456];
     [alert show];
-    [alert release];
     
     ScannedFoodis=YES;
     
@@ -1331,7 +1245,6 @@ CGPoint svos;
     }
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [popupQuery showInView:self.tabBarController.view];
-    [popupQuery release];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -1669,13 +1582,10 @@ CGPoint svos;
             NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:foodID, @"FoodID", intMeasureID, @"MeasureID", nil];
             NSDictionary *foodDict = [[NSDictionary alloc] initWithDictionary:
                                       [dietmasterEngine getFoodDetails:tempFoodDict]];
-            [tempFoodDict release];
             [dietmasterEngine.foodSelectedDict setDictionary:foodDict];
             DetailViewController *dvController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
             dvController.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:dvController animated:YES];
-            [dvController release];
-            [foodDict release];
             
             [self clearEnteredData];
         }
@@ -1686,14 +1596,12 @@ CGPoint svos;
             NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:@(_savedFoodID), @"FoodID", intMeasureID, @"MeasureID", nil];
             NSDictionary *foodDict = [[NSDictionary alloc] initWithDictionary:
                                       [dietmasterEngine getFoodDetails:tempFoodDict]];
-            [tempFoodDict release];
             [dietmasterEngine.foodSelectedDict setDictionary:foodDict];
             
             UIAlertView *alert;
             alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"There was an error saving to log. Please check your internet connection and try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert setTag:88];
             [alert show];
-            [alert release];
             
             [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
         }

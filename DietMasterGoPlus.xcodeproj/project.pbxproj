@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38B5029F2A0C524500A107FB /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B502942A0C524500A107FB /* MCSliceLayer.m */; };
-		38B502A02A0C524500A107FB /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B502952A0C524500A107FB /* MCPieChartView.m */; };
-		38B502A12A0C524500A107FB /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B502962A0C524500A107FB /* MCNewCustomLayer.m */; };
-		38B502A22A0C524500A107FB /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B5029D2A0C524500A107FB /* MCNewCustomLayeredView.m */; };
-		38B502A32A0C524500A107FB /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B5029E2A0C524500A107FB /* MCUtil.m */; };
+		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
+		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
+		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
+		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
+		0E9F170E2A33BBE700217BF9 /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */; };
+		0E9F170F2A33BBE700217BF9 /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */; };
 		4018F11E20DA437800FE1252 /* AppDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4018F11D20DA437800FE1252 /* AppDefaults.plist */; };
 		401B63A620B3FC64004453E7 /* owner_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3568E26F187EDBF7004A542C /* owner_bg@2x.png */; };
 		401B63A920B3FC64004453E7 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
@@ -166,7 +167,6 @@
 		401B644D20B3FC64004453E7 /* 195-barcode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E5ADCA317174FA600628F41 /* 195-barcode@2x.png */; };
 		401B644E20B3FC64004453E7 /* BottomBracket.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E5ADCBD17176D8800628F41 /* BottomBracket.png */; };
 		401B644F20B3FC64004453E7 /* TopBracket.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E5ADCBE17176D8800628F41 /* TopBracket.png */; };
-		401B645020B3FC64004453E7 /* BarcodeScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E5ADF501718B3D400628F41 /* BarcodeScannerViewController.xib */; };
 		401B645120B3FC64004453E7 /* black_box.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E4E437D1731559300C400D4 /* black_box.png */; };
 		401B645220B3FC64004453E7 /* 001.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EFC5EDF1C1328500091DD23 /* 001.png */; };
 		401B645320B3FC64004453E7 /* black_box@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E4E437E1731559400C400D4 /* black_box@2x.png */; };
@@ -472,7 +472,6 @@
 		401B658520B3FC64004453E7 /* ZXResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E5ADE791718B25300628F41 /* ZXResult.m */; };
 		401B658620B3FC64004453E7 /* ZXResultPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E5ADE7C1718B25300628F41 /* ZXResultPoint.m */; };
 		401B658720B3FC64004453E7 /* ZXRGBLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E5ADE7F1718B25300628F41 /* ZXRGBLuminanceSource.m */; };
-		401B658820B3FC64004453E7 /* BarcodeScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E5ADF4F1718B3D400628F41 /* BarcodeScannerViewController.m */; };
 		401B658920B3FC64004453E7 /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 685DFA2A18E2E99600FB97A7 /* XMLReader.m */; };
 		401B658A20B3FC64004453E7 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E436E172ABB7B00C400D4 /* Base64.m */; };
 		401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4370172ABB7B00C400D4 /* NSData-AES.m */; };
@@ -564,7 +563,6 @@
 		40E035C921F1F2A100968755 /* MyMovesDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */; };
 		40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */; };
 		40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */; };
-		4EA534167AB081724BB00A2B /* libPods-DietMasterGoPlus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DDD8F5E465723F2AAA8E6B /* libPods-DietMasterGoPlus.a */; };
 		650208B52500D34000F412B0 /* PopUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208B32500D34000F412B0 /* PopUpView.xib */; };
 		650208B62500D34000F412B0 /* PopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208B42500D34000F412B0 /* PopUpView.m */; };
 		650208CB250152FA00F412B0 /* PurchaseIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */; };
@@ -608,6 +606,7 @@
 		65FF437D2497F4B900583000 /* MealPlanDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF437B2497F4B900583000 /* MealPlanDetailsTableViewCell.xib */; };
 		65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4382249885D100583000 /* MyLogTableViewCell.m */; };
 		65FF4386249885D100583000 /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
+		6CF3FFC0A42040761DA6F930 /* Pods_DietMasterGoPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D87733DABEBBC0D3DC1C4AFD /* Pods_DietMasterGoPlus.framework */; };
 		8221CC932420D3300026CECD /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8221CC922420D3300026CECD /* Launch Screen.storyboard */; };
 		8272A32E23699A1C002331C2 /* today_active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8272A32223699A17002331C2 /* today_active@2x.png */; };
 		8272A32F23699A1C002331C2 /* today_inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8272A32323699A17002331C2 /* today_inactive@2x.png */; };
@@ -1208,9 +1207,6 @@
 		0E5ADE7F1718B25300628F41 /* ZXRGBLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRGBLuminanceSource.m; sourceTree = "<group>"; };
 		0E5ADE801718B25300628F41 /* ZXWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXWriter.h; sourceTree = "<group>"; };
 		0E5ADF4B1718B26800628F41 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		0E5ADF4E1718B3D400628F41 /* BarcodeScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeScannerViewController.h; sourceTree = "<group>"; };
-		0E5ADF4F1718B3D400628F41 /* BarcodeScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarcodeScannerViewController.m; sourceTree = "<group>"; };
-		0E5ADF501718B3D400628F41 /* BarcodeScannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BarcodeScannerViewController.xib; sourceTree = "<group>"; };
 		0E5ADF531718B79400628F41 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		0E5D707C1735890300336D06 /* 195-barcode2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "195-barcode2.png"; sourceTree = "<group>"; };
 		0E5D707D1735890300336D06 /* 195-barcode2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "195-barcode2@2x.png"; sourceTree = "<group>"; };
@@ -1261,6 +1257,20 @@
 		0E88C4E614E4584A0009C043 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		0E88C4E714E4584A0009C043 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		0E88C4E814E4584A0009C043 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		0E89824D2A33D47500DD7221 /* DietMasterGoPlus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DietMasterGoPlus-Bridging-Header.h"; sourceTree = "<group>"; };
+		0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeScanner.swift; sourceTree = "<group>"; };
+		0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
+		0E9F17002A33BBE700217BF9 /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
+		0E9F17012A33BBE700217BF9 /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
+		0E9F17022A33BBE700217BF9 /* MCPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCPieChartView.h; sourceTree = "<group>"; };
+		0E9F17032A33BBE700217BF9 /* MCNewCustomLayeredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNewCustomLayeredView.h; sourceTree = "<group>"; };
+		0E9F17042A33BBE700217BF9 /* MCCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCCore.h; sourceTree = "<group>"; };
+		0E9F17052A33BBE700217BF9 /* MCNewCustomLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNewCustomLayer.h; sourceTree = "<group>"; };
+		0E9F17062A33BBE700217BF9 /* MCPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCPieChartView.m; sourceTree = "<group>"; };
+		0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSliceLayer.m; sourceTree = "<group>"; };
+		0E9F17082A33BBE700217BF9 /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"; sourceTree = "<group>"; };
+		0E9F17092A33BBE700217BF9 /* MCUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCUtil.h; sourceTree = "<group>"; };
+		0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayeredView.m; sourceTree = "<group>"; };
 		0EAD266D1578EAED008E77D7 /* MealPlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanViewController.h; sourceTree = "<group>"; };
 		0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanViewController.m; sourceTree = "<group>"; };
 		0EAD266F1578EAED008E77D7 /* MealPlanViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MealPlanViewController.xib; sourceTree = "<group>"; };
@@ -1460,18 +1470,6 @@
 		35E541DF1887BAD5004DECCF /* config-adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-adhoc.xcconfig"; sourceTree = "<group>"; };
 		35E541E01887BAD5004DECCF /* config-appstore.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-appstore.xcconfig"; sourceTree = "<group>"; };
 		35E541E11887BAD5004DECCF /* config-debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-debug.xcconfig"; sourceTree = "<group>"; };
-		38B502932A0C524500A107FB /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
-		38B502942A0C524500A107FB /* MCSliceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSliceLayer.m; sourceTree = "<group>"; };
-		38B502952A0C524500A107FB /* MCPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCPieChartView.m; sourceTree = "<group>"; };
-		38B502962A0C524500A107FB /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
-		38B502972A0C524500A107FB /* MCNewCustomLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNewCustomLayer.h; sourceTree = "<group>"; };
-		38B502982A0C524500A107FB /* MCUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCUtil.h; sourceTree = "<group>"; };
-		38B502992A0C524500A107FB /* MCPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCPieChartView.h; sourceTree = "<group>"; };
-		38B5029A2A0C524500A107FB /* MCNewCustomLayeredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNewCustomLayeredView.h; sourceTree = "<group>"; };
-		38B5029B2A0C524500A107FB /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"; sourceTree = "<group>"; };
-		38B5029C2A0C524500A107FB /* MCCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCCore.h; sourceTree = "<group>"; };
-		38B5029D2A0C524500A107FB /* MCNewCustomLayeredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayeredView.m; sourceTree = "<group>"; };
-		38B5029E2A0C524500A107FB /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
 		4018F11D20DA437800FE1252 /* AppDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppDefaults.plist; sourceTree = "<group>"; };
 		401B65BA20B3FC64004453E7 /* DietMasterGoPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DietMasterGoPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		402A3C0E21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesDetailFooterCollectionReusableView.h; sourceTree = "<group>"; };
@@ -1722,7 +1720,6 @@
 		68626C4C1939EC5F001C9B9E /* option_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "option_bg@2x.png"; sourceTree = "<group>"; };
 		68626C4D1939EC5F001C9B9E /* radio_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radio_btn@2x.png"; sourceTree = "<group>"; };
 		68626C4E1939EC5F001C9B9E /* radio_btn_act@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radio_btn_act@2x.png"; sourceTree = "<group>"; };
-		73DDD8F5E465723F2AAA8E6B /* libPods-DietMasterGoPlus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DietMasterGoPlus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8221CC922420D3300026CECD /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		8272A32223699A17002331C2 /* today_active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_active@2x.png"; sourceTree = "<group>"; };
 		8272A32323699A17002331C2 /* today_inactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_inactive@2x.png"; sourceTree = "<group>"; };
@@ -1745,6 +1742,7 @@
 		B2119A47224BA2210020FF5D /* MyMovesListTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesListTableViewCell.h; sourceTree = "<group>"; };
 		B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesListTableViewCell.m; sourceTree = "<group>"; };
 		B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMovesListTableViewCell.xib; sourceTree = "<group>"; };
+		D87733DABEBBC0D3DC1C4AFD /* Pods_DietMasterGoPlus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DietMasterGoPlus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1778,7 +1776,7 @@
 				401B65B220B3FC64004453E7 /* Foundation.framework in Frameworks */,
 				401B65B320B3FC64004453E7 /* UIKit.framework in Frameworks */,
 				401B65B420B3FC64004453E7 /* CoreGraphics.framework in Frameworks */,
-				4EA534167AB081724BB00A2B /* libPods-DietMasterGoPlus.a in Frameworks */,
+				6CF3FFC0A42040761DA6F930 /* Pods_DietMasterGoPlus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2789,9 +2787,7 @@
 		0E5ADF4D1718B3B800628F41 /* BarcodeScannerViewController */ = {
 			isa = PBXGroup;
 			children = (
-				0E5ADF4E1718B3D400628F41 /* BarcodeScannerViewController.h */,
-				0E5ADF4F1718B3D400628F41 /* BarcodeScannerViewController.m */,
-				0E5ADF501718B3D400628F41 /* BarcodeScannerViewController.xib */,
+				0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */,
 			);
 			path = BarcodeScannerViewController;
 			sourceTree = "<group>";
@@ -2910,6 +2906,25 @@
 				0E88C4E814E4584A0009C043 /* SBJsonWriter.m */,
 			);
 			path = JSON;
+			sourceTree = "<group>";
+		};
+		0E9F16FE2A33BBE700217BF9 /* PNPieChartView */ = {
+			isa = PBXGroup;
+			children = (
+				0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */,
+				0E9F17002A33BBE700217BF9 /* MCUtil.m */,
+				0E9F17012A33BBE700217BF9 /* MCSliceLayer.h */,
+				0E9F17022A33BBE700217BF9 /* MCPieChartView.h */,
+				0E9F17032A33BBE700217BF9 /* MCNewCustomLayeredView.h */,
+				0E9F17042A33BBE700217BF9 /* MCCore.h */,
+				0E9F17052A33BBE700217BF9 /* MCNewCustomLayer.h */,
+				0E9F17062A33BBE700217BF9 /* MCPieChartView.m */,
+				0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */,
+				0E9F17082A33BBE700217BF9 /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */,
+				0E9F17092A33BBE700217BF9 /* MCUtil.h */,
+				0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */,
+			);
+			path = PNPieChartView;
 			sourceTree = "<group>";
 		};
 		0EAD266B1578EABF008E77D7 /* MealPlanViewController */ = {
@@ -3299,7 +3314,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				38B502922A0C517500A107FB /* MCPieChart */,
+				0E9F16FE2A33BBE700217BF9 /* PNPieChartView */,
 				650208E72501552400F412B0 /* KeyChainWrapper */,
 				652B915624B92A72007B08ED /* GoogleService-Info.plist */,
 				65F2DE84249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.h */,
@@ -3336,6 +3351,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0E89824D2A33D47500DD7221 /* DietMasterGoPlus-Bridging-Header.h */,
 				4163F1E31C8EEB03005A5E2E /* Images.xcassets */,
 				8D1107310486CEB800E47090 /* DietMasterBlueLine-Info.plist */,
 				68626C471939EC5F001C9B9E /* NewImages */,
@@ -3379,7 +3395,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
-				73DDD8F5E465723F2AAA8E6B /* libPods-DietMasterGoPlus.a */,
+				D87733DABEBBC0D3DC1C4AFD /* Pods_DietMasterGoPlus.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3483,25 +3499,6 @@
 				3568E2B4187EDE40004A542C /* MNMBottomPullToRefreshView.m */,
 			);
 			path = MNMBottomPullToRefresh;
-			sourceTree = "<group>";
-		};
-		38B502922A0C517500A107FB /* MCPieChart */ = {
-			isa = PBXGroup;
-			children = (
-				38B5029C2A0C524500A107FB /* MCCore.h */,
-				38B502972A0C524500A107FB /* MCNewCustomLayer.h */,
-				38B502962A0C524500A107FB /* MCNewCustomLayer.m */,
-				38B5029A2A0C524500A107FB /* MCNewCustomLayeredView.h */,
-				38B5029D2A0C524500A107FB /* MCNewCustomLayeredView.m */,
-				38B5029B2A0C524500A107FB /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */,
-				38B502992A0C524500A107FB /* MCPieChartView.h */,
-				38B502952A0C524500A107FB /* MCPieChartView.m */,
-				38B502932A0C524500A107FB /* MCSliceLayer.h */,
-				38B502942A0C524500A107FB /* MCSliceLayer.m */,
-				38B502982A0C524500A107FB /* MCUtil.h */,
-				38B5029E2A0C524500A107FB /* MCUtil.m */,
-			);
-			path = MCPieChart;
 			sourceTree = "<group>";
 		};
 		402A3C4421F8B7C4005DEC50 /* FSCalendar */ = {
@@ -4008,7 +4005,7 @@
 				401B65B520B3FC64004453E7 /* ShellScript */,
 				656D949424B9363B001DE651 /* Embed Frameworks */,
 				658D503D24BCD6B30022811A /* ShellScript */,
-				277FC8BA1E1BFB51A0F785F7 /* [CP] Copy Pods Resources */,
+				42E87FD247D3CE1545C14BBE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -4028,7 +4025,7 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					401B63A220B3FC64004453E7 = {
-						LastSwiftMigration = 1030;
+						LastSwiftMigration = 1430;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
@@ -4264,7 +4261,6 @@
 				4018F11E20DA437800FE1252 /* AppDefaults.plist in Resources */,
 				401B644E20B3FC64004453E7 /* BottomBracket.png in Resources */,
 				401B644F20B3FC64004453E7 /* TopBracket.png in Resources */,
-				401B645020B3FC64004453E7 /* BarcodeScannerViewController.xib in Resources */,
 				8272A33623699A1C002331C2 /* myplan_active@2x.png in Resources */,
 				401B645120B3FC64004453E7 /* black_box.png in Resources */,
 				401B645220B3FC64004453E7 /* 001.png in Resources */,
@@ -4334,32 +4330,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		277FC8BA1E1BFB51A0F785F7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-resources.sh",
-				"${PODS_ROOT}/SBPickerSelector/SBPickerSelector/Resources/SBPickerSelector.xib",
-				"${PODS_ROOT}/ZBarSDK/iphone/res/zbar-back.png",
-				"${PODS_ROOT}/ZBarSDK/iphone/res/zbar-help.html",
-				"${PODS_ROOT}/ZBarSDK/iphone/res/zbar-helpicons.png",
-				"${PODS_ROOT}/ZBarSDK/iphone/res/zbar-samples.png",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SBPickerSelector.nib",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zbar-back.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zbar-help.html",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zbar-helpicons.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zbar-samples.png",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		401B65B520B3FC64004453E7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4373,6 +4343,46 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PROJECT_DIR}/Fabric.framework/run\" cfaf556ea31098296c2387b2414d2f27bcb2ecbf 8255e987a7bcf6d91cb948e6f7432c7ec29f23ed7a5400d9bf4020fb20bf3269\n";
+		};
+		42E87FD247D3CE1545C14BBE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCoreExtension/FirebaseCoreExtension.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCoreInternal/FirebaseCoreInternal.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCrashlytics/FirebaseCrashlytics.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseSessions/FirebaseSessions.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleDataTransport/GoogleDataTransport.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesSwift/Promises.framework",
+				"${BUILT_PRODUCTS_DIR}/SBPickerSelector/SBPickerSelector.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCoreExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCoreInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCrashlytics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseInstallations.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseSessions.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleDataTransport.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Promises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SBPickerSelector.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		658D503D24BCD6B30022811A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4426,6 +4436,7 @@
 				650208F12501564700F412B0 /* DietMasterGoController_Old.m in Sources */,
 				401B648520B3FC64004453E7 /* fmdb.m in Sources */,
 				401B648620B3FC64004453E7 /* FMResultSet.m in Sources */,
+				0E9F170F2A33BBE700217BF9 /* MCNewCustomLayeredView.m in Sources */,
 				401B648720B3FC64004453E7 /* ExercisesViewController.m in Sources */,
 				403D88B321ECD53200B2F232 /* MyMovesDetailsViewController.m in Sources */,
 				401B648820B3FC64004453E7 /* MBProgressHUD.m in Sources */,
@@ -4448,7 +4459,6 @@
 				401B649720B3FC64004453E7 /* UserLoginWebService.m in Sources */,
 				401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */,
 				401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */,
-				38B5029F2A0C524500A107FB /* MCSliceLayer.m in Sources */,
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
 				401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */,
 				401B649C20B3FC64004453E7 /* PullRefreshTableViewController.m in Sources */,
@@ -4479,7 +4489,6 @@
 				401B64B020B3FC64004453E7 /* ZXEmailDoCoMoResultParser.m in Sources */,
 				401B64B120B3FC64004453E7 /* HPGrowingTextView.m in Sources */,
 				B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */,
-				38B502A32A0C524500A107FB /* MCUtil.m in Sources */,
 				401B64B220B3FC64004453E7 /* ZXExpandedProductParsedResult.m in Sources */,
 				401B64B320B3FC64004453E7 /* ZXExpandedProductResultParser.m in Sources */,
 				401B64B420B3FC64004453E7 /* ZXGeoParsedResult.m in Sources */,
@@ -4506,6 +4515,7 @@
 				401B64C620B3FC64004453E7 /* ZXURIParsedResult.m in Sources */,
 				401B64C720B3FC64004453E7 /* ZXURIResultParser.m in Sources */,
 				401B64C820B3FC64004453E7 /* ZXURLTOResultParser.m in Sources */,
+				0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */,
 				650208DF250153C300F412B0 /* InAppPurchaseViewController.m in Sources */,
 				401B64C920B3FC64004453E7 /* ZXVCardResultParser.m in Sources */,
 				401B64CA20B3FC64004453E7 /* ZXVEventResultParser.m in Sources */,
@@ -4518,7 +4528,6 @@
 				401B64D120B3FC64004453E7 /* ZXImage.m in Sources */,
 				401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */,
 				401B64D320B3FC64004453E7 /* ZXMathUtils.m in Sources */,
-				38B502A02A0C524500A107FB /* MCPieChartView.m in Sources */,
 				401B64D420B3FC64004453E7 /* NSObject+Blocks.m in Sources */,
 				401B64D520B3FC64004453E7 /* ZXMonochromeRectangleDetector.m in Sources */,
 				401B64D620B3FC64004453E7 /* CXMLElement.m in Sources */,
@@ -4580,7 +4589,7 @@
 				401B650720B3FC64004453E7 /* ZXMultiDetector.m in Sources */,
 				65462D2626BD1DAF004D1654 /* UserGoalVC.m in Sources */,
 				401B650820B3FC64004453E7 /* ZXMultiFinderPatternFinder.m in Sources */,
-				38B502A12A0C524500A107FB /* MCNewCustomLayer.m in Sources */,
+				0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */,
 				401B650920B3FC64004453E7 /* ZXQRCodeMultiReader.m in Sources */,
 				401B650A20B3FC64004453E7 /* ZXByQuadrantReader.m in Sources */,
 				401B650B20B3FC64004453E7 /* ZXGenericMultipleBarcodeReader.m in Sources */,
@@ -4600,6 +4609,7 @@
 				401B651820B3FC64004453E7 /* ZXBlockParsedResult.m in Sources */,
 				402A3C7221F8B7C4005DEC50 /* FSCalendarCalculator.m in Sources */,
 				402A9061221AED1900568860 /* NSArray+HOFC.m in Sources */,
+				0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */,
 				401B651920B3FC64004453E7 /* ZXCurrentParsingState.m in Sources */,
 				401B651A20B3FC64004453E7 /* ZXDecodedChar.m in Sources */,
 				401B651B20B3FC64004453E7 /* MNMBottomPullToRefreshManager.m in Sources */,
@@ -4654,6 +4664,7 @@
 				401B654620B3FC64004453E7 /* ZXUPCEANWriter.m in Sources */,
 				401B654720B3FC64004453E7 /* ZXUPCEReader.m in Sources */,
 				401B654820B3FC64004453E7 /* ZXModulusGF.m in Sources */,
+				0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */,
 				401B654920B3FC64004453E7 /* ZXModulusPoly.m in Sources */,
 				650208CE2501531B00F412B0 /* IAPHelper.m in Sources */,
 				401B654A20B3FC64004453E7 /* ZXPDF417ECErrorCorrection.m in Sources */,
@@ -4685,6 +4696,7 @@
 				401B655F20B3FC64004453E7 /* MessageCell.m in Sources */,
 				65F2DE86249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m in Sources */,
 				401B656020B3FC64004453E7 /* ZXQRCodeDecodedBitStreamParser.m in Sources */,
+				0E9F170E2A33BBE700217BF9 /* MCSliceLayer.m in Sources */,
 				401B656120B3FC64004453E7 /* ZXQRCodeDecoder.m in Sources */,
 				401B656220B3FC64004453E7 /* MBCircularProgressBarView.m in Sources */,
 				401B656320B3FC64004453E7 /* ZXQRCodeVersion.m in Sources */,
@@ -4703,7 +4715,6 @@
 				401B656E20B3FC64004453E7 /* ZXQRCodeDetector.m in Sources */,
 				401B656F20B3FC64004453E7 /* ZXQRCodeFinderPattern.m in Sources */,
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,
-				38B502A22A0C524500A107FB /* MCNewCustomLayeredView.m in Sources */,
 				401B657020B3FC64004453E7 /* ZXBlockPair.m in Sources */,
 				402A3C6821F8B7C4005DEC50 /* FSCalendarDelegationProxy.m in Sources */,
 				401B657120B3FC64004453E7 /* ZXByteMatrix.m in Sources */,
@@ -4731,7 +4742,6 @@
 				401B658520B3FC64004453E7 /* ZXResult.m in Sources */,
 				401B658620B3FC64004453E7 /* ZXResultPoint.m in Sources */,
 				401B658720B3FC64004453E7 /* ZXRGBLuminanceSource.m in Sources */,
-				401B658820B3FC64004453E7 /* BarcodeScannerViewController.m in Sources */,
 				401B658920B3FC64004453E7 /* XMLReader.m in Sources */,
 				401B658A20B3FC64004453E7 /* Base64.m in Sources */,
 				401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */,
@@ -4777,7 +4787,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: JOHN SCHIRRA (24JC3PGK4H)";
+				CODE_SIGN_IDENTITY = "Apple Development: Henry Kirk (876FQKADJR)";
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -4788,12 +4799,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "25a37cd3-0ea6-4da1-92ed-4c8b73a1fe7f";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Distribution;
 		};
@@ -4836,7 +4847,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/MyMoves-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "DietmasterGo Plus";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4852,14 +4863,15 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dietmastergoplus;
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = DietMasterGoPlus;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Classes/MyMoves_New_API_WebServices/MyMoves-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "DietMasterGoPlus-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -4900,7 +4912,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/MyMoves-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "DietmasterGo Plus";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4916,14 +4928,15 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dietmastergoplus;
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = DietMasterGoPlus;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Classes/MyMoves_New_API_WebServices/MyMoves-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "DietMasterGoPlus-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
@@ -4964,7 +4977,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/MyMoves-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "DietmasterGo Plus";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4980,14 +4993,15 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dietmastergoplus;
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = DietMasterGoPlus;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Classes/MyMoves_New_API_WebServices/MyMoves-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "DietMasterGoPlus-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Distribution;
 		};
@@ -5012,7 +5026,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: JOHN SCHIRRA (24JC3PGK4H)";
+				CODE_SIGN_IDENTITY = "Apple Development: Henry Kirk (876FQKADJR)";
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -5024,11 +5039,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "25a37cd3-0ea6-4da1-92ed-4c8b73a1fe7f";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -5053,7 +5068,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: JOHN SCHIRRA (24JC3PGK4H)";
+				CODE_SIGN_IDENTITY = "Apple Development: Henry Kirk (876FQKADJR)";
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -5064,12 +5080,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "25a37cd3-0ea6-4da1-92ed-4c8b73a1fe7f";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};

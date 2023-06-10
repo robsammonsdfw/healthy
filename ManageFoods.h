@@ -11,18 +11,12 @@
 #import "FoodCategoryPicker.h"
 #import "MeasurePicker.h"
 #import "MBProgressHUD.h"
-#import "BarcodeScannerViewController.h"
 #import "SaveUPCDataWebService.h"
 #import "FactualQuery.h"
-#import "zbar.h"
-#import "ZBarImageScanner.h"
-#import "ZBarReaderController.h"
-#import "ZBarReaderViewController.h"
-#import "ZBarReaderViewController.h"
 
 @class AppDelegate;
 
-@interface ManageFoods : UIViewController <UITextFieldDelegate, MeasurePickerDelegate, FoodCategoryDelegate, MBProgressHUDDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, SaveUPCDataWSDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate,ZBarReaderDelegate> {
+@interface ManageFoods : UIViewController <UITextFieldDelegate, MeasurePickerDelegate, FoodCategoryDelegate, MBProgressHUDDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, SaveUPCDataWSDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate> {
 	
 	AppDelegate *mainDelegate;
 	
@@ -84,8 +78,6 @@
     NSMutableDictionary *selectedFoodDict;
     
     BOOL reloadData;
-
-    BarcodeScannerViewController* barcodeScannerVC;
     
     NSMutableDictionary *scannerDict;
     NSString *scanned_UPCA;
@@ -105,7 +97,6 @@
 @property (nonatomic,retain) NSString *strCategoryName;
 @property (nonatomic,retain) NSNumber *intMeasureID;
 @property (nonatomic,retain) NSString *strMeasureName;
-@property (nonatomic,retain) BarcodeScannerViewController* barcodeScannerVC;
 @property (nonatomic,retain) NSMutableDictionary *scannerDict;
 @property (nonatomic,retain) NSString *scanned_UPCA;
 @property (nonatomic,retain) NSString *scanned_factualID;
