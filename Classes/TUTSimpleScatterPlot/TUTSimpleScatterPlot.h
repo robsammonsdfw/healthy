@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CorePlot-CocoaTouch.h"
+#import <CorePlot/CorePlot.h>
 #import "FMDatabase.h"
 #import "FMResultSet.h"
 

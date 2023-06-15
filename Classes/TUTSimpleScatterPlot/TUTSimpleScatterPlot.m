@@ -105,8 +105,8 @@
     float yAxisMax = maxY + 10.0f;
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(xAxisMin) length:CPTDecimalFromFloat(xAxisMax - xAxisMin)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(yAxisMin) length:CPTDecimalFromFloat(yAxisMax - yAxisMin)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(xAxisMin) length:@(xAxisMax - xAxisMin)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(yAxisMin) length:@(yAxisMax - yAxisMin)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     
@@ -116,7 +116,7 @@
     axisSet.xAxis.majorTickLineStyle = lineStyle;
     axisSet.xAxis.labelTextStyle = textStyle;
     axisSet.xAxis.labelOffset = 3.0f;
-    axisSet.xAxis.majorIntervalLength = CPTDecimalFromFloat(2.0f);
+    axisSet.xAxis.majorIntervalLength = @2.0f;
     axisSet.xAxis.minorTicksPerInterval = 1;
     axisSet.xAxis.minorTickLength = 5.0f;
     axisSet.xAxis.majorTickLength = 7.0f;
@@ -129,7 +129,7 @@
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[self.graphDataValues objectAtIndex:i]];
         
         CPTAxisLabel *newLabel = [[[CPTAxisLabel alloc] initWithText: [NSString stringWithFormat:@"%@", [dict valueForKey:@"date"]] textStyle:axisSet.xAxis.labelTextStyle] autorelease];
-        newLabel.tickLocation = CPTDecimalFromUnsignedInteger(i * 1);
+        newLabel.tickLocation = @(i * 1);
         newLabel.offset = axisSet.xAxis.labelOffset + axisSet.xAxis.majorTickLength / 2.0;
         newLabel.rotation = M_PI/4;
         [newAxisLabels addObject:newLabel];
@@ -149,7 +149,7 @@
     axisSet.yAxis.minorTickLineStyle = nil;
     axisSet.yAxis.labelTextStyle = textStyle;
     axisSet.yAxis.labelOffset = 5.0f;
-    axisSet.yAxis.majorIntervalLength = CPTDecimalFromFloat((yAxisMax / 5));
+    axisSet.yAxis.majorIntervalLength = @((yAxisMax / 5));
     axisSet.yAxis.minorTicksPerInterval = 1;
     axisSet.yAxis.minorTickLength = 5.0f;
     axisSet.yAxis.majorTickLength = 7.0f;
@@ -159,7 +159,7 @@
     axisSet.yAxis.labelFormatter = numberFormatter;
     [numberFormatter release];
     
-    axisSet.yAxis.orthogonalCoordinateDecimal = CPTDecimalFromFloat([self.graphDataValues count]-0.5f);
+    axisSet.yAxis.orthogonalPosition = @([self.graphDataValues count]-0.5f);
     axisSet.yAxis.tickDirection = CPTSignPositive;
     
     CPTScatterPlot *plot = [[[CPTScatterPlot alloc] init] autorelease];
@@ -185,7 +185,7 @@
     areaGradient.angle = -90.0;
     CPTFill* areaGradientFill = [CPTFill fillWithGradient:areaGradient];
     plot.areaFill = areaGradientFill;
-    plot.areaBaseValue = CPTDecimalFromString(@"0.0");
+    plot.areaBaseValue = @0.0;
     
     plot.plotSymbol = plotSymbol;
     
@@ -347,8 +347,8 @@
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(xAxisMin) length:CPTDecimalFromFloat(xAxisMax - xAxisMin)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(yAxisMin) length:CPTDecimalFromFloat(yAxisMax - yAxisMin)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(xAxisMin) length:@(xAxisMax - xAxisMin)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(yAxisMin) length:@(yAxisMax - yAxisMin)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     
@@ -359,7 +359,7 @@
     for ( NSUInteger i = 0; i < [self.graphDataValues count]; i++ ) {
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[self.graphDataValues objectAtIndex:i]];
         CPTAxisLabel *newLabel = [[[CPTAxisLabel alloc] initWithText: [NSString stringWithFormat:@"%@", [dict valueForKey:@"date"]] textStyle:axisSet.xAxis.labelTextStyle] autorelease];
-        newLabel.tickLocation = CPTDecimalFromUnsignedInteger(i * 1);
+        newLabel.tickLocation = @(i * 1);
         newLabel.offset = axisSet.xAxis.labelOffset + axisSet.xAxis.majorTickLength / 2.0;
         newLabel.rotation = M_PI/4;
         [newAxisLabels addObject:newLabel];
@@ -371,24 +371,24 @@
     axisSet.xAxis.axisLabels = newAxisLabels;
     axisSet.xAxis.majorTickLocations = majorTickLocations;
     
-    axisSet.yAxis.majorIntervalLength = CPTDecimalFromFloat((yAxisMax /16));
+    axisSet.yAxis.majorIntervalLength = @((yAxisMax /16));
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
     axisSet.yAxis.labelFormatter = numberFormatter;
     [numberFormatter release];
     
-    axisSet.yAxis.orthogonalCoordinateDecimal = CPTDecimalFromFloat([self.graphDataValues count]-0.5f);
+    axisSet.yAxis.orthogonalPosition = @([self.graphDataValues count]-0.5f);
     if ([self.graphData count] <=1) {
-        axisSet.yAxis.orthogonalCoordinateDecimal = CPTDecimalFromFloat(1.0);
+        axisSet.yAxis.orthogonalPosition = @(1.0);
     }
     axisSet.yAxis.tickDirection = CPTSignPositive;
     
     if (minY>50) {
-        axisSet.xAxis.orthogonalCoordinateDecimal = CPTDecimalFromFloat(minY-10);
+        axisSet.xAxis.orthogonalPosition = @(minY-10);
     }
     else {
-        axisSet.xAxis.orthogonalCoordinateDecimal = CPTDecimalFromFloat(0);
+        axisSet.xAxis.orthogonalPosition = @(0);
     }
     
     if ([self.graphData count] <= 1) {
