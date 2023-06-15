@@ -136,7 +136,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     }
     else
         hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = Localized(@"Updating...");
+    hud.labelText = @"Updating...";
     
     [[DietmasterEngine instance] synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
         [pullToRefreshManager tableViewReloadFinished];
@@ -158,7 +158,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;//11-02-2016
     
-    self.title = Localized(@"Mail");
+    self.title = @"Mail";
     
     countShowedMessage = ShowMessageCountStep;
     self.keyboardAutoScrolling = YES;
@@ -184,7 +184,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     button.layer.masksToBounds = YES;
     button.backgroundColor = UIColorFromHex(0x8e8e93);
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitle:Localized(@"show previous messages") forState:UIControlStateNormal];
+    [button setTitle:@"Show previous messages" forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.];
     [button setSize:CGSizeMake(200, 20)];
     [button addTarget:self action:@selector(addMessage) forControlEvents:UIControlEventTouchUpInside];
@@ -222,7 +222,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 
 - (void)addMessage {
     hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = Localized(@"Updating...");
+    hud.labelText = @"Updating...";
     [self performAfterDelay:0.1 block:^{
         countShowedMessage += ShowMessageCountStep;
         [self reloadDataWithScroll:@(NO)];
@@ -323,10 +323,10 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 
 - (void)sendMessageFailed:(NSString *)failedMessage {
     [hud hide:YES];
-    UIAlertViewShow(Localized(@"Error"),
+    UIAlertViewShow(@"Error",
                     failedMessage,
-                    @[Localized(@"Cancel"),
-                      Localized(@"Retry")],
+                    @[@"Cancel",
+                      @"Retry"],
                     ^(UIAlertView *alertView, NSInteger buttonIndex) {
                         if (buttonIndex == 1) {
                             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -417,7 +417,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     [sendView_.messageView resignFirstResponder];
     
     hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = Localized(@"Sending...");
+    hud.labelText = @"Sending...";
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -519,7 +519,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
         static NSString *cellIdentifier = @"lastCellIdentifier";
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                        reuseIdentifier:cellIdentifier];
-        cell.textLabel.text = Localized(@"Pull up the screen to update the message list");
+        cell.textLabel.text = @"Pull up the screen to update the message list";
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.backgroundColor = [UIColor clearColor];

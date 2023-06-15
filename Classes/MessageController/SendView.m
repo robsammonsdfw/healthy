@@ -29,7 +29,7 @@
     messageView.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
     messageView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
     messageView.backgroundColor = [UIColor whiteColor];
-    messageView.placeholder = Localized(@"Text");
+    messageView.placeholder = @"Text";
     messageView.placeholderColor = UIColorFromHex(0xababab);
     [messageView setBackgroundColor:[UIColor clearColor]];
     
