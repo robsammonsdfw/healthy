@@ -2205,30 +2205,25 @@ static DietmasterEngine* _instance = nil;
 }
 
 #pragma mark GET DATA DELEGATES (USER)
--(void)getDataFailed:(NSString *)failedMessage {
+- (void)getDataFailed:(NSString *)failedMessage {
     getDataDidFail = NO;
     getDataComplete = YES;
 }
 
--(void)getDataFinished:(NSDictionary *)responseDict {
+- (void)getDataFinished:(NSDictionary *)responseDict {
     if (responseDict == nil) {
         return;
     }
-   // NSString *str = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
     if (![db open]) {
-        NSLog(@"Could not open db.");
-    }
-    
-    FMResultSet *schemaRS = [db getSchemaVersion];
-    while ([schemaRS next]) {
-        NSLog(@"Schema Version: %@", [schemaRS stringForColumnIndex:0]);
+        DMLog(@"Could not open db.");
+        return;
     }
     
     NSDictionary *dict = responseDict.mutableCopy;
         
-    //HHT Null handle
+    // HHT Null handle
     // Update User Info
     if ([dict valueForKey:@"User"]) {
         NSArray *arryUserData = [dict valueForKey:@"User"];

@@ -14,6 +14,7 @@ def core_pods
   pod 'Firebase/Analytics'
   pod 'SBPickerSelector', '1.0.4' # Last Objc version.
   pod 'CorePlot' # https://github.com/core-plot/core-plot
+  pod 'FMDB' # https://github.com/ccgus/fmdb
 end
 
 target 'DietMasterGoPlus' do
