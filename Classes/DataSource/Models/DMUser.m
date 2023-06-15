@@ -30,16 +30,16 @@
             _goalStartDate = [_dateFormatter dateFromString:userDict[@"GoalStartDate"]];
         }
         
-        _weightGoal = ObjectOrNSNumber(userDict[@"WeightGoal"]);
-        _height = ObjectOrNSNumber(userDict[@"Height"]);
-        _goals = ObjectOrNSNumber(userDict[@"Goals"]);
-        _profession = ObjectOrNSNumber(userDict[@"Profession"]);
-        _bodyType = ObjectOrNSNumber(userDict[@"BodyType"]);
-        _proteinRequirements = ObjectOrNSNumber(userDict[@"ProteinRequirements"]);
-        _gender = ObjectOrNSNumber(userDict[@"Gender"]);
-        _lactating = ObjectOrNSNumber(userDict[@"Lactation"]);
-        _goalRate = ObjectOrNSNumber(userDict[@"GoalRate"]);
-        _userBMR = ObjectOrNSNumber(userDict[@"BMR"]);
+        _weightGoal = ValidNSNumber(userDict[@"WeightGoal"]);
+        _height = ValidNSNumber(userDict[@"Height"]);
+        _goals = ValidNSNumber(userDict[@"Goals"]);
+        _profession = ValidNSNumber(userDict[@"Profession"]);
+        _bodyType = ValidNSNumber(userDict[@"BodyType"]);
+        _proteinRequirements = ValidNSNumber(userDict[@"ProteinRequirements"]);
+        _gender = ValidNSNumber(userDict[@"Gender"]);
+        _lactating = ValidNSNumber(userDict[@"Lactation"]);
+        _goalRate = ValidNSNumber(userDict[@"GoalRate"]);
+        _userBMR = ValidNSNumber(userDict[@"BMR"]);
     }
     return self;
 }

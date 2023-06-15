@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
+		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
 		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
 		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
@@ -428,6 +429,8 @@
 		0E0A297C17468204003AB90A /* calloutbubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calloutbubble@2x.png"; sourceTree = "<group>"; };
 		0E1A3B392A3B66AC004C6033 /* DMMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessage.h; sourceTree = "<group>"; };
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
+		0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMFood.h; sourceTree = "<group>"; };
+		0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMFood.m; sourceTree = "<group>"; };
 		0E3F44D215003DA6008413AB /* LearnMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LearnMoreViewController.h; sourceTree = "<group>"; };
 		0E3F44D315003DA6008413AB /* LearnMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LearnMoreViewController.m; sourceTree = "<group>"; };
 		0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LearnMoreViewController.xib; sourceTree = "<group>"; };
@@ -1669,6 +1672,8 @@
 				0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */,
 				0E1A3B392A3B66AC004C6033 /* DMMessage.h */,
 				0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */,
+				0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */,
+				0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2816,6 +2821,7 @@
 				650208F12501564700F412B0 /* DietMasterGoController_Old.m in Sources */,
 				0E9F170F2A33BBE700217BF9 /* MCNewCustomLayeredView.m in Sources */,
 				401B648720B3FC64004453E7 /* ExercisesViewController.m in Sources */,
+				0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */,
 				403D88B321ECD53200B2F232 /* MyMovesDetailsViewController.m in Sources */,
 				401B648820B3FC64004453E7 /* MBProgressHUD.m in Sources */,
 				402A3C6D21F8B7C4005DEC50 /* FSCalendarCollectionViewLayout.m in Sources */,

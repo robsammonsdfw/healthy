@@ -27,21 +27,48 @@
         _dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateFormat:@"MM/dd/yyyy hh:mm:ss a"];
         
-        NSString *dateSent = ObjectOrEmptyString(dictionary[@"DateTime"]);
+        NSString *dateSent = ValidString(dictionary[@"DateTime"]);
         if (dateSent.length) {
             _dateSent = [_dateFormatter dateFromString:dateSent];
         }
         
-        _messageId = ObjectOrEmptyString(dictionary[@"MessageID"]);
-        _senderName = ObjectOrEmptyString(dictionary[@"Sender"]);
+        _messageId = ValidString(dictionary[@"MessageID"]);
+        _senderName = ValidString(dictionary[@"Sender"]);
         
         // Escape quotes.
-        NSString *text = [ObjectOrEmptyString(dictionary[@"Text"]) stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        NSString *text = [ValidString(dictionary[@"Text"]) stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         _text = text;
         
-        _isRead = [ObjectOrEmptyString(dictionary[@"MsgRead"]) isEqualToString:@"True"] ? YES : NO;
+        _isRead = [ValidString(dictionary[@"MsgRead"]) isEqualToString:@"True"] ? YES : NO;
     }
     return self;
+}
+
+
+#pragma mark - Equality
+
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    }
+    
+    if (![object isKindOfClass:[DMMessage class]]) {
+        return NO;
+    }
+    
+    return [self isEqualToMessage:object];
+}
+
+- (BOOL)isEqualToMessage:(DMMessage *)message {
+    if (![self.messageId isEqualToString:message.messageId]) {
+        return NO;
+    }
+
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return [self.messageId hash];
 }
 
 @end
