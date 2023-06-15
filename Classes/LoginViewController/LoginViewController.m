@@ -345,7 +345,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     //added by HHT
     else if ([[dict valueForKey:@"Status"] isEqualToString:@"False"] && [str containsString:@"Service has been terminated"]){
-        NSLog(@"Service has been terminated");
+        DMLog(@"Service has been terminated");
     }
     else {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];

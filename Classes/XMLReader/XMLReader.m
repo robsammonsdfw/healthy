@@ -163,7 +163,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 {
     // Set the error pointer to the parser's error object
 	
-	NSLog(@"%@",parseError);
+	DMLog(@"%@",parseError);
     *errorPointer = parseError;
 }
 

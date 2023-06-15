@@ -116,7 +116,7 @@
 #pragma mark - AlertView Delegate method -
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"Button Clicked");
+    DMLog(@"Button Clicked");
 //    exit(0);
 }
 #pragma mark - APi Call -
@@ -140,7 +140,7 @@
                               "</soap:Body>"
                               "</soap:Envelope>",companyID,ParentGroupID];
     
-    //NSLog(@"%@",soapMessage);
+    //DMLog(@"%@",soapMessage);
     // [{"UserID":"110195","CompanyID":"1127"}]
     NSURL *url = [NSURL URLWithString:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=GetMealTypeOptions"];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
@@ -160,7 +160,7 @@
     }
     else
     {
-        NSLog(@"theConnection is NULL");
+        DMLog(@"theConnection is NULL");
     }
 }
 
@@ -258,12 +258,12 @@
                                                          error:&error];
     
     if (!jsonData) {
-        NSLog(@"Got an error: %@", error);
+        DMLog(@"Got an error: %@", error);
         return;
     }
     
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSLog(@"pass Parameter is--->:%@",jsonString);
+    DMLog(@"pass Parameter is--->:%@",jsonString);
     
     //create body for company login
     NSString *companyAuthBody = [NSString stringWithFormat:@"{\"companyId\": \"%@\",\"passThruKey\": \"%@\"}", companyID, passThruKey];
@@ -400,9 +400,9 @@
     [HUD removeFromSuperview];
     [HUD release];
     HUD = nil;
-    NSLog(@"ERROR with Connection");
+    DMLog(@"ERROR with Connection");
     
-    NSLog(@"%@",[error description]);
+    DMLog(@"%@",[error description]);
     
     [connection release];
     [webData release];
@@ -412,14 +412,14 @@
     [HUD removeFromSuperview];
     [HUD release];
     HUD = nil;
-    // NSLog(@"DONE. Received Bytes: %d", [webData length]);
+    // DMLog(@"DONE. Received Bytes: %d", [webData length]);
     NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-    //NSLog(@"%@",theXML);
+    //DMLog(@"%@",theXML);
     
     NSError *error=nil;
     NSDictionary *dic = [XMLReader dictionaryForXMLString:theXML error:&error];
     
-    NSLog(@"%@",[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"GetMealTypeOptionsResponse"]objectForKey:@"GetMealTypeOptionsResult"]);
+    DMLog(@"%@",[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"GetMealTypeOptionsResponse"]objectForKey:@"GetMealTypeOptionsResult"]);
     //    soapResult =[NSMutableArray new];
     // pickerData=[[NSArray new] retain];
     SBJSON *json = [SBJSON new];
@@ -427,7 +427,7 @@
     
     soapResult=[[jsonObject objectForKey:@"MealTypeCategories"] retain];
     pickerData=[[soapResult valueForKey:@"Description"] retain];
-    NSLog(@"%@",pickerData);
+    DMLog(@"%@",pickerData);
     
     [theXML release];
     
@@ -447,13 +447,13 @@
 
 #pragma mark - Picker -
 -(void)pickerSelector:(SBPickerSelector *)selector selectedValue:(NSString *)value index:(NSInteger)idx {
-    NSLog(@"%@",[soapResult objectAtIndex:idx]);
+    DMLog(@"%@",[soapResult objectAtIndex:idx]);
     MealTypeID=[[[soapResult objectAtIndex:idx] valueForKey:@"MealTypeID"] retain];
     self.txtMealType.text=value;
 }
 
 -(void)pickerSelector:(SBPickerSelector *)selector cancelPicker:(BOOL)cancel {
-    NSLog(@"Picker canceled ...");
+    DMLog(@"Picker canceled ...");
 }
 
 - (void)dealloc {

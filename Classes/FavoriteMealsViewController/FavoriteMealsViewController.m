@@ -180,7 +180,7 @@
         [dateFormat release];
 
         NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
-        NSLog(@"mealIDQuery for DetailView is %@", mealIDQuery);
+        DMLog(@"mealIDQuery for DetailView is %@", mealIDQuery);
         FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
         while ([rsMealID next]) {
             
@@ -250,7 +250,7 @@
         [db executeUpdate:insertSQL];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         
         [db commit];
@@ -279,7 +279,7 @@
     [db executeUpdate:deleteSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -291,7 +291,7 @@
     [db executeUpdate:deleteSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];

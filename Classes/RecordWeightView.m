@@ -140,7 +140,7 @@
         FMDatabase* tempdb = [FMDatabase databaseWithPath:[dietmasterEnginePath databasePath]];
         
         if (![tempdb open]) {
-             NSLog(@"Could not open db.");
+             DMLog(@"Could not open db.");
         }
 
         NSString *strQuery = [NSString stringWithFormat:@"SELECT entry_type, bodyfat FROM weightlog where logtime =\"%@\"", date_Today];
@@ -156,13 +156,13 @@
         DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
-            NSLog(@"Could not open db.");
+            DMLog(@"Could not open db.");
         }
         
         [db beginTransaction];
         [db executeUpdate:insertSQL];
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         

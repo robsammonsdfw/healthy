@@ -43,7 +43,7 @@
 @synthesize requestDict = _requestDict;
 -(void)callWebserviceForFoodNew:(NSDictionary *)requestDict withCompletion:(void (^)(id))completion
 {
-    //NSLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine-ForNewFood");
+    //DMLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine-ForNewFood");
     
     [timeOutTimer invalidate];
     timeOutTimer = nil;
@@ -81,7 +81,7 @@
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=GetFoodNew"];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/GetFoodNew"];
     
-    //NSLog(@"%@", soapMessage);
+    //DMLog(@"%@", soapMessage);
     
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
@@ -113,7 +113,7 @@
 }
 
 -(void)callWebservice:(NSDictionary *)requestDict withCompletion:(void(^)(id obj))completion{
-    NSLog(@"CALL WEB SERVICE ----BEGIN---- SoapWebServiceEngine-withCompletion");
+    DMLog(@"CALL WEB SERVICE ----BEGIN---- SoapWebServiceEngine-withCompletion");
     
     NSString *soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                               "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -199,7 +199,7 @@
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=SaveFoodNew"];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/SaveFoodNew"];
     
-    NSLog(@"%@", soapMessage);
+    DMLog(@"%@", soapMessage);
     
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
@@ -235,7 +235,7 @@
 
 -(void)callWebservice:(NSDictionary *)requestDict
 {
-    //NSLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine - callwebservice");
+    //DMLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine - callwebservice");
     // Kill the timeout timer
     [timeOutTimer invalidate];
     timeOutTimer = nil;
@@ -612,7 +612,7 @@
         //					  "</soap:Body>"
         //					  "</soap:Envelope>"];
         
-        //NSLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
+        //DMLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
     } else if ([requestType isEqualToString:@"SaveWeightLogs"]) {
         
         
@@ -712,7 +712,7 @@
                         [NSString stringWithFormat:@"%i",[[requestDict valueForKey:@"FoodKey"] intValue]],
                         [requestDict valueForKey:@"AuthKey"], [requestDict valueForKey:@"ScannedFood"]];
         
-        //NSLog(@"requestType: %@",requestType);
+        //DMLog(@"requestType: %@",requestType);
         
         
     }
@@ -798,21 +798,21 @@
                         "</GetFoodNew>"
                         "</soap:Body>"
                         "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"], [[requestDict valueForKey:@"FoodKey"] intValue]];
-        //NSLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
+        //DMLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
     }
     
     
     // Fix error causing string
     soapMessage = [soapMessage stringByReplacingOccurrencesOfString:@"&" withString:@"and"];
     
-    //NSLog(@"%@", soapMessage);
+    //DMLog(@"%@", soapMessage);
     
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", requestType];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", requestType];
     
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     
-    //NSLog(@"%@", url);
+    //DMLog(@"%@", url);
     
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
     NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[soapMessage length]];
@@ -840,13 +840,13 @@
     if( theConnection ) {
         webData = [[NSMutableData data] retain];
     } else {
-        NSLog(@"theConnection is NULL");
+        DMLog(@"theConnection is NULL");
     }
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    //NSLog(@"response is : %@", response);
+    //DMLog(@"response is : %@", response);
     [webData setLength: 0];
 }
 
@@ -861,7 +861,7 @@
     [timeOutTimer invalidate];
     timeOutTimer = nil;
     
-    NSLog(@"ERROR with Connection");
+    DMLog(@"ERROR with Connection");
     
     if ([wsGetUserInfoDelegate respondsToSelector:@selector(getUserInfoFailed:)]) {
         [wsGetUserInfoDelegate getUserInfoFailed:[error localizedDescription]];
@@ -1109,7 +1109,7 @@
 {
     
     recordResults = FALSE;
-    NSLog(@"elementName =: %@",elementName);
+    DMLog(@"elementName =: %@",elementName);
     
     // Empty results?
     if ([soapResults isEqualToString:@"\"Empty\""]) {
@@ -1235,7 +1235,7 @@
     {
         
         if ([soapResults rangeOfString:@"System.Data.SqlClient.SqlException"].location != NSNotFound) {
-            NSLog(@"System.Data.SqlClient.SqlException!!!!!");
+            DMLog(@"System.Data.SqlClient.SqlException!!!!!");
             if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFailed:)]) {
                 [wsSaveMealDelegate saveMealFailed:[self.requestDict valueForKey:@"MealID"]];
             }
@@ -1277,7 +1277,7 @@
     if([elementName isEqualToString:@"GetFoodNewResult"])
     {
         //hirpara1
-        //      NSLog(@" hirpara1 GetFoodResult soapResults: %@",soapResults);
+        //      DMLog(@" hirpara1 GetFoodResult soapResults: %@",soapResults);
         
         /* if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFinished:)])
          {
@@ -1316,7 +1316,7 @@
     
     if([elementName isEqualToString:@"SaveFavoriteFoodResult"])
     {
-        NSLog(@"SaveFavoriteFoodResult soapResults: %@",soapResults);
+        DMLog(@"SaveFavoriteFoodResult soapResults: %@",soapResults);
         
         if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFinished:)]) {
             [wsSaveFavoriteFoodDelegate saveFavoriteFoodFinished:responseArray];

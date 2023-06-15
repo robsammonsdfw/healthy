@@ -117,7 +117,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     }
     
     if ([dataBase hadError]) {
-        NSLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+        DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
     }
     
     [rs close];
@@ -310,7 +310,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
         BOOL statusMsg = YES;
         
         if ([dataBase hadError]) {
-            NSLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+            DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
             statusMsg = NO;
         }
         [dataBase commit];
@@ -359,7 +359,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 }
 
 - (void)setMessageReadFailed:(NSString *)failedMessage {
-    NSLog(@"%@", failedMessage);
+    DMLog(@"%@", failedMessage);
 }
 
 #pragma mark - SendViewDelegate
@@ -513,7 +513,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     NSDictionary *section = sections[indexPath.section];
     
     NSArray *messages = section[@"items"];
-    NSLog(@"%@",messages);
+    DMLog(@"%@",messages);
     
     if ((indexPath.section == (sections.count - 1)) && indexPath.row == messages.count) {
         static NSString *cellIdentifier = @"lastCellIdentifier";

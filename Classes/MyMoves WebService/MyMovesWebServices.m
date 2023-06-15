@@ -80,7 +80,7 @@
     }
     else
     {
-        NSLog(@"theConnection is NULL");
+        DMLog(@"theConnection is NULL");
     }
     
 }
@@ -123,7 +123,7 @@
                                      nil];
 
     
-        NSLog(@"%@",requestDict);
+        DMLog(@"%@",requestDict);
         
         __block NSMutableDictionary *resultsDictionary;
         if ([NSJSONSerialization isValidJSONObject:requestDict]) {//validate it
@@ -142,7 +142,7 @@
                      resultsDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error1];
                     
                      [self clearTableDataS];
-                     NSLog(@"%@",resultsDictionary);
+                     DMLog(@"%@",resultsDictionary);
                      [self serverUserPlans:resultsDictionary];
                      [WSGetUserWorkoutplanOfflineDelegate getUserWorkoutplanOfflineListFinished:resultsDictionary];
                      [self updateFromNewToNormalToDb];
@@ -188,7 +188,7 @@
     [db executeUpdate:deleteWeightlog];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -241,7 +241,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -294,7 +294,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -388,7 +388,7 @@
     }
     
      if ([db hadError]) {
-     NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
      }
      
      [db commit];
@@ -548,7 +548,7 @@
     }
      
      if ([db hadError]) {
-     NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
      }
      
      [db commit];
@@ -606,7 +606,7 @@
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
     }
@@ -664,7 +664,7 @@
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
     }
@@ -716,7 +716,7 @@
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
     }
@@ -781,7 +781,7 @@
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
     }
@@ -825,7 +825,7 @@
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
     }
@@ -876,7 +876,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -932,7 +932,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -996,7 +996,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1062,7 +1062,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1113,7 +1113,7 @@
         
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1145,7 +1145,7 @@
     [db executeUpdate:deleteServerUserPlanMoveSetList];
 
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1177,7 +1177,7 @@
     [db executeUpdate:deleteServerUserPlanMoveSetList];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1210,7 +1210,7 @@
     [db executeUpdate:updateServerUserPlanMoveSetList];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1241,7 +1241,7 @@
     [db executeUpdate:updateServerUserPlanMoveSetList];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1271,7 +1271,7 @@
     [db executeUpdate:updateServerUserPlanMoveSetList];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1322,7 +1322,7 @@
 
         [arr addObject:dict];
     }
-    NSLog(@"%@",arr);
+    DMLog(@"%@",arr);
 
     if ([arr count] != 0)
     {
@@ -1413,7 +1413,7 @@
     
 
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1462,7 +1462,7 @@
     [db executeUpdate:insertSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -1495,7 +1495,7 @@
     [db executeUpdate:insertSQL];
 
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 
@@ -1512,7 +1512,7 @@
         [dict setObject: uniqueIDs  forKey: @"UniqueID"];
         [arr addObject:dict];
     }
-    NSLog(@"%@",arr);
+    DMLog(@"%@",arr);
 
     NSString *dateSearchSql = [NSString stringWithFormat:@"SELECT * FROM PlanDateTable WHERE PlanDate = '%@'",PlanDateStr];
     FMResultSet *rs = [db executeQuery:dateSearchSql];
@@ -1526,11 +1526,11 @@
         [dict setObject: dateStr  forKey: @"PlanDate"];
         [array addObject:dict];
     }
-    NSLog(@"%@",array);
+    DMLog(@"%@",array);
 
 
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
 
     [db commit];
@@ -1548,7 +1548,7 @@
 //    }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -1593,7 +1593,7 @@
     [db executeUpdate:insertSQL];
 
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 }
@@ -1619,7 +1619,7 @@
     [db executeUpdate:insertSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 }
@@ -1638,7 +1638,7 @@
     [db executeUpdate:deleteSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     NSString *updateEditedAddedSQL = [NSString stringWithFormat: @"UPDATE UserWorkoutPlan SET isEdited = 'no',ToBeAdded = 'no',isCommented = 'no',isStatusUpdated = 'no'"];
@@ -1646,7 +1646,7 @@
     [db executeUpdate:updateEditedAddedSQL];
 
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     NSString *updateAddedSetSQL = [NSString stringWithFormat: @"UPDATE workout SET isEdited = 'no',ToBeAdded = 'no'"];
@@ -1654,7 +1654,7 @@
     [db executeUpdate:updateAddedSetSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 
@@ -1698,7 +1698,7 @@
                     
                     [db executeUpdate:insertSQL];
                     if ([db hadError]) {
-                        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     }
                     [db commit];
                 }
@@ -1737,7 +1737,7 @@
                     
                     [db executeUpdate:insertSQL];
                     if ([db hadError]) {
-                        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     }
                 }
             }
@@ -1776,7 +1776,7 @@
                     
                     [db executeUpdate:insertSQL];
                     if ([db hadError]) {
-                        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     }
                 }
             }
@@ -1841,7 +1841,7 @@
         
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1878,7 +1878,7 @@
         [listOfBodyPart addObject:dict];
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1941,7 +1941,7 @@
         
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2002,7 +2002,7 @@
 
         }
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         
         [db commit];
@@ -2057,7 +2057,7 @@
         
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2092,7 +2092,7 @@
         [ListTable1 addObject:dict];
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2126,7 +2126,7 @@
         [ListTable2 addObject:dict];
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2201,13 +2201,13 @@
             }
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
             
             NSOperationQueue *operationQueue = [NSOperationQueue new];
             NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-                NSLog(@"The block operation ended, Do something such as show a successmessage etc");
+                DMLog(@"The block operation ended, Do something such as show a successmessage etc");
                 //This the completion block operation
             }];
             NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -2249,7 +2249,7 @@
                 
                 [db executeUpdate:insertSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -2286,7 +2286,7 @@
                 
                 [db executeUpdate:insertSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -2309,7 +2309,7 @@
     [db executeUpdate:updateUnit1ID];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2330,7 +2330,7 @@
     [db executeUpdate:updateUnit1ID];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2351,7 +2351,7 @@
     [db executeUpdate:updateUnit1Value];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2372,7 +2372,7 @@
     [db executeUpdate:updateUnit2Value];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2409,7 +2409,7 @@
         [ListTable1 addObject:dict];
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2443,7 +2443,7 @@
         [ListTable2 addObject:dict];
     }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2472,7 +2472,7 @@
     
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2495,7 +2495,7 @@
 
     [db executeUpdate:userWorkoutPlanDeleteSQL];
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2516,7 +2516,7 @@
     [db executeUpdate:updateCheckBoxStatus];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2574,7 +2574,7 @@
                 [db executeUpdate:insertSQL];
     
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
     
         [db commit];
@@ -2619,7 +2619,7 @@
     [db executeUpdate:updateComments];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -2639,7 +2639,7 @@
     [db executeUpdate:updateComments];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -2685,7 +2685,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2716,11 +2716,11 @@
     [db executeUpdate:updateComments];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
-    NSLog(@"%@",[self loadWorkoutTime]);
+    DMLog(@"%@",[self loadWorkoutTime]);
 }
 
 -(NSMutableArray *)loadWorkoutTime
@@ -2764,7 +2764,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2786,7 +2786,7 @@
         [db executeUpdate:userWorkoutPlanDeleteSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2808,10 +2808,10 @@
     [db executeUpdate:insertSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
-    NSLog(@"%@",[self loadDeletedExerciseFromDb]);
+    DMLog(@"%@",[self loadDeletedExerciseFromDb]);
 }
 
 -(NSMutableArray *)loadDeletedExerciseFromDb
@@ -2844,7 +2844,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -2898,7 +2898,7 @@
             }
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
         }
     }
@@ -2954,7 +2954,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -3015,7 +3015,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -3080,7 +3080,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -3165,7 +3165,7 @@
          }
     
          if ([db hadError]) {
-             NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
          }
     
          [db commit];
@@ -3300,7 +3300,7 @@
 //        [arr addObject:dict];
 //    }
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -3327,7 +3327,7 @@
     [db executeUpdate:updateComments];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 }
@@ -3353,7 +3353,7 @@
     [db executeUpdate:updateComments];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 }
@@ -3372,7 +3372,7 @@
     [db executeUpdate:updateSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -3411,7 +3411,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -3457,7 +3457,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -3503,7 +3503,7 @@
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -3543,7 +3543,7 @@
     [db executeUpdate:insertSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 }
@@ -3635,7 +3635,7 @@
     } else {
         strCheck = @"";
     }
-    NSLog(@"%@",elementName);
+    DMLog(@"%@",elementName);
  
     if([elementName isEqualToString:@"GetUserPlannedMealNamesResult"]) {
         if ([strCheck isEqualToString:@"Invalid Auth"]) {
@@ -3796,7 +3796,7 @@
     
     if (error) {
         
-        NSLog(@"%@ failed: %@", task.originalRequest.URL, error);
+        DMLog(@"%@ failed: %@", task.originalRequest.URL, error);
         if ([WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
             [WSWorkoutListDelegate getWorkoutListFailed: [NSString stringWithFormat:@"%@",error]];
         }
@@ -3806,7 +3806,7 @@
         
     }else{
         
-        NSLog(@"DONE. Received Bytes: %lu", (unsigned long)[self.responseData length]);
+        DMLog(@"DONE. Received Bytes: %lu", (unsigned long)[self.responseData length]);
         
         NSError *localError = nil;
         NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:&localError];
@@ -3885,7 +3885,7 @@
                 [db executeUpdate:insertSQL];
                 
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 
                 NSArray *categories = [key objectForKey:@"moveCategories"];
@@ -3906,7 +3906,7 @@
                         NSString * insertSQLTags = [NSString stringWithFormat: @"INSERT INTO ListOfTags_Table (WorkoutTagsID,WorkoutCategoryID,Tags) VALUES(\"%d\",\"%d\",\"%@\")",tagId,categoryId,tag];
                         [db executeUpdate:insertSQLTags];
                         if ([db hadError]) {
-                            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                         }
                     }
                     
@@ -3921,7 +3921,7 @@
                     }
                     
                     if ([db hadError]) {
-                        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     }
                     
                 }
@@ -3931,12 +3931,12 @@
                 
                 
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 
             }
         } else {
-            NSLog(@"%i", connectionError.code);
+            DMLog(@"%i", connectionError.code);
         }
 //            [[NSNotificationCenter defaultCenter] postNotificationName:@"showPosts" object:tempPosts];
     }];

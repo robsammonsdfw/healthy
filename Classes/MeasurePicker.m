@@ -43,7 +43,7 @@
                 
                 if([str_measureName isEqual: @"ml"])
                 {
-                    NSLog(@"ml");
+                    DMLog(@"ml");
                     str_measureName = [str_measureName stringByReplacingCharactersInRange:NSMakeRange(0,1)
                                                                                withString:[str_measureName  substringToIndex:1]];
                 }
@@ -94,8 +94,8 @@
     NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:arry3];
     arrayWithoutDuplicates = [orderedSet array];
     //    arrayWithoutDuplicates = [[NSArray alloc]init];
-    NSLog(@"%lu", (unsigned long)arry3.count);
-    NSLog(@"%lu", (unsigned long)arrayWithoutDuplicates.count);
+    DMLog(@"%lu", (unsigned long)arry3.count);
+    DMLog(@"%lu", (unsigned long)arrayWithoutDuplicates.count);
     
     [pickerView selectRow:[self.pickerRow3 intValue] inComponent:0 animated:NO];
 }

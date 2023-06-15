@@ -694,7 +694,7 @@ CGPoint svos;
         [db executeUpdate:insertSQL];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -705,7 +705,7 @@ CGPoint svos;
         [db executeUpdate:insertFMSQL];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -841,7 +841,7 @@ CGPoint svos;
         [db executeUpdate:updateSQL];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -856,7 +856,7 @@ CGPoint svos;
         [db executeUpdate:updateFMSQL];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -947,7 +947,7 @@ CGPoint svos;
     
     [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
     NSString *strURL = [NSString stringWithFormat:@"https://trackapi.nutritionix.com/v2/search/item?upc=%@",[upcDict2 valueForKey:@"UPC"]];
-    //NSLog(@"%@",strURL);
+    //DMLog(@"%@",strURL);
     
     [self getApiCall:nil urlStr:strURL response:nil];
 }
@@ -955,7 +955,7 @@ CGPoint svos;
 //HHT change 2018 Barcode scan
 -(void)getApiCall:(NSMutableDictionary *)dic urlStr:(NSString *)urlStr response:(NSMutableArray *)response{
     NSURL * serviceUrl = [NSURL URLWithString:urlStr];
-    NSLog(@"REquest URL >> %@",serviceUrl);
+    DMLog(@"REquest URL >> %@",serviceUrl);
     
     //Header
     NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
@@ -983,24 +983,24 @@ CGPoint svos;
     
     id jsonObject = Nil;
     NSString *charlieSendString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
-    NSLog(@"ResponseString %@",charlieSendString);
+    DMLog(@"ResponseString %@",charlieSendString);
     if (response==nil) {
-        NSLog(@"No internet connection.");
+        DMLog(@"No internet connection.");
     }
     else{
         NSError *error = Nil;
         jsonObject =[NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&error];
         
         if ([jsonObject isKindOfClass:[NSArray class]]) {
-            NSLog(@"Probably An Array");
+            DMLog(@"Probably An Array");
         }
         else
         {
-            NSLog(@"Probably A Dictionary");
+            DMLog(@"Probably A Dictionary");
             
             NSDictionary *jsonDictionary=(NSDictionary *)jsonObject;
             
-            NSLog(@"jsonDictionary %@",[jsonDictionary description]);
+            DMLog(@"jsonDictionary %@",[jsonDictionary description]);
             
             //Error handling
             if ([[jsonDictionary valueForKey:@"message"] isEqualToString:@"resource not found"]) {
@@ -1017,7 +1017,7 @@ CGPoint svos;
                 NSMutableArray *arr = [jsonDictionary valueForKey:@"foods"];
                 
                 if (arr.count > 0){
-                    NSLog(@"%@",[arr objectAtIndex:0]);
+                    DMLog(@"%@",[arr objectAtIndex:0]);
                     [self nutritionixAPISuccess:[arr objectAtIndex:0]];
                 }
             }
@@ -1028,7 +1028,7 @@ CGPoint svos;
 #pragma mark - Nutritionix -
 //HHT change 2018 barcode scan
 -(void)nutritionixAPISuccess:(NSMutableDictionary *)dict {
-    NSLog(@"%@",dict);
+    DMLog(@"%@",dict);
     
     scannerDict = nil;
     scannerDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
@@ -1077,7 +1077,7 @@ CGPoint svos;
     //NSDictionary *dictTemp = [self findMeasureId:@"slice"];
     NSDictionary *dictTemp = [self findMeasureId:[dict valueForKey:@"serving_unit"]];
     
-    NSLog(@"dictTemp for Query:: %@",dictTemp);
+    DMLog(@"dictTemp for Query:: %@",dictTemp);
     
     if ([dictTemp count] == 0) {
         intMeasureID = [NSNumber numberWithInt:3];
@@ -1089,7 +1089,7 @@ CGPoint svos;
         dietmasterEngine.selectedMeasureID = intMeasureID;
     }
     else {
-        NSLog(@"dictTemp after reault :: %@",dictTemp);
+        DMLog(@"dictTemp after reault :: %@",dictTemp);
         NSString *measureValue = [dictTemp valueForKey:@"MeasureID"];
         intMeasureID = [NSNumber numberWithInt:[measureValue intValue]];
         self.strMeasureName = [dictTemp valueForKey:@"Description"];
@@ -1192,7 +1192,7 @@ CGPoint svos;
 }
 
 -(void)saveUPCDataWSFailed:(NSString *)failedMessage {
-    NSLog(@"saveUPCDataWSFailed");
+    DMLog(@"saveUPCDataWSFailed");
 }
 
 #pragma mark ACTIONSHEET METHODS
@@ -1504,7 +1504,7 @@ CGPoint svos;
 //
 //    txtfieldFoodName.text = @"";
 //
-//    NSLog(@"factualAPIDidFail, desc: %@", failMessage);
+//    DMLog(@"factualAPIDidFail, desc: %@", failMessage);
 //
 //    UIAlertView *alert;
 //    alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"An error occured while looking up Food data. Please check your internet connection and try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];

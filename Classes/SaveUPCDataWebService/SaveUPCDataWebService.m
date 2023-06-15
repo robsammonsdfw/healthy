@@ -72,7 +72,7 @@
             [errorDetail setValue:@"Server returned bad access" forKey:NSLocalizedDescriptionKey];
             NSError *error = [NSError errorWithDomain:@"myDomain" code:100 userInfo:errorDetail];
             [self connection:connection didFailWithError:error];
-            NSLog(@"Error with %i", statusCode);
+            DMLog(@"Error with %i", statusCode);
         }
     }
     
@@ -91,7 +91,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    NSLog(@"Connection failed! Error – %@",[error localizedDescription]);
+    DMLog(@"Connection failed! Error – %@",[error localizedDescription]);
     
     if ([delegate respondsToSelector:@selector(saveUPCDataWSFailed:)]) {
         [delegate saveUPCDataWSFailed:[error localizedDescription]];

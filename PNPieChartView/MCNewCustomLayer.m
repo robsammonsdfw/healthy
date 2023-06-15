@@ -186,7 +186,7 @@
             return CGPathGetBoundingBox(self.mainPath);
     }
     
-    NSLog(@"invalid imageBoundsStyle");
+    DMLog(@"invalid imageBoundsStyle");
     return CGRectZero;
 }
 

@@ -152,7 +152,7 @@
     
     NSString *totalTimeStr = [NSString stringWithFormat:@"%f",interval];
     selectedValue = totalTimeStr;
-    NSLog(@"%@",totalTimeStr);
+    DMLog(@"%@",totalTimeStr);
     
     pickerLbl.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hoursInt,minsInt,secsInt];
     
@@ -185,11 +185,11 @@
     
     interval = secsInt + (minsInt*60) + (hoursInt*3600);
     
-    //NSLog(@"hours: %d ... mins: %d .... sec: %d .... interval: %f", hoursInt, minsInt, secsInt, interval);
+    //DMLog(@"hours: %d ... mins: %d .... sec: %d .... interval: %f", hoursInt, minsInt, secsInt, interval);
     
     NSString *totalTimeStr = [NSString stringWithFormat:@"%f",interval];
     _pickerLblInSeconds = [totalTimeStr doubleValue];
-    NSLog(@"%@",totalTimeStr);
+    DMLog(@"%@",totalTimeStr);
     
 }
 
@@ -290,7 +290,7 @@
     _audioPlayer.numberOfLoops = 1;
 
     if (_error) {
-        NSLog(@"Error : %@", [_error localizedDescription]);
+        DMLog(@"Error : %@", [_error localizedDescription]);
     } else {
         [_audioPlayer prepareToPlay];
     }

@@ -116,7 +116,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
   
         NSOperationQueue *operationQueue = [NSOperationQueue new];
         NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-            NSLog(@"The block operation ended, Do something such as show a successmessage etc");
+            DMLog(@"The block operation ended, Do something such as show a successmessage etc");
             //This the completion block operation
         }];
         NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -169,7 +169,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    [self loadTable];
     //    NSOperationQueue *operationQueue = [NSOperationQueue new];
     //    NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-    //        NSLog(@"The block operation ended, Do something such as show a successmessage etc");
+    //        DMLog(@"The block operation ended, Do something such as show a successmessage etc");
     //        //This the completion block operation
     //    }];
     //    NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -481,7 +481,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     for (int i=0; i<digit; i++) {
         [randomString appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
     }
-    NSLog(@"S-%@",randomString);
+    DMLog(@"S-%@",randomString);
     
     return randomString;
 }
@@ -596,7 +596,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                         [soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                         
                                         
-                                        NSLog(@"%@",self.moveDetailDictToDelete);
+                                        DMLog(@"%@",self.moveDetailDictToDelete);
                                         //                                            [soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue]];
                                         
                                         [soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
@@ -610,7 +610,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                         
                                         NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[[soapWebService loadExerciseFromDb] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [formatter stringFromDate:_selectedDate]]]];
                                         
-                                        NSLog(@"%@",tempArr[[tempArr count] - 1]);
+                                        DMLog(@"%@",tempArr[[tempArr count] - 1]);
                                         [self.exchangeDel passDataOnExchange:tempArr[[tempArr count] - 1]];
                                         
                                         moveDetailVc.workoutMethodID = [tempArr[[tempArr count] - 1][@"WorkoutUserDateID"]intValue];
@@ -640,7 +640,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                             MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
                                             
                                             [soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
-                                            NSLog(@"%@",self.moveDetailDictToDelete);
+                                            DMLog(@"%@",self.moveDetailDictToDelete);
                                             
                                             [soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                             
@@ -653,7 +653,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                             
                                             NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[[soapWebService loadExerciseFromDb] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [formatter stringFromDate:_selectedDate]]]];
                                             
-                                            NSLog(@"%@",tempArr[[tempArr count] - 1]);
+                                            DMLog(@"%@",tempArr[[tempArr count] - 1]);
                                             [self.exchangeDel passDataOnExchange:tempArr[[tempArr count] - 1]];
                                           
                                             moveDetailVc.workoutMethodID = [tempArr[[tempArr count] - 1][@"WorkoutUserDateID"]intValue];

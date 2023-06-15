@@ -159,7 +159,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         NSMutableString *thumbNail = NSMutableString.new;
         thumbNail = thumbnailArr[@"thumbnail_url"];
-        NSLog(@"%@", thumbNail);
+        DMLog(@"%@", thumbNail);
                 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: thumbNail]];

@@ -357,7 +357,7 @@ static DietmasterEngine* _instance = nil;
     BOOL statusMsg = YES;
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         statusMsg = NO;
     }
     [db commit];
@@ -520,7 +520,7 @@ static DietmasterEngine* _instance = nil;
                               [NSString stringWithFormat:@"%d",_pageNumber],@"PageNumber",
                               nil];
     
-    NSLog(@"SyncExerciseLogNew Dict is :: %@",infoDict);
+    DMLog(@"SyncExerciseLogNew Dict is :: %@",infoDict);
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsSyncExerciseLogNewDelegate = self;
@@ -667,7 +667,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([dataBase hadError]) {
-        NSLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+        DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
     }
     
     [rs close];
@@ -691,7 +691,7 @@ static DietmasterEngine* _instance = nil;
     BOOL statusMsg = YES;
     
     if ([dataBase hadError]) {
-        NSLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+        DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
         statusMsg = NO;
     }
     [dataBase commit];
@@ -745,7 +745,7 @@ static DietmasterEngine* _instance = nil;
             BOOL statusMsg = YES;
             
             if ([dataBase hadError]) {
-                NSLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+                DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
                 statusMsg = NO;
             }
             [dataBase commit];
@@ -1376,7 +1376,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -1467,7 +1467,7 @@ static DietmasterEngine* _instance = nil;
     [db commit];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     syncsCompleted++;
@@ -1534,7 +1534,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -1617,7 +1617,7 @@ static DietmasterEngine* _instance = nil;
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -1690,7 +1690,7 @@ static DietmasterEngine* _instance = nil;
      }
      
      if ([db hadError]) {
-     NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
      }
      [db commit];
      
@@ -1892,13 +1892,13 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
 }
 - (void)getFoodFailed:(NSString *)failedMessage {
-    NSLog(@"getFoodFailed, value of response is %@", failedMessage);
+    DMLog(@"getFoodFailed, value of response is %@", failedMessage);
 }
 
 #pragma mark UP SYNC DELEGATE METHODS
@@ -1940,7 +1940,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -1965,7 +1965,7 @@ static DietmasterEngine* _instance = nil;
 //            updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE MealID = %i", mealIDToDelete];
 //            [db executeUpdate:updateSQL];
 //            if ([db hadError]) {
-//                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+//                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 //            }
 //            [db commit];
         }
@@ -2002,7 +2002,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -2079,7 +2079,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -2143,7 +2143,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -2161,7 +2161,7 @@ static DietmasterEngine* _instance = nil;
 }
 
 - (void)saveFavoriteMealItemFailed:(NSString *)failedMessage {
-    NSLog(@"saveFavoriteMealItemFailed, value of response is %@", failedMessage);
+    DMLog(@"saveFavoriteMealItemFailed, value of response is %@", failedMessage);
 }
 
 #pragma mark GET DATA METHODS (NEW)
@@ -2288,7 +2288,7 @@ static DietmasterEngine* _instance = nil;
             BOOL statusMsg = YES;
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 statusMsg = NO;
             }
             [db commit];
@@ -2317,7 +2317,7 @@ static DietmasterEngine* _instance = nil;
             
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
         }
@@ -2358,7 +2358,7 @@ static DietmasterEngine* _instance = nil;
             }
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
         }
@@ -2487,7 +2487,7 @@ static DietmasterEngine* _instance = nil;
                 [db executeUpdate:insertSQL];
                 
                 if ([dict valueForKey:@"FoodKey"]==0) {
-                    NSLog(@"1 FoodID zero here....");
+                    DMLog(@"1 FoodID zero here....");
                 }
                 
                 NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)", [[dict valueForKey:@"FoodKey"] intValue],[[dict valueForKey:@"MeasureID"] intValue], [[dict valueForKey:@"GramWeight"] intValue]];
@@ -2496,7 +2496,7 @@ static DietmasterEngine* _instance = nil;
             }
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
         }
@@ -2623,7 +2623,7 @@ static DietmasterEngine* _instance = nil;
                  [dict valueForKey:@"FoodURL"]];
                 
                 if ([dict valueForKey:@"FoodKey"]==0) {
-                    NSLog(@"1 FoodID zero here....");
+                    DMLog(@"1 FoodID zero here....");
                 }
                 
                 [db executeUpdate:insertSQL];
@@ -2641,7 +2641,7 @@ static DietmasterEngine* _instance = nil;
             }
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
         }
@@ -2858,7 +2858,7 @@ static DietmasterEngine* _instance = nil;
             }
             
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
         }
@@ -2968,7 +2968,7 @@ static DietmasterEngine* _instance = nil;
         [df release];
     }
     @catch (NSException * e) {
-        NSLog(@"Error parsing last modified date: %@ - %@", lastModifiedString, [e description]);
+        DMLog(@"Error parsing last modified date: %@ - %@", lastModifiedString, [e description]);
     }
     
     if (!lastModifiedServer) {
@@ -2996,7 +2996,7 @@ static DietmasterEngine* _instance = nil;
         NSError *error = nil;
         NSDictionary *fileAttributes = [fileManager attributesOfItemAtPath:cachedPath error:&error];
         if (error) {
-            NSLog(@"Error reading file attributes for: %@ - %@", cachedPath, [error localizedDescription]);
+            DMLog(@"Error reading file attributes for: %@ - %@", cachedPath, [error localizedDescription]);
         }
         lastModifiedLocal = [fileAttributes fileModificationDate];
     }
@@ -3035,14 +3035,14 @@ static DietmasterEngine* _instance = nil;
                                 
                             }
                             if (error) {
-                                NSLog(@"Error setting file attributes for: %@ - %@", cachedPath, [error localizedDescription]);
+                                DMLog(@"Error setting file attributes for: %@ - %@", cachedPath, [error localizedDescription]);
                             }
                         }
                     }
                 });
             }
             else {
-                NSLog(@"error %@", error);
+                DMLog(@"error %@", error);
             }
         }];
     }
@@ -3149,7 +3149,7 @@ static DietmasterEngine* _instance = nil;
     }
     
     NSString *query = [NSString stringWithFormat: @"SELECT Food.CategoryID, Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, FoodMeasure.GramWeight, Measure.MeasureID, Measure.Description, Food.RecipeID, Food.CategoryID, Food.FoodURL FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE Food.FoodKey = %i AND Measure.MeasureID = %i LIMIT 1", selectedFoodID, tempMeasureID];
-    NSLog(@"query=%@",query);
+    DMLog(@"query=%@",query);
     
     FMResultSet *rs = [db executeQuery:query];
     
@@ -3307,7 +3307,7 @@ static DietmasterEngine* _instance = nil;
         [rs close];
         
         num_totalCalories = num_totalCalories + totalCalories;
-        NSLog(@"%f", num_totalCalories);
+        DMLog(@"%f", num_totalCalories);
     }
     
     return [NSNumber numberWithDouble:num_totalCalories];
@@ -3483,7 +3483,7 @@ static DietmasterEngine* _instance = nil;
     
 }
 - (void)getAuthenticateUserFailed:(NSString *)failedMessage {
-    NSLog(@"getAuthenticateUserFailed, value of response is %@", failedMessage);
+    DMLog(@"getAuthenticateUserFailed, value of response is %@", failedMessage);
 }
 
 #pragma mark My Moves Assigned RETREIVAL METHODS
@@ -3541,7 +3541,7 @@ static DietmasterEngine* _instance = nil;
     }
     [tempArray writeToFile:completePath atomically:YES];
     
-    NSLog(@"%@", completePath);
+    DMLog(@"%@", completePath);
     
     [tempArray release];
 }
@@ -3675,7 +3675,7 @@ static DietmasterEngine* _instance = nil;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [paths objectAtIndex:0];
     NSString *fullPath = [path stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
-    NSLog(@"%@",fullPath);
+    DMLog(@"%@",fullPath);
     NSFileManager *fm = [NSFileManager defaultManager];
     BOOL exists = [fm fileExistsAtPath:fullPath];
     if (!exists) {
@@ -3775,7 +3775,7 @@ static DietmasterEngine* _instance = nil;
 }
 
 - (void)saveUPCDataWSFailed:(NSString *)failedMessage {
-    NSLog(@"Engine saveUPCDataWSFailed");
+    DMLog(@"Engine saveUPCDataWSFailed");
 }
 
 #pragma mark TECH SUPPORT METHODS
@@ -3838,10 +3838,10 @@ static DietmasterEngine* _instance = nil;
     // Finalize and compress
     BOOL successCompressing = [za CloseZipFile2];
     if (successCompressing) {
-        NSLog(@"Compression successful!");
+        DMLog(@"Compression successful!");
     }
     else {
-        NSLog(@"Compression error!");
+        DMLog(@"Compression error!");
     }
     
     [za release];
@@ -3877,7 +3877,7 @@ static DietmasterEngine* _instance = nil;
     if([[NSFileManager defaultManager] fileExistsAtPath:[dict valueForKey:@"incomingDBFilePath"]])
     {
         [[NSFileManager defaultManager] removeItemAtPath:[dict valueForKey:@"incomingDBFilePath"] error:NULL];
-        NSLog(@"incomingDBFilePath Deleted...");
+        DMLog(@"incomingDBFilePath Deleted...");
     }
     
     NSString *dbSettingsPath = [unZipDirectory stringByAppendingPathComponent:@"/db_settings.plist"];
@@ -3989,7 +3989,7 @@ static DietmasterEngine* _instance = nil;
         [_activeRequest release];
         _activeRequest = nil;
         
-        NSLog(@"Active request failed with Error:%@", [error localizedDescription]);
+        DMLog(@"Active request failed with Error:%@", [error localizedDescription]);
         
         NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [error localizedDescription], @"ErrorDescription",

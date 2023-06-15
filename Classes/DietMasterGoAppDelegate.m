@@ -64,7 +64,6 @@
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-//    [Fabric with:@[[Crashlytics class]]];
     [FIRApp configure];
     //    [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
     
@@ -137,8 +136,10 @@
         tabBarItem5.selectedImage = [[UIImage imageNamed:@"settings_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
         tabBarItem5.image = [[UIImage imageNamed:@"settings_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
         //    }
+        
     }
     //    [self hidetabbar];
+    
     return YES;
 }
 
@@ -169,7 +170,7 @@
 
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    NSLog(@"Handle the URL: %@", url);
+    DMLog(@"Handle the URL: %@", url);
     return YES;
 }
 
@@ -196,7 +197,7 @@
 }
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-    NSLog(@"Open the URL: %@", url);
+    DMLog(@"Open the URL: %@", url);
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
@@ -340,7 +341,7 @@
         //        dietmasterEngine.sendAllServerData = true;
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
-            NSLog(@"Could not open db.");
+            DMLog(@"Could not open db.");
         }
         
 #pragma mark ON APP LOAD
@@ -392,14 +393,14 @@
             DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             if (![db open]) {
-                NSLog(@"Could not open db.");
+                DMLog(@"Could not open db.");
             }
             
             NSString *updateSQL = @"DELETE FROM Food WHERE Name LIKE '%infant%'";
             [db beginTransaction];
             [db executeUpdate:updateSQL];
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
             
@@ -407,7 +408,7 @@
             [db beginTransaction];
             [db executeUpdate:updateSQL2];
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
             
@@ -415,7 +416,7 @@
             [db beginTransaction];
             [db executeUpdate:updateSQL3];
             if ([db hadError]) {
-                NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
             
@@ -429,7 +430,7 @@
             DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             if (![db open]) {
-                NSLog(@"Could not open db.");
+                DMLog(@"Could not open db.");
             }
             
             BOOL upgraded103 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.3"];
@@ -450,7 +451,7 @@
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             [db close];
             if (![db open]) {
-                NSLog(@"Could not open db.");
+                DMLog(@"Could not open db.");
             }
             
             if (![db columnExists:@"Food" columnName:@"FactualID"]) {
@@ -458,7 +459,7 @@
                 [db beginImmediateTransaction];
                 [db executeUpdate:updateSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -474,7 +475,7 @@
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             [db close];
             if (![db open]) {
-                NSLog(@"Could not open db.");
+                DMLog(@"Could not open db.");
             }
             
             if (![db columnExists:@"user" columnName:@"ProteinRatio"]) {
@@ -482,7 +483,7 @@
                 NSString *proteinSQL = @"ALTER TABLE user ADD ProteinRatio INTEGER DEFAULT 0";
                 [db executeUpdate:proteinSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -492,7 +493,7 @@
                 NSString *carbSQL = @"ALTER TABLE user ADD CarbRatio INTEGER DEFAULT 0";
                 [db executeUpdate:carbSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -502,7 +503,7 @@
                 NSString *fatSQL = @"ALTER TABLE user ADD FatRatio INTEGER DEFAULT 0";
                 [db executeUpdate:fatSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -512,7 +513,7 @@
                 NSString *companySQL = @"ALTER TABLE user ADD CompanyID INTEGER DEFAULT 0";
                 [db executeUpdate:companySQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -522,7 +523,7 @@
                 NSString *bodyFatSQL = @"ALTER TABLE weightlog ADD bodyfat REAL DEFAULT 0";
                 [db executeUpdate:bodyFatSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -532,7 +533,7 @@
                 NSString *entryTypeSQL = @"ALTER TABLE weightlog ADD entry_type INTEGER DEFAULT 0";
                 [db executeUpdate:entryTypeSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -547,7 +548,7 @@
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             [db close];
             if (![db open]) {
-                NSLog(@"Could not open db.");
+                DMLog(@"Could not open db.");
             }
             
             if (![db tableExists:@"Messages"]) {
@@ -555,7 +556,7 @@
                 NSString *messageSQL = @"CREATE TABLE 'Messages' (Id INTEGER, 'Text' TEXT, Sender TEXT, 'Date' DATE, Read BOOLEAN)";
                 [db executeUpdate:messageSQL];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 [db commit];
             }
@@ -621,7 +622,7 @@
     
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -696,7 +697,7 @@
 //        NSString *tempFile2 = [tempPath2 stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
 //        [fileManager2 removeItemAtPath:tempFile2 error:NULL];
 //        if(![[NSFileManager defaultManager] fileExistsAtPath: tempFile2]) {
-//            NSLog(@"DMG.sqlite does not exist anymore");
+//            DMLog(@"DMG.sqlite does not exist anymore");
 //        }
         
 #pragma mark LOG OUT
@@ -840,7 +841,7 @@
 }
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
-    NSLog(@"SYNC FAIL: %@", failedMessage);
+    DMLog(@"SYNC FAIL: %@", failedMessage);
     [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
@@ -881,7 +882,7 @@
 }
 
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage {
-    NSLog(@"SYNC FAIL: %@", failedMessage);
+    DMLog(@"SYNC FAIL: %@", failedMessage);
     DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
@@ -982,7 +983,7 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        NSLog(@"Could not open db.");
+        DMLog(@"Could not open db.");
     }
     
     BOOL success = YES;
@@ -997,7 +998,7 @@
                 [db beginTransaction];
                 [db executeUpdate:sql];
                 if ([db hadError]) {
-                    NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     success = NO;
                 }
                 [db commit];
@@ -1073,7 +1074,7 @@
     BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
                                   forKey: NSURLIsExcludedFromBackupKey error: &error];
     if(!success) {
-        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+        DMLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
     }
     return success;
 }
@@ -1281,7 +1282,7 @@
     if([[NSFileManager defaultManager] fileExistsAtPath:zipFilePath])
     {
         [[NSFileManager defaultManager] removeItemAtPath:zipFilePath error:NULL];
-        NSLog(@"Temp DB Zip File Deleted...");
+        DMLog(@"Temp DB Zip File Deleted...");
     }
     //    });
     

@@ -322,10 +322,10 @@
 //
 //    if (exerciseIDTemp == 272 || exerciseIDTemp == 274){
 //        if (exerciseIDTemp == 272) {
-//            NSLog(@"Apple Calories");
+//            DMLog(@"Apple Calories");
 //        }
 //        else if (exerciseIDTemp == 274) {
-//            NSLog(@"Apple Steps");
+//            DMLog(@"Apple Steps");
 //        }
 //    }
 //    else {

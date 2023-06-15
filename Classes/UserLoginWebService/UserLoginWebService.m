@@ -18,7 +18,7 @@
 
 -(void)callWebservice:(NSString *)text
 {
-    NSLog(@"CALL WEB SERVICE ----BEGIN---- UserLoginWebService");
+    DMLog(@"CALL WEB SERVICE ----BEGIN---- UserLoginWebService");
     recordResults = FALSE;
     
     NSString *soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -34,7 +34,7 @@
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
     NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
     
-    NSLog(@"%@", soapMessage);
+    DMLog(@"%@", soapMessage);
     
     [theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     [theRequest addValue: @"http://webservice.dmwebpro.com/Authenticate" forHTTPHeaderField:@"SOAPAction"];
@@ -50,7 +50,7 @@
     }
     else
     {
-        NSLog(@"theConnection is NULL");
+        DMLog(@"theConnection is NULL");
     }
     
 }
@@ -65,7 +65,7 @@
 }
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"ERROR with Connection");
+    DMLog(@"ERROR with Connection");
     
     if ([wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFailed:)]) {
         [wsAuthenticateUserDelegate getAuthenticateUserFailed:[error description]];
@@ -82,7 +82,7 @@
     NSError *error=nil;
     NSDictionary *dic = [XMLReader dictionaryForXMLString:theXML error:&error];
     
-    NSLog(@"%@",[[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"AuthenticateResponse"]objectForKey:@"AuthenticateResult"] objectForKey:@"text"]);
+    DMLog(@"%@",[[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"AuthenticateResponse"]objectForKey:@"AuthenticateResult"] objectForKey:@"text"]);
     
     SBJSON *json = [SBJSON new];
     NSMutableDictionary *jsonObject = [[json objectWithString:[[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"AuthenticateResponse"]objectForKey:@"AuthenticateResult"] objectForKey:@"text"] error:NULL] objectAtIndex:0];
@@ -144,7 +144,7 @@
     
     if( [elementName isEqualToString:@"faultstring"])
     {
-        NSLog(@"ERROR with Connection");
+        DMLog(@"ERROR with Connection");
         
         if ([wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFailed:)]) {
             [wsAuthenticateUserDelegate getAuthenticateUserFailed:@"error"];

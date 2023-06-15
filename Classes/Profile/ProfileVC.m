@@ -217,10 +217,10 @@
             [alert show];
         }
         else if(result==NSOrderedDescending){
-            NSLog(@"newDate is less");
+            DMLog(@"newDate is less");
         }
         else {
-            NSLog(@"Both dates are same");
+            DMLog(@"Both dates are same");
         }
     }
 }
@@ -243,14 +243,14 @@
     result = [currentDate compare:selectedBDate]; // comparing two dates
     
     if(result==NSOrderedAscending) {
-        NSLog(@"newDate is in the future");
+        DMLog(@"newDate is in the future");
         return;
     }
     else if(result==NSOrderedDescending){
-        NSLog(@"newDate is less");
+        DMLog(@"newDate is less");
     }
     else {
-        NSLog(@"Both dates are same");
+        DMLog(@"Both dates are same");
     }
     
     NSString *dateString = [dateFormatter stringFromDate:eventDate];
@@ -279,7 +279,7 @@
         [dateFormatter setDateStyle:NSDateFormatterLongStyle];
         
         NSDate *BDate = [dateFormatter dateFromString:_txtBirthDate.text];
-        NSLog(@"date selected  : %@", [BDate descriptionWithLocale:[NSLocale currentLocale]]);
+        DMLog(@"date selected  : %@", [BDate descriptionWithLocale:[NSLocale currentLocale]]);
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         
@@ -298,7 +298,7 @@
             [dateFormat setDateFormat:@"dd/MM/yyyy"];
         }
         NSString *dateString = [dateFormat stringFromDate:BDate];
-        NSLog(@"Date in String is---:%@",dateString);
+        DMLog(@"Date in String is---:%@",dateString);
         
         [_userInfoDict setObject:dateString forKey:@"BirthDate"];
     }
@@ -367,11 +367,11 @@
     UITextField *textField =(UITextField *)sender;
     if (textField == self.txtHeight)
     {
-        NSLog(@"height textField");
+        DMLog(@"height textField");
     }
     else if (textField == self.txtWeight)
     {
-        NSLog(@"Weight textField");
+        DMLog(@"Weight textField");
     }
     [self.view endEditing:YES];
 }

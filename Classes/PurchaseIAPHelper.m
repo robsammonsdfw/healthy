@@ -55,7 +55,7 @@
 //        }
         
 //         NSString *savedValue = [[NSUserDefaults standardUserDefaults] valueForKey:@"ProductPurchasedAlready"];
-//        NSLog(@"%@",savedValue);
+//        DMLog(@"%@",savedValue);
 //        if ([savedValue  isEqual: @"ProductPurchasedAlready"]){
 //                  sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiersafterPurchased];
 //              }else{
@@ -67,7 +67,7 @@
 //         NSString *userID = [keychainItem objectForKey:kSecValueData];
 //         NSString *pruchased = [keychainItem objectForKey:kSecAttrAccount];
 //
-//         NSLog(@"%@",pruchased);
+//         DMLog(@"%@",pruchased);
 //
 //
 //        if ([pruchased  isEqual: @"YES"]){

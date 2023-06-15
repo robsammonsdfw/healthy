@@ -339,12 +339,12 @@
 
 #pragma mark - Picker -
 -(void)pickerSelector:(SBPickerSelector *)selector selectedValue:(NSString *)value index:(NSInteger)idx {
-    NSLog(@"%@",value);
+    DMLog(@"%@",value);
     self.txtGoalRate.text=value;
 }
 
 -(void)pickerSelector:(SBPickerSelector *)selector cancelPicker:(BOOL)cancel {
-    NSLog(@"Picker canceled ...");
+    DMLog(@"Picker canceled ...");
 }
 
 

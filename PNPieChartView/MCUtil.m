@@ -44,7 +44,7 @@
 }
 
 + (void)printRect:(CGRect)rect {
-    NSLog(@"rect = (%f, %f, %f, %f)", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+    DMLog(@"rect = (%f, %f, %f, %f)", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
 }
 
 + (NSString*)getRectLogString:(CGRect)rect {

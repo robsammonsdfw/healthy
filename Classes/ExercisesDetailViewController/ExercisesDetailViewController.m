@@ -321,14 +321,14 @@
         [self readData];
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
 }
 
 - (IBAction)btnAllowAccessClick:(id)sender {
     //check HKHealthStore available or not
     if ([HKHealthStore isHealthDataAvailable] == NO) {
-        NSLog(@"** HKHealthStore NotAvailable **");
+        DMLog(@"** HKHealthStore NotAvailable **");
         return;
     }
     
@@ -348,7 +348,7 @@
                 [self readData];
             }
             else {
-                NSLog(@"Error");
+                DMLog(@"Error");
             }
         }];
     }
@@ -376,7 +376,7 @@
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery* query, HKStatisticsCollection* results, NSError *error) {
         if (error) {
             // Perform proper error handling here
-            NSLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
+            DMLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
         }
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
@@ -391,7 +391,7 @@
                 
                 stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
                 //double cals = [self.sd stepsToCalories:value];
-                NSLog(@"%@: %.0f", date,stepCount);
+                DMLog(@"%@: %.0f", date,stepCount);
                 
                 [self showStepData];
                 
@@ -418,7 +418,7 @@
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //double temp = [self getMostRecentActiveCalories];
-                    //NSLog(@"%f",temp);
+                    //DMLog(@"%f",temp);
                 });
             }
         }];
@@ -730,7 +730,7 @@
         [insertQuery release];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -761,7 +761,7 @@
         [db executeUpdate:updateQuery];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -789,7 +789,7 @@
     [db executeUpdate:deleteQuery];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     

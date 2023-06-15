@@ -21,14 +21,14 @@
         
         self.weight = [dietmasterEngine.currentWeight doubleValue];
         
-        //NSLog(@"%ld",(long)self.weight);
+        //DMLog(@"%ld",(long)self.weight);
         
         //double height = [dietmasterEngine.userHeight doubleValue];
         //int inch = 12;
         //double sum = height * inch;
         
         self.heightInches = [dietmasterEngine.userHeight doubleValue];
-        //NSLog(@"%ld",(long)self.heightInches);
+        //DMLog(@"%ld",(long)self.heightInches);
     }
     
     return self;

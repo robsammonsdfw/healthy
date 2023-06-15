@@ -37,10 +37,10 @@
 
 #define   SHOW_LOGS             YES
 #define   SHOW_TEXTURES_LOGS    NO
-#define   Log(format, ...)      if (SHOW_LOGS) NSLog(@"%s: %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:format, ## __VA_ARGS__]);
-#define   TexLog(format, ...)   if (SHOW_LOGS && SHOW_TEXTURES_LOGS) NSLog(@"%s: %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:format, ## __VA_ARGS__]);
-#define   Error(format, ...)    if (SHOW_LOGS) NSLog(@"ERROR: %@", [NSString stringWithFormat:format, ## __VA_ARGS__]);
-#define   Mark                  if (SHOW_LOGS) NSLog(@"%s", __PRETTY_FUNCTION__);
+#define   Log(format, ...)      if (SHOW_LOGS) DMLog(@"%s: %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:format, ## __VA_ARGS__]);
+#define   TexLog(format, ...)   if (SHOW_LOGS && SHOW_TEXTURES_LOGS) DMLog(@"%s: %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:format, ## __VA_ARGS__]);
+#define   Error(format, ...)    if (SHOW_LOGS) DMLog(@"ERROR: %@", [NSString stringWithFormat:format, ## __VA_ARGS__]);
+#define   Mark                  if (SHOW_LOGS) DMLog(@"%s", __PRETTY_FUNCTION__);
 
 // Default Paths
 #pragma mark - Paths

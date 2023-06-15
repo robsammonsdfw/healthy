@@ -69,7 +69,7 @@
 }
 
 -(void)openUrl:(id)sender {
-    NSLog(@"we did it!");
+    DMLog(@"we did it!");
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

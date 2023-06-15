@@ -26,7 +26,7 @@
 @synthesize timeOutTimer;
 
 -(void)callWebservice:(NSDictionary *)requestDict {
-    NSLog(@"SOAP CALL ----BEGIN---- MealPlanWebService");
+    DMLog(@"SOAP CALL ----BEGIN---- MealPlanWebService");
     [timeOutTimer invalidate];
     timeOutTimer = nil;
 
@@ -171,7 +171,7 @@
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", requestType];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", requestType];
     
-    NSLog(@"%@", soapMessage);
+    DMLog(@"%@", soapMessage);
 	
 	NSURL *url = [NSURL URLWithString:urlToWebservice];
 	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
@@ -197,7 +197,7 @@
 	}
 	else
 	{
-		NSLog(@"theConnection is NULL");
+		DMLog(@"theConnection is NULL");
 	}
     
 }

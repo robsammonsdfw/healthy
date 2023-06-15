@@ -109,7 +109,7 @@
 			[errorDetail setValue:@"Server returned bad access" forKey:NSLocalizedDescriptionKey];
 			NSError *error = [NSError errorWithDomain:@"myDomain" code:100 userInfo:errorDetail];
 			[self connection:connection didFailWithError:error];
-			NSLog(@"Error with %i", statusCode);
+			DMLog(@"Error with %i", statusCode);
 			
         }
     }
@@ -133,7 +133,7 @@
 {
     
 	// [connection release];
-    NSLog(@"Connection failed! Error – %@",[error localizedDescription]);
+    DMLog(@"Connection failed! Error – %@",[error localizedDescription]);
 	
 	if ([wsSyncFoodsDelegate respondsToSelector:@selector(getSyncFoodsFailed:)]) {
         [wsSyncFoodsDelegate getSyncFoodsFailed:[error localizedDescription]];
@@ -180,7 +180,7 @@
      for (NSDictionary *item in responseArray)
      {
      // Get title of the image
-     NSLog(@"%@",[item valueForKey:@"accountid"]);
+     DMLog(@"%@",[item valueForKey:@"accountid"]);
      
      // Save the title to the photo titles array
      //[itemResponse addObject:(title.length > 0 ? title : @"Untitled")];

@@ -56,7 +56,7 @@ NSString *criticalDataPath()
                                                attributes:nil 
                                                     error:&error];
     if (error) {
-      NSLog(@"%@", [error localizedDescription]);
+      DMLog(@"%@", [error localizedDescription]);
       return nil;
     }
   }
@@ -75,7 +75,7 @@ NSString *offlineDataPath()
                                                attributes:nil 
                                                     error:&error];
     if (error) {
-      NSLog(@"%@", [error localizedDescription]);
+      DMLog(@"%@", [error localizedDescription]);
       return nil;
     }
     if (!addSkipBackupAttributeToFile(path))

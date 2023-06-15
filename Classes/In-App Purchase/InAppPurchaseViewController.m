@@ -129,7 +129,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    NSLog(@"PRODUCT COUNT %i", [self.products count]);
+//    DMLog(@"PRODUCT COUNT %i", [self.products count]);
 //    return [self planName].count;
     return [self.products count] / 2;
 }
@@ -154,7 +154,7 @@
 
     cell.dayAccessLbl.text = [self planAccess][indexPath.section];
     
-    NSLog(@"PRODUCT: %@", product);
+    DMLog(@"PRODUCT: %@", product);
     
     switch (indexPath.section){
         case 0:
@@ -211,21 +211,21 @@
     UIButton *senderBtn = (UIButton *)sender;
     SKProduct *product = self.products[senderBtn.tag];
     
-    NSLog(@"Buying %@", product.productIdentifier);
+    DMLog(@"Buying %@", product.productIdentifier);
     [[PurchaseIAPHelper sharedInstance] buyProduct:product];
     
 //    NSMutableArray *arr = [[NSMutableArray alloc] init];
     
     NSString *savedValue = [[NSUserDefaults standardUserDefaults] valueForKey:@"ProductPurchasedAlready"];
-    NSLog(@"%@",savedValue);
+    DMLog(@"%@",savedValue);
     
     if ([savedValue  isEqual: @"ProductPurchasedAlready"]){
-       NSLog(@" ProductPurchased");
+       DMLog(@" ProductPurchased");
     } else {
-       NSLog(@"NOT ProductPurchased");
+       DMLog(@"NOT ProductPurchased");
     }
     
-    NSLog(@"Buying %@...", product.productIdentifier);
+    DMLog(@"Buying %@...", product.productIdentifier);
     [[PurchaseIAPHelper sharedInstance] buyProduct:product];
     
     
@@ -235,8 +235,8 @@
 //     NSString *userID = [keychainItem objectForKey:kSecValueData];
 //     NSString *pruchased = [keychainItem objectForKey:kSecAttrAccount];
 //
-//     NSLog(@"%@",pruchased);
-//    NSLog(@"%@",userID);
+//     DMLog(@"%@",pruchased);
+//    DMLog(@"%@",userID);
 //
     
 //
@@ -245,7 +245,7 @@
 //        NSString *a = product.productIdentifier;
 //        [arr addObject:a];
 //    }
-//    NSLog(@"%@",arr);
+//    DMLog(@"%@",arr);
     
 //    switch (senderBtn.tag) {
 //        case 0:
@@ -269,9 +269,9 @@
 //    //    NSString *savedValue = [[NSUserDefaults standardUserDefaults] valueForKey:@"ProductPurchasedAlready"];
 //    //
 //    //    if ([savedValue  isEqual: @"ProductPurchasedAlready"]){
-//    //        NSLog(@" ProductPurchased");
+//    //        DMLog(@" ProductPurchased");
 //    //    }else{
-//    //         NSLog(@"NOT ProductPurchased");
+//    //         DMLog(@"NOT ProductPurchased");
 //    //    }
 //
 ////
@@ -280,7 +280,7 @@
 ////    NSString *userID = [keychainItem objectForKey:kSecValueData];
 ////    NSString *pruchased = [keychainItem objectForKey:kSecAttrAccount];
 ////
-////    NSLog(@"%@",pruchased);
+////    DMLog(@"%@",pruchased);
 //    SKProduct *product;
 //    NSMutableArray *arr = [[NSMutableArray alloc] init];
 //
@@ -307,7 +307,7 @@
 //        default:
 //            break;
 //    }
-//    NSLog(@"Buying %@...", product.productIdentifier);
+//    DMLog(@"Buying %@...", product.productIdentifier);
 //    [[PurchaseIAPHelper sharedInstance] buyProduct:product];
 //
 //}
@@ -349,12 +349,12 @@
 }
 
 -(void)savePurchased{
-    NSLog(@"I dont know why this is running....");
+    DMLog(@"I dont know why this is running....");
 //    [[NSUserDefaults standardUserDefaults] setObject: @"ProductPurchasedAlready" forKey:@"ProductPurchasedAlready"];
 //    [[NSUserDefaults standardUserDefaults] synchronize];
 //
 //    NSString *savedValue = [[NSUserDefaults standardUserDefaults] valueForKey:@"ProductPurchasedAlready"];
-//    NSLog(@"%@",savedValue);
+//    DMLog(@"%@",savedValue);
 //    return savedValue;
     
     NSUUID *uuid = [NSUUID UUID];
@@ -368,7 +368,7 @@
 //        NSString *userID = [keychainItem objectForKey:kSecValueData];
 //        NSString *pruchased = [keychainItem objectForKey:kSecAttrAccount];
         
-//        NSLog(@"%@",pruchased);
+//        DMLog(@"%@",pruchased);
     
 }
 

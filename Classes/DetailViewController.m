@@ -816,8 +816,8 @@
         FMResultSet *objChk = [db executeQuery:strChkRecord];
         while ([objChk next]) {
             if ([objChk intForColumn:@"count(*)"]>0) {
-                NSLog(@"%d",[objChk intForColumn:@"count(*)"]);
-                NSLog(@"Skip...");
+                DMLog(@"%d",[objChk intForColumn:@"count(*)"]);
+                DMLog(@"Skip...");
             }
             else{
                 
@@ -836,7 +836,7 @@
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
@@ -873,7 +873,7 @@
         [db executeUpdate:updateSQL];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
@@ -905,7 +905,7 @@
     [db executeUpdate:updateSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -931,7 +931,7 @@
     [db executeUpdate:updateSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -994,12 +994,12 @@
 
     NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO Favorite_Food (Favorite_FoodID, FoodID,modified,MeasureID) VALUES (%i, %i,DATETIME('%@'),%i)", minIDvalue, foodID, date_string, num_measureID];
     
-    NSLog(@"Save insertSQL for DetailView is %@", insertSQL);
+    DMLog(@"Save insertSQL for DetailView is %@", insertSQL);
     
     [db executeUpdate:insertSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1133,7 +1133,7 @@
     
 }
 - (void)deleteFavoriteFoodFailed:(NSString *)failedMessage {
-    NSLog(@"deleteFavoriteFoodFailed");
+    DMLog(@"deleteFavoriteFoodFailed");
 }
 
 #pragma mark -

@@ -375,7 +375,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 -(void)loadEventCalendar:(NSMutableArray*)datesArr
 {
 //    while(isLoading) {
-//        NSLog(@"Oh shit i think i broke it...");
+//        DMLog(@"Oh shit i think i broke it...");
 //    }
     prevDataArr = [[NSMutableArray alloc]initWithArray:datesArr];
     
@@ -384,7 +384,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     NSOperationQueue *operationQueue = [NSOperationQueue new];
     NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"The block operation ended, Do something such as show a successmessage etc");
+        DMLog(@"The block operation ended, Do something such as show a successmessage etc");
         //This the completion block operation
     }];
     NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -556,7 +556,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 }
             }
             
-            NSLog(@"%@",_exerciseDataWithoutDuplicate);
+            DMLog(@"%@",_exerciseDataWithoutDuplicate);
             
         }
         else
@@ -636,7 +636,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         NSOperationQueue *operationQueue = [NSOperationQueue new];
         NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-            NSLog(@"The block operation ended, Do something such as show a successmessage etc");
+            DMLog(@"The block operation ended, Do something such as show a successmessage etc");
             //This the completion block operation
         }];
         NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -1114,11 +1114,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 //    [self readData];
             }
             else {
-                NSLog(@"** Auto update apple watch sync is off **");
+                DMLog(@"** Auto update apple watch sync is off **");
             }
         }
         else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-            NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+            DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
         }
         
         //HHT temp change
@@ -1158,11 +1158,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 //    [self readData];
             }
             else {
-                NSLog(@"** Auto update apple watch sync is off **");
+                DMLog(@"** Auto update apple watch sync is off **");
             }
         }
         else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-            NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+            DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
         }
         
         //    [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
@@ -1203,11 +1203,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         //    [self readData];
         }
         else {
-            NSLog(@"** Auto update apple watch sync is off **");
+            DMLog(@"** Auto update apple watch sync is off **");
         }
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
     
 //    [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
@@ -1241,11 +1241,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         //    [self readData];
         }
         else {
-            NSLog(@"** Auto update apple watch sync is off **");
+            DMLog(@"** Auto update apple watch sync is off **");
         }
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
     
     //HHT temp change
@@ -1454,7 +1454,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSString *filter = @"%K == %@";
         NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"PlanDate",[dateFormatter stringFromDate:date]];
         [_listViewItem addObject:[_userPlanDateListData filteredArrayUsingPredicate:categoryPredicate]];
-        NSLog(@"%lu", (unsigned long)[_listViewItem count]);
+        DMLog(@"%lu", (unsigned long)[_listViewItem count]);
     }
 }
 
@@ -1476,7 +1476,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             [rowListArr addObjectsFromArray:tempArrs];
         }
         
-        NSLog(@"%@", rowListArr[indexPath.row]);
+        DMLog(@"%@", rowListArr[indexPath.row]);
         
         for (int i=0; i<[rowListArr count]; i++)
         {
@@ -1717,7 +1717,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     for (int i=0; i<digit; i++) {
         [randomString appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
     }
-    NSLog(@"S-%@",randomString);
+    DMLog(@"S-%@",randomString);
 
     return randomString;
 }
@@ -1727,8 +1727,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGPoint touchPoint = [sender convertPoint:CGPointZero toView:movesTblView]; // maintable --> replace your tableview name
     NSIndexPath *clickedButtonIndexPath = [movesTblView indexPathForRowAtPoint:touchPoint];
     
-    NSLog(@"index path.section ==%ld",(long)clickedButtonIndexPath.section);
-    NSLog(@"index path.row ==%ld",(long)clickedButtonIndexPath.row);
+    DMLog(@"index path.section ==%ld",(long)clickedButtonIndexPath.section);
+    DMLog(@"index path.row ==%ld",(long)clickedButtonIndexPath.row);
     
 //    NSString *filter = @"%K == %@";
 //    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"PlanName",_sectionTitleDataMovesTblView[clickedButtonIndexPath.section]];
@@ -1791,7 +1791,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery* query, HKStatisticsCollection* results, NSError *error) {
         if (error) {
             // Perform proper error handling here
-            NSLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
+            DMLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
         }
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
@@ -1816,7 +1816,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"Data not available");
+                    DMLog(@"Data not available");
                     //[self performSelector:@selector(updateData:) withObject:self.date_currentDate afterDelay:0.25];
                     
                     [self performSelector:@selector(loadExerciseData:) withObject:self.date_currentDate afterDelay:1.0];
@@ -1963,7 +1963,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [dateFormatter release];
     
     while(isLoading) {
-        NSLog(@"PREVENTING A CRASH HERE!");
+        DMLog(@"PREVENTING A CRASH HERE!");
         //containsObject below cannot run while loadEventCalendar block operation adds objs to datesWithInfo
         usleep(1000);
     }

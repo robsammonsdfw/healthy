@@ -209,7 +209,7 @@
     for (NSDictionary *mealItemDict in [tempArray objectAtIndex:mealCodeToAdd]) {
         BOOL success = [dietmasterEngine insertMealPlanToLog:mealItemDict];
         if (!success) {
-            NSLog(@"Food was not added successfully!");
+            DMLog(@"Food was not added successfully!");
         }
     }
     
@@ -410,7 +410,7 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    NSLog(@"SECTION: %d | ROW: %d", (int)indexPath.section, (int)indexPath.row);
+    DMLog(@"SECTION: %d | ROW: %d", (int)indexPath.section, (int)indexPath.row);
     
     NSInteger indexpathRow = indexPath.row;
     DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
@@ -424,7 +424,7 @@
                 NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[[[dietmasterEngine.mealPlanArray objectAtIndex:selectedIndex] valueForKey:@"MealNotes"] objectAtIndex:indexOfSection]];
                 
                 if(![[tempDict valueForKey:@"MealNote"] isEqualToString:@""]) {
-                    NSLog(@"MEAL NOTE: %@", [tempDict valueForKey:@"MealNote"]);
+                    DMLog(@"MEAL NOTE: %@", [tempDict valueForKey:@"MealNote"]);
                     if (indexPath.row == 0) {
                         cell.selectionStyle = UITableViewCellSelectionStyleNone;
                         cell.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver2_Border.png"]] autorelease];

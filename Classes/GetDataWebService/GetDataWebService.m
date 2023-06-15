@@ -16,7 +16,7 @@
 @synthesize requestDict = _requestDict;
 
 -(void)callWebservice:(NSDictionary *)requestDict {
-    NSLog(@"SOAP CALL ----BEGIN---- GetDataWebService");
+    DMLog(@"SOAP CALL ----BEGIN---- GetDataWebService");
     
     recordResults = FALSE;
     self.requestDict = nil;
@@ -43,11 +43,11 @@
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", requestType];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", requestType];
     
-    NSLog(@"%@", requestString);
+    DMLog(@"%@", requestString);
     
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     
-    NSLog(@"%@", url);
+    DMLog(@"%@", url);
     
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
     NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[requestString length]];
@@ -119,7 +119,7 @@
         NSError* error;
         NSDictionary *responseDict = [NSJSONSerialization
                                       JSONObjectWithData:data
-                                      options:nil
+                                      options:0
                                       error:&error];
         
         if ([getDataWSDelegate respondsToSelector:@selector(getDataFinished:)]) {

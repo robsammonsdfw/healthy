@@ -162,7 +162,7 @@
     NSNumber *key = @(section);
     NSDate *month = self.months[key];
     if (!month) {
-        NSLog(@"%@",month);
+        DMLog(@"%@",month);
         month = [self.gregorian dateByAddingUnit:NSCalendarUnitMonth value:section toDate:[self.gregorian fs_firstDayOfMonth:self.minimumDate] options:0];
         NSInteger numberOfHeadPlaceholders = [self numberOfHeadPlaceholdersForMonth:month];
         NSDate *monthHead = [self.gregorian dateByAddingUnit:NSCalendarUnitDay value:-numberOfHeadPlaceholders toDate:month options:0];

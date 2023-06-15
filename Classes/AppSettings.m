@@ -203,7 +203,7 @@
     [self openOpetionalSetting];
     
     //HHT change 28-11
-    NSLog(@"LoggedExeTracking :: %d",[[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"]);
+    DMLog(@"LoggedExeTracking :: %d",[[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"]);
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
         [btnLoggedExeTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
@@ -396,7 +396,7 @@
     [db executeUpdate:deleteCompanyMoves];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -684,7 +684,7 @@
     if([[NSFileManager defaultManager] fileExistsAtPath:zipFilePath])
     {
         [[NSFileManager defaultManager] removeItemAtPath:zipFilePath error:NULL];
-        NSLog(@"Temp DB Zip File Deleted...");
+        DMLog(@"Temp DB Zip File Deleted...");
     }
     //                   });
     
@@ -915,14 +915,14 @@
         
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
 }
 
 -(void)askForPermission {
     //check HKHealthStore available or not
     if ([HKHealthStore isHealthDataAvailable] == NO) {
-        NSLog(@"** HKHealthStore NotAvailable **");
+        DMLog(@"** HKHealthStore NotAvailable **");
         return;
     }
     
@@ -934,7 +934,7 @@
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        NSLog(@"HKAuthorizationStatusSharingAuthorized");
+        DMLog(@"HKAuthorizationStatusSharingAuthorized");
     }
     else {
         [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:shareTypes] readTypes:[NSSet setWithArray:readTypes] completion:^(BOOL success, NSError * _Nullable error) {
@@ -942,7 +942,7 @@
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HKHealthStoreAllow"];
             }
             else {
-                NSLog(@"Error");
+                DMLog(@"Error");
             }
         }];
     }
@@ -965,7 +965,7 @@
     
     FMDatabase* db = [FMDatabase databaseWithPath:[[DietmasterEngine instance] databasePath]];
     if (![db open]) {
-        NSLog(@"Could not open db.");
+        DMLog(@"Could not open db.");
     }
     
     NSMutableArray *arrFoods = [dictDataTemp valueForKey:@"Foods"];
@@ -1103,7 +1103,7 @@
         }
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         [self SyncFood];
@@ -1111,11 +1111,11 @@
 }
 
 -(void)getDataFailed:(NSString *)failedMessage {
-    NSLog(@"Err: %@", failedMessage);
+    DMLog(@"Err: %@", failedMessage);
     if (pageNumberCounter > 1) {
         //in process of syncing foods
         //fail silently and continue processing
-        NSLog(@"sync foods error: page %d failed.", pageNumberCounter);
+        DMLog(@"sync foods error: page %d failed.", pageNumberCounter);
         
         pageNumberCounter++;
         [self SyncFood];

@@ -461,11 +461,11 @@
             [self readData];
         }
         else {
-            NSLog(@"** Auto update apple watch sync is off **");
+            DMLog(@"** Auto update apple watch sync is off **");
         }
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
 }
 
@@ -575,15 +575,15 @@
         if ([exerciseResults count] > 0 && ((section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0)))
         {
             int totalFoodCal = breakfastCalories + snack1Calories + snack2Calories + snack3Calories + dinnerCalories + lunchCalories;
-            NSLog(@"%d",totalFoodCal);
+            DMLog(@"%d",totalFoodCal);
             
             if (!isExerciseData) {
                 sectionTitle = @"Exercise";
                 calorieCount = [NSString stringWithFormat:@"0.0"];
 //                calorieLabelFrame = CGRectMake(200, 6, 100, 20);
                 remainingCalorieCount=[NSString stringWithFormat:@"%.0f",AppDel.caloriesremaning];
-                NSLog(@"%@",remainingCalorieCount);
-                NSLog(@"%f",num_totalCaloriesBurned);
+                DMLog(@"%@",remainingCalorieCount);
+                DMLog(@"%f",num_totalCaloriesBurned);
                 
                 if (num_totalCaloriesBurned == 0)
                 {
@@ -716,7 +716,7 @@
                     }
                 }
                 else
-                    NSLog(@"Does not exist");
+                    DMLog(@"Does not exist");
             }
             else if ([[exerciseResults objectAtIndex:0] isKindOfClass:[NSArray class]]) {
                 return 0;
@@ -767,7 +767,7 @@
         if (isExerciseData) {
             
             NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResults objectAtIndex:indexPath.row]];
-            NSLog(@"%@",dict);
+            DMLog(@"%@",dict);
             int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
             DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
             NSNumber *caloriesPerHour = [dict valueForKey:@"CaloriesPerHour"];
@@ -815,7 +815,7 @@
                 totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
                 cell.lblCalories.text                = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
-            NSLog(@"%@",[dict valueForKey:@"ActivityName"]);
+            DMLog(@"%@",[dict valueForKey:@"ActivityName"]);
             cell.lblFoodName.text                = [dict valueForKey:@"ActivityName"];
             cell.lblFoodName.backgroundColor    = [UIColor clearColor];
             cell.lblFoodName.textColor        = [UIColor whiteColor];
@@ -986,11 +986,11 @@
             [self readData];
         }
         else {
-            NSLog(@"** Auto update apple watch sync is off **");
+            DMLog(@"** Auto update apple watch sync is off **");
         }
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
     
     [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
@@ -1158,11 +1158,11 @@
             [self readData];
         }
         else {
-            NSLog(@"** Auto update apple watch sync is off **");
+            DMLog(@"** Auto update apple watch sync is off **");
         }
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        NSLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
     
     //HHT temp change
@@ -1230,7 +1230,7 @@
     [db executeUpdate:insertSQL];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
@@ -1255,7 +1255,7 @@
         [db executeUpdate:insertSQLItems];
         
         if ([db hadError]) {
-            NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         
         [db commit];
@@ -1362,7 +1362,7 @@
     NSString *remainingCalorieCount;
     double calRecommended = [dietmasterEngine getBMR];
     int totalFoodCal = breakfastCalories + snack1Calories + snack2Calories + snack3Calories + dinnerCalories + lunchCalories;
-    NSLog(@"%d",totalFoodCal);
+    DMLog(@"%d",totalFoodCal);
     if (num_totalCaloriesBurned == 0)
     {
         lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[lbl_CaloriesRecommended.text intValue] - totalFoodCal];
@@ -2005,7 +2005,7 @@
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery* query, HKStatisticsCollection* results, NSError *error) {
         if (error) {
             // Perform proper error handling here
-            NSLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
+            DMLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
         }
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
@@ -2030,7 +2030,7 @@
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"Data not available");
+                    DMLog(@"Data not available");
                     //[self performSelector:@selector(updateData:) withObject:self.date_currentDate afterDelay:0.25];
                     
                     [self performSelector:@selector(loadExerciseData:) withObject:self.date_currentDate afterDelay:1.0];
@@ -2121,7 +2121,7 @@
     [insertQuery release];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
@@ -2198,7 +2198,7 @@
     [insertQuery release];
     
     if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     

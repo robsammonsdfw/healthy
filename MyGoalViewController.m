@@ -490,7 +490,7 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        NSLog(@"Could not open db.");
+        DMLog(@"Could not open db.");
     }
     
     float goalWeight;
