@@ -41,10 +41,7 @@
 @synthesize timeOutTimer;
 
 @synthesize requestDict = _requestDict;
--(void)callWebserviceForFoodNew:(NSDictionary *)requestDict withCompletion:(void (^)(id))completion
-{
-    //DMLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine-ForNewFood");
-    
+- (void)callWebserviceForFoodNew:(NSDictionary *)requestDict withCompletion:(void (^)(id))completion {
     [timeOutTimer invalidate];
     timeOutTimer = nil;
     
@@ -80,9 +77,7 @@
     
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=GetFoodNew"];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/GetFoodNew"];
-    
-    //DMLog(@"%@", soapMessage);
-    
+        
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
     NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[soapMessage length]];
@@ -198,9 +193,7 @@
     
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=SaveFoodNew"];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/SaveFoodNew"];
-    
-    DMLog(@"%@", soapMessage);
-    
+        
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
     NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[soapMessage length]];
@@ -233,9 +226,7 @@
     
 }
 
--(void)callWebservice:(NSDictionary *)requestDict
-{
-    //DMLog(@"CALL WEB SERVICE ---BEGIN--- SoapWebServiceEngine - callwebservice");
+- (void)callWebservice:(NSDictionary *)requestDict {
     // Kill the timeout timer
     [timeOutTimer invalidate];
     timeOutTimer = nil;
@@ -1105,11 +1096,13 @@
         [soapResults appendString: string];
     }
 }
--(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
+
+- (void)parser:(NSXMLParser *)parser
+ didEndElement:(NSString *)elementName
+  namespaceURI:(NSString *)namespaceURI
+ qualifiedName:(NSString *)qName {
     
     recordResults = FALSE;
-    DMLog(@"elementName =: %@",elementName);
     
     // Empty results?
     if ([soapResults isEqualToString:@"\"Empty\""]) {
@@ -1314,10 +1307,7 @@
         
     }
     
-    if([elementName isEqualToString:@"SaveFavoriteFoodResult"])
-    {
-        DMLog(@"SaveFavoriteFoodResult soapResults: %@",soapResults);
-        
+    if ([elementName isEqualToString:@"SaveFavoriteFoodResult"]) {
         if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFinished:)]) {
             [wsSaveFavoriteFoodDelegate saveFavoriteFoodFinished:responseArray];
         }
