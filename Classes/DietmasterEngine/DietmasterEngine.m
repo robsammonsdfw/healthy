@@ -21,6 +21,7 @@
 #import "DMUser.h"
 #import "DMMessage.h"
 #import "DMFood.h"
+#import "DMWeightLogEntry.h"
 
 #define D_MINUTE	60
 #define D_HOUR		3600
@@ -154,16 +155,13 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                                                     toDate:[NSDate date]
                                                                    options:0];
         
-        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-        outdateformatter.timeZone = [NSTimeZone systemTimeZone];
-        [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSString *dateString = [outdateformatter stringFromDate:oneDayAgo];
+        self.dateformatter.timeZone = [NSTimeZone systemTimeZone];
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString *dateString = [self.dateformatter stringFromDate:oneDayAgo];
         
-        NSDate *date1 = [outdateformatter dateFromString:dateString];
+        NSDate *date1 = [self.dateformatter dateFromString:dateString];
         
         [prefs setValue:date1 forKey:@"lastsyncdate"];
-
-        [prefs synchronize];
         
         [syncDatabaseDelegate syncDatabaseFinished:@"success"];
     }
@@ -199,18 +197,15 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                                                     toDate:[NSDate date]
                                                                    options:0];
         
-        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-        outdateformatter.timeZone = [NSTimeZone systemTimeZone];
-        [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSString *dateString = [outdateformatter stringFromDate:oneDayAgo];
+        self.dateformatter.timeZone = [NSTimeZone systemTimeZone];
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString *dateString = [self.dateformatter stringFromDate:oneDayAgo];
         
-        NSDate *date1 = [outdateformatter dateFromString:dateString];
+        NSDate *date1 = [self.dateformatter dateFromString:dateString];
         
         [prefs setValue:date1 forKey:@"lastsyncdate"];
-        [prefs synchronize];
         [syncUPDatabaseDelegate syncUPDatabaseFinished:@"success"];
         [self syncFavoriteFoods:nil];
-
     }
 }
 -(void)syncDatabaseFailed {
@@ -486,11 +481,10 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     NSString *strDatePassing = @"";
     if (lastMessage) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MM/dd/yyyy HH:mm:ss a"];
+        [self.dateformatter setDateFormat:@"MM/dd/yyyy HH:mm:ss a"];
         NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-        [dateFormatter setLocale:en_US];
-        strDatePassing = [dateFormatter stringFromDate:[lastMessage objectForKey:@"DsteTime"]];
+        [self.dateformatter setLocale:en_US];
+        strDatePassing = [self.dateformatter stringFromDate:[lastMessage objectForKey:@"DsteTime"]];
     }
     else {
         strDatePassing = @"0";
@@ -712,21 +706,15 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     int resultCounts = 0;
     while ([rs next]) {
         
-        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-        [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        dateformatter.timeZone = [NSTimeZone systemTimeZone];
-        NSDate *log_Date = [dateformatter dateFromString:[rs stringForColumn:@"MealDate"]];
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *log_Date = [self.dateformatter dateFromString:[rs stringForColumn:@"MealDate"]];
         
         if (log_Date == nil) {
             continue;
         }
-        [dateformatter release];
         
-        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-        [outdateformatter setDateFormat:@"M/dd/yyyy"];
-//        outdateformatter.timeZone = [NSTimeZone systemTimeZone];
-        NSString *logTimeString = [outdateformatter stringFromDate:log_Date];
-        [outdateformatter release];
+        [self.dateformatter setDateFormat:@"M/dd/yyyy"];
+        NSString *logTimeString = [self.dateformatter stringFromDate:log_Date];
         
         NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                   @"SaveMeal", @"RequestType",
@@ -1264,8 +1252,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
         
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Food "
                                  "(FoodID, MeasureID, modified) VALUES "
@@ -1276,8 +1263,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  ];
         
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     if ([db hadError]) {
@@ -1396,32 +1381,23 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
         
-        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-        [dateformatter setDateFormat:@"MM/dd/yyyy h:mm:ss aaa"];
+        [self.dateformatter setDateFormat:@"MM/dd/yyyy h:mm:ss aaa"];
         NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-        [dateformatter setLocale:en_US];
-        NSDate *logTimeDate = [dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
-        [dateformatter release];
+        [self.dateformatter setLocale:en_US];
+        NSDate *logTimeDate = [self.dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
         
-        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-        [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSString *logTimeString = [outdateformatter stringFromDate:logTimeDate];
-        [outdateformatter release];
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString *logTimeString = [self.dateformatter stringFromDate:logTimeDate];
         
-        NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
-        [keydateformatter setDateFormat:@"yyyyMMdd"];
-        NSString *keyDate = [keydateformatter stringFromDate:logTimeDate];
-        [keydateformatter release];
+        [self.dateformatter setDateFormat:@"yyyyMMdd"];
+        NSString *keyDate = [self.dateformatter stringFromDate:logTimeDate];
         
         int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
         NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
         
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-//        [dateFormatter setTimeZone:systemTimeZone];
-        NSString *date_string = [dateFormatter stringFromDate:sourceDate];
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString *date_string = [self.dateformatter stringFromDate:sourceDate];
         
         NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Exercise_Log"
                                  "(Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Log_Date, Date_Modified) VALUES "
@@ -1433,10 +1409,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  date_string
                                  ];
         
-        
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     if ([db hadError]) {
@@ -1476,31 +1449,24 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         for (int i=0; i < [arrTemp count]; i++) {
             NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[arrTemp objectAtIndex:i]];
             
-            NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
             //HHT change 2018 (Date format change)
-            [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             //[dateformatter setDateFormat:@"MM/dd/yyyy h:mm:ss aaa"];
             NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-            [dateformatter setLocale:en_US];
-            NSDate *logTimeDate = [dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
-            [dateformatter release];
+            [self.dateformatter setLocale:en_US];
+            NSDate *logTimeDate = [self.dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
             
-            NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-            [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            NSString *logTimeString = [outdateformatter stringFromDate:logTimeDate];
-            [outdateformatter release];
+            [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSString *logTimeString = [self.dateformatter stringFromDate:logTimeDate];
             
-            NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
-            [keydateformatter setDateFormat:@"yyyyMMdd"];
-            NSString *keyDate = [keydateformatter stringFromDate:logTimeDate];
-            [keydateformatter release];
+            [self.dateformatter setDateFormat:@"yyyyMMdd"];
+            NSString *keyDate = [self.dateformatter stringFromDate:logTimeDate];
             
             int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
             NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
             
             NSDate* sourceDate = [NSDate date];
-            NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-            [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             
             NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Exercise_Log "
                                      "(Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Log_Date, Date_Modified) VALUES "
@@ -1515,8 +1481,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             [db executeUpdate:queryString];
             
             [_arrExerciseSyncNew addObject:dict];
-            
-            [dict release];
         }
         
         if ([db hadError]) {
@@ -1543,61 +1507,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             [self syncDatabaseFinished];
         }
     }
-    
-    /*for (int i=0; i < [responseArray count]; i++) {
-     
-     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-     
-     NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-     [dateformatter setDateFormat:@"MM/dd/yyyy h:mm:ss aaa"];
-     NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-     [dateformatter setLocale:en_US];
-     NSDate *logTimeDate = [dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
-     [dateformatter release];
-     
-     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-     [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-     NSString *logTimeString = [outdateformatter stringFromDate:logTimeDate];
-     [outdateformatter release];
-     
-     NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
-     [keydateformatter setDateFormat:@"yyyyMMdd"];
-     NSString *keyDate = [keydateformatter stringFromDate:logTimeDate];
-     [keydateformatter release];
-     
-     int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
-     NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
-     
-     NSDate* sourceDate = [NSDate date];
-     NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-     [dateFormatter setTimeZone:systemTimeZone];
-     NSString *date_string = [dateFormatter stringFromDate:sourceDate];
-     
-     NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Exercise_Log "
-     "(Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Log_Date, Date_Modified) VALUES "
-     "('%@', %i, %i, '%@', '%@') ",
-     exerciseLogStrID,
-     exerciseID,
-     [[dict valueForKey:@"Duration"] intValue],
-     logTimeString,
-     date_string
-     ];
-     
-     
-     [db executeUpdate:queryString];
-     
-     [dict release];
-     }
-     
-     if ([db hadError]) {
-     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-     }
-     [db commit];
-     
-     syncsCompleted++;
-     [self syncDatabaseFinished];*/
 }
 
 //HHT new exercise sync
@@ -1617,24 +1526,9 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     for (int i=0; i < [responseArray count]; i++) {
         
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        double servingSize = ValidDouble([dict valueForKey:@"ServingSize"]);
-        if (servingSize == 0) {
-            servingSize = 1;
-        }
-        
-        NSString *foodName = ValidString([dict valueForKey:@"Name"]);
-        foodName = [foodName stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        foodName =  [foodName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-        
-        NSString *foodTags = ValidString([dict valueForKey:@"FoodTags"]);
-        if ([foodTags length] > 0) {
-            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-            foodTags = [foodTags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        }
-        
+        NSDictionary *dict = [responseArray[i] copy];
+        DMFood *food = [[DMFood alloc] initWithDictionary:dict];
+
         NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
                                 "(ScannedFood, "
                                  "FoodPK, FoodKey, "
@@ -1683,59 +1577,59 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  "%i , %i, "
                                  "%i, \"%@\", "
                                  "%i, \"%@\") ",
-                                 [[dict valueForKey:@"ScannedFood"] boolValue],
+                                 
+                               food.scannedFood.boolValue,
                                 
-                               ValidInt([dict valueForKey:@"FoodPK"]),
-                               ValidInt([dict valueForKey:@"FoodKey"]),
+                               food.foodPK.intValue,
+                               food.foodKey.intValue,
                                 
-                               ValidInt([dict valueForKey:@"FoodID"]),
-                               ValidInt([dict valueForKey:@"CategoryID"]),
+                               food.foodId.intValue,
+                               food.categoryId.intValue,
                                 
-                               ValidInt([dict valueForKey:@"CompanyID"]),
-                               ValidInt([dict valueForKey:@"UserID"]),
+                               food.companyId.intValue,
+                               food.userId.intValue,
                                
-                               foodName,
+                               food.name,
                                 
-                               ValidDouble([dict valueForKey:@"Calories"]),
-                               ValidDouble([dict valueForKey:@"Fat"]),
-                               ValidDouble([dict valueForKey:@"Sodium"]),
-                               ValidDouble([dict valueForKey:@"Carbohydrates"]),
-                               ValidDouble([dict valueForKey:@"SaturatedFat"]),
-                               ValidDouble([dict valueForKey:@"Cholesterol"]),
-                               ValidDouble([dict valueForKey:@"Protein"]),
-                               ValidDouble([dict valueForKey:@"Fiber"]),
-                               ValidDouble([dict valueForKey:@"Sugars"]),
-                               ValidDouble([dict valueForKey:@"Pot"]),
-                               ValidDouble([dict valueForKey:@"A"]),
-                               ValidDouble([dict valueForKey:@"Thi"]),
-                               ValidDouble([dict valueForKey:@"Rib"]),
-                               ValidDouble([dict valueForKey:@"Nia"]),
-                               ValidDouble([dict valueForKey:@"B6"]),
-                               ValidDouble([dict valueForKey:@"B12"]),
-                               ValidDouble([dict valueForKey:@"Fol"]),
-                               ValidDouble([dict valueForKey:@"C"]),
-                               ValidDouble([dict valueForKey:@"Calc"]),
-                               ValidDouble([dict valueForKey:@"Iron"]),
-                               ValidDouble([dict valueForKey:@"Mag"]),
-                               ValidDouble([dict valueForKey:@"Zn"]),
+                               food.calories.doubleValue,
+                               food.fat.doubleValue,
+                               food.sodium.doubleValue,
+                               food.carbohydrates.doubleValue,
+                               food.saturatedFat.doubleValue,
+                               food.cholesterol.doubleValue,
+                               food.protein.doubleValue,
+                               food.fiber.doubleValue,
+                               food.sugars.doubleValue,
+                               food.pot.doubleValue,
+                               food.a.doubleValue,
+                               food.thi.doubleValue,
+                               food.rib.doubleValue,
+                               food.nia.doubleValue,
+                               food.b6.doubleValue,
+                               food.b12.doubleValue,
+                               food.fol.doubleValue,
+                               food.c.doubleValue,
+                               food.calc.doubleValue,
+                               food.iron.doubleValue,
+                               food.mag.doubleValue,
+                               food.zn.doubleValue,
                                
-                               servingSize,
-                               foodTags,
+                               food.servingSize.doubleValue,
+                               food.foodTags,
                                
-                               ValidInt([dict valueForKey:@"Frequency"]),
-                               ValidDouble([dict valueForKey:@"Alcohol"]),
-                               ValidDouble([dict valueForKey:@"Folate"]),
-                               ValidDouble([dict valueForKey:@"Transfat"]),
-                               ValidDouble([dict valueForKey:@"E"]),
-                               ValidDouble([dict valueForKey:@"D"]),
-                               ValidString([dict valueForKey:@"UPCA"]),
-                               ValidInt([dict valueForKey:@"FactualID"]),
-                               ValidInt([dict valueForKey:@"ParentGroupID"]),
-                               ValidInt([dict valueForKey:@"RegionCode"]),
-                               ValidString([dict valueForKey:@"LastUpdateDate"]),
-                               ValidInt([dict valueForKey:@"RecipeID"]),
-                               ValidString([dict valueForKey:@"FoodURL"])];
-        
+                               food.frequency.intValue,
+                               food.alcohol.doubleValue,
+                               food.folate.doubleValue,
+                               food.transFat.doubleValue,
+                               food.e.doubleValue,
+                               food.d.doubleValue,
+                               food.barcodeUPCA,
+                               food.factualId.intValue,
+                               food.parentGroupID.intValue,
+                               food.regionCode.intValue,
+                               food.lastUpdateDateString,
+                               food.recipeId.intValue,
+                               food.foodURL];
         
         [db executeUpdate:insertSQL];
         
@@ -1891,8 +1785,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
         
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         NSString *queryString = [NSString stringWithFormat:@"UPDATE Food_Log_Items "
                                  " SET LastModified = '%@' WHERE MealID = %i ",
@@ -1901,8 +1794,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  ];
         
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     if ([db hadError]) {
@@ -2125,424 +2016,377 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     NSDictionary *dict = [responseDict copy];
-        
+    
+    // Get the model.
+    NSArray *userArray = [dict valueForKey:@"User"];
+    NSDictionary *userDict = dict[@"User"][0];
+    
     // Update User Info
-    if ([dict valueForKey:@"User"]) {
-        NSArray *arryUserData = [dict valueForKey:@"User"];
-        if (arryUserData.count > 0) {
-            NSDictionary *userDict = [[dict valueForKey:@"User"] objectAtIndex:0];
-            
-            // Log values to Firebase.
-            [[FIRCrashlytics crashlytics] log:@"GetUserData completed."];
-            for (id key in userDict) {
-                [[FIRCrashlytics crashlytics] setCustomValue:[userDict valueForKey:key] forKey:key];
-            }
-            
-            [db beginTransaction];
-            NSString *updateSQL = [NSString stringWithFormat: @"UPDATE user SET "
-                                   
-                                   "weight_goal = %i, "
-                                   "Height = %i, "
-                                   "Goals = %i, "
-                                   "BirthDate = '%@', "
-                                   "Profession = %i, "
-                                   "BodyType = %i, "
-                                   "GoalStartDate = '%@', "
-                                   "ProteinRequirements = %i, "
-                                   "gender = %i, "
-                                   "lactating = %i, "
-                                   "goalrate = %i, "
-                                   "BMR = %i, "
-                                   "CarbRatio = %i, "
-                                   "ProteinRatio = %i, "
-                                   "FatRatio = %i, "
-                                   "HostName = '%@'"
-                                   
-                                   "WHERE id = 1",
-                                   
-                                   [[userDict valueForKey:@"WeightGoal"] intValue] >= 0 ? [[userDict valueForKey:@"WeightGoal"] intValue]: 0,
-                                   [[userDict valueForKey:@"Height"] intValue] >= 0 ? [[userDict valueForKey:@"Height"] intValue]: 0,
-                                   [[userDict valueForKey:@"Goals"] intValue] >=0 ? [[userDict valueForKey:@"Goals"] intValue]: 0,
-                                   [[userDict valueForKey:@"BirthDate"] length] > 0 ? [userDict valueForKey:@"BirthDate"]:@"",
-                                   [[userDict valueForKey:@"Profession"] intValue] >=0 ? [[userDict valueForKey:@"Profession"] intValue]:0,
-                                   [[userDict valueForKey:@"BodyType"] intValue]>=0 ? [[userDict valueForKey:@"BodyType"] intValue]:0,
-                                   [[userDict valueForKey:@"GoalStartDate"] length] >0 ? [userDict valueForKey:@"GoalStartDate"]:@"",
-                                   [[userDict valueForKey:@"ProteinRequirements"] intValue] >=0 ? [[userDict valueForKey:@"ProteinRequirements"] intValue]:0,
-                                   [[userDict valueForKey:@"Gender"] intValue]>=0? [[userDict valueForKey:@"Gender"] intValue]:0,
-                                   [[userDict valueForKey:@"Lactation"] intValue]>=0? [[userDict valueForKey:@"Lactation"] intValue]:0,
-                                   [[userDict valueForKey:@"GoalRate"] intValue]>=0 ? [[userDict valueForKey:@"GoalRate"] intValue]:0,
-                                   [[userDict valueForKey:@"BMR"] intValue]>=0 ?[[userDict valueForKey:@"BMR"] intValue]:0,
-                                   [[userDict valueForKey:@"CarbRatio"] intValue]>=0 ?[[userDict valueForKey:@"CarbRatio"] intValue]:0,
-                                   [[userDict valueForKey:@"ProteinRatio"] intValue]>=0 ?[[userDict valueForKey:@"ProteinRatio"] intValue]:0,
-                                   [[userDict valueForKey:@"FatRatio"] intValue]>=0 ?[[userDict valueForKey:@"FatRatio"] intValue]:0,
-                                   [userDict valueForKey:@"HostName"]];
-            
-            [db executeUpdate:updateSQL];
-            
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            [prefs setValue:[userDict valueForKey:@"HostName"] forKey:@"HostName"];
-            [prefs synchronize];
-            
-            BOOL statusMsg = YES;
-            
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                statusMsg = NO;
-            }
-            [db commit];
+    if (userDict) {
+        DMUser *user = [[DMUser alloc] initWithDictionary:userDict];
+        
+        // Log values to Firebase.
+        [[FIRCrashlytics crashlytics] log:@"GetUserData completed."];
+        for (id key in userDict) {
+            [[FIRCrashlytics crashlytics] setCustomValue:[userDict valueForKey:key] forKey:key];
         }
-    }
-    if ([dict valueForKey:@"Weight"]) {
-        NSArray *weightArray = [dict valueForKey:@"Weight"];
-        if (weightArray.count > 0) {
-            [db beginTransaction];
-            for (NSDictionary *dict in weightArray) {
-                
-                NSArray *arryLogDate = [[dict valueForKey:@"LogDate"] componentsSeparatedByString:@" "];
-                NSString *strLogtime = @"";
-                if (arryLogDate.count > 0) {
-                    strLogtime = [NSString stringWithFormat:@"%@",arryLogDate[0]];
-                }
-                NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO weightlog "
-                                         "(weight, logtime, deleted, entry_type) VALUES "
-                                         "(%f, '%@', 1, %i) ",
-                                         [[dict valueForKey:@"Value"] doubleValue],strLogtime,
-                                         WEIGHT_ENTRY
-                                         ];
-                
-                [db executeUpdate:queryString];
-            }
-            
-            
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
+        
+        [db beginTransaction];
+        NSString *updateSQL = [NSString stringWithFormat: @"UPDATE user SET "
+                               
+                               "weight_goal = %i, "
+                               "Height = %i, "
+                               "Goals = %i, "
+                               "BirthDate = '%@', "
+                               "Profession = %i, "
+                               "BodyType = %i, "
+                               "GoalStartDate = '%@', "
+                               "ProteinRequirements = %i, "
+                               "gender = %i, "
+                               "lactating = %i, "
+                               "goalrate = %i, "
+                               "BMR = %i, "
+                               "CarbRatio = %i, "
+                               "ProteinRatio = %i, "
+                               "FatRatio = %i, "
+                               "HostName = '%@'"
+                               
+                               "WHERE id = 1",
+                               
+                               user.weightGoal.intValue,
+                               user.height.intValue,
+                               user.goals.intValue,
+                               [user birthDateString],
+                               user.profession.intValue,
+                               user.bodyType.intValue,
+                               [user goalStartDateString],
+                               user.proteinRequirements.intValue,
+                               user.gender.intValue,
+                               user.lactating.intValue,
+                               user.goalRate.intValue,
+                               user.userBMR.intValue,
+                               user.carbRatio.intValue,
+                               user.proteinRatio.intValue,
+                               user.fatRatio.intValue,
+                               user.hostName];
+        
+        [db executeUpdate:updateSQL];
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs setValue:user.hostName forKey:@"HostName"];
+        
+        BOOL statusMsg = YES;
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            statusMsg = NO;
         }
+        [db commit];
     }
     
-    if ([dict valueForKey:@"BodyFat"]) {
-        NSArray *bodyFatArray = [dict valueForKey:@"BodyFat"];
-        if (bodyFatArray.count > 0) {
-            [db beginTransaction];
+    NSArray *weightArray = [dict valueForKey:@"Weight"];
+    if (weightArray.count) {
+        [db beginTransaction];
+        for (NSDictionary *dict in weightArray) {
             
-            NSString *strTempWeight;
-            NSString *strTempDeleted;
-            for (NSDictionary *dict in bodyFatArray) {
-                NSArray *arryLogDate = [[dict valueForKey:@"LogDate"] componentsSeparatedByString:@" "];
-                NSString *strLogtime = @"";
-                if (arryLogDate.count > 0) {
-                    strLogtime = [NSString stringWithFormat:@"%@",arryLogDate[0]];
-                }
-                NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT weight, deleted FROM weightlog where logtime =\"%@\"", strLogtime];
-                FMResultSet *rs = [db executeQuery:getWeightSQL];
-                while ([rs next]) {
-                    strTempWeight = [NSString stringWithFormat:@"%f", [rs doubleForColumn:@"weight"]];
-                    strTempDeleted = [NSString stringWithFormat:@"%d", [rs intForColumn:@"deleted"]];
-                }
-                
-                NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO weightlog "
-                                         "(weight, bodyfat, logtime, deleted, entry_type) VALUES "
-                                         "(%@, %f, '%@', %@, %i)",
-                                         strTempWeight,
-                                         [[dict valueForKey:@"Value"] doubleValue],
-                                         strLogtime,
-                                         strTempDeleted,
-                                         BODYFAT_ENTRY
-                                         ];
-                
-                
-                [db executeUpdate:queryString];
-            }
+            DMWeightLogEntry *weightLogEntry = [[DMWeightLogEntry alloc] initWithDictionary:dict
+                                                                                  entryType:DMWeightLogEntryTypeWeight];
             
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
+            NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO weightlog "
+                                     "(weight, logtime, deleted, entry_type) VALUES "
+                                     "(%f, '%@', 1, %i) ",
+                                     weightLogEntry.value.doubleValue,
+                                     weightLogEntry.logDateString,
+                                     (int)weightLogEntry.entryType
+                                     ];
+            
+            [db executeUpdate:queryString];
         }
         
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+    }
+    
+    NSArray *bodyFatArray = [dict valueForKey:@"BodyFat"];
+    if (bodyFatArray.count) {
+        [db beginTransaction];
+        
+        NSString *strTempWeight;
+        NSString *strTempDeleted;
+        for (NSDictionary *dict in bodyFatArray) {
+            DMWeightLogEntry *weightLogEntry = [[DMWeightLogEntry alloc] initWithDictionary:dict
+                                                                                  entryType:DMWeightLogEntryTypeBodyFat];
+
+            NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT weight, deleted FROM weightlog where logtime =\"%@\"",
+                                      weightLogEntry.logDateString];
+            FMResultSet *rs = [db executeQuery:getWeightSQL];
+            while ([rs next]) {
+                strTempWeight = [NSString stringWithFormat:@"%f", [rs doubleForColumn:@"weight"]];
+                strTempDeleted = [NSString stringWithFormat:@"%d", [rs intForColumn:@"deleted"]];
+            }
+            
+            NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO weightlog "
+                                     "(weight, bodyfat, logtime, deleted, entry_type) VALUES "
+                                     "(%@, %f, '%@', %@, %i)",
+                                     strTempWeight,
+                                     weightLogEntry.value.doubleValue,
+                                     weightLogEntry.logDateString,
+                                     strTempDeleted,
+                                     (int)weightLogEntry.entryType
+                                     ];
+            
+            [db executeUpdate:queryString];
+        }
+        
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
     }
     
 #pragma mark RESPONSE - USER FOODS
-    if ([dict valueForKey:@"UserFoods"]) {
-        NSArray *userFoodsArray = [dict valueForKey:@"UserFoods"];
-        if (userFoodsArray.count > 0) {
-            [db beginTransaction];
+    NSArray *userFoodsArray = [dict valueForKey:@"UserFoods"];
+    if (userFoodsArray.count) {
+        [db beginTransaction];
+        
+        for (NSDictionary *dict in userFoodsArray) {
             
-            for (NSDictionary *dict in userFoodsArray) {
-                
-                NSString *foodName = [[dict valueForKey:@"Name"] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                foodName = [foodName stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-                
-                NSString *foodTags = [dict valueForKey:@"FoodTags"];
-                if (![foodTags isEqual:[NSNull null]] && [foodTags length] > 0) {
-                    foodTags = [foodTags stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    foodTags = [foodTags stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-                    foodTags = [foodTags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                }
-                
-                double servingSize = [[dict valueForKey:@"ServingSize"] doubleValue];
-                if (servingSize==0) { servingSize = 1; }
-                
-                NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
-                "(ScannedFood, "
-                 "FoodPK, FoodKey, "
-                 "FoodID, CategoryID, "
-                 "CompanyID, UserID, "
-                 "Name, Calories, "
-                 "Fat, Sodium, "
-                 "Carbohydrates, SaturatedFat, "
-                 "Cholesterol, Protein, "
-                 "Fiber, Sugars, "
-                 "Pot, A, "
-                 "Thi, Rib, "
-                 "Nia, B6, "
-                 "B12, Fol, "
-                 "C, Calc, "
-                 "Iron, Mag, "
-                 "Zn, ServingSize, "
-                 "FoodTags, Frequency, "
-                 "Alcohol, Folate, "
-                 "Transfat, E, "
-                 "D, UPCA, "
-                 "FactualID, ParentGroupID,"
-                 "RegionCode, LastUpdateDate,"
-                 "RecipeID, FoodURL)"
-                 "VALUES"
-                 "(%d, "
-                 "%i, %i, "
-                 "%i, %i, "
-                 "%i, %i, "
-                 "\"%@\", %f, " //Name, Calories
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, " //Pot, A
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "\"%@\", %i, " //FoodTags, Frequency
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, \"%@\", "
-                 "%i , %i, "
-                 "%i, \"%@\", "
-                 "%i, \"%@\") ",
-                 [[dict valueForKey:@"ScannedFood"] boolValue],
-                
-                 [[dict valueForKey:@"FoodPK"] intValue],
-                 [[dict valueForKey:@"FoodKey"] intValue],
-                
-                 [[dict valueForKey:@"FoodID"] intValue],
-                 [[dict valueForKey:@"CategoryID"] intValue],
-                
-                 [[dict valueForKey:@"CompanyID"] intValue],
-                 [[dict valueForKey:@"UserID"] intValue],
-                 foodName,
-                
-                 [[dict valueForKey:@"Calories"] doubleValue],
-                 [[dict valueForKey:@"Fat"] doubleValue],
-                 [[dict valueForKey:@"Sodium"] doubleValue],
-                 [[dict valueForKey:@"Carbohydrates"] doubleValue],
-                 [[dict valueForKey:@"SaturatedFat"] doubleValue],
-                 [[dict valueForKey:@"Cholesterol"] doubleValue],
-                 [[dict valueForKey:@"Protein"] doubleValue],
-                 [[dict valueForKey:@"Fiber"] doubleValue],
-                 [[dict valueForKey:@"Sugars"] doubleValue],
-                 [[dict valueForKey:@"Pot"] doubleValue],
-                 [[dict valueForKey:@"A"] doubleValue],
-                 [[dict valueForKey:@"Thi"] doubleValue],
-                 [[dict valueForKey:@"Rib"] doubleValue],
-                 [[dict valueForKey:@"Nia"] doubleValue],
-                 [[dict valueForKey:@"B6"] doubleValue],
-                 [[dict valueForKey:@"B12"] doubleValue],
-                 [[dict valueForKey:@"Fol"] doubleValue],
-                 [[dict valueForKey:@"C"] doubleValue],
-                 [[dict valueForKey:@"Calc"] doubleValue],
-                 [[dict valueForKey:@"Iron"] doubleValue],
-                 [[dict valueForKey:@"Mag"] doubleValue],
-                 [[dict valueForKey:@"Zn"] doubleValue],
-                 servingSize,
-                 foodTags,
-                 [[dict valueForKey:@"Frequency"] intValue],
-                 [[dict valueForKey:@"Alcohol"] doubleValue],
-                 [[dict valueForKey:@"Folate"] doubleValue],
-                 [[dict valueForKey:@"Transfat"] doubleValue],
-                 [[dict valueForKey:@"E"] doubleValue],
-                 [[dict valueForKey:@"D"] doubleValue],
-                 [dict valueForKey:@"UPCA"] ? [dict valueForKey:@"UPCA"] : @"",
-                 [[dict valueForKey:@"FactualID"] intValue],
-                 [[dict valueForKey:@"ParentGroupID"] intValue],
-                 [[dict valueForKey:@"RegionCode"] intValue],
-                 [dict valueForKey:@"LastUpdateDate"],
-                 [[dict valueForKey:@"RecipeID"] intValue],
-                 [dict valueForKey:@"FoodURL"]];
-                
-                [db executeUpdate:insertSQL];
-                
-                if ([dict valueForKey:@"FoodKey"]==0) {
-                    DMLog(@"1 FoodID zero here....");
-                }
-                
-                NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)", [[dict valueForKey:@"FoodKey"] intValue],[[dict valueForKey:@"MeasureID"] intValue], [[dict valueForKey:@"GramWeight"] intValue]];
-                
-                [db executeUpdate:insertFMSQL];
-            }
+            DMFood *food = [[DMFood alloc] initWithDictionary:dict];
+                        
+            NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
+            "(ScannedFood, "
+             "FoodPK, FoodKey, "
+             "FoodID, CategoryID, "
+             "CompanyID, UserID, "
+             "Name, Calories, "
+             "Fat, Sodium, "
+             "Carbohydrates, SaturatedFat, "
+             "Cholesterol, Protein, "
+             "Fiber, Sugars, "
+             "Pot, A, "
+             "Thi, Rib, "
+             "Nia, B6, "
+             "B12, Fol, "
+             "C, Calc, "
+             "Iron, Mag, "
+             "Zn, ServingSize, "
+             "FoodTags, Frequency, "
+             "Alcohol, Folate, "
+             "Transfat, E, "
+             "D, UPCA, "
+             "FactualID, ParentGroupID,"
+             "RegionCode, LastUpdateDate,"
+             "RecipeID, FoodURL)"
+             "VALUES"
+             "(%d, "
+             "%i, %i, "
+             "%i, %i, "
+             "%i, %i, "
+             "\"%@\", %f, " //Name, Calories
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, " //Pot, A
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "\"%@\", %i, " //FoodTags, Frequency
+             "%f, %f, "
+             "%f, %f, "
+             "%f, \"%@\", "
+             "%i , %i, "
+             "%i, \"%@\", "
+             "%i, \"%@\") ",
+             food.scannedFood.boolValue,
             
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
+             food.foodPK.intValue,
+             food.foodKey.intValue,
+            
+             food.foodId.intValue,
+             food.categoryId.intValue,
+            
+             food.companyId.intValue,
+             food.userId.intValue,
+             food.name,
+            
+             food.calories.doubleValue,
+             food.fat.doubleValue,
+             food.sodium.doubleValue,
+             food.carbohydrates.doubleValue,
+             food.saturatedFat.doubleValue,
+             food.cholesterol.doubleValue,
+             food.protein.doubleValue,
+             food.fiber.doubleValue,
+             food.sugars.doubleValue,
+             food.pot.doubleValue,
+             food.a.doubleValue,
+             food.thi.doubleValue,
+             food.rib.doubleValue,
+             food.nia.doubleValue,
+             food.b6.doubleValue,
+             food.b12.doubleValue,
+             food.fol.doubleValue,
+             food.c.doubleValue,
+             food.calc.doubleValue,
+             food.iron.doubleValue,
+             food.mag.doubleValue,
+             food.zn.doubleValue,
+             food.servingSize.doubleValue,
+             food.foodTags,
+             food.frequency.intValue,
+             food.alcohol.doubleValue,
+             food.folate.doubleValue,
+             food.transFat.doubleValue,
+             food.e.doubleValue,
+             food.d.doubleValue,
+             food.barcodeUPCA,
+             food.factualId.intValue,
+             food.parentGroupID.intValue,
+             food.regionCode.intValue,
+             food.lastUpdateDateString,
+             food.recipeId.intValue,
+             food.foodURL];
+            
+            [db executeUpdate:insertSQL];
+            
+            NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)",
+                                     food.foodKey.intValue,
+                                     food.measureId.intValue,
+                                     food.gramWeight.intValue];
+            
+            [db executeUpdate:insertFMSQL];
         }
+        
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
     }
     
 #pragma mark COMPANY FOODS
-    if ([dict valueForKey:@"CompanyFoods"]) {
-        
-        NSArray *companyFoodsArray = [dict valueForKey:@"CompanyFoods"];
-        if (companyFoodsArray.count > 0) {
-            [db beginTransaction];
-                        
-            for (NSDictionary *dict in companyFoodsArray) {
-                
-                NSString *foodName = [[dict valueForKey:@"Name"] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                foodName = [foodName stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-                
-                NSString *foodTags = [dict valueForKey:@"FoodTags"];
-                if (![foodTags isEqual:[NSNull null]] && [foodTags length] > 0) {
-                    foodTags = [foodTags stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    foodTags = [foodTags stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-                    foodTags = [foodTags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                }
-
-                double servingSize = [[dict valueForKey:@"ServingSize"] doubleValue];
-                if (servingSize == 0) { servingSize = 1; }
-
-                NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
-                "(ScannedFood, "
-                 "FoodPK, FoodKey, "
-                 "FoodID, CategoryID, "
-                 "CompanyID, UserID, "
-                 "Name, Calories, "
-                 "Fat, Sodium, "
-                 "Carbohydrates, SaturatedFat, "
-                 "Cholesterol, Protein, "
-                 "Fiber, Sugars, "
-                 "Pot, A, "
-                 "Thi, Rib, "
-                 "Nia, B6, "
-                 "B12, Fol, "
-                 "C, Calc, "
-                 "Iron, Mag, "
-                 "Zn, ServingSize, "
-                 "FoodTags, Frequency, "
-                 "Alcohol, Folate, "
-                 "Transfat, E, "
-                 "D, UPCA, "
-                 "FactualID, ParentGroupID,"
-                 "RegionCode, LastUpdateDate,"
-                 "RecipeID, FoodURL)"
-                 "VALUES"
-                 "(%d, "
-                 "%i, %i, "
-                 "%i, %i, "
-                 "%i, %i, "
-                 "\"%@\", %f, " //Name, Calories
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, " //Pot, A
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, %f, "
-                 "\"%@\", %i, " //FoodTags, Frequency
-                 "%f, %f, "
-                 "%f, %f, "
-                 "%f, \"%@\", "
-                 "%i , %i, "
-                 "%i, \"%@\", "
-                 "%i, \"%@\") ",
-                 [[dict valueForKey:@"ScannedFood"] boolValue],
-                
-                 [[dict valueForKey:@"FoodPK"] intValue],
-                 [[dict valueForKey:@"FoodKey"] intValue],
-                
-                 [[dict valueForKey:@"FoodID"] intValue],
-                 [[dict valueForKey:@"CategoryID"] intValue],
-                
-                 [[dict valueForKey:@"CompanyID"] intValue],
-                 [[dict valueForKey:@"UserID"] intValue],
-                 foodName,
-                
-                 [[dict valueForKey:@"Calories"] doubleValue],
-                 [[dict valueForKey:@"Fat"] doubleValue],
-                 [[dict valueForKey:@"Sodium"] doubleValue],
-                 [[dict valueForKey:@"Carbohydrates"] doubleValue],
-                 [[dict valueForKey:@"SaturatedFat"] doubleValue],
-                 [[dict valueForKey:@"Cholesterol"] doubleValue],
-                 [[dict valueForKey:@"Protein"] doubleValue],
-                 [[dict valueForKey:@"Fiber"] doubleValue],
-                 [[dict valueForKey:@"Sugars"] doubleValue],
-                 [[dict valueForKey:@"Pot"] doubleValue],
-                 [[dict valueForKey:@"A"] doubleValue],
-                 [[dict valueForKey:@"Thi"] doubleValue],
-                 [[dict valueForKey:@"Rib"] doubleValue],
-                 [[dict valueForKey:@"Nia"] doubleValue],
-                 [[dict valueForKey:@"B6"] doubleValue],
-                 [[dict valueForKey:@"B12"] doubleValue],
-                 [[dict valueForKey:@"Fol"] doubleValue],
-                 [[dict valueForKey:@"C"] doubleValue],
-                 [[dict valueForKey:@"Calc"] doubleValue],
-                 [[dict valueForKey:@"Iron"] doubleValue],
-                 [[dict valueForKey:@"Mag"] doubleValue],
-                 [[dict valueForKey:@"Zn"] doubleValue],
-                 servingSize,
-                 foodTags,
-                 [[dict valueForKey:@"Frequency"] intValue],
-                 [[dict valueForKey:@"Alcohol"] doubleValue],
-                 [[dict valueForKey:@"Folate"] doubleValue],
-                 [[dict valueForKey:@"Transfat"] doubleValue],
-                 [[dict valueForKey:@"E"] doubleValue],
-                 [[dict valueForKey:@"D"] doubleValue],
-                 [dict valueForKey:@"UPCA"] ? [dict valueForKey:@"UPCA"] : @"",
-                 [[dict valueForKey:@"FactualID"] intValue],
-                 [[dict valueForKey:@"ParentGroupID"] intValue],
-                 [[dict valueForKey:@"RegionCode"] intValue],
-                 [dict valueForKey:@"LastUpdateDate"],
-                 [[dict valueForKey:@"RecipeID"] intValue],
-                 [dict valueForKey:@"FoodURL"]];
-                
-                if ([dict valueForKey:@"FoodKey"]==0) {
-                    DMLog(@"1 FoodID zero here....");
-                }
-                
-                [db executeUpdate:insertSQL];
-                
-                if ([[dict objectForKey:@"MeasureID"] isEqual:[NSNull null]] || [[dict objectForKey:@"GramWeight"] isEqual:[NSNull null]])
-                {
-                    NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)", [[dict valueForKey:@"FoodKey"] intValue],1, 1];
-                    [db executeUpdate:insertFMSQL];
-                }
-                else
-                {
-                    NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)", [[dict valueForKey:@"FoodKey"] intValue],[[dict valueForKey:@"MeasureID"] intValue], [[dict valueForKey:@"GramWeight"] intValue]];
-                    [db executeUpdate:insertFMSQL];
-                }
-            }
+    NSArray *companyFoodsArray = [dict valueForKey:@"CompanyFoods"];
+    if (companyFoodsArray.count) {
+        [db beginTransaction];
+                    
+        for (NSDictionary *dict in companyFoodsArray) {
+            DMFood *food = [[DMFood alloc] initWithDictionary:dict];
+                       
+            NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
+            "(ScannedFood, "
+             "FoodPK, FoodKey, "
+             "FoodID, CategoryID, "
+             "CompanyID, UserID, "
+             "Name, Calories, "
+             "Fat, Sodium, "
+             "Carbohydrates, SaturatedFat, "
+             "Cholesterol, Protein, "
+             "Fiber, Sugars, "
+             "Pot, A, "
+             "Thi, Rib, "
+             "Nia, B6, "
+             "B12, Fol, "
+             "C, Calc, "
+             "Iron, Mag, "
+             "Zn, ServingSize, "
+             "FoodTags, Frequency, "
+             "Alcohol, Folate, "
+             "Transfat, E, "
+             "D, UPCA, "
+             "FactualID, ParentGroupID,"
+             "RegionCode, LastUpdateDate,"
+             "RecipeID, FoodURL)"
+             "VALUES"
+             "(%d, "
+             "%i, %i, "
+             "%i, %i, "
+             "%i, %i, "
+             "\"%@\", %f, " //Name, Calories
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, " //Pot, A
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "%f, %f, "
+             "\"%@\", %i, " //FoodTags, Frequency
+             "%f, %f, "
+             "%f, %f, "
+             "%f, \"%@\", "
+             "%i , %i, "
+             "%i, \"%@\", "
+             "%i, \"%@\") ",
+             food.scannedFood.boolValue,
             
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
+             food.foodPK.intValue,
+             food.foodKey.intValue,
+            
+             food.foodId.intValue,
+             food.categoryId.intValue,
+            
+             food.companyId.intValue,
+             food.userId.intValue,
+             food.name,
+            
+             food.calories.doubleValue,
+             food.fat.doubleValue,
+             food.sodium.doubleValue,
+             food.carbohydrates.doubleValue,
+             food.saturatedFat.doubleValue,
+             food.cholesterol.doubleValue,
+             food.protein.doubleValue,
+             food.fiber.doubleValue,
+             food.sugars.doubleValue,
+             food.pot.doubleValue,
+             food.a.doubleValue,
+             food.thi.doubleValue,
+             food.rib.doubleValue,
+             food.nia.doubleValue,
+             food.b6.doubleValue,
+             food.b12.doubleValue,
+             food.fol.doubleValue,
+             food.c.doubleValue,
+             food.calc.doubleValue,
+             food.iron.doubleValue,
+             food.mag.doubleValue,
+             food.zn.doubleValue,
+             food.servingSize.doubleValue,
+             food.foodTags,
+             food.frequency.intValue,
+             food.alcohol.doubleValue,
+             food.folate.doubleValue,
+             food.transFat.doubleValue,
+             food.e.doubleValue,
+             food.d.doubleValue,
+             food.barcodeUPCA,
+             food.factualId.intValue,
+             food.parentGroupID.intValue,
+             food.regionCode.intValue,
+             food.lastUpdateDateString,
+             food.recipeId.intValue,
+             food.foodURL];
+            
+            [db executeUpdate:insertSQL];
+            
+            NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)",
+                                     food.foodKey.intValue,
+                                     food.measureId.intValue,
+                                     food.gramWeight.intValue];
+            [db executeUpdate:insertFMSQL];
         }
+        
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
     }
     
 #pragma mark LOG DATA
@@ -2561,14 +2405,12 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 [db executeUpdate:queryString];
                 
                 NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-                [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                NSString *lastUpdate = [dateformatter stringFromDate:[[prefs valueForKey:@"lastsyncdate"] dateByAddingTimeInterval:-30]];
-                
+                [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSString *lastUpdate = [self.dateformatter stringFromDate:[[prefs valueForKey:@"lastsyncdate"] dateByAddingTimeInterval:-30]];
                 
                 if (lastUpdate == nil) {
-                    [dateformatter setTimeZone:[NSTimeZone systemTimeZone]];
-                    lastUpdate = [dateformatter stringFromDate:[NSDate date]];
+                    [self.dateformatter setTimeZone:[NSTimeZone systemTimeZone]];
+                    lastUpdate = [self.dateformatter stringFromDate:[NSDate date]];
                 }
 
                 NSString *selectString = [NSString stringWithFormat:@"SELECT FoodID, MealCode, LastModified FROM Food_Log_Items WHERE MealID = %i", [[dict valueForKey:@"MealID"] intValue]];
@@ -2737,8 +2579,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 }
                 
                 for(NSDictionary *itemToDelete in existingLogItems) {
-                    NSDate *date1 = [dateformatter dateFromString:lastUpdate];
-                    NSDate *date2 = [dateformatter dateFromString:[[itemToDelete valueForKey:@"LastModified"] stringValue]];
+                    NSDate *date1 = [self.dateformatter dateFromString:lastUpdate];
+                    NSDate *date2 = [self.dateformatter dateFromString:[[itemToDelete valueForKey:@"LastModified"] stringValue]];
 
                     // if lastUpdate is more recent than LastModified, this item has been deleted
                     NSTimeInterval timeInterval = [date2 timeIntervalSinceDate:date1];
@@ -2751,8 +2593,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                         [db executeUpdate:deleteFoodLogItem];
                     }
                 }
-                
-                [dateformatter release];
             }
             
             if ([db hadError]) {
@@ -2858,12 +2698,10 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     NSDate *lastModifiedServer = nil;
     @try {
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        df.dateFormat = @"EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'";
-        df.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
-        df.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-        lastModifiedServer = [df dateFromString:lastModifiedString];
-        [df release];
+        self.dateformatter.dateFormat = @"EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'";
+        self.dateformatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        self.dateformatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+        lastModifiedServer = [self.dateformatter dateFromString:lastModifiedString];
     }
     @catch (NSException * e) {
         DMLog(@"Error parsing last modified date: %@ - %@", lastModifiedString, [e description]);
@@ -3093,22 +2931,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     int mealIDValue = 0;
    
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    dateFormat.timeZone = [NSTimeZone systemTimeZone];
-    NSString *date_Today = [dateFormat stringFromDate:dateSelected];
-    [dateFormat release];
-
-    
-    
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-//
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
-//
-//    NSString *date_Today = [dateFormatter stringFromDate:[NSDate date]];
-//
-    
+    [self.dateformatter setDateFormat:@"yyyy-MM-dd"];
+    self.dateformatter.timeZone = [NSTimeZone systemTimeZone];
+    NSString *date_Today = [self.dateformatter stringFromDate:dateSelected];
+        
+    [self.dateformatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
     
     NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
     FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
@@ -3153,10 +2980,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     int mealID = minIDvalue;
     
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
-    
-    NSString *date_string = [dateFormatter stringFromDate:[NSDate date]];
+    [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *date_string = [self.dateformatter stringFromDate:[NSDate date]];
     
     insertSQL = [NSString stringWithFormat: @"INSERT INTO Food_Log_Items "
                  "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
@@ -3696,11 +3521,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     NSString *dateString = @"N/A";
     if ([prefs valueForKey:@"lastsyncdate"]) {
-        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-        [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
-//        [outdateformatter setTimeZone:[NSTimeZone systemTimeZone]];
-        dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-        [outdateformatter release];
+        [self.dateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
+        dateString = [self.dateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
     }
     
     NSTimeZone* destinationTimeZone = [NSTimeZone systemTimeZone];

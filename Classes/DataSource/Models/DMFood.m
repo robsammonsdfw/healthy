@@ -8,13 +8,19 @@
 #import "DMFood.h"
 
 @interface DMFood()
+@property (nonatomic, strong, readwrite) NSNumber *foodPK;
 @property (nonatomic, strong, readwrite) NSNumber *foodKey;
 @property (nonatomic, strong, readwrite) NSNumber *foodId;
 @property (nonatomic, strong, readwrite) NSNumber *userId;
 @property (nonatomic, strong, readwrite) NSNumber *companyId;
 @property (nonatomic, strong, readwrite) NSNumber *measureId;
+@property (nonatomic, strong, readwrite) NSNumber *recipeId;
+@property (nonatomic, strong, readwrite) NSNumber *regionCode;
+@property (nonatomic, strong, readwrite) NSNumber *parentGroupID;
+
 @property (nonatomic, strong, readwrite) NSNumber *servingSize;
 @property (nonatomic, strong, readwrite) NSNumber *frequency;
+@property (nonatomic, strong, readwrite) NSNumber *gramWeight;
 
 @property (nonatomic, strong, readwrite) NSString *name;
 
@@ -45,11 +51,18 @@
 @property (nonatomic, strong, readwrite) NSNumber *iron;
 @property (nonatomic, strong, readwrite) NSNumber *mag;
 @property (nonatomic, strong, readwrite) NSNumber *zn;
+@property (nonatomic, strong, readwrite) NSNumber *alcohol;
+
+@property (nonatomic, strong, readwrite) NSNumber *scannedFood;
 
 @property (nonatomic, strong, readwrite) NSNumber *categoryId;
 @property (nonatomic, strong, readwrite) NSString *barcodeUPCA;
 @property (nonatomic, strong, readwrite) NSString *factualId;
-@property (nonatomic, strong, readwrite) NSString *scannedFood;
+@property (nonatomic, strong, readwrite) NSString *foodTags;
+@property (nonatomic, strong, readwrite) NSString *foodURL;
+
+@property (nonatomic, strong, readwrite) NSString *lastUpdateDateString;
+
 @end
 
 @implementation DMFood
@@ -61,49 +74,77 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _foodKey = ValidNSNumber(dictionary[@"foodKey"]);
-        _foodId = ValidNSNumber(dictionary[@"foodId"]);
-        
-        _userId = ValidNSNumber(dictionary[@"userId"]);
-        _companyId = ValidNSNumber(dictionary[@"companyId"]);
-        
-        _scannedFood = ValidString(dictionary[@"ScannedFood"]);
+        _foodPK = ValidNSNumber(dictionary[@"FoodPK"]);
+        _foodKey = ValidNSNumber(dictionary[@"FoodKey"]);
+        _foodId = ValidNSNumber(dictionary[@"FoodID"]);
+        _userId = ValidNSNumber(dictionary[@"UserID"]);
+        _companyId = ValidNSNumber(dictionary[@"CompanyID"]);
+        _scannedFood = ValidNSNumber(dictionary[@"ScannedFood"]);
         _factualId = ValidString(dictionary[@"FactualID"]);
         _barcodeUPCA = ValidString(dictionary[@"UPCA"]);
         _categoryId = ValidNSNumber(dictionary[@"CategoryID"]);
-        _measureId = ValidNSNumber(dictionary[@"measureId"]);
+        _recipeId = ValidNSNumber(dictionary[@"RecipeID"]);
+        _regionCode = ValidNSNumber(dictionary[@"RegionCode"]);
+        _parentGroupID = ValidNSNumber(dictionary[@"ParentGroupID"]);
         
-        _servingSize = ValidNSNumber(dictionary[@"servingSize"]);
-        _frequency = ValidNSNumber(dictionary[@"frequency"]);
-        _name = ValidString(dictionary[@"name"]);
+        _measureId = ValidNSNumber(dictionary[@"MeasureID"]);
+        if ([_measureId isEqual:@0]) {
+            _measureId = @1;
+        }
+        _servingSize = ValidNSNumber(dictionary[@"ServingSize"]);
+        if ([_servingSize isEqual:@0]) {
+            _servingSize = @1;
+        }
+        _gramWeight = ValidNSNumber(dictionary[@"GramWeight"]);
+        if ([_gramWeight isEqual:@0]) {
+            _gramWeight = @1;
+        }
         
-        _calories = ValidNSNumber(dictionary[@"calories"]);
-        _fat = ValidNSNumber(dictionary[@"fat"]);
-        _transFat = ValidNSNumber(dictionary[@"transFat"]);
-        _sodium = ValidNSNumber(dictionary[@"sodium"]);
-        _carbohydrates = ValidNSNumber(dictionary[@"carbohydrates"]);
-        _saturatedFat = ValidNSNumber(dictionary[@"saturatedFat"]);
-        _cholesterol = ValidNSNumber(dictionary[@"cholesterol"]);
-        _protein = ValidNSNumber(dictionary[@"protein"]);
-        _fiber = ValidNSNumber(dictionary[@"fiber"]);
-        _sugars = ValidNSNumber(dictionary[@"sugars"]);
+        _frequency = ValidNSNumber(dictionary[@"Frequency"]);
 
-        _e = ValidNSNumber(dictionary[@"e"]);
-        _d = ValidNSNumber(dictionary[@"d"]);
-        _folate = ValidNSNumber(dictionary[@"folate"]);
-        _pot = ValidNSNumber(dictionary[@"pot"]);
-        _a = ValidNSNumber(dictionary[@"a"]);
-        _thi = ValidNSNumber(dictionary[@"thi"]);
-        _rib = ValidNSNumber(dictionary[@"rib"]);
-        _nia = ValidNSNumber(dictionary[@"nia"]);
-        _b6 = ValidNSNumber(dictionary[@"b6"]);
-        _b12 = ValidNSNumber(dictionary[@"b12"]);
-        _fol = ValidNSNumber(dictionary[@"fol"]);
-        _c = ValidNSNumber(dictionary[@"c"]);
-        _calc = ValidNSNumber(dictionary[@"calc"]);
-        _iron = ValidNSNumber(dictionary[@"iron"]);
-        _mag = ValidNSNumber(dictionary[@"mag"]);
-        _zn = ValidNSNumber(dictionary[@"zn"]);
+        _name = ValidString(dictionary[@"Name"]);
+        _name = [_name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        _name =  [_name stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        
+        _calories = ValidNSNumber(dictionary[@"Calories"]);
+        _fat = ValidNSNumber(dictionary[@"Fat"]);
+        _transFat = ValidNSNumber(dictionary[@"TransFat"]);
+        _sodium = ValidNSNumber(dictionary[@"Sodium"]);
+        _carbohydrates = ValidNSNumber(dictionary[@"Carbohydrates"]);
+        _saturatedFat = ValidNSNumber(dictionary[@"SaturatedFat"]);
+        _cholesterol = ValidNSNumber(dictionary[@"Cholesterol"]);
+        _protein = ValidNSNumber(dictionary[@"Protein"]);
+        _fiber = ValidNSNumber(dictionary[@"Fiber"]);
+        _sugars = ValidNSNumber(dictionary[@"Sugars"]);
+
+        _e = ValidNSNumber(dictionary[@"E"]);
+        _d = ValidNSNumber(dictionary[@"D"]);
+        _folate = ValidNSNumber(dictionary[@"Folate"]);
+        _pot = ValidNSNumber(dictionary[@"Pot"]);
+        _a = ValidNSNumber(dictionary[@"A"]);
+        _thi = ValidNSNumber(dictionary[@"Thi"]);
+        _rib = ValidNSNumber(dictionary[@"Rib"]);
+        _nia = ValidNSNumber(dictionary[@"Nia"]);
+        _b6 = ValidNSNumber(dictionary[@"B6"]);
+        _b12 = ValidNSNumber(dictionary[@"B12"]);
+        _fol = ValidNSNumber(dictionary[@"Fol"]);
+        _c = ValidNSNumber(dictionary[@"C"]);
+        _calc = ValidNSNumber(dictionary[@"Calc"]);
+        _iron = ValidNSNumber(dictionary[@"Iron"]);
+        _mag = ValidNSNumber(dictionary[@"Mag"]);
+        _zn = ValidNSNumber(dictionary[@"Zn"]);
+        _alcohol = ValidNSNumber(dictionary[@"Alcohol"]);
+
+        NSString *foodTags = ValidString(dictionary[@"FoodTags"]);
+        if (foodTags.length) {
+            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+            foodTags = [foodTags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        }
+        _foodTags = foodTags;
+        
+        _foodURL = ValidString(dictionary[@"FoodURL"]);
+        _lastUpdateDateString = ValidString(dictionary[@"LastUpdateDate"]);
     }
     return self;
 }

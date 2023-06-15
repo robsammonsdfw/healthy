@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
+		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
 		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
 		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
 		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
@@ -431,6 +432,8 @@
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
 		0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMFood.h; sourceTree = "<group>"; };
 		0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMFood.m; sourceTree = "<group>"; };
+		0E1A3B3F2A3B9E68004C6033 /* DMWeightLogEntry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMWeightLogEntry.h; sourceTree = "<group>"; };
+		0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMWeightLogEntry.m; sourceTree = "<group>"; };
 		0E3F44D215003DA6008413AB /* LearnMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LearnMoreViewController.h; sourceTree = "<group>"; };
 		0E3F44D315003DA6008413AB /* LearnMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LearnMoreViewController.m; sourceTree = "<group>"; };
 		0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LearnMoreViewController.xib; sourceTree = "<group>"; };
@@ -1674,6 +1677,8 @@
 				0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */,
 				0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */,
 				0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */,
+				0E1A3B3F2A3B9E68004C6033 /* DMWeightLogEntry.h */,
+				0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2830,6 +2835,7 @@
 				401B648B20B3FC64004453E7 /* FavoriteMealsViewController.m in Sources */,
 				401B648C20B3FC64004453E7 /* WebServiceEngine.m in Sources */,
 				401B648D20B3FC64004453E7 /* NSObject+SBJSON.m in Sources */,
+				0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */,
 				401B648E20B3FC64004453E7 /* NSString+SBJSON.m in Sources */,
 				401B648F20B3FC64004453E7 /* SBJSON.m in Sources */,
 				401B649020B3FC64004453E7 /* SBJsonBase.m in Sources */,

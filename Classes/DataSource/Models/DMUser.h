@@ -28,6 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *weightGoal;
 @property (nonatomic, strong) NSNumber *goalRate;
 
+@property (nonatomic, strong) NSNumber *carbRatio;
+@property (nonatomic, strong) NSNumber *proteinRatio;
+@property (nonatomic, strong) NSNumber *fatRatio;
+
+@property (nonatomic, strong) NSString *hostName;
+
 /// Designated initializer.
 - (instancetype)initWithDictionary:(NSDictionary *)userDict NS_DESIGNATED_INITIALIZER;
 
