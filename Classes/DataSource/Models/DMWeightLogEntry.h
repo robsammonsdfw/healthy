@@ -22,7 +22,12 @@ typedef NS_ENUM(NSUInteger, DMWeightLogEntryType) {
 @property (nonatomic, readonly) DMWeightLogEntryType entryType;
 
 /// Formatted string of what's saved to the database. The Webservice returns Date/Time. We strip time from it.
+/// E.g.: M/dd/yyyy
 @property (nonatomic, strong, readonly) NSString *logDateString;
+/// Formatted string of the date that includes time. The time will always be 12AM midnight.
+/// E.g. M/dd/yyyy 12:00:00 AM.
+/// This is used for sending data to the server.
+@property (nonatomic, strong, readonly) NSString *logDateTimeString;
 // The amount of weight logged.
 @property (nonatomic, strong, readonly) NSNumber *value;
 

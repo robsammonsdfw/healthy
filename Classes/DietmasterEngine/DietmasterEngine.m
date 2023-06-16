@@ -769,7 +769,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     while ([rs next]) {
         NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                   [rs stringForColumn:@"MealID"], @"MealID",
-                                  [rs stringForColumn:@"FoodID"], @"FoodID",
+           x                       [rs stringForColumn:@"FoodID"], @"FoodID",
                                   [rs stringForColumn:@"MealCode"], @"MealCode",
                                   [rs stringForColumn:@"MeasureID"], @"MeasureID",
                                   [rs stringForColumn:@"NumberOfServings"], @"ServingSize",
@@ -864,8 +864,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         [self uploadDatabaseFinished];
     }
 }
--(void)saveWeightLog:(NSString *)dateString {
-    
+
+- (void)saveWeightLog:(NSString *)dateString {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
@@ -873,44 +873,33 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
     }
     
-    NSString *query;
-    
-    query = [NSString stringWithFormat:@"SELECT weight, logtime FROM weightlog"];
-    
+    NSString *query = [NSString stringWithFormat:@"SELECT weight, logtime FROM weightlog"];
     int resultCounts = 0;
     FMResultSet *rs = [db executeQuery:query];
     
-    NSMutableArray *tempDataArray = [[NSMutableArray alloc] init];
+    NSMutableArray *tempDataArray = [NSMutableArray array];
     
     while ([rs next]) {
         
-        [self.dateformatter setDateFormat:@"yyyy-MM-dd"];
-        NSDate *log_Date = [self.dateformatter dateFromString:[rs stringForColumn:@"logtime"]];
-        
-        if (log_Date == nil) {
+        NSDictionary *dict = [rs resultDictionary];
+        DMWeightLogEntry *weightEntry = [[DMWeightLogEntry alloc] initWithDictionary:dict entryType:DMWeightLogEntryTypeWeight];
+        if (!weightEntry.logDateString.length) {
             continue;
         }
-        
-        [self.dateformatter setDateFormat:@"M/dd/yyyy"];
-        NSString *logTimeString = [self.dateformatter stringFromDate:log_Date];
-        
-        NSString *finalLogString = [NSString stringWithFormat:@"%@ 12:00:00 AM", logTimeString];
+                
         NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                  [rs stringForColumn:@"weight"], @"Weight",
-                                  finalLogString, @"LogDate",
-                                  nil];
-        
+                                    weightEntry.value, @"Weight",
+                                    weightEntry.logDateTimeString, @"LogDate", nil];
         [tempDataArray addObject:tempDict];
         
         resultCounts++;
     }
     
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SaveWeightLogs", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                              tempDataArray, @"WeightLog",
-                              nil];
+                                @"SaveWeightLogs", @"RequestType",
+                                [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
+                                [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
+                                [tempDataArray copy], @"WeightLog", nil];
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsSaveWeightLogDelegate = self;
@@ -923,7 +912,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         [self uploadDatabaseFinished];
     }
 }
--(void)saveAllCustomFoods {
+
+- (void)saveAllCustomFoods {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -945,57 +935,17 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     while ([rs next]) {
         
-        
-        NSDictionary *dict;
-        {
-            
-            dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                    @"SaveFoodNew", @"RequestType",
-                    [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                    [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                    [NSNumber numberWithInt:[rs intForColumn:@"FoodKey"]], @"FoodKey",
-                    [NSNumber numberWithInt:[rs intForColumn:@"FoodID"]], @"FoodID",
-                    [rs stringForColumn:@"Name"], @"Name",
-                    [NSNumber numberWithInt:[rs intForColumn:@"CategoryID"]], @"CategoryID",
-                    [NSNumber numberWithInt:[rs intForColumn:@"Calories"]], @"Calories",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Fat"]], @"Fat",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Sodium"]], @"Sodium",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Carbohydrates"]], @"Carbohydrates",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"SaturatedFat"]], @"SaturatedFat",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Cholesterol"]], @"Cholesterol",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Protein"]], @"Protein",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Fiber"]], @"Fiber",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Sugars"]], @"Sugars",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Pot"]], @"Pot",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"A"]], @"A",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Thi"]], @"Thi",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Rib"]], @"Rib",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Nia"]], @"Nia",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"B6"]], @"B6",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"B12"]], @"B12",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Fol"]], @"Fol",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"C"]], @"C",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Calc"]], @"Calc",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Iron"]], @"Iron",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Mag"]], @"Mag",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Zn"]], @"Zn",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"ServingSize"]], @"ServingSize",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Transfat"]], @"Transfat",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"E"]], @"E",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"D"]], @"D",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Folate"]], @"Folate",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"Frequency"]], @"Frequency",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"UserID"]], @"UserID",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"CompanyID"]], @"CompanyID",
-                    [rs stringForColumn:@"UPCA"], @"UPCA",
-                    [rs stringForColumn:@"FactualID"], @"FactualID",
-                    [NSNumber numberWithDouble:[rs doubleForColumn:@"MeasureID"]], @"MeasureID", [rs stringForColumn:@"ScannedFood"], @"ScannedFood", nil];
-            
-        }
-        
+        NSDictionary *resultDict = [rs resultDictionary];
+        DMFood *food = [[DMFood alloc] initWithDictionary:resultDict];
+        NSMutableDictionary *mutableDict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                              @"SaveFoodNew", @"RequestType",
+                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
+                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
+                              nil];
+        [mutableDict addEntriesFromDictionary:[food dictionaryRepresentation]];
+
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        
-        [soapWebService callWebservice:dict withCompletion:^(id obj)
+        [soapWebService callWebservice:[mutableDict copy] withCompletion:^(id obj)
          {
              [self saveFoodFinished:obj];
          }];
@@ -2153,106 +2103,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         for (NSDictionary *dict in userFoodsArray) {
             
             DMFood *food = [[DMFood alloc] initWithDictionary:dict];
-                        
-            NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
-            "(ScannedFood, "
-             "FoodPK, FoodKey, "
-             "FoodID, CategoryID, "
-             "CompanyID, UserID, "
-             "Name, Calories, "
-             "Fat, Sodium, "
-             "Carbohydrates, SaturatedFat, "
-             "Cholesterol, Protein, "
-             "Fiber, Sugars, "
-             "Pot, A, "
-             "Thi, Rib, "
-             "Nia, B6, "
-             "B12, Fol, "
-             "C, Calc, "
-             "Iron, Mag, "
-             "Zn, ServingSize, "
-             "FoodTags, Frequency, "
-             "Alcohol, Folate, "
-             "Transfat, E, "
-             "D, UPCA, "
-             "FactualID, ParentGroupID,"
-             "RegionCode, LastUpdateDate,"
-             "RecipeID, FoodURL)"
-             "VALUES"
-             "(%d, "
-             "%i, %i, "
-             "%i, %i, "
-             "%i, %i, "
-             "\"%@\", %f, " //Name, Calories
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, " //Pot, A
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "\"%@\", %i, " //FoodTags, Frequency
-             "%f, %f, "
-             "%f, %f, "
-             "%f, \"%@\", "
-             "%i , %i, "
-             "%i, \"%@\", "
-             "%i, \"%@\") ",
-             food.scannedFood.boolValue,
-            
-             food.foodPK.intValue,
-             food.foodKey.intValue,
-            
-             food.foodId.intValue,
-             food.categoryId.intValue,
-            
-             food.companyId.intValue,
-             food.userId.intValue,
-             food.name,
-            
-             food.calories.doubleValue,
-             food.fat.doubleValue,
-             food.sodium.doubleValue,
-             food.carbohydrates.doubleValue,
-             food.saturatedFat.doubleValue,
-             food.cholesterol.doubleValue,
-             food.protein.doubleValue,
-             food.fiber.doubleValue,
-             food.sugars.doubleValue,
-             food.pot.doubleValue,
-             food.a.doubleValue,
-             food.thi.doubleValue,
-             food.rib.doubleValue,
-             food.nia.doubleValue,
-             food.b6.doubleValue,
-             food.b12.doubleValue,
-             food.fol.doubleValue,
-             food.c.doubleValue,
-             food.calc.doubleValue,
-             food.iron.doubleValue,
-             food.mag.doubleValue,
-             food.zn.doubleValue,
-             food.servingSize.doubleValue,
-             food.foodTags,
-             food.frequency.intValue,
-             food.alcohol.doubleValue,
-             food.folate.doubleValue,
-             food.transFat.doubleValue,
-             food.e.doubleValue,
-             food.d.doubleValue,
-             food.barcodeUPCA,
-             food.factualId.intValue,
-             food.parentGroupID.intValue,
-             food.regionCode.intValue,
-             food.lastUpdateDateString,
-             food.recipeId.intValue,
-             food.foodURL];
-            
-            [db executeUpdate:insertSQL];
+            NSString *replaceIntoSQL = [food replaceIntoSQLString];
+            [db executeUpdate:replaceIntoSQL];
             
             NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)",
                                      food.foodKey.intValue,
@@ -2275,106 +2127,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                     
         for (NSDictionary *dict in companyFoodsArray) {
             DMFood *food = [[DMFood alloc] initWithDictionary:dict];
-                       
-            NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
-            "(ScannedFood, "
-             "FoodPK, FoodKey, "
-             "FoodID, CategoryID, "
-             "CompanyID, UserID, "
-             "Name, Calories, "
-             "Fat, Sodium, "
-             "Carbohydrates, SaturatedFat, "
-             "Cholesterol, Protein, "
-             "Fiber, Sugars, "
-             "Pot, A, "
-             "Thi, Rib, "
-             "Nia, B6, "
-             "B12, Fol, "
-             "C, Calc, "
-             "Iron, Mag, "
-             "Zn, ServingSize, "
-             "FoodTags, Frequency, "
-             "Alcohol, Folate, "
-             "Transfat, E, "
-             "D, UPCA, "
-             "FactualID, ParentGroupID,"
-             "RegionCode, LastUpdateDate,"
-             "RecipeID, FoodURL)"
-             "VALUES"
-             "(%d, "
-             "%i, %i, "
-             "%i, %i, "
-             "%i, %i, "
-             "\"%@\", %f, " //Name, Calories
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, " //Pot, A
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "%f, %f, "
-             "\"%@\", %i, " //FoodTags, Frequency
-             "%f, %f, "
-             "%f, %f, "
-             "%f, \"%@\", "
-             "%i , %i, "
-             "%i, \"%@\", "
-             "%i, \"%@\") ",
-             food.scannedFood.boolValue,
-            
-             food.foodPK.intValue,
-             food.foodKey.intValue,
-            
-             food.foodId.intValue,
-             food.categoryId.intValue,
-            
-             food.companyId.intValue,
-             food.userId.intValue,
-             food.name,
-            
-             food.calories.doubleValue,
-             food.fat.doubleValue,
-             food.sodium.doubleValue,
-             food.carbohydrates.doubleValue,
-             food.saturatedFat.doubleValue,
-             food.cholesterol.doubleValue,
-             food.protein.doubleValue,
-             food.fiber.doubleValue,
-             food.sugars.doubleValue,
-             food.pot.doubleValue,
-             food.a.doubleValue,
-             food.thi.doubleValue,
-             food.rib.doubleValue,
-             food.nia.doubleValue,
-             food.b6.doubleValue,
-             food.b12.doubleValue,
-             food.fol.doubleValue,
-             food.c.doubleValue,
-             food.calc.doubleValue,
-             food.iron.doubleValue,
-             food.mag.doubleValue,
-             food.zn.doubleValue,
-             food.servingSize.doubleValue,
-             food.foodTags,
-             food.frequency.intValue,
-             food.alcohol.doubleValue,
-             food.folate.doubleValue,
-             food.transFat.doubleValue,
-             food.e.doubleValue,
-             food.d.doubleValue,
-             food.barcodeUPCA,
-             food.factualId.intValue,
-             food.parentGroupID.intValue,
-             food.regionCode.intValue,
-             food.lastUpdateDateString,
-             food.recipeId.intValue,
-             food.foodURL];
-            
-            [db executeUpdate:insertSQL];
+            NSString *replaceIntoSQL = [food replaceIntoSQLString];
+            [db executeUpdate:replaceIntoSQL];
             
             NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)",
                                      food.foodKey.intValue,
@@ -2455,125 +2209,14 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                     
                     for (NSDictionary *dict in [mealDict valueForKey:@"FoodDetails"]) {
                         
-                        NSString *foodName = [[dict valueForKey:@"Name"] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                        foodName = [foodName stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+                        DMFood *food = [[DMFood alloc] initWithDictionary:dict];
+                        NSString *replaceIntoSQL = [food replaceIntoSQLString];
+                        [db executeUpdate:replaceIntoSQL];
                         
-                        NSString *foodTags = [dict valueForKey:@"FoodTags"];
-                        if (![foodTags isEqual:[NSNull null]] && [foodTags length] > 0) {
-                            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-                            foodTags = [foodTags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                        }
-
-                        double servingSize = [[dict valueForKey:@"ServingSize"] doubleValue];
-                        if (servingSize == 0) { servingSize = 1; }
-                        
-                        NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
-                        "(ScannedFood, "
-                         "FoodPK, FoodKey, "
-                         "FoodID, CategoryID, "
-                         "CompanyID, UserID, "
-                         "Name, Calories, "
-                         "Fat, Sodium, "
-                         "Carbohydrates, SaturatedFat, "
-                         "Cholesterol, Protein, "
-                         "Fiber, Sugars, "
-                         "Pot, A, "
-                         "Thi, Rib, "
-                         "Nia, B6, "
-                         "B12, Fol, "
-                         "C, Calc, "
-                         "Iron, Mag, "
-                         "Zn, ServingSize, "
-                         "FoodTags, Frequency, "
-                         "Alcohol, Folate, "
-                         "Transfat, E, "
-                         "D, UPCA, "
-                         "FactualID, ParentGroupID,"
-                         "RegionCode, LastUpdateDate,"
-                         "RecipeID, FoodURL)"
-                         "VALUES"
-                         "(%d, "
-                         "%i, %i, "
-                         "%i, %i, "
-                         "%i, %i, "
-                         "\"%@\", %f, " //Name, Calories
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, %f, " //Pot, A
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, %f, "
-                         "\"%@\", %i, " //FoodTags, Frequency
-                         "%f, %f, "
-                         "%f, %f, "
-                         "%f, \"%@\", "
-                         "%i , %i, "
-                         "%i, \"%@\", "
-                         "%i, \"%@\") ",
-                         [[dict valueForKey:@"ScannedFood"] boolValue],
-                        
-                         [[dict valueForKey:@"FoodPK"] intValue],
-                         [[dict valueForKey:@"FoodKey"] intValue],
-                        
-                         [[dict valueForKey:@"FoodID"] intValue],
-                         [[dict valueForKey:@"CategoryID"] intValue],
-                        
-                         [[dict valueForKey:@"CompanyID"] intValue],
-                         [[dict valueForKey:@"UserID"] intValue],
-                         foodName,
-                        
-                         [[dict valueForKey:@"Calories"] doubleValue],
-                         [[dict valueForKey:@"Fat"] doubleValue],
-                         [[dict valueForKey:@"Sodium"] doubleValue],
-                         [[dict valueForKey:@"Carbohydrates"] doubleValue],
-                         [[dict valueForKey:@"SaturatedFat"] doubleValue],
-                         [[dict valueForKey:@"Cholesterol"] doubleValue],
-                         [[dict valueForKey:@"Protein"] doubleValue],
-                         [[dict valueForKey:@"Fiber"] doubleValue],
-                         [[dict valueForKey:@"Sugars"] doubleValue],
-                         [[dict valueForKey:@"Pot"] doubleValue],
-                         [[dict valueForKey:@"A"] doubleValue],
-                         [[dict valueForKey:@"Thi"] doubleValue],
-                         [[dict valueForKey:@"Rib"] doubleValue],
-                         [[dict valueForKey:@"Nia"] doubleValue],
-                         [[dict valueForKey:@"B6"] doubleValue],
-                         [[dict valueForKey:@"B12"] doubleValue],
-                         [[dict valueForKey:@"Fol"] doubleValue],
-                         [[dict valueForKey:@"C"] doubleValue],
-                         [[dict valueForKey:@"Calc"] doubleValue],
-                         [[dict valueForKey:@"Iron"] doubleValue],
-                         [[dict valueForKey:@"Mag"] doubleValue],
-                         [[dict valueForKey:@"Zn"] doubleValue],
-                         servingSize,
-                         foodTags,
-                         [[dict valueForKey:@"Frequency"] intValue],
-                         [[dict valueForKey:@"Alcohol"] doubleValue],
-                         [[dict valueForKey:@"Folate"] doubleValue],
-                         [[dict valueForKey:@"Transfat"] doubleValue],
-                         [[dict valueForKey:@"E"] doubleValue],
-                         [[dict valueForKey:@"D"] doubleValue],
-                         [dict valueForKey:@"UPCA"] ? [dict valueForKey:@"UPCA"] : @"",
-                         [[dict valueForKey:@"FactualID"] intValue],
-                         [[dict valueForKey:@"ParentGroupID"] intValue],
-                         [[dict valueForKey:@"RegionCode"] intValue],
-                         [dict valueForKey:@"LastUpdateDate"],
-                         [[dict valueForKey:@"RecipeID"] intValue],
-                         [dict valueForKey:@"FoodURL"]];
-                        
-                        [db executeUpdate:insertSQL];
-                        
-                        int gramWeight = 100;
-                        if ([dict valueForKey:@"GramWeight"]) {
-                            gramWeight = [[dict valueForKey:@"GramWeight"] intValue];
-                        }
-                        
-                        NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)", [[dict valueForKey:@"FoodKey"] intValue],[[dict valueForKey:@"MeasureID"] intValue], gramWeight];
+                        NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)",
+                                                 food.foodKey.intValue,
+                                                 food.measureId.intValue,
+                                                 food.gramWeight.intValue];
                         [db executeUpdate:insertFMSQL];
                     }
                 }
@@ -2600,8 +2243,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             }
             [db commit];
         }
-        
-        
     }
     
     getDataDidFail = NO;
@@ -2613,7 +2254,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 - (void)downloadFileIfUpdatedInBackground {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if ([prefs boolForKey:@"user_loggedin"] == YES) { //  && [prefs valueForKey:@"splashimage_filename"] != nil
+    if ([prefs boolForKey:@"user_loggedin"] == YES) {
         
         if (![prefs valueForKey:@"lastmodified_splash"]) {
             
@@ -2625,10 +2266,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 UserLoginWebService *userLoginWS = [[UserLoginWebService alloc] init];
                 userLoginWS.wsAuthenticateUserDelegate = self;
                 [userLoginWS callWebservice:tokenToSend];
-                [userLoginWS release];
                 
                 [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
-                [prefs synchronize];
                 
                 return;
             }

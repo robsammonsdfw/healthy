@@ -11,7 +11,9 @@
 @interface DMWeightLogEntry()
 @property (nonatomic, readwrite) DMWeightLogEntryType entryType;
 @property (nonatomic, strong, readwrite) NSString *logDateString;
+@property (nonatomic, strong, readwrite) NSString *logDateTimeString;
 @property (nonatomic, strong, readwrite) NSNumber *value;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation DMWeightLogEntry
@@ -24,17 +26,31 @@
                          entryType:(DMWeightLogEntryType)entryType {
     self = [super init];
     if (self) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        
         _entryType = entryType;
         
         _value = ValidNSNumber(dictionary[@"Value"]);
         
+        // Format for device.
         NSString *dateTimeString = ValidString(dictionary[@"LogDate"]);
         NSArray *dateArray = [dateTimeString componentsSeparatedByString:@" "];
         NSString *dateString = @"";
         if (dateArray.count) {
             dateString = dateArray[0];
         }
+        
+        // Format date for server.
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        NSDate *fullDate = [_dateFormatter dateFromString:dateTimeString];
+        [_dateFormatter setDateFormat:@"M/dd/yyyy"];
+        NSString *logTimeString = [_dateFormatter stringFromDate:fullDate];
+        // Re-attach the time as midnight. TBH, not sure why the system does this. Perhaps to standardize
+        // time zones on the server?
+        NSString *dateTimeStandardizedString = [NSString stringWithFormat:@"%@ 12:00:00 AM", dateString];
+
         _logDateString = dateString;
+        _logDateTimeString = dateTimeStandardizedString;
     }
     return self;
 }

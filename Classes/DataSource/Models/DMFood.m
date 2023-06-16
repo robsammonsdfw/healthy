@@ -97,7 +97,7 @@
         }
         _gramWeight = ValidNSNumber(dictionary[@"GramWeight"]);
         if ([_gramWeight isEqual:@0]) {
-            _gramWeight = @1;
+            _gramWeight = @1; // Also saw value at 100.
         }
         
         _frequency = ValidNSNumber(dictionary[@"Frequency"]);
@@ -147,6 +147,150 @@
         _lastUpdateDateString = ValidString(dictionary[@"LastUpdateDate"]);
     }
     return self;
+}
+
+- (NSDictionary *)dictionaryRepresentation {
+    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                          self.foodKey, @"FoodKey",
+                          self.foodId, @"FoodID",
+                          self.name, @"Name",
+                          self.categoryId, @"CategoryID",
+                          self.calories, @"Calories",
+                          self.fat, @"Fat",
+                          self.sodium, @"Sodium",
+                          self.carbohydrates, @"Carbohydrates",
+                          self.saturatedFat, @"SaturatedFat",
+                          self.cholesterol, @"Cholesterol",
+                          self.protein, @"Protein",
+                          self.fiber, @"Fiber",
+                          self.sugars, @"Sugars",
+                          self.pot, @"Pot",
+                          self.a, @"A",
+                          self.thi, @"Thi",
+                          self.rib, @"Rib",
+                          self.nia, @"Nia",
+                          self.b6, @"B6",
+                          self.b12, @"B12",
+                          self.fol, @"Fol",
+                          self.c, @"C",
+                          self.calc, @"Calc",
+                          self.iron, @"Iron",
+                          self.mag, @"Mag",
+                          self.zn, @"Zn",
+                          self.servingSize, @"ServingSize",
+                          self.transFat, @"Transfat",
+                          self.e, @"E",
+                          self.d, @"D",
+                          self.folate, @"Folate",
+                          self.frequency, @"Frequency",
+                          self.userId, @"UserID",
+                          self.companyId, @"CompanyID",
+                          self.barcodeUPCA, @"UPCA",
+                          self.factualId, @"FactualID",
+                          self.measureId, @"MeasureID",
+                          self.scannedFood, @"ScannedFood", nil];
+    return dict;
+}
+
+- (NSString *)replaceIntoSQLString {
+    NSString *sqlString = [NSString stringWithFormat:@"REPLACE INTO Food "
+                            "(ScannedFood, "
+                            "FoodPK, FoodKey, "
+                            "FoodID, CategoryID, "
+                            "CompanyID, UserID, "
+                            "Name, Calories, "
+                            "Fat, Sodium, "
+                            "Carbohydrates, SaturatedFat, "
+                            "Cholesterol, Protein, "
+                            "Fiber, Sugars, "
+                            "Pot, A, "
+                            "Thi, Rib, "
+                            "Nia, B6, "
+                            "B12, Fol, "
+                            "C, Calc, "
+                            "Iron, Mag, "
+                            "Zn, ServingSize, "
+                            "FoodTags, Frequency, "
+                            "Alcohol, Folate, "
+                            "Transfat, E, "
+                            "D, UPCA, "
+                            "FactualID, ParentGroupID,"
+                            "RegionCode, LastUpdateDate,"
+                            "RecipeID, FoodURL)"
+                            "VALUES"
+                            "(%d, "
+                            "%i, %i, "
+                            "%i, %i, "
+                            "%i, %i, "
+                            "\"%@\", %f, " //Name, Calories
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, %f, " //Pot, A
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, %f, "
+                            "\"%@\", %i, " //FoodTags, Frequency
+                            "%f, %f, "
+                            "%f, %f, "
+                            "%f, \"%@\", "
+                            "%i , %i, "
+                            "%i, \"%@\", "
+                            "%i, \"%@\") ",
+                           self.scannedFood.boolValue,
+
+                           self.foodPK.intValue,
+                           self.foodKey.intValue,
+
+                           self.foodId.intValue,
+                           self.categoryId.intValue,
+
+                           self.companyId.intValue,
+                           self.userId.intValue,
+                           self.name,
+
+                           self.calories.doubleValue,
+                           self.fat.doubleValue,
+                           self.sodium.doubleValue,
+                           self.carbohydrates.doubleValue,
+                           self.saturatedFat.doubleValue,
+                           self.cholesterol.doubleValue,
+                           self.protein.doubleValue,
+                           self.fiber.doubleValue,
+                           self.sugars.doubleValue,
+                           self.pot.doubleValue,
+                           self.a.doubleValue,
+                           self.thi.doubleValue,
+                           self.rib.doubleValue,
+                           self.nia.doubleValue,
+                           self.b6.doubleValue,
+                           self.b12.doubleValue,
+                           self.fol.doubleValue,
+                           self.c.doubleValue,
+                           self.calc.doubleValue,
+                           self.iron.doubleValue,
+                           self.mag.doubleValue,
+                           self.zn.doubleValue,
+                           self.servingSize.doubleValue,
+                           self.foodTags,
+                           self.frequency.intValue,
+                           self.alcohol.doubleValue,
+                           self.folate.doubleValue,
+                           self.transFat.doubleValue,
+                           self.e.doubleValue,
+                           self.d.doubleValue,
+                           self.barcodeUPCA,
+                           self.factualId.intValue,
+                           self.parentGroupID.intValue,
+                           self.regionCode.intValue,
+                           self.lastUpdateDateString,
+                           self.recipeId.intValue,
+                           self.foodURL];
+    return sqlString;
 }
 
 #pragma mark - Equality
