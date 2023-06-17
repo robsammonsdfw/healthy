@@ -329,9 +329,7 @@
         if ([dietmasterEngine hasMyMovesAssignedSaved]) {
             [dietmasterEngine loadMyMovesAssignedOnDateList];
         }
-        
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
+                
         BOOL upgraded11 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1"];
         if (upgraded11 == NO && [prefs boolForKey:@"user_loggedin"] == YES) {
             [self performSelectorInBackground:@selector(updateMeasureTable) withObject:nil];
@@ -381,7 +379,6 @@
             
             [prefs setBool:YES forKey:@"1.0.2"];
         }
-        [[NSUserDefaults standardUserDefaults] synchronize];
         
         BOOL upgraded111 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1.11.1"];
         if (upgraded111 == NO) {
@@ -400,7 +397,6 @@
             
             [prefs setBool:YES forKey:@"1.1.11.1"];
         }
-        [[NSUserDefaults standardUserDefaults] synchronize];
         
         BOOL upgraded121 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.2.1.1"];
         upgraded121 = NO;
@@ -437,7 +433,7 @@
                 DMLog(@"Could not open db.");
             }
             
-            if (![db columnExists:@"user" columnName:@"ProteinRatio"]) {
+            if (![db columnExists:@"ProteinRatio" inTableWithName:@"user"]) {
                 [db beginTransaction];
                 NSString *proteinSQL = @"ALTER TABLE user ADD ProteinRatio INTEGER DEFAULT 0";
                 [db executeUpdate:proteinSQL];
@@ -447,7 +443,7 @@
                 [db commit];
             }
             
-            if (![db columnExists:@"user" columnName:@"CarbRatio"]) {
+            if (![db columnExists:@"CarbRatio" inTableWithName:@"user"]) {
                 [db beginTransaction];
                 NSString *carbSQL = @"ALTER TABLE user ADD CarbRatio INTEGER DEFAULT 0";
                 [db executeUpdate:carbSQL];
@@ -457,7 +453,7 @@
                 [db commit];
             }
             
-            if (![db columnExists:@"user" columnName:@"FatRatio"]) {
+            if (![db columnExists:@"FatRatio" inTableWithName:@"user"]) {
                 [db beginTransaction];
                 NSString *fatSQL = @"ALTER TABLE user ADD FatRatio INTEGER DEFAULT 0";
                 [db executeUpdate:fatSQL];
@@ -467,7 +463,7 @@
                 [db commit];
             }
             
-            if (![db columnExists:@"user" columnName:@"CompanyID"]) {
+            if (![db columnExists:@"CompanyID" inTableWithName:@"user"]) {
                 [db beginTransaction];
                 NSString *companySQL = @"ALTER TABLE user ADD CompanyID INTEGER DEFAULT 0";
                 [db executeUpdate:companySQL];
@@ -477,7 +473,7 @@
                 [db commit];
             }
             
-            if (![db columnExists:@"weightlog" columnName:@"bodyfat"]) {
+            if (![db columnExists:@"bodyfat" inTableWithName:@"weightlog"]) {
                 [db beginTransaction];
                 NSString *bodyFatSQL = @"ALTER TABLE weightlog ADD bodyfat REAL DEFAULT 0";
                 [db executeUpdate:bodyFatSQL];
@@ -487,7 +483,7 @@
                 [db commit];
             }
             
-            if (![db columnExists:@"weightlog" columnName:@"entry_type"]) {
+            if (![db columnExists:@"entry_type" inTableWithName:@"weightlog"]) {
                 [db beginTransaction];
                 NSString *entryTypeSQL = @"ALTER TABLE weightlog ADD entry_type INTEGER DEFAULT 0";
                 [db executeUpdate:entryTypeSQL];
@@ -630,11 +626,9 @@
         v1.alpha = 1.0;
         v.alpha = 1.0;
         
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.75];
-        [UIView setAnimationDelegate:self];
-        v2.alpha = 0.0;
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.75 animations:^{
+            v2.alpha = 0.0;
+        }];
         
         v2.hidden = YES;
         [self.window sendSubviewToBack:v2];
@@ -669,9 +663,9 @@
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"lastmodified_splash"];
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"splashimage_filename"];
         
+        // This rmoves ALL entries from NSUserDefaults.
         NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
         [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
-        [[NSUserDefaults standardUserDefaults] synchronize];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs setBool:NO forKey:@"user_loggedin"];
@@ -684,14 +678,12 @@
         // NSUserDefaults out.
         [prefs setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
         [prefs setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
-
-        [prefs synchronize];
         
         [dietmasterEngine purgeGroceryListArray];
         [dietmasterEngine purgeMealPlanArray];
         [viewController loadData];
         
-        #pragma mark DELETE ALL FOOD LOG ITEMS
+        #pragma mark DELETE ALL USER DATA
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if ([db open]) {
             [db beginTransaction];
@@ -702,6 +694,7 @@
             [db executeUpdate:@"DELETE FROM Favorite_Meal"];
             [db executeUpdate:@"DELETE FROM Favorite_Meal_Items"];
             [db executeUpdate:@"DELETE FROM weightlog"];
+            [db executeUpdate:@"DELETE FROM Messages"];
             [db commit];
             [db close];
         }
