@@ -30,6 +30,7 @@
         NSString *name = dictionary[@"moveName"];
         name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         _name = name;
         
         _videoUrl = dictionary[@"videoLink"];
@@ -37,8 +38,8 @@
         NSString *notes = dictionary[@"notes"];
         notes = [notes stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         notes = [notes stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        notes = [notes stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         _notes = notes;
-
     }
     return self;
 }

@@ -22,6 +22,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     IBOutlet UITextField *templateNameTxtFld;
 }
 @property (nonatomic, strong) MyMovesWebServices *soapWebService;
+@property (nonatomic, strong) NSArray *tagsArr;
+@property (nonatomic, strong) NSArray *BodyPartDataArr;
 @end
 
 @implementation MyMovesListViewController
@@ -32,9 +34,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     _tableData = [[NSMutableArray alloc]init];
     _originalDataListArr = [[NSMutableArray alloc]init];
     _workOutListArr = [[NSMutableArray alloc]init];
-    _BodyPartDataArr = [[NSMutableArray alloc]init];
+    _BodyPartDataArr = @[];
     _categoryFilteredListArr = [[NSMutableArray alloc]init];
-    _tagsArr = [[NSMutableArray alloc]init];
+    _tagsArr = @[];
     _filteredTableArr = [[NSMutableArray alloc]init];
     
     searchBar.delegate = self;
@@ -77,9 +79,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             _originalDataListArr = [[NSMutableArray alloc]initWithArray:[tempArr1 filteredArrayUsingPredicate:categoryPredicate]];
             _workOutListArr = [[NSMutableArray alloc]initWithArray:[_tableData filteredArrayUsingPredicate:categoryPredicate]];
-            _BodyPartDataArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfBodyPart]];
+            _BodyPartDataArr = [self.soapWebService loadListOfBodyPart];
             _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[_tableData filteredArrayUsingPredicate:categoryPredicate]];
-            _tagsArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTags]];
+            _tagsArr = [self.soapWebService loadListOfTags];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [DMActivityIndicator hideActivityIndicator];
 
@@ -117,9 +119,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 _tableData = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
                 _workOutListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
                 _originalDataListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
-                _BodyPartDataArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfBodyPart]];
+                _BodyPartDataArr = [self.soapWebService loadListOfBodyPart];
                 _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
-                _tagsArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTags]];
+                _tagsArr = [self.soapWebService loadListOfTags];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSSortDescriptor *sortDescriptor;
                     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
@@ -145,6 +147,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         picker.selectedBodyPartDel = self;
         picker.pickerData = _BodyPartDataArr;
+        picker.dataType = DMPickerDataTypeMoveCategories;
         [self presentViewController:picker animated:YES completion:nil];
     }
 }
@@ -154,6 +157,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     picker.selectedBodyPartDel = self;
     picker.pickerData = _tagsArr;
+    picker.dataType = DMPickerDataTypeMoveTags;
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -308,7 +312,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
     if([NSNull null] != [responseDict objectForKey:@"ListOfTags"]) {
-        _tagsArr = [[NSMutableArray alloc]initWithArray:responseDict[@"ListOfTags"]];
+        //_tagsArr = [[NSMutableArray alloc]initWithArray:responseDict[@"ListOfTags"]];
     }
     
     [DMActivityIndicator hideActivityIndicator];

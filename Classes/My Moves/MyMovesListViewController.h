@@ -27,11 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray *categoryFilteredListArr;
 @property (nonatomic, strong) NSMutableArray *filteredTableArr;
 
-@property (nonatomic, strong) NSMutableArray *tagsArr;
-
 @property (nonatomic, strong) NSMutableArray *tableData;
-
-@property (nonatomic, strong) NSMutableArray *BodyPartDataArr;
 
 @property (nonatomic, strong) IBOutlet UITextField *searchtxtfld;
 @property (nonatomic, strong) IBOutlet UITextField *bodypartTxtFld;

@@ -105,6 +105,7 @@
         _name = ValidString(dictionary[@"Name"]);
         _name = [_name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         _name =  [_name stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        _name = [_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         _calories = ValidNSNumber(dictionary[@"Calories"]);
         _fat = ValidNSNumber(dictionary[@"Fat"]);

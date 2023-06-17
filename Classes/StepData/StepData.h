@@ -17,7 +17,7 @@
 @property NSInteger weight;
 // Steps is the standardize measurement
 
-- (id) init;
+- (id)init;
 
 - (double) stepsToMiles: (NSInteger) steps;
 

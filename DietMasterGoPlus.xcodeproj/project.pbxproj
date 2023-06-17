@@ -15,6 +15,8 @@
 		0E8EC8E42A3CF7E50095BDEC /* DMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */; };
 		0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */; };
 		0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */; };
+		0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */; };
+		0E8EC8F12A3DE57D0095BDEC /* DMMoveTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */; };
 		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
 		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
 		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
@@ -474,6 +476,10 @@
 		0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encode.m"; sourceTree = "<group>"; };
 		0E8EC8E92A3DC4C70095BDEC /* DMMove.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMove.h; sourceTree = "<group>"; };
 		0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMove.m; sourceTree = "<group>"; };
+		0E8EC8EC2A3DE56F0095BDEC /* DMMoveCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveCategory.h; sourceTree = "<group>"; };
+		0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveCategory.m; sourceTree = "<group>"; };
+		0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveTag.h; sourceTree = "<group>"; };
+		0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveTag.m; sourceTree = "<group>"; };
 		0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
 		0E9F17002A33BBE700217BF9 /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
 		0E9F17012A33BBE700217BF9 /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
@@ -1500,6 +1506,10 @@
 				0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */,
 				0E8EC8E92A3DC4C70095BDEC /* DMMove.h */,
 				0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */,
+				0E8EC8EC2A3DE56F0095BDEC /* DMMoveCategory.h */,
+				0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */,
+				0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */,
+				0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2562,6 +2572,7 @@
 				401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */,
 				401B649F20B3FC64004453E7 /* GroceryListViewController.m in Sources */,
 				40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */,
+				0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */,
 				401B64A020B3FC64004453E7 /* TDDatePickerController.m in Sources */,
 				401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */,
 				401B64A220B3FC64004453E7 /* UIViewController+TDSemiModalExtension.m in Sources */,
@@ -2586,6 +2597,7 @@
 				82C45661233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m in Sources */,
 				65462D2626BD1DAF004D1654 /* UserGoalVC.m in Sources */,
 				0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */,
+				0E8EC8F12A3DE57D0095BDEC /* DMMoveTag.m in Sources */,
 				402A9061221AED1900568860 /* NSArray+HOFC.m in Sources */,
 				0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */,
 				401B651B20B3FC64004453E7 /* MNMBottomPullToRefreshManager.m in Sources */,

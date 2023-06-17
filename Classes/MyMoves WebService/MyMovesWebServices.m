@@ -8,6 +8,8 @@
 #import "MyMovesWebServices.h"
 #import "FMDatabase.h"
 #import "DMMove.h"
+#import "DMMoveTag.h"
+#import "DMMoveCategory.h"
 
 @implementation MyMovesWebServices
 
@@ -1758,92 +1760,60 @@
     }
 }
 
--(NSMutableArray *)loadListOfTags
-{
-    
+- (NSArray *)loadListOfTags {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
     [db beginTransaction];
     
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM ListOfTags_Table ORDER BY Tags  COLLATE NOCASE ASC"];
-    
-    //"SELECT DISTINCT WorkoutTagsID,WorkoutCategoryID,Tags FROM ListOfTags_Table WHERE WorkoutCategoryID LIKE '%" + selectedCategoryId + "%' ORDER BY Tags COLLATE NOCASE ASC";
-    
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    NSMutableArray *ListOfTags = [[NSMutableArray alloc]init];
-    
-    
-    NSMutableString *tempStr = [[NSMutableString alloc] init];
+    NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM MoveTags"];
+    FMResultSet *rs = [db executeQuery:sqlString];
+    NSMutableArray *tagArray = [NSMutableArray array];
     
     while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutTagsID = [rs intForColumn:@"WorkoutTagsID"];
-        int WorkoutCategoryID = [rs intForColumn:@"WorkoutCategoryID"];
-
-        NSString * Tags = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Tags"]];
-        
-        [dict setObject: [NSNumber numberWithInt:WorkoutTagsID]  forKey: @"WorkoutTagsID"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutCategoryID]  forKey: @"WorkoutCategoryID"];
-        [dict setObject: Tags  forKey: @"Tags"];
-        
-        NSString *tagTrim = [Tags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        if (![tagTrim isEqualToString:tempStr]) {
-            [tempStr setString:tagTrim];
-            [ListOfTags addObject:dict];
+        NSDictionary *resultDict = [rs resultDictionary];
+        DMMoveTag *tag = [[DMMoveTag alloc] initWithDictionary:resultDict];
+        if (tag.name.length) {
+            [tagArray addObject:tag];
         }
-
     }
+
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
     
-    return ListOfTags;
+    return [tagArray copy];
 }
 
--(NSMutableArray *)loadListOfBodyPart
-{
-    
+- (NSArray *)loadListOfBodyPart {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
     [db beginTransaction];
     
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM ListOfBodyPart_Table ORDER BY WorkoutCategoryName  COLLATE NOCASE ASC"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    NSMutableArray *listOfBodyPart = [[NSMutableArray alloc]init];
+    NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM MoveCategories"];
+    FMResultSet *rs = [db executeQuery:sqlString];
+    NSMutableArray *categoriesArray = [NSMutableArray array];
     
     while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutCategoryID = [rs intForColumn:@"WorkoutCategoryID"];
-        int WorkoutUserDateID = [rs intForColumn:@"WorkoutUserDateID"];
-
-        NSString * WorkoutCategoryName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutCategoryName"]];
-        
-        [dict setObject: [NSNumber numberWithInt:WorkoutCategoryID]  forKey: @"WorkoutCategoryID"];
-         [dict setObject: WorkoutCategoryName  forKey: @"WorkoutCategoryName"];
-        
-        [listOfBodyPart addObject:dict];
+        NSDictionary *resultDict = [rs resultDictionary];
+        DMMoveCategory *category = [[DMMoveCategory alloc] initWithDictionary:resultDict];
+        [categoriesArray addObject:category];
     }
+
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
     
-    return listOfBodyPart;
+    return [categoriesArray copy];
 }
+
 -(NSMutableArray *)loadCategoryFilteredListOfTitleToDb:(int)catId
 {
     
@@ -1907,6 +1877,7 @@
     
     return listOfTitlearr;
 }
+
 -(NSMutableArray *)loadFilteredListOfTitleToDb
 {
     
@@ -3612,48 +3583,51 @@
                 
                 [db beginTransaction];
                 
+                // Save the Move itself.
                 NSString *moveReplaceIntoSQL = [move replaceIntoSQLString];
                 [db executeUpdate:moveReplaceIntoSQL];
-                
                 if ([db hadError]) {
                     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 
-                NSArray *categories = [dict objectForKey:@"moveCategories"];
-                int index = 0;
-                
-                //iterate through categories
-                for (id categoryObj in categories) {
-                    int categoryId = [[categoryObj valueForKey:@"categoryID"] intValue];
-                    //get tag from tag array. same number of objects as category, always
-                    int tagId = [[[dict objectForKey:@"moveTags"][index] valueForKey:@"tagID"] intValue];
-                    NSString *tag = [[[[[dict objectForKey:@"moveTags"][index] valueForKey:@"tag"] stringValue] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-                    index++;
-                    
-                    NSString *replaceIntoSQLTags = [NSString stringWithFormat: @"REPLACE INTO ListOfTags_Table (WorkoutTagsID,WorkoutCategoryID,Tags) VALUES(\"%d\",\"%d\",\"%@\")",tagId,categoryId,tag];
-                    [db executeUpdate:replaceIntoSQLTags];
-
+                // Save Tags, then save the Tags to the Move.
+                NSArray *tags = [dict objectForKey:@"moveTags"];
+                for (NSDictionary *tagDict in tags) {
+                    DMMoveTag *tag = [[DMMoveTag alloc] initWithDictionary:tagDict];
+                    NSString *replaceIntoTagSQL = [tag replaceIntoSQLString];
+                    [db executeUpdate:replaceIntoTagSQL];
                     if ([db hadError]) {
                         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     }
-
-                    NSString * replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO ListOfTitle_Table (WorkoutID,WorkoutCategoryID,WorkoutTagsID,WorkoutName,Link,Notes) VALUES(\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",'%@')", move.moveId.intValue,categoryId,tagId,move.name,move.videoUrl,move.notes];
+                    
+                    // Now save the TagID into the MovesTags database to link them to the Move.
+                    NSString *replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO MovesTags (TagID,MoveID) VALUES(\"%d\",\"%d\")",
+                                                 move.moveId.intValue,
+                                                 tag.tagId.intValue];
                     [db executeUpdate:replaceIntoSQL];
-                    
                     if ([db hadError]) {
                         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     }
-                    
                 }
                 
-                //i hate the way these guys made this database. it makes zero sense to me.
+                // Save the CategoryID into the MovesCategories table to link to the Move. NOTE: Category = Bodypart.
+                // We don't need to save the Category itself, as it's hardcoded in "MoveCategories" table.
+                NSArray *categories = [dict objectForKey:@"moveCategories"];
+                for (NSDictionary *categoryDict in categories) {
+                    DMMoveCategory *category = [[DMMoveCategory alloc] initWithDictionary:categoryDict];
+                    NSString *replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO MovesCategories (CategoryID,MoveID) VALUES(\"%d\",\"%d\")",
+                                                 move.moveId.intValue,
+                                                 category.categoryId.intValue];
+                    [db executeUpdate:replaceIntoSQL];
+                    if ([db hadError]) {
+                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                    }
+                }
+                
                 [db commit];
-                
-                
                 if ([db hadError]) {
                     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
-                
             }
         } else {
             DMLog(@"Error, code: %li", connectionError.code);

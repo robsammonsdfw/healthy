@@ -262,18 +262,13 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-//    NSString *currentDate = [formatter stringFromDate:[NSDate date]];
     NSString *lastUpdate = [formatter stringFromDate:[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
-    
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine saveMealItems:lastUpdate]; //should not be passing nil
     [dietmasterEngine saveMealPlanArray];
     [dietmasterEngine saveGroceryListArray];
     [dietmasterEngine saveMyMovesAssignedOnDateArray];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs synchronize];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -297,7 +292,6 @@
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        //        dietmasterEngine.sendAllServerData = true;
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
             DMLog(@"Could not open db.");
@@ -401,7 +395,7 @@
             }
             
             if (![db columnExists:@"FactualID" inTableWithName:@"Food"]) {
-                NSString *updateSQL = @"ALTER TABLE Food ADD FactualID VARCHAR(150)";
+                NSString *updateSQL = @"ALTER TABLE Food ADD FactualID TEXT";
                 [db beginImmediateTransaction];
                 [db executeUpdate:updateSQL];
                 if ([db hadError]) {
@@ -510,8 +504,90 @@
             [prefs setBool:YES forKey:@"1.5"];
         }
         
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        // Add optimized MyMoves Tags and Categories Tables.
+        // Create table to store Tags associated with Moves.
+        if (![db tableExists:@"MoveTags"]) {
+            [db beginTransaction];
+            NSString *createTableSQL = @"CREATE TABLE 'MoveTags' (TagID INTEGER PRIMARY KEY, TagName TEXT)";
+            [db executeUpdate:createTableSQL];
+            // Drop the old table.
+//            NSString *dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTags_Table"];
+//            [db executeUpdate:dropTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+
+        // List of Categories that moves can be associated with. NOTE: Category = Bodypart.
+        if (![db tableExists:@"MoveCategories"]) {
+            [db beginTransaction];
+            NSString *createTableSQL = @"CREATE TABLE 'MoveCategories' (CategoryID INTEGER PRIMARY KEY, CategoryName TEXT)";
+            [db executeUpdate:createTableSQL];
+            // Now add the hard-coded values of Categories.
+            NSArray *categorySQLArray = @[
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (1, 'Arms')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (2, 'Calves')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (3, 'Full Body')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (4, 'Chest')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (5, 'Back')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (6, 'Shoulders')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (7, 'Lats')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (8, 'Abdominals')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (9, 'Quads')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (10, 'Hamstrings')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (11, 'Legs')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (12, 'Upper Body')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (13, 'Biceps')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (14, 'Triceps')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (15, 'Lower Body')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (16, 'Traps')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (17, 'Core')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (18, 'Glutes')",
+                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (19, 'Hip Flexors')",
+            ];
+            for (NSString *sqlStatement in categorySQLArray) {
+                [db executeUpdate:sqlStatement];
+                if ([db hadError]) {
+                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+                }
+            }
+            // Drop the old table.
+//            NSString *dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfBodyPart_Table"];
+//            [db executeUpdate:dropTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
         
+        // Create table to store the Categories that are associated with a Move.
+        if (![db tableExists:@"MovesCategories"]) {
+            [db beginTransaction];
+            NSString *createTableSQL = @"CREATE TABLE 'MovesCategories' (MoveID INTEGER, CategoryID INTEGER)";
+            [db executeUpdate:createTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        // Create a table to store the Tags associated with the Moves.
+        if (![db tableExists:@"MovesTags"]) {
+            [db beginTransaction];
+            NSString *createTableSQL = @"CREATE TABLE 'MovesTags' (MoveID INTEGER, TagID INTEGER)";
+            [db executeUpdate:createTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+
+        // Cleanup unused tables
+        [db beginTransaction];
+        NSString *dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table_Old"];
+        [db executeUpdate:dropTableSQL];
+        [db commit];
+
         BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
         if ([prefs boolForKey:@"user_loggedin"] == YES && userLogout == NO) {
             NSString *pngFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];

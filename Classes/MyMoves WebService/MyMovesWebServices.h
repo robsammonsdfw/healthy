@@ -35,9 +35,13 @@
 
 - (NSArray *)loadExerciseFromDb;
 -(NSMutableArray *)loadWorkoutFromDb;
+
 -(NSMutableArray *)loadListOfTitleToDb;
--(NSMutableArray *)loadListOfBodyPart;
--(NSMutableArray *)loadListOfTags;
+/// Loads a list of the categories from the database. Also called "Bodyparts".
+-(NSArray *)loadListOfBodyPart;
+/// Loads a list of tags from the database.
+- (NSArray *)loadListOfTags;
+
 -(NSMutableArray *)loadFilteredListOfTitleToDb;
 -(NSMutableArray *)loadCategoryFilteredListOfTitleToDb:(int)catId;
 

@@ -467,7 +467,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     NSString *filter = @"%K CONTAINS %@";
     NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"LastUpdated",[dateFormatter stringFromDate:self.date_currentDate]];
-//    _exerciseData = [[soapWebService loadExerciseFromDb] filteredArrayUsingPredicate:categoryPredicate];
     
     NSString *dateOneStr = @"-01";
     NSString *monthYearStr = [dateFormatter stringFromDate:self.date_currentDate];
@@ -483,12 +482,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     if ([[dateFormatter stringFromDate:calendar.selectedDate]isEqualToString:[dateFormatter stringFromDate:self.date_currentDate]]) {
         _exerciseDataWithoutDuplicate = [[NSMutableArray alloc]init];
+    }
 
-    }
-    else
-    {
-    }
-    
     for (int i = 0; i <=31; i++) {
         NSDateComponents *components = [[NSDateComponents alloc] init];
         NSCalendar *cal = [NSCalendar currentCalendar];

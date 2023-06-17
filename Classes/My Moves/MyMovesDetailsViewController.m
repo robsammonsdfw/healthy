@@ -582,6 +582,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         picker.pickerData = [soapWebService loadFirstHeaderTable];
     }
     picker.pickerData = [soapWebService loadFirstHeaderTable];
+    picker.dataType = DMPickerDataTypeUnknown;
     picker.parentUniqueId = _parentUniqueID;
     picker.secondColumn = YES;
     if (_userPlanSetListArr.count == 0)
@@ -606,6 +607,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if ([soapWebService loadSecondHeaderTable].count != 0)
     {
         picker.pickerData = [soapWebService loadSecondHeaderTable];
+        picker.dataType = DMPickerDataTypeUnknown;
     }
     picker.parentUniqueId = _parentUniqueID;
     picker.secondColumn = NO;
