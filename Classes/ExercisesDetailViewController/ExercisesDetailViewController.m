@@ -685,7 +685,7 @@
         
         exerciseLogID = [db lastInsertRowId];
         
-        [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+        [DMActivityIndicator showCompletedIndicator];
         [self.navigationController popToRootViewControllerAnimated:YES];
         
     }
@@ -714,7 +714,7 @@
         }
         [db commit];
         
-        [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+        [DMActivityIndicator showCompletedIndicator];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -740,18 +740,18 @@
     }
     [db commit];
     
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void) deleteFromFavorites {
     [self.navigationController popViewControllerAnimated:YES];
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
 }
 
 -(void)saveToFavorites {
     [self.navigationController popViewControllerAnimated:YES];
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
 }
 
 -(void)updateCalorieLabel {

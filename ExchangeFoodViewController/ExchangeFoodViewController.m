@@ -580,7 +580,7 @@
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.didInsertNewFood = YES;
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
 }
 

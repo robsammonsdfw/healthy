@@ -197,7 +197,7 @@
             }
         }
     }
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
 }
 
 -(void)addMealToLog:(id)sender {
@@ -211,8 +211,7 @@
         }
     }
     
-    
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
 }
 
 -(void)addItemToMealPlan:(id)sender {

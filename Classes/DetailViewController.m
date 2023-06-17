@@ -830,8 +830,8 @@
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
-        [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
-        
+        [DMActivityIndicator showCompletedIndicator];
+
 //        if (dietmasterEngine.isMealPlanItem) {
 //            [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 //        }
@@ -868,7 +868,7 @@
         }
         [db commit];
         
-        [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+        [DMActivityIndicator showCompletedIndicator];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
         
         [self.navigationController popViewControllerAnimated:YES];
@@ -902,7 +902,7 @@
     [db commit];
     
     [DMActivityIndicator hideActivityIndicator];
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -939,9 +939,7 @@
     [soapWebService callWebservice:wsInfoDict];
     
     
-    
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
-    
+    [DMActivityIndicator showCompletedIndicator];
 }
 
 -(void)saveToFavorites {
@@ -996,7 +994,7 @@
     [db commit];
     
     num_isFavorite = 1;
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
 }
 
 -(void)deleteFromWSLog {
@@ -1037,7 +1035,7 @@
     [DMActivityIndicator hideActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.didInsertNewFood = YES;
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
 }
 
@@ -1056,7 +1054,7 @@
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.didInsertNewFood = YES;
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
+    [DMActivityIndicator showCompletedIndicator];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
 }
 

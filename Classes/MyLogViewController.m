@@ -1224,8 +1224,8 @@
     }
     
     [DMActivityIndicator hideActivityIndicator];
-    [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
-    
+    [DMActivityIndicator showCompletedIndicator];
+
     favoriteMealID = 0;
 }
 
