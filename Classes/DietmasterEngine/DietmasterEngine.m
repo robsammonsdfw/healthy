@@ -2201,8 +2201,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             if ([[prefs valueForKey:@"splashimage_filename"] length] == 0) {
                 
                 NSString *tokenToSend = [NSString stringWithString:[prefs valueForKey:@"authkey_dietmastergo"]];
-                [tokenToSend uppercaseString];
-                
                 DataFetcher *dataFetcher = [[DataFetcher alloc] init];
                 [dataFetcher signInUserWithPassword:tokenToSend completion:^(DMUser *user, NSString *status, NSString *message) {
                     [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
@@ -2220,16 +2218,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             if (hourSinceDate >= (24*3)) {
                 if ([[prefs valueForKey:@"splashimage_filename"] length] == 0) {
                     
-                    
                     NSString *tokenToSend = [NSString stringWithString:[prefs valueForKey:@"authkey_dietmastergo"]];
-                    [tokenToSend uppercaseString];
-                    
                     DataFetcher *dataFetcher = [[DataFetcher alloc] init];
                     [dataFetcher signInUserWithPassword:tokenToSend completion:^(DMUser *user, NSString *status, NSString *message) {
                         [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
                     }];
-                    
-                    [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
                     
                     return;
                 }

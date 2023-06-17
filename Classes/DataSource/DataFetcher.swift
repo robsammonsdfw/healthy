@@ -14,8 +14,7 @@ class DataFetcher : NSObject {
     
     /// Signs-in a user.
     @objc func signInUser(password: String, completion : @escaping (_ object: DMUser?, _ status: String?, _ message: String?) -> Void) {
-        let defaults = UserDefaults.standard
-        let authPassword = password // defaults.object(forKey: "loginPwd") ?? "N/A"
+        let authPassword = pasword.uppercased()
 
         let namespace = "http://webservice.dmwebpro.com"
         let params = ["AuthKey": authPassword]
