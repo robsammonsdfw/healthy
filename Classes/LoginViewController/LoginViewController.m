@@ -329,21 +329,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark - USER SYNC METHODS
 
-- (void)sendDeviceToken {
-    NSString *deviceToken = [DietmasterEngine sharedInstance].deviceToken;
-    if (deviceToken) {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                  @"SendDeviceToken", @"RequestType",
-                                  [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                                  [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                                  deviceToken, @"DeviceToken",
-                                  nil];
-        SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        [soapWebService callWebservice:infoDict];
-    }
-}
-
 - (void)syncUserInfo:(id)sender {
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Loading..."];
 

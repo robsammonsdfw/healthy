@@ -273,16 +273,6 @@
     [dietmasterEngine saveMyMovesAssignedOnDateArray];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    
-}
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSString *dToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    dToken = [dToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    [DietmasterEngine sharedInstance].deviceToken = dToken;
-}
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     if (self.selectedIndex == 4) {

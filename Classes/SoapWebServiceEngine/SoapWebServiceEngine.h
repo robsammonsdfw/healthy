@@ -34,7 +34,6 @@
 @protocol WSSaveFavoriteMealItemDelegate;
 @protocol WSDeleteMealItemDelegate;
 @protocol WSDeleteFavoriteFoodDelegate;
-@protocol WSSendDeviceTokenDelegate;
 
 @interface SoapWebServiceEngine : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate> {
     NSMutableData *webData;
@@ -78,7 +77,6 @@
 @property (nonatomic,strong) id<WSDeleteMealItemDelegate> wsDeleteMealItemDelegate;
 
 @property (nonatomic, weak) id<WSDeleteFavoriteFoodDelegate> wsDeleteFavoriteFoodDelegate;
-@property (nonatomic, weak) id<WSSendDeviceTokenDelegate> wsSendDeviceTokenDelegate;
 
 @property (nonatomic, strong) NSMutableData *webData;
 @property (nonatomic, strong) NSMutableString *soapResults;
@@ -181,8 +179,4 @@
 @protocol WSDeleteFavoriteFoodDelegate <NSObject>
 - (void)deleteFavoriteFoodFinished:(NSMutableArray *)responseArray;
 - (void)deleteFavoriteFoodFailed:(NSString *)failedMessage;
-@end
-@protocol WSSendDeviceTokenDelegate <NSObject>
-- (void)sendDeviceFinished:(NSMutableArray *)responseArray;
-- (void)sendDeviceFailed:(NSString *)failedMessage;
 @end

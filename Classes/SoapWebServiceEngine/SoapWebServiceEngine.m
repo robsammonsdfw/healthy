@@ -229,23 +229,7 @@
     NSString *soapMessage = nil;
     
     // Now lay out the different requests:
-    if ([requestType isEqualToString:@"SendDeviceToken"]) {
-        
-        soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                        "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
-                        "<soap:Body>"
-                        "<SendDeviceToken xmlns=\"http://webservice.dmwebpro.com/\">"
-                        "<UserID>%@</UserID>"
-                        "<DeviceToken>%@</DeviceToken>"
-                        "<AuthKey>%@</AuthKey>"
-                        "</SendDeviceToken>"
-                        "</soap:Body>"
-                        "</soap:Envelope>",
-                        [requestDict valueForKey:@"UserID"],
-                        [requestDict valueForKey:@"DeviceToken"],
-                        [requestDict valueForKey:@"AuthKey"]];
-        
-    } else if ([requestType isEqualToString:@"SyncUser"]) {
+    if ([requestType isEqualToString:@"SyncUser"]) {
         
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -860,9 +844,6 @@
     if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFailed:)]) {
         [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFailed:[error localizedDescription]];
     }
-    if ([self.wsSendDeviceTokenDelegate respondsToSelector:@selector(sendDeviceFailed:)]) {
-        [self.wsSendDeviceTokenDelegate sendDeviceFailed:[error localizedDescription]];
-    }
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -1245,13 +1226,6 @@
         
     }
 
-    if([elementName isEqualToString:@"SendTokenResult"])
-    {
-        if ([self.wsSendDeviceTokenDelegate respondsToSelector:@selector(sendDeviceFinished:)]) {
-            [self.wsSendDeviceTokenDelegate sendDeviceFinished:responseArray];
-        }
-    }
-    
     soapResults = nil;
     
 }

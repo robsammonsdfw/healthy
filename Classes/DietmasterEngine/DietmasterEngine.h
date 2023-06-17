@@ -124,9 +124,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 @property (nonatomic, readonly) FactualAPI* apiObject;
 @property (nonatomic,retain)  FactualQueryResult* queryResult;
 
-// device token store
-@property (nonatomic,retain) NSString *deviceToken;
-
 //HHT new exercise sync
 @property (nonatomic, strong) NSMutableArray *arrExerciseSyncNew;
 @property (nonatomic ,assign) int pageNumber;
