@@ -22,6 +22,8 @@
 #import "UIViewController+Keyboard.h"
 #import "UIAlertView+Blocks.h"
 
+#import "DMMessage.h"
+
 static NSString *OpponentCellIdentifier = @"OpponentCellIdentifier";
 static NSString *OwnerCellIdentifier = @"OwnerCellIdentifier";
 
@@ -29,8 +31,7 @@ int const ShowMessageCountStep = 10;
 
 int const MaximumStringLength = 300;
 
-@interface MessageViewController ()<HPGrowingTextViewDelegate,SendViewDelegate,
-WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,UITableViewDelegate,WSSetMessageReadDelegate,TTTAttributedLabelDelegate> {
+@interface MessageViewController ()<HPGrowingTextViewDelegate,SendViewDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,UITableViewDelegate,TTTAttributedLabelDelegate> {
     SendView *sendView;
     IBOutlet UITableView *tableView;
     MBProgressHUD *hud;
@@ -131,13 +132,14 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     [pullToRefreshManager tableViewReloadFinished];
 }
 
-- (void)synchMessages:(id)sender {
+- (void)syncMessages:(id)sender {
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
     
-    [[DietmasterEngine sharedInstance] synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
+    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
         [pullToRefreshManager tableViewReloadFinished];
         [DMActivityIndicator hideActivityIndicator];
-        if (!errorString) {
+        if (!error) {
             [self reloadDataWithScroll:@(YES)];
             [DMActivityIndicator hideActivityIndicator];
         }
@@ -246,10 +248,8 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     [tableView setSize:CGSizeMake(tableView.bounds.size.width,
                                   boundsHeight - sendView.bounds.size.height - ((IsIOS7)?65:0))];
     
-    
-//    sendView.frame = CGRectMake(0, boundsHeight - sendView.frame.size.height, SCREEN_WIDTH, sendView.frame.size.height);
     [self reloadDataWithScroll:@(YES)];
-    [self synchMessages:nil];
+    [self syncMessages:nil];
     [self updateHeaderView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -266,104 +266,21 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - WSSendMessageDelegate
-
-- (void)sendMessageFinished:(NSMutableArray *)responseArray {
-    if (responseArray.count && createMessage) {
-        NSDictionary *result = responseArray[0];
-        NSString *messageId = result[@"MessageID"];
-        NSDate *dateValue = [result[@"DateTime"] dateWithFormat:@"MM/dd/yyyy hh:mm:ss a"];
-        
-        dataBase = [self database];
-        [dataBase beginTransaction];
-        
-        NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO Messages (Id,Text,Sender,Date,Read)"
-                               "VALUES ('%@','%@','%@','%f', 1)",
-                               messageId,
-                               createMessage[@"Text"],
-                               createMessage[@"Sender"],
-                               [dateValue timeIntervalSince1970]];
-        createMessage = nil;
-        
-        [dataBase executeUpdate:insertSQL];
-        
-        BOOL statusMsg = YES;
-        
-        if ([dataBase hadError]) {
-            DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
-            statusMsg = NO;
-        }
-        [dataBase commit];
-        [self reloadDataWithScroll:@(YES)];
-        [pullToRefreshManager tableViewReleased];
-    }
-    
-    [DMActivityIndicator hideActivityIndicator];
-}
-
-- (void)sendMessageFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-
-    UIAlertViewShow(@"Error",
-                    failedMessage,
-                    @[@"Cancel",
-                      @"Retry"],
-                    ^(UIAlertView *alertView, NSInteger buttonIndex) {
-                        if (buttonIndex == 1) {
-                            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                            NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                      @"SendMessage", @"RequestType",
-                                                      [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                                                      [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                                                      createMessage[@"Text"], @"MessageText",
-                                                      nil];
-                            
-                            SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-                            soapWebService.wsSendMessageDelegate = self;
-                            [soapWebService callWebservice:infoDict];
-                        }
-                        else {
-                            createMessage = nil;
-                        }
-                    });
-}
-
-#pragma mark - WSSetMessageReadDelegate
-- (void)setMessageReadFinished:(NSMutableArray *)responseArray {
-    for (NSDictionary *message in responseArray) {
-        NSString *status = message[@"Status"];
-        if ([status isEqualToString:@"Success"]) {
-            NSString *messageId = message[@"MessageID"];
-            [[DietmasterEngine sharedInstance] setReadedMessageId:messageId];
-        }
-    }
-}
-
-- (void)setMessageReadFailed:(NSString *)failedMessage {
-    DMLog(@"%@", failedMessage);
-}
-
-#pragma mark - SendViewDelegate
 - (void)setMessagesRead {
-    NSArray *messages = [[DietmasterEngine sharedInstance] unreadingMessages];
-    
-    NSMutableArray *messageIds = [NSMutableArray arrayWithCapacity:messages.count];
-    for (NSDictionary *message in messages) {
-        [messageIds addObject:@{@"MessageID": message[@"MessageID"]}];
+    NSArray<DMMessage *> *messages = [[DietmasterEngine sharedInstance] unreadMessages];
+    if (!messages.count) {
+        return; // No messages to process.
     }
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SetMessageRead", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                              messageIds, @"MessageIds",
-                              nil];
-    
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSetMessageReadDelegate = self;
-    [soapWebService callWebservice:infoDict];
+    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    [fetcher setMessagesReadWithMessages:messages completion:^(NSArray<DMMessage *> *messages, NSError *error) {
+        if (error) {
+            DMLog(@"Error: %@", error.localizedDescription);
+        }
+        for (DMMessage *message in messages) {
+            [[DietmasterEngine sharedInstance] setReadedMessageId:message.messageId];
+        }
+    }];
 }
 
 - (void)keyboardLayoutSubviews {
@@ -396,25 +313,32 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 
 - (void)sendView:(SendView *)sendView_ didSendText:(NSString *)text {
     [sendView_.messageView resignFirstResponder];
-    
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Sending..."];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SendMessage", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                              text, @"MessageText",
-                              nil];
-    
-    createMessage = [NSDictionary dictionaryWithObjectsAndKeys: text, @"Text",
-                     [NSDate date], @"DsteTime",
-                     [prefs valueForKey:@"userid_dietmastergo"], @"Sender", nil];
-    
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSendMessageDelegate = self;
-    [soapWebService callWebservice:infoDict];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    [fetcher saveMessageWithText:text completion:^(DMMessage *message, NSError *error) {
+        if (error) {
+            [DMGUtilities showError:error withTitle:@"Error" message:@"Please try again." inViewController:nil];
+            return;
+        }
+        // Save message that was created.
+        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+        if (![db open]) {
+        }
+
+        [db beginTransaction];
+        NSString *sqlString = [message replaceIntoSQLString];
+        [db executeUpdate:sqlString];
+        if ([db hadError]) {
+            DMLog(@"Error %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+
+        [DMActivityIndicator hideActivityIndicator];
+        [self reloadDataWithScroll:@(YES)];
+        [pullToRefreshManager tableViewReleased];
+    }];
 }
 
 - (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height {
@@ -626,7 +550,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 }
 
 - (void)bottomPullToRefreshTriggered:(MNMBottomPullToRefreshManager *)manager {
-    [self synchMessages:manager];
+    [self syncMessages:manager];
 }
 
 @end

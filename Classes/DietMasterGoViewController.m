@@ -676,8 +676,10 @@ static inline UIColor *GetRandomUIColor()
 
 - (void)reloadMessages {
     numberBadge.value = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
-    [[DietmasterEngine sharedInstance] synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
-        if (success) {
+    
+    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
+        if (!error) {
             [self updateBadge];
         }
     }];

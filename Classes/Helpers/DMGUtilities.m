@@ -117,4 +117,16 @@
     return [self showError:nil withTitle:title message:message okActionBlock:actionBlock inViewController:viewController];
 }
 
+#pragma mark - Error Handling
+
++ (NSError *)errorWithMessage:(NSString *)message code:(NSInteger)code {
+    NSString *errorDomain = @"com.dietmaster.error";
+    NSDictionary *userInfo = @{
+        NSLocalizedDescriptionKey: message
+    };
+    NSError *error = [NSError errorWithDomain:errorDomain code:code userInfo:userInfo];
+
+    return error;
+}
+
 @end

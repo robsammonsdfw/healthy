@@ -62,6 +62,11 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 /// Shows an alert to user with OK button and an action block for the OK button.
 + (void)showAlertWithTitle:(NSString *)title message:(NSString *)message okActionBlock:(completionBlock)actionBlock inViewController:(nullable UIViewController *)viewController;
 
+#pragma mark - Error Handling
+
+/// Helper to create a generic error with message and code.
++ (NSError *)errorWithMessage:(NSString *)message code:(NSInteger)code;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -229,51 +229,7 @@
     NSString *soapMessage = nil;
     
     // Now lay out the different requests:
-    if ([requestType isEqualToString:@"GetMessages"]) {
-        soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                        "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
-                        "<soap:Body>"
-                        "<GetMessages xmlns=\"http://webservice.dmwebpro.com/\">"
-                        "<UserID>%@</UserID>"
-                        "<AuthKey>%@</AuthKey>"
-                        "<LastMessageID>%@</LastMessageID>"
-                        "</GetMessages>"
-                        "</soap:Body>"
-                        "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"], [requestDict valueForKey:@"LastMessageID"]];
-        
-    } else if ([requestType isEqualToString:@"SetMessageRead"]){
-        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MessageIds"] options:0 error:nil];
-        
-        soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                        "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
-                        "<soap:Body>"
-                        "<SetMessageRead xmlns=\"http://webservice.dmwebpro.com/\">"
-                        "<UserID>%@</UserID>"
-                        "<strJSON>%@</strJSON>"
-                        "<AuthKey>%@</AuthKey>"
-                        "</SetMessageRead>"
-                        "</soap:Body>"
-                        "</soap:Envelope>",
-                        [requestDict valueForKey:@"UserID"],
-                        jsonString,
-                        [requestDict valueForKey:@"AuthKey"]];
-    } else if ([requestType isEqualToString:@"SendMessage"]) {
-        
-        soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                        "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
-                        "<soap:Body>"
-                        "<SendMessage xmlns=\"http://webservice.dmwebpro.com/\">"
-                        "<UserID>%@</UserID>"
-                        "<MessageText>%@</MessageText>"
-                        "<AuthKey>%@</AuthKey>"
-                        "</SendMessage>"
-                        "</soap:Body>"
-                        "</soap:Envelope>",
-                        [requestDict valueForKey:@"UserID"],
-                        [requestDict valueForKey:@"MessageText"],
-                        [requestDict valueForKey:@"AuthKey"]];
-        
-    } else if ([requestType isEqualToString:@"SendDeviceToken"]) {
+    if ([requestType isEqualToString:@"SendDeviceToken"]) {
         
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -388,9 +344,6 @@
                         "</GetFavoriteMealItems>"
                         "</soap:Body>"
                         "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"], [requestDict valueForKey:@"Favorite_MealID"]];
-        
-        
-        
         
     } else if ([requestType isEqualToString:@"SyncFoods"]) {
         
@@ -907,12 +860,6 @@
     if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFailed:)]) {
         [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFailed:[error localizedDescription]];
     }
-    if ([self.wsGetMessagesDelegate respondsToSelector:@selector(getMessagesFailed:)]) {
-        [self.wsGetMessagesDelegate getMessagesFailed:[error localizedDescription]];
-    }
-    if ([self.wsSendMessageDelegate respondsToSelector:@selector(sendMessageFailed:)]) {
-        [self.wsSendMessageDelegate sendMessageFailed:[error localizedDescription]];
-    }
     if ([self.wsSendDeviceTokenDelegate respondsToSelector:@selector(sendDeviceFailed:)]) {
         [self.wsSendDeviceTokenDelegate sendDeviceFailed:[error localizedDescription]];
     }
@@ -1049,10 +996,6 @@
         
         if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFailed:)]) {
             [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFailed:@"error"];
-        }
-        
-        if ([self.wsSetMessageReadDelegate respondsToSelector:@selector(setMessageReadFailed:)]) {
-            [self.wsSetMessageReadDelegate setMessageReadFailed:@"error"];
         }
     }
 }
@@ -1241,14 +1184,6 @@
         
     }
     
-    if([elementName isEqualToString:@"GetMessagesResult"])
-    {
-        if ([self.wsGetMessagesDelegate respondsToSelector:@selector(getMessagesFinished:)]) {
-            [self.wsGetMessagesDelegate getMessagesFinished:responseArray];
-        }
-        
-    }
-    
     if([elementName isEqualToString:@"SaveWeightLogsResult"])
     {
         if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFinished:)]) {
@@ -1309,25 +1244,11 @@
         }
         
     }
-    
-    if([elementName isEqualToString:@"SendMessageResult"])
-    {
-        if ([self.wsSendMessageDelegate respondsToSelector:@selector(sendMessageFinished:)]) {
-            [self.wsSendMessageDelegate sendMessageFinished:responseArray];
-        }
-    }
-    
+
     if([elementName isEqualToString:@"SendTokenResult"])
     {
         if ([self.wsSendDeviceTokenDelegate respondsToSelector:@selector(sendDeviceFinished:)]) {
             [self.wsSendDeviceTokenDelegate sendDeviceFinished:responseArray];
-        }
-    }
-    
-    if([elementName isEqualToString:@"SetMessageReadResult"])
-    {
-        if ([self.wsSetMessageReadDelegate respondsToSelector:@selector(setMessageReadFinished:)]) {
-            [self.wsSetMessageReadDelegate setMessageReadFinished:responseArray];
         }
     }
     
@@ -1395,9 +1316,6 @@
     }
     if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFailed:)]) {
         [wsGetFoodDelegate getFoodFailed:@"error"];
-    }
-    if ([self.wsGetMessagesDelegate respondsToSelector:@selector(getMessagesFailed:)]) {
-        [self.wsGetMessagesDelegate getMessagesFailed:@"error"];
     }
     if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFailed:)]) {
         [wsSaveWeightLogDelegate saveWeightLogFailed:@"error"];

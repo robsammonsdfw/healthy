@@ -14,20 +14,21 @@
 #import "SaveUPCDataWebService.h"
 #import "FactualAPI.h"
 #import "FactualQuery.h"
+
+@class DMMessage;
+
 @protocol WSGetFoodDelegate;
 
 extern NSString * const UpdatingMessageNotification;
 
 typedef void (^DMGBooleanResponseBlock)(BOOL success, NSError *error);
 
-typedef void (^GetMessagesCompletionBlock)(BOOL success, NSString *errorString);
-
 @protocol SyncDatabaseDelegate;
 @protocol UpdateUserInfoDelegate;
 @protocol UPSyncDatabaseDelegate;
 
 @interface DietmasterEngine : NSObject <WSSyncFavoriteFoodsDelegate, WSSyncFavoriteMealsDelegate, WSGetUserInfoDelegate,
-WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, SaveUPCDataWSDelegate, FactualAPIDelegate, GetDataWSDelegate, WSGetMessagesDelegate> {
+WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, SaveUPCDataWSDelegate, FactualAPIDelegate, GetDataWSDelegate> {
     
     NSMutableDictionary *exerciseSelectedDict;
     // Dict for Food Selected Detail
@@ -86,8 +87,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 @property (nonatomic, weak) id<SyncDatabaseDelegate> syncDatabaseDelegate;
 @property (nonatomic, weak) id<UpdateUserInfoDelegate> updateUserInfoDelegate;
 @property (nonatomic, weak) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
-
-@property (nonatomic,copy) GetMessagesCompletionBlock messageCompletion;
 
 @property (nonatomic, strong) NSMutableDictionary *exerciseSelectedDict;
 @property (nonatomic, strong) NSMutableDictionary *foodSelectedDict;
@@ -222,8 +221,7 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 - (NSDictionary *)getUserRecommendedRatios;
 - (NSInteger)getBMR;
 
-- (void)synchMessagesWithCompletion:(GetMessagesCompletionBlock)messagesCompletion;
-- (NSArray *)unreadingMessages;
+- (NSArray<DMMessage *> *)unreadMessages;
 - (int)countOfUnreadingMessages;
 - (void)setReadedMessageId:(NSString *)messageId;
 - (NSDictionary *)messageById:(NSString *)uid;

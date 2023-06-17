@@ -443,62 +443,30 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 #pragma mark - MESSAGES
 - (void)updateByTimer {
     if (updatingMessage == NO) {
-        [self synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
-            if (success) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:UpdatingMessageNotification
-                                                                    object:nil];
+        DataFetcher *fetcher = [[DataFetcher alloc] init];
+        [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
+            if (error) {
+                return;
             }
+            [self getMessagesFinished:messages];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UpdatingMessageNotification object:nil];
         }];
     }
 }
 
-- (void)synchMessagesWithCompletion:(GetMessagesCompletionBlock)messagesCompletion_ {
-    self.messageCompletion = messagesCompletion_;
-    updatingMessage = YES;
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSDictionary *lastMessage = [self lastMessageId];
-    
-    NSString *strDatePassing = @"";
-    if (lastMessage) {
-        [self.dateformatter setDateFormat:@"MM/dd/yyyy HH:mm:ss a"];
-        NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-        [self.dateformatter setLocale:en_US];
-        strDatePassing = [self.dateformatter stringFromDate:[lastMessage objectForKey:@"DsteTime"]];
-    }
-    else {
-        strDatePassing = @"0";
-    }
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"GetMessages", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                              strDatePassing, @"LastMessageID",
-                              nil];
-    
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsGetMessagesDelegate = self;
-    [soapWebService callWebservice:infoDict];
-}
-
-- (NSArray *)unreadingMessages {
+- (NSArray<DMMessage *> *)unreadMessages {
     FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
     if (![dataBase open]) {
-        
     }
     NSString *query = @"SELECT * FROM Messages WHERE Sender = 0 AND Read = 0";
     
     FMResultSet *rs = [dataBase executeQuery:query];
     NSMutableArray *result = [NSMutableArray array];
     while ([rs next]) {
-        [result addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                           [rs stringForColumn:@"Id"],    @"MessageID",
-                           [rs stringForColumn:@"Text"],   @"Text",
-                           [rs stringForColumn:@"Sender"], @"Sender",
-                           [rs dateForColumn:@"Date"],     @"DsteTime", nil]];
+        NSDictionary *dict = [rs resultDictionary];
+        DMMessage *message = [[DMMessage alloc] initWithDictionary:dict];
+        [result addObject:message];
     }
-    
     [rs close];
     
     return result;
@@ -606,63 +574,30 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [UIApplication sharedApplication].applicationIconBadgeNumber = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
 }
 
-#pragma mark - WSGetMessagesDelegate
-- (void)getMessagesFinished:(NSDictionary *)response {
-    if ([response isKindOfClass:[NSDictionary class]]) {
-        NSArray *messages = [response[@"Messages"] copy];
-        
-        FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
-        if (![dataBase open]) {
-            
-        }
-        
-        for (NSDictionary *dict in messages) {
-            DMMessage *message = [[DMMessage alloc] initWithDictionary:dict];
-            
-            NSDictionary *existMessage = [self messageById:message.messageId database:dataBase];
-            
-            [dataBase beginTransaction];
-            NSString *sqlQuery;
-                        
-            if (existMessage) {
-                sqlQuery = [NSString stringWithFormat:@"UPDATE Messages SET Text = '%@', Sender = '%@', Date = %f, Read = %d "
-                            "WHERE Id = '%@'",
-                            message.text,
-                            message.senderName,
-                            [message.dateSent timeIntervalSince1970],
-                            message.isRead,
-                            message.messageId];
-            } else {
-                sqlQuery = [NSString stringWithFormat:@"INSERT INTO Messages (Text,Sender,Date,Id,Read)"
-                            "VALUES ('%@','%@',%f,%@,%d)",
-                            message.text,
-                            message.senderName,
-                            [message.dateSent timeIntervalSince1970],
-                            message.messageId,
-                            message.isRead];
-            }
-            
-            [dataBase executeUpdate:sqlQuery];
-            
-            BOOL statusMsg = YES;
-            
-            if ([dataBase hadError]) {
-                DM_LOG(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
-                statusMsg = NO;
-            }
-            [dataBase commit];
-        }
+- (void)getMessagesFinished:(NSArray<DMMessage *> *)messages {
+    if (!messages.count) {
+        return;
     }
     
-    if (self.messageCompletion) {
-        self.messageCompletion(YES, nil);
+    FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
+    if (![dataBase open]) {
     }
+    
+    for (DMMessage *message in messages) {
+        [dataBase beginTransaction];
+        NSString *sqlQuery = [message replaceIntoSQLString];
+        [dataBase executeUpdate:sqlQuery];
+
+        BOOL statusMsg = YES;
+        
+        if ([dataBase hadError]) {
+            DM_LOG(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+            statusMsg = NO;
+        }
+        [dataBase commit];
+    }
+    
     [NSTimer scheduledTimerWithTimeInterval:UpdateMessagesTimeInterval target:self selector:@selector(updateByTimer) userInfo:nil repeats:NO];
-    updatingMessage = NO;
-}
-- (void)getMessagesFailed:(NSString *)failedMessage {
-    if (self.messageCompletion)
-        self.messageCompletion(NO, failedMessage);
     updatingMessage = NO;
 }
 

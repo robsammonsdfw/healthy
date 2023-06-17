@@ -22,7 +22,6 @@
 
 @protocol WSSyncWeightLogDelegate;
 @protocol WSGetFoodDelegate;
-@protocol WSGetMessagesDelegate;
 
 // UP SYNC
 @protocol WSSaveMealDelegate;
@@ -35,9 +34,7 @@
 @protocol WSSaveFavoriteMealItemDelegate;
 @protocol WSDeleteMealItemDelegate;
 @protocol WSDeleteFavoriteFoodDelegate;
-@protocol WSSendMessageDelegate;
 @protocol WSSendDeviceTokenDelegate;
-@protocol WSSetMessageReadDelegate;
 
 @interface SoapWebServiceEngine : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate> {
     NSMutableData *webData;
@@ -66,7 +63,6 @@
 //HHT new exercise sync
 @property (nonatomic, weak) id<WSSyncExerciseLogNewDelegate> wsSyncExerciseLogNewDelegate;
 @property (nonatomic, weak) id<WSGetFoodDelegate> wsGetFoodDelegate;
-@property (nonatomic, weak) id<WSGetMessagesDelegate> wsGetMessagesDelegate;
 
 // UP SYNC
 @property (nonatomic, weak) id<WSSaveMealDelegate> wsSaveMealDelegate;
@@ -82,9 +78,7 @@
 @property (nonatomic,strong) id<WSDeleteMealItemDelegate> wsDeleteMealItemDelegate;
 
 @property (nonatomic, weak) id<WSDeleteFavoriteFoodDelegate> wsDeleteFavoriteFoodDelegate;
-@property (nonatomic, weak) id<WSSendMessageDelegate> wsSendMessageDelegate;
 @property (nonatomic, weak) id<WSSendDeviceTokenDelegate> wsSendDeviceTokenDelegate;
-@property (nonatomic, weak) id<WSSetMessageReadDelegate> wsSetMessageReadDelegate;
 
 @property (nonatomic, strong) NSMutableData *webData;
 @property (nonatomic, strong) NSMutableString *soapResults;
@@ -188,19 +182,7 @@
 - (void)deleteFavoriteFoodFinished:(NSMutableArray *)responseArray;
 - (void)deleteFavoriteFoodFailed:(NSString *)failedMessage;
 @end
-@protocol WSGetMessagesDelegate <NSObject>
-- (void)getMessagesFinished:(NSMutableArray *)responseArray;
-- (void)getMessagesFailed:(NSString *)failedMessage;
-@end
-@protocol WSSendMessageDelegate <NSObject>
-- (void)sendMessageFinished:(NSMutableArray *)responseArray;
-- (void)sendMessageFailed:(NSString *)failedMessage;
-@end
 @protocol WSSendDeviceTokenDelegate <NSObject>
 - (void)sendDeviceFinished:(NSMutableArray *)responseArray;
 - (void)sendDeviceFailed:(NSString *)failedMessage;
-@end
-@protocol WSSetMessageReadDelegate <NSObject>
-- (void)setMessageReadFinished:(NSMutableArray *)responseArray;
-- (void)setMessageReadFailed:(NSString *)failedMessage;
 @end
