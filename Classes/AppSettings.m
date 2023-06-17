@@ -16,9 +16,6 @@
 #import "MyMovesViewController.h"
 
 @interface AppSettings () <SFSafariViewControllerDelegate>
-{
-     
-}
 
 @property (nonatomic) IBOutlet UIButton *hcgBookletButton;
 @property (nonatomic) IBOutlet UIButton *mwlBookletButton;
@@ -49,7 +46,8 @@
 @end
 
 @implementation AppSettings
-@synthesize userLoginWS, myScrollBG;
+
+@synthesize myScrollBG;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -62,10 +60,6 @@
         self.showPopUpVw.hidden = true;
     }
     
-//    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-//    dietmasterEngine.sendAllServerData = true;
-
-    
     pageSize = 1000;
     pageNumberCounter = 1;
     viewSetting.hidden=TRUE;
@@ -77,16 +71,8 @@
     if (!IS_IPHONE_5) {
         //HHT change 2018 to solve issue in ipad setting lbl cut
         [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, versionLabel.frame.origin.y + versionLabel.frame.size.height + 20)];
-        
-        //OLD
-        //[myScrollBG setContentSize:CGSizeMake(320, 568)];
     }
     else{
-        //OLD
-        //self.view.frame.size.height-80
-        //HHT change
-        //[myScrollBG setContentSize:CGSizeMake(320, viewSetting.frame.size.height+ 20)];
-        
         //HHT change 2018 to solve issue in ipad setting lbl cut
         [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, versionLabel.frame.origin.y + versionLabel.frame.size.height + 20)];
     }

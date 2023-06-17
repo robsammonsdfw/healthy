@@ -12,27 +12,39 @@ NS_ASSUME_NONNULL_BEGIN
 /// Represents a "User" of DMG.
 @interface DMUser : NSObject
 
-@property (nonatomic, strong, nullable) NSDate *birthDate;
-@property (nonatomic, strong) NSNumber *gender;
-@property (nonatomic, strong) NSNumber *height;
-@property (nonatomic, strong) NSNumber *lactating;
+@property (nonatomic, strong, readonly) NSNumber *userId;
+@property (nonatomic, strong, readonly) NSString *userName;
+@property (nonatomic, strong, readonly) NSString *email1;
+@property (nonatomic, strong, readonly) NSString *email2;
 
-@property (nonatomic, strong) NSNumber *profession;
+@property (nonatomic, strong, readonly) NSNumber *companyId;
+@property (nonatomic, strong, readonly) NSString *companyName;
+@property (nonatomic, strong, readonly) NSString *mobileGraphicImageName;
 
-@property (nonatomic, strong) NSNumber *bodyType;
-@property (nonatomic, strong) NSNumber *userBMR;
-@property (nonatomic, strong) NSNumber *proteinRequirements;
+@property (nonatomic, strong, readonly) NSString *firstName;
+@property (nonatomic, strong, readonly) NSString *lastName;
 
-@property (nonatomic, strong) NSNumber *goals;
-@property (nonatomic, strong, nullable) NSDate *goalStartDate;
-@property (nonatomic, strong) NSNumber *weightGoal;
-@property (nonatomic, strong) NSNumber *goalRate;
+@property (nonatomic, strong, readonly, nullable) NSDate *birthDate;
+@property (nonatomic, strong, readonly) NSNumber *gender;
+@property (nonatomic, strong, readonly) NSNumber *height;
+@property (nonatomic, strong, readonly) NSNumber *lactating;
 
-@property (nonatomic, strong) NSNumber *carbRatio;
-@property (nonatomic, strong) NSNumber *proteinRatio;
-@property (nonatomic, strong) NSNumber *fatRatio;
+@property (nonatomic, strong, readonly) NSNumber *profession;
 
-@property (nonatomic, strong) NSString *hostName;
+@property (nonatomic, strong, readonly) NSNumber *bodyType;
+@property (nonatomic, strong, readonly) NSNumber *userBMR;
+@property (nonatomic, strong, readonly) NSNumber *proteinRequirements;
+
+@property (nonatomic, strong, readonly) NSNumber *goals;
+@property (nonatomic, strong, readonly, nullable) NSDate *goalStartDate;
+@property (nonatomic, strong, readonly) NSNumber *weightGoal;
+@property (nonatomic, strong, readonly) NSNumber *goalRate;
+
+@property (nonatomic, strong, readonly) NSNumber *carbRatio;
+@property (nonatomic, strong, readonly) NSNumber *proteinRatio;
+@property (nonatomic, strong, readonly) NSNumber *fatRatio;
+
+@property (nonatomic, strong, readonly) NSString *hostName;
 
 /// Designated initializer.
 - (instancetype)initWithDictionary:(NSDictionary *)userDict NS_DESIGNATED_INITIALIZER;

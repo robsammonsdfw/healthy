@@ -23,6 +23,9 @@
 #import "DMFood.h"
 #import "DMWeightLogEntry.h"
 
+#import "DietMasterGoPlus-Swift.h"
+#import "DMUser.h"
+
 #define D_MINUTE	60
 #define D_HOUR		3600
 #define D_DAY		86400
@@ -312,7 +315,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     soapWebService.wsGetUserInfoDelegate = self;
     [soapWebService callWebservice:infoDict];
 }
-
 
 -(void)syncFavoriteFoods:(NSString *)dateString {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -2201,12 +2203,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 NSString *tokenToSend = [NSString stringWithString:[prefs valueForKey:@"authkey_dietmastergo"]];
                 [tokenToSend uppercaseString];
                 
-                UserLoginWebService *userLoginWS = [[UserLoginWebService alloc] init];
-                userLoginWS.wsAuthenticateUserDelegate = self;
-                [userLoginWS callWebservice:tokenToSend];
-                
-                [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
-                
+                DataFetcher *dataFetcher = [[DataFetcher alloc] init];
+                [dataFetcher signInUserWithPassword:tokenToSend completion:^(DMUser *user, NSString *status, NSString *message) {
+                    [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
+                }];
+                               
                 return;
             }
             else {
@@ -2223,12 +2224,12 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                     NSString *tokenToSend = [NSString stringWithString:[prefs valueForKey:@"authkey_dietmastergo"]];
                     [tokenToSend uppercaseString];
                     
-                    UserLoginWebService *userLoginWS = [[UserLoginWebService alloc] init];
-                    userLoginWS.wsAuthenticateUserDelegate = self;
-                    [userLoginWS callWebservice:tokenToSend];
+                    DataFetcher *dataFetcher = [[DataFetcher alloc] init];
+                    [dataFetcher signInUserWithPassword:tokenToSend completion:^(DMUser *user, NSString *status, NSString *message) {
+                        [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
+                    }];
                     
                     [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
-                    [prefs synchronize];
                     
                     return;
                 }

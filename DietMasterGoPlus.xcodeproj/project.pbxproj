@@ -17,6 +17,7 @@
 		0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */; };
 		0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */; };
 		0E8EC8F12A3DE57D0095BDEC /* DMMoveTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */; };
+		0E8EC8F32A3E08E00095BDEC /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F22A3E08E00095BDEC /* DataFetcher.swift */; };
 		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
 		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
 		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
@@ -216,7 +217,6 @@
 		401B649420B3FC64004453E7 /* SoapWebServiceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B214EAC79700B8FFE3 /* SoapWebServiceEngine.m */; };
 		401B649520B3FC64004453E7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */; };
 		401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */; };
-		401B649720B3FC64004453E7 /* UserLoginWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788C314EAD0F100B8FFE3 /* UserLoginWebService.m */; };
 		401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F44D315003DA6008413AB /* LearnMoreViewController.m */; };
 		401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E002FF3153E19560094341F /* NSData+Blocks.m */; };
 		401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */; };
@@ -403,8 +403,6 @@
 		0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		0E4788BE14EACCCC00B8FFE3 /* SHA1PHPClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1PHPClass.h; sourceTree = "<group>"; };
 		0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHA1PHPClass.m; sourceTree = "<group>"; };
-		0E4788C214EAD0F100B8FFE3 /* UserLoginWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLoginWebService.h; sourceTree = "<group>"; };
-		0E4788C314EAD0F100B8FFE3 /* UserLoginWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserLoginWebService.m; sourceTree = "<group>"; };
 		0E4788C514EAD8FA00B8FFE3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0E4E436D172ABB7B00C400D4 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		0E4E436E172ABB7B00C400D4 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
@@ -480,6 +478,7 @@
 		0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveCategory.m; sourceTree = "<group>"; };
 		0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveTag.h; sourceTree = "<group>"; };
 		0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveTag.m; sourceTree = "<group>"; };
+		0E8EC8F22A3E08E00095BDEC /* DataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetcher.swift; sourceTree = "<group>"; };
 		0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
 		0E9F17002A33BBE700217BF9 /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
 		0E9F17012A33BBE700217BF9 /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
@@ -917,7 +916,6 @@
 				0E4788BD14EACCCC00B8FFE3 /* SHA1PHPClass */,
 				0E4788AF14EAC78C00B8FFE3 /* SoapWebServiceEngine */,
 				0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */,
-				0E4788C114EAD0E400B8FFE3 /* UserLoginWebService */,
 				0E88C4D614E457BD0009C043 /* WebServiceEngine */,
 				0E75DD8B1586532B003B1BB7 /* MealPlanWebService */,
 				0ECE6EDC14BF4093004DEF36 /* DatePickerControl */,
@@ -1043,15 +1041,6 @@
 				0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */,
 			);
 			path = SHA1PHPClass;
-			sourceTree = "<group>";
-		};
-		0E4788C114EAD0E400B8FFE3 /* UserLoginWebService */ = {
-			isa = PBXGroup;
-			children = (
-				0E4788C214EAD0F100B8FFE3 /* UserLoginWebService.h */,
-				0E4788C314EAD0F100B8FFE3 /* UserLoginWebService.m */,
-			);
-			path = UserLoginWebService;
 			sourceTree = "<group>";
 		};
 		0E4E436C172ABB7B00C400D4 /* Base64Encoder */ = {
@@ -1489,6 +1478,7 @@
 			isa = PBXGroup;
 			children = (
 				0EDAB6A92A3B4E9A00DB351A /* Models */,
+				0E8EC8F22A3E08E00095BDEC /* DataFetcher.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -2449,6 +2439,8 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ASIHTTPRequest/ASIHTTPRequest.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireSoap/AlamofireSoap.framework",
 				"${BUILT_PRODUCTS_DIR}/CorePlot/CorePlot.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/FSCalendar/FSCalendar.framework",
@@ -2466,12 +2458,15 @@
 				"${BUILT_PRODUCTS_DIR}/PromisesSwift/Promises.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SBPickerSelector/SBPickerSelector.framework",
+				"${BUILT_PRODUCTS_DIR}/SWXMLHash/SWXMLHash.framework",
 				"${BUILT_PRODUCTS_DIR}/ZipArchive/ZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASIHTTPRequest.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireSoap.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CorePlot.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSCalendar.framework",
@@ -2489,6 +2484,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Promises.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SBPickerSelector.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWXMLHash.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -2560,7 +2556,6 @@
 				401B649520B3FC64004453E7 /* LoginViewController.m in Sources */,
 				40AFA92E21FA13CD009140D9 /* MyMovesListViewController.m in Sources */,
 				401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */,
-				401B649720B3FC64004453E7 /* UserLoginWebService.m in Sources */,
 				401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */,
 				401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */,
 				0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */,
@@ -2593,6 +2588,7 @@
 				0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */,
 				401B64E820B3FC64004453E7 /* MNMBottomPullToRefreshView.m in Sources */,
 				650208E0250153C300F412B0 /* headerVw.m in Sources */,
+				0E8EC8F32A3E08E00095BDEC /* DataFetcher.swift in Sources */,
 				650208E3250153C300F412B0 /* PlansTableViewCell.m in Sources */,
 				82C45661233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m in Sources */,
 				65462D2626BD1DAF004D1654 /* UserGoalVC.m in Sources */,

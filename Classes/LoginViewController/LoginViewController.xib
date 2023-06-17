@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,7 +12,6 @@
             <connections>
                 <outlet property="appNameLabel" destination="12" id="40"/>
                 <outlet property="backgroundImgVw" destination="oHV-bT-spj" id="yRE-7H-dBT"/>
-                <outlet property="cellSpinner" destination="23" id="24"/>
                 <outlet property="emailbtuuon" destination="7" id="4bc-q0-H6b"/>
                 <outlet property="imgtop" destination="h9L-LL-Xvl" id="bu3-Oo-EAe"/>
                 <outlet property="loginButton" destination="6" id="18"/>
@@ -111,14 +110,6 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="23">
-                    <rect key="frame" x="150" y="230" width="20" height="20"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="20" id="jpc-La-jQq"/>
-                        <constraint firstAttribute="width" constant="20" id="mM1-1l-TYe"/>
-                    </constraints>
-                    <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </activityIndicatorView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="27">
                     <rect key="frame" x="100" y="390" width="120" height="35"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -183,7 +174,6 @@
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="h9L-LL-Xvl" firstAttribute="top" secondItem="1" secondAttribute="top" id="4ae-H9-Joo"/>
-                <constraint firstItem="23" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="6fm-j2-gv0"/>
                 <constraint firstAttribute="trailing" secondItem="32" secondAttribute="trailing" constant="65" id="9Hz-Rh-vcC"/>
                 <constraint firstItem="12" firstAttribute="top" secondItem="1" secondAttribute="top" constant="20" id="B0m-B1-elP"/>
                 <constraint firstItem="8" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="65" id="C49-LO-b93"/>
@@ -208,7 +198,6 @@
                 <constraint firstAttribute="trailing" secondItem="10" secondAttribute="trailing" constant="57" id="f5G-T4-HWd"/>
                 <constraint firstItem="h9L-LL-Xvl" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="fIj-vd-L2a"/>
                 <constraint firstItem="12" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="13" id="jpi-1K-pUJ"/>
-                <constraint firstItem="23" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="mnt-BQ-3gu"/>
                 <constraint firstItem="32" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="65" id="nSs-wQ-sDy"/>
                 <constraint firstAttribute="bottom" secondItem="25" secondAttribute="bottom" constant="25" id="oQl-2z-ZD6"/>
                 <constraint firstItem="25" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="5" id="or2-KF-miK"/>

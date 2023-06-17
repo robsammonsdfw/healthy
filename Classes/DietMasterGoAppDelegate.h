@@ -11,14 +11,13 @@
 #import <MessageUI/MessageUI.h>
 #import "MyMovesWebServices.h"
 
-#import "UserLoginWebService.h"
 #import "PurchaseIAPHelper.h"
 
 @class DietMasterGoViewController;
 @class DetailViewController;
 @class LoginViewController;
 
-@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, SyncDatabaseDelegate, MBProgressHUDDelegate, UIAlertViewDelegate, UITextFieldDelegate,WSAuthenticateUserDelegate,UITabBarControllerDelegate,MFMailComposeViewControllerDelegate,UINavigationControllerDelegate> {
+@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, SyncDatabaseDelegate, MBProgressHUDDelegate, UIAlertViewDelegate, UITextFieldDelegate,UITabBarControllerDelegate,MFMailComposeViewControllerDelegate,UINavigationControllerDelegate> {
                           
     DietMasterGoViewController *viewController;     //To Enable NEW DESIGN
     
@@ -50,7 +49,6 @@
 @property (nonatomic, strong) NSString *idStr;
 
 @property (nonatomic) BOOL isSessionExp;
-@property(retain) UserLoginWebService *userLoginWS;
 
 @property (nonatomic)BOOL isFromAlert;
 

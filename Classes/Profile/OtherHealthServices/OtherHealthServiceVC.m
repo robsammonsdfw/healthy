@@ -24,10 +24,6 @@
      @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationItem.hidesBackButton = YES;
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (IBAction)btnYesClicked:(id)sender {
     ProfileContactVC  *desVc= [[ProfileContactVC alloc] initWithNibName:@"ProfileContactVC" bundle:nil];

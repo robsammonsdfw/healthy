@@ -10,6 +10,9 @@ use_frameworks!
 
 # Pods that should be included in all apps.
 def core_pods
+  pod 'AlamofireSoap' # https://github.com/ShakeebM/AlamofireSoap
+  pod 'SWXMLHash' # For decoding XML in Alamofire responses - https://github.com/drmohundro/SWXMLHash
+
   pod 'Firebase/Crashlytics'
   pod 'Firebase/Analytics'
   pod 'SBPickerSelector', '1.0.4' # Last Objc version.

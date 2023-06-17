@@ -11,9 +11,6 @@
 // get data
 #import "GetDataWebService.h"
 
-// For splash updating
-#import "UserLoginWebService.h"
-
 #import "SaveUPCDataWebService.h"
 #import "FactualAPI.h"
 #import "FactualQuery.h"
@@ -30,7 +27,7 @@ typedef void (^GetMessagesCompletionBlock)(BOOL success, NSString *errorString);
 @protocol UPSyncDatabaseDelegate;
 
 @interface DietmasterEngine : NSObject <WSSyncFavoriteFoodsDelegate, WSSyncFavoriteMealsDelegate, WSGetUserInfoDelegate,
-WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, WSAuthenticateUserDelegate, SaveUPCDataWSDelegate, FactualAPIDelegate, GetDataWSDelegate, WSGetMessagesDelegate> {
+WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, SaveUPCDataWSDelegate, FactualAPIDelegate, GetDataWSDelegate, WSGetMessagesDelegate> {
     
     NSMutableDictionary *exerciseSelectedDict;
     // Dict for Food Selected Detail

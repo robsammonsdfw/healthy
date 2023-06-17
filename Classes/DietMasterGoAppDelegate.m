@@ -15,6 +15,9 @@
 #import "PopUpView.h"
 #import "PurchaseIAPHelper.h"
 
+#import "DietMasterGoPlus-Swift.h"
+#import "DMUser.h"
+
 @import StoreKit;
 @import Firebase;
 
@@ -30,7 +33,6 @@
 @synthesize splashView;
 @synthesize incomingDBFilePath;
 @synthesize isSessionExp;
-@synthesize userLoginWS;
 @synthesize isFromAlert;
 @synthesize caloriesremaning;
 @synthesize strchekeditornot;
@@ -927,38 +929,41 @@
         
         if (![prefs valueForKey:@"lastmodified"]) {
             AppDel.isSessionExp = NO;
-            self.userLoginWS = [[UserLoginWebService alloc] init];
-            userLoginWS.wsAuthenticateUserDelegate = self;
-            [userLoginWS callWebservice:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginPwd"]];
+            DataFetcher *dataFetcher = [[DataFetcher alloc] init];
+            [dataFetcher signInUserWithPassword:[prefs objectForKey:@"loginPwd"] completion:^(DMUser *user, NSString *status, NSString *message) {
+                if (AppDel.isSessionExp == NO) {
+                    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+                    dietmasterEngine.syncUPDatabaseDelegate = self;
+                    [dietmasterEngine uploadDatabase];
+                }
+            }];
         }
         else {
             NSInteger hourSinceDate = [self hoursAfterDate:[prefs valueForKey:@"lastmodified"]];
             if (hourSinceDate >= 2) {
                 
                 AppDel.isSessionExp = NO;
-                self.userLoginWS = [[UserLoginWebService alloc] init];
-                userLoginWS.wsAuthenticateUserDelegate = self;
-                [userLoginWS callWebservice:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginPwd"]];
+                DataFetcher *dataFetcher = [[DataFetcher alloc] init];
+                [dataFetcher signInUserWithPassword:[prefs objectForKey:@"loginPwd"] completion:^(DMUser *user, NSString *status, NSString *message) {
+                    if (AppDel.isSessionExp == NO) {
+                        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+                        dietmasterEngine.syncUPDatabaseDelegate = self;
+                        [dietmasterEngine uploadDatabase];
+                    }
+                }];
             }
             else {
                 AppDel.isSessionExp = NO;
-                self.userLoginWS = [[UserLoginWebService alloc] init];
-                userLoginWS.wsAuthenticateUserDelegate = self;
-                [userLoginWS callWebservice:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginPwd"]];
+                DataFetcher *dataFetcher = [[DataFetcher alloc] init];
+                [dataFetcher signInUserWithPassword:[prefs objectForKey:@"loginPwd"] completion:^(DMUser *user, NSString *status, NSString *message) {
+                    if (AppDel.isSessionExp == NO) {
+                        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+                        dietmasterEngine.syncUPDatabaseDelegate = self;
+                        [dietmasterEngine uploadDatabase];
+                    }
+                }];
             }
         }
-    }
-}
-
-#pragma mark LOGIN AUTH DELEGATE METHODS
-- (void)getAuthenticateUserFinished:(NSMutableArray *)responseArray {
-    if (AppDel.isSessionExp == YES) {
-        
-    }
-    else {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.syncUPDatabaseDelegate = self;
-        [dietmasterEngine uploadDatabase];
     }
 }
 
