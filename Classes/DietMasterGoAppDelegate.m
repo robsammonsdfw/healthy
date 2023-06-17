@@ -334,16 +334,7 @@
         if (upgraded11 == NO && [prefs boolForKey:@"user_loggedin"] == YES) {
             [self performSelectorInBackground:@selector(updateMeasureTable) withObject:nil];
         }
-        
-        BOOL upgraded103 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.3"];
-        if (upgraded103 == NO && [prefs boolForKey:@"user_loggedin"] == YES) {
-            
-            if (![prefs valueForKey:@"splashimage_filename"]) {
-            }
-            
-            [prefs setBool:YES forKey:@"1.0.3"];
-        }
-        
+                
         BOOL upgraded102 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.2"];
         if (upgraded102 == NO) {
             
@@ -409,7 +400,7 @@
                 DMLog(@"Could not open db.");
             }
             
-            if (![db columnExists:@"Food" columnName:@"FactualID"]) {
+            if (![db columnExists:@"FactualID" inTableWithName:@"Food"]) {
                 NSString *updateSQL = @"ALTER TABLE Food ADD FactualID VARCHAR(150)";
                 [db beginImmediateTransaction];
                 [db executeUpdate:updateSQL];
