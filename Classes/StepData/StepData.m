@@ -12,9 +12,8 @@
 
 @implementation StepData
     
-- (id) init {
+- (instancetype)init {
     self = [super init];
-    
     if (self) {
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -58,6 +57,8 @@
 //    return MILES_INCHES / (0.415 * [self heightInches]);
 //    else  // Female
 //    return MILES_INCHES / (0.413 * [self heightInches]);
+    
+    return 0.0;
 }
     
-    @end
+@end
