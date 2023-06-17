@@ -11,12 +11,11 @@ import SWXMLHash
 
 /// Fetcher for making network requests to the DMG backend.
 class DataFetcher : NSObject {
-    
+    private let namespace = "http://webservice.dmwebpro.com"
+
     /// Signs-in a user.
     @objc func signInUser(password: String, completion : @escaping (_ object: DMUser?, _ status: String?, _ message: String?) -> Void) {
         let authPassword = password.uppercased()
-
-        let namespace = "http://webservice.dmwebpro.com"
         let params = ["AuthKey": authPassword]
         let method = "Authenticate"
         

@@ -213,7 +213,6 @@
 		401B648920B3FC64004453E7 /* ExercisesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79114DE157C008C9576 /* ExercisesDetailViewController.m */; };
 		401B648A20B3FC64004453E7 /* DietmasterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */; };
 		401B648B20B3FC64004453E7 /* FavoriteMealsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */; };
-		401B648C20B3FC64004453E7 /* WebServiceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E88C4D914E457D00009C043 /* WebServiceEngine.m */; };
 		401B649420B3FC64004453E7 /* SoapWebServiceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B214EAC79700B8FFE3 /* SoapWebServiceEngine.m */; };
 		401B649520B3FC64004453E7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */; };
 		401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */; };
@@ -462,8 +461,6 @@
 		0E81811D14D46A49002C8520 /* ExercisesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExercisesViewController.h; sourceTree = "<group>"; };
 		0E81811E14D46A49002C8520 /* ExercisesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExercisesViewController.m; sourceTree = "<group>"; };
 		0E81811F14D46A49002C8520 /* ExercisesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExercisesViewController.xib; sourceTree = "<group>"; };
-		0E88C4D814E457D00009C043 /* WebServiceEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServiceEngine.h; sourceTree = "<group>"; };
-		0E88C4D914E457D00009C043 /* WebServiceEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebServiceEngine.m; sourceTree = "<group>"; };
 		0E89824D2A33D47500DD7221 /* DietMasterGoPlus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DietMasterGoPlus-Bridging-Header.h"; sourceTree = "<group>"; };
 		0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeScanner.swift; sourceTree = "<group>"; };
 		0E8EC8DF2A3CF5430095BDEC /* DMActivityIndicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMActivityIndicator.h; sourceTree = "<group>"; };
@@ -916,7 +913,6 @@
 				0E4788BD14EACCCC00B8FFE3 /* SHA1PHPClass */,
 				0E4788AF14EAC78C00B8FFE3 /* SoapWebServiceEngine */,
 				0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */,
-				0E88C4D614E457BD0009C043 /* WebServiceEngine */,
 				0E75DD8B1586532B003B1BB7 /* MealPlanWebService */,
 				0ECE6EDC14BF4093004DEF36 /* DatePickerControl */,
 				0E71B79514DE1ABD008C9576 /* DietmasterEngine */,
@@ -1163,15 +1159,6 @@
 				0E81811F14D46A49002C8520 /* ExercisesViewController.xib */,
 			);
 			path = ExercisesViewController;
-			sourceTree = "<group>";
-		};
-		0E88C4D614E457BD0009C043 /* WebServiceEngine */ = {
-			isa = PBXGroup;
-			children = (
-				0E88C4D814E457D00009C043 /* WebServiceEngine.h */,
-				0E88C4D914E457D00009C043 /* WebServiceEngine.m */,
-			);
-			path = WebServiceEngine;
 			sourceTree = "<group>";
 		};
 		0E8EC8DE2A3CF52A0095BDEC /* Helpers */ = {
@@ -2550,7 +2537,6 @@
 				401B648920B3FC64004453E7 /* ExercisesDetailViewController.m in Sources */,
 				401B648A20B3FC64004453E7 /* DietmasterEngine.m in Sources */,
 				401B648B20B3FC64004453E7 /* FavoriteMealsViewController.m in Sources */,
-				401B648C20B3FC64004453E7 /* WebServiceEngine.m in Sources */,
 				0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */,
 				401B649420B3FC64004453E7 /* SoapWebServiceEngine.m in Sources */,
 				401B649520B3FC64004453E7 /* LoginViewController.m in Sources */,
