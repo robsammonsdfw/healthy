@@ -157,7 +157,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSError *err;
         NSDictionary *thumbnailArr = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
         
-        NSMutableString *thumbNail = NSMutableString.new;
+        NSMutableString *thumbNail = [NSMutableString string];
         thumbNail = thumbnailArr[@"thumbnail_url"];
         DMLog(@"%@", thumbNail);
                 

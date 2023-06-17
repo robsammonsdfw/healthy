@@ -7,6 +7,7 @@
 
 #import "MyMovesWebServices.h"
 #import "FMDatabase.h"
+#import "DMMove.h"
 
 @implementation MyMovesWebServices
 
@@ -1796,19 +1797,7 @@
             [tempStr setString:tagTrim];
             [ListOfTags addObject:dict];
         }
-        
-//        NSMutableArray *filteredArray = [NSMutableArray array];
-//        for (int i = ListOfTags.count-1; i>= 0; i--)
-//        {
-//            NSMutableDictionary* E1 = [Event_Array objectAtIndex:i];
-//            BOOL hasDuplicate = [[filteredArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"act_id == %@", [E1 objectForKey:@"act_id"]]] count] > 0;
-//
-//            if (!hasDuplicate)
-//            {
-//                [filteredArray addObject:E1];
-//            }
-//        }
-        
+
     }
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -3581,19 +3570,19 @@
     }
 }
 
--(NSMutableArray *)filterObjectsByKeys:(NSString *)key array:(NSArray *)array {
+- (NSMutableArray *)filterObjectsByKeys:(NSString *)key array:(NSArray *)array {
     NSMutableSet *tempValues = [[NSMutableSet alloc] init];
     NSMutableArray *ret = [NSMutableArray array];
-    for(id obj in array) {
-        if(! [tempValues containsObject:[obj valueForKey:key]]) {
-            [tempValues addObject:[obj valueForKey:key]];
+    for (id obj in array) {
+        if(![tempValues containsObject:obj[key]]) {
+            [tempValues addObject:obj[key]];
             [ret addObject:obj];
         }
     }
     return ret;
 }
 
--(void)getMyMovesData {
+- (void)getMyMovesData {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSString *authString = [NSString stringWithFormat:@"%@:%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"username_dietmastergo"], [prefs valueForKey:@"authkey_dietmastergo"]];
     
@@ -3610,7 +3599,7 @@
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *repsone, NSData *data, NSError *connectionError) {
         if (data.length > 0 && connectionError == nil) {
-            NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
             
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             
@@ -3618,55 +3607,38 @@
             if (![db open]) {
             }
             
-            for (id key in response) {
-                //insert move
-                int moveId = [[key objectForKey:@"moveID"] intValue];
-                int companyId = [[key objectForKey:@"companyID"] intValue];
-                NSString *moveName = [[[[key objectForKey:@"moveName"] stringValue]stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-                NSString *videoLink = [[key objectForKey:@"videoLink"] stringValue];
-                NSString *notes = [[[[key objectForKey:@"notes"] stringValue] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+            for (NSDictionary *dict in responseDict) {
+                DMMove *move = [[DMMove alloc] initWithDictionary:dict];
                 
                 [db beginTransaction];
                 
-                NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO MoveDetailsTable (MoveID,CompanyID,MoveName,VideoLink,Notes) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",'%@')",moveId,companyId,moveName,videoLink,notes];
-
-                [db executeUpdate:insertSQL];
+                NSString *moveReplaceIntoSQL = [move replaceIntoSQLString];
+                [db executeUpdate:moveReplaceIntoSQL];
                 
                 if ([db hadError]) {
                     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
                 
-                NSArray *categories = [key objectForKey:@"moveCategories"];
+                NSArray *categories = [dict objectForKey:@"moveCategories"];
                 int index = 0;
                 
                 //iterate through categories
-                for(id categoryObj in categories) {
+                for (id categoryObj in categories) {
                     int categoryId = [[categoryObj valueForKey:@"categoryID"] intValue];
                     //get tag from tag array. same number of objects as category, always
-                    int tagId = [[[key objectForKey:@"moveTags"][index] valueForKey:@"tagID"] intValue];
-                    NSString *tag = [[[[[key objectForKey:@"moveTags"][index] valueForKey:@"tag"] stringValue] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+                    int tagId = [[[dict objectForKey:@"moveTags"][index] valueForKey:@"tagID"] intValue];
+                    NSString *tag = [[[[[dict objectForKey:@"moveTags"][index] valueForKey:@"tag"] stringValue] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
                     index++;
                     
-                    FMResultSet *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM ListOfTags_Table WHERE WorkoutTagsID = %d AND WorkoutCategoryID = %d AND Tags = '%@'", tagId, categoryId, tag]];
-                    if (![rs next]) {
-                        //contains no matches, so insert to db
-                        //insert tag
-                        NSString * insertSQLTags = [NSString stringWithFormat: @"INSERT INTO ListOfTags_Table (WorkoutTagsID,WorkoutCategoryID,Tags) VALUES(\"%d\",\"%d\",\"%@\")",tagId,categoryId,tag];
-                        [db executeUpdate:insertSQLTags];
-                        if ([db hadError]) {
-                            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                        }
+                    NSString *replaceIntoSQLTags = [NSString stringWithFormat: @"REPLACE INTO ListOfTags_Table (WorkoutTagsID,WorkoutCategoryID,Tags) VALUES(\"%d\",\"%d\",\"%@\")",tagId,categoryId,tag];
+                    [db executeUpdate:replaceIntoSQLTags];
+
+                    if ([db hadError]) {
+                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     }
-                    
-                    rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM ListOfTitle_Table WHERE WorkoutID = %d AND WorkoutCategoryID = %d AND WorkoutTagsID = %d", moveId, categoryId, tagId]];
-                    if (![rs next]) {
-                        //insert listoftitle
-                        NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ListOfTitle_Table (WorkoutID,WorkoutCategoryID,WorkoutTagsID,WorkoutName,Link,Notes) VALUES(\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",'%@')",moveId,categoryId,tagId,moveName,videoLink,notes];
-                        [db executeUpdate:insertSQL];
-                    } else {
-                        NSString *updateSQL = [NSString stringWithFormat:@"UPDATE ListOfTitle_Table SET WorkoutName = '%@', Link = '%@', Notes = '%@' WHERE WorkoutID = %d AND WorkoutCategoryID = %d AND WorkoutTagsID = %d", moveName, videoLink, notes, moveId, categoryId, tagId];
-                        [db executeUpdate:updateSQL];
-                    }
+
+                    NSString * replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO ListOfTitle_Table (WorkoutID,WorkoutCategoryID,WorkoutTagsID,WorkoutName,Link,Notes) VALUES(\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",'%@')", move.moveId.intValue,categoryId,tagId,move.name,move.videoUrl,move.notes];
+                    [db executeUpdate:replaceIntoSQL];
                     
                     if ([db hadError]) {
                         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -3684,7 +3656,7 @@
                 
             }
         } else {
-            DMLog(@"%i", connectionError.code);
+            DMLog(@"Error, code: %li", connectionError.code);
         }
     }];
 }

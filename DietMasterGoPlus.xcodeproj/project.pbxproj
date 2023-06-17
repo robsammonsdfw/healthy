@@ -14,6 +14,7 @@
 		0E8EC8E12A3CF5430095BDEC /* DMActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */; };
 		0E8EC8E42A3CF7E50095BDEC /* DMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */; };
 		0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */; };
+		0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */; };
 		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
 		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
 		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
@@ -471,6 +472,8 @@
 		0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMConstants.m; sourceTree = "<group>"; };
 		0E8EC8E62A3CF9770095BDEC /* NSString+Encode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Encode.h"; sourceTree = "<group>"; };
 		0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encode.m"; sourceTree = "<group>"; };
+		0E8EC8E92A3DC4C70095BDEC /* DMMove.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMove.h; sourceTree = "<group>"; };
+		0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMove.m; sourceTree = "<group>"; };
 		0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
 		0E9F17002A33BBE700217BF9 /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
 		0E9F17012A33BBE700217BF9 /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
@@ -1495,6 +1498,8 @@
 				0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */,
 				0E1A3B3F2A3B9E68004C6033 /* DMWeightLogEntry.h */,
 				0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */,
+				0E8EC8E92A3DC4C70095BDEC /* DMMove.h */,
+				0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2519,6 +2524,7 @@
 				401B647720B3FC64004453E7 /* DetailViewController.m in Sources */,
 				401B647820B3FC64004453E7 /* Log_Add.m in Sources */,
 				401B647920B3FC64004453E7 /* RecordWeightView.m in Sources */,
+				0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */,
 				401B647A20B3FC64004453E7 /* FoodsHome.m in Sources */,
 				40DD776F220082BA003EE6E9 /* MyMovesWebServices.m in Sources */,
 				401B647B20B3FC64004453E7 /* FoodsSearch.m in Sources */,

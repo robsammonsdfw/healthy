@@ -425,7 +425,6 @@
                               @{@"UserID" : [prefs valueForKey:@"userid_dietmastergo"],
                                 @"AuthKey" : [prefs valueForKey:@"authkey_dietmastergo"],
                                 @"LastSync" : strSyncDate,
-                                //                                @"LastSync" : @"1970-01-01",
                                 @"PageSize" : [NSString stringWithFormat:@"%d", pageSize],
                                 @"PageNumber" : [NSString stringWithFormat:@"%d", pageNumberCounter],
                                 }, @"parameters",
