@@ -29,7 +29,7 @@
     
     NSURL *url = [NSURL URLWithString:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=Authenticate"];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
-    NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
+    NSString *msgLength = [NSString stringWithFormat:@"%li", [soapMessage length]];
         
     [theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     [theRequest addValue: @"http://webservice.dmwebpro.com/Authenticate" forHTTPHeaderField:@"SOAPAction"];
@@ -84,11 +84,10 @@
     //change BY HHT
     if ([strAlertMessage containsString:@"Service has been terminated."]) {
         AppDel.isSessionExp = YES;
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APP_NAME message:strAlertMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        
+        [DMGUtilities showAlertWithTitle:APP_NAME message:strAlertMessage okActionBlock:^(BOOL completed) {
+            exit(0);
+        } inViewController:nil];
         [[NSUserDefaults standardUserDefaults] setObject:@"SecondTime" forKey:@"FirstTime"];
-        alertView.tag = 1;
-        [alertView show];
     }
     
     xmlParser = [[NSXMLParser alloc] initWithData: webData];
@@ -97,13 +96,7 @@
     [xmlParser parse];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 1) {
-        exit(0);
-    }
-}
-
--(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName
    attributes: (NSDictionary *)attributeDict {
     if([elementName isEqualToString:@"AuthenticateResult"]) {
         if (!soapResults) {
@@ -121,10 +114,9 @@
     }
     
 }
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-    if( recordResults )
-    {
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+    if (recordResults) {
         [soapResults appendString: string];
     }
 }
