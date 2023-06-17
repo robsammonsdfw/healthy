@@ -10,8 +10,8 @@
 
 @interface MealPlanDetailsTableViewCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet TTTAttributedLabel *lblMealName;
-@property (retain, nonatomic) IBOutlet UILabel *lblServingSize;
-@property (retain, nonatomic) IBOutlet UILabel *lblMealNote;
+@property (nonatomic, strong) IBOutlet TTTAttributedLabel *lblMealName;
+@property (nonatomic, strong) IBOutlet UILabel *lblServingSize;
+@property (nonatomic, strong) IBOutlet UILabel *lblMealNote;
 
 @end

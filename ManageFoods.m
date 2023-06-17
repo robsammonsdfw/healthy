@@ -114,7 +114,7 @@ CGPoint svos;
         }
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
         [self.navigationItem setTitle:@"Update Food"];
     }
@@ -139,10 +139,10 @@ CGPoint svos;
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if([dietmasterEngine.taskMode isEqualToString:@"View"] && reloadData == YES) {
-        [self showLoading];
+        [DMActivityIndicator showActivityIndicator];
         [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
     }
     
@@ -306,7 +306,7 @@ CGPoint svos;
     [selectCategoryButton setTitle: self.strCategoryName forState: UIControlStateHighlighted];
     [selectCategoryButton setTitle: self.strCategoryName forState: UIControlStateSelected];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.selectedCategoryID = intCategoryID;
     
     isSaved = NO;
@@ -321,7 +321,7 @@ CGPoint svos;
     [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateHighlighted];
     [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.selectedMeasureID = intMeasureID;
     
     isSaved = NO;
@@ -356,7 +356,7 @@ CGPoint svos;
     if (selectedFoodDict) {
         [selectedFoodDict removeAllObjects];
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -503,7 +503,7 @@ CGPoint svos;
     dietmasterEngine.selectedMeasureID = intMeasureID;
     dietmasterEngine.selectedCategoryID = intCategoryID;
     
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 -(void) recordFood:(id) sender {
@@ -534,7 +534,7 @@ CGPoint svos;
         return;
     }
     else {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -717,7 +717,7 @@ CGPoint svos;
         [dietmasterEngine saveFood:minFoodID];
         
         if (_saveToLog) {
-            [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
+            [DMActivityIndicator showActivityIndicator];
         }
         else {
             [self clearEnteredData];
@@ -755,7 +755,7 @@ CGPoint svos;
         return;
     }
     else {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
             
@@ -868,7 +868,7 @@ CGPoint svos;
         [dietmasterEngine saveFood:minFoodID];
         
         if (_saveToLog) {
-            [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
+            [DMActivityIndicator showActivityIndicator];
         }
         else {
             [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
@@ -901,37 +901,6 @@ CGPoint svos;
     }
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [HUD hide:YES afterDelay:0.5];
-    });
-}
-
--(void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    HUD = nil;
-}
-
--(void)showCompleted {
-    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:HUD];
-    HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [HUD show:YES];
-        [HUD hide:YES afterDelay:2.25];
-    });
-}
-
 #pragma mark BARCODE SCANNER METHODS
 
 - (IBAction)loadBarcodeScanner:(id)sender {
@@ -945,7 +914,7 @@ CGPoint svos;
     
     NSDictionary *upcDict2 = (NSDictionary *)[notification object];
     
-    [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
+    [DMActivityIndicator showActivityIndicator];
     NSString *strURL = [NSString stringWithFormat:@"https://trackapi.nutritionix.com/v2/search/item?upc=%@",[upcDict2 valueForKey:@"UPC"]];
     //DMLog(@"%@",strURL);
     
@@ -979,17 +948,17 @@ CGPoint svos;
 //HHT change 2018 Barcode scan
 -(void)parsePostApiData:(NSData *)response responseP:(NSMutableArray *)responseP{
     
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     id jsonObject = Nil;
     NSString *charlieSendString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
     DMLog(@"ResponseString %@",charlieSendString);
-    if (response==nil) {
+    if (!response) {
         DMLog(@"No internet connection.");
     }
     else{
         NSError *error = Nil;
-        jsonObject =[NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&error];
+        jsonObject = [NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&error];
         
         if ([jsonObject isKindOfClass:[NSArray class]]) {
             DMLog(@"Probably An Array");
@@ -1085,7 +1054,7 @@ CGPoint svos;
         [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateNormal];
         [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateHighlighted];
         [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMeasureID = intMeasureID;
     }
     else {
@@ -1098,7 +1067,7 @@ CGPoint svos;
         [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateHighlighted];
         [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMeasureID = intMeasureID;
     }
     
@@ -1160,7 +1129,7 @@ CGPoint svos;
 
 -(NSDictionary *)findMeasureId:(NSString *)serving_unit {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1208,7 +1177,7 @@ CGPoint svos;
         }];
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSString *actionButtonName = nil;
     NSString *saveToLogName = nil;
@@ -1248,7 +1217,7 @@ CGPoint svos;
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
         //HHT
         if (buttonIndex == actionSheet.cancelButtonIndex) {
@@ -1322,7 +1291,7 @@ CGPoint svos;
 //        [alert addButtonWithTitle:@"Yes"];
 //        [alert setTag:90099];
 //        [alert show];
-//        [alert release];
+//        
 //    }
 //
 //    if (rowCount > 0) {
@@ -1340,7 +1309,7 @@ CGPoint svos;
 //        webservice.delegate = self;
 //        [webservice callWebservice:dict];
 //        [webservice release];
-//        [dict release];
+//        
 //
 //        //HHT change 2018 barcode scan
 //        scanned_factualID = nil;
@@ -1421,7 +1390,7 @@ CGPoint svos;
 //            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateHighlighted];
 //            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
 //
-//            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+//            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
 //            dietmasterEngine.selectedMeasureID = intMeasureID;
 //        }
 //        else {
@@ -1430,7 +1399,7 @@ CGPoint svos;
 //            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateNormal];
 //            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateHighlighted];
 //            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
-//            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+//            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
 //            dietmasterEngine.selectedMeasureID = intMeasureID;
 //        }
 //
@@ -1486,7 +1455,7 @@ CGPoint svos;
 //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Nutritional information found! Please confirm values then select Category." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 //        [alert setTag:123456];
 //        [alert show];
-//        [alert release];
+//        
 //
 //        ScannedFoodis=YES;
 //    }
@@ -1510,7 +1479,7 @@ CGPoint svos;
 //    alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"An error occured while looking up Food data. Please check your internet connection and try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 //    [alert setTag:90099];
 //    [alert show];
-//    [alert release];
+//    
 //
 //    isSaved = YES;
 //
@@ -1562,13 +1531,13 @@ CGPoint svos;
 
 #pragma mark Save To Log Methods
 -(void)foodWasSavedToCloud:(NSNotification *)notification {
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
+    [DMActivityIndicator hideActivityIndicator];
     if (_saveToLog) {
         BOOL success = [[[notification userInfo] valueForKey:@"success"] boolValue];
         NSNumber *foodID = [[notification userInfo] valueForKey:@"FoodID"];
         
         if (success) {
-            DietmasterEngine *dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
             
             if (dietmasterEngine.isMealPlanItem)
             {
@@ -1590,7 +1559,7 @@ CGPoint svos;
             [self clearEnteredData];
         }
         else {
-            DietmasterEngine *dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
             dietmasterEngine.taskMode = @"View";
             
             NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:@(_savedFoodID), @"FoodID", intMeasureID, @"MeasureID", nil];

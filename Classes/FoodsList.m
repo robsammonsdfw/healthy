@@ -6,7 +6,7 @@
 @synthesize foodsNameList,foodsIDList, mainDelegate;
 
 - (void)viewDidLoad {
-    DietmasterEngine *dietEngine = [DietmasterEngine instance];
+    DietmasterEngine *dietEngine = [DietmasterEngine sharedInstance];
 	dbPath	= [dietEngine databasePath];
 	
 	if (sqlite3_open([dbPath UTF8String], &database) == SQLITE_OK) {	
@@ -56,9 +56,9 @@
                              FoodsTable];
     if (cell == nil) {
 		
-        cell = [[[UITableViewCell alloc] 
+        cell = [[UITableViewCell alloc] 
 				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FoodsTable] autorelease];
+				 reuseIdentifier: FoodsTable];
     }
 	
     NSUInteger row = [indexPath row];
@@ -86,24 +86,11 @@
                           otherButtonTitles:nil];
     [alert show];
     
-    [message release];
-    [alert release];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44;
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-
-
-- (void)dealloc {
-    [super dealloc];
-}
-
 
 @end

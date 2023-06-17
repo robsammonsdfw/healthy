@@ -8,18 +8,18 @@
 #import <UIKit/UIKit.h>
 
 @interface MyMovesDetailCollectionViewCell : UICollectionViewCell
-@property (retain, nonatomic) IBOutlet UILabel *setNoLbl;
-@property (retain, nonatomic) IBOutlet UILabel *repsLbl;
-@property (retain, nonatomic) IBOutlet UILabel *weightLbl;
-@property (retain, nonatomic) IBOutlet UIButton *repsBtn;
-@property (retain, nonatomic) IBOutlet UIButton *weightBtn;
-@property (retain, nonatomic) IBOutlet UIImageView *deleteImgV;
-@property (retain, nonatomic) IBOutlet UITextField *repsTxtFld;
-@property (retain, nonatomic) IBOutlet UITextField *weightTxtFld;
-@property (retain, nonatomic) IBOutlet UIButton *deleteBtn;
-@property (retain, nonatomic) IBOutlet UIButton *headerRepsBtn;
-@property (retain, nonatomic) IBOutlet UIButton *headerWeightBtn;
-@property (retain, nonatomic) IBOutlet UIImageView *editRepsImgView;
-@property (retain, nonatomic) IBOutlet UIImageView *editWeightImgView;
+@property (nonatomic, strong) IBOutlet UILabel *setNoLbl;
+@property (nonatomic, strong) IBOutlet UILabel *repsLbl;
+@property (nonatomic, strong) IBOutlet UILabel *weightLbl;
+@property (nonatomic, strong) IBOutlet UIButton *repsBtn;
+@property (nonatomic, strong) IBOutlet UIButton *weightBtn;
+@property (nonatomic, strong) IBOutlet UIImageView *deleteImgV;
+@property (nonatomic, strong) IBOutlet UITextField *repsTxtFld;
+@property (nonatomic, strong) IBOutlet UITextField *weightTxtFld;
+@property (nonatomic, strong) IBOutlet UIButton *deleteBtn;
+@property (nonatomic, strong) IBOutlet UIButton *headerRepsBtn;
+@property (nonatomic, strong) IBOutlet UIButton *headerWeightBtn;
+@property (nonatomic, strong) IBOutlet UIImageView *editRepsImgView;
+@property (nonatomic, strong) IBOutlet UIImageView *editWeightImgView;
 
 @end

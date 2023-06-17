@@ -24,47 +24,47 @@ typedef NS_ENUM(NSInteger, MBCircularProgressBarAppearanceType) {
 /**
  * Set a partial angle for the progress bar	[0,100]
  */
-@property (nonatomic,assign) CGFloat  progressAngle;
+@property (nonatomic) CGFloat  progressAngle;
 
 /**
  * Progress bar rotation (Clockewise)	[0,100]
  */
-@property (nonatomic,assign) CGFloat  progressRotationAngle;
+@property (nonatomic) CGFloat  progressRotationAngle;
 
 /**
  * Progress bar appearance type 
  */
-@property (nonatomic,assign) MBCircularProgressBarAppearanceType progressAppearanceType;
+@property (nonatomic) MBCircularProgressBarAppearanceType progressAppearanceType;
 
 /**
  * The value of the progress bar
  */
-@property (nonatomic,assign) CGFloat  value;
+@property (nonatomic) CGFloat  value;
 
 /**
  * The maximum possible value, used to calculate the progress (value/maxValue)	[0,∞)
  */
-@property (nonatomic,assign) CGFloat  maxValue;
+@property (nonatomic) CGFloat  maxValue;
 
 /**
  * Padding from borders
  */
-@property (nonatomic,assign) CGFloat borderPadding;
+@property (nonatomic) CGFloat borderPadding;
 
 /**
  * Animation duration in seconds
  */
-@property (nonatomic,assign) NSTimeInterval  animationDuration;
+@property (nonatomic) NSTimeInterval  animationDuration;
 
 /**
  * The font size of the value text	[0,∞)
  */
-@property (nonatomic,assign) CGFloat  valueFontSize;
+@property (nonatomic) CGFloat  valueFontSize;
 
 /**
  * The name of the font of the unit string
  */
-@property (nonatomic,assign) CGFloat  unitFontSize;
+@property (nonatomic) CGFloat  unitFontSize;
 
 /**
  * The string that represents the units, usually %
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, MBCircularProgressBarAppearanceType) {
 /**
  * The width of the progress bar (user space units)	[0,∞)
  */
-@property (nonatomic,assign) CGFloat    progressLineWidth;
+@property (nonatomic) CGFloat    progressLineWidth;
 
 /**
  * The color of the progress bar
@@ -94,17 +94,17 @@ typedef NS_ENUM(NSInteger, MBCircularProgressBarAppearanceType) {
 /**
  * The shape of the progress bar cap	{kCGLineCapButt=0, kCGLineCapRound=1, kCGLineCapSquare=2}
  */
-@property (nonatomic,assign) CGLineCap  progressCapType;
+@property (nonatomic) CGLineCap  progressCapType;
 
 /**
  * The width of the background bar (user space units)	[0,∞)
  */
-@property (nonatomic,assign) CGFloat    emptyLineWidth;
+@property (nonatomic) CGFloat    emptyLineWidth;
 
 /**
  * The shape of the background bar cap	{kCGLineCapButt=0, kCGLineCapRound=1, kCGLineCapSquare=2}
  */
-@property (nonatomic,assign) CGLineCap  emptyCapType;
+@property (nonatomic) CGLineCap  emptyCapType;
 
 /**
  * The color of the background bar
@@ -118,12 +118,12 @@ typedef NS_ENUM(NSInteger, MBCircularProgressBarAppearanceType) {
 /*
  * Number of decimal places of the value [0,∞)
  */
-@property (nonatomic,assign)  NSInteger decimalPlaces;
+@property (nonatomic)  NSInteger decimalPlaces;
 
 /**
  * The value to be displayed in the center
  */
-@property (nonatomic,assign)  CGFloat   valueDecimalFontSize;
+@property (nonatomic)  CGFloat   valueDecimalFontSize;
 
 /**
  * The font size of the unit text	[0,∞)
@@ -138,23 +138,23 @@ typedef NS_ENUM(NSInteger, MBCircularProgressBarAppearanceType) {
 /**
  * Should show unit screen
  */
-@property (nonatomic,assign)  BOOL      showUnitString;
+@property (nonatomic)  BOOL      showUnitString;
 
 /**
  * The offset to apply to the unit / value text
  */
-@property (nonatomic,assign)  CGPoint   textOffset;
+@property (nonatomic)  CGPoint   textOffset;
 
 /**
  * Should show value string
  */
-@property (nonatomic,assign)  BOOL      showValueString;
+@property (nonatomic)  BOOL      showValueString;
 
 
 /**
  * Show label value as countdown
  * Default is NO
  */
-@property (nonatomic,assign)  BOOL      countdown;
+@property (nonatomic)  BOOL      countdown;
 
 @end

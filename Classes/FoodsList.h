@@ -16,8 +16,8 @@
 	NSString *dbPath;
 }
 
-@property (nonatomic, retain) NSMutableArray *foodsNameList;
-@property (nonatomic, retain) NSMutableArray *foodsIDList;
-@property (nonatomic, retain) AppDelegate *mainDelegate;
+@property (nonatomic, strong) NSMutableArray *foodsNameList;
+@property (nonatomic, strong) NSMutableArray *foodsIDList;
+@property (nonatomic, strong) AppDelegate *mainDelegate;
 
 @end

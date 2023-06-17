@@ -24,23 +24,19 @@
 	NSString *date_DB;
 	sqlite3 *database;
 	NSString *dbPath;
-    MBProgressHUD *HUD;
+    
     IBOutlet UILabel *lblUnit;
 }
 
-@property (retain, nonatomic) IBOutlet UIButton *btnrecordweight;
-@property (nonatomic, retain) AppDelegate *mainDelegate;
-@property (nonatomic, retain) UILabel *recordDate;
-@property (nonatomic, retain) NSDate *date_currentDate;
-@property (nonatomic, retain) NSString *date_Today;
-@property (nonatomic, retain) NSString *date_Display;
-@property (nonatomic, retain) NSString *date_DB;
+@property (nonatomic, strong) IBOutlet UIButton *btnrecordweight;
+@property (nonatomic, strong) AppDelegate *mainDelegate;
+@property (nonatomic, strong) UILabel *recordDate;
+@property (nonatomic, strong) NSDate *date_currentDate;
+@property (nonatomic, strong) NSString *date_Today;
+@property (nonatomic, strong) NSString *date_Display;
+@property (nonatomic, strong) NSString *date_DB;
 
 - (IBAction) recordWeight:(id) sender;
 - (IBAction) changeDate:(id) sender;
-
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 
 @end

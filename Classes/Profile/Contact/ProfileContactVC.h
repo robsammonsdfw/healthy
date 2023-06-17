@@ -6,11 +6,11 @@
 @interface ProfileContactVC : UIViewController<MFMailComposeViewControllerDelegate>
 - (IBAction)btnNextClicked:(id)sender;
 
-@property (retain, nonatomic) IBOutlet UITextField *txtUsername;
-@property (retain, nonatomic) IBOutlet UITextField *txtPassword;
-@property (retain, nonatomic) IBOutlet UITextField *txtFirstName;
-@property (retain, nonatomic) IBOutlet UITextField *txtLastName;
-@property (retain, nonatomic) IBOutlet UITextField *txtEmail;
-@property (retain, nonatomic) NSMutableDictionary *userInfoDict;
+@property (nonatomic, strong) IBOutlet UITextField *txtUsername;
+@property (nonatomic, strong) IBOutlet UITextField *txtPassword;
+@property (nonatomic, strong) IBOutlet UITextField *txtFirstName;
+@property (nonatomic, strong) IBOutlet UITextField *txtLastName;
+@property (nonatomic, strong) IBOutlet UITextField *txtEmail;
+@property (nonatomic, strong) NSMutableDictionary *userInfoDict;
 
 @end

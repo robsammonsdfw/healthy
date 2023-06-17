@@ -7,14 +7,11 @@
 //
 
 #import "UserLoginWebService.h"
-#import "JSON.h"
 #import "XMLReader.h"
-#import "CommonModule.h"
 
 @implementation UserLoginWebService
 
 @synthesize webData, soapResults, xmlParser;
-@synthesize wsAuthenticateUserDelegate;
 
 -(void)callWebservice:(NSString *)text
 {
@@ -33,9 +30,7 @@
     NSURL *url = [NSURL URLWithString:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=Authenticate"];
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
     NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
-    
-    DMLog(@"%@", soapMessage);
-    
+        
     [theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     [theRequest addValue: @"http://webservice.dmwebpro.com/Authenticate" forHTTPHeaderField:@"SOAPAction"];
     [theRequest addValue: msgLength forHTTPHeaderField:@"Content-Length"];
@@ -44,84 +39,62 @@
     
     NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     
-    if( theConnection )
-    {
-        webData = [[NSMutableData data] retain];
+    if (theConnection) {
+        webData = [NSMutableData data];
     }
-    else
-    {
-        DMLog(@"theConnection is NULL");
-    }
-    
 }
 
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     [webData setLength: 0];
 }
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     [webData appendData:data];
 }
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
+
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     DMLog(@"ERROR with Connection");
     
-    if ([wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFailed:)]) {
-        [wsAuthenticateUserDelegate getAuthenticateUserFailed:[error description]];
+    if ([self.wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFailed:)]) {
+        [self.wsAuthenticateUserDelegate getAuthenticateUserFailed:[error description]];
     }
-    
-    [connection release];
-    [webData release];
 }
 
--(void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
     
     NSError *error=nil;
-    NSDictionary *dic = [XMLReader dictionaryForXMLString:theXML error:&error];
+    NSDictionary *xmlDict = [XMLReader dictionaryForXMLString:theXML error:&error];
     
-    DMLog(@"%@",[[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"AuthenticateResponse"]objectForKey:@"AuthenticateResult"] objectForKey:@"text"]);
+    NSString *responseString = [[[[[xmlDict objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"] objectForKey:@"AuthenticateResponse"] objectForKey:@"AuthenticateResult"] objectForKey:@"text"];
+    DMLog(@"%@", responseString);
     
-    SBJSON *json = [SBJSON new];
-    NSMutableDictionary *jsonObject = [[json objectWithString:[[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"AuthenticateResponse"]objectForKey:@"AuthenticateResult"] objectForKey:@"text"] error:NULL] objectAtIndex:0];
+    NSDictionary *jsonObject = @{};
+    if (responseString.length) {
+        jsonObject = [NSJSONSerialization JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil][0];
+    }
     
-    NSString *strAlertMessage = [jsonObject objectForKey:@"Message"];
-    NSString *strEmail = [jsonObject objectForKey:@"Email1"];
-    NSString *strUsername = [jsonObject objectForKey:@"Username"];
-        
-    [[NSUserDefaults standardUserDefaults]setObject:strEmail forKey:@"LoginEmail"];
+    NSString *strAlertMessage = jsonObject[@"Message"];
+    NSString *strEmail = jsonObject[@"Email1"];
+    NSString *strUsername = jsonObject[@"Username"];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:strEmail forKey:@"LoginEmail"];
     [[NSUserDefaults standardUserDefaults] setObject:strUsername forKey:@"username_dietmastergo"];
-        
-    [[NSUserDefaults standardUserDefaults]synchronize];
-    //Service has been terminated. Contact your plan provider.
-    
+       
     //change BY HHT
     if ([strAlertMessage containsString:@"Service has been terminated."]) {
         AppDel.isSessionExp = YES;
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APP_NAME message:strAlertMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         
-        [[NSUserDefaults standardUserDefaults]setObject:@"SecondTime" forKey:@"FirstTime"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
+        [[NSUserDefaults standardUserDefaults] setObject:@"SecondTime" forKey:@"FirstTime"];
         alertView.tag = 1;
         [alertView show];
-    }
-    
-    [theXML release];
-    
-    if( xmlParser )
-    {
-        [xmlParser release];
     }
     
     xmlParser = [[NSXMLParser alloc] initWithData: webData];
     [xmlParser setDelegate: self];
     [xmlParser setShouldResolveExternalEntities: YES];
     [xmlParser parse];
-    
-    [connection release];
-    [webData release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -131,23 +104,19 @@
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName
-   attributes: (NSDictionary *)attributeDict
-{
-    if( [elementName isEqualToString:@"AuthenticateResult"])
-    {
-        if(!soapResults)
-        {
+   attributes: (NSDictionary *)attributeDict {
+    if([elementName isEqualToString:@"AuthenticateResult"]) {
+        if (!soapResults) {
             soapResults = [[NSMutableString alloc] init];
         }
         recordResults = TRUE;
     }
     
-    if( [elementName isEqualToString:@"faultstring"])
-    {
+    if ([elementName isEqualToString:@"faultstring"]) {
         DMLog(@"ERROR with Connection");
         
-        if ([wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFailed:)]) {
-            [wsAuthenticateUserDelegate getAuthenticateUserFailed:@"error"];
+        if ([self.wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFailed:)]) {
+            [self.wsAuthenticateUserDelegate getAuthenticateUserFailed:@"error"];
         }
     }
     
@@ -159,6 +128,7 @@
         [soapResults appendString: string];
     }
 }
+
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
     if([elementName isEqualToString:@"AuthenticateResult"])
@@ -166,27 +136,13 @@
         recordResults = FALSE;
         
         // Create a dictionary from the JSON string
-        NSMutableArray *responseArray = [soapResults JSONValue];
-        
-        if ([wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFinished:)]) {
-            [wsAuthenticateUserDelegate getAuthenticateUserFinished:responseArray];
+        NSMutableArray *responseArray = [NSJSONSerialization JSONObjectWithData:[soapResults dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+
+        if ([self.wsAuthenticateUserDelegate respondsToSelector:@selector(getAuthenticateUserFinished:)]) {
+            [self.wsAuthenticateUserDelegate getAuthenticateUserFinished:responseArray];
         }
-        [soapResults release];
         soapResults = nil;
     }
 }
 
-//- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-//    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-//    [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-//}
-
-- (void)dealloc 
-{
-    [xmlParser release];
-    [super dealloc];
-}
 @end

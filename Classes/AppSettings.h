@@ -39,11 +39,11 @@
     IBOutlet UILabel *lblStaticLoggedExe;
 }
 
-@property (retain, nonatomic) IBOutlet UIView *viewtoptobottom;
+@property (nonatomic, strong) IBOutlet UIView *viewtoptobottom;
 @property(retain) UserLoginWebService *userLoginWS;
-@property (retain, nonatomic) IBOutlet UIScrollView *myScrollBG;
-@property (retain, nonatomic) IBOutlet UIView *popUpView;
-@property (retain, nonatomic) IBOutlet UIView *showPopUpVw;
+@property (nonatomic, strong) IBOutlet UIScrollView *myScrollBG;
+@property (nonatomic, strong) IBOutlet UIView *popUpView;
+@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 
 
 @end

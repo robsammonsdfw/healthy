@@ -19,10 +19,10 @@
 }
 
 //HHT apple watch
-@property(nonatomic,retain) HKHealthStore *healthStore;
-@property(nonatomic, strong) NSMutableArray *arrData;
-@property(nonatomic, strong) NSSet *readDataTypes;
-@property(nonatomic, strong) StepData * sd;
+@property (nonatomic,retain) HKHealthStore *healthStore;
+@property (nonatomic, strong) NSMutableArray *arrData;
+@property (nonatomic, strong) NSSet *readDataTypes;
+@property (nonatomic, strong) StepData * sd;
 
 @end
 
@@ -44,16 +44,16 @@
 -(void)loadData {
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     NSString *appName = [appDefaults valueForKey:@"app_name_long"];
     [permissionBtn setTitle:[NSString stringWithFormat:@"Allow %@ to access Apple Heath data.", appName] forState:UIControlStateNormal];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     exerciseNameLabel.text = [dietmasterEngine.exerciseSelectedDict valueForKey:@"ActivityName"];
     
-    [self hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseIDTemp == 257 || exerciseIDTemp == 267 || exerciseIDTemp == 268 || exerciseIDTemp == 269 || exerciseIDTemp == 275){
@@ -101,7 +101,7 @@
     tfCalories.textColor = PrimaryFontColor;
 
     //HHT apple watch start
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274){
@@ -131,8 +131,6 @@
     else {
        [rightButton setEnabled:YES];
     }
-    
-    //[bi release];
     [self.navigationController.navigationBar setTranslucent:NO];
 }
 
@@ -140,7 +138,7 @@
     [super viewDidAppear:animated];
     
     //HHT apple watch start (to solve issue when user comes from background)
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274 || exerciseIDTemp == 275){
@@ -156,7 +154,7 @@
                                              selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
     
     exerciseLogID = 0;
-    [self showLoading];
+    [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
 }
 
@@ -167,7 +165,7 @@
 }
 
 -(void)deleteExerciseAPICALL {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         self.navigationItem.title = @"Add to Log";
@@ -194,7 +192,7 @@
         GetDataWebService *webService = [[GetDataWebService alloc] init];
         webService.getDataWSDelegate = self;
         [webService callWebservice:infoDict];
-        [webService release];
+        
     });
 }
 
@@ -207,7 +205,7 @@
     viewAllowHealthAccess.hidden = YES;
     
     [[UITextField appearance] setTintColor:[UIColor whiteColor]];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         self.navigationItem.title = @"Add to Log";
     }
@@ -236,7 +234,6 @@
         for (int i=0; i < 10001; i++) {
             NSString *hourString = [[NSString alloc] initWithFormat:@"%i", i];
             [pickerComponentOneArray addObject:hourString];
-            [hourString release];
         }
     }
     else if (exerciseID == 257 || exerciseID == 267 || exerciseID == 268 || exerciseID == 269 || exerciseID == 275 || exerciseID == 276) {
@@ -247,7 +244,6 @@
         for (int i=0; i < 2501; i++) {
             NSString *hourString = [[NSString alloc] initWithFormat:@"%i", i];
             [pickerComponentOneArray addObject:hourString];
-            [hourString release];
         }
     }
     
@@ -267,45 +263,13 @@
         for (int i=0; i < 24; i++) {
             NSString *hourString = [[NSString alloc] initWithFormat:@"%i", i];
             [pickerComponentOneArray addObject:hourString];
-            [hourString release];
         }
         for (int i=0; i < 60; i++) {
             NSString *minuteString = [[NSString alloc] initWithFormat:@"%i", i];
             [pickerComponentTwoArray addObject:minuteString];
-            [minuteString release];
         }
     }
     dateLabel.text = [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-//- (void)viewDidUnload {
-//    [lblCaloriesBurnedTitle release];
-//    lblCaloriesBurnedTitle = nil;
-//    [super viewDidUnload];
-//    
-//    pickerView = nil;
-//    pickerComponentOneArray = nil;
-//    pickerComponentTwoArray = nil;
-//    caloriesBurnedLabel = nil;
-//    exerciseNameLabel = nil;
-//}
-
-- (void)dealloc {
-    [lblCaloriesBurnedTitle release];
-    lblCaloriesBurnedTitle = nil;
-    [_imgbar release];
-    [permissionBtn release];
-    [permissionBtn release];
-    pickerView = nil;
-    pickerComponentOneArray = nil;
-    pickerComponentTwoArray = nil;
-    caloriesBurnedLabel = nil;
-    exerciseNameLabel = nil;
-    [super dealloc];
 }
 
 //HHT apple watch
@@ -379,7 +343,7 @@
             DMLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
         }
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         NSDate *endDate = dietmasterEngine.dateSelected;
         NSDate *startDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:0 toDate:endDate options:0];
@@ -443,7 +407,7 @@
         _imgbar.hidden = NO;
         lblCaloriesBurnedTitle.hidden = NO;
     
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
         
@@ -463,7 +427,7 @@
 #pragma mark ACTION SHEET METHODS
 -(void)showActionSheet:(id)sender {
     [self.view endEditing:YES];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     UIActionSheet *popupQuery;
     
@@ -478,7 +442,7 @@
     popupQuery.tag = 10;
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
-    [popupQuery release];
+    
 }
 
 -(void)confirmDeleteFromLog {
@@ -486,11 +450,11 @@
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     actionSheet.tag = 5;
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    [actionSheet release];
+    
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if (actionSheet.tag == 10) {
         if (buttonIndex == 0) {
@@ -547,7 +511,7 @@
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 259 || exerciseID == 267 || exerciseID == 268 || exerciseID == 269 || exerciseID == 275 || exerciseID == 276) {
@@ -562,7 +526,7 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 259 || exerciseID == 267 || exerciseID == 268 || exerciseID == 269 || exerciseID == 275 || exerciseID == 276) {
@@ -585,7 +549,7 @@
 }
 
 - (NSString *)pickerView:(UIPickerView *)thePickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 267 || exerciseID == 275) {
@@ -628,7 +592,7 @@
 
 #pragma mark SAVE EDIT DB METHODS
 -(void)saveToLog:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -662,27 +626,12 @@
     if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         [db beginTransaction];
         
-//        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-//        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-//        [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        [outdateformatter setTimeZone:systemTimeZone];
-//        NSString *logTimeString = [outdateformatter stringFromDate:dietmasterEngine.dateSelected];
-//        [outdateformatter release];
-//
-//        NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
-//        [keydateformatter setDateFormat:@"yyyyMMdd"];
-//        [keydateformatter setTimeZone:systemTimeZone];
-//        NSString *keyDate = [keydateformatter stringFromDate:dietmasterEngine.dateSelected];
-//        [keydateformatter release];
-        
-        
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
         [keydateformatter setDateFormat:@"yyyyMMdd"];
 
-        
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [keydateformatter setTimeZone:[NSTimeZone systemTimeZone]];
 
@@ -727,7 +676,7 @@
                                  logTimeString];
         
         [db executeUpdate:insertQuery];
-        [insertQuery release];
+        
         
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -746,12 +695,12 @@
         [db beginTransaction];
         
 //        NSDate* sourceDate = [NSDate date];
-//        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 //        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 //        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
 //        [dateFormatter setTimeZone:systemTimeZone];
 //        NSString *date_string = [dateFormatter stringFromDate:sourceDate];
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *date_string = [dateFormatter stringFromDate:[NSDate date]];
 
@@ -767,13 +716,11 @@
         
         [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
         [self.navigationController popViewControllerAnimated:YES];
-        
-        [updateQuery release];
     }
 }
 
 -(IBAction) delLog:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -793,8 +740,6 @@
     }
     [db commit];
     
-    [deleteQuery release];
-    
     [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -810,7 +755,7 @@
 }
 
 -(void)updateCalorieLabel {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 267 || exerciseID == 275) {
@@ -848,31 +793,4 @@
     }
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-    
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
-}
 @end

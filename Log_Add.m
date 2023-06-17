@@ -17,11 +17,11 @@
 }
 
 - (void)viewDidLoad {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     if (dietmasterEngine.isMealPlanItem) {
         self.title = @"Add To Plan";
@@ -47,7 +47,7 @@
 
     if(self.date_currentDate == NULL) {
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
         [dateFormat setTimeZone:systemTimeZone];
@@ -92,7 +92,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     if(indexPath.section == 0)
@@ -121,13 +121,10 @@
                                    target: nil action: nil];
     
     [self.navigationItem setBackBarButtonItem: backButton];
-    [backButton release];
     
     if (indexPath.section == 1) {
         ExercisesViewController *exercisesViewController = [[ExercisesViewController alloc] init];
         [self.navigationController pushViewController:exercisesViewController animated:YES];
-        [exercisesViewController release];
-        
     }
     else {
         NSUInteger row		= [indexPath row];
@@ -153,7 +150,7 @@
             int_mealID = [NSNumber numberWithInt:5];
         }
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         
         if (![dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
@@ -164,26 +161,7 @@
         fhController.date_currentDate	= date_currentDate;
         fhController.title = MealsName;
         [self.navigationController pushViewController:fhController animated:YES];
-        [fhController release];
     }
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    
-//    tblLogAdd = nil;
-//    int_mealID = nil;
-//    arryMeals = nil;
-//    arryExercise = nil;
-//}
-
-- (void)dealloc {
-    [super dealloc];
-    [int_mealID release];
-    tblLogAdd = nil;
-    int_mealID = nil;
-    arryMeals = nil;
-    arryExercise = nil;
 }
 
 @end

@@ -28,12 +28,12 @@
     NSMutableArray*arrVlaue;
 
 }
-@property (retain, nonatomic) IBOutlet UIImageView *imgtop;
-@property (retain, nonatomic) IBOutlet UIButton *emailbtuuon;
-@property (nonatomic, retain) IBOutlet UILabel *appNameLabel;
-@property (nonatomic, retain) IBOutlet UIButton *loginButton;
+@property (nonatomic, strong) IBOutlet UIImageView *imgtop;
+@property (nonatomic, strong) IBOutlet UIButton *emailbtuuon;
+@property (nonatomic, strong) IBOutlet UILabel *appNameLabel;
+@property (nonatomic, strong) IBOutlet UIButton *loginButton;
 @property (retain) UserLoginWebService *userLoginWS;
-@property (retain, nonatomic) IBOutlet UIButton *signUpBtn;
+@property (nonatomic, strong) IBOutlet UIButton *signUpBtn;
 
 -(IBAction)sendLoginInfo:(id)sender;
 -(IBAction)emailUs:(id)sender;
@@ -41,6 +41,6 @@
 -(IBAction)privacyPolicy:(id)sender;
 -(void)syncUserInfo:(id)sender;
 -(void)loginFromUrl:(NSString *)authcode;
-@property (retain, nonatomic) IBOutlet UIImageView *backgroundImgVw;
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundImgVw;
 
 @end

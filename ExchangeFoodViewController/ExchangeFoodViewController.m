@@ -7,19 +7,16 @@
 
 @interface ExchangeFoodViewController () <UISearchBarDelegate, MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems, GetDataWSDelegate>
 
-@property (nonatomic, retain) NSDictionary *deleteDict;
-@property (nonatomic, retain) NSDictionary *insertDict;
-@property (nonatomic, retain) NSMutableArray *foodResults;
+@property (nonatomic, strong) NSDictionary *deleteDict;
+@property (nonatomic, strong) NSDictionary *insertDict;
+@property (nonatomic, strong) NSMutableArray *foodResults;
 
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) UISearchBar *mySearchBar;
-@property (nonatomic, assign) BOOL bSearchIsOn;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UISearchBar *mySearchBar;
+@property (nonatomic) BOOL bSearchIsOn;
 
 -(void) searchBar:(id) object;
 -(void)loadSearchData:(NSString *)searchTerm;
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 -(void)confirmExchangeItem;
 -(void)exchangeFood;
 -(void)deleteFood:(NSDictionary *)dict;
@@ -145,7 +142,6 @@
     UIBarButtonItem* bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSearch target:self action:@selector(searchBar:)];
     bi.style = UIBarButtonItemStylePlain;
     self.navigationItem.rightBarButtonItem = bi;
-    [bi release];
     
     _mySearchBar = [[UISearchBar alloc] init];
     _mySearchBar.placeholder = @"Search";
@@ -160,9 +156,7 @@
     self.tableView.tableHeaderView = _mySearchBar;
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
-    HUD.delegate = self;
-    
+        
     if (!_foodResults) {
         _foodResults = [[NSMutableArray alloc] init];
     }
@@ -225,14 +219,13 @@
     [alert addButtonWithTitle:@"Yes"];
     [alert addButtonWithTitle:@"No"];
     [alert show];
-    [alert release];
 }
 
 -(void)exchangeFood_Original {
     isExchangeFood = YES;
-    [self showLoading];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator showActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSMutableDictionary *exchangeDict = dietmasterEngine.mealPlanItemToExchangeDict;
     
     double totalCaloriesToExchange = 0;
@@ -250,7 +243,6 @@
     
     NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:[dict valueForKey:@"FoodKey"], @"FoodID", measureID, @"MeasureID", nil];
     NSDictionary *newDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine getFoodDetails:tempFoodDict]];
-    [tempFoodDict release];
     
     double totalCalories = 0;
     double numberOfCalories = [[dict valueForKey:@"Calories"] doubleValue];
@@ -269,8 +261,6 @@
         _deleteDict = [[NSDictionary alloc] initWithDictionary:deleteDictTemp];
     }
     
-    [deleteDictTemp release];
-    
     NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
                                     dietmasterEngine.selectedMealID, @"MealCode",
@@ -285,18 +275,14 @@
     }
     
     [self insertFood:_insertDict];
-    [insertDictTemp release];
-    
-    [newDict release];
-    [dict release];
 }
 
 -(void)exchangeFood_MyNew {
     
     isExchangeFood = YES;
-    [self showLoading];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator showActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSMutableDictionary *exchangeDict = dietmasterEngine.mealPlanItemToExchangeDict;
     
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexToExchange]];
@@ -313,7 +299,6 @@
     if (!_deleteDict) {
         _deleteDict = [[NSDictionary alloc] initWithDictionary:deleteDictTemp];
     }
-    [deleteDictTemp release];
     
     NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
@@ -329,15 +314,13 @@
     }
     
     [self insertFood:_insertDict];
-    [insertDictTemp release];
-    [dict release];
 }
 
 -(void)exchangeFood {
     isExchangeFood = YES;
-    [self showLoading];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator showActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSMutableDictionary *exchangeDict = dietmasterEngine.mealPlanItemToExchangeDict;
     
     double numberOfExchangedCalories = [[exchangeDict valueForKey:@"Calories"] doubleValue];
@@ -395,8 +378,6 @@
         _deleteDict = [[NSDictionary alloc] initWithDictionary:deleteDictTemp];
     }
     
-    [deleteDictTemp release];
-    
     if (isnan(totalServingAmount))
     {
         NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -412,7 +393,6 @@
         }
         
         [self insertFood:_insertDict];
-        [insertDictTemp release];
     }
     else
     {
@@ -429,13 +409,10 @@
         }
         
         [self insertFood:_insertDict];
-        [insertDictTemp release];
     }
-    
-    [dict release];
 }
 
--(void)deleteFood:(NSDictionary *)dict {
+- (void)deleteFood:(NSDictionary *)dict {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"DeleteUserPlannedMealItems", @"RequestType",
@@ -447,12 +424,9 @@
     MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
     soapWebService.wsDeleteUserPlannedMealItems = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
-    
 }
--(void)insertFood:(NSDictionary *)dict {
+
+- (void)insertFood:(NSDictionary *)dict {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -466,9 +440,6 @@
     MealPlanWebService *soapWebService2 = [[MealPlanWebService alloc] init];
     soapWebService2.wsInsertUserPlannedMealItems = self;
     [soapWebService2 callWebservice:wsInfoDict];
-    [soapWebService2 release];
-    
-    [wsInfoDict release];
 }
 
 #pragma mark ALERT VIEW DELEGATE
@@ -509,14 +480,10 @@
                                      context:nil];
 
     CGSize labelSize = textRect.size;
-
-    
-    [dict release];
     
     if (labelSize.height < 46) {
         return 48;
-    }
-    else {
+    } else {
         return labelSize.height + 6;
     }
 }
@@ -524,8 +491,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([_foodResults count] == 0) {
         return 1;
-    }
-    else {
+    } else {
         return [_foodResults count];
     }
 }
@@ -535,12 +501,12 @@
     
     UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     if ([_foodResults count] == 0) {
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         [cell textLabel].adjustsFontSizeToFitWidth = YES;
@@ -555,7 +521,7 @@
     
     if ([_foodResults count] > 0) {
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         if (_bSearchIsOn) {
             cell.userInteractionEnabled = YES;
@@ -567,9 +533,7 @@
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexPath.row]];
         cell.textLabel.text			= [dict valueForKey:@"Name"];
         cell.textLabel.textColor = [UIColor blackColor];
-        
-        [dict release];
-        
+                
         cell.textLabel.font = [UIFont systemFontOfSize:14.0];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -590,7 +554,7 @@
 }
 
 - (void)checkFoodAvailability:(NSString *)strFoodKey {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     [db open];
     NSString *query = @"SELECT FoodKey FROM Food";
@@ -602,58 +566,26 @@
     
     [rs close];
     if (![arrFoodKeys containsObject:strFoodKey]) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         [dietmasterEngine retrieveMissingFood:[strFoodKey intValue]];
     }
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    _foodResults = nil;
-//    _tableView = nil;
-//    _mySearchBar = nil;
-//    
-//    _deleteDict = nil;
-//    _insertDict = nil;
-//    
-//    _foodID = nil;
-//    _mealTypeID = nil;
-//}
-
-- (void)dealloc {
-    [super dealloc];
-    
-    [_foodResults release];
-    [_tableView release];
-    _mySearchBar = [[UISearchBar alloc] init];
-    [_mySearchBar release];
-    _foodResults = nil;
-    _tableView = nil;
-    _mySearchBar = nil;
-    
-    _deleteDict = nil;
-    _insertDict = nil;
-    
-    _foodID = nil;
-    _mealTypeID = nil;
-
 }
 
 #pragma mark MEAL PLAN ITEMS DELEGATE - This Delegate method is for Delete only.
 - (void)deleteUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
     
-    [self hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     _deleteDict = nil;
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.didInsertNewFood = YES;
     [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
 }
 
 - (void)deleteUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     _deleteDict = nil;
 }
 
@@ -661,12 +593,12 @@
     _insertDict = nil;
     
     if ([[[responseArray objectAtIndex:0] valueForKey:@"Status"] isEqualToString:@"Error"]) {
-        [self hideLoading];
-        
+        [DMActivityIndicator hideActivityIndicator];
+
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert setTag:200];
         [alert show];
-        [alert release];
+        
     }
     else {
         [self deleteFood:_deleteDict];
@@ -674,50 +606,22 @@
 }
 
 - (void)insertUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     _insertDict = nil;
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:200];
     [alert show];
-    [alert release];
-}
-
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
     
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
 }
 
 #pragma mark Webservice
 - (void)loadData {
     
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate showLoading];
-    
+    [DMActivityIndicator showActivityIndicator];
+
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetExchangeItemsForFood", @"RequestType",
@@ -731,22 +635,19 @@
     GetDataWebService *webService = [[GetDataWebService alloc] init];
     webService.getDataWSDelegate = self;
     [webService callWebservice:infoDict];
-    [webService release];
+    
 }
 
 - (void)getDataFailed:(NSString *)failedMessage {
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please check your internet connection and try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
-    [alert release];
 }
 
 - (void)getDataFinished:(NSDictionary *)responseDict {
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     [_foodResults removeAllObjects];
     [_foodResults addObjectsFromArray:responseDict[@"Foods"]];
     [self.tableView reloadData];

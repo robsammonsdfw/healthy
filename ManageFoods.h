@@ -73,7 +73,7 @@
     IBOutlet UIButton *selectMeasureButton;
 	IBOutlet UIToolbar *keyboardToolBar;
     IBOutlet UIBarButtonItem *closeDoneButton;
-    MBProgressHUD *HUD;
+    
     
     NSMutableDictionary *selectedFoodDict;
     
@@ -90,8 +90,8 @@
     NSDictionary *upcDict;
 }
 
-@property (nonatomic, retain) AppDelegate *mainDelegate;
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) AppDelegate *mainDelegate;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic) int intFoodID;
 @property (nonatomic,retain) NSNumber *intCategoryID;
 @property (nonatomic,retain) NSString *strCategoryName;
@@ -122,10 +122,6 @@
 -(IBAction)nextTextField:(id)sender;
 -(IBAction)previousTextField:(id)sender;
 -(IBAction)dismissKeyboard:(id)sender;
-
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 
 -(IBAction)loadBarcodeScanner:(id)sender;
 -(void)barcodeWasScanned:(NSNotification *)notification;

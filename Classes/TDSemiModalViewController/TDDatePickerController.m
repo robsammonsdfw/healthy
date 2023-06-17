@@ -15,7 +15,7 @@
     [super viewDidLoad];
 
     NSDate* sourceDate = [NSDate date];
-    NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
 	[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     [dateFormat setTimeZone:systemTimeZone];
@@ -74,22 +74,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//
-//	self.datePicker = nil;
-//	self.delegate = nil;
-//
-//}
-
-- (void)dealloc {
-	self.datePicker = nil;
-	self.delegate = nil;
-
-    [super dealloc];
-}
-
 
 @end
 

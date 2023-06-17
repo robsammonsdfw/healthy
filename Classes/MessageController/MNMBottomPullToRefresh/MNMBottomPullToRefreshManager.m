@@ -113,12 +113,6 @@ CGFloat const kAnimationDuration = 0.2f;
     [table_ addSubview:pullToRefreshView_];
 }
 
-- (void)dealloc
-{
-  [pullToRefreshView_ removeFromSuperview];
-  pullToRefreshView_ = nil;
-}
-
 /*
  * Sets the pull-to-refresh view visible or not. Visible by default
  */

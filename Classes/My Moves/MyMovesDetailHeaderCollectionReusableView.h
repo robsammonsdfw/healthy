@@ -8,9 +8,9 @@
 #import <UIKit/UIKit.h>
 
 @interface MyMovesDetailHeaderCollectionReusableView : UICollectionReusableView
-@property (retain, nonatomic) IBOutlet UIButton *repsHeadBtn;
-@property (retain, nonatomic) IBOutlet UIButton *weightHeadBtn;
-@property (retain, nonatomic) IBOutlet UILabel *repsLbl;
-@property (retain, nonatomic) IBOutlet UILabel *weightLbl;
+@property (nonatomic, strong) IBOutlet UIButton *repsHeadBtn;
+@property (nonatomic, strong) IBOutlet UIButton *weightHeadBtn;
+@property (nonatomic, strong) IBOutlet UILabel *repsLbl;
+@property (nonatomic, strong) IBOutlet UILabel *weightLbl;
 
 @end

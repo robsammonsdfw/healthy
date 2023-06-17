@@ -11,30 +11,27 @@
 @interface MyMovesDetailsViewController : UIViewController
 {
 }
-@property (retain, nonatomic) IBOutlet UIView *moveNameView;
-@property (retain, nonatomic) IBOutlet UITextView *exerciseNotesTxtView;
-@property (retain, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, assign) NSDictionary * moveDetailDict;
-@property (nonatomic, assign) NSDictionary * moveListDict;
-@property (nonatomic, assign) NSMutableArray * moveSetListDict;
-@property (retain, nonatomic) IBOutlet UILabel *exerciseNotesLbl;
-@property (retain, nonatomic) IBOutlet UILabel *exerciseNameLbl;
-@property (nonatomic, assign) int workoutMethodID;
-@property (nonatomic, assign) int WorkoutMethodValueID;
-@property (strong, retain) NSDate * currentDate;
-@property (retain, nonatomic) IBOutlet UIImageView *exchangeImgView;
-@property(nonatomic,assign) id<loadDataToMovesTbl> passDataDel;
-@property (retain, nonatomic) IBOutlet UIButton *exchangeBtnOutlet;
-@property (nonatomic, assign) NSString *parentUniqueID;
-@property (nonatomic, assign) NSString *deleteSetUniqueID;
-@property (nonatomic, assign) NSMutableArray *addMovesArray;
-@property (retain, nonatomic) IBOutlet UILabel *noVideoMsgLbl;
-@property (retain, nonatomic) IBOutlet UIButton *playVideoBtn;
-@property (retain, nonatomic) IBOutlet UIImageView *playImg;
-@property (retain, nonatomic) IBOutlet UIView *thumbNailView;
-
-
-//@property (strong, nonatomic) NSMutableArray *moveSetListArr;
+@property (nonatomic, strong) IBOutlet UIView *moveNameView;
+@property (nonatomic, strong) IBOutlet UITextView *exerciseNotesTxtView;
+@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
+@property (nonatomic) NSDictionary * moveDetailDict;
+@property (nonatomic) NSDictionary * moveListDict;
+@property (nonatomic) NSMutableArray * moveSetListDict;
+@property (nonatomic, strong) IBOutlet UILabel *exerciseNotesLbl;
+@property (nonatomic, strong) IBOutlet UILabel *exerciseNameLbl;
+@property (nonatomic) int workoutMethodID;
+@property (nonatomic) int WorkoutMethodValueID;
+@property (nonatomic, strong) NSDate * currentDate;
+@property (nonatomic, strong) IBOutlet UIImageView *exchangeImgView;
+@property (nonatomic, weak) id<loadDataToMovesTbl> passDataDel;
+@property (nonatomic, strong) IBOutlet UIButton *exchangeBtnOutlet;
+@property (nonatomic) NSString *parentUniqueID;
+@property (nonatomic) NSString *deleteSetUniqueID;
+@property (nonatomic) NSMutableArray *addMovesArray;
+@property (nonatomic, strong) IBOutlet UILabel *noVideoMsgLbl;
+@property (nonatomic, strong) IBOutlet UIButton *playVideoBtn;
+@property (nonatomic, strong) IBOutlet UIImageView *playImg;
+@property (nonatomic, strong) IBOutlet UIView *thumbNailView;
 
 @end
 

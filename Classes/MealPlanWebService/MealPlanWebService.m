@@ -7,12 +7,9 @@
 //
 
 #import "MealPlanWebService.h"
-#import "JSON.h"
 #import "DietmasterEngine.h"
 
 @implementation MealPlanWebService
-
-@synthesize webData, soapResults, xmlParser;
 
 @synthesize wsGetUserPlannedMealNames;
 @synthesize wsGetGroceryList;
@@ -25,7 +22,7 @@
 
 @synthesize timeOutTimer;
 
--(void)callWebservice:(NSDictionary *)requestDict {
+- (void)callWebservice:(NSDictionary *)requestDict {
     DMLog(@"SOAP CALL ----BEGIN---- MealPlanWebService");
     [timeOutTimer invalidate];
     timeOutTimer = nil;
@@ -51,8 +48,8 @@
     }
     
     if ([requestType isEqualToString:@"GetGroceryList"]) {
-        NSString *jsonString = [[requestDict valueForKey:@"GroceryItems"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"GroceryItems"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -72,8 +69,8 @@
     }
     
     if ([requestType isEqualToString:@"DeleteUserPlannedMealItems"]) {
-        NSString *jsonString = [[requestDict valueForKey:@"MealItems"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -91,7 +88,7 @@
     }
     if ([requestType isEqualToString:@"InsertUserPlannedMealItems"]) {
         
-        NSString *jsonString = [[requestDict valueForKey:@"MealItems"] JSONRepresentation];
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
 
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -111,8 +108,8 @@
     if ([requestType isEqualToString:@"InsertUserPlannedMeals"]) {
         
          	
-        NSString *jsonString = [[requestDict valueForKey:@"MealItems"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -130,9 +127,8 @@
     }
     if ([requestType isEqualToString:@"UpdateUserPlannedMealItems"]) {
         
-         	
-        NSString *jsonString = [[requestDict valueForKey:@"MealItems"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -150,9 +146,8 @@
     
     if ([requestType isEqualToString:@"UpdateUserPlannedMealNames"]) {
         
-        
-        NSString *jsonString = [[requestDict valueForKey:@"MealItems"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -193,7 +188,7 @@
     
 	if( theConnection )
 	{
-		webData = [[NSMutableData data] retain];
+		self.webData = [NSMutableData data];
 	}
 	else
 	{
@@ -203,11 +198,11 @@
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[webData setLength: 0];
+	[self.webData setLength: 0];
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	[webData appendData:data];
+	[self.webData appendData:data];
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -236,32 +231,18 @@
 	if ([wsUpdateUserPlannedMealNames respondsToSelector:@selector(updateUserPlannedMealNamesFailed:)]) {
         [wsUpdateUserPlannedMealNames updateUserPlannedMealNamesFailed:[error localizedDescription]];
     }
-    
-	[connection release];
-	[webData release];
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection {
     [timeOutTimer invalidate];
     timeOutTimer = nil;
 
-	NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-    
-    
-	[theXML release];
+	NSString *theXML = [[NSString alloc] initWithBytes: [self.webData mutableBytes] length:[self.webData length] encoding:NSUTF8StringEncoding];
 	
-	if( xmlParser )
-	{
-		[xmlParser release];
-	}
-	
-	xmlParser = [[NSXMLParser alloc] initWithData: webData];
-	[xmlParser setDelegate: self];
-	[xmlParser setShouldResolveExternalEntities: YES];
-	[xmlParser parse];
-	
-	[connection release];
-	[webData release];
+	self.xmlParser = [[NSXMLParser alloc] initWithData: self.webData];
+	[self.xmlParser setDelegate: self];
+	[self.xmlParser setShouldResolveExternalEntities: YES];
+	[self.xmlParser parse];
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName attributes: (NSDictionary *)attributeDict {
@@ -269,8 +250,8 @@
        [elementName isEqualToString:@"InsertUserPlannedMealItemsResult"] || [elementName isEqualToString:@"InsertUserPlannedMealsResult"] ||
        [elementName isEqualToString:@"UpdateUserPlannedMealItemsResult"] || [elementName isEqualToString:@"UpdateUserPlannedMealNamesResult"] ||
        [elementName isEqualToString:@"GetGroceryListResult"]) {
-		if(!soapResults) {
-			soapResults = [[NSMutableString alloc] init];
+		if(!self.soapResults) {
+			self.soapResults = [[NSMutableString alloc] init];
 		}
 		recordResults = TRUE;
 	}
@@ -306,21 +287,19 @@
 {
 	if( recordResults )
 	{
-		[soapResults appendString: string];
+		[self.soapResults appendString: string];
 	}
 }
 
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     recordResults = FALSE;
-    if ([soapResults isEqualToString:@"\"Empty\""]) {
-        [soapResults release];
-        soapResults = nil;
-        soapResults = [[NSMutableString alloc] init];
-		[soapResults appendFormat:@"%@",@"[]"];
+    if ([self.soapResults isEqualToString:@"\"Empty\""]) {
+        self.soapResults = nil;
+        self.soapResults = [[NSMutableString alloc] init];
+		[self.soapResults appendFormat:@"%@",@"[]"];
     }
     
-    
-    NSMutableArray *responseArray = [soapResults JSONValue];
+    NSMutableArray *responseArray = [NSJSONSerialization JSONObjectWithData:[self.soapResults dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];;
     NSString *strCheck;
     if([responseArray count]!= 0) {
         NSDictionary *dictCheck = [responseArray objectAtIndex:0];
@@ -335,7 +314,7 @@
             alertView.tag = 1;
             [alertView show];
         } else {
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             
             NSMutableArray *tempArray = [[NSMutableArray alloc] init];
             
@@ -360,14 +339,11 @@
                                                       [NSNumber numberWithInt:[[mealItems valueForKey:@"MeasureID"] intValue]], @"MeasureID", nil];
                             
                             [dietmasterEngine getMissingFoods:tempDict];
-                            [tempDict release];
                         }
                     }
                     [newMealItemsArray addObject:mealItemsTemp];
-                    [mealItemsTemp release];
                 }
                 [newMealPlanDict setObject:newMealItemsArray forKey:@"MealItems"];
-                [newMealItemsArray release];
                 
                 if ([[mealDict valueForKey:@"MealNotes"] count] != 0) {
                     NSMutableArray *newMealNotesArray = [[NSMutableArray alloc] init];
@@ -375,7 +351,6 @@
                         [newMealNotesArray addObject:mealNotes];
                     }
                     [newMealPlanDict setObject:newMealNotesArray forKey:@"MealNotes"];
-                    [newMealNotesArray release];
                 }
                 [tempArray addObject:newMealPlanDict];
                 
@@ -385,7 +360,6 @@
             if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFinished:)]) {
                 [wsGetUserPlannedMealNames getUserPlannedMealNamesFinished:tempArray];
             }
-            [tempArray release];
         }
     }
     if([elementName isEqualToString:@"GetGroceryListResult"]) {
@@ -432,8 +406,7 @@
         
     }
     
-    [soapResults release];
-    soapResults = nil;
+    self.soapResults = nil;
 }
 
 
@@ -443,27 +416,17 @@
     }
 }
 
-//- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-//	return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-//	[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-//}
-
 #pragma mark TIMEOUT METHOD
 -(void)timeOutWebservice:(NSTimer *)theTimer {
     
     NSURLConnection *connection = [[theTimer userInfo] objectForKey:@"connection"];
     [connection cancel];
-    [connection release];
     connection = nil;
     
     [timeOutTimer invalidate];
     timeOutTimer = nil;
     
-    [webData release];
-    webData = nil;
+    self.webData = nil;
     
     if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]) {
         [wsGetUserPlannedMealNames getUserPlannedMealNamesFailed:@"error"];
@@ -489,11 +452,4 @@
     }
 }
 
-- (void)dealloc {
-	[xmlParser release];
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    [timeOutTimer release];
-	[super dealloc];
-}
 @end

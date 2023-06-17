@@ -18,39 +18,37 @@ NS_ASSUME_NONNULL_BEGIN
     IBOutlet UITableView *tblView;
     PickerViewController *picker;
     CGFloat animatedDistance;
-    MBProgressHUD *HUD;
-
     IBOutlet UISearchBar *searchBar;
 }
-@property(nonatomic,assign) id<loadDataToMovesTbl> passDataDel;
+@property (nonatomic, weak) id<loadDataToMovesTbl> passDataDel;
 
-@property (strong, nonatomic) NSMutableArray *originalDataListArr;
-@property (strong, nonatomic) NSMutableArray *workOutListArr;
-@property (strong, nonatomic) NSMutableArray *categoryFilteredListArr;
-@property (strong, nonatomic) NSMutableArray *filteredTableArr;
+@property (nonatomic, strong) NSMutableArray *originalDataListArr;
+@property (nonatomic, strong) NSMutableArray *workOutListArr;
+@property (nonatomic, strong) NSMutableArray *categoryFilteredListArr;
+@property (nonatomic, strong) NSMutableArray *filteredTableArr;
 
-@property (strong, nonatomic) NSMutableArray *tagsArr;
+@property (nonatomic, strong) NSMutableArray *tagsArr;
 
-@property (strong, nonatomic) NSMutableArray *tableData;
+@property (nonatomic, strong) NSMutableArray *tableData;
 
-@property (strong, nonatomic) NSMutableArray *BodyPartDataArr;
+@property (nonatomic, strong) NSMutableArray *BodyPartDataArr;
 
-@property (retain, nonatomic) IBOutlet UITextField *searchtxtfld;
-@property (retain, nonatomic) IBOutlet UITextField *bodypartTxtFld;
-@property (retain, nonatomic) IBOutlet UITextField *filter1;
-@property (retain, nonatomic) IBOutlet UITextField *filter2;
-@property (retain, nonatomic) IBOutlet UIButton *filterOneBtn;
-@property (retain, nonatomic) IBOutlet UIButton *bodyPartBtn;
+@property (nonatomic, strong) IBOutlet UITextField *searchtxtfld;
+@property (nonatomic, strong) IBOutlet UITextField *bodypartTxtFld;
+@property (nonatomic, strong) IBOutlet UITextField *filter1;
+@property (nonatomic, strong) IBOutlet UITextField *filter2;
+@property (nonatomic, strong) IBOutlet UIButton *filterOneBtn;
+@property (nonatomic, strong) IBOutlet UIButton *bodyPartBtn;
 
-@property (nonatomic, assign) BOOL isExchange;
-@property (strong, retain) NSDate * selectedDate;
-@property(nonatomic,assign) NSInteger userId;
-@property(nonatomic,assign) NSInteger categoryID;
-@property(nonatomic,assign) NSInteger tagsId;
-@property(nonatomic,assign) NSInteger newCount;
+@property (nonatomic) BOOL isExchange;
+@property (nonatomic, strong) NSDate * selectedDate;
+@property (nonatomic) NSInteger userId;
+@property (nonatomic) NSInteger categoryID;
+@property (nonatomic) NSInteger tagsId;
+@property (nonatomic) NSInteger newCount;
 
-@property (strong, retain) NSDictionary * moveDetailDictToDelete;
-@property(nonatomic,assign) id<exchangeDelegate> exchangeDel;
+@property (nonatomic, strong) NSDictionary * moveDetailDictToDelete;
+@property (nonatomic, weak) id<exchangeDelegate> exchangeDel;
 @end
 
 @protocol loadDataToMovesTbl <NSObject>

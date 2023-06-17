@@ -32,13 +32,13 @@ static inline UIColor *GetRandomUIColor()
     MyMovesWebServices *soapWebService;
 }
 
-@property (strong, nonatomic) NSMutableArray *values;
-@property (strong, nonatomic) NSMutableArray *cpf_Values;
-@property (strong, nonatomic) NSMutableArray *labels;
-@property (strong, nonatomic) NSMutableArray *colors;
-@property (strong, nonatomic) NSMutableArray *sugarArray;
-@property (strong, nonatomic) NSMutableArray *individualSugarValues;
-@property (strong, nonatomic) NSMutableAttributedString *cpfValueStr;
+@property (nonatomic, strong) NSMutableArray *values;
+@property (nonatomic, strong) NSMutableArray *cpf_Values;
+@property (nonatomic, strong) NSMutableArray *labels;
+@property (nonatomic, strong) NSMutableArray *colors;
+@property (nonatomic, strong) NSMutableArray *sugarArray;
+@property (nonatomic, strong) NSMutableArray *individualSugarValues;
+@property (nonatomic, strong) NSMutableAttributedString *cpfValueStr;
 @property (nonatomic) BOOL inserting;
 
 
@@ -384,19 +384,17 @@ static inline UIColor *GetRandomUIColor()
 
 - (IBAction)sendMessageBtn:(id)sender {
     MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
-//    self.hidesBottomBarWhenPushed = false;
     [self.navigationController pushViewController:vc animated:YES];
-    [vc release];
 }
 - (IBAction)sendMailBtn:(id)sender {
     if ([MFMailComposeViewController canSendMail]) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
         NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
         
-        MFMailComposeViewController *mailComposer = [[[MFMailComposeViewController alloc] init] autorelease];
+        MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
         [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
-        NSString *emailTo = [[[NSString alloc] initWithFormat:@""] autorelease];
+        NSString *emailTo = [[NSString alloc] initWithFormat:@""];
         [mailComposer setMessageBody:emailTo isHTML:NO];
         NSString *emailTo1 = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
         NSArray *toArray = [NSArray arrayWithObjects:emailTo1, nil];
@@ -622,31 +620,6 @@ static inline UIColor *GetRandomUIColor()
         [self.navigationController pushViewController:appVC animated:YES];
 }
 
-//- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//
-//    //HHT change 2018 to solve barbutton issue
-//    UIBarButtonItem *mailButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Mail" style:UIBarButtonItemStylePlain target:self action:@selector(mailAction:)];
-//    self.navigationItem.leftBarButtonItem = mailButtonItem;
-//    [self.view addSubview:numberBadge];
-//    mailButtonItem.tintColor=[UIColor whiteColor];
-//    [mailButtonItem release];
-//    //[numberBadge release];
-//
-//    [fat_circular setValue:0];
-//    [protein_Circular setValue:0];
-//    [carbs_circular setValue:0];
-//    [self.remainingCalories_Circular_Progress setValue:0];
-//    [progressbar setProgress:0.0f animated:NO];
-//
-//    self.navigationController.navigationBar.layer.zPosition = -1;
-//    [self reloadMessages];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBadge) name:UpdatingMessageNotification object:nil];
-//
-//    [self.navigationController setNavigationBarHidden:NO];
-//}
-
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
@@ -697,13 +670,13 @@ static inline UIColor *GetRandomUIColor()
 }
 
 - (void)updateBadge {
-    numberBadge.value = [[DietmasterEngine instance] countOfUnreadingMessages];
+    numberBadge.value = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
     [UIApplication sharedApplication].applicationIconBadgeNumber = numberBadge.value;
 }
 
 - (void)reloadMessages {
-    numberBadge.value = [[DietmasterEngine instance] countOfUnreadingMessages];
-    [[DietmasterEngine instance] synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
+    numberBadge.value = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
+    [[DietmasterEngine sharedInstance] synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
         if (success) {
             [self updateBadge];
         }
@@ -718,7 +691,7 @@ static inline UIColor *GetRandomUIColor()
 }
 
 -(void)getBMR{
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSInteger bmrValue = [dietmasterEngine getBMR];
     num_BMR = bmrValue;
@@ -730,8 +703,6 @@ static inline UIColor *GetRandomUIColor()
 -(IBAction) showGroceryList:(id) sender {
     FoodsList *flController = [[FoodsList alloc] initWithNibName:@"FoodsList" bundle:nil];
     [self.navigationController pushViewController:flController animated:YES];
-    [flController release];
-    flController=nil;
 }
 
 -(IBAction)showManageFoods:(id) sender {
@@ -740,126 +711,6 @@ static inline UIColor *GetRandomUIColor()
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-
-- (void)dealloc {
-    [_imghomescreenbg release];
-    [_imgtop1 release];
-    [_imgtop2 release];
-    [_imgtop3 release];
-    [_imgtop4 release];
-    [_imglinetop release];
-    [_remainingCalories_Circular_Progress release];
-    [fat_circular release];
-    [protein_Circular release];
-    [carbs_circular release];
-    [YLProgressBar release];
-    [lblGoal release];
-    [lblfoodCalories release];
-    [lblExerciseCalories release];
-    [lblNetCalories release];
-    [lblFatPercent release];
-    [lblProtinPercent release];
-    [lblCarbsPercent release];
-    [lblStart_lbs release];
-    [lblGoal_lbs release];
-    [lblWeightStatus release];
-    [lblWeight release];
-    [lblBodyFat release];
-    [lblCurrentBMI release];
-    [lblActualFat release];
-    [lblActualProtein release];
-    [lblActualCarbs release];
-    [lblCaloriesRemainingValue release];
-    [vwPadding release];
-    [scrollViewMain release];
-    [_circleHomeView release];
-    [_entireView release];
-    [_hideShowStack release];
-    [_hideShowConstant release];
-    [_firstExpandVw release];
-    [_expandViewHeightConst release];
-    [_rightExpBtnAction release];
-    [_seperateLineLbl release];
-    [_headerStackVw release];
-    [_leftStackVw release];
-    [_rightStackVw release];
-    [_midLineVw release];
-    [_secondExpandVw release];
-    [_secondExpandViewHeightConst release];
-    [_secondHideShowConstant release];
-    [_secondHideShowStackVw release];
-    [_consumedPlusBtn release];
-    [_plannedArroewBtn release];
-    [_weightPlusBtn release];
-    [_burnedPlusBtn release];
-    [_calPullDwnBtn release];
-    [_macrosPullDwnBtn release];
-    [lblConsumed release];
-    [lblBurned release];
-    [lblSugar release];
-    [lblStepsCount release];
-    [_remaining_Pie release];
-    [_cpf_Pie release];
-    [_consumedView release];
-    [_sugarView release];
-    [_plannedView release];
-    [_weightView release];
-    [_stepsView release];
-    [_burnedView release];
-    [_workoutView release];
-    [_scheduledView release];
-    [_seperateLineVw release];
-    [_cpf_PercentageLbl release];
-    [_c_PercentageLbl release];
-    [_p_PercentageLbl release];
-    [_f_PercentageLbl release];
-    [_headerBlueVw release];
-    [_cornerRadiImgVw release];
-    [_suagrGraphImageVw release];
-    [_sendMsgBtnOutlet release];
-    [_nameLbl release];
-    [_popUpBtn release];
-    [_showPopUpVw release];
-    [_thirdExpVwHeightConst release];
-    [_weightPullDwnBtn release];
-    [_weightHideShowStack release];
-    [_weightHideShowHeightConst release];
-    [_weightSeperatorLbl release];
-    [lblToGo_lbs release];
-    [_thirtyConst release];
-    [_eightyConst release];
-    [_scrollView release];
-    [_homeImage release];
-    [_consumedImage release];
-    [_plannedImage release];
-    [_weightImage release];
-    [_stepsImage release];
-    [_burnedImage release];
-    [_workoutImage release];
-    [_scheduledImage release];
-    [_cpfLbl release];
-    [_gotoWorkout release];
-    [_gotoScheduled release];
-    [lblCurrent_BMI release];
-    [lblBody_Fat release];
-    [super dealloc];
-    
-    [lbl_CaloriesLogged release];
-    [lbl_CaloriesRecommended release];
-    [lbl_GoalWeight release];
-    [lbl_CurrentWeight release];
-    [lbl_CalorieDifference release];
-    
-    [goalCalorieLabel release];
-    [caloriesLoggedLabel release];
-    [exerciseCaloriesLoggedLabel release];
-    [netCalorieLabel release];
-    
-    [totalFatLabel release];
-    [totalCarbsLabel release];
-    [totalProteinLabel release];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - WorkOutList
@@ -881,7 +732,6 @@ static inline UIColor *GetRandomUIColor()
 - (void)mailAction:(id)sender {
     MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
     [self.navigationController pushViewController:vc animated:YES];
-    [vc release];
 }
 
 -(IBAction)showActionSheet:(id)sender {
@@ -892,7 +742,6 @@ static inline UIColor *GetRandomUIColor()
     UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:alertTitle delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Send an Email", nil];
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [popupQuery showInView:self.tabBarController.view];
-    [popupQuery release];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -907,11 +756,11 @@ static inline UIColor *GetRandomUIColor()
     if ([MFMailComposeViewController canSendMail]) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
         NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
         
-        MFMailComposeViewController *mailComposer = [[[MFMailComposeViewController alloc] init] autorelease];
+        MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
         [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
-        NSString *emailTo = [[[NSString alloc] initWithFormat:@""] autorelease];
+        NSString *emailTo = [[NSString alloc] initWithFormat:@""];
         [mailComposer setMessageBody:emailTo isHTML:NO];
         NSString *emailTo1 = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
         NSArray *toArray = [NSArray arrayWithObjects:emailTo1, nil];
@@ -946,34 +795,30 @@ static inline UIColor *GetRandomUIColor()
             break;
     }
     [alert show];
-    [alert release];
     [self dismissViewControllerAnimated:YES completion:nil];
-    
 }
 
 #pragma mark DATA LOADING METHODS
 -(void)reloadData {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if ([prefs valueForKey:@"userid_dietmastergo"] > 0) {
-//        [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
         [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
         [self performSelector:@selector(loadExerciseData) withObject:nil afterDelay:0.15];
     }
     NSString *firstName = [prefs valueForKey:@"FirstName_dietmastergo"];
-//    NSString *lastName = [prefs valueForKey:@"LastName_dietmastergo"];
     NSString *name = [NSString stringWithFormat: @"Hi, %@!",firstName];
     self.nameLbl.text = name;
 }
 
 -(void)loadData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         
     }
     
-    NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd"];
     
     NSDate* date_homeDate = [NSDate date];
@@ -1227,13 +1072,13 @@ static inline UIColor *GetRandomUIColor()
     percentBodyFatLabel.text = [NSString stringWithFormat:@"%.1f%%", bodyFat];
     lblBody_Fat.text = [NSString stringWithFormat:@"Body Fat: %.1f%%", bodyFat];
     [rs close];
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 -(void)caloriesRemainUpdate
 {
     NSString *remainingCalorieCount;
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     double calRecommended = [dietmasterEngine getBMR];
     
     if (num_totalCaloriesBurned == 0)
@@ -1250,7 +1095,7 @@ static inline UIColor *GetRandomUIColor()
    
 }
 -(void)loadExerciseData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1261,7 +1106,7 @@ static inline UIColor *GetRandomUIColor()
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     
     NSDate* sourceDate = [NSDate date];
-    NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     [dateFormat setTimeZone:systemTimeZone];
@@ -1312,8 +1157,6 @@ static inline UIColor *GetRandomUIColor()
     }
     
     [rs close];
-    
-    [dateFormatter release];
     
     [self updateCalorieTotal];
     [self calculateBMI];
@@ -1544,7 +1387,7 @@ static inline UIColor *GetRandomUIColor()
     [carbs_circular setUnitString:@"g"];
     [carbs_circular setMaxValue:100]; //HHT cange
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSDictionary *ratioDict = [dietmasterEngine getUserRecommendedRatios];
 
     CGFloat carbRatioActual = totalCarbs / 4;
@@ -1627,47 +1470,6 @@ static inline UIColor *GetRandomUIColor()
     lblCurrent_BMI.text = [NSString stringWithFormat:@"BMI: %.1f", bodyMassIndex];
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    [HUD hide:YES afterDelay:0.0];
-    HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 6.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^ {
-        [self showLoading1];
-        [self loadData];
-    });
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
-
--(void)showLoading1 {
-    [HUD hide:YES afterDelay:0.0];
-    HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain];
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:HUD];
-    
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-    
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
-}
-
 -(void)DietMasterGoViewController
 {
     DietMasterGoViewController *vc = [[DietMasterGoViewController alloc] initWithNibName:@"DietMasterGoViewController" bundle:nil];
@@ -1728,7 +1530,6 @@ static inline UIColor *GetRandomUIColor()
     if (navigationArray.count > 2) {
         [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
         self.navigationController.viewControllers = navigationArray;
-        [navigationArray release];
     }
 }
 

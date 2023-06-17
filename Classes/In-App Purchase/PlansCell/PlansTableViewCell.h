@@ -10,14 +10,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PlansTableViewCell : UITableViewCell
-@property (retain, nonatomic) IBOutlet UILabel *planNameLbl;
-@property (retain, nonatomic) IBOutlet UILabel *priceLbl;
-@property (retain, nonatomic) IBOutlet UILabel *perMonthLbl;
-@property (retain, nonatomic) IBOutlet UILabel *initialActFeeLbl;
-@property (retain, nonatomic) IBOutlet UILabel *dayAccessLbl;
-@property (retain, nonatomic) IBOutlet UILabel *accessDescriptionLbl;
-@property (retain, nonatomic) IBOutlet UIButton *signUpBtn;
-@property (retain, nonatomic) IBOutlet UIView *blueView;
+@property (nonatomic, strong) IBOutlet UILabel *planNameLbl;
+@property (nonatomic, strong) IBOutlet UILabel *priceLbl;
+@property (nonatomic, strong) IBOutlet UILabel *perMonthLbl;
+@property (nonatomic, strong) IBOutlet UILabel *initialActFeeLbl;
+@property (nonatomic, strong) IBOutlet UILabel *dayAccessLbl;
+@property (nonatomic, strong) IBOutlet UILabel *accessDescriptionLbl;
+@property (nonatomic, strong) IBOutlet UIButton *signUpBtn;
+@property (nonatomic, strong) IBOutlet UIView *blueView;
 
 @end
 

@@ -7,7 +7,6 @@
 //
 
 #import "WebserviceEngine.h"
-#import "JSON.h"
 
 @implementation WebserviceEngine
 
@@ -30,20 +29,12 @@
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	
 	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-	NSLocale *usLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+	NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
 	[dateFormatter setLocale:usLocale];
 	NSTimeZone *est = [NSTimeZone timeZoneWithAbbreviation:@"EST"];
 	[dateFormatter setTimeZone:est];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 	NSString *lastmodified = [dateFormatter stringFromDate:[prefs valueForKey:@"lastmodified"]];
-	
-	/*
-	NSData *data = [lastmodified dataUsingEncoding: NSASCIIStringEncoding];
-	[Base64 initialize];
-	NSString *b64EncStr = [Base64 encode:data];
-	*/
-    
-    [dateFormatter release];
     
     NSString *webservicekey;
     NSString *accountid;
@@ -58,8 +49,8 @@
 									lastmodified,@"lastupdated",
 									nil];
 	
-	NSString *jsonString = [jsonDictionary JSONRepresentation];
-	
+    NSString *jsonString = [NSJSONSerialization dataWithJSONObject:jsonDictionary options:0 error:nil];
+
 	NSString *urlString = [NSString stringWithFormat:@"%@/webservice/webservice_SVN.php",[appDefaults valueForKey:@"syncurl"]];
 	// create request object with that URL
 	NSURL *url = [NSURL URLWithString:urlString];
@@ -78,23 +69,9 @@
 	[request setHTTPBody:postData];
     
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	[connection release];
-	//[request release];
 	
-	[appDefaults release];
-	
-	// To call, use [self callWebservice:@"iPhone"];
-	responseData = [[NSMutableData data] retain];       
-	
+	responseData = [NSMutableData data];
 }
-
-//- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-//	return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-//	[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-//}
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
@@ -131,8 +108,6 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    
-	// [connection release];
     DMLog(@"Connection failed! Error – %@",[error localizedDescription]);
 	
 	if ([wsSyncFoodsDelegate respondsToSelector:@selector(getSyncFoodsFailed:)]) {
@@ -150,17 +125,12 @@
 	
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	// Store incoming data into a string
-	NSString *jsonString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-		
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	// Create a dictionary from the JSON string
-	NSDictionary *results = [jsonString JSONValue];
+	NSDictionary *results = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
 	
 	// Build an array from the dictionary for easy access to each entry
 	NSMutableArray *responseArray = [[results objectForKey:@"data"] valueForKey:@"data"];
-	
 	
  	if ([wsSyncFoodsDelegate respondsToSelector:@selector(getSyncFoodsFinished:)]) {
         [wsSyncFoodsDelegate getSyncFoodsFinished:responseArray];
@@ -174,23 +144,6 @@
 	if ([wsSyncFavoriteMealsDelegate respondsToSelector:@selector(getSyncFavoriteMealsFinished:)]) {
         [wsSyncFavoriteMealsDelegate getSyncFavoriteMealsFinished:responseArray];
     }
-	
-	/*
-	 // Loop through each entry in the dictionary...
-     for (NSDictionary *item in responseArray)
-     {
-     // Get title of the image
-     DMLog(@"%@",[item valueForKey:@"accountid"]);
-     
-     // Save the title to the photo titles array
-     //[itemResponse addObject:(title.length > 0 ? title : @"Untitled")];
-     
-     }
-     */
-	
-    [jsonString release];
-	[responseData release]; 
-	
 }
 
 

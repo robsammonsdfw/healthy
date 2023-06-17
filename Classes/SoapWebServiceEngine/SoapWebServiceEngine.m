@@ -7,7 +7,6 @@
 //
 
 #import "SoapWebServiceEngine.h"
-#import "JSON.h"
 
 @implementation SoapWebServiceEngine
 
@@ -87,18 +86,14 @@
     [theRequest addValue: msgLength forHTTPHeaderField:@"Content-Length"];
     [theRequest setHTTPMethod:@"POST"];
     [theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    //NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-    
-    //NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:NO];
-    
+        
     [NSURLConnection sendAsynchronousRequest:theRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         if (!connectionError) {
             NSString *theXML = [[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSUTF8StringEncoding];
             NSDictionary *dic= [XMLReader dictionaryForXMLString:theXML error:nil];
             NSString *strJson=[NSString stringWithFormat:@"%@",dic[@"soap:Envelope"][@"soap:Body"][@"GetFoodNewResponse"][@"GetFoodNewResult"][@"text"]];
-            id dicObj = [NSJSONSerialization JSONObjectWithData:[strJson dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONWritingPrettyPrinted error:nil];
+            id dicObj = [NSJSONSerialization JSONObjectWithData:[strJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             
             if (completion) {
                 completion(dicObj);
@@ -188,9 +183,7 @@
     
     
     soapMessage = [soapMessage stringByReplacingOccurrencesOfString:@"&" withString:@"and"];
-    
-    
-    
+       
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=SaveFoodNew"];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/SaveFoodNew"];
         
@@ -203,11 +196,7 @@
     [theRequest addValue: msgLength forHTTPHeaderField:@"Content-Length"];
     [theRequest setHTTPMethod:@"POST"];
     [theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    //NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-    
-    //NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:NO];
-    
+       
     [NSURLConnection sendAsynchronousRequest:theRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         if (!connectionError) {
@@ -253,7 +242,7 @@
                         "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"], [requestDict valueForKey:@"LastMessageID"]];
         
     } else if ([requestType isEqualToString:@"SetMessageRead"]){
-        NSString *jsonString = [[requestDict valueForKey:@"MessageIds"] JSONRepresentation];
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MessageIds"] options:0 error:nil];
         
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -538,8 +527,8 @@
     } else if ([requestType isEqualToString:@"SaveMealItems"]) {
         
         
-        NSString *jsonString = [[requestDict valueForKey:@"MealItems"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -558,9 +547,8 @@
         
     } else if ([requestType isEqualToString:@"SaveExerciseLogs"]) {
         
-        
-        NSString *jsonString = [[requestDict valueForKey:@"ExerciseLog"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"ExerciseLog"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -606,9 +594,8 @@
         //DMLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
     } else if ([requestType isEqualToString:@"SaveWeightLogs"]) {
         
-        
-        NSString *jsonString = [[requestDict valueForKey:@"WeightLog"] JSONRepresentation];
-        
+        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"WeightLog"] options:0 error:nil];
+
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -829,7 +816,7 @@
     
     
     if( theConnection ) {
-        webData = [[NSMutableData data] retain];
+        webData = [NSMutableData data];
     } else {
         DMLog(@"theConnection is NULL");
     }
@@ -929,9 +916,6 @@
     if ([self.wsSendDeviceTokenDelegate respondsToSelector:@selector(sendDeviceFailed:)]) {
         [self.wsSendDeviceTokenDelegate sendDeviceFailed:[error localizedDescription]];
     }
-    
-    [connection release];
-    [webData release];
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -941,27 +925,11 @@
     timeOutTimer = nil;
     
     NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-    
-    // Code to convert Unicode Chars to NSString
-    //NSString *convertedString = [theXML mutableCopy];
-    //CFStringRef transform = CFSTR("Any-Hex/Java");
-    //CFStringTransform((CFMutableStringRef)convertedString, NULL, transform, YES);
-    //NSData *data = [convertedString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-    
-    [theXML release];
-    
-    if( xmlParser )
-    {
-        [xmlParser release];
-    }
-    
+          
     xmlParser = [[NSXMLParser alloc] initWithData: webData];
     [xmlParser setDelegate: self];
     [xmlParser setShouldResolveExternalEntities: YES];
     [xmlParser parse];
-    
-    [connection release];
-    [webData release];
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName
@@ -1106,17 +1074,15 @@
     
     // Empty results?
     if ([soapResults isEqualToString:@"\"Empty\""]) {
-        [soapResults release];
         soapResults = nil;
         soapResults = [[NSMutableString alloc] init];
         [soapResults appendFormat:@"%@",@"[]"];
     }
     
     // Create a dictionary from the JSON string
-    NSMutableArray *responseArray = [soapResults JSONValue];
-    
-    
-    if (!responseArray) {
+    NSArray *responseArray = @[];
+    if (soapResults.length) {
+        responseArray = [NSJSONSerialization JSONObjectWithData:[soapResults dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     }
     
     if([elementName isEqualToString:@"SyncUserResult"])
@@ -1154,13 +1120,11 @@
             NSMutableDictionary *newDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
             [newDict setValue:mealIDString forKey:@"MealID"];
             [fixedArray addObject:newDict];
-            [newDict release];
         }
         
         if ([wsSyncFoodLogItemsDelegate respondsToSelector:@selector(getSyncFoodLogItemsFinished:)]) {
             [wsSyncFoodLogItemsDelegate getSyncFoodLogItemsFinished:responseArray];
         }
-        // [fixedArray release];
         
     }
     
@@ -1192,14 +1156,11 @@
             NSMutableDictionary *newDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
             [newDict setValue:mealIDString forKey:@"Favorite_Meal_ID"];
             [fixedArray addObject:newDict];
-            [newDict release];
         }
         
         if ([wsSyncFavoriteMealItemsDelegate respondsToSelector:@selector(getSyncFavoriteMealItemsFinished:)]) {
             [wsSyncFavoriteMealItemsDelegate getSyncFavoriteMealItemsFinished:fixedArray];
         }
-        // [fixedArray release];
-        
     }
     
     if([elementName isEqualToString:@"SyncFoodsResult"])
@@ -1370,7 +1331,6 @@
         }
     }
     
-    [soapResults release];
     soapResults = nil;
     
 }
@@ -1388,14 +1348,12 @@
     
     NSURLConnection *connection = [[theTimer userInfo] objectForKey:@"connection"];
     [connection cancel];
-    [connection release];
     connection = nil;
     
     // Kill the timeout timer
     [timeOutTimer invalidate];
     timeOutTimer = nil;
     
-    [webData release];
     webData = nil;
     
     
@@ -1459,17 +1417,6 @@
     if ([wsDeleteMealItemDelegate respondsToSelector:@selector(deleteMealItemFailed:)]) {
         [wsDeleteMealItemDelegate deleteMealItemFailed:@"error"];
     }
-}
-
-- (void)dealloc
-{
-    [xmlParser release];
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    [timeOutTimer release];
-    self.requestDict = nil;
-    [self.requestDict release];
-    [super dealloc];
 }
 
 @end

@@ -15,6 +15,13 @@ def core_pods
   pod 'SBPickerSelector', '1.0.4' # Last Objc version.
   pod 'CorePlot' # https://github.com/core-plot/core-plot
   pod 'FMDB' # https://github.com/ccgus/fmdb
+  pod 'FSCalendar' # https://github.com/WenchaoD/FSCalendar
+  pod 'MBProgressHUD' # https://github.com/matej/MBProgressHUD
+  pod 'MKNumberBadgeView' # https://github.com/erichoracek/MKNumberBadgeView
+  
+  # To be deprecated:
+  pod 'ASIHTTPRequest' # https://cocoapods.org/pods/ASIHTTPRequest
+  pod 'ZipArchive' # https://github.com/mattconnolly/ZipArchive
 end
 
 target 'DietMasterGoPlus' do

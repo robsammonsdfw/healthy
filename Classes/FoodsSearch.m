@@ -56,9 +56,8 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar*) theSearchBar {
     self.tableView.scrollEnabled = YES;
     [mySearchBar resignFirstResponder];
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate showLoading];
-    
+    [DMActivityIndicator showActivityIndicator];
+
     [self performSelector:@selector(loadSearchData:) withObject:theSearchBar.text afterDelay:0.25];
 }
 
@@ -180,7 +179,7 @@
     
     if(!date_currentDate) {
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
         [dateFormat setTimeZone:systemTimeZone];
@@ -189,8 +188,6 @@
         
         self.date_currentDate = date_today;
     }
-    
-    HUD.delegate = self;
     
     if (!foodResults)
         foodResults = [[NSMutableArray alloc] init];
@@ -203,9 +200,8 @@
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate showLoading];
-    
+    [DMActivityIndicator showActivityIndicator];
+
     [self performSelector:@selector(loadSearchData:) withObject:mySearchBar.text afterDelay:0.25];
     
     if ([searchType isEqualToString:@"All Foods"] && [mySearchBar.text length] == 0) {
@@ -223,7 +219,7 @@
         [self.navigationController setNavigationBarHidden:NO animated:NO];
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if (dietmasterEngine.isMealPlanItem) {
         self.title = @"Equivalent Foods";
     }
@@ -235,7 +231,7 @@
         [foodResults removeAllObjects];
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     int userID = [[prefs valueForKey:@"userid_dietmastergo"] intValue];
     int companyID = [[prefs valueForKey:@"companyid_dietmastergo"] intValue];
@@ -339,14 +335,13 @@
         [arrFoodIDs addObject:[NSString stringWithFormat:@"%@", [rs stringForColumn:@"Name"]]];
         [foodResults addObject:dict];
        
-        [dict release];
+        
     }
     [rs close];
     
     if (!query2) {
         [self.tableView reloadData];
-        DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate hideLoading];
+        [DMActivityIndicator hideActivityIndicator];
         return;
     }
     
@@ -382,15 +377,13 @@
                 break;
             }
         }
-        [dict release];
+        
     }
     [rs2 close];
     
     [self.tableView reloadData];
     
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 #pragma mark TABLE VIEW METHODS
@@ -426,7 +419,7 @@
     
 //    BOOBIES
     
-    [dict release];
+    
     
     if (labelSize.height < 46) {
         return 48;
@@ -505,8 +498,6 @@
             }
         }
         
-        [dict1 release];
-
         cell.lblFoodName.textColor = [UIColor blackColor];
         
         cell.lblFoodName.font = [UIFont systemFontOfSize:14.0];
@@ -528,9 +519,8 @@
                                    target: nil action: nil];
     
     [self.navigationItem setBackBarButtonItem: backButton];
-    [backButton release];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[foodResults objectAtIndex:indexPath.row]];
     [dietmasterEngine.foodSelectedDict setDictionary:dict];
@@ -546,7 +536,6 @@
         
         [self.navigationController pushViewController:mfController animated:YES];
         mfController.hideAddToLog = YES;
-        [mfController release];
     }
     else {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -554,38 +543,7 @@
         dvController.foodIdValue = [NSString stringWithFormat:@"%@",[dietmasterEngine.foodSelectedDict valueForKey:@"FoodID"]];
         dvController.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:dvController animated:YES];
-        [dvController release];
     }
-    
-    [dict release];
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    foodResults = nil;
-//    tableView = nil;
-//    mySearchBar = nil;
-//    searchType = nil;
-//}
-
-- (void)dealloc {
-    [searchType release];
-    [mySearchBar release];
-    [foodResults release];
-    [_scroll release];
-    [_imgscrl release];
-    [_btnall release];
-    [_btnfood release];
-    [_btnfavfoods release];
-    [_btnprogram release];
-    [_btnfacmeals release];
-    
-    foodResults = nil;
-    tableView = nil;
-    mySearchBar = nil;
-    searchType = nil;
-
-    [super dealloc];
 }
 
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -606,29 +564,11 @@
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     searchBar.text = @"";
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate showLoading];
-    
+    [DMActivityIndicator showActivityIndicator];
+
     [self performSelector:@selector(loadSearchData:) withObject:@"" afterDelay:0.25];
     
 }
-
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
-
 
 - (IBAction)ScrollBtnClick:(id)sender {
     
@@ -642,7 +582,6 @@
         [_btnfavfoods setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [_btnprogram setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [_btnfacmeals setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        //[self loadSearchData:searchType];
         
         //HHT change 2018
         [self loadSearchData:@""];
@@ -696,7 +635,6 @@
         
         FavoriteMealsViewController *favoriteMealsViewController = [[FavoriteMealsViewController alloc] init];
         [self.navigationController pushViewController:favoriteMealsViewController animated:YES];
-        [favoriteMealsViewController release];
     }
     
     _imgscrl.frame=CGRectMake(btnn.frame.origin.x, 28, 100, 2);
@@ -709,13 +647,12 @@
     [UIView commitAnimations];
     bSearchIsOn = NO;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate showLoading];
+    [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadSearchData:) withObject:@"" afterDelay:0.25];
 }
 
 - (IBAction)ScanbtnPressed:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"Save";
     
     ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
@@ -724,7 +661,6 @@
     mfController.intTabId = AppDel.selectedIndex;
     
     [self.navigationController pushViewController:mfController animated:YES];
-    [mfController release];
     mfController = nil;
 }
 -(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array {
@@ -736,7 +672,6 @@
             [ret addObject:obj];
         }
     }
-    [tempValues release];
     return ret;
 }
 

@@ -94,12 +94,6 @@
     }
 }
 
-- (void)dealloc {
-    [_txtUsername release];
-    [_txtPassword release];
-    [super dealloc];
-}
-
 -(BOOL)validation {
     if(self.txtUsername.text.length > 3 && self.txtUsername.text.length < 50)
     {

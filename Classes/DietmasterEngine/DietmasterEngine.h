@@ -50,16 +50,12 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
     NSNumber *selectedMeasureID; // for editing My Foods.
     
     // delegates
-    id<SyncDatabaseDelegate> syncDatabaseDelegate;
-    id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
     int syncsCompleted;
     int upsyncsCompleted;
     int syncsToComplete;
     int upsyncsToComplete;
     int syncsFailed;
     int upsyncsFailed;
-    
-    id<UpdateUserInfoDelegate> updateUserInfoDelegate;
     
     // Meal Plan
     NSMutableArray *mealPlanArray;
@@ -83,51 +79,50 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
     __block BOOL getDataComplete;
     __block BOOL getDataDidFail;
     dispatch_semaphore_t semaphore;
-    id<WSGetFoodDelegate> wsGetFoodDelegate;
     
     
 }
 
 // delegate
-@property(nonatomic,assign) id<WSGetFoodDelegate> wsGetFoodDelegate;
+@property (nonatomic, weak) id<WSGetFoodDelegate> wsGetFoodDelegate;
 
-@property(nonatomic,assign) id<SyncDatabaseDelegate> syncDatabaseDelegate;
-@property(nonatomic,assign) id<UpdateUserInfoDelegate> updateUserInfoDelegate;
-@property(nonatomic,assign) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
+@property (nonatomic, weak) id<SyncDatabaseDelegate> syncDatabaseDelegate;
+@property (nonatomic, weak) id<UpdateUserInfoDelegate> updateUserInfoDelegate;
+@property (nonatomic, weak) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
 
 @property (nonatomic,copy) GetMessagesCompletionBlock messageCompletion;
 
-@property (nonatomic, retain) NSMutableDictionary *exerciseSelectedDict;
-@property (nonatomic, retain) NSMutableDictionary *foodSelectedDict;
-@property (nonatomic, retain) NSNumber *currentWeight;
+@property (nonatomic, strong) NSMutableDictionary *exerciseSelectedDict;
+@property (nonatomic, strong) NSMutableDictionary *foodSelectedDict;
+@property (nonatomic, strong) NSNumber *currentWeight;
 
 //HHT apple watch
 @property (nonatomic,retain) NSNumber *userHeight;
-@property (nonatomic,assign) int userGender;
+@property (nonatomic) int userGender;
 
-@property (nonatomic, retain) NSString *taskMode;
-@property (nonatomic, retain) NSDate *dateSelected;
-@property (nonatomic, retain) NSString *dateSelectedFormatted;
-@property (nonatomic, retain) NSNumber *selectedMealID;
+@property (nonatomic, strong) NSString *taskMode;
+@property (nonatomic, strong) NSDate *dateSelected;
+@property (nonatomic, strong) NSString *dateSelectedFormatted;
+@property (nonatomic, strong) NSNumber *selectedMealID;
 
-@property (nonatomic, retain) NSNumber *selectedCategoryID;
-@property (nonatomic, retain) NSNumber *selectedMeasureID;
+@property (nonatomic, strong) NSNumber *selectedCategoryID;
+@property (nonatomic, strong) NSNumber *selectedMeasureID;
 
 // Meal Plan
-@property (nonatomic, retain) NSMutableArray *mealPlanArray;
-@property (nonatomic, retain) NSMutableArray *ArrMealNotes; // BHADRESH
-@property (nonatomic, assign) BOOL isMealPlanItem;
-@property (nonatomic, assign) BOOL sendAllServerData;
-@property (nonatomic, retain) NSMutableDictionary *mealPlanItemToExchangeDict;
-@property (nonatomic, assign) int indexOfItemToExchange;
-@property (nonatomic, assign) int selectedMealPlanID;
-@property (nonatomic, assign) BOOL didInsertNewFood;
+@property (nonatomic, strong) NSMutableArray *mealPlanArray;
+@property (nonatomic, strong) NSMutableArray *ArrMealNotes; // BHADRESH
+@property (nonatomic) BOOL isMealPlanItem;
+@property (nonatomic) BOOL sendAllServerData;
+@property (nonatomic, strong) NSMutableDictionary *mealPlanItemToExchangeDict;
+@property (nonatomic) int indexOfItemToExchange;
+@property (nonatomic) int selectedMealPlanID;
+@property (nonatomic) BOOL didInsertNewFood;
 
 //Assigned my moves
-@property (nonatomic, retain) NSMutableArray *myMovesAssignedArray;
+@property (nonatomic, strong) NSMutableArray *myMovesAssignedArray;
 
 // Grocery List
-@property (nonatomic, retain) NSMutableArray *groceryArray;
+@property (nonatomic, strong) NSMutableArray *groceryArray;
 
 // factual api
 @property (nonatomic, readonly) FactualAPI* apiObject;
@@ -137,10 +132,10 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 @property (nonatomic,retain) NSString *deviceToken;
 
 //HHT new exercise sync
-@property (nonatomic, retain) NSMutableArray *arrExerciseSyncNew;
+@property (nonatomic, strong) NSMutableArray *arrExerciseSyncNew;
 @property (nonatomic ,assign) int pageNumber;
 
-+(DietmasterEngine*)instance;
++ (instancetype)sharedInstance;
 
 -(void)syncDatabase;
 -(void)uploadDatabase;

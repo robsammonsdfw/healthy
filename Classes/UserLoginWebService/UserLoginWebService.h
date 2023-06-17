@@ -11,22 +11,16 @@
 @protocol WSAuthenticateUserDelegate;
 
 @interface UserLoginWebService : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate> {
-    
-    // delegates
-	id<WSAuthenticateUserDelegate> wsAuthenticateUserDelegate;
-    
     NSMutableData *webData;
 	NSMutableString *soapResults;
 	NSXMLParser *xmlParser;
 	BOOL recordResults;
 }
 
-// delegates
-@property(nonatomic,assign) id<WSAuthenticateUserDelegate> wsAuthenticateUserDelegate;
-
-@property(nonatomic, retain) NSMutableData *webData;
-@property(nonatomic, retain) NSMutableString *soapResults;
-@property(nonatomic, retain) NSXMLParser *xmlParser;
+@property (nonatomic, weak) id<WSAuthenticateUserDelegate> wsAuthenticateUserDelegate;
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
 
 -(void)callWebservice:(NSString *)text;
 

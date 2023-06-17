@@ -26,20 +26,19 @@
 	NSMutableArray *arry3;
 	NSMutableArray *categoryIDs;
 	NSNumber *selectedCategoryID;
-    id <FoodCategoryDelegate> delegate;
 }
 
 -(IBAction) sendNewDate:(id) sender;
 -(IBAction)cancelSaveCategory:(id)sender;
 
-@property (nonatomic, retain) AppDelegate *mainDelegate;
-@property (nonatomic, retain) NSString *str_categoryName;
-@property (nonatomic, retain) NSNumber *num_categoryID;
-@property (nonatomic, retain) NSNumber *pickerRow3;
-@property (nonatomic, retain) NSMutableArray *arry3;
-@property (nonatomic, retain) NSMutableArray *categoryIDs;
-@property (nonatomic, retain) NSNumber *selectedCategoryID;
-@property (assign) id <FoodCategoryDelegate> delegate;
+@property (nonatomic, strong) AppDelegate *mainDelegate;
+@property (nonatomic, strong) NSString *str_categoryName;
+@property (nonatomic, strong) NSNumber *num_categoryID;
+@property (nonatomic, strong) NSNumber *pickerRow3;
+@property (nonatomic, strong) NSMutableArray *arry3;
+@property (nonatomic, strong) NSMutableArray *categoryIDs;
+@property (nonatomic, strong) NSNumber *selectedCategoryID;
+@property (nonatomic, weak) id<FoodCategoryDelegate> delegate;
 
 
 

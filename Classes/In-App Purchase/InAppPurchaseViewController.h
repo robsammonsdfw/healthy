@@ -13,20 +13,20 @@ NS_ASSUME_NONNULL_BEGIN
 @interface InAppPurchaseViewController : UIViewController
 {
     BOOL areAdsRemoved;
-    MBProgressHUD *HUD;
+    
 }
 @property (nonatomic, strong) InAppPurchaseViewController *inAppPurchaseViewController;
-@property (retain, nonatomic) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet UIView *contentVw;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UIView *contentVw;
 
 
-@property (strong, nonatomic) NSArray<NSString *> *dayPlansArr;
-@property (strong, nonatomic) NSArray<NSString *> *planNameArr;
-@property (strong, nonatomic) NSArray<NSString *> *threeMonthsPlanPriceArr;
-@property (strong, nonatomic) NSArray<NSString *> *oneMonthPlanPriceArr;
-@property (strong, nonatomic) NSArray<NSString *> *planAccessArr;
-@property (strong, nonatomic) NSArray<NSString *> *descriptionArr;
-@property (nonatomic, assign) NSString *statusStr;
+@property (nonatomic, strong) NSArray<NSString *> *dayPlansArr;
+@property (nonatomic, strong) NSArray<NSString *> *planNameArr;
+@property (nonatomic, strong) NSArray<NSString *> *threeMonthsPlanPriceArr;
+@property (nonatomic, strong) NSArray<NSString *> *oneMonthPlanPriceArr;
+@property (nonatomic, strong) NSArray<NSString *> *planAccessArr;
+@property (nonatomic, strong) NSArray<NSString *> *descriptionArr;
+@property (nonatomic) NSString *statusStr;
 - (void)closeModal;
 
 

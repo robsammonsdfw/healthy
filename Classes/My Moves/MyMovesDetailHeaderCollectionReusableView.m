@@ -14,11 +14,4 @@
     // Initialization code
 }
 
-- (void)dealloc {
-    [_repsHeadBtn release];
-    [_weightHeadBtn release];
-    [_repsLbl release];
-    [_weightLbl release];
-    [super dealloc];
-}
 @end

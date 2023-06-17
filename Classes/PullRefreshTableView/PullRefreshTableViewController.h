@@ -44,12 +44,12 @@
     IBOutlet UITableView *_tableView;
     
 }
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 
-@property (nonatomic, retain) UIView *refreshHeaderView;
-@property (nonatomic, retain) UILabel *refreshLabel;
-@property (nonatomic, retain) UIImageView *refreshArrow;
-@property (nonatomic, retain) UIActivityIndicatorView *refreshSpinner;
+@property (nonatomic, strong) UIView *refreshHeaderView;
+@property (nonatomic, strong) UILabel *refreshLabel;
+@property (nonatomic, strong) UIImageView *refreshArrow;
+@property (nonatomic, strong) UIActivityIndicatorView *refreshSpinner;
 @property (nonatomic, copy) NSString *textPull;
 @property (nonatomic, copy) NSString *textRelease;
 @property (nonatomic, copy) NSString *textLoading;

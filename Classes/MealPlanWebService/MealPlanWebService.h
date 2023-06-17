@@ -20,47 +20,27 @@
 @protocol WSGetGroceryList;
 
 @interface MealPlanWebService : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate> {
-    
-    // delegates
-    // DOWN SYNC
-    id<WSGetUserPlannedMealNames> wsGetUserPlannedMealNames;
-    id<WSGetGroceryList> wsGetGroceryList;
-
-    // UP SYNC
-    id<WSDeleteUserPlannedMealItems> wsDeleteUserPlannedMealItems;
-    id<WSInsertUserPlannedMealItems> wsInsertUserPlannedMealItems;
-    id<WSInsertUserPlannedMeals> wsInsertUserPlannedMeals;
-    id<WSUpdateUserPlannedMealItems> wsUpdateUserPlannedMealItems;
-    id<WSUpdateUserPlannedMealNames> wsUpdateUserPlannedMealNames;
-    
-    NSMutableData *webData;
-	NSMutableString *soapResults;
-	NSXMLParser *xmlParser;
 	BOOL recordResults;
     
     // Vars to Hold Data for Session
     int tempID;
-    
-    NSTimer *timeOutTimer;
-
 }
-@property (nonatomic, retain) NSTimer *timeOutTimer;
+@property (nonatomic, strong) NSTimer *timeOutTimer;
 
-// delegates
 // DOWN SYNC
-@property(nonatomic,assign) id<WSGetUserPlannedMealNames> wsGetUserPlannedMealNames;
-@property(nonatomic,assign) id<WSGetGroceryList> wsGetGroceryList;
+@property (nonatomic, weak) id<WSGetUserPlannedMealNames> wsGetUserPlannedMealNames;
+@property (nonatomic, weak) id<WSGetGroceryList> wsGetGroceryList;
 
 // UP SYNC
-@property(nonatomic,assign) id<WSDeleteUserPlannedMealItems> wsDeleteUserPlannedMealItems;
-@property(nonatomic,assign) id<WSInsertUserPlannedMealItems> wsInsertUserPlannedMealItems;
-@property(nonatomic,assign) id<WSInsertUserPlannedMeals> wsInsertUserPlannedMeals;
-@property(nonatomic,assign) id<WSUpdateUserPlannedMealItems> wsUpdateUserPlannedMealItems;
-@property(nonatomic,assign) id<WSUpdateUserPlannedMealNames> wsUpdateUserPlannedMealNames;
+@property (nonatomic, weak) id<WSDeleteUserPlannedMealItems> wsDeleteUserPlannedMealItems;
+@property (nonatomic, weak) id<WSInsertUserPlannedMealItems> wsInsertUserPlannedMealItems;
+@property (nonatomic, weak) id<WSInsertUserPlannedMeals> wsInsertUserPlannedMeals;
+@property (nonatomic, weak) id<WSUpdateUserPlannedMealItems> wsUpdateUserPlannedMealItems;
+@property (nonatomic, weak) id<WSUpdateUserPlannedMealNames> wsUpdateUserPlannedMealNames;
 
-@property(nonatomic, retain) NSMutableData *webData;
-@property(nonatomic, retain) NSMutableString *soapResults;
-@property(nonatomic, retain) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
 
 -(void)callWebservice:(NSDictionary *)requestDict;
 -(void)timeOutWebservice:(NSTimer *)theTimer;

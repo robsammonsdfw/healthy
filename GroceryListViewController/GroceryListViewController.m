@@ -40,35 +40,25 @@
                                    target: nil action: nil];
     
     [self.navigationItem setBackBarButtonItem: backButton];
-    [backButton release];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.mealPlanArray objectAtIndex:selectedIndex]];
     titleLabel.text = [tempDict valueForKey:@"MealName"];
-    [tempDict release];
     
     selectedRows = [[NSMutableArray alloc] init];
     
     UIBarButtonItem *aBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editGroceryList)];
     [self.navigationItem setRightBarButtonItem:aBarButtonItem];
-    [aBarButtonItem release];
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
     }
 }
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    titleLabel = nil;
-//    selectedRows = nil;
-//    tableView = nil;
-//}
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -78,10 +68,10 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if (dietmasterEngine.didInsertNewFood == YES) {
         dietmasterEngine.didInsertNewFood = NO;
-        [self showLoading];
+        [DMActivityIndicator showActivityIndicator];
     }
 }
 
@@ -102,7 +92,7 @@
 #pragma mark LOAD DATA METHODS
 
 -(void)loadData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -116,10 +106,6 @@
     MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
     soapWebService.wsGetGroceryList = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
-    
 }
 
 #pragma mark TABLE VIEW METHODS
@@ -128,25 +114,22 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     return [dietmasterEngine.groceryArray count];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:section]];
     
-    UILabel *label = [[[UILabel alloc] init] autorelease];
+    UILabel *label = [[UILabel alloc] init];
     label.frame = CGRectMake(10, 10, 295, 18);
     label.textColor = [UIColor blackColor];
     label.font = [UIFont boldSystemFontOfSize:17.0];
     label.text = [NSString stringWithString:[categoryDict valueForKey:@"CategoryName"]];
     label.backgroundColor = [UIColor clearColor];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 28)];
-    [view autorelease];
     [view addSubview:label];
-    
-    [categoryDict release];
     
     return view;
 }
@@ -164,9 +147,9 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
-    NSDictionary *categoryDict = [[[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:section]] autorelease];
-    NSArray *itemsArray = [[[NSArray alloc] initWithArray:[categoryDict valueForKey:@"CategoryItems"]] autorelease];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:section]];
+    NSArray *itemsArray = [[NSArray alloc] initWithArray:[categoryDict valueForKey:@"CategoryItems"]];
     
     return [itemsArray count];
 }
@@ -180,19 +163,17 @@
     if (cell == nil) {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MealPlanDetailsTableViewCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
-        cell.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver2.png"]] autorelease];
-        cell.selectedBackgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver_on2.png"]] autorelease];
+        cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver2.png"]];
+        cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver_on2.png"]];
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     //HHT Change (Temp)
     if (dietmasterEngine.groceryArray.count >0){
         NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:[indexPath section]]];
         NSArray *itemsArray = [[NSArray alloc] initWithArray:[categoryDict valueForKey:@"CategoryItems"]];
         NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[itemsArray objectAtIndex:[indexPath row]]];
-        [itemsArray release];
-        [categoryDict release];
         
         NSString *foodName = [tempDict valueForKey:@"FoodName"];
         cell.lblMealName.text = foodName;
@@ -253,19 +234,16 @@
         button.backgroundColor = [UIColor clearColor];
         cell.accessoryView = button;
         
-        [tempDict release];
     }
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)myTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:[indexPath section]]];
     NSArray *itemsArray = [[NSArray alloc] initWithArray:[categoryDict valueForKey:@"CategoryItems"]];
     NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[itemsArray objectAtIndex:[indexPath row]]];
-    [itemsArray release];
-    [categoryDict release];
     
     UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
     UIImage *image = nil;
@@ -292,7 +270,7 @@
         [selectedRows removeObject:[tempDict valueForKey:@"FoodName"]];
         [self.tableView beginUpdates];
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         NSDictionary *categoryDict = [dietmasterEngine.groceryArray objectAtIndex:[indexPath section]];
         NSMutableArray *itemsArray = [categoryDict valueForKey:@"CategoryItems"];
         
@@ -302,7 +280,6 @@
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
         [itemsArray addObject:tempItem];
-        [tempItem release];
         [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:
                                                 [NSIndexPath indexPathForRow:([itemsArray count]-1) inSection:[indexPath section]]]
                               withRowAnimation:UITableViewRowAnimationFade];
@@ -312,7 +289,6 @@
         [self.tableView reloadData];
     }
     
-    [tempDict release];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -327,7 +303,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [myTableView beginUpdates];
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         NSDictionary *categoryDict = [dietmasterEngine.groceryArray objectAtIndex:[indexPath section]];
         NSMutableArray *itemsArray = [categoryDict valueForKey:@"CategoryItems"];
         NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[itemsArray objectAtIndex:[indexPath row]]];
@@ -337,7 +313,6 @@
         
         [myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
-        [tempDict release];
         [myTableView endUpdates];
         [myTableView reloadData];
         
@@ -351,7 +326,7 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSDictionary *categoryDict = [dietmasterEngine.groceryArray objectAtIndex:[sourceIndexPath section]];
     NSMutableArray *itemsArray = [[categoryDict valueForKey:@"CategoryItems"]mutableCopy];
     
@@ -378,59 +353,26 @@
 
 #pragma mark GET GROCERY LIST DELEGATES
 - (void)getGroceryListFinished:(NSMutableArray *)responseArray {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine.groceryArray removeAllObjects];
     [dietmasterEngine.groceryArray addObjectsFromArray:responseArray];
     
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     [[self tableView] reloadData];
 }
 
 - (void)getGroceryListFailed:(NSString *)failedMessage {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     [[self tableView] reloadData];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please pull to refresh & try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:200];
     [alert show];
-    [alert release];
 }
 
 #pragma mark PULL REFRESH METHODS
 - (void)refresh {
     [self performSelector:@selector(loadData) withObject:nil afterDelay:1.0];
-}
-//
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-//}
-
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-    
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
 }
 
 #pragma mark CHECKMARK ACTION
@@ -444,14 +386,6 @@
     if (indexPath != nil) {
         [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     }
-}
-
-- (void)dealloc {
-    [_imgBackground release];
-    titleLabel = nil;
-    selectedRows = nil;
-    tableView = nil;
-    [super dealloc];
 }
 
 #pragma mark - TTTAttributedLabel Delegate

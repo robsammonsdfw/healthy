@@ -25,34 +25,34 @@
     IBOutlet UIButton *listCalendarBtn ;
     UIBarButtonItem * listCalendarBarBtn;
     UIButton *calendarViewBtn;
-    MBProgressHUD *HUD;
+    
     UIBarButtonItem * CalendarBarBtn;
 
     IBOutlet UIButton *expandBtn;
     int currentSection;
 }
-@property (retain, nonatomic) IBOutlet UIView *showPopUpVw;
+@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *proportionalHeightCalConst;
-@property(nonatomic,retain) HKHealthStore *healthStore;
-@property(nonatomic, strong) NSMutableArray *arrData;
-@property(nonatomic, strong) StepData * sd;
-@property(nonatomic, strong) NSDate *date_currentDate;
-@property (retain, nonatomic) IBOutlet UIView *dayToggleView;
-@property (retain, nonatomic) IBOutlet UIToolbar *dayToolBar;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *proportionalHeightCalConst;
+@property (nonatomic,retain) HKHealthStore *healthStore;
+@property (nonatomic, strong) NSMutableArray *arrData;
+@property (nonatomic, strong) StepData * sd;
+@property (nonatomic, strong) NSDate *date_currentDate;
+@property (nonatomic, strong) IBOutlet UIView *dayToggleView;
+@property (nonatomic, strong) IBOutlet UIToolbar *dayToolBar;
 
-@property(nonatomic, strong)  FSCalendar *calendar;
-@property (retain, nonatomic) IBOutlet UIView *calendarView;
-@property (retain, nonatomic) IBOutlet UILabel *userCommentsLbl;
-@property (retain, nonatomic) IBOutlet UILabel *displayedMonthLbl;
+@property (nonatomic, strong)  FSCalendar *calendar;
+@property (nonatomic, strong) IBOutlet UIView *calendarView;
+@property (nonatomic, strong) IBOutlet UILabel *userCommentsLbl;
+@property (nonatomic, strong) IBOutlet UILabel *displayedMonthLbl;
 
 
 -(IBAction) shownextDate:(id) sender;
 -(IBAction)showprevDate:(id)sender;
-@property (retain, nonatomic) IBOutlet UIButton *sendMessageBtn;
-@property (retain, nonatomic) IBOutlet UIView *lineView;
-@property (retain, nonatomic) IBOutlet UIStackView *sendMsgStackVw;
-@property (nonatomic, assign) NSString *workoutClickedFromHome;
+@property (nonatomic, strong) IBOutlet UIButton *sendMessageBtn;
+@property (nonatomic, strong) IBOutlet UIView *lineView;
+@property (nonatomic, strong) IBOutlet UIStackView *sendMsgStackVw;
+@property (nonatomic) NSString *workoutClickedFromHome;
 
 
 @end

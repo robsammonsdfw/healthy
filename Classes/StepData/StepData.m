@@ -17,7 +17,7 @@
     
     if (self) {
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         self.weight = [dietmasterEngine.currentWeight doubleValue];
         
@@ -43,7 +43,7 @@
 }
     
 - (double) stepsPerMile: (NSInteger ) steps {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int userGender = dietmasterEngine.userGender;
     

@@ -23,21 +23,4 @@
 
 }
 
-#pragma mark -
-#pragma mark Memory Management
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//	self.coverView = nil;
-//}
-
-- (void)dealloc {
-	self.coverView = nil;
-    [super dealloc];
-}
-
 @end

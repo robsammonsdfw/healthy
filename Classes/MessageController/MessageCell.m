@@ -49,7 +49,4 @@
     messageLabel.linkAttributes = [NSDictionary dictionaryWithDictionary:mutableActiveLinkAttributes];
 }
 
-- (void)dealloc {
-    
-}
 @end

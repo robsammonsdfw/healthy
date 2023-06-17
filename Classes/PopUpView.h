@@ -17,10 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol GotoViewControllerDelegate;
 
 @interface PopUpView : UIViewController
-@property (retain, nonatomic) IBOutlet UIView *popUpView;
+@property (nonatomic, strong) IBOutlet UIView *popUpView;
 @property (nonatomic, weak) id<GotoViewControllerDelegate> gotoDelegate;
 
-@property (nonatomic, assign) NSString *vc;
+@property (nonatomic) NSString *vc;
 
 @end
 

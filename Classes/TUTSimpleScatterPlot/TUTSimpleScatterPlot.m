@@ -38,7 +38,7 @@
     }
     
     CGRect frame = [self.hostingView bounds];
-    self.graph = [[[CPTXYGraph alloc] initWithFrame:frame] autorelease];
+    self.graph = [[CPTXYGraph alloc] initWithFrame:frame];
     
     self.graph.plotAreaFrame.paddingTop = 25.0f;
     self.graph.plotAreaFrame.paddingRight = 50.0f;
@@ -61,7 +61,7 @@
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
         textStyle.color = [CPTColor blackColor];
@@ -128,15 +128,13 @@
     for ( NSUInteger i = 0; i < [self.graphDataValues count]; i++ ) {
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[self.graphDataValues objectAtIndex:i]];
         
-        CPTAxisLabel *newLabel = [[[CPTAxisLabel alloc] initWithText: [NSString stringWithFormat:@"%@", [dict valueForKey:@"date"]] textStyle:axisSet.xAxis.labelTextStyle] autorelease];
+        CPTAxisLabel *newLabel = [[CPTAxisLabel alloc] initWithText: [NSString stringWithFormat:@"%@", [dict valueForKey:@"date"]] textStyle:axisSet.xAxis.labelTextStyle];
         newLabel.tickLocation = @(i * 1);
         newLabel.offset = axisSet.xAxis.labelOffset + axisSet.xAxis.majorTickLength / 2.0;
         newLabel.rotation = M_PI/4;
         [newAxisLabels addObject:newLabel];
         
         [majorTickLocations addObject:[NSDecimalNumber numberWithInteger:i]];
-        
-        [dict release];
     }
     
     axisSet.xAxis.axisLabels = newAxisLabels;
@@ -157,12 +155,11 @@
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
     axisSet.yAxis.labelFormatter = numberFormatter;
-    [numberFormatter release];
     
     axisSet.yAxis.orthogonalPosition = @([self.graphDataValues count]-0.5f);
     axisSet.yAxis.tickDirection = CPTSignPositive;
     
-    CPTScatterPlot *plot = [[[CPTScatterPlot alloc] init] autorelease];
+    CPTScatterPlot *plot = [[CPTScatterPlot alloc] init];
     plot.dataSource = self;
     plot.identifier = @"mainplot";
     plot.dataLineStyle = lineStyle;
@@ -209,7 +206,7 @@
     plotSymbol.lineStyle = lineStyle;
     plotSymbol.size = CGSizeMake(7.0, 7.0);
     
-    CPTScatterPlot *plot = [[[CPTScatterPlot alloc] init] autorelease];
+    CPTScatterPlot *plot = [[CPTScatterPlot alloc] init];
     plot.dataSource = self;
     plot.identifier = @"SecondryPlot";
     plot.dataLineStyle = lineStyle;
@@ -237,7 +234,7 @@
         else {
             return [NSNumber numberWithFloat:point.y];
         }
-        [dict release];
+        
     }
     else if ([plot.identifier isEqual:@"SecondryPlot"]) {
         NSDictionary *dict;
@@ -261,7 +258,7 @@
 }
 
 -(float)getGoalWeightFromDB {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         DMLog(@"Could not open db.");
@@ -280,7 +277,6 @@
 -(void)scatterPlot:(CPTScatterPlot *)plot plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index {
     if (symbolTextAnnotation) {
         [self.graph.plotAreaFrame.plotArea removeAnnotation:symbolTextAnnotation];
-        [symbolTextAnnotation release];
         symbolTextAnnotation = nil;
     }
     
@@ -292,15 +288,15 @@
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[self.graphDataValues objectAtIndex:index]];
     CGPoint point = [[dict valueForKey:@"point"] CGPointValue];
     NSNumber *y = [NSNumber numberWithFloat:point.y];
-    [dict release];
+    
     
     NSArray *anchorPoint = [NSArray arrayWithObjects:[NSNumber numberWithFloat:point.x], [NSNumber numberWithFloat:point.y], nil];
     
-    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setMaximumFractionDigits:2];
     NSString *yString = [formatter stringFromNumber:y];
     
-    CPTTextLayer *textLayer = [[[CPTTextLayer alloc] initWithText:yString style:hitAnnotationTextStyle] autorelease];
+    CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:yString style:hitAnnotationTextStyle];
     symbolTextAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:self.graph.defaultPlotSpace anchorPlotPoint:anchorPoint];
     symbolTextAnnotation.contentLayer = textLayer;
     symbolTextAnnotation.displacement = CGPointMake(0.0f, 20.0f);
@@ -311,7 +307,6 @@
 -(void)reloadGraphView {
     if (symbolTextAnnotation) {
         [self.graph.plotAreaFrame.plotArea removeAnnotation:symbolTextAnnotation];
-        [symbolTextAnnotation release];
         symbolTextAnnotation = nil;
     }
     
@@ -358,7 +353,7 @@
     
     for ( NSUInteger i = 0; i < [self.graphDataValues count]; i++ ) {
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[self.graphDataValues objectAtIndex:i]];
-        CPTAxisLabel *newLabel = [[[CPTAxisLabel alloc] initWithText: [NSString stringWithFormat:@"%@", [dict valueForKey:@"date"]] textStyle:axisSet.xAxis.labelTextStyle] autorelease];
+        CPTAxisLabel *newLabel = [[CPTAxisLabel alloc] initWithText: [NSString stringWithFormat:@"%@", [dict valueForKey:@"date"]] textStyle:axisSet.xAxis.labelTextStyle];
         newLabel.tickLocation = @(i * 1);
         newLabel.offset = axisSet.xAxis.labelOffset + axisSet.xAxis.majorTickLength / 2.0;
         newLabel.rotation = M_PI/4;
@@ -366,7 +361,7 @@
         
         [majorTickLocations addObject:[NSDecimalNumber numberWithInteger:i]];
         
-        [dict release];
+        
     }
     axisSet.xAxis.axisLabels = newAxisLabels;
     axisSet.xAxis.majorTickLocations = majorTickLocations;
@@ -376,7 +371,6 @@
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
     axisSet.yAxis.labelFormatter = numberFormatter;
-    [numberFormatter release];
     
     axisSet.yAxis.orthogonalPosition = @([self.graphDataValues count]-0.5f);
     if ([self.graphData count] <=1) {

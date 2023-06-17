@@ -187,7 +187,7 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  *
  * @discussion The default value is YLProgressBarBehaviorDefault.
  */
-@property (nonatomic, assign) IBInspectable YLProgressBarBehavior behavior; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable YLProgressBarBehavior behavior; //UI_APPEARANCE_SELECTOR;
 
 #pragma mark Configuring the Progress Bar
 /** @name Configuring the Progress Bar */
@@ -200,7 +200,7 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  * (`YLProgressBarTypeRounded` or `YLProgressBarTypeFlat`). The value is updated
  * each time the type change.
  */
-@property (nonatomic, assign) IBInspectable BOOL hideGloss;
+@property (nonatomic) IBInspectable BOOL hideGloss;
 
 /**
  * @abstract A Boolean value that determines whether the progress bar needs 
@@ -217,13 +217,13 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  *
  * The default value is set to YES.
  */
-@property (nonatomic, assign) IBInspectable BOOL progressStretch;
+@property (nonatomic) IBInspectable BOOL progressStretch;
 
 /**
  * @abstract Set whether the color shown for the portion of the progress bar that is uniform.
  * @discussion The default value is NO.
  */
-@property (nonatomic, assign) IBInspectable BOOL uniformTintColor; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable BOOL uniformTintColor; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract The colors shown for the portion of the progress bar
@@ -249,21 +249,21 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  * progressBar for the rounded progress bar type.
  * @discussion The default value is 1px.
  */
-@property (nonatomic, assign) IBInspectable CGFloat progressBarInset; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable CGFloat progressBarInset; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract The type of the progress bar.
  * @discussion The default value is set to `YLProgressBarTypeRounded`. The corner 
  * radius can be configured through the `cornerRadius` property.
  */
-@property (nonatomic, assign) IBInspectable YLProgressBarType type; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable YLProgressBarType type; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract The corner radius of the progress bar.
  * @discussion The default value is 0. It means that the corner radius is equal
  * to the half of the height.
  */
-@property (nonatomic, assign) IBInspectable CGFloat cornerRadius; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable CGFloat cornerRadius; //UI_APPEARANCE_SELECTOR;
 
 #pragma mark Displaying Text
 /** @name Displaying Text */
@@ -284,7 +284,7 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  * @discussion The default value is set to
  * `YLProgressBarIndicatorTextDisplayModeNone`.
  */
-@property (nonatomic, assign) IBInspectable YLProgressBarIndicatorTextDisplayMode indicatorTextDisplayMode; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable YLProgressBarIndicatorTextDisplayMode indicatorTextDisplayMode; //UI_APPEARANCE_SELECTOR;
 
 #pragma mark Configuring the Stripes
 /** @name Configuring the Stripes */
@@ -303,7 +303,7 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  * @discussion The default value for this property is
  * `YLProgressBarStripesDirectionRight`.
  */
-@property (nonatomic, assign) IBInspectable YLProgressBarStripesDirection stripesDirection; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable YLProgressBarStripesDirection stripesDirection; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract The velocity of the stripes during the animation. Higher is the
@@ -311,14 +311,14 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  * @discussion The absolute value of the property is taken into account. By
  * default the velocity is `1`.
  */
-@property (nonatomic, assign) IBInspectable double stripesAnimationVelocity; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable double stripesAnimationVelocity; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract The orientation of the stripes.
  * @discussion The default value for this property is
  * `YLProgressBarStripesOrientationRight`.
  */
-@property (nonatomic, assign) IBInspectable YLProgressBarStripesOrientation stripesOrientation; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable YLProgressBarStripesOrientation stripesOrientation; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract The width of the stripes drawn over the progress bar.
@@ -327,7 +327,7 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  * The default value for this property is equal to the
  * `YLProgressBarDefaultStripeWidth` value.
  */
-@property (nonatomic, assign) IBInspectable NSInteger stripesWidth; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable NSInteger stripesWidth; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract The color show for the stripes over the progress bar.
@@ -341,21 +341,21 @@ IB_DESIGNABLE @interface YLProgressBar : UIView
  * integers are expected for correct effect. Has no effect when
  * stripesOrientation property is `YLProgressBarStripesOrientationVertical`.
  */
-@property (nonatomic, assign) IBInspectable NSInteger stripesDelta; //UI_APPEARANCE_SELECTOR;
+@property (nonatomic) IBInspectable NSInteger stripesDelta; //UI_APPEARANCE_SELECTOR;
 
 /**
  * @abstract A Boolean value that determines whether the stripes are hidden.
  * @discussion Setting the value of this property to YES hides the stripes and
  * setting it to NO shows the stripes. The default value is NO.
  */
-@property (nonatomic, assign) IBInspectable BOOL hideStripes;
+@property (nonatomic) IBInspectable BOOL hideStripes;
 
 /**
  * @abstract A Boolean value that determines whether the track is hidden.
  * @discussion Setting the value of this property to YES hides the track and
  * setting it to NO shows the track. The default value is NO.
  */
-@property (nonatomic, assign) IBInspectable BOOL hideTrack;
+@property (nonatomic) IBInspectable BOOL hideTrack;
 
 @end
 

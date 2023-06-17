@@ -17,7 +17,6 @@
     NSTimeInterval interval;
     NSString *selectedValue;
 }
-
 @end
 
 @implementation TimerViewController
@@ -283,19 +282,20 @@
         pickerLbl.text = @"00:00:00";
     }
 }
--(void)playBuzzer
-{
-     _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"sound" ofType:@"mp3"]] error:&_error];
+
+-(void)playBuzzer {
+    NSError *error;
+     _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"sound" ofType:@"mp3"]] error:&error];
 
     _audioPlayer.numberOfLoops = 1;
 
-    if (_error) {
-        DMLog(@"Error : %@", [_error localizedDescription]);
+    if (error) {
+        DMLog(@"Error : %@", [error localizedDescription]);
     } else {
         [_audioPlayer prepareToPlay];
     }
-    
 }
+
 - (NSString *)formattedTime:(int)totalSeconds
 {
     int seconds = totalSeconds % 60;
@@ -357,10 +357,8 @@
         [pickerCompView setUserInteractionEnabled:YES];
     }
 }
+
 - (IBAction)resumeaction:(UIButton*)sender {
-    
-//    _currentTimeInSeconds = 0;
-    
     if([timerBtn backgroundColor] == [UIColor whiteColor])
     {
         self.timerLbl.text = [self formattedTime:_currentTimeInSeconds];
@@ -377,7 +375,6 @@
             _pickerTimer = [self createTimerPicker];
         }
     }
-//    self.timerLbl.text = [self formattedTime:_currentTimeInSeconds];
 }
 
 - (IBAction)resetAction:(UIButton*)sender {
@@ -400,8 +397,7 @@
         [self stopaction:sender];
     });
     
-    if([timerBtn backgroundColor] == [UIColor whiteColor])
-    {
+    if([timerBtn backgroundColor] == [UIColor whiteColor]) {
     }
     else
     {
@@ -409,14 +405,4 @@
     }
 }
 
-- (void)dealloc {
-    [stopWatchBtn release];
-    [timerBtn release];
-    [pickerLbl release];
-    [timePicker release];
-    [pickerView release];
-    [pickerCompView release];
-    [_startBtnOutlet release];
-    [super dealloc];
-}
 @end

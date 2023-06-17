@@ -10,11 +10,9 @@
 #import "SoapWebServiceEngine.h"
 #import "LearnMoreViewController.h"
 #import "DietMasterGoViewController.h"
-#import "DietMasterGoController_Old.h"
 #import "InAppPurchaseViewController.h"
 #import "MyMovesViewController.h"
 #import "ProfileAlertVCViewController.h"
-
 
 @implementation LoginViewController
 
@@ -74,7 +72,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     appNameLabel.text = [appDefaults valueForKey:@"app_name_long"];
     
@@ -210,7 +208,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         UIAlertView *alert;
         alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Username or Mobile Password field is empty. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-        [alert release];
         
         _loginButton.enabled = YES;
         [cellSpinner stopAnimating];
@@ -218,7 +215,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     else {
         _loginButton.enabled = NO;
         
-        DietmasterEngine *engine = [DietmasterEngine instance];
+        DietmasterEngine *engine = [DietmasterEngine sharedInstance];
         engine.sendAllServerData = true;
         
         NSString *tokenToSend = [NSString stringWithString:passwordField.text];
@@ -232,7 +229,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.userLoginWS = [[UserLoginWebService alloc] init];
         userLoginWS.wsAuthenticateUserDelegate = self;
         [userLoginWS callWebservice:tokenToSend];
-        [userLoginWS release];
     }
 }
 
@@ -242,11 +238,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if ([MFMailComposeViewController canSendMail]) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
         NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
         
-        MFMailComposeViewController *mailComposer = [[[MFMailComposeViewController alloc] init] autorelease];
+        MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
         [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
-        NSString *emailTo = [[[NSString alloc] initWithFormat:@""] autorelease];
+        NSString *emailTo = [[NSString alloc] initWithFormat:@""];
         [mailComposer setMessageBody:emailTo isHTML:NO];
         NSArray *toArray = [NSArray arrayWithObjects:Support_Email, nil];
         [mailComposer setToRecipients:toArray];
@@ -290,12 +286,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             break;
     }
     [alert show];
-    [alert release];
 }
 
 #pragma mark USER SYNC METHODS
 -(void)sendDeviceToken {
-    NSString *deviceToken = [DietmasterEngine instance].deviceToken;
+    NSString *deviceToken = [DietmasterEngine sharedInstance].deviceToken;
     if (deviceToken) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -306,9 +301,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                   nil];
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
         [soapWebService callWebservice:infoDict];
-        [soapWebService release];
-        
-        [infoDict release];
     }
 }
 
@@ -323,9 +315,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsGetUserInfoDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
 }
 
 #pragma mark LOGIN AUTH DELEGATE METHODS
@@ -339,7 +328,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         UIAlertView *alert;
         alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Incorrect Login. Please check your username and/or mobile password and try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-        [alert release];
         [cellSpinner stopAnimating];
         _loginButton.enabled = YES;
     }
@@ -372,7 +360,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             [cellSpinner stopAnimating];
         }
     }
-    [dict release];
 }
 
 - (void)getAuthenticateUserFailed:(NSString *)failedMessage {
@@ -381,13 +368,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     UIAlertView *alert;
     alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Incorrect Login. Please check your username and/or mobile password and try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
-    [alert release];
     [cellSpinner stopAnimating];
 }
 
 #pragma mark USER INFO DELEGATE METHODS
 - (void)getUserInfoFinished:(NSMutableArray *)responseArray {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.updateUserInfoDelegate = self;
     [dietmasterEngine updateUserInfo:responseArray];
     
@@ -404,31 +390,29 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     UIAlertView *alert;
     alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Incorrect Login. Please check your username and/or mobile password and try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
-    [alert release];
     [cellSpinner stopAnimating];
     _loginButton.enabled = YES;
 }
 
 - (void)updateUserInfoFinished:(NSString *)responseMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.updateUserInfoDelegate = nil;
 }
 
 - (void)updateUserInfoFailed:(NSString *)failedMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.updateUserInfoDelegate = nil;
     
     UIAlertView *alert;
     alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred processing your request. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
-    [alert release];
     [cellSpinner stopAnimating];
     _loginButton.enabled = YES;
 }
 
 #pragma mark SYNC DELEGATE METHODS
 - (void)syncDatabaseFinished:(NSString *)responseMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"UserLoginFinished" object:responseMessage];
@@ -439,13 +423,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
     UIAlertView *alert;
     alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred processing your request. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
-    [alert release];
     
     [cellSpinner stopAnimating];
     _loginButton.enabled = YES;
@@ -462,7 +445,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     learnMoreViewController.hidesBottomBarWhenPushed = YES;
     learnMoreViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentViewController:learnMoreViewController animated:YES completion:nil];
-    [learnMoreViewController release];
 }
 
 -(IBAction)termsOfService:(id)sender {
@@ -471,18 +453,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     learnMoreViewController.hidesBottomBarWhenPushed = YES;
     learnMoreViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentViewController:learnMoreViewController animated:YES completion:nil];
-    [learnMoreViewController release];
 }
 
-- (void)dealloc {
-    [_emailbtuuon release];
-    [_imgtop release];
-    usernameField = nil;
-    cellSpinner = nil;
-    passwordField = nil;
-    appNameLabel = nil;
-    _loginButton = nil;
-    
-    [super dealloc];
-}
 @end

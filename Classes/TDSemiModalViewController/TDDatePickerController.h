@@ -13,9 +13,9 @@
 	id delegate;
 }
 
-@property (nonatomic, retain) IBOutlet id delegate;
-@property (nonatomic, retain) IBOutlet UIDatePicker* datePicker;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolBarOutlet;
+@property (nonatomic, strong) IBOutlet id delegate;
+@property (nonatomic, strong) IBOutlet UIDatePicker* datePicker;
+@property (nonatomic, strong) IBOutlet UIToolbar *toolBarOutlet;
 
 -(IBAction)saveDateEdit:(id)sender;
 -(IBAction)clearDateEdit:(id)sender;

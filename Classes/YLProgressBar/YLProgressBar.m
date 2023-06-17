@@ -40,12 +40,12 @@ static NSString * YLProgressBarDefaultName = @"Arial-BoldMT";
 const CGFloat YLProgressBarDefaultProgress = 0.3f;
 
 @interface YLProgressBar ()
-@property (nonatomic, assign) double  stripesOffset;
-@property (nonatomic, assign) CGFloat internalCornerRadius;
+@property (nonatomic) double  stripesOffset;
+@property (nonatomic) CGFloat internalCornerRadius;
 @property (nonatomic, strong) NSTimer *stripesTimer;
 @property (nonatomic, strong) NSArray *colors;
 @property (nonatomic, strong) NSTimer *progressTargetTimer;
-@property (nonatomic, assign) CGFloat progressTargetValue;
+@property (nonatomic) CGFloat progressTargetValue;
 
 /** Init the progress bar with the default values. */
 - (void)initializeProgressBar;
@@ -72,8 +72,9 @@ const CGFloat YLProgressBarDefaultProgress = 0.3f;
 @implementation YLProgressBar
 @synthesize progress = _progress;
 
-- (void)dealloc
-{
+- (void)removeFromSuperview {
+    [super removeFromSuperview];
+    
   if (_stripesTimer && [_stripesTimer isValid])
   {
     [_stripesTimer invalidate];

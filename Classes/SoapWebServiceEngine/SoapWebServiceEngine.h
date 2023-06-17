@@ -40,34 +40,6 @@
 @protocol WSSetMessageReadDelegate;
 
 @interface SoapWebServiceEngine : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate> {
-    
-    // delegates
-    // DOWN SYNC
-    id<WSGetUserInfoDelegate> wsGetUserInfoDelegate;
-    id<WSSyncFoodsDelegate> wsSyncFoodsDelegate;
-    id<WSSyncFoodLogDelegate> wsSyncFoodLogDelegate;
-    id<WSSyncFoodLogItemsDelegate> wsSyncFoodLogItemsDelegate;
-    id<WSSyncFavoriteFoodsDelegate> wsSyncFavoriteFoodsDelegate;
-    id<WSSyncFavoriteMealsDelegate> wsSyncFavoriteMealsDelegate;
-    id<WSSyncFavoriteMealItemsDelegate> wsSyncFavoriteMealItemsDelegate;
-    id<WSSyncExerciseLogDelegate> wsSyncExerciseLogDelegate;
-    //HHT new exercise sync
-    id<WSSyncExerciseLogNewDelegate> wsSyncExerciseLogNewDelegate;
-    id<WSSyncWeightLogDelegate> wsSyncWeightLogDelegate;
-    id<WSGetFoodDelegate> wsGetFoodDelegate;
-    
-    // UP SYNC
-    id<WSSaveMealDelegate> wsSaveMealDelegate;
-    id<WSSaveMealItemDelegate> wsSaveMealItemDelegate;
-    id<WSSaveExerciseLogsDelegate> wsSaveExerciseLogsDelegate;
-    id<WSSaveWeightLogDelegate> wsSaveWeightLogDelegate;
-    id<WSSaveFoodDelegate> wsSaveFoodDelegate;
-    id<WSSaveFavoriteFoodDelegate> wsSaveFavoriteFoodDelegate;
-    id<WSSaveFavoriteMealDelegate> wsSaveFavoriteMealDelegate;
-    id<WSSaveFavoriteMealItemDelegate> wsSaveFavoriteMealItemDelegate;
-    id<WSDeleteMealItemDelegate> wsDeleteMealItemDelegate;
-    id<WSDeleteFavoriteFoodDelegate> wsDeleteFavoriteFoodDelegate;
-    
     NSMutableData *webData;
     NSMutableString *soapResults;
     NSXMLParser *xmlParser;
@@ -77,48 +49,47 @@
     int tempID;
     
     NSTimer *timeOutTimer;
-    
 }
-@property (nonatomic, retain) NSTimer *timeOutTimer;
-@property (nonatomic, retain) NSDictionary *requestDict;
+@property (nonatomic, strong) NSTimer *timeOutTimer;
+@property (nonatomic, strong) NSDictionary *requestDict;
 
-// delegates
 // DOWN SYNC
-@property(nonatomic,assign) id<WSGetUserInfoDelegate> wsGetUserInfoDelegate;
-@property(nonatomic,assign) id<WSSyncFoodsDelegate> wsSyncFoodsDelegate;
-@property(nonatomic,assign) id<WSSyncFoodLogDelegate> wsSyncFoodLogDelegate;
-@property(nonatomic,assign) id<WSSyncFoodLogItemsDelegate> wsSyncFoodLogItemsDelegate;
-@property(nonatomic,assign) id<WSSyncFavoriteFoodsDelegate> wsSyncFavoriteFoodsDelegate;
-@property(nonatomic,assign) id<WSSyncFavoriteMealsDelegate> wsSyncFavoriteMealsDelegate;
-@property(nonatomic,assign) id<WSSyncFavoriteMealItemsDelegate> wsSyncFavoriteMealItemsDelegate;
-@property(nonatomic,assign) id<WSSyncWeightLogDelegate> wsSyncWeightLogDelegate;
-@property(nonatomic,assign) id<WSSyncExerciseLogDelegate> wsSyncExerciseLogDelegate;
+@property (nonatomic, weak) id<WSGetUserInfoDelegate> wsGetUserInfoDelegate;
+@property (nonatomic, weak) id<WSSyncFoodsDelegate> wsSyncFoodsDelegate;
+@property (nonatomic, weak) id<WSSyncFoodLogDelegate> wsSyncFoodLogDelegate;
+@property (nonatomic, weak) id<WSSyncFoodLogItemsDelegate> wsSyncFoodLogItemsDelegate;
+@property (nonatomic, weak) id<WSSyncFavoriteFoodsDelegate> wsSyncFavoriteFoodsDelegate;
+@property (nonatomic, weak) id<WSSyncFavoriteMealsDelegate> wsSyncFavoriteMealsDelegate;
+@property (nonatomic, weak) id<WSSyncFavoriteMealItemsDelegate> wsSyncFavoriteMealItemsDelegate;
+@property (nonatomic, weak) id<WSSyncWeightLogDelegate> wsSyncWeightLogDelegate;
+@property (nonatomic, weak) id<WSSyncExerciseLogDelegate> wsSyncExerciseLogDelegate;
 //HHT new exercise sync
-@property(nonatomic,assign) id<WSSyncExerciseLogNewDelegate> wsSyncExerciseLogNewDelegate;
-@property(nonatomic,assign) id<WSGetFoodDelegate> wsGetFoodDelegate;
-@property(nonatomic,assign) id<WSGetMessagesDelegate> wsGetMessagesDelegate;
+@property (nonatomic, weak) id<WSSyncExerciseLogNewDelegate> wsSyncExerciseLogNewDelegate;
+@property (nonatomic, weak) id<WSGetFoodDelegate> wsGetFoodDelegate;
+@property (nonatomic, weak) id<WSGetMessagesDelegate> wsGetMessagesDelegate;
 
 // UP SYNC
-@property(nonatomic,assign) id<WSSaveMealDelegate> wsSaveMealDelegate;
-@property(nonatomic,assign) id<WSSaveMealItemDelegate> wsSaveMealItemDelegate;
-@property(nonatomic,assign) id<WSSaveExerciseLogsDelegate> wsSaveExerciseLogsDelegate;
-@property(nonatomic,assign) id<WSSaveWeightLogDelegate> wsSaveWeightLogDelegate;
-@property(nonatomic,assign) id<WSSaveFoodDelegate> wsSaveFoodDelegate;
-@property(nonatomic,assign) id<WSSaveFavoriteFoodDelegate> wsSaveFavoriteFoodDelegate;
-@property(nonatomic,assign) id<WSSaveFavoriteMealDelegate> wsSaveFavoriteMealDelegate;
-@property(nonatomic,assign) id<WSSaveFavoriteMealItemDelegate> wsSaveFavoriteMealItemDelegate;
+@property (nonatomic, weak) id<WSSaveMealDelegate> wsSaveMealDelegate;
+@property (nonatomic, weak) id<WSSaveMealItemDelegate> wsSaveMealItemDelegate;
+@property (nonatomic, weak) id<WSSaveExerciseLogsDelegate> wsSaveExerciseLogsDelegate;
+@property (nonatomic, weak) id<WSSaveWeightLogDelegate> wsSaveWeightLogDelegate;
+@property (nonatomic, weak) id<WSSaveFoodDelegate> wsSaveFoodDelegate;
+@property (nonatomic, weak) id<WSSaveFavoriteFoodDelegate> wsSaveFavoriteFoodDelegate;
+@property (nonatomic, weak) id<WSSaveFavoriteMealDelegate> wsSaveFavoriteMealDelegate;
+@property (nonatomic, weak) id<WSSaveFavoriteMealItemDelegate> wsSaveFavoriteMealItemDelegate;
 
 //change by Kiran sir
-@property(nonatomic,strong) id<WSDeleteMealItemDelegate> wsDeleteMealItemDelegate;
+@property (nonatomic,strong) id<WSDeleteMealItemDelegate> wsDeleteMealItemDelegate;
 
-@property(nonatomic,assign) id<WSDeleteFavoriteFoodDelegate> wsDeleteFavoriteFoodDelegate;
-@property(nonatomic,assign) id<WSSendMessageDelegate> wsSendMessageDelegate;
-@property(nonatomic,assign) id<WSSendDeviceTokenDelegate> wsSendDeviceTokenDelegate;
-@property(nonatomic,assign) id<WSSetMessageReadDelegate> wsSetMessageReadDelegate;
+@property (nonatomic, weak) id<WSDeleteFavoriteFoodDelegate> wsDeleteFavoriteFoodDelegate;
+@property (nonatomic, weak) id<WSSendMessageDelegate> wsSendMessageDelegate;
+@property (nonatomic, weak) id<WSSendDeviceTokenDelegate> wsSendDeviceTokenDelegate;
+@property (nonatomic, weak) id<WSSetMessageReadDelegate> wsSetMessageReadDelegate;
 
-@property(nonatomic, retain) NSMutableData *webData;
-@property(nonatomic, retain) NSMutableString *soapResults;
-@property(nonatomic, retain) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
+
 -(void)callWebserviceForFoodNew:(NSDictionary *)requestDict withCompletion:(void (^)(id))completion;
 
 -(void)callWebservice:(NSDictionary *)requestDict withCompletion:(void(^)(id obj))completion;

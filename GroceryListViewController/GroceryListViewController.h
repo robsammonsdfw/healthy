@@ -16,20 +16,17 @@
 @interface GroceryListViewController : UIViewController <MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, WSGetGroceryList, UIAlertViewDelegate, TTTAttributedLabelDelegate> {
         
     IBOutlet UILabel *titleLabel;
-    MBProgressHUD *HUD;
+    
     int selectedIndex;
     NSMutableArray *selectedRows;
     IBOutlet UITableView *tableView;
 }
 
-@property (nonatomic, assign) int selectedIndex;
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet UIImageView *imgBackground;
+@property (nonatomic) int selectedIndex;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UIImageView *imgBackground;
 
 -(void)loadData;
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 -(void)checkButtonTapped:(id)sender event:(id)event;
 -(void)editGroceryList;
 

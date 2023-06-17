@@ -22,18 +22,18 @@
     IBOutlet UISegmentedControl *segmentedControl;
     IBOutlet UILabel *noDataLabel;
 }
-@property (retain, nonatomic) IBOutlet UILabel *goalWeightLbl;
-@property (retain, nonatomic) IBOutlet UILabel *WeightLbl;
+@property (nonatomic, strong) IBOutlet UILabel *goalWeightLbl;
+@property (nonatomic, strong) IBOutlet UILabel *WeightLbl;
 
-@property (retain, nonatomic) IBOutlet UIImageView *imgbg;
-@property (retain, nonatomic) IBOutlet UIImageView *imgtop;
-@property (retain, nonatomic) IBOutlet UIButton *btnrecordyourweight;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbg;
+@property (nonatomic, strong) IBOutlet UIImageView *imgtop;
+@property (nonatomic, strong) IBOutlet UIButton *btnrecordyourweight;
 
-@property (nonatomic, retain) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
 // Graph
-@property (nonatomic, retain) TUTSimpleScatterPlot *scatterPlot;
-@property (retain, nonatomic) IBOutlet UIView *popUpView;
-@property (retain, nonatomic) IBOutlet UIView *showPopUpVw;
+@property (nonatomic, strong) TUTSimpleScatterPlot *scatterPlot;
+@property (nonatomic, strong) IBOutlet UIView *popUpView;
+@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 
 -(IBAction) showRecordWeightView:(id) sender;
 -(IBAction) changeGraphTime:(id) sender;

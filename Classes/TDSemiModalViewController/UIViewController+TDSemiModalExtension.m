@@ -48,19 +48,14 @@
 	[self.view addSubview:coverView];
 	[self.view addSubview:modalView];
 	
-	// Show it with a transition effect
-	[UIView beginAnimations:nil context:nil];
-	[UIView setAnimationDuration:0.6];
-	
-	modalView.center = middleCenter;
-	coverView.alpha = 0.5;
-
-	[UIView commitAnimations];
-
+    [UIView animateWithDuration:0.6 animations:^{
+        modalView.center = middleCenter;
+        coverView.alpha = 0.5;
+    }];
 }
 
 // Use this to slide the semi-modal view back down.
--(void) dismissSemiModalViewController:(TDSemiModalViewController*)vc {
+-(void)dismissSemiModalViewController:(TDSemiModalViewController*)vc {
 	double animationDelay = 0.7;
 	UIView* modalView = vc.view;
 	UIView* coverView = vc.coverView;
@@ -78,22 +73,14 @@
 		offScreenCenter = CGPointMake(offSize.width / 2.0, offSize.height * 1.5);
 	}
 
-	[UIView beginAnimations:nil context:modalView];
-	[UIView setAnimationDuration:animationDelay];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(dismissSemiModalViewControllerEnded:finished:context:)];
-	modalView.center = offScreenCenter;
-	coverView.alpha = 0.0f;
-	[UIView commitAnimations];
+    [UIView animateWithDuration:animationDelay animations:^{
+        modalView.center = offScreenCenter;
+        coverView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        [modalView removeFromSuperview];
+    }];
 
-	[coverView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:animationDelay];
-
-}
-
-- (void) dismissSemiModalViewControllerEnded:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-	UIView* modalView = (UIView*)context;
-	[modalView removeFromSuperview];
-
+    [coverView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:animationDelay];
 }
 
 @end

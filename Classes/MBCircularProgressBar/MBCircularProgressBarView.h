@@ -19,27 +19,27 @@ IB_DESIGNABLE
 /**
  * Should show value string 
  */
-@property (nonatomic,assign) IBInspectable BOOL      showValueString;
+@property (nonatomic) IBInspectable BOOL      showValueString;
 
 /**
  * The value of the progress bar (Animatable property using [UIView animateWithDuration:]) 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   value;
+@property (nonatomic) IBInspectable CGFloat   value;
 
 /** 
  * The maximum possible value, used to calculate the progress (value/maxValue)	[0,∞) 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   maxValue;
+@property (nonatomic) IBInspectable CGFloat   maxValue;
 
 /**
  * Padding from borders
  */
-@property (nonatomic,assign) IBInspectable CGFloat borderPadding;
+@property (nonatomic) IBInspectable CGFloat borderPadding;
 
 /* 
  * Number of decimal places of the value [0,∞) 
  */
-@property (nonatomic,assign) IBInspectable NSInteger decimalPlaces;
+@property (nonatomic) IBInspectable NSInteger decimalPlaces;
 
 /** 
  * The name of the font of the value string
@@ -49,17 +49,17 @@ IB_DESIGNABLE
 /**
  * The font size of the value text	[0,∞) 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   valueFontSize;
+@property (nonatomic) IBInspectable CGFloat   valueFontSize;
 
 /** 
  * The value to be displayed in the center 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   valueDecimalFontSize;
+@property (nonatomic) IBInspectable CGFloat   valueDecimalFontSize;
 
 /**
  * Should show unit screen 
  */
-@property (nonatomic,assign) IBInspectable BOOL      showUnitString;
+@property (nonatomic) IBInspectable BOOL      showUnitString;
 
 /**
  * The name of the font of the unit string 
@@ -69,7 +69,7 @@ IB_DESIGNABLE
 /**
  * The font size of the unit text	[0,∞) 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   unitFontSize;
+@property (nonatomic) IBInspectable CGFloat   unitFontSize;
 
 /** 
  * The string that represents the units, usually % 
@@ -84,22 +84,22 @@ IB_DESIGNABLE
 /**
  * Progress bar appearance type
  */
-@property (nonatomic,assign) IBInspectable NSInteger progressAppearanceType;
+@property (nonatomic) IBInspectable NSInteger progressAppearanceType;
 
 /**
  * Progress bar rotation (Clockewise)	[0,100] 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   progressRotationAngle;
+@property (nonatomic) IBInspectable CGFloat   progressRotationAngle;
 
 /** 
  * Set a partial angle for the progress bar	[0,100] 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   progressAngle;
+@property (nonatomic) IBInspectable CGFloat   progressAngle;
 
 /** 
  * The width of the progress bar (user space units)	[0,∞)
  */
-@property (nonatomic,assign) IBInspectable CGFloat   progressLineWidth;
+@property (nonatomic) IBInspectable CGFloat   progressLineWidth;
 
 /** 
  * The color of the progress bar 
@@ -114,12 +114,12 @@ IB_DESIGNABLE
 /**
  * The shape of the progress bar cap	{kCGLineCapButt=0, kCGLineCapRound=1, kCGLineCapSquare=2} 
  */
-@property (nonatomic,assign) IBInspectable NSInteger progressCapType;
+@property (nonatomic) IBInspectable NSInteger progressCapType;
 
 /**
  * The width of the background bar (user space units)	[0,∞) 
  */
-@property (nonatomic,assign) IBInspectable CGFloat   emptyLineWidth;
+@property (nonatomic) IBInspectable CGFloat   emptyLineWidth;
 
 /**
  * The color of the background bar 
@@ -134,17 +134,17 @@ IB_DESIGNABLE
 /**
  * The shape of the background bar cap	{kCGLineCapButt=0, kCGLineCapRound=1, kCGLineCapSquare=2} 
  */
-@property (nonatomic,assign) IBInspectable NSInteger emptyCapType;
+@property (nonatomic) IBInspectable NSInteger emptyCapType;
 
 /**
  * The offset to apply to the unit / value text
  */
-@property (nonatomic,assign) IBInspectable CGPoint textOffset;
+@property (nonatomic) IBInspectable CGPoint textOffset;
 
 
 /**
  * The bool value to apply to if its counddown or not
  */
-@property (nonatomic,assign) IBInspectable BOOL      countdown;
+@property (nonatomic) IBInspectable BOOL      countdown;
 
 @end

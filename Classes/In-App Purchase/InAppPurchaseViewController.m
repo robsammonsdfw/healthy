@@ -372,20 +372,4 @@
     
 }
 
-
--(void)showLoading {
-    [HUD hide:YES afterDelay:0.0];
-    HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)dealloc {
-    [_tableView release];
-    [_contentVw release];
-    [super dealloc];
-}
-
 @end

@@ -10,8 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface headerVw : UITableViewCell
-@property (retain, nonatomic) IBOutlet UIView *accentClrVw;
-@property (retain, nonatomic) IBOutlet UILabel *planLbl;
+@property (nonatomic, strong) IBOutlet UIView *accentClrVw;
+@property (nonatomic, strong) IBOutlet UILabel *planLbl;
 
 @end
 

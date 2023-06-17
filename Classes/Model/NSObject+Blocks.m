@@ -7,17 +7,6 @@
 
 @implementation NSObject (Blocks)
 
-//- (void)runBlock:(void (^)(void))block
-//{
-//  block();
-//}
-//
-//- (void)performAfterDelay:(NSTimeInterval)delay block:(void (^)(void))block
-//{
-//  void (^block_)() = [[block copy] autorelease];
-//  [self performSelector:@selector(runBlock:) withObject:block_ afterDelay:delay];
-//}
-
 - (void)performAfterDelay:(NSTimeInterval)delay block:(void (^)(void))block
 {
   int64_t delta = (int64_t)(1.0e9 * delay);

@@ -69,7 +69,7 @@
                                    target: nil action: nil];
     
     [self.navigationItem setBackBarButtonItem: backButton];
-    [backButton release];
+    
     
     aBarButtonItem = [[UIBarButtonItem alloc] initWithImage:
                       [UIImage imageNamed:@"80-shopping-cart"]
@@ -77,14 +77,13 @@
                                                      target:self action:@selector(showActionSheet:)];
     aBarButtonItem.tintColor=[UIColor whiteColor];
     [self.navigationItem setLeftBarButtonItem:aBarButtonItem];
-    [aBarButtonItem release];
     
     selectedRows = [[NSMutableArray alloc] init];
     isChoosingForGroceryList = NO;
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
@@ -136,7 +135,7 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if ([dietmasterEngine.mealPlanArray count] == 0) {
         [self startLoading];
     }
@@ -157,7 +156,6 @@
                                                                            target:self action:@selector(showActionSheet:)];
         
         [self.navigationItem setRightBarButtonItem:aBarButtonItem1];
-        [aBarButtonItem1 release];
         
         [self.navigationItem setLeftBarButtonItem:nil];
     }
@@ -166,31 +164,27 @@
         
         UIBarButtonItem *aBarButtonItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(loadGroceryList)];
         [self.navigationItem setRightBarButtonItem:aBarButtonItem2];
-        [aBarButtonItem2 release];
         
         UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(showGroceryList)];
         [self.navigationItem setLeftBarButtonItem:cancelButton];
-        [cancelButton release];
     }
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 -(void)loadGroceryList {
-    [self showLoading];
-    
+    [DMActivityIndicator showActivityIndicator];
+
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     NSMutableArray *mealIDArray = [[NSMutableArray alloc] init];
     for (NSIndexPath *indexPath in selectedRows) {
         
         NSMutableDictionary *mealIDDict = [[NSMutableDictionary alloc] init];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.mealPlanArray objectAtIndex:[indexPath row]]];
         [mealIDDict setValue:[tempDict valueForKey:@"MealID"] forKey:@"MealID"];
         [mealIDArray addObject:mealIDDict];
-        [tempDict release];
-        [mealIDDict release];
     }
     
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -203,10 +197,6 @@
     self.soapWebService = [[MealPlanWebService alloc] init];
     soapWebService.wsGetGroceryList = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [mealIDArray release];
-    [infoDict release];
 }
 
 #pragma mark LOAD DATA METHODS
@@ -221,14 +211,14 @@
     self.soapWebService = [[MealPlanWebService alloc] init];
     soapWebService.wsGetUserPlannedMealNames = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
     
-    [infoDict release];
+    
+    
 }
 
 #pragma mark TABLE VIEW METHODS
 - (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if ([dietmasterEngine.mealPlanArray count] > 0) {
         return indexPath;
@@ -252,7 +242,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     return ([dietmasterEngine.mealPlanArray count] > 0 ? [dietmasterEngine.mealPlanArray count] : 1);
 }
 
@@ -261,15 +251,15 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 
-        UIImageView * rowCellImgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver.png"]] autorelease];
+        UIImageView * rowCellImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver.png"]];
         rowCellImgView.tintColor = PrimaryColor;
         
         cell.backgroundView = rowCellImgView;
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if ([dietmasterEngine.mealPlanArray count] > 0) {
         
@@ -306,7 +296,7 @@
             cell.accessoryView = nil;
         }
         
-        [tempDict release];
+        
     }
     else {
         cell.textLabel.text = @"Contact your program provider regarding meal plans";
@@ -327,7 +317,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if ([dietmasterEngine.mealPlanArray count] > 0) {
         if (isChoosingForGroceryList) {
@@ -358,7 +348,6 @@
             MealPlanDetailViewController *detailVC = [[MealPlanDetailViewController alloc] init];
             detailVC.selectedIndex = (int)indexPath.row;
             [self.navigationController pushViewController:detailVC animated:YES];
-            [detailVC release];
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -368,10 +357,6 @@
         return;
     }
 }
-
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-//}
 
 #pragma mark CHECKMARK ACTION
 
@@ -387,9 +372,9 @@
 
 #pragma mark GROCERY LIST DELEGATES
 - (void)getGroceryListFinished:(NSMutableArray *)responseArray {
-    [self hideLoading];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator hideActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine.groceryArray removeAllObjects];
     
     for (id obj in responseArray) {
@@ -401,24 +386,22 @@
     
     GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
     [self.navigationController pushViewController:groceryListVC animated:YES];
-    [groceryListVC release];
     
     [self showGroceryList];
 }
 
 - (void)getGroceryListFailed:(NSString *)failedMessage {
-    [self hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred! Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:200];
     [alert show];
-    [alert release];
 }
 
 #pragma mark GET MEAL PLAN NAME DELEGATES
 
 - (void)getUserPlannedMealNamesFinished:(NSMutableArray *)responseArray {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine.mealPlanArray removeAllObjects];
     [dietmasterEngine.mealPlanArray addObjectsFromArray:responseArray];
     
@@ -433,7 +416,6 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please pull to refresh & try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:200];
     [alert show];
-    [alert release];
 }
 
 #pragma mark PULL REFRESH METHODS
@@ -444,7 +426,7 @@
 #pragma mark ACTION SHEET METHODS
 
 -(void)showActionSheet:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if ([dietmasterEngine.mealPlanArray count] > 0) {
         NSString *buttonString = nil;
@@ -458,7 +440,7 @@
         popupQuery.tag = 10;
         popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
         [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
-        [popupQuery release];
+        
     }
     else {
         
@@ -473,49 +455,13 @@
             [self showGroceryList];
         }
         else if (buttonIndex == 1) {
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             if ([dietmasterEngine.groceryArray count] > 0) {
                 GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
                 [self.navigationController pushViewController:groceryListVC animated:YES];
-                [groceryListVC release];
             }
         }
     }
-}
-
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:HUD];
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-    
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
-}
-
-- (void)dealloc {
-    [_imgbg release];
-    selectedRows = nil;
-    [super dealloc];
 }
 
 - (IBAction)popUpBtn:(id)sender {
@@ -585,7 +531,6 @@
     if (navigationArray.count > 2) {
         [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
         self.navigationController.viewControllers = navigationArray;
-        [navigationArray release];
     }
 }
 

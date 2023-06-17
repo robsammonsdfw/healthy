@@ -16,7 +16,7 @@
 @interface ExercisesDetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate, MBProgressHUDDelegate> {
     
 	IBOutlet UIPickerView *pickerView;
-	MBProgressHUD *HUD;
+	
     NSMutableArray *pickerComponentOneArray;
     NSMutableArray *pickerComponentTwoArray;
     int exerciseLogID;
@@ -35,7 +35,7 @@
     IBOutlet UIButton *permissionBtn;
 }
 
-@property (retain, nonatomic) IBOutlet UIImageView *imgbar;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
 - (IBAction) delLog:(id) sender;
 -(void) saveToLog:(id) sender;
 
@@ -45,9 +45,5 @@
 -(void) deleteFromFavorites;
 -(void)saveToFavorites;
 -(void)updateCalorieLabel;
-
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 
 @end

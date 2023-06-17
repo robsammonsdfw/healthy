@@ -45,7 +45,7 @@
 	
     IBOutlet UIActivityIndicatorView *cellSpinner;
     
-    MBProgressHUD *HUD;
+    
     NSMutableArray *exerciseResults;
     NSMutableArray *foodResults;
 	
@@ -113,40 +113,40 @@
     MyMovesWebServices *soapWebService;
 }
 
-@property (retain, nonatomic) IBOutlet UIImageView *imgbottom;
-@property (nonatomic, retain) NSDate *date_currentDate1;
-@property (nonatomic, retain) NSNumber *int_mealID;
-@property (retain, nonatomic) IBOutlet UITableView *tbl;
-@property (retain, nonatomic) IBOutlet UIImageView *imgbottomline;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbottom;
+@property (nonatomic, strong) NSDate *date_currentDate1;
+@property (nonatomic, strong) NSNumber *int_mealID;
+@property (nonatomic, strong) IBOutlet UITableView *tbl;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbottomline;
 @property (assign, nonatomic, readonly) NSInteger primaryKey;
-@property (nonatomic, retain) NSDate *date_currentDate;
-@property (nonatomic, retain) UITableView *tblSimpleTable;
+@property (nonatomic, strong) NSDate *date_currentDate;
+@property (nonatomic, strong) UITableView *tblSimpleTable;
 @property (nonatomic) int num_BMR;
-@property (nonatomic, retain) IBOutlet UIView *dayDetailView;
+@property (nonatomic, strong) IBOutlet UIView *dayDetailView;
 
-@property (retain, nonatomic) IBOutlet UILabel *staticRecommendedLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticRemainingLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticRecCarbLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticActualCarbLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticRecProtLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticActualProtLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticRecFatLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticActualFatLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticCarbsLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticProteinLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticFatLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticRecommendedLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticRemainingLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticRecCarbLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticActualCarbLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticRecProtLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticActualProtLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticRecFatLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticActualFatLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticCarbsLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticProteinLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticFatLbl;
 
-@property (retain, nonatomic) IBOutlet UIView *showPopUpVw;
-@property (retain, nonatomic) IBOutlet UIView *overallView;
+@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
+@property (nonatomic, strong) IBOutlet UIView *overallView;
 
-@property (retain, nonatomic) IBOutlet UIView *vw;
+@property (nonatomic, strong) IBOutlet UIView *vw;
 
 //HHT apple watch
-@property(nonatomic,retain) HKHealthStore *healthStore;
-@property(nonatomic, strong) NSMutableArray *arrData;
-@property(nonatomic, strong) NSSet *readDataTypes;
-@property(nonatomic, strong) StepData * sd;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *whiteViewHeightConst;
+@property (nonatomic,retain) HKHealthStore *healthStore;
+@property (nonatomic, strong) NSMutableArray *arrData;
+@property (nonatomic, strong) NSSet *readDataTypes;
+@property (nonatomic, strong) StepData * sd;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *whiteViewHeightConst;
 
 -(void) getBMR;
 
@@ -156,9 +156,6 @@
 -(IBAction) goToSafetyGuidelines:(id) sender;
 
 -(void)updateData:(NSDate *)date;
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 -(void)loadExerciseData:(NSDate *)date;
 -(void)updateCalorieTotal;
 -(IBAction)saveFavoriteMeal:(id)sender;
@@ -166,6 +163,6 @@
 -(void)reloadData;
 -(IBAction)showHideDetailView:(id)sender;
 -(void)movedDetailView:(id)sender;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *popUpVwBottonContrain;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *popUpVwBottonContrain;
 
 @end

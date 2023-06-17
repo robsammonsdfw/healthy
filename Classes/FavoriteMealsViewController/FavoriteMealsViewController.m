@@ -33,8 +33,6 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
-    HUD.delegate = self;
-    
     if (!searchResults) {
         searchResults = [[NSMutableArray alloc] init];
     }
@@ -46,32 +44,8 @@
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self showLoading];
+    [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadSearchData:) withObject:nil afterDelay:0.25];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    searchResults = nil;
-//    tableView = nil;
-//}
-
-- (void)dealloc {
-    [searchType release];
-    [searchResults release];
-    
-    searchResults = nil;
-    tableView = nil;
-
-    [super dealloc];
 }
 
 #pragma mark DATA METHODS
@@ -80,7 +54,7 @@
         [searchResults removeAllObjects];
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -127,10 +101,7 @@
                                        nil];
                 
                 [favFoodItemsArray addObject:dict2];
-                [dict2 release];
             }
-            
-            [foodName release];
         }
         
         [dict setValue:favFoodItemsArray forKey:@"Food_Items_Array"];
@@ -138,20 +109,16 @@
         if ([favFoodItemsArray count] > 0) {
             [searchResults addObject:dict];
         }
-        [favFoodItemsArray release];
-        
-        [dict release];
-        [favoriteMealName release];
     }
     
     [rs close];
     
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     [self.tableView reloadData];
 }
 
 -(void) saveToLog:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -177,7 +144,7 @@
 //        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
         
 //        NSString *date_Today = [dateFormat stringFromDate:[NSDate date]];
-        [dateFormat release];
+        
 
         NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
         DMLog(@"mealIDQuery for DetailView is %@", mealIDQuery);
@@ -218,13 +185,13 @@
         [db beginTransaction];
         
 //        NSDate* sourceDate1 = dietmasterEngine.dateSelected;
-//        NSDateFormatter *dateFormatter1 = [[[NSDateFormatter alloc] init] autorelease];
+//        NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
 //        [dateFormatter1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 //        NSTimeZone* systemTimeZone1 = [NSTimeZone systemTimeZone];
 //        [dateFormatter1 setTimeZone:systemTimeZone1];
 //        NSString *date_string1 = [dateFormatter1 stringFromDate:sourceDate1];
         
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 //        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         NSTimeZone* systemTimeZone1 = [NSTimeZone systemTimeZone];
@@ -256,13 +223,13 @@
         [db commit];
     }
     
-    [dict release];
+    
     [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 -(void)deleteFromFavorites {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         
@@ -295,7 +262,7 @@
     }
     
     [db commit];
-    [dict release];
+    
     [self performSelector:@selector(loadSearchData:) withObject:nil afterDelay:0.10];
 }
 
@@ -329,7 +296,7 @@
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     actionSheet.tag = 5;
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    [actionSheet release];
+    
 }
 
 -(void)confirmRemoveFromLog {
@@ -337,7 +304,7 @@
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     actionSheet.tag = 10;
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    [actionSheet release];
+    
 }
 
 - (void)checkButtonTapped:(id)sender event:(id)event {
@@ -409,7 +376,7 @@
             [foodItemsString appendFormat:@"%.1f - %@ \n",servings, nameString];
             
         }
-        [dict release];
+        
         
         NSString *cellDetailText = foodItemsString;
         
@@ -446,13 +413,13 @@
     
     UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     if ([searchResults count] == 0) {
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         [cell textLabel].adjustsFontSizeToFitWidth = YES;
@@ -470,7 +437,7 @@
     
     if ([searchResults count] > 0) {
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:indexPath.row]];
@@ -519,7 +486,7 @@
         button.backgroundColor = [UIColor clearColor];
         cell.accessoryView = button;
         
-        [dict release];
+        
     }
     
     return cell;
@@ -531,31 +498,4 @@
     [self confirmAddToLog];
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-    
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
-}
 @end

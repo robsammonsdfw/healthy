@@ -22,7 +22,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    DietmasterEngine *dietEngine = [DietmasterEngine instance];
+    DietmasterEngine *dietEngine = [DietmasterEngine sharedInstance];
     dbPath	= [dietEngine databasePath];
     
     if (sqlite3_open([dbPath UTF8String], &database) == SQLITE_OK) {
@@ -48,7 +48,7 @@
         sqlite3_close(database);
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     selectedCategoryID = dietmasterEngine.selectedCategoryID;
     
     for (int i = 0; i <[categoryIDs count]; i++) {
@@ -74,27 +74,13 @@
     return [arry3  objectAtIndex:row];
 }
 
--(IBAction) sendNewDate:(id) sender {
+- (IBAction) sendNewDate:(id) sender {
     [delegate didChooseCategory:[categoryIDs objectAtIndex:[pickerView selectedRowInComponent:0]] withName:[arry3 objectAtIndex:[pickerView selectedRowInComponent:0]]];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(IBAction)cancelSaveCategory:(id)sender {
+- (IBAction)cancelSaveCategory:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    pickerView = nil;
-//    arry3 = nil;
-//    categoryIDs = nil;
-//}
-
-- (void)dealloc {
-    [super dealloc];
-    pickerView = nil;
-    arry3 = nil;
-    categoryIDs = nil;
 }
 
 @end

@@ -6,7 +6,6 @@
 
 #import "DietMasterGoAppDelegate.h"
 #import "DietMasterGoViewController.h"
-#import "DietMasterGoController_Old.h"
 #import "MyLogViewController.h"
 #import "LoginViewController.h"
 #import "DietmasterEngine.h"
@@ -14,11 +13,7 @@
 #import "FMDatabaseAdditions.h"
 #import "MyMovesDetailsViewController.h"
 #import "PopUpView.h"
-#import "UITextViewWorkaround.h"
 #import "PurchaseIAPHelper.h"
-
-//HHT remove SplunkMint
-//#import <SplunkMint/SplunkMint.h>
 
 @import StoreKit;
 @import Firebase;
@@ -44,9 +39,6 @@
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    //    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
-    //    dietmasterEngine.sendAllServerData = true;
-    [UITextViewWorkaround executeWorkaround];
     
     [PurchaseIAPHelper sharedInstance];
 
@@ -61,11 +53,8 @@
         [[NSUserDefaults standardUserDefaults]setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
     //    [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"changeDesign"];          /// To Enable OLD DESIGN
     /*=================================================================================================*/
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
+        
     [FIRApp configure];
-    //    [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
@@ -75,10 +64,8 @@
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
     
-    if (@available(iOS 15.0, *))
-    {
+    if (@available(iOS 15.0, *)) {
         UITableView.appearance.sectionHeaderTopPadding = 0;
-        
     }
     
     self.isFromBarcode = NO;
@@ -138,36 +125,8 @@
         //    }
         
     }
-    //    [self hidetabbar];
-    
     return YES;
 }
-
-- (void) hidetabbar {
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.0];
-
-    for(UIView *view in rootController.view.subviews)
-    {
-        if([view isKindOfClass:[UITabBar class]])
-        {
-            if (rootController) {
-                [view setFrame:CGRectMake(view.frame.origin.x, 431, view.frame.size.width, view.frame.size.height)];
-            } else {
-                [view setFrame:CGRectMake(view.frame.origin.x, 480, view.frame.size.width, view.frame.size.height)];
-            }
-        } else {
-            if (rootController) {
-                [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, 431)];
-            } else {
-                [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, 480)];
-            }
-        }
-    }
-    [UIView commitAnimations];
-    rootController = !rootController;
-}
-
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     DMLog(@"Handle the URL: %@", url);
@@ -177,7 +136,7 @@
 //HHT (Set taskMode to View when user select Setting tab)
 -(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     if (tabBarController.selectedIndex == 4){
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.taskMode = @"View";
     }
     //HHT save selected current index for scan page (Managefood)
@@ -307,7 +266,7 @@
     NSString *lastUpdate = [formatter stringFromDate:[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
     
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine saveMealItems:lastUpdate]; //should not be passing nil
     [dietmasterEngine saveMealPlanArray];
     [dietmasterEngine saveGroceryListArray];
@@ -324,7 +283,7 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSString *dToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     dToken = [dToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    [DietmasterEngine instance].deviceToken = dToken;
+    [DietmasterEngine sharedInstance].deviceToken = dToken;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -337,7 +296,7 @@
         [self checkUserLogin];
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         //        dietmasterEngine.sendAllServerData = true;
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -390,7 +349,7 @@
         BOOL upgraded102 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.2"];
         if (upgraded102 == NO) {
             
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             if (![db open]) {
                 DMLog(@"Could not open db.");
@@ -427,7 +386,7 @@
         BOOL upgraded111 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1.11.1"];
         if (upgraded111 == NO) {
             
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             if (![db open]) {
                 DMLog(@"Could not open db.");
@@ -447,7 +406,7 @@
         upgraded121 = NO;
         if (upgraded121 == NO) {
             
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             [db close];
             if (![db open]) {
@@ -471,7 +430,7 @@
         BOOL upgraded14 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.4"];
         if (upgraded14 == NO) {
             
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             [db close];
             if (![db open]) {
@@ -544,7 +503,7 @@
         BOOL upgraded15 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.5"];
         if (upgraded15 == NO) {
             
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             [db close];
             if (![db open]) {
@@ -592,7 +551,7 @@
 }
 -(void)clearTableData
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -690,7 +649,7 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
 //        NSArray *paths2 = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //        NSString *tempPath2 = [paths2 objectAtIndex:0];
 //        NSFileManager *fileManager2 = [NSFileManager defaultManager];
@@ -818,7 +777,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APP_NAME message:@"Do you want to make changes to optional settings?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     alertView.tag = 1;
     [alertView show];
-    [alertView release];
     
     [self syncDatabase];
     
@@ -828,8 +786,8 @@
 //DownSync
 #pragma mark SYNC DELEGATE METHODS
 - (void)syncDatabaseFinished:(NSString *)responseMessage {
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator hideActivityIndicator];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
@@ -842,22 +800,15 @@
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
     DMLog(@"SYNC FAIL: %@", failedMessage);
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
+    [DMActivityIndicator hideActivityIndicator];
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:nil forKey:@"lastmodified"];
     [prefs setValue:nil forKey:@"lastsyncdate"];
     [prefs synchronize];
-        
-    //HHT mail change
-//    UIAlertView *alert;
-//    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
-//    alert.tag = 1001;
-//    [alert show];
-//    [alert release];
 }
 
 //UpSync
@@ -867,7 +818,7 @@
 
 -(void)callSyncDatabase
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
     dietmasterEngine.syncDatabaseDelegate = self;
@@ -883,7 +834,7 @@
 
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage {
     DMLog(@"SYNC FAIL: %@", failedMessage);
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -891,15 +842,7 @@
     [prefs setValue:nil forKey:@"lastsyncdate"];
     [prefs synchronize];
     
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
-    
-    //HHT mail change
-//    UIAlertView *alert;
-//    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
-//    alert.tag = 1001;
-//    [alert show];
-//    [alert release];
-    
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 
@@ -927,7 +870,6 @@
             self.userLoginWS = [[UserLoginWebService alloc] init];
             userLoginWS.wsAuthenticateUserDelegate = self;
             [userLoginWS callWebservice:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginPwd"]];
-            [userLoginWS release];
         }
         else {
             NSInteger hourSinceDate = [self hoursAfterDate:[prefs valueForKey:@"lastmodified"]];
@@ -937,14 +879,12 @@
                 self.userLoginWS = [[UserLoginWebService alloc] init];
                 userLoginWS.wsAuthenticateUserDelegate = self;
                 [userLoginWS callWebservice:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginPwd"]];
-                [userLoginWS release];
             }
             else {
                 AppDel.isSessionExp = NO;
                 self.userLoginWS = [[UserLoginWebService alloc] init];
                 userLoginWS.wsAuthenticateUserDelegate = self;
                 [userLoginWS callWebservice:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginPwd"]];
-                [userLoginWS release];
             }
         }
     }
@@ -956,23 +896,10 @@
         
     }
     else {
-//        [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
-//        [HUD setLabelText:@"Syncing..."];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.syncUPDatabaseDelegate = self;
         [dietmasterEngine uploadDatabase];
     }
-}
-
-- (void)dealloc {
-    incomingDBFilePath = nil;
-    
-    [viewController release];
-    [navigationController release];
-    [window release];
-    [loginViewController release];
-    
-    [super dealloc];
 }
 
 #pragma mark UPDATE 1.1. METHOD
@@ -980,7 +907,7 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         DMLog(@"Could not open db.");
@@ -1012,60 +939,6 @@
     }
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.window animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
--(void)hideLoadingNow {
-    [HUD hide:YES afterDelay:0.0];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-    
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-    
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
-}
-
--(void)changeLoadingMessage:(NSString *)message {
-    HUD.labelText = message;
-}
-
--(void)updateLoadingProgress:(double)progress {
-    HUD.progress = progress;
-}
-
--(void)showWithProgressIndicator {
-    HUD = [[MBProgressHUD alloc] initWithView:self.window];
-    [self.window addSubview:HUD];
-    
-    HUD.mode = MBProgressHUDModeDeterminate;
-    HUD.delegate = self;
-    HUD.labelText = @"Loading";
-    
-    HUD.progress = 0.0;
-    
-    [HUD showWhileExecuting:@selector(myProgressTask) onTarget:self withObject:nil animated:YES];
-}
-
 #pragma mark REMOVE DB FROM ICLOUD BACKUP
 - (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL {
     assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
@@ -1087,7 +960,6 @@
         alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No database was found. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert setTag:1000];
         [alert show];
-        [alert release];
         return;
     }
     
@@ -1099,7 +971,6 @@
     [alert addButtonWithTitle:@"Yes"];
     [alert setTag:223];
     [alert show];
-    [alert release];
 }
 
 -(void)confirmDatabaseUserPassword {
@@ -1113,8 +984,6 @@
     [alert textFieldAtIndex:0].autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
     [alert setTag:321];
     [alert show];
-    [alert release];
-    
 }
 
 #pragma mark ALERT VIEW DELEGATE
@@ -1127,7 +996,6 @@
                 alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Importing of new database was cancelled." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert setTag:1000];
                 [alert show];
-                [alert release];
             });
             
         }
@@ -1148,7 +1016,6 @@
                 alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Importing of new database was cancelled." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert setTag:1000];
                 [alert show];
-                [alert release];
             });
             
         }
@@ -1160,17 +1027,16 @@
                 alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Mobile Password is required. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert setTag:1005];
                 [alert show];
-                [alert release];
                 return;
             }
             
-            [self showLoading];
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
-            NSDictionary *dict = [[[NSDictionary alloc] initWithObjectsAndKeys:
+            [DMActivityIndicator showActivityIndicator];
+
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+            NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                    mobilePassword, @"mobilePassword",
                                    incomingDBFilePath, @"incomingDBFilePath",
-                                   nil] autorelease];
+                                   nil];
             [dietmasterEngine processIncomingDatabase:dict];
             
         }
@@ -1188,8 +1054,8 @@
 }
 
 -(void)processDatabaseMessage:(NSDictionary *)messageDict {
-    [self hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     int tag = 112233;
     if ([[messageDict valueForKey:@"try_password_again"] boolValue] == YES) {
         tag = 1005;
@@ -1199,7 +1065,6 @@
     alert = [[UIAlertView alloc] initWithTitle:[messageDict valueForKey:@"title"] message:[messageDict valueForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:tag];
     [alert show];
-    [alert release];
 }
 
 
@@ -1215,15 +1080,13 @@
     }
 }
 
--(void)openMailForApp {
-    //[self showLoading];
-    
+- (void)openMailForApp {
     if ([MFMailComposeViewController canSendMail]) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
         NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
         
-        MFMailComposeViewController *mailComposer = [[[MFMailComposeViewController alloc] init] autorelease];
+        MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
         [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
         NSString *emailTo = [[NSString alloc] initWithFormat:@""];
         [mailComposer setMessageBody:emailTo isHTML:NO];
@@ -1232,15 +1095,14 @@
         [mailComposer setToRecipients:toArray];
         mailComposer.mailComposeDelegate = self;
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         NSData *zipData = dietmasterEngine.createZipFileOfDatabase;
         [mailComposer addAttachmentData:zipData mimeType:@"application/zip" fileName:@"Document.Zip"];
         [AppDel.window.rootViewController presentViewController:mailComposer animated:YES completion:^{
-            //[self hideLoading];
+
         }];
     }
     else {
-        //[self hideLoading];
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alert show];
     }

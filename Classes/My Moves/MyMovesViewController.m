@@ -38,40 +38,40 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     int userId;
     bool isLoading;
 }
-@property (strong, nonatomic) NSDateFormatter *dateFormatter;
-@property (strong, nonatomic) NSDateFormatter *monthFormat;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSDateFormatter *monthFormat;
 
-@property (strong, nonatomic) NSMutableArray<NSString *> *datesWithInfo;
-@property (strong, nonatomic) NSMutableArray *datesExerciseCompletd;
-@property (strong, nonatomic) NSArray *DatesWithEvents;
-@property (strong, nonatomic) NSMutableArray *exerciseData;
-@property (strong, nonatomic) NSMutableArray *userPlanListData;
-@property (strong, nonatomic) NSMutableArray *userPlanDateListData;
-@property (strong, nonatomic) NSMutableArray *userPlanMoveListData;
-@property (strong, nonatomic) NSMutableArray *userPlanMoveSetListData;
-@property (strong, nonatomic) NSMutableArray *loadMoveDetails;
-@property (strong, nonatomic) NSMutableArray *deletedPlanArr;
-@property (strong, nonatomic) NSMutableArray *deletedPlanDateArr;
-@property (strong, nonatomic) NSMutableArray *deletedMoveArr;
-@property (strong, nonatomic) NSMutableArray *deletedMoveSetArr;
-@property (strong, nonatomic) NSMutableArray *deletedArr;
+@property (nonatomic, strong) NSMutableArray<NSString *> *datesWithInfo;
+@property (nonatomic, strong) NSMutableArray *datesExerciseCompletd;
+@property (nonatomic, strong) NSArray *DatesWithEvents;
+@property (nonatomic, strong) NSMutableArray *exerciseData;
+@property (nonatomic, strong) NSMutableArray *userPlanListData;
+@property (nonatomic, strong) NSMutableArray *userPlanDateListData;
+@property (nonatomic, strong) NSMutableArray *userPlanMoveListData;
+@property (nonatomic, strong) NSMutableArray *userPlanMoveSetListData;
+@property (nonatomic, strong) NSMutableArray *loadMoveDetails;
+@property (nonatomic, strong) NSMutableArray *deletedPlanArr;
+@property (nonatomic, strong) NSMutableArray *deletedPlanDateArr;
+@property (nonatomic, strong) NSMutableArray *deletedMoveArr;
+@property (nonatomic, strong) NSMutableArray *deletedMoveSetArr;
+@property (nonatomic, strong) NSMutableArray *deletedArr;
 
-@property (strong, nonatomic) NSMutableArray *loadMoveName;
+@property (nonatomic, strong) NSMutableArray *loadMoveName;
 
-@property (strong, nonatomic) NSMutableArray *exerciseDataWithoutDuplicate;
-@property (strong, nonatomic) NSMutableArray *listViewItem;
-@property (strong, nonatomic) NSMutableArray *tblData;
-@property (strong, nonatomic) NSMutableArray *sectionTitleDataMovesTblView;
-@property (strong, nonatomic) NSMutableArray *templatesList1;
-@property (strong, nonatomic) NSMutableArray *templatesList2;
+@property (nonatomic, strong) NSMutableArray *exerciseDataWithoutDuplicate;
+@property (nonatomic, strong) NSMutableArray *listViewItem;
+@property (nonatomic, strong) NSMutableArray *tblData;
+@property (nonatomic, strong) NSMutableArray *sectionTitleDataMovesTblView;
+@property (nonatomic, strong) NSMutableArray *templatesList1;
+@property (nonatomic, strong) NSMutableArray *templatesList2;
 
-@property (strong, retain) NSDate *prevDate;
-@property (strong, nonatomic) NSMutableArray *sectionCount;
-@property (strong, nonatomic) NSMutableArray *sectionTitle;
-@property (strong, nonatomic) NSMutableArray *datesTitleArr;
-@property (strong, nonatomic) NSMutableArray *fullDBData;
-@property (strong, nonatomic) NSMutableArray *fullDateListData;
-@property (strong, nonatomic) NSMutableArray *fullPlanListData;
+@property (nonatomic, strong) NSDate *prevDate;
+@property (nonatomic, strong) NSMutableArray *sectionCount;
+@property (nonatomic, strong) NSMutableArray *sectionTitle;
+@property (nonatomic, strong) NSMutableArray *datesTitleArr;
+@property (nonatomic, strong) NSMutableArray *fullDBData;
+@property (nonatomic, strong) NSMutableArray *fullDateListData;
+@property (nonatomic, strong) NSMutableArray *fullPlanListData;
 @property (nonatomic, strong) NSString *statusSs;
 
 
@@ -149,10 +149,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.dateFormatter = [[NSDateFormatter alloc] init];
         self.dateFormatter.dateFormat = @"yyyy/MM/dd";
         
-        self.monthFormat = [[[NSDateFormatter alloc] init] retain];
+        self.monthFormat = [[NSDateFormatter alloc] init];
         
-        //        calendar = [[[FSCalendar alloc] initWithFrame:CGRectMake(_calendarView.bounds.origin.x, _calendarView.bounds.origin.y, _calendarView.bounds.size.width - 60, _calendarView.bounds.size.height - 50)]retain];
-        calendar = [[[FSCalendar alloc] initWithFrame:CGRectMake(_calendarView.bounds.origin.x, _calendarView.bounds.origin.y + 15, SCREEN_WIDTH, _calendarView.bounds.size.height - 50)]retain];
+        calendar = [[FSCalendar alloc] initWithFrame:CGRectMake(_calendarView.bounds.origin.x, _calendarView.bounds.origin.y + 15, SCREEN_WIDTH, _calendarView.bounds.size.height - 50)];
         calendar.dataSource = self;
         calendar.delegate = self;
         calendar.scrollDirection = FSCalendarScrollDirectionVertical;
@@ -228,13 +227,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.navigationItem.leftBarButtonItems = [[NSArray alloc]initWithObjects:listCalendarBarBtn,nil];
         
         UIBarButtonItem * settingsBtn = [[UIBarButtonItem alloc] initWithCustomView:btn1];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.taskMode = @"View";
         self.navigationItem.rightBarButtonItem = settingsBtn;
         
         //set date in current date variable
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
         [dateFormat setTimeZone:systemTimeZone];
@@ -288,14 +287,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         appSettings.title = @"Settings";
         self.navigationItem.title = @"Settings";
         [self.navigationController setViewControllers:@[appSettings] animated:NO];
-        [appSettings release];
         [soapWebService offlineSyncApi];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    DietmasterEngine *engine = [DietmasterEngine instance];
+    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
     commentsTxtView.hidden = YES;
     _userCommentsLbl.hidden = YES;
 
@@ -392,7 +390,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         isLoading = YES;
         for (int i = 0 ;i < datesArr.count;i++)
         {
-            NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
             
             NSDateFormatter *myFormat = [[NSDateFormatter alloc] init];
@@ -402,7 +400,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             {
                 NSArray *planDateArr = [datesArr[i][@"PlanDate"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[planDateArr objectAtIndex:0]];
-                NSDate *dateFormate = [[dateFormatter dateFromString:dateString] retain];
+                NSDate *dateFormate = [dateFormatter dateFromString:dateString];
                 [dateFormatter setDateFormat:@"yyyy/MM/dd"];
                 [self.datesWithInfo addObject:[dateFormatter stringFromDate:dateFormate]];
             }
@@ -411,7 +409,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 NSArray *planDateArr = [datesArr[i][@"PlanDate"] componentsSeparatedByString:@" "];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[planDateArr objectAtIndex:0]];
 
-                NSDate *dateFormate = [[dateFormatter dateFromString:dateString] retain];
+                NSDate *dateFormate = [dateFormatter dateFromString:dateString];
                 [myFormat setDateFormat:@"yyyy/MM/dd"];
                 [self.datesWithInfo addObject:[myFormat stringFromDate:dateFormate]];
             }
@@ -422,7 +420,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         sleep(2);
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.calendar reloadData];
-            [self hideLoading];
+            [DMActivityIndicator hideActivityIndicator];
         });
         
     }];
@@ -510,35 +508,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSDate * dat = [[NSDate alloc]init];
         dat = [formatter dateFromString:dateString];
         
-        //            if ([[monthFormatter stringFromDate:self.date_currentDate]isEqualToString:[monthFormatter stringFromDate:dat]]) {
-        
         NSMutableArray * arr = [[NSMutableArray alloc]init];
 
         if ([[dateFormatter stringFromDate:calendar.selectedDate]isEqualToString:[dateFormatter stringFromDate:self.date_currentDate]]) {
-            
-//            if (_fullDateListData.count != 0){
-//                arr = [[NSMutableArray alloc]initWithArray:[_fullDBData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(PlanDate contains[c] %@)", dateString]]];
-//            }
-//
-//            NSMutableArray *rowListArr = [[NSMutableArray alloc] init];
-//            for (int j=0; j<[_userPlanListData count]; j++)
-//            {
-//                NSPredicate *categoryPredicates = [NSPredicate predicateWithFormat:filter,@"ParentUniqueID",_fullPlanListData[j][@"UniqueID"]];
-//                NSArray * tempArrs = [[NSArray alloc]initWithArray:[_userPlanDateListData filteredArrayUsingPredicate:categoryPredicates]];
-//                [rowListArr addObjectsFromArray:tempArrs];
-//            }
-            
-//            if ([_fullDBData count] == 0) {
-//                arr = [[NSMutableArray alloc]initWithArray:[_fullDBData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(LastUpdated contains[c] %@)", dateString]]];
-//            }
-//            else
-//            {
-//                arr = [[NSMutableArray alloc]initWithArray:[_fullDBData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(LastUpdated contains[c] %@)", dateString]]];
-//            }
-            
-            
-            
-            
             _templatesList1 = [[NSMutableArray alloc]init];
             _templatesList2 = [[NSMutableArray alloc]init];
             for (int i =0 ; i<[_userPlanListData count]; i++) {
@@ -555,20 +527,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [_exerciseDataWithoutDuplicate addObject:_userPlanListData[i]];
                 }
             }
-            
-            DMLog(@"%@",_exerciseDataWithoutDuplicate);
-            
-        }
-        else
-        {
-            
+            // DMLog(@"%@",_exerciseDataWithoutDuplicate);
         }
         
         if ([[monthFormatter stringFromDate:self.date_currentDate]isEqualToString:[monthFormatter stringFromDate:date_Tomorrow]]) {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             NSDateFormatter *customFormatter = [[NSDateFormatter alloc] init];
 
-//            [dateFormatter setDateFormat:@"dd MMMM yyyy"];
             [dateFormatter setDateFormat:@"EEEE, d LLLL yyyy"];
             [customFormatter setDateFormat:@"EEEE, d LLLL"];
 
@@ -580,57 +545,23 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             NSString *filter = @"%K == %@";
             NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"PlanDate",[dateFormatter stringFromDate:date_Tomorrow]];
-//
             NSMutableArray *listArr = [[NSMutableArray alloc]initWithArray:[_userPlanDateListData filteredArrayUsingPredicate:categoryPredicate]];
             
-            
-            
             [_listViewItem addObjectsFromArray:listArr];
-          
-//            }
-        }
-        else
-        {
-
         }
     }
     [self loadRowDataDateArr:_sectionTitle];
-    /*
-    for(NSDictionary *dictionary in _exerciseData)
-    {
-        NSString *dateStr = [dictionary objectForKey:@"WorkoutDate"];;
-        
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-        NSDate *date = [dateFormatter dateFromString:dateStr];
-        [dateFormatter setDateFormat:@"dd MMMM yyyy"];
-        
-        [arrayWithSameDate addObject: [dateFormatter stringFromDate:date] ];
-        [_sectionCount addObject:dateStr];
-    }
     
-    NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:arrayWithSameDate];
-    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
-    _sectionTitle = [[[orderedSet array] sortedArrayUsingDescriptors:@[sd]] mutableCopy];
-
-    _sectionTitle = [[[orderedSet array] sortedArrayUsingDescriptors:@[sd]] mutableCopy];
-
-    NSOrderedSet *orderedSetSection = [NSOrderedSet orderedSetWithArray:_sectionCount];
-    _sectionCount = [[[orderedSetSection array] sortedArrayUsingDescriptors:@[sd]] mutableCopy];
-    _sectionCount = [[orderedSet array] mutableCopy];
-     */
     _datesTitleArr = [[NSMutableArray alloc]initWithArray:arrayWithCustomDateTitle];
     _sectionTitle = [[NSMutableArray alloc]initWithArray:arrayWithSameDate];
     _sectionCount = [[NSMutableArray alloc]initWithArray:arrayWithSameDate];
     
     [listViewMoves reloadData];
 }
--(void)loadCircleInCalendar:(NSMutableArray*)datesArr
-{
 
+- (void)loadCircleInCalendar:(NSMutableArray*)datesArr {
         prevDataArr = [[NSMutableArray alloc]initWithArray:datesArr];
         
-    
         self.datesExerciseCompletd = [[NSMutableArray alloc]init];
         self.datesWithInfo = [[NSMutableArray alloc]init];
         
@@ -644,11 +575,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             for (int i = 0 ;i < datesArr.count;i++)
             {
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [datesArr[i][@"WorkoutDate"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [[dateFormatter dateFromString:dateString] retain];
+                NSDate *date = [dateFormatter dateFromString:dateString];
                 [dateFormatter setDateFormat:@"yyyy/MM/dd"];
                 [self.datesWithInfo addObject:[dateFormatter stringFromDate:date]];
             }
@@ -663,10 +594,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             for (int i = 0 ;i < completedExerciseArr.count;i++)
             {
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [completedExerciseArr[i][@"WorkoutDate"] componentsSeparatedByString:@"T"];
-                NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];                NSDate *date = [[dateFormatter dateFromString:dateString]retain];
+                NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
+                NSDate *date = [dateFormatter dateFromString:dateString];
                 [dateFormatter setDateFormat:@"yyyy/MM/dd"];
                 [completedExerciseArrDates addObject:[dateFormatter stringFromDate:date]];
             }
@@ -681,11 +613,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             for (int i = 0 ;i < incompletedExerciseArr.count;i++)
             {
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [incompletedExerciseArr[i][@"WorkoutDate"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [[dateFormatter dateFromString:dateString]retain];
+                NSDate *date = [dateFormatter dateFromString:dateString];
                 [dateFormatter setDateFormat:@"yyyy/MM/dd"];
                 [incompletedExerciseArrDates addObject:[dateFormatter stringFromDate:date]];
             }
@@ -697,7 +629,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 
                 [firstArraySet minusSet: secondArraySet];
                 
-                NSArray *array = [[firstArraySet allObjects] retain];
+                NSArray *array = [firstArraySet allObjects];
                 
                 [self.datesExerciseCompletd addObjectsFromArray:array];
             }
@@ -716,7 +648,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.calendar reloadData];
-                [self hideLoading];
+                [DMActivityIndicator hideActivityIndicator];
             });
             
         }];
@@ -727,25 +659,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     
 }
--(void)showLoading {
-    [HUD hide:YES afterDelay:0.0];
-    HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 6.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^ {
-//        [self showLoading1];
-    });
-}
 
--(void)showLoading1 {
-    [HUD hide:YES afterDelay:0.0];
-    HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain];
-}
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
 -(void)setMonthLbl:(NSDate*)dateToSet
 {
-    NSDateFormatter *setDisplayCalendarMonth = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *setDisplayCalendarMonth = [[NSDateFormatter alloc] init];
 
     [setDisplayCalendarMonth setDateFormat:@"MMMM YYYY"];
     listCurrentMonthLbl.text = [setDisplayCalendarMonth stringFromDate:dateToSet];
@@ -753,7 +670,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 -(void)setDateLbl:(NSDate*)dateToSet
 {
-    NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     [dateFormat setTimeZone:systemTimeZone];
@@ -780,7 +697,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //api call to load table data
     [self loadTableData:dateToSet];
 
-    NSDateFormatter *setDisplayCalendarMonth = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *setDisplayCalendarMonth = [[NSDateFormatter alloc] init];
     [setDisplayCalendarMonth setDateFormat:@"MMMM"];
 
     _displayedMonthLbl.text = [setDisplayCalendarMonth stringFromDate:dateToSet];
@@ -789,7 +706,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //new API
 -(void)loadCalendarOnMonthChange:(NSDate*)dateToSet
 {
-    NSDateFormatter *setDisplayCalendarMonth = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *setDisplayCalendarMonth = [[NSDateFormatter alloc] init];
     [setDisplayCalendarMonth setDateFormat:@"MMMM"];
     
     _displayedMonthLbl.text = [setDisplayCalendarMonth stringFromDate:dateToSet];
@@ -806,184 +723,38 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSMutableArray * tempExDb = [[NSMutableArray alloc]init];
     tempExDb = [soapWebService loadUserPlanListFromDb];
     tempExDb = [soapWebService loadUserPlanDateListFromDb];
-//    [self showLoading];
-   
-//    if ([[tempExDb filteredArrayUsingPredicate:categoryPredicate] count] == 0) {
-//        //API Call
-//        MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-//        soapWebService.WSGetUserWorkoutplanOfflineDelegate = self;
-////        [soapWebService offlineSyncApi];
-//
-//        [self performSelector:@selector(hideLoading) withObject:nil afterDelay:10.0];
-//    }
-//    else
-//    {
-    _exerciseData = [[tempExDb filteredArrayUsingPredicate:categoryPredicate]retain];
+
+    _exerciseData = [tempExDb filteredArrayUsingPredicate:categoryPredicate];
     
     if ([[self.dateFormatter stringFromDate:[NSDate date]] isEqualToString:[self.dateFormatter stringFromDate:self.date_currentDate]]) {
-//        [self loadTableData:dateToSet];
+
     }
     
     if (self.date_currentDate == calendar.currentPage) {
-//        [self loadTableData:dateToSet];
+
     }
     else
     {
-//        [self loadTableData:dateToSet];
+
     }
-    [self performSelector:@selector(hideLoading) withObject:nil afterDelay:10.0];
-//    }
-    
-    /*
-    [soapWebService offlineSyncApi];
-    
-    if(prevDate != nil)
-    {
-        if (([[_monthFormat stringFromDate:prevDate] compare:[_monthFormat stringFromDate:dateToSet]] == NSOrderedSame) && dateToSet != nil)
-        {
-            
-        }
-        else
-        {   //New Month changed
-            prevDate = dateToSet;
-            
-            NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
-            [dateFormat setDateFormat:@"yyyy-MM-dd"];
-            
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            
-            //        NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-            //                                        [prefs valueForKey:@"userid_dietmastergo"], @"UserID",[dateFormat stringFromDate:dateToSet], @"WorkoutDate",nil];
-            
-            NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                            @"10", @"UserID",[dateFormat stringFromDate:dateToSet], @"WorkoutDate",nil];
-            
-            MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-            soapWebService.WSGetUserWorkoutplanOfflineDelegate = self;
-            [soapWebService GetUserWorkoutplanOffline:wsWorkInfoDict];
-            
-            [soapWebService release];
-        }
-    }*/
-    
+    [DMActivityIndicator hideActivityIndicator];
 }
-
-/*
--(void)loadCalendarOnMonthChange:(NSDate*)dateToSet
-{
-    NSDateFormatter *setDisplayCalendarMonth = [[[NSDateFormatter alloc] init] autorelease];
-    [setDisplayCalendarMonth setDateFormat:@"MMMM"];
-    
-    _displayedMonthLbl.text = [setDisplayCalendarMonth stringFromDate:dateToSet];
-    
-    [_monthFormat setDateFormat:@"MM"];
-    
-    //Month change api call & check
-   
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM"];
-    
-   /* NSString *filter = @"%K CONTAINS %@";
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutDate",[dateFormatter stringFromDate:dateToSet]];
-    NSMutableArray * tempExDb = [[NSMutableArray alloc]init];
-    tempExDb = [soapWebService loadExerciseFromDb];
-    [self showLoading];
-    if ([[tempExDb filteredArrayUsingPredicate:categoryPredicate] count] == 0) {
-
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormat setDateFormat:@"yyyy-MM-dd"];
-        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
-                NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                [prefs valueForKey:@"userid_dietmastergo"], @"UserID",[dateFormat stringFromDate:dateToSet], @"WorkoutDate",nil];
-        */
-
-//        MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-//        soapWebService.WSGetUserWorkoutplanOfflineDelegate = self;
-//        [soapWebService offlineSyncApi];
-//
-//        [self performSelector:@selector(hideLoading) withObject:nil afterDelay:10.0];
-    /*
-//        [_tblData removeAllObjects];
-    }
-    else
-    {
-//        [_tblData removeAllObjects];
-
-        _exerciseData = [[tempExDb filteredArrayUsingPredicate:categoryPredicate]retain];
-        
-//        _fullDBData = [soapWebService loadExerciseFromDb];
-
-//        [self loadCircleInCalendar:_exerciseData];
-        
-        if ([[self.dateFormatter stringFromDate:[NSDate date]] isEqualToString:[self.dateFormatter stringFromDate:self.date_currentDate]]) {
-            [self loadTableData:dateToSet];
-        }
-        
-        if (self.date_currentDate == calendar.currentPage) {
-            [self loadTableData:dateToSet];
-        }
-        else
-        {
-            [self loadTableData:dateToSet];
-        }
-    }
-//    [self loadListTable];
-    
-//    if ([[_monthFormat stringFromDate:prevDate] isEqualToString:[_monthFormat stringFromDate:dateToSet]])
-    
-    /*
-    [soapWebService offlineSyncApi];
-
-    if(prevDate != nil)
-    {
-    if (([[_monthFormat stringFromDate:prevDate] compare:[_monthFormat stringFromDate:dateToSet]] == NSOrderedSame) && dateToSet != nil)
-    {
-        
-    }
-    else
-    {   //New Month changed
-        prevDate = dateToSet;
-        
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormat setDateFormat:@"yyyy-MM-dd"];
-        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
-//        NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-//                                        [prefs valueForKey:@"userid_dietmastergo"], @"UserID",[dateFormat stringFromDate:dateToSet], @"WorkoutDate",nil];
-
-        NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        @"10", @"UserID",[dateFormat stringFromDate:dateToSet], @"WorkoutDate",nil];
-        
-        MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-        soapWebService.WSGetUserWorkoutplanOfflineDelegate = self;
-        [soapWebService GetUserWorkoutplanOffline:wsWorkInfoDict];
-        
-        [soapWebService release];
-    }
-    }
-
-}
-*/
-
 
 -(void)loadTableData:(NSDate*)dateToSet
 {
     [_userCommentsLbl setHidden:YES];
 
-    _userPlanListData        = [[[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanListFromDb]] retain];
-    _userPlanDateListData    = [[[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanDateListFromDb]] retain];
-    _userPlanMoveListData    = [[[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveListFromDb]] retain];
-    _userPlanMoveSetListData = [[[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]] retain];
+    _userPlanListData        = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanListFromDb]];
+    _userPlanDateListData    = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanDateListFromDb]];
+    _userPlanMoveListData    = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveListFromDb]];
+    _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]];
     
-    _loadMoveDetails         = [[[NSMutableArray alloc]initWithArray:[soapWebService loadListOfMovesFromDb]] retain];
+    _loadMoveDetails         = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfMovesFromDb]];
    
-    _deletedPlanArr     = [[[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanList]] retain];
-    _deletedPlanDateArr = [[[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanDateList]] retain];
-    _deletedMoveArr     = [[[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanMoveList]] retain];
-    _deletedMoveSetArr  = [[[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanMoveSetList]] retain];
+    _deletedPlanArr     = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanList]];
+    _deletedPlanDateArr = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanDateList]];
+    _deletedMoveArr     = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanMoveList]];
+    _deletedMoveSetArr  = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanMoveSetList]];
 
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -1075,9 +846,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.navigationController pushViewController:appVC animated:YES];
 
 }
+
 -(void)apiCallOnMonthChangeFromList
 {
-    NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd"];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -1087,9 +859,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
     soapWebService.WSGetUserWorkoutplanOfflineDelegate = self;
-    [soapWebService GetUserWorkoutplanOffline:wsWorkInfoDict];
-    
+    //[soapWebService GetUserWorkoutplanOffline:wsWorkInfoDict];
+#warning WHY IS ABOVE NOT A METHOD???
 }
+
 - (IBAction)previousMonthAction:(id)sender {
     
 //        [self showLoading];
@@ -1104,7 +877,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [calendar selectDate:date_Yesterday];
         
         //HHT temp (IMP line)
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.dateSelected = date_Yesterday;
         
         HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
@@ -1123,7 +896,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         //HHT temp change
         //    [self performSelector:@selector(updateData:) withObject:date_Yesterday afterDelay:0.25];
-        [components release];
 
     [self loadCalendarOnMonthChange:self.date_currentDate];
     [self loadTableData:self.date_currentDate];
@@ -1134,9 +906,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //    [self apiCallOnMonthChangeFromList];
 }
 - (IBAction)nextMonthAction:(id)sender {
-    
-//        [self showLoading];
-
         NSDateComponents *components = [[NSDateComponents alloc] init];
         NSCalendar *cal = [NSCalendar currentCalendar];
         [components setMonth:+1];
@@ -1148,7 +917,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [calendar selectDate:date_Tomorrow];
         
         //HHT temp (IMP line)
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.dateSelected = date_Tomorrow;
         
         HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
@@ -1165,20 +934,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
         }
         
-        //    [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
-        
-        //HHT temp change
-        //    [self performSelector:@selector(updateData:) withObject:date_Tomorrow afterDelay:0.25];
-        [components release];
-
-//    [self loadCalendarOnMonthChange:self.date_currentDate];
-//    [self loadTableData:self.date_currentDate];
-//    [self setDateLbl:self.date_currentDate];
     [self tabBarAction:listCalendarBtn];
-
-//    [self loadListTable];
-//    [self loadCalendarOnMonthChange:self.date_currentDate];
-//    [self apiCallOnMonthChangeFromList];
 }
 
 -(IBAction)shownextDate:(id)sender {
@@ -1193,7 +949,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [calendar selectDate:date_Tomorrow];
 
     //HHT temp (IMP line)
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.dateSelected = date_Tomorrow;
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
@@ -1209,17 +965,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
         DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
-    
-//    [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
-    
-    //HHT temp change
-//    [self performSelector:@selector(updateData:) withObject:date_Tomorrow afterDelay:0.25];
-    [components release];
 }
 
 
 -(IBAction)showprevDate:(id)sender {
-//    [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:NO];
     NSDateComponents *components = [[NSDateComponents alloc] init];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [components setDay:-1];
@@ -1231,7 +980,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [calendar selectDate:date_Yesterday];
 
     //HHT temp (IMP line)
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.dateSelected = date_Yesterday;
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
@@ -1250,7 +999,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     //HHT temp change
 //    [self performSelector:@selector(updateData:) withObject:date_Yesterday afterDelay:0.25];
-    [components release];
 }
 
 -(void)loadSectionsForMovesTbl
@@ -1443,12 +1191,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 
 
--(void)loadRowDataDateArr:(NSMutableArray*)arr
-{
-    for (int i = 0; i <= [arr count]; i++) {
+- (void)loadRowDataDateArr:(NSMutableArray*)arr {
+    for (int i = 0; i < [arr count]; i++) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"EEEE, d LLLL yyyy"];
-        NSDate *date = [dateFormatter dateFromString:i];
+        NSString *sectionTitle = arr[i];
+        NSDate *date = [dateFormatter dateFromString:sectionTitle];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
         
         NSString *filter = @"%K == %@";
@@ -1764,8 +1512,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
     [self loadTableData:self.date_currentDate];
-//    _exerciseData = [[[NSMutableArray alloc]initWithArray:[soapWebService loadExerciseFromDb]]retain];
-//    [self loadCircleInCalendar:_exerciseData];
 }
 
 /*
@@ -1794,7 +1540,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             DMLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
         }
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         //NSDate *endDate = self.date_currentDate;
         
         NSDate *endDate = dietmasterEngine.dateSelected;
@@ -1852,25 +1598,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 */
 
-- (void)dealloc {
-    [lblDateHeader release];
-    [commentsTxtView release];
-    [_userCommentsLbl release];
-    [_displayedMonthLbl release];
-    [listViewMoves release];
-    [listView release];
-    [listCurrentMonthLbl release];
-    [_dayToggleView release];
-    [_dayToolBar release];
-    [_proportionalHeightCalConst release];
-    [expandBtn release];
-    [_sendMessageBtn release];
-    [_lineView release];
-    [_showPopUpVw release];
-    [_sendMsgStackVw release];
-    [super dealloc];
-}
-
 #pragma mark - <FSCalendarDelegate>
 
 - (BOOL)calendar:(FSCalendar *)calendar shouldSelectDate:(NSDate *)date atMonthPosition:(FSCalendarMonthPosition)monthPosition
@@ -1889,26 +1616,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 
 
-- (void)calendarCurrentPageDidChange:(FSCalendar *)calendar
-{
-//    [self showLoading];
-    if (self.date_currentDate == calendar.currentPage) {
-//        [self loadCalendarOnMonthChange:calendar.selectedDate];
-    }
-//    else if ([[self.dateFormatter stringFromDate:[NSDate date]] isEqualToString:[self.dateFormatter stringFromDate:self.date_currentDate]]) {
-//        [self loadCalendarOnMonthChange:self.date_currentDate];
-//    }
-    else
-    {
-//        [self loadCalendarOnMonthChange:calendar.currentPage];
-    }
-    
-    
-    
+- (void)calendarCurrentPageDidChange:(FSCalendar *)calendar {
+    // No-op.
 }
 
-- (void)calendar:(FSCalendar *)calendar boundingRectWillChange:(CGRect)bounds animated:(BOOL)animated
-{
+- (void)calendar:(FSCalendar *)calendar boundingRectWillChange:(CGRect)bounds animated:(BOOL)animated {
     calendar.frame = (CGRect){calendar.frame.origin,bounds.size};
 }
 
@@ -1960,7 +1672,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
     NSString *dateString = [dateFormatter stringFromDate:date];
-    [dateFormatter release];
     
     while(isLoading) {
         DMLog(@"PREVENTING A CRASH HERE!");
@@ -1990,11 +1701,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 #pragma mark - <WSWorkoutplanOfflineListDelegate>
 
 - (void)getUserWorkoutplanOfflineListFailed:(NSString *)failedMessage {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 - (void)getUserWorkoutplanOfflineListFinished:(NSDictionary *)responseArray {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
 
     _userPlanListData        = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanList"]];
     _userPlanDateListData    = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]];
@@ -2004,9 +1715,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
        [self loadEventCalendar:[[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]]];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-//        [self loadListTable];
         [movesTblView reloadData];
-        [self hideLoading];
+        [DMActivityIndicator hideActivityIndicator];
     });
 }
 
@@ -2161,8 +1871,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (IBAction)sendMsgBtnAction:(id)sender {
     MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
     [self.navigationController pushViewController:vc animated:YES];
-    [vc release];
 }
+
 - (IBAction)popUpBtn:(id)sender {
     PopUpView* popUpView = [[PopUpView alloc]initWithNibName:@"PopUpView" bundle:nil];
     popUpView.modalPresentationStyle = UIModalPresentationOverFullScreen;
@@ -2171,7 +1881,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     _showPopUpVw.hidden = true;
     popUpView.vc = @"MyMoves";
     [self presentViewController:popUpView animated:YES completion:nil];
-
 }
 
 -(void)DietMasterGoViewController
@@ -2234,7 +1943,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if (navigationArray.count > 2) {
         [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
         self.navigationController.viewControllers = navigationArray;
-        [navigationArray release];
     }
 }
 

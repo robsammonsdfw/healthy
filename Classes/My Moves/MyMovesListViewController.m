@@ -20,8 +20,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 @interface MyMovesListViewController ()<WSWorkoutList,WSCategoryList,UITableViewDelegate,UITableViewDataSource,SelectedBodyPartDelegate,UISearchBarDelegate>
 {
     IBOutlet UITextField *templateNameTxtFld;
-    MyMovesWebServices *soapWebService;
 }
+@property (nonatomic, strong) MyMovesWebServices *soapWebService;
 @end
 
 @implementation MyMovesListViewController
@@ -43,25 +43,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [self.navigationController.navigationBar setTranslucent:NO];
     
-    
     dispatch_async(dispatch_get_main_queue(), ^{ [self loadTable]; });
-//    [self loadTable];
-    
-    
-    
-    
-    
 }
-- (void)loadTable
-{
-    soapWebService = [[MyMovesWebServices alloc] init];
+
+- (void)loadTable {
+    self.soapWebService = [[MyMovesWebServices alloc] init];
     NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     @"WorkoutOffline", @"RequestType",nil];
     
     if(_isExchange)
-    {        [self showLoading];
-        NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadFilteredListOfTitleToDb]];
-        NSMutableArray * tempArr1 = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTitleToDb]];
+    {
+        [DMActivityIndicator showActivityIndicator];
+        NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
+        NSMutableArray * tempArr1 = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
         if ([tempArr count] != 0) {
             NSString *filter = @"%K == %@";
             
@@ -83,36 +77,34 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             _originalDataListArr = [[NSMutableArray alloc]initWithArray:[tempArr1 filteredArrayUsingPredicate:categoryPredicate]];
             _workOutListArr = [[NSMutableArray alloc]initWithArray:[_tableData filteredArrayUsingPredicate:categoryPredicate]];
-            _BodyPartDataArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfBodyPart]];
+            _BodyPartDataArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfBodyPart]];
             _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[_tableData filteredArrayUsingPredicate:categoryPredicate]];
-            _tagsArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTags]];
+            _tagsArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTags]];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self hideLoading];
-                
-                
+                [DMActivityIndicator hideActivityIndicator];
+
                 NSSortDescriptor *sortDescriptor;
                 sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
                                                              ascending:YES];
                 _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
-                
                 
                 [tblView reloadData];
             });
         }
         else
         {
-            [soapWebService callGetWebservice:wsWorkInfoDict];
+            [self.soapWebService callGetWebservice:wsWorkInfoDict];
         }
     }
     else
     {
-        [self hideLoading];
+        [DMActivityIndicator hideActivityIndicator];
         [self.bodyPartBtn setUserInteractionEnabled:YES];
         [self.bodypartTxtFld setUserInteractionEnabled:YES];
         [self.filter1 setUserInteractionEnabled:YES];
         [self.filterOneBtn setUserInteractionEnabled:YES];
         
-        soapWebService.WSWorkoutListDelegate = self;
+        self.soapWebService.WSWorkoutListDelegate = self;
   
         NSOperationQueue *operationQueue = [NSOperationQueue new];
         NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -120,15 +112,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             //This the completion block operation
         }];
         NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
-            //        _tableData = [[NSMutableArray alloc]init];
-            [self showLoading];
-            if ([[soapWebService loadListOfTitleToDb] count] != 0) {
-                _tableData = [[NSMutableArray alloc]initWithArray:[soapWebService loadFilteredListOfTitleToDb]];
-                _workOutListArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadFilteredListOfTitleToDb]];
-                _originalDataListArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTitleToDb]];
-                _BodyPartDataArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfBodyPart]];
-                _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTitleToDb]];
-                _tagsArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTags]];
+            [DMActivityIndicator showActivityIndicator];
+            if ([[self.soapWebService loadListOfTitleToDb] count] != 0) {
+                _tableData = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
+                _workOutListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
+                _originalDataListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
+                _BodyPartDataArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfBodyPart]];
+                _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
+                _tagsArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTags]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSSortDescriptor *sortDescriptor;
                     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
@@ -139,7 +130,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }
             else
             {
-                [soapWebService callGetWebservice:wsWorkInfoDict];
+                [self.soapWebService callGetWebservice:wsWorkInfoDict];
             }
         }];
         [blockCompletionOperation addDependency:blockOperation];
@@ -148,68 +139,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 }
 
--(void)showLoading {
-    dispatch_async(dispatch_get_main_queue(), ^{  [HUD hide:YES afterDelay:0.0];
-       HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain]; });
-
-//    [HUD hide:YES afterDelay:0.0];
-//    HUD = [[MBProgressHUD showHUDAddedTo:self.view animated:YES] retain];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 6.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^ {
-        //        [self showLoading1];
-    });
-}
--(void)hideLoading {
-        dispatch_async(dispatch_get_main_queue(), ^{
-    [HUD hide:YES afterDelay:0.5];
-        });
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    //    [self loadTable];
-    //    NSOperationQueue *operationQueue = [NSOperationQueue new];
-    //    NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-    //        DMLog(@"The block operation ended, Do something such as show a successmessage etc");
-    //        //This the completion block operation
-    //    }];
-    //    NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
-    ////        _tableData = [[NSMutableArray alloc]init];
-    //        _workOutListArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTitleToDb]];
-    //        _BodyPartDataArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfBodyPart]];
-    //        _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTitleToDb]];
-    //        _tagsArr = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfTags]];
-    //
-    //    }];
-    //    [blockCompletionOperation addDependency:blockOperation];
-    //    [operationQueue addOperation:blockCompletionOperation];
-    //    [operationQueue addOperation:blockOperation];
-    
-    //        [_workOutListArr addObjectsFromArray:[soapWebService loadListOfTitleToDb]];
-    //        [_categoryFilteredListArr addObjectsFromArray:[soapWebService loadListOfTitleToDb]];
-    //        [_BodyPartDataArr addObjectsFromArray:[soapWebService loadListOfBodyPart]];
-    //        [_tagsArr addObjectsFromArray:[soapWebService loadListOfTags]];
-    
-}
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-
-- (void)dealloc {
-    [tblView release];
-    [_filterOneBtn release];
-    [_bodyPartBtn release];
-    [templateNameTxtFld release];
-    [searchBar release];
-    [super dealloc];
-}
 - (IBAction)bodyPartAction:(id)sender {
-    
     if ([_BodyPartDataArr count]!=0) {
         picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
         picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -217,45 +147,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         picker.pickerData = _BodyPartDataArr;
         [self presentViewController:picker animated:YES completion:nil];
     }
-    else
-    {
-        //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-        //                                                        message:@"Sorry No Moves available in this category"
-        //                                                       delegate:self
-        //                                              cancelButtonTitle:@"Ok"
-        //                                              otherButtonTitles:@"No", nil];
-        //        [alert show];
-    }
 }
+
 - (IBAction)filterOne:(id)sender {
-    
-    //    if ([self.bodypartTxtFld.text length]!=0) {
-    //    if ([_categoryFilteredListArr count]!=0) {
-    //        picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    //        picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    //        picker.selectedBodyPartDel = self;
-    //        picker.pickerData = _tagsArr;
-    //        [self presentViewController:picker animated:YES completion:nil];
-    //    }
-    //    else
-    //    {
-    //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-    //                                                        message:@"Sorry No Moves available in this category"
-    //                                                       delegate:self
-    //                                              cancelButtonTitle:@"Ok"
-    //                                              otherButtonTitles:nil];
-    //        [alert show];
-    //    }
-    //    }
-    //    else
-    //    {
     picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
     picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     picker.selectedBodyPartDel = self;
     picker.pickerData = _tagsArr;
     [self presentViewController:picker animated:YES completion:nil];
-    //    }
 }
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     if ([searchText length] > 0)
     {
@@ -276,10 +177,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
                                                                    ascending:YES];
     _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
-    
-    
     [tblView reloadData];
 }
+
 - (IBAction)searchTxtFldEditingAction:(UITextField*)sender {
     if ([sender.text length] > 0)
     {
@@ -380,57 +280,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [UIView commitAnimations];
 }
+
 #pragma mark TEXTFIELD ACCESSORY METHODS
-/*
- -(IBAction)dismissKeyboard:(id)sender {
- for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++) {
- UITextField *textField = (UITextField*)[self.view viewWithTag:i];
- 
- if ([textField isFirstResponder]) {
- [textField resignFirstResponder];
- [scrollView setContentOffset:svos animated:YES];
- }
- }
- }
- 
- -(IBAction)nextTextField:(id)sender {
- for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++) {
- UITextField *textField = (UITextField*)[self.view viewWithTag:i];
- 
- if ([textField isFirstResponder] && i!=NUMBER_OF_TEXTFIELDS) {
- UITextField *textField2 = (UITextField*)[self.view viewWithTag:i+1];
- [textField2 becomeFirstResponder];
- if (i+1 ==NUMBER_OF_TEXTFIELDS) {
- [closeDoneButton setTitle:@"Done"];
- [closeDoneButton setStyle:UIBarButtonItemStyleDone];
- }
- else {
- [closeDoneButton setTitle:@"Close"];
- [closeDoneButton setStyle:UIBarButtonItemStylePlain];
- }
- break;
- }
- }
- }
- 
- -(IBAction)previousTextField:(id)sender {
- for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++) {
- UITextField *textField = (UITextField*)[self.view viewWithTag:i];
- if ([textField isFirstResponder] && i != 1) {
- UITextField *textField2 = (UITextField*)[self.view viewWithTag:i-1];
- 
- [textField2 becomeFirstResponder];
- [closeDoneButton setTitle:@"Close"];
- [closeDoneButton setStyle:UIBarButtonItemStylePlain];
- break;
- }
- }
- }
- */
--(BOOL)textFieldShouldReturn:(UITextField*)textField {
+
+- (BOOL)textFieldShouldReturn:(UITextField*)textField {
     [textField resignFirstResponder];
     return YES;
 }
+
 #pragma mark - WorkOutList
 
 - (void)getWorkoutListFailed:(NSString *)failedMessage {
@@ -454,27 +311,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         _tagsArr = [[NSMutableArray alloc]initWithArray:responseDict[@"ListOfTags"]];
     }
     
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     NSSortDescriptor *sortDescriptor;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
                                                  ascending:YES];
     _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
     [tblView reloadData];
 }
-/*
- #pragma mark - CategoryList
- 
- - (void)getCategoryListFailed:(NSString *)failedMessage {
- 
- }
- 
- - (void)getCategoryListFinished:(NSDictionary *)responseArray {
- [_BodyPartDataArr addObjectsFromArray:responseArray[@"CategoryList"]];
- }
- */
 
-//UniquiID
--(NSString *) randomStringWithLength:(int)digit {
+// UniqueID
+-(NSString *)randomStringWithLength:(int)digit {
     NSString *alphaNumaricStr = @"abcdefghijklmnopqrstuvwxyz0123456789";
     NSMutableString *randomString = [NSMutableString stringWithCapacity: digit];
     
@@ -485,12 +331,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     return randomString;
 }
+
 #pragma mark - TableView Delegate
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"searchTable";
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
@@ -516,70 +363,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSString * msgInfo = [NSString stringWithFormat:@"New Move will be added to %@",[dateFormatter stringFromDate:_selectedDate]];
    
     NSString * msgInfoForExchange = [NSString stringWithFormat:@"Exchange move on %@",[dateFormatter stringFromDate:_selectedDate]];
-    /*
-     if([templateNameTxtFld.text length] == 0)
-     {
-     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-     message:@"Please Enter Template Name"
-     delegate:self
-     cancelButtonTitle:@"Ok"
-     otherButtonTitles:nil];
-     [alert show];
-     }
-     else if ([_bodypartTxtFld.text length] == 0)
-     {
-     UIAlertController * alert = [UIAlertController
-     alertControllerWithTitle:@"Add My Moves"
-     message:msgInfo
-     preferredStyle:UIAlertControllerStyleAlert];
-     
-     //Add Buttons
-     
-     UIAlertAction* yesButton = [UIAlertAction
-     actionWithTitle:@"Ok"
-     style:UIAlertActionStyleDefault
-     handler:^(UIAlertAction * action) {
-     //Handle your yes please button action here
-     
-     MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
-     moveDetailVc.moveDetailDict = self.tableData[indexPath.row];
-     
-     NSString *filter = @"%K == %@";
-     NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutCategoryID",_tableData[indexPath.row][@"WorkoutCategoryID"]];
-     
-     NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[_BodyPartDataArr filteredArrayUsingPredicate:categoryPredicate]];
-     
-     NSString *tagFilter = @"%K == %@ && %K == %@";
-     NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:tagFilter,@"WorkoutTagsID",_tableData[indexPath.row][@"WorkoutTagsID"],@"WorkoutCategoryID",_tableData[indexPath.row][@"WorkoutCategoryID"]];
-     
-     NSMutableArray * tempTagArr = [[NSMutableArray alloc]initWithArray:[_tagsArr filteredArrayUsingPredicate:tagPredicate]];
-     
-     
-     [soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:[_tableData[indexPath.row][@"WorkoutCategoryID"]integerValue] tagsName:tempTagArr[0][@"Tags"] TagsId:[_tableData[indexPath.row][@"WorkoutTagsID"]integerValue] templateName:templateNameTxtFld.text];
-     moveDetailVc.workoutMethodID = [self.tableData[indexPath.row][@"WorkoutTemplateId"]intValue];
-     [self.navigationController popViewControllerAnimated:YES];
-     }];
-     
-     UIAlertAction* noButton = [UIAlertAction
-     actionWithTitle:@"Cancel"
-     style:UIAlertActionStyleDefault
-     handler:^(UIAlertAction * action) {
-     //Handle no, thanks button
-     }];
-     
-     //Add your buttons to alert controller
-     
-     [alert addAction:yesButton];
-     [alert addAction:noButton];
-     
-     [self presentViewController:alert animated:YES completion:nil];
-     
-     }
-     else
-     { */
-    if(_isExchange)
-    {
-        
+   
+    if (_isExchange) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Exchange My Moves"
                                      message:msgInfoForExchange
@@ -592,23 +377,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                     handler:^(UIAlertAction * action) {
                                         
                                         MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
-                                        //                                            [soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId];
-                                        [soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
+                                        //                                            [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId];
+                                        [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                         
                                         
                                         DMLog(@"%@",self.moveDetailDictToDelete);
-                                        //                                            [soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue]];
+                                        //                                            [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue]];
                                         
-                                        [soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
+                                        [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                         
-                                        //                                            [soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName:@"Custom Plan"];
+                                        //                                            [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName:@"Custom Plan"];
                                         
-                                        [soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName: _moveDetailDictToDelete[@"TemplateName"] WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
+                                        [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName: _moveDetailDictToDelete[@"TemplateName"] WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
                                         
                                         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                                         formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
                                         
-                                        NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[[soapWebService loadExerciseFromDb] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [formatter stringFromDate:_selectedDate]]]];
+                                        NSArray *exerciseArray = [self.soapWebService loadExerciseFromDb];
+                                        NSArray *filteredExerciseArray = [exerciseArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [formatter stringFromDate:_selectedDate]]];
+                                        NSMutableArray * tempArr = [filteredExerciseArray mutableCopy];
                                         
                                         DMLog(@"%@",tempArr[[tempArr count] - 1]);
                                         [self.exchangeDel passDataOnExchange:tempArr[[tempArr count] - 1]];
@@ -617,7 +404,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                         
                                         moveDetailVc.currentDate = self.selectedDate;
                                         NSString *dateString = [formatter stringFromDate:self.selectedDate];
-                                        [soapWebService updateWorkoutToDb:dateString];
+                                        [self.soapWebService updateWorkoutToDb:dateString];
                                         
                                         MyMovesViewController *mymoveVc = [[MyMovesViewController alloc]initWithNibName:@"MyMovesViewController" bundle:nil];
                                         
@@ -639,19 +426,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                             
                                             MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
                                             
-                                            [soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
+                                            [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                             DMLog(@"%@",self.moveDetailDictToDelete);
                                             
-                                            [soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
+                                            [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                             
                                             
-                                            [soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName: _moveDetailDictToDelete[@"TemplateName"] WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
+                                            [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName: _moveDetailDictToDelete[@"TemplateName"] WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
                                             
                                             
                                             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                                             formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
                                             
-                                            NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[[soapWebService loadExerciseFromDb] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [formatter stringFromDate:_selectedDate]]]];
+                                            NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[[self.soapWebService loadExerciseFromDb] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [formatter stringFromDate:_selectedDate]]]];
                                             
                                             DMLog(@"%@",tempArr[[tempArr count] - 1]);
                                             [self.exchangeDel passDataOnExchange:tempArr[[tempArr count] - 1]];
@@ -660,7 +447,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                             
                                             moveDetailVc.currentDate = self.selectedDate;
                                             NSString *dateString = [formatter stringFromDate:self.selectedDate];
-                                            [soapWebService updateWorkoutToDb:dateString];
+                                            [self.soapWebService updateWorkoutToDb:dateString];
 
                                             [self.navigationController popViewControllerAnimated:YES];
                                         }];
@@ -727,11 +514,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                         NSString *planNameStr = @"Custom Plan";
 
 //                                        if (_bodypartTxtFld.text.length == 0) {
-                                            [soapWebService addMovesToDb:_tableData[indexPath.row] SelectedDate:_selectedDate planName:planNameStr categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:_categoryID tagsName:self.filter1.text TagsId:_tagsId status:@"New" PlanNameUnique:planNameUniqueID DateListUnique:planDateListUniqueID MoveNameUnique:moveNameUniqueID];
+                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row] SelectedDate:_selectedDate planName:planNameStr categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:_categoryID tagsName:self.filter1.text TagsId:_tagsId status:@"New" PlanNameUnique:planNameUniqueID DateListUnique:planDateListUniqueID MoveNameUnique:moveNameUniqueID];
 //                                        }
 //                                        else
 //                                        {
-//                                            // [soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:_categoryID tagsName:self.filter1.text TagsId:_tagsId templateName:@"Custom Plan" WorkoutDateID: workoutTempId];
+//                                            // [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:_categoryID tagsName:self.filter1.text TagsId:_tagsId templateName:@"Custom Plan" WorkoutDateID: workoutTempId];
 //                                        }
                                         
                                         
@@ -782,7 +569,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                             //  NSString *planNameStr = [NSString stringWithFormat:@"Custom Plan (%ld)", _newCount + 1];
                                             NSString *planNameStr = @"Custom Plan";
 
-                                            [soapWebService addMovesToDb:_tableData[indexPath.row] SelectedDate:_selectedDate planName:planNameStr categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:_categoryID tagsName:self.filter1.text TagsId:_tagsId status:@"New" PlanNameUnique:planNameUniqueID DateListUnique:planDateListUniqueID MoveNameUnique:moveNameUniqueID];
+                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row] SelectedDate:_selectedDate planName:planNameStr categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:_categoryID tagsName:self.filter1.text TagsId:_tagsId status:@"New" PlanNameUnique:planNameUniqueID DateListUnique:planDateListUniqueID MoveNameUnique:moveNameUniqueID];
                                             
                                             MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
                                             
@@ -802,7 +589,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                                             formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
                                             NSString *dateString = [formatter stringFromDate:self.selectedDate];
-                                            [soapWebService updateWorkoutToDb:dateString];
+                                            [self.soapWebService updateWorkoutToDb:dateString];
                                             [_passDataDel passDataOnAdd];
                                             
                                             [self.navigationController pushViewController:moveDetailVc animated:YES];
@@ -840,7 +627,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[removeDup allObjects]];
     _filter1.text = @"";
     
-    _tableData = [soapWebService loadCategoryFilteredListOfTitleToDb:[dict[@"WorkoutCategoryID"]intValue]];
+    _tableData = [self.soapWebService loadCategoryFilteredListOfTitleToDb:[dict[@"WorkoutCategoryID"]intValue]];
     
     if (dict[@"WorkoutCategoryID"] != nil) {
         _categoryID = [dict[@"WorkoutCategoryID"] integerValue];

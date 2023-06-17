@@ -19,21 +19,20 @@
 }
 @property (weak, nonatomic) IBOutlet UILabel *timerLbl;
 
-@property (strong, nonatomic) AVAudioPlayer * audioPlayer;
-@property (strong, nonatomic) NSError *error;
+@property (nonatomic, strong) AVAudioPlayer * audioPlayer;
 
 @property (weak, nonatomic) NSTimer *myTimer;
 @property (weak, nonatomic) NSTimer *pickerTimer;
 @property double currentTimeInSeconds;
 @property double pickerLblInSeconds;
-@property (strong, retain) NSDictionary * moveDetailDict;
+@property (nonatomic, strong) NSDictionary * moveDetailDict;
 
-@property (retain, nonatomic) IBOutlet UIButton *startBtnOutlet;
+@property (nonatomic, strong) IBOutlet UIButton *startBtnOutlet;
 
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
-@property(retain, nonatomic) NSMutableArray *hoursArray;
-@property(retain, nonatomic) NSMutableArray *minsArray;
-@property(retain, nonatomic) NSMutableArray *secsArray;
+@property (nonatomic, strong) NSMutableArray *hoursArray;
+@property (nonatomic, strong) NSMutableArray *minsArray;
+@property (nonatomic, strong) NSMutableArray *secsArray;
 
 @end
 

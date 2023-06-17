@@ -15,12 +15,6 @@
 
 @interface GetDataWebService : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate> {
     
-    // delegates
-    id<GetDataWSDelegate> getDataWSDelegate;
-    
-    NSMutableData *webData;
-	NSMutableString *soapResults;
-	NSXMLParser *xmlParser;
 	BOOL recordResults;
     
     // Vars to Hold Data for Session
@@ -29,14 +23,13 @@
     NSString *requestType;
 
 }
-@property (nonatomic, retain) NSDictionary *requestDict;
+@property (nonatomic, strong) NSDictionary *requestDict;
 
-// delegates
-@property(nonatomic,assign) id<GetDataWSDelegate> getDataWSDelegate;
+@property (nonatomic, weak) id<GetDataWSDelegate> getDataWSDelegate;
 
-@property(nonatomic, retain) NSMutableData *webData;
-@property(nonatomic, retain) NSMutableString *soapResults;
-@property(nonatomic, retain) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
 
 -(void)callWebservice:(NSDictionary *)requestDict;
 

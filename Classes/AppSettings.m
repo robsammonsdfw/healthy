@@ -17,11 +17,11 @@
 
 @interface AppSettings () <SFSafariViewControllerDelegate>
 {
-    MBProgressHUD *HUD; 
+     
 }
 
-@property (nonatomic, assign) IBOutlet UIButton *hcgBookletButton;
-@property (nonatomic, assign) IBOutlet UIButton *mwlBookletButton;
+@property (nonatomic) IBOutlet UIButton *hcgBookletButton;
+@property (nonatomic) IBOutlet UIButton *mwlBookletButton;
 
 - (IBAction)showHCGBooklet:(id)sender;
 - (IBAction)showMWLBooklet:(id)sender;
@@ -32,19 +32,19 @@
 - (IBAction)CheckForFoodUpdateSync:(id)sender;
 - (IBAction)sendSupportEmail:(id)sender;
 
-@property (retain, nonatomic) IBOutlet UIButton *btnoptionsetting;
-@property (retain, nonatomic) IBOutlet UIButton *btnmycustomfood;
-@property (retain, nonatomic) IBOutlet UIButton *btnaddcustomfood;
-@property (retain, nonatomic) IBOutlet UIButton *btnperformdownsync;
-@property (retain, nonatomic) IBOutlet UIButton *btnperfomupsync;
-@property (retain, nonatomic) IBOutlet UIButton *btnchekforfoodupdate;
-@property (retain, nonatomic) IBOutlet UIButton *btnsenddatabasetosupport;
+@property (nonatomic, strong) IBOutlet UIButton *btnoptionsetting;
+@property (nonatomic, strong) IBOutlet UIButton *btnmycustomfood;
+@property (nonatomic, strong) IBOutlet UIButton *btnaddcustomfood;
+@property (nonatomic, strong) IBOutlet UIButton *btnperformdownsync;
+@property (nonatomic, strong) IBOutlet UIButton *btnperfomupsync;
+@property (nonatomic, strong) IBOutlet UIButton *btnchekforfoodupdate;
+@property (nonatomic, strong) IBOutlet UIButton *btnsenddatabasetosupport;
 
 //HHT apple watch
-@property(nonatomic,retain) HKHealthStore *healthStore;
-@property(nonatomic, strong) NSMutableArray *arrData;
-@property(nonatomic, strong) NSSet *readDataTypes;
-@property(nonatomic, strong) StepData * sd;
+@property (nonatomic,retain) HKHealthStore *healthStore;
+@property (nonatomic, strong) NSMutableArray *arrData;
+@property (nonatomic, strong) NSSet *readDataTypes;
+@property (nonatomic, strong) StepData * sd;
 
 @end
 
@@ -62,7 +62,7 @@
         self.showPopUpVw.hidden = true;
     }
     
-//    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+//    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
 //    dietmasterEngine.sendAllServerData = true;
 
     
@@ -121,11 +121,10 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back" style: UIBarButtonItemStylePlain target: nil action: nil];
     
     [self.navigationItem setBackBarButtonItem: backButton];
-    [backButton release];
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     
@@ -237,7 +236,6 @@
         NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
         [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
         dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-        [outdateformatter release];
     }
     
     lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
@@ -283,18 +281,17 @@
 }
 
 -(IBAction) myFoods:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"View";
     
     FoodsSearch *fsController = [[FoodsSearch alloc] initWithNibName:@"FoodsSearch" bundle:nil];
     fsController.searchType = @"My Foods";
     fsController.title = @"My Foods";
     [self.navigationController pushViewController:fsController animated:YES];
-    [fsController release];
 }
 
 -(IBAction)addFoods:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"";
     
     ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
@@ -304,7 +301,6 @@
     
     [self.navigationController pushViewController:mfController animated:YES];
     mfController.hideAddToLog = YES;
-    [mfController release];
     mfController = nil;
 }
 
@@ -313,9 +309,8 @@
     MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
     [soapWebService offlineSyncApi];
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = self;
-//    [self clearTableData];
 
     //HHT new exercise sync
     [dietmasterEngine.arrExerciseSyncNew removeAllObjects];
@@ -323,16 +318,8 @@
 }
 
 -(IBAction)forceUPDBSync:(id)sender {
-//    AppDel.isSessionExp = NO;
-    
-    
-//    self.userLoginWS = [[UserLoginWebService alloc] init];
-//    userLoginWS.wsAuthenticateUserDelegate = self;
-//    [userLoginWS callWebservice:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginPwd"]];
-//    [userLoginWS release];
-    
     [upSyncSpinner startAnimating];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = self;
     [dietmasterEngine uploadDatabase];
 }
@@ -348,7 +335,7 @@
 
 -(void)clearTableData
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -428,7 +415,6 @@
         GetDataWebService *webService = [[GetDataWebService alloc] init];
         webService.getDataWSDelegate = self;
         [webService callWebservice:infoDict];
-        [webService release];
     });
 }
 
@@ -449,7 +435,6 @@
         GetDataWebService *webService = [[GetDataWebService alloc] init];
         webService.getDataWSDelegate = self;
         [webService callWebservice:infoDict];
-        [webService release];
     });
 }
 
@@ -460,7 +445,7 @@
     }
     else {
         [upSyncSpinner startAnimating];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.syncUPDatabaseDelegate = self;
         [dietmasterEngine uploadDatabase];
     }
@@ -468,7 +453,7 @@
 
 #pragma mark SYNC DELEGATE METHODS
 - (void)syncDatabaseFinished:(NSString *)responseMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -478,8 +463,6 @@
                            UIAlertView *alert;
                            alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"The database was sync'd successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                            [alert show];
-                           [alert release];
-                           
                        });
                    });
     
@@ -487,7 +470,6 @@
     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
     [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
     NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-    [outdateformatter release];
     
     lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
 }
@@ -495,7 +477,7 @@
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
     
     //HHT mail change
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -507,8 +489,6 @@
                            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
                            alert.tag = 1001;
                            [alert show];
-                           [alert release];
-                           
                        });
                    });
     
@@ -516,7 +496,7 @@
 
 - (void)syncUPDatabaseFinished:(NSString *)responseMessage {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -531,7 +511,6 @@
                                UIAlertView *alert;
                                alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"The database was sync'd successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                                [alert show];
-                               [alert release];
                            }
                        });
                    });
@@ -540,14 +519,14 @@
     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
     [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
     NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-    [outdateformatter release];
+    
     
     lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
 }
 
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -560,36 +539,9 @@
                            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
                            alert.tag = 1001;
                            [alert show];
-                           [alert release];
-                           
                        });
                    });
     
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    [self setMyScrollBG:nil];
-//    upSyncSpinner = nil;
-//    downSyncSpinner = nil;
-//}
-
-
-- (void)dealloc {
-    [myScrollBG release];
-    [_btnoptionsetting release];
-    [_btnmycustomfood release];
-    [_btnaddcustomfood release];
-    [_btnperformdownsync release];
-    [_btnperfomupsync release];
-    [_btnchekforfoodupdate release];
-    [_btnsenddatabasetosupport release];
-    [_viewtoptobottom release];
-    [self setMyScrollBG:nil];
-    upSyncSpinner = nil;
-    downSyncSpinner = nil;
-    [btnSafetyGuidelines release];
-    [super dealloc];
 }
 
 //HHT mail change
@@ -602,9 +554,9 @@
             if ([MFMailComposeViewController canSendMail]) {
                 NSString *path = [[NSBundle mainBundle] bundlePath];
                 NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-                NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+                NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
                 
-                MFMailComposeViewController *mailComposer = [[[MFMailComposeViewController alloc] init] autorelease];
+                MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
                 [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
                 NSString *emailTo = [[NSString alloc] initWithFormat:@""];
                 [mailComposer setMessageBody:emailTo isHTML:NO];
@@ -613,7 +565,7 @@
                 [mailComposer setToRecipients:toArray];
                 mailComposer.mailComposeDelegate = self;
                 
-                DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+                DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
                 NSData *zipData = dietmasterEngine.createZipFileOfDatabase;                [mailComposer addAttachmentData:zipData mimeType:@"application/zip" fileName:@"Document.Zip"];
                 [self presentViewController:mailComposer animated:YES completion:nil];
             }
@@ -697,15 +649,13 @@
     learnMoreViewController.learnMoreTitle = @"mwlbooklet";
     learnMoreViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:learnMoreViewController animated:YES];
-    [learnMoreViewController release];
-    
 }
+
 -(IBAction)showHCGBooklet:(id)sender {
     LearnMoreViewController *learnMoreViewController = [[LearnMoreViewController alloc] init];
     learnMoreViewController.learnMoreTitle = @"hcgbooklet";
     learnMoreViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:learnMoreViewController animated:YES];
-    [learnMoreViewController release];
 }
 
 #pragma mark SettingView
@@ -956,14 +906,13 @@
         [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:@"FoodUpdateLastsyncDate"];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"The Food database was sync'd successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-        [alert release];
         return;
     }
     pageNumberCounter++;
     
     responseDict = [dictDataTemp valueForKey:@"Foods"];
     
-    FMDatabase* db = [FMDatabase databaseWithPath:[[DietmasterEngine instance] databasePath]];
+    FMDatabase* db = [FMDatabase databaseWithPath:[[DietmasterEngine sharedInstance] databasePath]];
     if (![db open]) {
         DMLog(@"Could not open db.");
     }
@@ -1125,7 +1074,6 @@
     UIAlertView *alert;
     alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
-    [alert release];
 }
 
 - (IBAction)popUpBtn:(id)sender {
@@ -1194,7 +1142,6 @@
     if (navigationArray.count > 2) {
         [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
         self.navigationController.viewControllers = navigationArray;
-        [navigationArray release];
     }
 }
 

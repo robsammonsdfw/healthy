@@ -23,7 +23,7 @@
 
 	[txtfieldWeight becomeFirstResponder];
 	
-    DietmasterEngine *dietEngine = [DietmasterEngine instance];
+    DietmasterEngine *dietEngine = [DietmasterEngine sharedInstance];
 	dbPath	= [dietEngine databasePath];
 
 	[self setTitle:@"Log Weight"];
@@ -44,7 +44,7 @@
 
 	if(self.date_currentDate == NULL) {
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
         [dateFormat setTimeZone:systemTimeZone];
@@ -60,22 +60,17 @@
 	
 	recordDate.text = [NSString stringWithFormat: @"%@", date_Display];
 	
-    [dateFormat release];
-    [dateFormat_display release];
-    [dateFormat_db release];
-    
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Date"
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
                                                                   action:@selector(changeDate:)];
     self.navigationItem.rightBarButtonItem = editButton;
-    [editButton release];
     
 	[super viewDidLoad];
     
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-	NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+	NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Log_Weight_Screen"];
@@ -91,23 +86,11 @@
     }
 }
 
-- (void)dealloc {
-    [_btnrecordweight release];
-    [super dealloc];
-    
-    [recordDate release];
-    [date_Today release];
-    [date_currentDate release];
-    [date_Display release];
-    [date_DB release];
-}
-
 - (IBAction) changeDate:(id) sender {
 	DatePickerControl *dpControl = [[DatePickerControl alloc] initWithNibName:@"DatePickerControl" bundle:nil];
 	dpControl.delegate = self;
 	dpControl.date_currentDate	= date_currentDate;
     [self presentViewController:dpControl animated:YES completion:nil];
-	[dpControl release];
 	dpControl = nil;
 }
 
@@ -130,13 +113,11 @@
 				cancelButtonTitle: @"OK"
 				otherButtonTitles: nil];
 		[view show];
-		[view autorelease];
-		
 	}
     else {
         NSString *strBodyfat = @"0";
         NSString *strEntryType = [NSString stringWithFormat:@"%d", WEIGHT_ENTRY];
-        DietmasterEngine* dietmasterEnginePath = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEnginePath = [DietmasterEngine sharedInstance];
         FMDatabase* tempdb = [FMDatabase databaseWithPath:[dietmasterEnginePath databasePath]];
         
         if (![tempdb open]) {
@@ -153,7 +134,7 @@
 
         NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO weightlog (weight,logtime, deleted, entry_type, bodyfat) VALUES (%f,'%@', 1, %@, %@)", [newWeight doubleValue], date_Today, strEntryType, strBodyfat];
 
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
             DMLog(@"Could not open db.");
@@ -171,32 +152,4 @@
 	}	
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-	HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-	HUD = nil;
-}
-
-- (void)showCompleted {
-	HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-    
-	HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-	
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-	
-    [HUD show:YES];
-	[HUD hide:YES afterDelay:1.0];
-}
 @end

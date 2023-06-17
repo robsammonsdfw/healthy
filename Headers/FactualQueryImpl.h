@@ -56,7 +56,7 @@ typedef enum {
 }
 
 @property (nonatomic,copy)   NSString* fieldName;
-@property (nonatomic,assign) SimplePredicateType type;
+@property (nonatomic) SimplePredicateType type;
 @property (nonatomic,retain) id value;
 
 
@@ -74,7 +74,7 @@ typedef enum {
     NSMutableArray* _filters;
 }
 
-@property (nonatomic,assign) CompoundFilterPredicateType type;
+@property (nonatomic) CompoundFilterPredicateType type;
 @property (nonatomic,readonly) NSMutableArray* filterValues;
 
 -(id) initWithPredicateType:(CompoundFilterPredicateType) type filterValues:(NSArray*) filterValues;
@@ -91,7 +91,7 @@ typedef enum {
     NSArray* _values;
     NSString* _fieldName;
 }
-@property (nonatomic,assign) CompoundValuePredicateType type;
+@property (nonatomic) CompoundValuePredicateType type;
 @property (nonatomic,retain) NSArray* values;
 @property (nonatomic,copy) NSString* fieldName;
 
@@ -120,8 +120,8 @@ typedef enum {
     double                 _radiusInMeters;
 }
 
-@property (nonatomic,assign) CLLocationCoordinate2D location;
-@property (nonatomic,assign) double radius;
+@property (nonatomic) CLLocationCoordinate2D location;
+@property (nonatomic) double radius;
 
 -(id) initWithLocation:(CLLocationCoordinate2D) location distance:(double)distance;
 
@@ -144,7 +144,7 @@ typedef enum {
     NSUInteger  _minCountPerFacetValue;
     NSUInteger  _maxValuesPerFacet;
 }
-@property(nonatomic,retain)   FactualGeoFilter* geoFilter;
+@property (nonatomic,retain)   FactualGeoFilter* geoFilter;
 
 -(void) generateQueryString:(NSMutableString*)intoString;
 

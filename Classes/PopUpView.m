@@ -10,36 +10,36 @@
 
 @interface PopUpView ()
 
-@property (retain, nonatomic) IBOutlet UIStackView *homeStack;
-@property (retain, nonatomic) IBOutlet UIStackView *weightStack;
-@property (retain, nonatomic) IBOutlet UIStackView *journalStack;
-@property (retain, nonatomic) IBOutlet UIStackView *plannedStack;
-@property (retain, nonatomic) IBOutlet UIStackView *settingsStack;
+@property (nonatomic, strong) IBOutlet UIStackView *homeStack;
+@property (nonatomic, strong) IBOutlet UIStackView *weightStack;
+@property (nonatomic, strong) IBOutlet UIStackView *journalStack;
+@property (nonatomic, strong) IBOutlet UIStackView *plannedStack;
+@property (nonatomic, strong) IBOutlet UIStackView *settingsStack;
 
-@property (retain, nonatomic) IBOutlet UIView *homeSelectedVw;
-@property (retain, nonatomic) IBOutlet UIView *weightSelectedVw;
-@property (retain, nonatomic) IBOutlet UIView *jousnalSelectedVw;
-@property (retain, nonatomic) IBOutlet UIView *plannedSelecetdVw;
-@property (retain, nonatomic) IBOutlet UIView *settingsSelectedVw;
+@property (nonatomic, strong) IBOutlet UIView *homeSelectedVw;
+@property (nonatomic, strong) IBOutlet UIView *weightSelectedVw;
+@property (nonatomic, strong) IBOutlet UIView *jousnalSelectedVw;
+@property (nonatomic, strong) IBOutlet UIView *plannedSelecetdVw;
+@property (nonatomic, strong) IBOutlet UIView *settingsSelectedVw;
 
-@property (retain, nonatomic) IBOutlet UIImageView *homeImgVw;
-@property (retain, nonatomic) IBOutlet UIImageView *weightImgVw;
-@property (retain, nonatomic) IBOutlet UIImageView *journalImgVw;
-@property (retain, nonatomic) IBOutlet UIImageView *plannedImgVw;
-@property (retain, nonatomic) IBOutlet UIImageView *settingsImgVw;
-@property (retain, nonatomic) IBOutlet UIImageView *myMovesImgVw;
+@property (nonatomic, strong) IBOutlet UIImageView *homeImgVw;
+@property (nonatomic, strong) IBOutlet UIImageView *weightImgVw;
+@property (nonatomic, strong) IBOutlet UIImageView *journalImgVw;
+@property (nonatomic, strong) IBOutlet UIImageView *plannedImgVw;
+@property (nonatomic, strong) IBOutlet UIImageView *settingsImgVw;
+@property (nonatomic, strong) IBOutlet UIImageView *myMovesImgVw;
 
-@property (retain, nonatomic) IBOutlet UILabel *homeLbl;
-@property (retain, nonatomic) IBOutlet UILabel *weightLbl;
-@property (retain, nonatomic) IBOutlet UILabel *journalLbl;
-@property (retain, nonatomic) IBOutlet UILabel *plannedLbl;
-@property (retain, nonatomic) IBOutlet UILabel *settingsLbl;
-@property (retain, nonatomic) IBOutlet UILabel *myMovesLbl;
+@property (nonatomic, strong) IBOutlet UILabel *homeLbl;
+@property (nonatomic, strong) IBOutlet UILabel *weightLbl;
+@property (nonatomic, strong) IBOutlet UILabel *journalLbl;
+@property (nonatomic, strong) IBOutlet UILabel *plannedLbl;
+@property (nonatomic, strong) IBOutlet UILabel *settingsLbl;
+@property (nonatomic, strong) IBOutlet UILabel *myMovesLbl;
 
-@property (retain, nonatomic) IBOutlet UIStackView *mmStackVw;
+@property (nonatomic, strong) IBOutlet UIStackView *mmStackVw;
 
-@property (retain, nonatomic) IBOutlet UIButton *mmBtn;
-@property (retain, nonatomic) IBOutlet UIView *myMovesSelectedVw;
+@property (nonatomic, strong) IBOutlet UIButton *mmBtn;
+@property (nonatomic, strong) IBOutlet UIView *myMovesSelectedVw;
 
 @end
 
@@ -155,36 +155,4 @@
     lbl.textColor = UIColorFromHex(0xE69800);
 }
 
-
-- (void)dealloc {
-    [_popUpView release];
-    [_homeStack release];
-    [_weightStack release];
-    [_journalStack release];
-    [_plannedStack release];
-    [_settingsStack release];
-    [_homeSelectedVw release];
-    [_weightSelectedVw release];
-    [_weightSelectedVw release];
-    [_jousnalSelectedVw release];
-    [_plannedSelecetdVw release];
-    [_settingsSelectedVw release];
-    [_homeImgVw release];
-    [_weightImgVw release];
-    [_journalImgVw release];
-    [_plannedImgVw release];
-    [_settingsImgVw release];
-    [_homeLbl release];
-    [_weightLbl release];
-    [_journalLbl release];
-    [_plannedLbl release];
-    [_settingsLbl release];
-    [_mmStackVw release];
-    [_myMovesImgVw release];
-    [_myMovesLbl release];
-    [_mmBtn release];
-    [_myMovesSelectedVw release];
-    [super dealloc];
-}
 @end
-

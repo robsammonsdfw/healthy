@@ -46,7 +46,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 
 @implementation MessageViewController
 - (FMDatabase *)database {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -132,22 +132,14 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 }
 
 - (void)synchMessages:(id)sender {
-    if (sender) {
-    }
-    else
-        hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Updating...";
+    [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
     
-    [[DietmasterEngine instance] synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
+    [[DietmasterEngine sharedInstance] synchMessagesWithCompletion:^(BOOL success, NSString *errorString) {
         [pullToRefreshManager tableViewReloadFinished];
-        if (errorString) {
-            hud.labelText = errorString;
-            hud.labelFont = [hud.labelFont fontWithSize:10];
-            [hud hide:YES afterDelay:1.0];
-        }
-        else {
+        [DMActivityIndicator hideActivityIndicator];
+        if (!errorString) {
             [self reloadDataWithScroll:@(YES)];
-            [hud hide:YES];
+            [DMActivityIndicator hideActivityIndicator];
         }
     }];
 }
@@ -221,13 +213,12 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 }
 
 - (void)addMessage {
-    hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Updating...";
+    [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
     [self performAfterDelay:0.1 block:^{
         countShowedMessage += ShowMessageCountStep;
         [self reloadDataWithScroll:@(NO)];
         [self updateHeaderView];
-        [hud hide:YES];
+        [DMActivityIndicator hideActivityIndicator];
     }];
 }
 
@@ -275,17 +266,6 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)dealloc {
-    pullToRefreshManager.client = nil;
-    pullToRefreshManager.table = nil;
-    pullToRefreshManager = nil;
-    tableView.delegate = nil;
-    tableView.dataSource = nil;
-    [DietmasterEngine instance].messageCompletion = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    sendView = nil;
-}
-
 #pragma mark - WSSendMessageDelegate
 
 - (void)sendMessageFinished:(NSMutableArray *)responseArray {
@@ -318,11 +298,12 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
         [pullToRefreshManager tableViewReleased];
     }
     
-    [hud hide:YES];
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 - (void)sendMessageFailed:(NSString *)failedMessage {
-    [hud hide:YES];
+    [DMActivityIndicator hideActivityIndicator];
+
     UIAlertViewShow(@"Error",
                     failedMessage,
                     @[@"Cancel",
@@ -353,7 +334,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
         NSString *status = message[@"Status"];
         if ([status isEqualToString:@"Success"]) {
             NSString *messageId = message[@"MessageID"];
-            [[DietmasterEngine instance] setReadedMessageId:messageId];
+            [[DietmasterEngine sharedInstance] setReadedMessageId:messageId];
         }
     }
 }
@@ -364,7 +345,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 
 #pragma mark - SendViewDelegate
 - (void)setMessagesRead {
-    NSArray *messages = [[DietmasterEngine instance] unreadingMessages];
+    NSArray *messages = [[DietmasterEngine sharedInstance] unreadingMessages];
     
     NSMutableArray *messageIds = [NSMutableArray arrayWithCapacity:messages.count];
     for (NSDictionary *message in messages) {
@@ -416,8 +397,7 @@ WSSendMessageDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,
 - (void)sendView:(SendView *)sendView_ didSendText:(NSString *)text {
     [sendView_.messageView resignFirstResponder];
     
-    hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Sending...";
+    [DMActivityIndicator showActivityIndicatorWithMessage:@"Sending..."];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     

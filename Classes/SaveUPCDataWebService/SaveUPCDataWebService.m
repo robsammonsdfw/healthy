@@ -8,7 +8,6 @@
 
 #import "SaveUPCDataWebService.h"
 #import "DietmasterEngine.h"
-#import "JSON.h"
 #import "NSData-AES.h"
 #import "Base64.h"
 
@@ -29,9 +28,10 @@
                                     b64EncStrwebservicekey, @"api_key",
                                     [userData valueForKey:@"action"], @"action",
                                     nil];
-    [tempDict release];
     
-    NSString *jsonString = [jsonDictionary JSONRepresentation];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDictionary options:0 error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
     NSString *urlString = [NSString stringWithFormat:
                            @"http://mobile.dietmastergo.com/webservice/%@",
                            @"save_scanned_food_ws.php"];
@@ -51,7 +51,7 @@
     
     __unused NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
-    responseData = [[NSMutableData data] retain];
+    responseData = [NSMutableData data];
 }
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
@@ -98,27 +98,17 @@
     }
     
     responseData = nil;
-    [responseData release];
-    [connection release];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSString *jsonString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    NSMutableDictionary *responseDict = [jsonString JSONValue];
+    NSMutableDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
     
     if ([delegate respondsToSelector:@selector(saveUPCDataWSFinished:)]) {
         [delegate saveUPCDataWSFinished:responseDict];
     }
     
     responseData = nil;
-    [responseData release];
-    [jsonString release];
-    [connection release];
 }
 
-- (void)dealloc {
-    [responseData release];
-    [super dealloc];
-}
 @end
 

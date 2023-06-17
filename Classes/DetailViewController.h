@@ -41,25 +41,25 @@
     BOOL fractionPicker;
     
     int num_isFavorite;
-    MBProgressHUD *HUD;
+    
     
     IBOutlet UIBarButtonItem *decimalButton;
     IBOutlet UIBarButtonItem *fractionButton;
     NSMutableArray *rowListArr;
 
 }
-@property (retain, nonatomic) IBOutlet UIImageView *imgbar;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
 
 - (IBAction)delLog:(id) sender;
 - (void) saveToLog:(id) sender;
 
-@property (nonatomic, retain) NSMutableArray *pickerColumn1Array;
-@property (nonatomic, retain) NSMutableArray *pickerColumn3Array;
-@property (nonatomic, retain) NSMutableArray *pickerFractionArray;
-@property (nonatomic, retain) NSMutableArray *pickerDecimalArray;
-@property (nonatomic, retain) NSNumber *pickerRow1;
-@property (nonatomic, retain) NSNumber *pickerRow2;
-@property (nonatomic, retain) NSNumber *pickerRow3;
+@property (nonatomic, strong) NSMutableArray *pickerColumn1Array;
+@property (nonatomic, strong) NSMutableArray *pickerColumn3Array;
+@property (nonatomic, strong) NSMutableArray *pickerFractionArray;
+@property (nonatomic, strong) NSMutableArray *pickerDecimalArray;
+@property (nonatomic, strong) NSNumber *pickerRow1;
+@property (nonatomic, strong) NSNumber *pickerRow2;
+@property (nonatomic, strong) NSNumber *pickerRow3;
 
 -(void)loadData;
 -(void)cleanUpView;
@@ -67,9 +67,6 @@
 -(void) deleteFromFavorites;
 -(void)saveToFavorites;
 
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 -(void)updateCalorieCount;
 -(NSString *)superScriptOf:(NSString *)inputNumber;
 -(NSString *)subScriptOf:(NSString *)inputNumber;
@@ -86,9 +83,9 @@
 -(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array;
 -(IBAction) goToSafetyGuidelines:(id) sender;
 
-@property (retain, nonatomic) IBOutlet UILabel *staticCalLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticProtFatCarbLbl;
-@property (retain, nonatomic) IBOutlet UILabel *foodIdLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticCalLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticProtFatCarbLbl;
+@property (nonatomic, strong) IBOutlet UILabel *foodIdLbl;
 
 @property (nonatomic, weak) NSString *foodIdValue;
 

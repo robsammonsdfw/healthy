@@ -20,8 +20,8 @@
     
 }
 
-@property(nonatomic,assign) id<SaveUPCDataWSDelegate> delegate;
-@property(nonatomic,strong) NSMutableData *responseData;
+@property (nonatomic, weak) id<SaveUPCDataWSDelegate> delegate;
+@property (nonatomic,strong) NSMutableData *responseData;
 
 -(void)callWebservice:(NSDictionary *)userData;
 

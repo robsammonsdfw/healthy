@@ -7,7 +7,7 @@
 - (IBAction)btnPreviousClicked:(id)sender;
 - (IBAction)btnGoalWeightClicked:(id)sender;
 
-@property (retain, nonatomic) IBOutlet UITextField *txtGoalWeight;
-@property (retain, nonatomic) IBOutlet UITextField *txtGoalRate;
-@property (retain, nonatomic) NSMutableDictionary *userInfoDict;
+@property (nonatomic, strong) IBOutlet UITextField *txtGoalWeight;
+@property (nonatomic, strong) IBOutlet UITextField *txtGoalRate;
+@property (nonatomic, strong) NSMutableDictionary *userInfoDict;
 @end

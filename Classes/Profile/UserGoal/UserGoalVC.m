@@ -8,9 +8,9 @@
 {
     SBPickerSelector *picker;
 }
-@property (retain, nonatomic) IBOutlet UIButton *btnLoseWeight;
-@property (retain, nonatomic) IBOutlet UIButton *btnMainWeight;
-@property (retain, nonatomic) IBOutlet UIButton *btnGainWeight;
+@property (nonatomic, strong) IBOutlet UIButton *btnLoseWeight;
+@property (nonatomic, strong) IBOutlet UIButton *btnMainWeight;
+@property (nonatomic, strong) IBOutlet UIButton *btnGainWeight;
 
 @end
 
@@ -29,7 +29,7 @@
 
     [self.view addGestureRecognizer:tap];
     
-    picker = [[SBPickerSelector picker] retain];
+    picker = [SBPickerSelector picker];
     
     self.txtGoalRate.text = @"1.00";
     // Do any additional setup after loading the view from its nib.
@@ -347,13 +347,4 @@
     DMLog(@"Picker canceled ...");
 }
 
-
-
-- (void)dealloc {
-    [_btnLoseWeight release];
-    [_btnMainWeight release];
-    [_btnGainWeight release];
-    [_txtGoalWeight release];
-    [super dealloc];
-}
 @end

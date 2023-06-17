@@ -10,10 +10,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MyMovesListTableViewCell : UITableViewCell
-@property (retain, nonatomic) IBOutlet UIImageView *checkBoxImgView;
-@property (retain, nonatomic) IBOutlet UILabel *templateNameLbl;
-@property (retain, nonatomic) IBOutlet UIView *bgView;
-@property (retain, nonatomic) IBOutlet UIImageView *arrowImgView;
+@property (nonatomic, strong) IBOutlet UIImageView *checkBoxImgView;
+@property (nonatomic, strong) IBOutlet UILabel *templateNameLbl;
+@property (nonatomic, strong) IBOutlet UIView *bgView;
+@property (nonatomic, strong) IBOutlet UIImageView *arrowImgView;
 
 @end
 

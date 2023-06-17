@@ -9,45 +9,31 @@
 
 @protocol WSWorkoutList,WSCategoryList,WSGetUserWorkoutplanOffline;
 
-@interface MyMovesWebServices : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate,NSURLSessionDelegate> {
-    
-    // delegates
-    // DOWN SYNC
-    id<WSWorkoutList> WSWorkoutListDelegate;
-    
-    
-    NSMutableData *webData;
-    NSMutableString *soapResults;
-    NSXMLParser *xmlParser;
+@interface MyMovesWebServices : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate, NSURLSessionDelegate> {
     BOOL recordResults;
     BOOL SendAllServerData;
-    
     // Vars to Hold Data for Session
     int tempID;
-    
     NSTimer *timeOutTimer;
     NSString * tempStr;
-
 }
 
-@property (nonatomic, retain) NSMutableData *responseData;
-@property (nonatomic, retain) NSString *apiRequestType;
-@property (nonatomic, assign) BOOL myBool;
+@property (nonatomic, strong) NSMutableData *responseData;
+@property (nonatomic, strong) NSString *apiRequestType;
+@property (nonatomic) BOOL myBool;
 
+@property (nonatomic, weak) id<WSWorkoutList> WSWorkoutListDelegate;
+@property (nonatomic, weak) id<WSCategoryList> WSCategoryListListDelegate;
+@property (nonatomic, weak) id<WSGetUserWorkoutplanOffline> WSGetUserWorkoutplanOfflineDelegate;
 
-// delegates
-@property(nonatomic,assign) id<WSWorkoutList> WSWorkoutListDelegate;
-@property(nonatomic,assign) id<WSCategoryList> WSCategoryListListDelegate;
-@property(nonatomic,assign) id<WSGetUserWorkoutplanOffline> WSGetUserWorkoutplanOfflineDelegate;
-
-@property(nonatomic, retain) NSMutableData *webData;
-@property(nonatomic, retain) NSMutableString *soapResults;
-@property(nonatomic, retain) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
 
 -(void)callGetWebservice:(NSDictionary *)requestDict;
 -(void)timeOutWebservice:(NSTimer *)theTimer;
 
--(NSMutableDictionary *)loadExerciseFromDb;
+- (NSArray *)loadExerciseFromDb;
 -(NSMutableArray *)loadWorkoutFromDb;
 -(NSMutableArray *)loadListOfTitleToDb;
 -(NSMutableArray *)loadListOfBodyPart;
@@ -107,7 +93,7 @@
 -(void)updateSetsForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict;
 -(void)addSetsForExercise:(int)WorkoutUserDateId Dict:(NSDictionary *)dict;
 -(void)deleteSetsFromDB:(int)WorkoutMethodValueID;
--(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array;
+-(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSArray *)array;
 
 -(NSMutableArray *)loadSetsToBeAddedFromDb;
 -(NSMutableArray *)loadSetsToBeUpdatedFromDb;

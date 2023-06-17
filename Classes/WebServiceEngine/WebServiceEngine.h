@@ -14,24 +14,14 @@
 @protocol WSSyncFavoriteMealsDelegate;
 
 @interface WebserviceEngine : NSObject <NSURLConnectionDelegate> {
-	
-	// delegates
-	id<WSSyncFoodsDelegate> wsSyncFoodsDelegate;
-	id<WSSyncFoodLogDelegate> wsSyncFoodLogDelegate;
-	id<WSSyncFavoriteFoodsDelegate> wsSyncFavoriteFoodsDelegate;
-	id<WSSyncFavoriteMealsDelegate> wsSyncFavoriteMealsDelegate;
-    
 	NSMutableData *responseData;
-    
     int total_data;
-	
 }
 
-// delegates
-@property(nonatomic,assign) id<WSSyncFoodsDelegate> wsSyncFoodsDelegate;
-@property(nonatomic,assign) id<WSSyncFoodLogDelegate> wsSyncFoodLogDelegate;
-@property(nonatomic,assign) id<WSSyncFavoriteFoodsDelegate> wsSyncFavoriteFoodsDelegate;
-@property(nonatomic,assign) id<WSSyncFavoriteMealsDelegate> wsSyncFavoriteMealsDelegate;
+@property (nonatomic, weak) id<WSSyncFoodsDelegate> wsSyncFoodsDelegate;
+@property (nonatomic, weak) id<WSSyncFoodLogDelegate> wsSyncFoodLogDelegate;
+@property (nonatomic, weak) id<WSSyncFavoriteFoodsDelegate> wsSyncFavoriteFoodsDelegate;
+@property (nonatomic, weak) id<WSSyncFavoriteMealsDelegate> wsSyncFavoriteMealsDelegate;
 
 -(void)callWebservice:(NSString *)text;
 

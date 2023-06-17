@@ -14,19 +14,17 @@
     UISearchBar *mySearchBar;
     BOOL bSearchIsOn;
 	IBOutlet UITableView *tableView;
-	MBProgressHUD *HUD;
+	
     NSString *searchType;
     NSMutableArray *searchResults;
 }
 
-@property (nonatomic, retain) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSString *searchType;
-@property (nonatomic, retain) UISearchBar *mySearchBar; 
-@property (nonatomic, assign) BOOL bSearchIsOn;
+@property (nonatomic, strong) UISearchBar *mySearchBar; 
+@property (nonatomic) BOOL bSearchIsOn;
 
 -(void)searchBar: (id) object;
 -(void)loadSearchData:(NSString *)searchTerm;
--(void)showLoading;
--(void)hideLoading;
 
 @end

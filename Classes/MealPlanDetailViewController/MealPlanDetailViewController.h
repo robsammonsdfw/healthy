@@ -19,17 +19,17 @@
     IBOutlet UILabel *recommendedCaloriesLabel;
     IBOutlet UILabel *caloriesPlannedLabel;
     int mealCodeToAdd;
-    MBProgressHUD *HUD;
+    
     int addToPlanButtonIndex;
     IBOutlet UIButton *infoBtn;
 
 }
 
-@property (strong, nonatomic) IBOutlet UIImageView *imgbar;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
 @property (nonatomic) int selectedIndex;
-@property (retain, nonatomic) IBOutlet UIImageView *imgbarline;
-@property (retain, nonatomic) IBOutlet UILabel *staticCalPlannedLbl;
-@property (retain, nonatomic) IBOutlet UILabel *staticRecomCalLbl;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbarline;
+@property (nonatomic, strong) IBOutlet UILabel *staticCalPlannedLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticRecomCalLbl;
 
 -(void)loadData;
 -(void)showActionSheet:(id)sender;
@@ -40,9 +40,6 @@
 -(void)confirmAddMealToLog:(id)sender;
 -(void)addMealToLog:(id)sender;
 -(void)addItemToMealPlan:(id)sender;
--(void)showLoading;
--(void)hideLoading;
--(void)showCompleted;
 -(void)selectMealDate:(id)sender;
 -(void)selectAllMealDate:(id)sender;
 -(void)removeMissingFood:(NSIndexPath *)indexPath;

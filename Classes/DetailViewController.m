@@ -17,7 +17,7 @@
 
 #pragma mark DATA METHODS
 -(void)loadData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         
@@ -47,7 +47,7 @@
         NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               [NSNumber numberWithInt:[rss intForColumn:@"FoodID"]], @"FoodID", nil];
         _foodIdLbl.text = [NSString stringWithFormat:@"%@",dict[@"FoodID"]];
-        [dict release];
+        
     }
 
     
@@ -65,7 +65,7 @@
         pickerColumn3Array = rowListArr;
 
         
-        [dict release];
+        
     }
     
     double totalCalories;
@@ -141,7 +141,7 @@
     
     [self performSelector:@selector(updateCalorieCount) withObject:nil afterDelay:0.50];
     
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 #pragma mark VIEW LIFECYCLE
@@ -207,7 +207,7 @@
     
     [pickerColumn3Array removeAllObjects];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     lblText.text		= [dietmasterEngine.foodSelectedDict valueForKey:@"Name"];
     
     UIImage* image3 = [UIImage imageNamed:@"menuscan.png"];
@@ -225,7 +225,7 @@
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
@@ -239,13 +239,13 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self showLoading];
+    [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if ([dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
         lblMealName.text	= @"Add item to Plan";
     }
@@ -281,7 +281,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         if (dietmasterEngine.isMealPlanItem) {
             self.navigationItem.title = @"Plan Item Detail";
@@ -306,7 +306,7 @@
 
 #pragma mark ACTION SHEET METHODS
 -(void)showActionSheet:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     UIActionSheet *popupQuery = nil;
     NSString *favoriteOrNot = nil;
@@ -336,7 +336,7 @@
     popupQuery.tag = 10;
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
-    [popupQuery release];
+    
 }
 
 -(void)confirmDeleteFromLog {
@@ -344,7 +344,7 @@
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     actionSheet.tag = 5;
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    [actionSheet release];
+    
 }
 
 -(void)confirmDeleteFromFavorite {
@@ -352,11 +352,11 @@
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     actionSheet.tag = 1;
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    [actionSheet release];
+    
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
 
     if (actionSheet.tag == 10) {
         if (buttonIndex == 0) {
@@ -426,9 +426,9 @@
 -(void)exchangeFood {
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back" style: UIBarButtonItemStylePlain target: nil action: nil];
     [self.navigationItem setBackBarButtonItem: backButton];
-    [backButton release];
     
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine instance];
+    
+    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     NSMutableDictionary *exchangeDict = dietmasterEngine.foodSelectedDict;
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -439,12 +439,11 @@
     exchangeVC.CaloriesToMaintain = [lblCalories.text doubleValue];
     exchangeVC.ExchangeOldDataDict = exchangeDict;
     [self.navigationController pushViewController:exchangeVC animated:YES];
-    [exchangeVC release];
 }
 
 -(void)updateFoodServings {
-    [self showLoading];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator showActivityIndicator];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int num_measureID	= [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
@@ -480,17 +479,13 @@
     MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
     soapWebService.wsUpdateUserPlannedMealItems = self;
     [soapWebService callWebservice:wsInfoDict];
-    [soapWebService release];
-    
-    [wsInfoDict release];
-    [updateDict release];
 }
 
 -(void)insertNewFood {
-    [self showLoading];
-    
+    [DMActivityIndicator showActivityIndicator];
+
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int num_measureID	= [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
     
@@ -528,16 +523,12 @@
     MealPlanWebService *soapWebService2 = [[MealPlanWebService alloc] init];
     soapWebService2.wsInsertUserPlannedMealItems = self;
     [soapWebService2 callWebservice:wsInfoDict];
-    [soapWebService2 release];
-    
-    [insertDict release];
-    [wsInfoDict release];
 }
 
 -(void)deleteFromPlan {
-    [self showLoading];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator showActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
     int mealCode = [dietmasterEngine.selectedMealID intValue];
@@ -561,27 +552,27 @@
     MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
     soapWebService.wsDeleteUserPlannedMealItems = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
     
-    [infoDict release];
-    [newDict release];
+    
+    
+    
 }
 
 #pragma mark MEAL PLAN WEBSERVICE DELEGATES
 
 - (void)updateUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    [self hideLoading];
-    [self showCompleted];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator hideActivityIndicator];
+    [DMActivityIndicator showCompletedIndicator];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.didInsertNewFood = YES;
 }
 
 - (void)updateUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:200];
     [alert show];
-    [alert release];
+    
 }
 
 #pragma mark BUTTON ACTIONS
@@ -690,7 +681,7 @@
 }
 
 -(void)updateCalorieCount {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     double gramWeight = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"GramWeight"] floatValue];
     double servingSize = [[dietmasterEngine.foodSelectedDict valueForKey:@"ServingSize"] floatValue];
     double foodCalories = [[dietmasterEngine.foodSelectedDict valueForKey:@"Calories"] floatValue];
@@ -723,7 +714,7 @@
 
 #pragma mark LOG METHODS
 -(void) saveToLog:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -756,7 +747,7 @@
 
         
         
-        [dateFormat release];
+        
         
         NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
         FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
@@ -796,7 +787,7 @@
         NSDate* sourceDate = [NSDate date];
 
         
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         systemTimeZone = [NSTimeZone systemTimeZone];
@@ -822,7 +813,7 @@
             else{
                 
                 NSDate* sourceDate = [NSDate date];
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 //                [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
                 NSString *date_string1 = [dateFormatter stringFromDate:sourceDate];
@@ -885,13 +876,13 @@
 }
 
 -(IBAction) delLog:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [self deleteFromWSLog];
     [self deleteFromLog];
 }
 
 -(void)deleteFromLog {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -910,13 +901,13 @@
     
     [db commit];
     
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void) deleteFromFavorites {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -946,15 +937,15 @@
                                 nil];
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     [soapWebService callWebservice:wsInfoDict];
-    [soapWebService release];
-    [wsInfoDict release];
+    
+    
     
     [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
     
 }
 
 -(void)saveToFavorites {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -981,7 +972,7 @@
     }
     [db beginTransaction];
     
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 
     NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
@@ -1009,9 +1000,9 @@
 }
 
 -(void)deleteFromWSLog {
-    [self showLoading];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator showActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int foodLogID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
@@ -1032,8 +1023,8 @@
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsDeleteMealItemDelegate = self;
     [soapWebService callWebservice:wsInfoDict];
-    [soapWebService release];
-    [wsInfoDict release];
+    
+    
 }
 
 #pragma mark MEMORY METHODS
@@ -1041,91 +1032,50 @@
     [super didReceiveMemoryWarning];
 }
 
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    
-//    lblText  = nil;
-//    lblMealName  = nil;
-//    pickerView  = nil;
-//    lblCalories  = nil;
-//    lblProtein  = nil;
-//    lblCarbs  = nil;
-//    lblFat  = nil;
-//    pickerView = nil;
-//    
-//    pickerColumn1Array = nil;
-//    pickerColumn3Array = nil;
-//    pickerDecimalArray = nil;
-//    pickerFractionArray = nil;
-//}
-
-- (void)dealloc {
-    [_imgbar release];
-    [_staticCalLbl release];
-    [_staticProtFatCarbLbl release];
-    [_foodIdLbl release];
-    
-    lblText  = nil;
-    lblMealName  = nil;
-    pickerView  = nil;
-    lblCalories  = nil;
-    lblProtein  = nil;
-    lblCarbs  = nil;
-    lblFat  = nil;
-    pickerView = nil;
-    
-    pickerColumn1Array = nil;
-    pickerColumn3Array = nil;
-    pickerDecimalArray = nil;
-    pickerFractionArray = nil;
-
-    [super dealloc];
-}
-
 #pragma mark WEBSERVICE INSERT MEAL ITEM DELEGATE
 - (void)insertUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    [self hideLoading];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator hideActivityIndicator];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.didInsertNewFood = YES;
     [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
 }
 
 - (void)insertUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [self hideLoading];
-    
+    [DMActivityIndicator hideActivityIndicator];
+
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:200];
     [alert show];
-    [alert release];
+    
 }
 
 #pragma mark DELETE MEAL PLAN ITEMS DELEGATE
 - (void)deleteUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    [self hideLoading];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    [DMActivityIndicator hideActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.didInsertNewFood = YES;
     [self performSelector:@selector(showCompleted) withObject:nil afterDelay:0.25];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
 }
 
 - (void)deleteUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:200];
     [alert show];
-    [alert release];
+    
 }
 
 #pragma mark WEBSERVICE DELETE MEAL ITEM DELEGATE
 - (void)deleteMealItemFinished:(NSMutableArray *)responseArray {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     [self deleteFromLog];
 }
 
 - (void)deleteMealItemFailed:(NSString *)failedMessage {
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
 }
 
 #pragma mark WEBSERVICE DELETE FAVORITE FOOD DELEGATE
@@ -1134,34 +1084,6 @@
 }
 - (void)deleteFavoriteFoodFailed:(NSString *)failedMessage {
     DMLog(@"deleteFavoriteFoodFailed");
-}
-
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
-
-- (void)showCompleted {
-    HUD = [[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES] retain];
-    HUD.customView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]] autorelease];
-    HUD.mode = MBProgressHUDModeCustomView;
-    
-    HUD.delegate = nil;
-    HUD.labelText = @"Completed";
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1.0];
 }
 
 #pragma mark CUSTOM SUPERSCRIPT NSSTRING METHOD
@@ -1258,7 +1180,6 @@
             [ret addObject:obj];
         }
     }
-    [tempValues release];
     return ret;
 }
 

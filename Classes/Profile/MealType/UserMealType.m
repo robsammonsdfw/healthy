@@ -4,9 +4,7 @@
 #import "OtherHealthServiceVC.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "MBProgressHUD.h"
-#import "JSON.h"
 #import "XMLReader.h"
-#import "CommonModule.h"
 #import "SBPickerSelector.h"
 #import "DietMasterGoAppDelegate.h"
 #import "DietMasterGoViewController.h"
@@ -14,29 +12,31 @@
 @interface UserMealType ()<UIAlertViewDelegate,NSURLConnectionDelegate,UITextFieldDelegate,SBPickerSelectorDelegate>
 {
     SBPickerSelector *picker;
-    MBProgressHUD *HUD;
+    
     NSMutableData *webData;
     NSMutableArray *soapResult;
     NSArray *pickerData;
     NSString *MealTypeID;
 }
-@property (retain, nonatomic) IBOutlet UIButton *btnYes;
-@property (retain, nonatomic) IBOutlet UIButton *btnNo;
+@property (nonatomic, strong) IBOutlet UIButton *btnYes;
+@property (nonatomic, strong) IBOutlet UIButton *btnNo;
 
 @end
 
 @implementation UserMealType
 @synthesize xmlParser;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.btnNo setSelected:YES];
-    picker = [[SBPickerSelector picker] retain];
+    picker = [SBPickerSelector picker];
 }
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:YES];
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     [self getMealType];
-    self.title=@"Meal Type";
+    self.title = @"Meal Type";
     
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
@@ -53,10 +53,7 @@
     self.txtMealType.leftView = leftView;
     self.txtMealType.leftViewMode = UITextFieldViewModeAlways;
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 #pragma mark - btn Action -
 - (IBAction)btnPreviousClicked:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -96,9 +93,9 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSString *userName = [defaults valueForKey:@"username_dietmastergo"];
-    NSString *password = [defaults valueForKey:@"Password"];
-    NSString *passThruKey = [defaults valueForKey:@"PassThruKey"];
+    NSString *userName = [defaults objectForKey:@"username_dietmastergo"];
+    NSString *password = [defaults objectForKey:@"Password"];
+    NSString *passThruKey = [defaults objectForKey:@"PassThruKey"];
     NSString *concatStr=[NSString stringWithFormat:@"%@%@%@",userName,password,passThruKey];
     
     const char * pointer = [concatStr UTF8String];
@@ -122,12 +119,10 @@
 #pragma mark - APi Call -
 -(void)getMealType
 {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-//    manager  = [AFHTTPRequestOperationManager manager];
-//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [DMActivityIndicator showProgressIndicator];
     
     //http://webservice.dmwebpro.com/DMGoWS.asmx?op=GetMealTypeOptions
-    NSString *companyID= [[NSUserDefaults standardUserDefaults] valueForKey:@"companyid_dietmastergo"]; // @"3271";
+    NSString *companyID= [[NSUserDefaults standardUserDefaults] objectForKey:@"companyid_dietmastergo"]; // @"3271";
     NSString *ParentGroupID=@"1";
     
     NSString *soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -153,53 +148,44 @@
     [theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
     
     NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-    
-    if( theConnection )
-    {
-        webData = [[NSMutableData data] retain];
-    }
-    else
-    {
-        DMLog(@"theConnection is NULL");
-    }
 }
 
 -(void)ProfileCompletion
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSString *companyID= [[NSUserDefaults standardUserDefaults] valueForKey:@"companyid_dietmastergo"]; // @"3271";
-    NSString *passThruKey= [[NSUserDefaults standardUserDefaults] valueForKey:@"companyPassThru_dietmastergo"]; //p54118!
+    NSString *companyID= [[NSUserDefaults standardUserDefaults] objectForKey:@"companyid_dietmastergo"]; // @"3271";
+    NSString *passThruKey= [[NSUserDefaults standardUserDefaults] objectForKey:@"companyPassThru_dietmastergo"]; //p54118!
     
     
-    NSString *userName = [_userInfoDict valueForKey:@"Username"];
-    NSString *password = [_userInfoDict valueForKey:@"Password"];
-    NSString *firstName =[_userInfoDict valueForKey:@"FirstName"];
-    NSString *lastName =[_userInfoDict valueForKey:@"LastName"];
-    NSString *Email=[_userInfoDict valueForKey:@"Email"];
+    NSString *userName = [_userInfoDict objectForKey:@"Username"];
+    NSString *password = [_userInfoDict objectForKey:@"Password"];
+    NSString *firstName =[_userInfoDict objectForKey:@"FirstName"];
+    NSString *lastName =[_userInfoDict objectForKey:@"LastName"];
+    NSString *Email=[_userInfoDict objectForKey:@"Email"];
 //
     //format the birthday
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"dd/MM/yyyy"]; //yyyy-MM-dd
-    NSDate *formattedDate = [dateFormat dateFromString:[_userInfoDict valueForKey:@"BirthDate"]];
+    NSDate *formattedDate = [dateFormat dateFromString:[_userInfoDict objectForKey:@"BirthDate"]];
     [dateFormat setDateFormat:@"yyyy-MM-dd"];
     NSString*birthDate = [dateFormat stringFromDate:formattedDate];
     
     [_userInfoDict setValue:MealTypeID forKey:@"MealTypeID"];
-    int Gender=[[_userInfoDict valueForKey:@"gender"] intValue];
-    int Height=[[_userInfoDict valueForKey:@"userHeight"] intValue];
-    int Weight=[[_userInfoDict valueForKey:@"userWeight"] intValue];
-    bool lactation=[[_userInfoDict valueForKey:@"Lactating"] intValue] == 0 ? NO : YES;
-    int weigthGoal=[[_userInfoDict valueForKey:@"WeightGoals"] intValue];
+    int Gender=[[_userInfoDict objectForKey:@"gender"] intValue];
+    int Height=[[_userInfoDict objectForKey:@"userHeight"] intValue];
+    int Weight=[[_userInfoDict objectForKey:@"userWeight"] intValue];
+    bool lactation=[[_userInfoDict objectForKey:@"Lactating"] intValue] == 0 ? NO : YES;
+    int weigthGoal=[[_userInfoDict objectForKey:@"WeightGoals"] intValue];
 
-    NSNumber *goalRate=[NSNumber numberWithFloat:[[_userInfoDict valueForKey:@"goalRate"] floatValue]];
-    int bodyType=[[_userInfoDict valueForKey:@"BodyType"] intValue];
-    int Profession=[[_userInfoDict valueForKey:@"Profession"] intValue];
+    NSNumber *goalRate=[NSNumber numberWithFloat:[[_userInfoDict objectForKey:@"goalRate"] floatValue]];
+    int bodyType=[[_userInfoDict objectForKey:@"BodyType"] intValue];
+    int Profession=[[_userInfoDict objectForKey:@"Profession"] intValue];
     
     int goalWeight;
-    if ([_userInfoDict valueForKey:@"goalWeight"] != nil)
+    if ([_userInfoDict objectForKey:@"goalWeight"] != nil)
     {
-        goalWeight=[[_userInfoDict valueForKey:@"goalWeight"] intValue];
+        goalWeight=[[_userInfoDict objectForKey:@"goalWeight"] intValue];
     }
     
     NSMutableDictionary *dictParameter = [NSMutableDictionary dictionary];
@@ -217,7 +203,7 @@
     [dictParameter setObject:[NSNumber numberWithInt:weigthGoal] forKey:@"WeightGoals"];
     [dictParameter setObject:[NSNumber numberWithInt:Profession] forKey:@"Profession"];
     [dictParameter setObject:[NSNumber numberWithBool:lactation] forKey:@"Lactation"];
-    if ([_userInfoDict valueForKey:@"goalWeight"] != nil)
+    if ([_userInfoDict objectForKey:@"goalWeight"] != nil)
     {
         [dictParameter setObject:[NSNumber numberWithInt:goalWeight] forKey:@"GoalWeight"];
     }
@@ -268,12 +254,7 @@
     //create body for company login
     NSString *companyAuthBody = [NSString stringWithFormat:@"{\"companyId\": \"%@\",\"passThruKey\": \"%@\"}", companyID, passThruKey];
     
-    HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-//    [HUD hide:YES afterDelay:0.0];
-//    HUD.delegate = nil;
-    HUD.labelText = @"Creating your profile";
-    
-    [HUD show:YES];
+    [DMActivityIndicator showProgressIndicatorWithMessage:@"Creating your profile"];
     
     NSURL *companyLoginUrl = [NSURL URLWithString:@"https://api.dmwebpro.com/authentication/companylogin"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:companyLoginUrl];
@@ -286,10 +267,10 @@
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *repsone, NSData *data, NSError *connectionError) {
         if (data.length > 0 && connectionError == nil) {
             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-            NSString *companyIdToken = [response valueForKey:@"authToken"];
+            NSString *companyIdToken = [response objectForKey:@"authToken"];
             
-            HUD.labelText = @"Almost finished...";
-            
+            [DMActivityIndicator showProgressIndicatorWithMessage:@"Almost finished..."];
+
             //CREATE USER PROFILE
             NSURL *addUserProfileUrl = [NSURL URLWithString:@"https://api.dmwebpro.com/CompanyUser/adduserprofile"];
             NSMutableURLRequest *profileRequest = [NSMutableURLRequest requestWithURL:addUserProfileUrl];
@@ -302,14 +283,10 @@
             [NSURLConnection sendAsynchronousRequest:profileRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *repsone, NSData *data, NSError *connectionError) {
                 if (data.length > 0 && connectionError == nil) {
                     NSDictionary *profileResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-                    if ([[profileResponse valueForKey:@"result"] isEqualToString:@"Failed"] || [[profileResponse valueForKey:@"status"] intValue] == 400) {
-                        [HUD hide:YES afterDelay:0];
-                        [HUD show:NO];
-                        [HUD removeFromSuperview];
-                        [HUD release];
-                        HUD = nil;
+                    if ([[profileResponse objectForKey:@"result"] isEqualToString:@"Failed"] || [[profileResponse objectForKey:@"status"] intValue] == 400) {
+                        [DMActivityIndicator hideActivityIndicator];
                         
-                        NSString *errorMessage = [profileResponse valueForKey:@"errorMessage"];
+                        NSString *errorMessage = [profileResponse objectForKey:@"errorMessage"];
                         if (!errorMessage || [errorMessage isEqualToString:@""]) {
                             errorMessage = @"You have had one or more validation errors.";
                         }
@@ -317,38 +294,25 @@
                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                         [alert show];
                     } else {
-                        [defaults setValue:[profileResponse valueForKey:@"mobileToken"] forKey:@"authkey_dietmastergo"];
-                        [defaults setValue:[profileResponse valueForKey:@"userId"] forKey:@"userid_dietmastergo"];
+                        [defaults setValue:[profileResponse objectForKey:@"mobileToken"] forKey:@"authkey_dietmastergo"];
+                        [defaults setValue:[profileResponse objectForKey:@"userId"] forKey:@"userid_dietmastergo"];
                         [defaults synchronize];
 
-                        HUD.labelText = @"Completed!";
-                        [HUD hide:YES afterDelay:1];
-                        [HUD show:NO];
-                        [HUD removeFromSuperview];
-                        [HUD release];
-                        HUD = nil;
+                        [DMActivityIndicator showCompletedIndicator];
                         
                         [self dismissViewControllerAnimated:YES completion:^() {
                             DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
                             
-                            [appDelegate loginFromUrl:[NSString stringWithFormat:@"%@:%@", [defaults valueForKey:@"authkey_dietmastergo"], [_userInfoDict valueForKey:@"Username"]]];
+                            [appDelegate loginFromUrl:[NSString stringWithFormat:@"%@:%@", [defaults objectForKey:@"authkey_dietmastergo"], [_userInfoDict objectForKey:@"Username"]]];
                         }];
                     }
                 } else {
-                    [HUD hide:YES afterDelay:0];
-                    [HUD show:NO];
-                    [HUD removeFromSuperview];
-                    [HUD release];
-                    HUD = nil;
+                    [DMActivityIndicator hideActivityIndicator];
                 }
             }];
             
         } else {
-            [HUD hide:YES afterDelay:0];
-            [HUD show:NO];
-            [HUD removeFromSuperview];
-            [HUD release];
-            HUD = nil;
+            [DMActivityIndicator hideActivityIndicator];
         }
     }];
 }
@@ -397,44 +361,29 @@
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-    DMLog(@"ERROR with Connection");
-    
-    DMLog(@"%@",[error description]);
-    
-    [connection release];
-    [webData release];
+    [DMActivityIndicator hideActivityIndicator];
+    DMLog(@"Error: %@",[error description]);
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-    // DMLog(@"DONE. Received Bytes: %d", [webData length]);
+    [DMActivityIndicator hideActivityIndicator];
+
     NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
     //DMLog(@"%@",theXML);
     
     NSError *error=nil;
-    NSDictionary *dic = [XMLReader dictionaryForXMLString:theXML error:&error];
+    NSDictionary *xmlDict = [XMLReader dictionaryForXMLString:theXML error:&error];
     
-    DMLog(@"%@",[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"GetMealTypeOptionsResponse"]objectForKey:@"GetMealTypeOptionsResult"]);
-    //    soapResult =[NSMutableArray new];
-    // pickerData=[[NSArray new] retain];
-    SBJSON *json = [SBJSON new];
-    NSMutableDictionary *jsonObject = [[json objectWithString:[[[[[dic objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"]objectForKey:@"GetMealTypeOptionsResponse"]objectForKey:@"GetMealTypeOptionsResult"] objectForKey:@"text"] error:NULL] objectAtIndex:1];
+    NSString *resultString = [[[[[xmlDict objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"] objectForKey:@"GetMealTypeOptionsResponse"] objectForKey:@"GetMealTypeOptionsResult"] objectForKey:@"text"];
+    DMLog(@"%@", resultString);
     
-    soapResult=[[jsonObject objectForKey:@"MealTypeCategories"] retain];
-    pickerData=[[soapResult valueForKey:@"Description"] retain];
-    DMLog(@"%@",pickerData);
-    
-    [theXML release];
-    
-    if(xmlParser){
-        [xmlParser release];
+    NSDictionary *jsonObject = @{};
+    if (resultString.length) {
+        jsonObject = [NSJSONSerialization JSONObjectWithData:[resultString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil][1];
     }
-    [webData release];
+    
+    soapResult = [jsonObject objectForKey:@"MealTypeCategories"];
+    pickerData = [soapResult valueForKey:@"Description"];
 }
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
@@ -447,8 +396,7 @@
 
 #pragma mark - Picker -
 -(void)pickerSelector:(SBPickerSelector *)selector selectedValue:(NSString *)value index:(NSInteger)idx {
-    DMLog(@"%@",[soapResult objectAtIndex:idx]);
-    MealTypeID=[[[soapResult objectAtIndex:idx] valueForKey:@"MealTypeID"] retain];
+    MealTypeID = [[soapResult objectAtIndex:idx] objectForKey:@"MealTypeID"];
     self.txtMealType.text=value;
 }
 
@@ -456,12 +404,4 @@
     DMLog(@"Picker canceled ...");
 }
 
-- (void)dealloc {
-    [_txtMealType release];
-    [_btnYes release];
-    [_btnNo release];
-    [xmlParser release];
-    [soapResult release];
-    [super dealloc];
-}
 @end

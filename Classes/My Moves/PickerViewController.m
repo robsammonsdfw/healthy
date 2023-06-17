@@ -8,87 +8,67 @@
 #import "PickerViewController.h"
 #import "MyMovesWebServices.h"
 
-@interface PickerViewController ()<UIPickerViewDelegate,UIPickerViewDataSource,WSCategoryList>
-{
-    MyMovesWebServices *soapWebService;
-}
-@property (strong, nonatomic) IBOutlet UIPickerView *picker;
-
+@interface PickerViewController () <UIPickerViewDelegate,UIPickerViewDataSource,WSCategoryList>
+@property (nonatomic, strong) IBOutlet UIPickerView *picker;
+@property (nonatomic, strong) MyMovesWebServices *soapWebService;
 @end
 
 @implementation PickerViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    soapWebService = [[MyMovesWebServices alloc] init];
+    self.soapWebService = [[MyMovesWebServices alloc] init];
     
     _picker.delegate = self;
     _picker.dataSource = self;
     
-    
-    if (([soapWebService loadFirstHeaderTable].count != 0) || ([soapWebService loadSecondHeaderTable].count) != 0)
+    if (([self.soapWebService loadFirstHeaderTable].count != 0) || ([self.soapWebService loadSecondHeaderTable].count) != 0)
     {
-        if((_pickerData[0][@"Unit1ID"] == nil) || (_pickerData[0][@"Unit2ID"] == nil))
+        if((self.pickerData[0][@"Unit1ID"] == nil) || (self.pickerData[0][@"Unit2ID"] == nil))
         {
-            if([_pickerData[0]valueForKey:
+            if([self.pickerData[0]valueForKey:
                 @"WorkoutCategoryName"] != (id)[NSNull null])
             {
-                [_selectedBodyPartDel getSelectedBodyPart:_pickerData[0]];
+                [_selectedBodyPartDel getSelectedBodyPart:self.pickerData[0]];
                 
             }
         }
     }
-    else
-    {
-        
-    }
-    
-    
-    
 }
-- (void)viewWillAppear:(BOOL)animated
-{
-    if (([soapWebService loadFirstHeaderTable].count != 0) || ([soapWebService loadSecondHeaderTable].count) != 0)
+
+- (void)viewWillAppear:(BOOL)animated {
+    if (([self.soapWebService loadFirstHeaderTable].count != 0) || ([self.soapWebService loadSecondHeaderTable].count) != 0)
     {
-        if((_pickerData[0][@"Unit1ID"] != nil) || (_pickerData[0][@"Unit2ID"] != nil))
+        if((self.pickerData[0][@"Unit1ID"] != nil) || (self.pickerData[0][@"Unit2ID"] != nil))
         {
-            if([_pickerData[0]valueForKey: @"Tags"] != (id)[NSNull null])
+            if([self.pickerData[0]valueForKey: @"Tags"] != (id)[NSNull null])
             {
-                [_selectedBodyPartDel getSelectedTagId:_pickerData[0]];
+                [_selectedBodyPartDel getSelectedTagId:self.pickerData[0]];
             }
         }
         else
         {
-            if([[_pickerData objectAtIndex:0]valueForKey: @"Unit1ID"] != nil)
+            if([[self.pickerData objectAtIndex:0]valueForKey: @"Unit1ID"] != nil)
             {
-                [_repsWeightDel getReps:[[_pickerData objectAtIndex:0]valueForKey: @"Unit1ID"]];
+                [_repsWeightDel getReps:[[self.pickerData objectAtIndex:0]valueForKey: @"Unit1ID"]];
             }
-            else if([[_pickerData objectAtIndex:0]valueForKey: @"Unit2ID"] != nil)
+            else if([[self.pickerData objectAtIndex:0]valueForKey: @"Unit2ID"] != nil)
             {
-                [_repsWeightDel getWeight:[[_pickerData objectAtIndex:0]valueForKey: @"Unit2ID"]];
+                [_repsWeightDel getWeight:[[self.pickerData objectAtIndex:0]valueForKey: @"Unit2ID"]];
             }
         }
     }
-    else
-    {
-        
-    }
+
     [_picker reloadAllComponents];
 }
+
 - (IBAction)dismissOnTap:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 - (IBAction)okButtonAction:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-- (void)dealloc {
-    [_picker release];
-    [_pickerData release];
-    [super dealloc];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(nonnull UIPickerView *)pickerView {
@@ -98,36 +78,29 @@
 - (NSInteger)pickerView:(nonnull UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     NSArray *LoadSetsHeader = @[@"None", @"Feet", @"Kilograms", @"Kilometers", @"KilometerPerHour",@"Meters", @"Miles", @"MilesPerHour", @"Minutes", @"Pounds", @"Repetitions", @"RestSeconds", @"Seconds", @"Yards"];
     
-//    return LoadSetsHeader.count;
-    if (([soapWebService loadFirstHeaderTable].count != 0) || ([soapWebService loadSecondHeaderTable].count) != 0)
-    {
-        if(([[_pickerData objectAtIndex:component]valueForKey: @"Unit1ID"] != nil) || ([[_pickerData objectAtIndex:component]valueForKey: @"Unit2ID"] != nil))
-        {
+    if (([self.soapWebService loadFirstHeaderTable].count != 0) || ([self.soapWebService loadSecondHeaderTable].count) != 0) {
+        if(([[self.pickerData objectAtIndex:component]valueForKey: @"Unit1ID"] != nil) || ([[self.pickerData objectAtIndex:component]valueForKey: @"Unit2ID"] != nil)) {
             return [LoadSetsHeader count];
         }
-        else if ([[_pickerData objectAtIndex:component]valueForKey: @"WorkoutCategoryName"] != nil)
-        {
-            return [_pickerData count];
+        else if ([[self.pickerData objectAtIndex:component]valueForKey: @"WorkoutCategoryName"] != nil) {
+            return [self.pickerData count];
         }
-        else if ([[_pickerData objectAtIndex:component]valueForKey: @"Tags"] != nil)
-        {
-            _data = [soapWebService filterObjectsByKeys:@"Tags" array:_pickerData];
+        else if ([[self.pickerData objectAtIndex:component]valueForKey: @"Tags"] != nil) {
+            _data = [self.soapWebService filterObjectsByKeys:@"Tags" array:self.pickerData];
             return [_data count];
         }
     }
-    else if ([[_pickerData objectAtIndex:component]valueForKey: @"WorkoutCategoryName"] != nil)
-    {
-        return [_pickerData count];
+    else if ([[self.pickerData objectAtIndex:component]valueForKey: @"WorkoutCategoryName"] != nil) {
+        return [self.pickerData count];
     }
-    else if ([[_pickerData objectAtIndex:component]valueForKey: @"Tags"] != nil)
-    {
-        _data = [soapWebService filterObjectsByKeys:@"Tags" array:_pickerData];
+    else if ([[self.pickerData objectAtIndex:component]valueForKey: @"Tags"] != nil) {
+        _data = [self.soapWebService filterObjectsByKeys:@"Tags" array:self.pickerData];
         return [_data count];
-    }
-    else
-    {
+    } else {
         return [LoadSetsHeader count];
     }
+    
+    return 0;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
@@ -135,34 +108,34 @@
     NSArray *LoadSetsHeader = @[@"None", @"Feet", @"Kilograms", @"Kilometers", @"KilometerPerHour",@"Meters", @"Miles", @"MilesPerHour", @"Minutes", @"Pounds", @"Repetitions", @"RestSeconds", @"Seconds", @"Yards"];
     
     
-    if (([soapWebService loadFirstHeaderTable].count != 0) || ([soapWebService loadSecondHeaderTable].count) != 0)
+    if (([self.soapWebService loadFirstHeaderTable].count != 0) || ([self.soapWebService loadSecondHeaderTable].count) != 0)
     {
-        if(([[_pickerData objectAtIndex:component]valueForKey: @"Unit1ID"] != nil) || ([[_pickerData objectAtIndex:component]valueForKey: @"Unit2ID"] != nil))
+        if(([[self.pickerData objectAtIndex:component]valueForKey: @"Unit1ID"] != nil) || ([[self.pickerData objectAtIndex:component]valueForKey: @"Unit2ID"] != nil))
         {
             return  [LoadSetsHeader objectAtIndex:row];
         }
         else
         {
-            if([[_pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
+            if([[self.pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
             {
-                return [[_pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"];
+                return [[self.pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"];
             }
-            else if([[_pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
+            else if([[self.pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
             {
-                _data = [soapWebService filterObjectsByKeys:@"Tags" array:_pickerData];
+                _data = [self.soapWebService filterObjectsByKeys:@"Tags" array:self.pickerData];
                 return [[_data objectAtIndex:row]valueForKey: @"Tags"];
             }
         }
     }
     else
     {
-        if([[_pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
+        if([[self.pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
         {
-            return [[_pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"];
+            return [[self.pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"];
         }
-        else if([[_pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
+        else if([[self.pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
         {
-            _data = [soapWebService filterObjectsByKeys:@"Tags" array:_pickerData];
+            _data = [self.soapWebService filterObjectsByKeys:@"Tags" array:self.pickerData];
             return [[_data objectAtIndex:row]valueForKey: @"Tags"];
         }
         else
@@ -176,85 +149,53 @@
 {
     NSArray *LoadSetsHeader = @[@"None", @"Feet", @"Kilograms", @"Kilometers", @"KilometerPerHour",@"Meters", @"Miles", @"MilesPerHour", @"Minutes", @"Pounds", @"Repetitions", @"RestSeconds", @"Seconds", @"Yards"];
     
-    if (([soapWebService loadFirstHeaderTable].count != 0) || ([soapWebService loadSecondHeaderTable].count) != 0)
+    if (([self.soapWebService loadFirstHeaderTable].count != 0) || ([self.soapWebService loadSecondHeaderTable].count) != 0)
     {
-        if(_pickerData[0][@"Unit1ID"] != nil)
+        if(self.pickerData[0][@"Unit1ID"] != nil)
         {
             [_repsWeightDel getReps:LoadSetsHeader[row]];
-            [soapWebService updateFirstHeaderValue:row ParentUniqueID:_parentUniqueId];
+            [self.soapWebService updateFirstHeaderValue:row ParentUniqueID:_parentUniqueId];
             
         }
-        else if(_pickerData[0][@"Unit2ID"] != nil)
+        else if(self.pickerData[0][@"Unit2ID"] != nil)
         {
             [_repsWeightDel getWeight:LoadSetsHeader[row]];
-            [soapWebService updateSecondHeaderValue:row ParentUniqueID:_parentUniqueId];
+            [self.soapWebService updateSecondHeaderValue:row ParentUniqueID:_parentUniqueId];
         }
-        else if([[_pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
+        else if([[self.pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
         {
-            [_selectedBodyPartDel getSelectedBodyPart:[_pickerData objectAtIndex:row]];
+            [_selectedBodyPartDel getSelectedBodyPart:[self.pickerData objectAtIndex:row]];
         }
-        else if([[_pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
+        else if([[self.pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
         {
-            _data = [soapWebService filterObjectsByKeys:@"Tags" array:_pickerData];
+            _data = [self.soapWebService filterObjectsByKeys:@"Tags" array:self.pickerData];
 
             [_selectedBodyPartDel getSelectedTagId:[_data objectAtIndex:row]];
         }
     }
     else
     {
-        if([[_pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
+        if([[self.pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
         {
-            [_selectedBodyPartDel getSelectedBodyPart:[_pickerData objectAtIndex:row]];
+            [_selectedBodyPartDel getSelectedBodyPart:[self.pickerData objectAtIndex:row]];
         }
-        else if([[_pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
+        else if([[self.pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
         {
-            _data = [soapWebService filterObjectsByKeys:@"Tags" array:_pickerData];
+            _data = [self.soapWebService filterObjectsByKeys:@"Tags" array:self.pickerData];
             [_selectedBodyPartDel getSelectedTagId:[_data objectAtIndex:row]];
         }
         else if (_secondColumn == YES)
         {
             [_repsWeightDel getReps:LoadSetsHeader[row]];
-            [soapWebService updateFirstHeaderValue:row ParentUniqueID:_parentUniqueId];
+            [self.soapWebService updateFirstHeaderValue:row ParentUniqueID:_parentUniqueId];
         }
         else if (_secondColumn == NO)
         {
             [_repsWeightDel getWeight:LoadSetsHeader[row]];
-            [soapWebService updateSecondHeaderValue:row ParentUniqueID:_parentUniqueId];
+            [self.soapWebService updateSecondHeaderValue:row ParentUniqueID:_parentUniqueId];
             
         }
     }
-    
-    
-//    {
-//
-//        if(_pickerData[0][@"Unit1ID"] != nil)
-//        {
-//            [_repsWeightDel getReps:LoadSetsHeader[row]];
-//            [soapWebService updateFirstHeaderValue:row ParentUniqueID:_parentUniqueId];
-//
-//        }
-//        else if(_pickerData[0][@"Unit2ID"] != nil)
-//        {
-//            [_repsWeightDel getWeight:LoadSetsHeader[row]];
-//            [soapWebService updateSecondHeaderValue:row ParentUniqueID:_parentUniqueId];
-//        }
-//        else
-//        {
-//            if([[_pickerData objectAtIndex:row]valueForKey: @"WorkoutCategoryName"] != nil)
-//            {
-//                [_selectedBodyPartDel getSelectedBodyPart:[_pickerData objectAtIndex:row]];
-//            }
-//            else if([[_pickerData objectAtIndex:row]valueForKey: @"Tags"] != nil)
-//            {
-//                [_selectedBodyPartDel getSelectedTagId:[_pickerData objectAtIndex:row]];
-//            }
-//        }
-//    }
-//    else
-//    {
-//        [_repsWeightDel getWeight:LoadSetsHeader[row]];
-//    }
-
 }
 
 - (void)getCategoryListFailed:(NSString *)failedMessage {
@@ -262,7 +203,7 @@
 }
 
 - (void)getCategoryListFinished:(NSDictionary *)responseArray {
-    [_pickerData addObjectsFromArray:responseArray[@"CategoryList"]];
+    [self.pickerData addObjectsFromArray:responseArray[@"CategoryList"]];
     [_picker reloadAllComponents];
 }
 

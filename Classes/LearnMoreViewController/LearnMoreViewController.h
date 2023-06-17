@@ -17,7 +17,7 @@
 
 @property (nonatomic,copy) NSString *learnMoreTitle;
 @property (nonatomic,retain) IBOutlet UINavigationBar *myNavBar;
-@property (retain, nonatomic) IBOutlet WKWebView *webView;
+@property (nonatomic, strong) IBOutlet WKWebView *webView;
 
 -(IBAction)cancelLearnMore:(id)sender;
 -(void)loadWebView;

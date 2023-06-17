@@ -275,8 +275,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 }
 
 @interface TTTAccessibilityElement : UIAccessibilityElement
-@property (nonatomic, assign) UIView *superview;
-@property (nonatomic, assign) CGRect boundingRect;
+@property (nonatomic) UIView *superview;
+@property (nonatomic) CGRect boundingRect;
 @end
 
 @implementation TTTAccessibilityElement
@@ -388,20 +388,6 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                                                                                 action:@selector(longPressGestureDidFire:)];
     self.longPressGestureRecognizer.delegate = self;
     [self addGestureRecognizer:self.longPressGestureRecognizer];
-}
-
-- (void)dealloc {
-    if (_framesetter) {
-        CFRelease(_framesetter);
-    }
-
-    if (_highlightFramesetter) {
-        CFRelease(_highlightFramesetter);
-    }
-    
-    if (_longPressGestureRecognizer) {
-        [self removeGestureRecognizer:_longPressGestureRecognizer];
-    }
 }
 
 #pragma mark -

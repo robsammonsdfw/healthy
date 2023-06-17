@@ -24,7 +24,6 @@
 	NSMutableArray *arry3;
 	NSMutableArray *measureIDs;
 	NSNumber *selectedMeasureID;
-	id <MeasurePickerDelegate> delegate ;
     NSArray *arrayWithoutDuplicates;
     NSMutableArray *rowListArr;
 
@@ -33,12 +32,12 @@
 -(IBAction) sendMeasure:(id) sender;
 -(IBAction)cancelSaveMeasure:(id)sender;
 
-@property (nonatomic, retain) AppDelegate *mainDelegate;
-@property (nonatomic, retain) NSNumber *pickerRow3;
-@property (nonatomic, retain) NSMutableArray *arry3;
-@property (nonatomic, retain) NSMutableArray *measureIDs;
-@property (nonatomic, retain) NSNumber *selectedMeasureID;
-@property (assign) id <MeasurePickerDelegate> delegate;
+@property (nonatomic, strong) AppDelegate *mainDelegate;
+@property (nonatomic, strong) NSNumber *pickerRow3;
+@property (nonatomic, strong) NSMutableArray *arry3;
+@property (nonatomic, strong) NSMutableArray *measureIDs;
+@property (nonatomic, strong) NSNumber *selectedMeasureID;
+@property (nonatomic, weak) id<MeasurePickerDelegate> delegate;
 
 -(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array;
 

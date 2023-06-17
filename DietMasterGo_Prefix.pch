@@ -3,12 +3,12 @@
 //
 
 #ifdef __OBJC__
-    #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
     #import "DietMasterGoAppDelegate.h"
-    #import <Security/Security.h>
     #import <FirebaseCrashlytics/FirebaseCrashlytics.h>
     #import "DMGUtilities.h"
+    #import "DMActivityIndicator.h"
 #endif
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width

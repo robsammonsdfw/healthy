@@ -11,14 +11,14 @@
 #import "MealPlanWebService.h"
 
 @interface ExchangeFoodViewController : UIViewController {
-	MBProgressHUD *HUD;
+	
     int indexToExchange;
     BOOL isExchangeFood;
 }
 
-@property (nonatomic, assign) double CaloriesToMaintain;
+@property (nonatomic) double CaloriesToMaintain;
 @property (nonatomic, strong) NSMutableDictionary *ExchangeOldDataDict;
-@property (nonatomic, retain) NSNumber *foodID;
-@property (nonatomic, retain) NSNumber *mealTypeID;
+@property (nonatomic, strong) NSNumber *foodID;
+@property (nonatomic, strong) NSNumber *mealTypeID;
 
 @end

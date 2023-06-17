@@ -88,7 +88,7 @@
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
@@ -197,7 +197,6 @@
 {
     if (self.isMovingFromParentViewController) {
         [[self navigationController] setNavigationBarHidden:YES animated:YES];
-        [_scatterPlot release];
         self.scatterPlot = nil;
     }
 }
@@ -230,7 +229,7 @@
     self.navigationItem.hidesBackButton = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
        
@@ -281,22 +280,6 @@
     [super viewDidUnload];
 }
 
-- (void)dealloc {
-    [_btnrecordyourweight release];
-    [_imgbg release];
-    [_imgtop release];
-    [_goalWeightLbl release];
-    [_goalWeightLbl release];
-    [_popUpView release];
-    [super dealloc];
-    
-    [lbl_weightGoal release];
-    [_graphHostingView release];
-    [_scatterPlot release];
-    [segmentedControl release];
-    self.scatterPlot = nil;
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -332,12 +315,11 @@
 -(IBAction) showRecordWeightView:(id) sender {
     RecordWeightView *dvController = [[RecordWeightView alloc] initWithNibName:@"RecordWeightView" bundle:nil];
     [self.navigationController pushViewController:dvController animated:YES];
-    [dvController release];
     dvController = nil;
 }
 
 -(void)getDataForDays:(int)days {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -345,7 +327,7 @@
     }
 
     NSDate* sourceDate = [NSDate date];
-    NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     [dateFormat setTimeZone:systemTimeZone];
@@ -366,8 +348,6 @@
     
     NSString *startDateString = [dateFormatter stringFromDate:startDate];
     NSString *endDateString = [dateFormatter stringFromDate:currDate];
-    
-    [dateFormatter release];
 
     NSString *countQuery = [NSString stringWithFormat:@"SELECT count(*) as row_count FROM weightlog WHERE deleted = 1 AND (logtime BETWEEN DATETIME('%@') AND DATETIME('%@')) AND logtime LIMIT %i",startDateString, endDateString, days];
     
@@ -398,10 +378,8 @@
         
         NSString *dateString = [dateFormat stringFromDate:tempDate];
         tempDate=[dateFormat dateFromString:dateString];
-        [dateFormat release];
+        
     }
-    
-    [components release];
     
     NSMutableArray *pointsData = [NSMutableArray array];
     
@@ -466,9 +444,6 @@
         [pointsData addObject:[NSValue valueWithCGPoint:CGPointMake(counter, [weightLogged intValue])]];
         [data addObject:dates];
         
-        [dateFormat release];
-        [dates release];
-        
         counter--;
         maxCounter = maxCounter + maxCountStep;
     }
@@ -487,7 +462,7 @@
 }
 
 -(float)getGoalWeightFromDB {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         DMLog(@"Could not open db.");
@@ -569,7 +544,6 @@
     if (navigationArray.count > 2) {
         [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
         self.navigationController.viewControllers = navigationArray;
-        [navigationArray release];
     }
 }
 

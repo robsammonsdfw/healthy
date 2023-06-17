@@ -7,13 +7,13 @@
 {
     NSUserDefaults *Defaults;
 }
-@property (retain, nonatomic) IBOutlet UIButton *btnJobType1;
-@property (retain, nonatomic) IBOutlet UIButton *btnJobType2;
-@property (retain, nonatomic) IBOutlet UIButton *btnJobType3;
-@property (retain, nonatomic) IBOutlet UIButton *btnJobType4;
-@property (retain, nonatomic) IBOutlet UIButton *btnJobType5;
-@property (retain, nonatomic) IBOutlet UIButton *btnJobType6;
-@property (retain, nonatomic) IBOutlet UIButton *btnJobType7;
+@property (nonatomic, strong) IBOutlet UIButton *btnJobType1;
+@property (nonatomic, strong) IBOutlet UIButton *btnJobType2;
+@property (nonatomic, strong) IBOutlet UIButton *btnJobType3;
+@property (nonatomic, strong) IBOutlet UIButton *btnJobType4;
+@property (nonatomic, strong) IBOutlet UIButton *btnJobType5;
+@property (nonatomic, strong) IBOutlet UIButton *btnJobType6;
+@property (nonatomic, strong) IBOutlet UIButton *btnJobType7;
 @end
 
 @implementation DailyActivityTypeVC
@@ -171,11 +171,5 @@
         [self.btnJobType7 setSelected:YES];
     }
 }
-- (void)dealloc {
-    [_btnJobType1 release];
-    [_btnJobType2 release];
-    [_btnJobType3 release];
-    [_btnJobType4 release];
-    [super dealloc];
-}
+
 @end

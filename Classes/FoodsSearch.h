@@ -20,7 +20,7 @@
 	NSString *date_foodLogtime;
 	NSDate *date_currentDate;
 	NSNumber *int_mealID;
-	MBProgressHUD *HUD;
+	
     NSString *searchType;
     NSMutableArray *foodResults;
 	NSMutableArray *arrBtnNames;
@@ -28,30 +28,27 @@
 }
 -(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array;
 
-@property (retain, nonatomic) IBOutlet UIButton *btnfavfoods;
-@property (retain, nonatomic) IBOutlet UIButton *btnprogram;
-@property (retain, nonatomic) IBOutlet UIButton *btnfacmeals;
-@property (retain, nonatomic) IBOutlet UIButton *btnall;
-@property (retain, nonatomic) IBOutlet UIButton *btnfood;
+@property (nonatomic, strong) IBOutlet UIButton *btnfavfoods;
+@property (nonatomic, strong) IBOutlet UIButton *btnprogram;
+@property (nonatomic, strong) IBOutlet UIButton *btnfacmeals;
+@property (nonatomic, strong) IBOutlet UIButton *btnall;
+@property (nonatomic, strong) IBOutlet UIButton *btnfood;
 
 - (IBAction)ScrollBtnClick:(id)sender;
 
-@property (retain, nonatomic) IBOutlet UIImageView *imgscrl;
-@property (retain, nonatomic) IBOutlet UIScrollView *scroll;
+@property (nonatomic, strong) IBOutlet UIImageView *imgscrl;
+@property (nonatomic, strong) IBOutlet UIScrollView *scroll;
 
 - (IBAction)ScanbtnPressed:(id)sender;
 
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) NSDate *date_currentDate;
-@property (nonatomic, retain) NSNumber *int_mealID;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSDate *date_currentDate;
+@property (nonatomic, strong) NSNumber *int_mealID;
 @property (nonatomic, copy) NSString *searchType;
-@property (nonatomic, retain) UISearchBar *mySearchBar; 
-@property (nonatomic, assign) BOOL bSearchIsOn;
+@property (nonatomic, strong) UISearchBar *mySearchBar; 
+@property (nonatomic) BOOL bSearchIsOn;
 
 -(void)searchBar:(id)object;
 -(void)loadSearchData:(NSString *)searchTerm;
-
--(void)showLoading;
--(void)hideLoading;
 
 @end

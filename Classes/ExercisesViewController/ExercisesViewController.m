@@ -63,7 +63,7 @@
 - (void) searchBarSearchButtonClicked:(UISearchBar*) theSearchBar {
     self.tableView.scrollEnabled = YES;
     [mySearchBar resignFirstResponder ];
-    [self showLoading];
+    [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadSearchData) withObject:theSearchBar.text afterDelay:0.25];
 }
 
@@ -94,7 +94,7 @@
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     searchBar.text = @"";
-    [self showLoading];
+    [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadSearchData) withObject:@"" afterDelay:0.25];
 }
 
@@ -131,7 +131,6 @@
                            initWithBarButtonSystemItem: UIBarButtonSystemItemSearch target:self action:@selector(searchBar:)];
     bi.style = UIBarButtonItemStylePlain;
     self.navigationItem.rightBarButtonItem = bi;
-    [bi release];
     
     mySearchBar = [[UISearchBar alloc] init];
     mySearchBar.placeholder = @"Search";
@@ -146,8 +145,6 @@
     self.tableView.tableHeaderView = mySearchBar;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
-    HUD.delegate = self;
-    
     if (!searchResults) {
         searchResults = [[NSMutableArray alloc] init];
     }
@@ -157,7 +154,7 @@
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self showLoading];
+    [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadSearchData) withObject:mySearchBar.text afterDelay:0.25];
 }
 
@@ -180,7 +177,7 @@
         [searchResults removeAllObjects];
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -197,7 +194,7 @@
     
     NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [bundlePath stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
@@ -217,13 +214,11 @@
                               caloriesPerHour, @"CaloriesPerHour",
                               nil];
         [searchResults addObject:dict];
-        [dict release];
-        [activityName release];
     }
     
     [rs close];
     
-    [self hideLoading];
+    [DMActivityIndicator hideActivityIndicator];
     [self.tableView reloadData];
 }
 
@@ -258,12 +253,12 @@
     
     UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     if ([searchResults count] == 0) {
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         [cell textLabel].adjustsFontSizeToFitWidth = YES;
@@ -279,7 +274,7 @@
     
     if ([searchResults count] > 0) {
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         if (bSearchIsOn) {
@@ -291,7 +286,7 @@
         
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:indexPath.row]];
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         double totalCaloriesBurned = [[dict valueForKey:@"CaloriesPerHour"] floatValue] * [dietmasterEngine.currentWeight floatValue];
         
         cell.textLabel.text = [dict valueForKey:@"ActivityName"];
@@ -302,8 +297,6 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.selectionStyle =  UITableViewCellSelectionStyleGray;
         [cell textLabel].adjustsFontSizeToFitWidth = NO;
-        
-        [dict release];
     }
     
     return cell;
@@ -312,67 +305,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:indexPath.row]];
     [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
     dietmasterEngine.taskMode = @"Save";
     
-   //HHT apple watch
-//    int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-//
-//    if (exerciseIDTemp == 272 || exerciseIDTemp == 274){
-//        if (exerciseIDTemp == 272) {
-//            DMLog(@"Apple Calories");
-//        }
-//        else if (exerciseIDTemp == 274) {
-//            DMLog(@"Apple Steps");
-//        }
-//    }
-//    else {
-//        ExercisesDetailViewController *eDVController = [[ExercisesDetailViewController alloc] init];
-//        [self.navigationController pushViewController:eDVController animated:YES];
-//        [eDVController release];
-//    }
-    
     ExercisesDetailViewController *eDVController = [[ExercisesDetailViewController alloc] init];
     [self.navigationController pushViewController:eDVController animated:YES];
-    [eDVController release];
-    [dict release];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    searchResults = nil;
-//    mySearchBar = nil;
-//    tableView = nil;
-//}
-
-- (void)dealloc {
-    [searchType release];
-    [searchResults release];
-    searchResults = nil;
-    mySearchBar = nil;
-    tableView = nil;
-    [super dealloc];
-}
-
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
--(void)showLoading {
-    HUD = [[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES] retain];
-}
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
-}
 @end

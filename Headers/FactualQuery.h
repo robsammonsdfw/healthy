@@ -186,14 +186,14 @@ typedef enum  {
  @discussion used to specify the offset (number of records to skip) when
  paginating a large record set.
  */ 
-@property (nonatomic, assign) NSUInteger offset;
+@property (nonatomic) NSUInteger offset;
 /*! @property 
  @discussion used to limit the number of returned records in a single response.
  This system will return the lessor of either the limit value or the max limit 
  value associated with the user's API Key.
  paginating a large record set.
  */ 
-@property (nonatomic, assign) NSUInteger limit;
+@property (nonatomic) NSUInteger limit;
 
 /*! @property 
  @discussion set the primary sort criteria for the query in context. This 
@@ -213,11 +213,11 @@ typedef enum  {
 /*! @property 
  @discussion text query terms used to perform a full-text query 
  */
-@property(nonatomic,readonly) NSMutableArray* fullTextTerms;
+@property (nonatomic,readonly) NSMutableArray* fullTextTerms;
 /*! @property 
  @discussion when true, the response will include a count of the total number of rows in the table that conform to the request based on included filters.  Requesting the row count will increase the time required to return a response. The default behavior is to NOT include a row count 
  */
-@property (nonatomic, assign) BOOL includeRowCount;
+@property (nonatomic) BOOL includeRowCount;
 
 /*! @property 
  @discussion Sets the fields to select. This is optional.
@@ -227,12 +227,12 @@ typedef enum  {
 /*! @property 
  @discussion For each facet value count, the minimum number of results it must have in order to be returned in the response. Must be zero or greater. The default is 1.
  */ 
-@property (nonatomic, assign) NSUInteger minCountPerFacetValue;
+@property (nonatomic) NSUInteger minCountPerFacetValue;
 
 /*! @property 
  @discussion The maximum number of unique facet values that can be returned for a single field. Range is 1-250. The default is 25.
  */ 
-@property (nonatomic, assign) NSUInteger maxValuesPerFacet;
+@property (nonatomic) NSUInteger maxValuesPerFacet;
 
 @end
 

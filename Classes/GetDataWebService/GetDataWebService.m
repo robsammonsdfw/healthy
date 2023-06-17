@@ -15,7 +15,7 @@
 @synthesize getDataWSDelegate;
 @synthesize requestDict = _requestDict;
 
--(void)callWebservice:(NSDictionary *)requestDict {
+- (void)callWebservice:(NSDictionary *)requestDict {
     DMLog(@"SOAP CALL ----BEGIN---- GetDataWebService");
     
     recordResults = FALSE;
@@ -58,7 +58,7 @@
     [theRequest setHTTPMethod:@"POST"];
     [theRequest setHTTPBody: [requestString dataUsingEncoding:NSUTF8StringEncoding]];
     
-    webData = [[NSMutableData data] retain];
+    webData = [NSMutableData data];
     
     [NSURLConnection sendAsynchronousRequest:theRequest queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
@@ -72,18 +72,11 @@
                                }
                                else {
                                    NSString *theXML = [[NSString alloc] initWithBytes:[webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-                                   [theXML release];
-                                   
-                                   if (xmlParser) {
-                                       [xmlParser release];
-                                   }
                                    
                                    xmlParser = [[NSXMLParser alloc] initWithData: webData];
                                    [xmlParser setDelegate: self];
                                    [xmlParser setShouldResolveExternalEntities: YES];
                                    [xmlParser parse];
-                                   
-                                   [webData release];
                                }
                            }];
     
@@ -127,15 +120,7 @@
         }
     }
       
-    [soapResults release];
     soapResults = nil;
-}
-
-- (void)dealloc {
-	[xmlParser release];
-    self.requestDict = nil;
-    [self.requestDict release];
-	[super dealloc];
 }
 
 @end

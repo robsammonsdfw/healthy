@@ -34,7 +34,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 @interface DietmasterEngine () {
     BOOL updatingMessage;
-    MBProgressHUD *HUD;
+    
 }
 
 @property (nonatomic, strong ) NSDateFormatter *dateformatter;
@@ -236,7 +236,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         GetDataWebService *webService = [[GetDataWebService alloc] init];
         webService.getDataWSDelegate = self;
         [webService callWebservice:infoDict];
-        [webService release];
     });
 }
 
@@ -312,11 +311,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsGetUserInfoDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
 }
-
 
 
 -(void)syncFavoriteFoods:(NSString *)dateString {
@@ -339,10 +334,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsSyncFavoriteFoodsDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
-    
 }
 
 -(void)syncFavoriteMeals:(NSString *)dateString {
@@ -358,10 +349,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsSyncFavoriteMealsDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
-    
 }
 
 -(void)syncFavoriteMealItems:(NSString *)dateString {
@@ -391,9 +378,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
         soapWebService.wsSyncFavoriteMealItemsDelegate = self;
         [soapWebService callWebservice:infoDict];
-        [soapWebService release];
-        
-        [infoDict release];
         resultCounts++;
     }
     
@@ -426,9 +410,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsSyncExerciseLogDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
 }
 
 //HHT new exercise sync
@@ -455,9 +436,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsSyncExerciseLogNewDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    
-    [infoDict release];
 }
 
 #pragma mark - MESSAGES
@@ -500,8 +478,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsGetMessagesDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    [infoDict release];
 }
 
 - (NSArray *)unreadingMessages {
@@ -625,7 +601,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     [dataBase commit];
     
-    [UIApplication sharedApplication].applicationIconBadgeNumber = [[DietmasterEngine instance] countOfUnreadingMessages];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
 }
 
 #pragma mark - WSGetMessagesDelegate
@@ -727,9 +703,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
         soapWebService.wsSaveMealDelegate = self;
         [soapWebService callWebservice:infoDict];
-        [soapWebService release];
-        
-        [infoDict release];
         resultCounts++;
     }
     
@@ -743,7 +716,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
 }
 
--(void)saveMealItems:(NSString *)dateString {
+- (void)saveMealItems:(NSString *)dateString {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -769,14 +742,13 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     while ([rs next]) {
         NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                   [rs stringForColumn:@"MealID"], @"MealID",
-           x                       [rs stringForColumn:@"FoodID"], @"FoodID",
+                                  [rs stringForColumn:@"FoodID"], @"FoodID",
                                   [rs stringForColumn:@"MealCode"], @"MealCode",
                                   [rs stringForColumn:@"MeasureID"], @"MeasureID",
                                   [rs stringForColumn:@"NumberOfServings"], @"ServingSize",
                                   nil];
         [tempDataArray addObject:tempDict];
         
-        [tempDict release];
         resultCounts++;
     }
     
@@ -798,12 +770,9 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
     soapWebService.wsSaveMealItemDelegate = self;
     [soapWebService callWebservice:infoDict];
-    [soapWebService release];
-    [infoDict release];
-    [tempDataArray release];
-    
 }
--(void)saveExerciseLogs:(NSString *)dateString {
+
+- (void)saveExerciseLogs:(NSString *)dateString {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -1028,10 +997,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
         soapWebService.wsSaveFoodDelegate = self;
         [soapWebService callWebservice:dict];
-        [soapWebService release];
-        [dict release];
         resultCounts++;
-        
     }
     
     [rs close];
@@ -1065,11 +1031,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
         soapWebService.wsSaveFavoriteFoodDelegate = self;
         [soapWebService callWebservice:dict];
-        [soapWebService release];
-        
-        [dict release];
         resultCounts++;
-        
     }
     
     [rs close];
@@ -1113,9 +1075,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
         soapWebService.wsSaveFavoriteMealDelegate = self;
         [soapWebService callWebservice:dict];
-        [soapWebService release];
-        
-        [dict release];
         resultCounts++;
         
     }
@@ -1163,9 +1122,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
         soapWebService.wsSaveFavoriteMealItemDelegate = self;
         [soapWebService callWebservice:dict];
-        [soapWebService release];
-        
-        [dict release];
         resultCounts++;
         
     }
@@ -1256,8 +1212,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
         
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     [db commit];
@@ -1301,8 +1255,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  ];
         
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     [db commit];
@@ -1636,8 +1588,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             NSString *insertForMessure = [NSString stringWithFormat: @"INSERT OR REPLACE INTO Measure (MeasureID, Description) VALUES (%i, '%@')",[[dict valueForKey:@"MeasureIDs"] intValue],[dict valueForKey:@"MeasureDescriptions"]];
             [db executeUpdate:insertForMessure];
         }
-        
-        [dict release];
     }
     
     if ([db hadError]) {
@@ -1668,8 +1618,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
         
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     for (int i=0; i < [responseArray count]; i++) {
@@ -1684,8 +1632,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
         
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     if ([db hadError]) {
@@ -1805,8 +1751,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             [self saveUPCFood:[[dict valueForKey:@"FoodID"] intValue]];
         });
-        
-        [dict release];
     }
     
     for (int i=0; i < [responseArray count]; i++) {
@@ -1819,7 +1763,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  ];
         
         [db executeUpdate:queryString];
-        [dict release];
     }
     
     if ([db hadError]) {
@@ -1862,8 +1805,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  ];
         
         [db executeUpdate:queryString];
-        
-        [dict release];
     }
     
     for (int i=0; i < [responseArray count]; i++) {
@@ -1882,8 +1823,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                        {
                            [self saveFavoriteMealItem:[[dict valueForKey:@"MealID"] intValue]];
                        });
-        
-        [dict release];
     }
     
     if ([db hadError]) {
@@ -1930,7 +1869,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         GetDataWebService *webService = [[GetDataWebService alloc] init];
         webService.getDataWSDelegate = self;
         [webService callWebservice:infoDict];
-        [webService release];
     });
     
     semaphore = dispatch_semaphore_create(0);
@@ -2288,7 +2226,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                     UserLoginWebService *userLoginWS = [[UserLoginWebService alloc] init];
                     userLoginWS.wsAuthenticateUserDelegate = self;
                     [userLoginWS callWebservice:tokenToSend];
-                    [userLoginWS release];
                     
                     [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
                     [prefs synchronize];
@@ -2394,7 +2331,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                         UIImage* stdImage2x = [self imageWithImage:image scaledToSize:CGSizeMake(640, SCREEN_HEIGHT*2)];
                         NSData *data1 = [NSData dataWithData:UIImagePNGRepresentation(stdImage)];
                         NSData *data2 = [NSData dataWithData:UIImagePNGRepresentation(stdImage2x)];
-                        [image release];
                         
                         if ([data1 writeToFile:pngFilePath atomically:YES]) {
                         }
@@ -2483,8 +2419,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
              [self getFoodFinished:obj];
              
          }];
-        
-        [infoDict release];
     }
 }
 
@@ -2508,8 +2442,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [soapWebService callWebserviceForFoodNew:infoDict withCompletion:^(id obj)
      {
          [self getFoodFinished:obj];
-         [soapWebService release];
-         [infoDict release];
      }];
 }
 
@@ -2549,15 +2481,12 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 [NSNumber numberWithInt:[rs intForColumn:@"CategoryID"]], @"CategoryID",
                 [rs stringForColumn:@"FoodURL"], @"FoodURL",
                 nil];
-        
-        [dict autorelease];
     }
     
     [rs close];
     
     if (dict == nil) {
         dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"Invalid Food, Contact Support", @"Name",nil];
-        [dict autorelease];
     }
     return dict;
 }
@@ -2840,10 +2769,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         }
         
     }
-    
-    [dict release];
-    
 }
+
 - (void)getAuthenticateUserFailed:(NSString *)failedMessage {
     DMLog(@"getAuthenticateUserFailed, value of response is %@", failedMessage);
 }
@@ -2858,7 +2785,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
     }
     [tempArray writeToFile:completePath atomically:YES];
-    [tempArray release];
 }
 
 -(void)saveMyMovesAssignedOnDateToDatabase:(NSMutableArray*)movesArr{
@@ -2884,8 +2810,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         _myMovesAssignedArray = nil;
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:[self getmyMovesAssignedFilePath]]) {
-        _myMovesAssignedArray = [[[NSMutableArray alloc] initWithArray:
-                         [NSArray arrayWithContentsOfFile:[self getmyMovesAssignedFilePath]]] retain];
+        _myMovesAssignedArray = [[NSMutableArray alloc] initWithArray:
+                         [NSArray arrayWithContentsOfFile:[self getmyMovesAssignedFilePath]]];
         
     } else {
         _myMovesAssignedArray = [[NSMutableArray alloc] init];
@@ -2904,8 +2830,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [tempArray writeToFile:completePath atomically:YES];
     
     DMLog(@"%@", completePath);
-    
-    [tempArray release];
 }
 
 -(void)saveMealNotesArray {
@@ -2958,8 +2882,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:[self getSavedMealPlanFilePath]])
     {
-        mealPlanArray = [[[NSMutableArray alloc] initWithArray:
-                          [NSArray arrayWithContentsOfFile:[self getSavedMealPlanFilePath]]] retain];
+        mealPlanArray = [[NSMutableArray alloc] initWithArray:
+                          [NSArray arrayWithContentsOfFile:[self getSavedMealPlanFilePath]]];
     } else {
         mealPlanArray = [[NSMutableArray alloc] init];
     }
@@ -2979,8 +2903,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     [tempArray writeToFile:completePath atomically:YES];
-    
-    [tempArray release];
 }
 
 -(BOOL)hasGroceryListSaved {
@@ -3024,8 +2946,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         groceryArray = nil;
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:[self getGroceryListFilePath]]) {
-        groceryArray = [[[NSMutableArray alloc] initWithArray:
-                         [NSArray arrayWithContentsOfFile:[self getGroceryListFilePath]]] retain];
+        groceryArray = [[NSMutableArray alloc] initWithArray:
+                         [NSArray arrayWithContentsOfFile:[self getGroceryListFilePath]]];
         
     } else {
         groceryArray = [[NSMutableArray alloc] init];
@@ -3119,12 +3041,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 SaveUPCDataWebService *webservice = [[SaveUPCDataWebService alloc] init];
                 webservice.delegate = self;
 //                [webservice callWebservice:scannerDict];
-                [webservice release];
             });
-            [scannerDict release];
         }
-        
-        [dict release];
         resultCounts++;
     }
     
@@ -3168,7 +3086,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     NSLocale *locale = [NSLocale currentLocale];
     NSString *countryCode = [locale objectForKey: NSLocaleCountryCode];
-    NSLocale *usLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     NSString *country = [usLocale displayNameForKey: NSLocaleCountryCode value: countryCode];
     
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -3184,7 +3102,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                           nil];
     
     [dict writeToFile:dbSettingsPath atomically:YES];
-    [dict release];
     
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:@"dietmaster_db.dmgo"];
@@ -3203,8 +3120,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         DMLog(@"Compression error!");
     }
     
-    [za release];
-    
     if([[NSFileManager defaultManager] fileExistsAtPath:dbSettingsPath]) {
         [[NSFileManager defaultManager] removeItemAtPath:dbSettingsPath error:NULL];
     }
@@ -3212,17 +3127,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return [NSData dataWithContentsOfFile:zipFilePath];
 }
 
-
--(void)hideLoading {
-    [HUD hide:YES afterDelay:0.5];
-}
-
--(void)showLoading1 {
-    [HUD hide:YES afterDelay:0.0];
-    HUD = [[MBProgressHUD showHUDAddedTo:AppDel.window animated:YES] retain];
-}
-
--(void)processIncomingDatabase:(NSDictionary *)dict {
+- (void)processIncomingDatabase:(NSDictionary *)dict {
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -3257,7 +3162,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               @"An error occurred while importing the database. Please try again.", @"message",
                               nil];
         [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:dict waitUntilDone:NO];
-        [dict release];
         return;
     }
     
@@ -3269,7 +3173,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               [NSNumber numberWithBool:YES], @"try_password_again",
                               nil];
         [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:dict waitUntilDone:NO];
-        [dict release];
         return;
     }
     
@@ -3298,7 +3201,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                      @"The database was successfully imported.", @"message",
                                      nil];
         [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:messageDict waitUntilDone:NO];
-        [messageDict release];
     }
     else {
         DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -3307,7 +3209,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               @"An error occurred while importing the database. Please try again.", @"message",
                               nil];
         [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:dict waitUntilDone:NO];
-        [dict release];
         return;
     }
     
@@ -3323,11 +3224,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     FactualQuery* queryObject = [FactualQuery query];
-    FactualSortCriteria* primarySort = [[[FactualSortCriteria alloc] initWithFieldName:@"$relevance" sortOrder:FactualSortOrder_Ascending] autorelease];
+    FactualSortCriteria* primarySort = [[FactualSortCriteria alloc] initWithFieldName:@"$relevance" sortOrder:FactualSortOrder_Ascending];
     [queryObject setPrimarySortCriteria:primarySort];
     [queryObject addRowFilter:[FactualRowFilter fieldName:@"upc" equalTo:upcString]];
     
-    _activeRequest = [[_apiObject queryTable:@"products-cpg-nutrition" optionalQueryParams:queryObject withDelegate:self] retain];
+    _activeRequest = [_apiObject queryTable:@"products-cpg-nutrition" optionalQueryParams:queryObject withDelegate:self];
 }
 
 #pragma mark FactualAPIDelegate methods
@@ -3345,7 +3246,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 -(void) requestComplete:(FactualAPIRequest *)request failedWithError:(NSError *)error {
     if (_activeRequest == request) {
-        [_activeRequest release];
         _activeRequest = nil;
         
         DMLog(@"Active request failed with Error:%@", [error localizedDescription]);
@@ -3368,8 +3268,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                  [NSNumber numberWithInt:[queryResultObj rowCount]], @"ResultCount",
                                  nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FactualAPISuccess" object:nil userInfo:options];
-        
-        [_activeRequest release];
         _activeRequest = nil;
     }
 }
@@ -3384,7 +3282,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     NSString *query = [NSString stringWithFormat: @"SELECT CarbRatio, ProteinRatio, FatRatio FROM user"];
     
-    NSMutableDictionary *ratioDict = [[[NSMutableDictionary alloc] init] autorelease];
+    NSMutableDictionary *ratioDict = [[NSMutableDictionary alloc] init];
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
         [ratioDict setValue:@([rs doubleForColumn:@"CarbRatio"]/100) forKey:@"CarbRatio"];

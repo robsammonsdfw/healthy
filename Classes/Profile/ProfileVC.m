@@ -1,14 +1,10 @@
-
-
 #import "ProfileVC.h"
 #import "DailyActivityTypeVC.h"
 #import "TDDatePickerController.h"
 
-
 @interface ProfileVC ()<UITextFieldDelegate>
 {
     int flag;
-    MBProgressHUD *HUD;
     NSString *dateFromateType;
     
     //HHT change check BD validation
@@ -16,6 +12,7 @@
     NSDate *currentDate;
     
 }
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation ProfileVC
@@ -23,6 +20,8 @@
 #pragma mark - ViewLifeCycle -
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    
     flag=0;
     [self.btnMale setSelected:YES];
     // Do any additional setup after loading the view from its nib.
@@ -36,9 +35,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-    [HUD removeFromSuperview];
-
-//    [IQKeyboardManager sharedManager].shouldShowToolbarPlaceholder=NO;
+    [DMActivityIndicator hideActivityIndicator];
     
     self.title=@"Profile";
     [self.navigationController.navigationBar setTitleTextAttributes:
@@ -60,10 +57,8 @@
     self.txtWeight.layer.cornerRadius=4;
     self.txtWeight.clipsToBounds=YES;
     
-    
     NSString *fmt = [NSDateFormatter dateFormatFromTemplate:@"dd MM YYYY" options:0 locale:[NSLocale currentLocale]];
     self.txtBirthDate.placeholder=fmt;
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"GeneralUnits"] != nil)
     {
         if([[[NSUserDefaults standardUserDefaults] objectForKey:@"GeneralUnits"] isEqualToString:@"0"])
@@ -81,20 +76,18 @@
             dateFromateType=[[NSUserDefaults standardUserDefaults] objectForKey:@"DateFormat"];
             if ([dateFromateType isEqualToString:@"0"])
             {
-                [dateFormat setDateFormat:@"MM/dd/yyyy"];
+                [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
             }else{
-                [dateFormat setDateFormat:@"dd/MM/yyyy"];
+                [self.dateFormatter setDateFormat:@"dd/MM/yyyy"];
             }
         } else {
-            [dateFormat setDateFormat:@"dd/MM/yyyy"];
+            [self.dateFormatter setDateFormat:@"dd/MM/yyyy"];
         }
         
-        NSDate *BDate = [dateFormat dateFromString:[_userInfoDict objectForKey:@"BirthDate"]];
-        
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormatter setDateStyle:NSDateFormatterLongStyle];
-        NSString *dateString = [dateFormatter stringFromDate:BDate];
-        self.txtBirthDate.text=dateString;
+        NSDate *BDate = [self.dateFormatter dateFromString:[_userInfoDict objectForKey:@"BirthDate"]];
+        [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
+        NSString *dateString = [self.dateFormatter stringFromDate:BDate];
+        self.txtBirthDate.text = dateString;
     }
     if ([_userInfoDict objectForKey:@"gender"] != nil)
     {
@@ -124,20 +117,10 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 -(void)dismissKeyboard {
     [_txtHeight resignFirstResponder];
     [_txtWeight resignFirstResponder];
     [_txtBirthDate resignFirstResponder];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    [HUD removeFromSuperview];
-    [HUD release];
-    HUD = nil;
 }
 
 #pragma mark - button Action -
@@ -184,9 +167,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     if (textField == self.txtBirthDate) {
         NSDate *eventDate = [NSDate date];
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormatter setDateStyle:NSDateFormatterLongStyle];
-        
+        [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
         
         UIDatePicker *datePicker = [[UIDatePicker alloc]init];
         [datePicker setDate:[NSDate date]];
@@ -195,7 +176,7 @@
         [datePicker addTarget:self action:@selector(dateTextField:) forControlEvents:UIControlEventValueChanged];
         [self.txtBirthDate setInputView:datePicker];
         
-        NSString *dateString = [dateFormatter stringFromDate:eventDate];
+        NSString *dateString = [self.dateFormatter stringFromDate:eventDate];
         self.txtBirthDate.text = [NSString stringWithFormat:@"%@",dateString];
     }
 }
@@ -229,8 +210,7 @@
     UIDatePicker *picker = (UIDatePicker*)self.txtBirthDate.inputView;
     //[picker setMaximumDate:[NSDate date]];
     
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+    [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
     
     NSDate *eventDate = picker.date;
     
@@ -253,7 +233,7 @@
         DMLog(@"Both dates are same");
     }
     
-    NSString *dateString = [dateFormatter stringFromDate:eventDate];
+    NSString *dateString = [self.dateFormatter stringFromDate:eventDate];
     self.txtBirthDate.text = [NSString stringWithFormat:@"%@",dateString];
 }
 
@@ -275,10 +255,9 @@
         return NO;
     }
     else{
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+        [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
         
-        NSDate *BDate = [dateFormatter dateFromString:_txtBirthDate.text];
+        NSDate *BDate = [self.dateFormatter dateFromString:_txtBirthDate.text];
         DMLog(@"date selected  : %@", [BDate descriptionWithLocale:[NSLocale currentLocale]]);
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -374,17 +353,6 @@
         DMLog(@"Weight textField");
     }
     [self.view endEditing:YES];
-}
-
-- (void)dealloc {
-    [_txtBirthDate release];
-    [_txtWeight release];
-    [_txtHeight release];
-    [_btnMale release];
-    [_btnFemale release];
-    [_txtHeight release];
-    [_btnLactating release];
-    [super dealloc];
 }
 
 @end

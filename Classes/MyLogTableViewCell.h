@@ -12,7 +12,7 @@
 
 @interface MyLogTableViewCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet TTTAttributedLabel *lblFoodName;
-@property (retain, nonatomic) IBOutlet UILabel *lblCalories;
+@property (nonatomic, strong) IBOutlet TTTAttributedLabel *lblFoodName;
+@property (nonatomic, strong) IBOutlet UILabel *lblCalories;
 
 @end

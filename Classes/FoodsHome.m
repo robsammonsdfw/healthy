@@ -16,7 +16,7 @@
 	
 	if(self.date_currentDate == NULL) {
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
         [dateFormat setTimeZone:systemTimeZone];
@@ -30,7 +30,7 @@
 	
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-	NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+	NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
         tblFoodsHome.backgroundView = nil;
         tblFoodsHome.backgroundColor = [UIColor clearColor];
@@ -63,7 +63,7 @@
 	
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
 	
     if(indexPath.section == 0) {
@@ -98,12 +98,10 @@
 								   target: nil action: nil];
 	
 	[self.navigationItem setBackBarButtonItem: backButton];
-	[backButton release];
 	
     if (indexPath.section == 2) {
         FavoriteMealsViewController *favoriteMealsViewController = [[FavoriteMealsViewController alloc] init];
         [self.navigationController pushViewController:favoriteMealsViewController animated:YES];
-        [favoriteMealsViewController release];
     }
     else {
         FoodsSearch *fsController = [[FoodsSearch alloc] initWithNibName:@"FoodsSearch" bundle:nil];
@@ -117,7 +115,7 @@
         if (indexPath.section == 1) {
             if (indexPath.row == 3) {
                 fsController = nil;
-                DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+                DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
                 dietmasterEngine.taskMode = @"Save";
                 
                 ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
@@ -125,7 +123,6 @@
                 //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
                 mfController.intTabId = AppDel.selectedIndex;
                 [self.navigationController pushViewController:mfController animated:YES];
-                [mfController release];
                 mfController = nil;
                 return;
             }
@@ -135,22 +132,7 @@
             }
         }
         [self.navigationController pushViewController:fsController animated:YES];
-        [fsController release];
     }
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    arrayFavoriteMeals = nil;
-//    arrySearch = nil;
-//    arryOptions = nil;
-//}
-
-- (void)dealloc {
-    [super dealloc];
-    arrayFavoriteMeals = nil;
-    arrySearch = nil;
-    arryOptions = nil;
 }
 
 @end

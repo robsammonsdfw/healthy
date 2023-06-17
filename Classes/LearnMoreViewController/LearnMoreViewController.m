@@ -22,18 +22,6 @@
     return [self init];
 }
 
-- (void)dealloc {
-    [_webView release];
-    activityIndicator = nil;
-    learnMoreTitle = nil;
-    myNavBar = nil;
-    [super dealloc];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - Action Methods
 - (IBAction)myBackAction:(id)sender {
     if ([learnMoreTitle isEqualToString:@"termsofservice"] || [learnMoreTitle isEqualToString:@"privacypolicy"]) {
@@ -71,7 +59,7 @@
     if ([learnMoreTitle isEqualToString:@"privacypolicy"] || [learnMoreTitle isEqualToString:@"termsofservice"]) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
         NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[[NSDictionary alloc] initWithContentsOfFile:finalPath] autorelease];
+        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
         
         NSString *htmlFile = [[NSBundle mainBundle] pathForResource:escapedUrlString ofType:@"html"];
         NSString* htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSASCIIStringEncoding error:nil];

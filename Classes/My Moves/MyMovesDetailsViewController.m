@@ -31,12 +31,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSString *weightTxt;
     IBOutlet UIImageView *thumbNailImgV;
 }
-@property (strong, nonatomic) NSMutableArray<NSDictionary *> *exerciseSetArr;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeightCons;
-@property (retain, nonatomic) IBOutlet UIImageView *deleteImgB;
+@property (nonatomic, strong) NSMutableArray<NSDictionary *> *exerciseSetArr;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *collectionViewHeightCons;
+@property (nonatomic, strong) IBOutlet UIImageView *deleteImgB;
 
-@property (strong, nonatomic) NSMutableArray *userPlanMoveSetListData;
-@property (strong, nonatomic) NSMutableArray *userPlanSetListArr;
+@property (nonatomic, strong) NSMutableArray *userPlanMoveSetListData;
+@property (nonatomic, strong) NSMutableArray *userPlanSetListArr;
 
 @end
 
@@ -68,7 +68,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // [btn1 setImage:btnImage1 forState:UIControlStateNormal];
     //
     // UIBarButtonItem * settingsBtn = [[UIBarButtonItem alloc] initWithCustomView:btn1];
-    // DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    // DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     // dietmasterEngine.taskMode = @"View";
     // self.navigationItem.rightBarButtonItem = settingsBtn;
     
@@ -174,7 +174,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)loadSetValues
 {
     [_userPlanSetListArr removeAllObjects];
-    _userPlanMoveSetListData = [[[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]] retain];
+    _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]];
     NSArray *LoadSetsHeader = @[@"None", @"Feet", @"Kilograms", @"Kilometers", @"KilometerPerHour",@"Meters", @"Miles", @"MilesPerHour", @"Minutes", @"Pounds", @"Repetitions", @"RestSeconds", @"Seconds", @"Yards"];
    
     NSMutableSet* removeDuplicateSetInSection = [[NSMutableSet alloc] initWithArray:_userPlanMoveSetListData];
@@ -345,24 +345,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Pass the selected object to the new view controller.
 }
 */
-
-- (void)dealloc {
-    [_exerciseNotesTxtView release];
-    [_collectionView release];
-    [_exerciseNotesLbl release];
-    [_exerciseNameLbl release];
-    [_collectionViewHeightCons release];
-    [_deleteImgB release];
-    [_exchangeImgView release];
-    [thumbNailImgV release];
-    [_exchangeBtnOutlet release];
-    [_moveNameView release];
-    [_noVideoMsgLbl release];
-    [_playVideoBtn release];
-    [_playImg release];
-    [_thumbNailView release];
-    [super dealloc];
-}
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -797,24 +779,22 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y += animatedDistance;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
+        [self.view setFrame:viewFrame];
+    }];
 }
+
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {
     [textField resignFirstResponder];
     return YES;
 }
 
-- (void)passDataOnExchange:(NSDictionary *)dict
-{
+- (void)passDataOnExchange:(NSDictionary *)dict {
     [self setData:dict];
     self.workoutMethodID = [dict[@"WorkoutUserDateID"]intValue];
     self.moveDetailDict = dict;
-    [self loadSets];
+    //[self loadSets];
+#warning THE ABOVE METHOD ISNT FOUND...WHY?
 }
+
 @end

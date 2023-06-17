@@ -27,12 +27,12 @@
     float GoalWeight;
 }
 
-@property (nonatomic, retain) CPTGraphHostingView *hostingView;
-@property (nonatomic, retain) CPTXYGraph *graph;
-@property (nonatomic, retain) NSMutableArray *graphData;
-@property (nonatomic, retain) NSMutableArray *graphDataValues;
-//@property (nonatomic, retain) NSMutableArray *graphData2;
-//@property (nonatomic, retain) NSMutableArray *graphDataValues2;
+@property (nonatomic, strong) CPTGraphHostingView *hostingView;
+@property (nonatomic, strong) CPTXYGraph *graph;
+@property (nonatomic, strong) NSMutableArray *graphData;
+@property (nonatomic, strong) NSMutableArray *graphDataValues;
+//@property (nonatomic, strong) NSMutableArray *graphData2;
+//@property (nonatomic, strong) NSMutableArray *graphDataValues2;
 
 // Methods to create this object and attach it to it's hosting view.
 //+(TUTSimpleScatterPlot *)plotWithHostingView:(CPTGraphHostingView *)hostingView andData:(NSMutableArray *)data;

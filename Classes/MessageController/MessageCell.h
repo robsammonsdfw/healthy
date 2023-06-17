@@ -14,7 +14,7 @@ typedef enum {
 @interface MessageCell : UITableViewCell
 
 @property (nonatomic,strong) IBOutlet UILabel *timeLabel;
-@property (retain, nonatomic) IBOutlet TTTAttributedLabel *messageLabel;
-@property (nonatomic,assign) MessageType messageType;
+@property (nonatomic, strong) IBOutlet TTTAttributedLabel *messageLabel;
+@property (nonatomic) MessageType messageType;
 
 @end

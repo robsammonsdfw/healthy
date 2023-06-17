@@ -20,7 +20,7 @@
 	NSArray *arrayFavoriteMeals;
 }
 
-@property (nonatomic, retain) NSDate *date_currentDate;
-@property (nonatomic, retain) NSNumber *int_mealID;
+@property (nonatomic, strong) NSDate *date_currentDate;
+@property (nonatomic, strong) NSNumber *int_mealID;
 
 @end

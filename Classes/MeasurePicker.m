@@ -21,46 +21,14 @@
     [super viewWillAppear:animated];
     rowListArr = [[NSMutableArray alloc] init];
     
-    DietmasterEngine *dietEngine = [DietmasterEngine instance];
+    DietmasterEngine *dietEngine = [DietmasterEngine sharedInstance];
     dbPath	= [dietEngine databasePath];
     
     if (sqlite3_open([dbPath UTF8String], &database) == SQLITE_OK) {
         NSString *query = @"SELECT MeasureID, Description FROM Measure WHERE MeasureID < 10000  ORDER BY Description";
         arry3 = [[NSMutableArray alloc] init];
         
-     /*   if (sqlite3_prepare_v2(database, [query UTF8String], -1, &statement, nil) ==SQLITE_OK) {
-            sqlite3_stmt *statement;
-
-            arry3 = [[NSMutableArray alloc] init];
-            measureIDs = [[NSMutableArray alloc] init];
-            
-            while (sqlite3_step(statement) == SQLITE_ROW) {
-                
-                char *Name			= (char *) sqlite3_column_text(statement, 1);
-                NSString *str_measureName	= [[[NSString alloc] initWithUTF8String:Name] autorelease];
-                str_measureName = [str_measureName stringByReplacingCharactersInRange:NSMakeRange(0,1)
-                                                                           withString:[str_measureName  substringToIndex:1]];
-                
-                if([str_measureName isEqual: @"ml"])
-                {
-                    DMLog(@"ml");
-                    str_measureName = [str_measureName stringByReplacingCharactersInRange:NSMakeRange(0,1)
-                                                                               withString:[str_measureName  substringToIndex:1]];
-                }
-                else
-                {
-                    [str_measureName stringByReplacingCharactersInRange:NSMakeRange(0,1)
-                                                             withString:[[str_measureName  substringToIndex:1] capitalizedString]];
-                }
-                
-                NSNumber *num_measureID		= [NSNumber numberWithInt:sqlite3_column_int(statement, 0)];
-                
-                [arry3 addObject:str_measureName];
-                [measureIDs addObject:num_measureID];
-            }
-            sqlite3_finalize(statement);
-        }*/
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
             
@@ -76,12 +44,12 @@
             [arry3 addObject:dict];
             rowListArr = [[NSMutableArray alloc]initWithArray:[self filterObjectsByKeys:@"MeasureID" array:arry3]];
             arry3 = rowListArr;
-            [dict release];
+            
         }
         sqlite3_close(database);
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     selectedMeasureID = dietmasterEngine.selectedMeasureID;
     
     for (NSInteger i = 0; i <[measureIDs count]; i++) {
@@ -128,23 +96,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    pickerView = nil;
-//    arry3 = nil;
-//    measureIDs = nil;
-//}
-
-- (void)dealloc {
-    [super dealloc];
-    pickerView = nil;
-    arry3 = nil;
-    measureIDs = nil;
-}
 -(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array {
     NSMutableSet *tempValues = [[NSMutableSet alloc] init];
     NSMutableArray *ret = [NSMutableArray array];
@@ -154,7 +105,6 @@
             [ret addObject:obj];
         }
     }
-    [tempValues release];
     return ret;
 }
 @end

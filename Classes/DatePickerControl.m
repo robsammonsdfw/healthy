@@ -10,7 +10,7 @@
 
 @implementation DatePickerControl
 
-@synthesize date_currentDate, myDatePicker, delegate,apassedData,sourceName;
+@synthesize date_currentDate, myDatePicker, apassedData, sourceName;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -31,7 +31,7 @@
 - (void)viewDidLoad {
 	if(self.date_currentDate == NULL) {
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
         [dateFormat setTimeZone:systemTimeZone];
@@ -42,7 +42,7 @@
 	}
 	
 	if ([self.sourceName isEqualToString:@"DW_01New"]) {
-		UILabel *lblBirthDate = [[[UILabel alloc] initWithFrame:CGRectMake(85, 10, 175, 35)]autorelease];
+		UILabel *lblBirthDate = [[UILabel alloc] initWithFrame:CGRectMake(85, 10, 175, 35)];
 		[lblBirthDate setText:@"Enter Your Birthdate"];
 		[lblBirthDate setTextColor:[UIColor whiteColor]];
 		[lblBirthDate setBackgroundColor:[UIColor clearColor]];
@@ -54,7 +54,7 @@
 	[super viewDidLoad];
 }
 
--(IBAction) sendNewDate:(id) sender {
+-(IBAction)sendNewDate:(id) sender {
 	
     if ([self.delegate respondsToSelector:@selector(dpControl:didChooseDate:)]) {
         [self.delegate dpControl:self didChooseDate:[myDatePicker date]];
@@ -65,8 +65,4 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)dealloc {
-	[myDatePicker release];
-    [super dealloc];
-}
 @end

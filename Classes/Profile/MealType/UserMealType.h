@@ -5,8 +5,8 @@
 - (IBAction)btnPreviousClicked:(id)sender;
 - (IBAction)btnNextClicked:(id)sender;
 - (IBAction)btnMedicalConditionClicked:(id)sender;
-@property (retain, nonatomic) IBOutlet UITextField *txtMealType;
-@property(nonatomic, retain) NSXMLParser *xmlParser;
-@property (nonatomic, retain) LoginViewController *loginViewController;
-@property (retain, nonatomic) NSMutableDictionary *userInfoDict;
+@property (nonatomic, strong) IBOutlet UITextField *txtMealType;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
+@property (nonatomic, strong) LoginViewController *loginViewController;
+@property (nonatomic, strong) NSMutableDictionary *userInfoDict;
 @end

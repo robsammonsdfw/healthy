@@ -7,12 +7,8 @@
 
 #import "MyMovesWebServices.h"
 #import "FMDatabase.h"
+
 @implementation MyMovesWebServices
-
-@synthesize webData, soapResults, xmlParser;
-@synthesize WSWorkoutListDelegate,apiRequestType,WSCategoryListListDelegate,WSGetUserWorkoutplanOfflineDelegate;
-
-@synthesize responseData;
 
 -(void)callGetWebservice:(NSDictionary *)requestDict {
     [timeOutTimer invalidate];
@@ -23,7 +19,7 @@
     NSString *requestType = [requestDict valueForKey:@"RequestType"];
     NSString *soapMessage = nil;
     
-    apiRequestType = requestType;
+    self.apiRequestType = requestType;
     
     if ([requestType isEqualToString:@"WorkoutOffline"]) {
         soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -76,7 +72,7 @@
     
     if( theConnection )
     {
-        webData = [[NSMutableData data] retain];
+        self.webData = [NSMutableData data];
     }
     else
     {
@@ -97,7 +93,7 @@
 //        NSString *AuthHash = @"SRQ8MBFY2";
 //        NSString *AuthHash = @"TEWM6N113213";
 
-        DietmasterEngine *engine = [DietmasterEngine instance];
+        DietmasterEngine *engine = [DietmasterEngine sharedInstance];
         _myBool =  engine.sendAllServerData;
         
         NSMutableArray *mobileUserPlanListArr = [[NSMutableArray alloc] initWithArray:[self MobileUserPlanList]];
@@ -107,21 +103,11 @@
         NSMutableArray *MobileUserPlanMoveListArr = [[NSMutableArray alloc] initWithArray:[self MobileUserPlanMoveList]];
         
         NSMutableArray *MobileUserPlanMoveSetListArr = [[NSMutableArray alloc] initWithArray:[self MobileUserPlanMoveSetList]];
-      
-//        NSDictionary *requestDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:
-//                                     AuthHash, @"AuthHash",
-//                                     [NSNumber numberWithBool:_myBool], @"SendAllServerData",
-//                                     mobileUserPlanListArr, @"MobileUserPlanList",
-//                                     mobileUserPlanDateListArr, @"MobileUserPlanDateList",
-//                                     MobileUserPlanMoveListArr,@"MobileUserPlanMoveList",
-//                                     MobileUserPlanMoveSetListArr,@"MobileUserPlanMoveSetList",
-//                                     nil];
-        
+              
         NSDictionary *requestDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                      AuthHash, @"AuthHash",
                                      [NSNumber numberWithBool:_myBool], @"SendAllServerData",
                                      nil];
-
     
         DMLog(@"%@",requestDict);
         
@@ -138,17 +124,17 @@
 
             [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse* response,NSData* data,NSError* error)
              {
-                 if ([data length]>0 && error == nil) {
-                     resultsDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error1];
+                 if ([data length] && error == nil) {
+                     resultsDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error1];
                     
                      [self clearTableDataS];
                      DMLog(@"%@",resultsDictionary);
                      [self serverUserPlans:resultsDictionary];
-                     [WSGetUserWorkoutplanOfflineDelegate getUserWorkoutplanOfflineListFinished:resultsDictionary];
+                     [self.WSGetUserWorkoutplanOfflineDelegate getUserWorkoutplanOfflineListFinished:resultsDictionary];
                      [self updateFromNewToNormalToDb];
                      [self updateFromChangedToNormalToDb];
                    
-                     DietmasterEngine *engine = [DietmasterEngine instance];
+                     DietmasterEngine *engine = [DietmasterEngine sharedInstance];
                      engine.sendAllServerData = false;
                  }
              }];
@@ -159,7 +145,7 @@
 
 -(void)clearTableData
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -200,7 +186,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
     if (![db open]) {
@@ -253,7 +239,7 @@
 - (NSMutableArray *)MobileUserPlanDateList
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
     if (![db open]) {
@@ -306,7 +292,7 @@
 - (NSMutableArray *)MobileUserPlanMoveList
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
-           DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+           DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
      FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
      
      if (![db open]) {
@@ -400,7 +386,7 @@
 - (NSMutableArray *)MobileUserPlanMoveSetList
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
     if (![db open]) {
@@ -556,14 +542,12 @@
     return arr;
 }
 
-
-
 //newAPI
 -(void)serverUserPlans:(NSDictionary *)planListDict
 {
     if (planListDict[@"ServerUserPlanList"] != [NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -578,17 +562,17 @@
         {
             for (NSDictionary*dict in planArr) {
                 
-                int planId = [dict[@"PlanID"] integerValue];
-                int userId = [dict[@"UserID"] integerValue];
+                int planId = [dict[@"PlanID"] intValue];
+                int userId = [dict[@"UserID"] intValue];
 
                 NSString *planName = [[dict[@"PlanName"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
                 NSString *notes = [[dict[@"Notes"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
                 
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [dict[@"LastUpdated"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [[dateFormatter dateFromString:dateString] retain];
+                NSDate *date = [dateFormatter dateFromString:dateString];
                 NSString * lastUpdated = [dateFormatter stringFromDate:date];
                 
                 NSString *uniqueId = dict[@"UniqueID"];
@@ -613,7 +597,7 @@
     
     if (planListDict[@"ServerUserPlanDateList"] != [NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -628,19 +612,19 @@
         {
             for (NSDictionary*dict in planDateListArr) {
                
-                int userPlanDateID = [dict[@"UserPlanDateID"] integerValue];
-                int planId = [dict[@"PlanID"] integerValue];
+                int userPlanDateID = [dict[@"UserPlanDateID"] intValue];
+                int planId = [dict[@"PlanID"] intValue];
                 
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *lastUpdateArr = [dict[@"LastUpdated"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[lastUpdateArr objectAtIndex:0]];
-                NSDate *date = [[dateFormatter dateFromString:dateString] retain];
+                NSDate *date = [dateFormatter dateFromString:dateString];
                 NSString * lastUpdated = [dateFormatter stringFromDate:date];
                 
                 NSArray *arr = [dict[@"PlanDate"] componentsSeparatedByString:@"T"];
                 NSString *dateStr = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *dateFormate = [[dateFormatter dateFromString:dateStr] retain];
+                NSDate *dateFormate = [dateFormatter dateFromString:dateStr];
                 NSString * planDate = [dateFormatter stringFromDate:dateFormate];
                 
                 NSString *uniqueId = dict[@"UniqueID"];
@@ -671,7 +655,7 @@
     
     if (planListDict[@"ServerUserPlanMoveList"] != [NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -694,11 +678,11 @@
                 NSString *videoLink = dict[@"VideoLink"];
                 NSString *notes = [[dict[@"Notes"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
                 
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [dict[@"LastUpdated"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [[dateFormatter dateFromString:dateString] retain];
+                NSDate *date = [dateFormatter dateFromString:dateString];
                 NSString * lastUpdated = [dateFormatter stringFromDate:date];
                 
                 NSString *uniqueId = dict[@"UniqueID"];
@@ -722,7 +706,7 @@
     }
     if (planListDict[@"ServerUserPlanMoveSetList"] != [NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -739,23 +723,16 @@
         {
             for (NSDictionary*dict in planMoveSetListArr) {
                 
-                int setId = [dict[@"SetID"] integerValue];
-                int userPlanMoveID = [dict[@"UserPlanMoveID"] integerValue];
-                int setNumber = [dict[@"SetNumber"] integerValue];
-                int unit1ID = [dict[@"Unit1ID"] integerValue];
-                int unit1Value = [dict[@"Unit1Value"] integerValue];
-                int unit2ID = [dict[@"Unit2ID"] integerValue];
-                int unit2Value = [dict[@"Unit2Value"] integerValue];
+                int setId = [dict[@"SetID"] intValue];
+                int userPlanMoveID = [dict[@"UserPlanMoveID"] intValue];
+                int setNumber = [dict[@"SetNumber"] intValue];
+                int unit1ID = [dict[@"Unit1ID"] intValue];
+                int unit1Value = [dict[@"Unit1Value"] intValue];
+                int unit2ID = [dict[@"Unit2ID"] intValue];
+                int unit2Value = [dict[@"Unit2Value"] intValue];
                 
                 NSString *unit1Name = dict[@"Unit1Name"];
                 NSString *unit2Name = dict[@"Unit2Name"];
-                
-//                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
-//                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-//                NSArray *arr = [dict[@"LastUpdated"] componentsSeparatedByString:@"T"];
-//                NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-//                NSDate *date = [[dateFormatter dateFromString:dateString] retain];
-//                NSString * lastUpdated = [dateFormatter stringFromDate:date];
                 
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
@@ -763,7 +740,7 @@
                 NSString *dateStringS = [formatter stringFromDate:currentDate];
                 NSArray *arrS = [dateStringS componentsSeparatedByString:@"T"];
                 NSString *dt = [NSString stringWithFormat:@"%@T00:00:00",[arrS objectAtIndex:0]];
-                NSDate *dateS = [[formatter dateFromString:dt] retain];
+                NSDate *dateS = [formatter dateFromString:dt];
                 NSString * lastUpdated = [formatter stringFromDate:dateS];
 
                 
@@ -788,7 +765,7 @@
     
     if (planListDict[@"ServerCustomMoveList"] != [NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -803,18 +780,18 @@
         {
             for (NSDictionary*dict in customPlanMoveListArr) {
                 
-                int moveId = [dict[@"MoveID"] integerValue];
-                int companyID = [dict[@"CompanyID"] integerValue];
+                int moveId = [dict[@"MoveID"] intValue];
+                int companyID = [dict[@"CompanyID"] intValue];
 
                 NSString *moveName = dict[@"MoveName"];
                 NSString *videoLink = dict[@"VideoLink"];
                 NSString *notes = dict[@"Notes"];
                 
-                NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [dict[@"LastUpdated"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [[dateFormatter dateFromString:dateString] retain];
+                NSDate *date = [dateFormatter dateFromString:dateString];
                 NSString * lastUpdated = [dateFormatter stringFromDate:date];
                 
                 NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO MoveDetailsTable (MoveID,CompanyID,MoveName,VideoLink,Notes) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\")",moveId,companyID,moveName,videoLink,notes];
@@ -836,7 +813,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -891,7 +868,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -947,7 +924,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -1011,7 +988,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -1076,7 +1053,7 @@
 //new API
 -(NSMutableArray *)loadListOfMovesFromDb
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1124,7 +1101,7 @@
 //new API
 -(void)clearTableDataS
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1153,7 +1130,7 @@
 
 -(void)clearedDataFromWeb:(NSString *)uniqueId
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1185,7 +1162,7 @@
 
 -(void)updateFromNewToNormalToDb
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1218,7 +1195,7 @@
 
 -(void)updateFromChangedToNormalToDb
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1249,7 +1226,7 @@
 
 -(void)updateChangesFromWeb:(NSString *)uniqueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1280,7 +1257,7 @@
 //new API
 -(void)addMovesToDb:(NSDictionary *)dict SelectedDate:(NSDate*)planDate planName:(NSString *)planName categoryName:(NSString*)CatName CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId status:(NSString*)status PlanNameUnique:(NSString*)PlanNameUnique DateListUnique:(NSString*)DateListUnique MoveNameUnique:(NSString*)MoveNameUnique;
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1426,7 +1403,7 @@
 //new API
 -(void)mobilePlanDateList:(NSDate *)planDate DateUniqueID:(NSString *)uniqueID Dict:(NSDictionary *)dict
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -1473,7 +1450,7 @@
 //new API
 - (void)mobilePlanMoveList:(NSString *)MoveName VideoLink:(NSString *)VideoLink Notes:(NSString *)Notes UniqueID:(NSString *)UniqueID ParentUniqueID:(NSString *)ParentUniqueID MoveID:(int)MoveID PlanDateStr:(NSString *)PlanDateStr
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -1566,7 +1543,7 @@
 
 -(void)mobilePlanMoveSetList:(NSString *)ParentUniqueID setDict:(NSDictionary *)dict
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -1599,7 +1576,7 @@
 }
 -(void)mobilePlanMoveSetLists:(NSString *)ParentUniqueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -1627,7 +1604,7 @@
 
 -(void)clearOfflineSynParamsDb
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1664,7 +1641,7 @@
 {
     if (movesDict[@"ListOfTitle"] != (id)[NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -1677,8 +1654,8 @@
         NSMutableArray * monthlyArr = [[NSMutableArray alloc]init];
 //        [monthlyArr addObjectsFromArray:movesDict[@"ListOfTitle"]];
         
-        if([NSNull null] != [[movesDict[@"ListOfTitle"]copy]autorelease]) {
-            monthlyArr = [NSMutableArray arrayWithArray:[[movesDict[@"ListOfTitle"]mutableCopy]autorelease]];
+        if([NSNull null] != [movesDict[@"ListOfTitle"] copy]) {
+            monthlyArr = [NSMutableArray arrayWithArray:[movesDict[@"ListOfTitle"] mutableCopy]];
             if ([monthlyArr count] != 0)
             {
                 for (NSDictionary*dict in monthlyArr) {
@@ -1708,29 +1685,25 @@
     
     if (movesDict[@"ListOfBodyPart"] != (id)[NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
         }
         [db beginTransaction];
         
-//        NSString * deleteSQL = [NSString stringWithFormat: @"DELETE FROM ListOfBodyPart_Table"];
-//        [db executeUpdate:deleteSQL];
-        
         NSMutableArray * monthlyArr = [[NSMutableArray alloc]init];
-//        [monthlyArr addObjectsFromArray:movesDict[@"ListOfBodyPart"]];
         
-        if([NSNull null] != [[movesDict[@"ListOfBodyPart"]copy]autorelease]) {
-            monthlyArr = [NSMutableArray arrayWithArray:[[movesDict[@"ListOfBodyPart"]mutableCopy]autorelease]];
+        if([NSNull null] != [movesDict[@"ListOfBodyPart"] copy]) {
+            monthlyArr = [NSMutableArray arrayWithArray:[movesDict[@"ListOfBodyPart"] mutableCopy]];
             
             if ([monthlyArr count] != 0)
             {
                 for (NSDictionary*dict in monthlyArr) {
                     
                     
-                    int WorkoutCategoryID = [dict[@"WorkoutCategoryID"] integerValue];
-                    int WorkoutUserDateID = [dict[@"WorkoutUserDateID"] integerValue];
+                    int WorkoutCategoryID = [dict[@"WorkoutCategoryID"] intValue];
+                    int WorkoutUserDateID = [dict[@"WorkoutUserDateID"] intValue];
                     NSString * WorkoutCategoryName = dict[@"WorkoutCategoryName"];
                     
                     NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ListOfBodyPart_Table (WorkoutCategoryID,WorkoutCategoryName,WorkoutUserDateID) VALUES(\"%d\",\"%@\",\"%d\")",WorkoutCategoryID,WorkoutCategoryName,WorkoutUserDateID];
@@ -1747,28 +1720,25 @@
     
     if (movesDict[@"ListOfTags"] != (id)[NSNull null])
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
         }
         [db beginTransaction];
         
-//        NSString * deleteSQL = [NSString stringWithFormat: @"DELETE FROM ListOfTags_Table"];
-//        [db executeUpdate:deleteSQL];
-        
         NSMutableArray * monthlyArr = [[NSMutableArray alloc]init];
         
-        if([NSNull null] != [[movesDict[@"ListOfBodyPart"]copy]autorelease]) {
+        if([NSNull null] != [movesDict[@"ListOfBodyPart"] copy]) {
             
-            monthlyArr = [NSMutableArray arrayWithArray:[[movesDict[@"ListOfTags"]mutableCopy]autorelease]];
+            monthlyArr = [NSMutableArray arrayWithArray:[movesDict[@"ListOfTags"] mutableCopy]];
             
             if ([monthlyArr count] != 0)
             {
                 for (NSDictionary*dict in monthlyArr) {
                     
-                    int WorkoutTagsID = [dict[@"WorkoutTagsID"] integerValue];
-                    int WorkoutCategoryID = [dict[@"WorkoutCategoryID"] integerValue];
+                    int WorkoutTagsID = [dict[@"WorkoutTagsID"] intValue];
+                    int WorkoutCategoryID = [dict[@"WorkoutCategoryID"] intValue];
                     
                     NSString * Tags = dict[@"Tags"];
                     
@@ -1790,7 +1760,7 @@
 -(NSMutableArray *)loadListOfTags
 {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1852,7 +1822,7 @@
 -(NSMutableArray *)loadListOfBodyPart
 {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1888,7 +1858,7 @@
 -(NSMutableArray *)loadCategoryFilteredListOfTitleToDb:(int)catId
 {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1951,7 +1921,7 @@
 -(NSMutableArray *)loadFilteredListOfTitleToDb
 {
     
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -2013,7 +1983,7 @@
 -(NSMutableArray *)loadListOfTitleToDb
 {
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2067,7 +2037,7 @@
 
 -(NSMutableArray *)loadTable1Header
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2101,7 +2071,7 @@
 }
 -(NSMutableArray *)loadTable2Header
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2138,7 +2108,7 @@
 {
     if (monthlyDict[@"UserWorkoutPlan"] != [NSNull null])
         {
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             if (![db open]) {
@@ -2165,11 +2135,11 @@
                     
                     NSString * tempName = dict[@"TemplateName"];
                     
-                    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init]retain];
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                     NSArray *arr = [dict[@"WorkoutDate"] componentsSeparatedByString:@"T"];
                     NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                    NSDate *date = [[dateFormatter dateFromString:dateString] retain];
+                    NSDate *date = [dateFormatter dateFromString:dateString];
                     NSString * workoutDate = [dateFormatter stringFromDate:date];
                     
                     int workoutTempId = [dict[@"WorkoutTemplateId"] integerValue];
@@ -2221,7 +2191,7 @@
         }
     if (monthlyDict[@"TableP1"] != nil)
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -2258,7 +2228,7 @@
     }
     if (monthlyDict[@"TableP2"] != nil)
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -2296,7 +2266,7 @@
 }
 -(void)updateFirstHeaderValue:(int)unit1ID ParentUniqueID:(NSString *)ParentUniqueID;
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2317,7 +2287,7 @@
 
 -(void)updateSecondHeaderValue:(int)unit2ID ParentUniqueID:(NSString *)ParentUniqueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2338,7 +2308,7 @@
 
 -(void)updateSetInFirstColumn:(int)unit1Value uniqueID:(NSString *)uniqueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2359,7 +2329,7 @@
 
 -(void)updateSetInSecondColumn:(int)unit2Value uniqueID:(NSString *)uniqueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2382,7 +2352,7 @@
 
 -(NSMutableArray *)loadFirstHeaderTable
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2418,7 +2388,7 @@
 }
 -(NSMutableArray *)loadSecondHeaderTable
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2453,7 +2423,7 @@
 
 -(void)deleteMoveFromDb:(NSString *)UniqueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2481,7 +2451,7 @@
 
 -(void)deleteSetFromDb:(NSString *)UniqueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2504,7 +2474,7 @@
 
 -(void)updateCheckBoxStatusToDb:(NSString *)UniqueID checkBoxStatus:(NSString *)checkBoxStatus
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2523,7 +2493,7 @@
 }
 -(void)addExerciseToDb:(NSDictionary *)dict workoutDate:(NSDate*)date userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutDateID:(int)WorkoutDateID
 {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -2599,7 +2569,7 @@
 
 -(void)updateUserCommentsToDb:(NSString *)exerciseDate commentsToUpdate:(NSString *)comments
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2626,7 +2596,7 @@
 }
 -(void)updateWorkoutToDb:(NSString *)exerciseDate
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2648,7 +2618,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -2694,7 +2664,7 @@
 }
 -(void)updateTimeToDb:(NSString *)WorkingStatus timeToSet:(NSString *)CurrentDuration excerciseDict:(NSDictionary *)dict
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2727,7 +2697,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -2773,7 +2743,7 @@
 
 -(void)deleteWorkoutFromDb:(int)workoutTempId
 {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -2795,7 +2765,7 @@
 
 -(void)saveDeletedExerciseToDb:(int)workoutTempId UserId:(int)userId WorkoutUserDateID:(int)workoutUserDateID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -2818,7 +2788,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -2854,7 +2824,7 @@
 {
     if ([dataArr count] != 0)
     {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
@@ -2907,7 +2877,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -2964,7 +2934,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -3025,7 +2995,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -3086,11 +3056,11 @@
     [db commit];
     return arr;
 }
--(NSMutableArray *)loadExerciseFromDb
-{
-     NSMutableArray *arr = [[NSMutableArray alloc]init];
+
+- (NSArray *)loadExerciseFromDb {
+    NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -3173,15 +3143,16 @@
     NSSet * setForArr = [[NSMutableSet alloc] initWithArray:arr];
     NSMutableArray *exerArr = [[NSMutableArray alloc]initWithArray:[setForArr allObjects]];
     
-    return exerArr;
+    return [exerArr copy];
 }
+
 -(NSMutableArray *)loadAddWorkoutTemplate
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
     NSMutableArray * setsDbArr = [[NSMutableArray alloc]initWithArray:[self loadWorkoutFromDbParams]];
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -3310,7 +3281,7 @@
 #pragma mark Sets for my moves
 -(void)updateTimeForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict WorkoutTimer:(NSString*)WorkoutTime
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -3333,7 +3304,7 @@
 }
 -(void)updateSetsForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -3359,7 +3330,7 @@
 }
 -(void)deleteSetsFromDB:(int)WorkoutMethodValueID
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -3381,7 +3352,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -3421,7 +3392,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -3467,7 +3438,7 @@
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     
@@ -3511,7 +3482,7 @@
 }
 -(void)addSetsForExercise:(int)WorkoutUserDateId Dict:(NSDictionary *)dict
 {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -3548,237 +3519,24 @@
     [db commit];
 }
 
-/*
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    [webData setLength: 0];
-}
-
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [webData appendData:data];
-}
-
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
- 
-    if ([WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
-        [WSWorkoutListDelegate getWorkoutListFailed:[error localizedDescription]];
-    }
- 
-    [connection release];
-    [webData release];
-}
--(void)connectionDidFinishLoading:(NSURLConnection *)connection {
-//    [timeOutTimer invalidate];
-//    timeOutTimer = nil;
-//
-//    NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-//
-//
-//    [theXML release];
-//
-//    if( xmlParser )
-//    {
-//        [xmlParser release];
-//    }
-//
-//    xmlParser = [[NSXMLParser alloc] initWithData: webData];
-//    [xmlParser setDelegate: self];
-//    [xmlParser setShouldResolveExternalEntities: YES];
-//    [xmlParser parse];
-//
-//    [connection release];
-//    [webData release];
-}
-
--(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName attributes: (NSDictionary *)attributeDict {
-    if( [elementName isEqualToString:@"DeleteUserPlannedMealItemsResult"] || [elementName isEqualToString:@"GetUserPlannedMealNamesResult"] ||
-       [elementName isEqualToString:@"InsertUserPlannedMealItemsResult"] || [elementName isEqualToString:@"InsertUserPlannedMealsResult"] ||
-       [elementName isEqualToString:@"UpdateUserPlannedMealItemsResult"] || [elementName isEqualToString:@"UpdateUserPlannedMealNamesResult"] ||
-       [elementName isEqualToString:@"GetGroceryListResult"]) {
-        if(!soapResults) {
-            soapResults = [[NSMutableString alloc] init];
-        }
-        recordResults = TRUE;
-    }
- 
-    if( [elementName isEqualToString:@"faultstring"]) {
-        if ([WSWorkoutListDelegate respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]){
-            [WSWorkoutListDelegate getWorkoutListFailed:@"error"];
-        }
-    }
-}
-
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-    if( recordResults )
-    {
-        [soapResults appendString: string];
-    }
-}
-
--(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-    recordResults = FALSE;
-    if ([soapResults isEqualToString:@"\"Empty\""]) {
-        [soapResults release];
-        soapResults = nil;
-        soapResults = [[NSMutableString alloc] init];
-        [soapResults appendFormat:@"%@",@"[]"];
-    }
- 
- 
-    NSMutableArray *responseArray = [soapResults JSONValue];
-    NSString *strCheck;
-    if([responseArray count]!= 0) {
-        NSDictionary *dictCheck = [responseArray objectAtIndex:0];
-        strCheck = [dictCheck objectForKey:@"Response"];
-    } else {
-        strCheck = @"";
-    }
-    DMLog(@"%@",elementName);
- 
-    if([elementName isEqualToString:@"GetUserPlannedMealNamesResult"]) {
-        if ([strCheck isEqualToString:@"Invalid Auth"]) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APP_NAME message:@"Service has been terminated. Contact your plan provider." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            alertView.tag = 1;
-            [alertView show];
-        } else {
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
- 
-            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
- 
-            for (NSDictionary *mealDict in responseArray) {
- 
-                NSMutableDictionary *newMealPlanDict = [[NSMutableDictionary alloc] init];
-                [newMealPlanDict setObject:[mealDict valueForKey:@"MealName"] forKey:@"MealName"];
-                [newMealPlanDict setObject:[mealDict valueForKey:@"MealID"] forKey:@"MealID"];
-                [newMealPlanDict setObject:[mealDict valueForKey:@"MealTypeID"] forKey:@"MealTypeID"];
- 
- 
-                NSMutableArray *newMealItemsArray = [[NSMutableArray alloc] init];
-                for (int i = 0; i <=5; i++) {
-                    NSMutableArray *mealItemsTemp = [[NSMutableArray alloc] init];
-                    for (NSDictionary *mealItems in [mealDict valueForKey:@"MealItems"]) {
-                        int mealCode = [[mealItems valueForKey:@"MealCode"] intValue];
-                        if (mealCode == i) {
-                            [mealItemsTemp addObject:mealItems];
- 
-                            NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                      [NSNumber numberWithInt:[[mealItems valueForKey:@"FoodID"] intValue]], @"FoodID",
-                                                      [NSNumber numberWithInt:[[mealItems valueForKey:@"MeasureID"] intValue]], @"MeasureID", nil];
- 
-                            [dietmasterEngine getMissingFoods:tempDict];
-                            [tempDict release];
-                        }
-                    }
-                    [newMealItemsArray addObject:mealItemsTemp];
-                    [mealItemsTemp release];
-                }
-                [newMealPlanDict setObject:newMealItemsArray forKey:@"MealItems"];
-                [newMealItemsArray release];
- 
-                if (![[mealDict valueForKey:@"MealNotes"] count]==0) {
-                    NSMutableArray *newMealNotesArray = [[NSMutableArray alloc] init];
-                    for (NSDictionary *mealNotes in [mealDict valueForKey:@"MealNotes"]) {
-                        [newMealNotesArray addObject:mealNotes];
-                    }
-                    [newMealPlanDict setObject:newMealNotesArray forKey:@"MealNotes"];
-                    [newMealNotesArray release];
-                }
-                [tempArray addObject:newMealPlanDict];
- 
-            }
- 
- 
-            if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFinished:)]) {
-                [wsGetUserPlannedMealNames getUserPlannedMealNamesFinished:tempArray];
-            }
-            [tempArray release];
-        }
-    }
-    if([elementName isEqualToString:@"GetGroceryListResult"]) {
- 
-        if ([wsGetGroceryList respondsToSelector:@selector(getGroceryListFinished:)]) {
-            [wsGetGroceryList getGroceryListFinished:responseArray];
-        }
- 
-    }
- 
-    if([elementName isEqualToString:@"DeleteUserPlannedMealItemsResult"]) {
- 
-        if ([wsDeleteUserPlannedMealItems respondsToSelector:@selector(deleteUserPlannedMealItemsFinished:)]) {
-            [wsDeleteUserPlannedMealItems deleteUserPlannedMealItemsFinished:responseArray];
-        }
- 
-    }
-    if([elementName isEqualToString:@"InsertUserPlannedMealItemsResult"]) {
- 
-        if ([wsInsertUserPlannedMealItems respondsToSelector:@selector(insertUserPlannedMealItemsFinished:)]) {
-            [wsInsertUserPlannedMealItems insertUserPlannedMealItemsFinished:responseArray];
-        }
- 
-    }
-    if([elementName isEqualToString:@"InsertUserPlannedMealsResult"]) {
-        
-        if ([wsInsertUserPlannedMeals respondsToSelector:@selector(insertUserPlannedMealsFinished:)]) {
-            [wsInsertUserPlannedMeals insertUserPlannedMealsFinished:responseArray];
-        }
-        
-    }
-    if([elementName isEqualToString:@"UpdateUserPlannedMealItemsResult"])
-    {
-        if ([wsUpdateUserPlannedMealItems respondsToSelector:@selector(updateUserPlannedMealItemsFinished:)]) {
-            [wsUpdateUserPlannedMealItems updateUserPlannedMealItemsFinished:responseArray];
-        }
-        
-    }
-    if([elementName isEqualToString:@"UpdateUserPlannedMealNamesResult"])
-    {
-        if ([wsUpdateUserPlannedMealNames respondsToSelector:@selector(updateUserPlannedMealNamesFinished:)]) {
-            [wsUpdateUserPlannedMealNames updateUserPlannedMealNamesFinished:responseArray];
-        }
-        
-    }
-    
-    [soapResults release];
-    soapResults = nil;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 1) {
-        exit(0);
-    }
-}
-*/
-
-//- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-//    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-//    [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-//}
-
 #pragma mark TIMEOUT METHOD
 -(void)timeOutWebservice:(NSTimer *)theTimer {
     
     NSURLConnection *connection = [[theTimer userInfo] objectForKey:@"connection"];
     [connection cancel];
-    [connection release];
     connection = nil;
     
     [timeOutTimer invalidate];
     timeOutTimer = nil;
     
-    [webData release];
-    webData = nil;
+    self.webData = nil;
     
-    if ([WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
-        [WSWorkoutListDelegate getWorkoutListFailed:@"error"];
+    if ([self.WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
+        [self.WSWorkoutListDelegate getWorkoutListFailed:@"error"];
     }
     
-    if ([WSCategoryListListDelegate respondsToSelector:@selector(getCategoryListFailed:)]) {
-        [WSCategoryListListDelegate getCategoryListFailed:@"error"];
+    if ([self.WSCategoryListListDelegate respondsToSelector:@selector(getCategoryListFailed:)]) {
+        [self.WSCategoryListListDelegate getCategoryListFailed:@"error"];
     }
 }
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
@@ -3797,11 +3555,11 @@
     if (error) {
         
         DMLog(@"%@ failed: %@", task.originalRequest.URL, error);
-        if ([WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
-            [WSWorkoutListDelegate getWorkoutListFailed: [NSString stringWithFormat:@"%@",error]];
+        if ([self.WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
+            [self.WSWorkoutListDelegate getWorkoutListFailed: [NSString stringWithFormat:@"%@",error]];
         }
-        if ([WSCategoryListListDelegate respondsToSelector:@selector(getCategoryListFailed:)]) {
-            [WSCategoryListListDelegate getCategoryListFailed:[NSString stringWithFormat:@"%@",error]];
+        if ([self.WSCategoryListListDelegate respondsToSelector:@selector(getCategoryListFailed:)]) {
+            [self.WSCategoryListListDelegate getCategoryListFailed:[NSString stringWithFormat:@"%@",error]];
         }
         
     }else{
@@ -3811,27 +3569,19 @@
         NSError *localError = nil;
         NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:&localError];
         
-        if ([apiRequestType isEqualToString:@"WorkoutOffline"]) {
-            [WSWorkoutListDelegate getWorkoutListFinished:parsedObject];
+        if ([self.apiRequestType isEqualToString:@"WorkoutOffline"]) {
+            [self.WSWorkoutListDelegate getWorkoutListFinished:parsedObject];
             [self saveMovesTagsCategoriesToDb:parsedObject];
         }
         
-        if ([apiRequestType isEqualToString:@"Category"]) {
-            [WSCategoryListListDelegate getCategoryListFinished:parsedObject];
+        if ([self.apiRequestType isEqualToString:@"Category"]) {
+            [self.WSCategoryListListDelegate getCategoryListFinished:parsedObject];
         }
         
     }
 }
 
-- (void)dealloc {
-    [xmlParser release];
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    [timeOutTimer release];
-    [super dealloc];
-}
-
--(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array {
+-(NSMutableArray *)filterObjectsByKeys:(NSString *)key array:(NSArray *)array {
     NSMutableSet *tempValues = [[NSMutableSet alloc] init];
     NSMutableArray *ret = [NSMutableArray array];
     for(id obj in array) {
@@ -3840,7 +3590,6 @@
             [ret addObject:obj];
         }
     }
-    [tempValues release];
     return ret;
 }
 
@@ -3863,8 +3612,7 @@
         if (data.length > 0 && connectionError == nil) {
             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
             
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine instance];
+            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
             if (![db open]) {
@@ -3938,7 +3686,6 @@
         } else {
             DMLog(@"%i", connectionError.code);
         }
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"showPosts" object:tempPosts];
     }];
 }
 

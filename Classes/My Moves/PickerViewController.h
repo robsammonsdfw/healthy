@@ -6,23 +6,21 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PickerViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @protocol SelectedBodyPartDelegate;
 @protocol changedRepsAndWeightDelegate;
 
-@interface PickerViewController : UIViewController{
-    
-}
-@property(nonatomic,assign) id<SelectedBodyPartDelegate> selectedBodyPartDel;
-@property(nonatomic,assign) id<changedRepsAndWeightDelegate> repsWeightDel;
-@property (nonatomic, assign) NSString *parentUniqueId;
+@interface PickerViewController : UIViewController
 
+@property (nonatomic, weak) id<SelectedBodyPartDelegate> selectedBodyPartDel;
+@property (nonatomic, weak) id<changedRepsAndWeightDelegate> repsWeightDel;
+@property (nonatomic) NSString *parentUniqueId;
 
-@property (strong, retain) NSArray *pickerData;
-@property (strong, retain) NSArray *data;
-@property (nonatomic, assign) BOOL secondColumn;
+@property (nonatomic, strong) NSMutableArray *pickerData;
+@property (nonatomic, strong) NSArray *data;
+@property (nonatomic) BOOL secondColumn;
 
 @end
 @protocol SelectedBodyPartDelegate <NSObject>

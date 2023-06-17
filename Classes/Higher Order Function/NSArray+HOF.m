@@ -77,7 +77,6 @@
             [ret addObject:obj];
         }
     }
-    [tempValues release];
     return ret;
 }
 

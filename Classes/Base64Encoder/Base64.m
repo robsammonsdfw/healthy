@@ -8,7 +8,6 @@
 
 #import "Base64.h"
 
-
 @implementation Base64
 #define ArrayLength(x) (sizeof(x)/sizeof(*(x)))
 
@@ -23,7 +22,6 @@ static char decodingTable[128];
 		}
 	}
 }
-
 
 + (NSString*) encode:(const uint8_t*) input length:(NSInteger) length {
     NSMutableData* data = [NSMutableData dataWithLength:((length + 2) / 3) * 4];
@@ -46,15 +44,12 @@ static char decodingTable[128];
         output[index + 3] = (i + 2) < length ? encodingTable[(value >> 0)  & 0x3F] : '=';
     }
 	
-    return [[[NSString alloc] initWithData:data
-                                  encoding:NSASCIIStringEncoding] autorelease];
+    return [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 }
-
 
 + (NSString*) encode:(NSData*) rawBytes {
     return [self encode:(const uint8_t*) rawBytes.bytes length:rawBytes.length];
 }
-
 
 + (NSData*) decode:(const char*) string length:(NSInteger) inputLength {
 	if ((string == NULL) || (inputLength % 4 != 0)) {
@@ -88,7 +83,6 @@ static char decodingTable[128];
 	
 	return data;
 }
-
 
 + (NSData*) decode:(NSString*) string {
 	return [self decode:[string cStringUsingEncoding:NSASCIIStringEncoding] length:string.length];

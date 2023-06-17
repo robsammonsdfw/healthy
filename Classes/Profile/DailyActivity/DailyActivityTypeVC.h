@@ -6,5 +6,5 @@
 - (IBAction)btnNextClicked:(id)sender;
 
 - (IBAction)btnJobType:(id)sender;
-@property (retain, nonatomic) NSMutableDictionary *userInfoDict;
+@property (nonatomic, strong) NSMutableDictionary *userInfoDict;
 @end
