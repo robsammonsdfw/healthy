@@ -14,6 +14,9 @@
 /// Logins the user automatically from the authcode provided.
 - (void)loginFromUrl:(NSString *)authcode;
 
+/// Performs a sync of the user's info, such as BMR, Height, Goals, etc.
+/// NOTE: This is redundant to the function in the DMG Engine. Need to validate
+/// if this is still needed.
 - (void)syncUserInfo:(id)sender;
 
 @end

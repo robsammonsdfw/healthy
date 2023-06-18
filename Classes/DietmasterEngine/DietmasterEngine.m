@@ -49,7 +49,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 @synthesize exerciseSelectedDict, foodSelectedDict, currentWeight, taskMode, dateSelected, dateSelectedFormatted,userHeight,userGender;
 @synthesize selectedMealID, selectedMeasureID, selectedCategoryID;
-@synthesize syncDatabaseDelegate, updateUserInfoDelegate, syncUPDatabaseDelegate;
+@synthesize syncDatabaseDelegate, syncUPDatabaseDelegate;
 @synthesize mealPlanArray, isMealPlanItem, mealPlanItemToExchangeDict, indexOfItemToExchange, selectedMealPlanID, didInsertNewFood, ArrMealNotes;
 @synthesize groceryArray;
 @synthesize apiObject=_apiObject;
@@ -103,7 +103,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     syncsFailed = 0;
     syncsToComplete = 4;
     
-    NSDate *currentDate = [NSDate date];
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     [dateComponents setDay:-90];
         
@@ -242,18 +241,24 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     });
 }
 
-#pragma mark UPDATE/ADD/INSERT DATA METHODS
--(void)updateUserInfo:(NSMutableArray *)userInfo {
-    
-    NSDictionary *dict = [userInfo objectAtIndex:0];
-    
+#pragma mark - Sync User Details
+
+- (void)syncUserInfo:(id)sender {
+    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    [fetcher getUserDetailsWithCompletion:^(DMUser *user, NSError *error) {
+        if (error) {
+            return;
+        }
+        [self updateUserInfo:user];
+    }];
+}
+
+- (void)updateUserInfo:(DMUser *)user {
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
     if (![db open]) {
     }
     
     [db beginTransaction];
-    
-    DMUser *user = [[DMUser alloc] initWithDictionary:dict];
         
     NSString *updateSQL = [NSString stringWithFormat: @"UPDATE user SET "
                            
@@ -286,35 +291,13 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     [db executeUpdate:updateSQL];
     
-    BOOL statusMsg = YES;
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        statusMsg = NO;
     }
     [db commit];
-    
-    if (statusMsg) {
-        [updateUserInfoDelegate updateUserInfoFinished:@"success"];
-    } else {
-        [updateUserInfoDelegate updateUserInfoFailed:@"Error updating database"];
-    }
 }
 
 #pragma mark DOWN SYNC METHODS
--(void)syncUserInfo:(id)sender {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SyncUser", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                              nil];
-    
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsGetUserInfoDelegate = self;
-    [soapWebService callWebservice:infoDict];
-}
 
 -(void)syncFavoriteFoods:(NSString *)dateString {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -1072,17 +1055,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark DOWN SYNC DELEGATE METHODS
-- (void)getUserInfoFinished:(NSMutableArray *)responseArray {
-    [self updateUserInfo:responseArray];
-    
-    syncsCompleted++;
-    [self syncDatabaseFinished];
-}
-
-- (void)getUserInfoFailed:(NSString *)failedMessage {
-    syncsFailed++;
-    [self syncDatabaseFailed];
-}
 
 - (void)getSyncFavoriteFoodsFinished:(NSMutableArray *)responseArray {
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];

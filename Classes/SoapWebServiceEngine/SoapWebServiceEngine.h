@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "XMLReader.h"
 // DOWN SYNC
-@protocol WSGetUserInfoDelegate;
 @protocol WSSyncFoodsDelegate;
 @protocol WSSyncFoodLogDelegate;
 @protocol WSSyncFoodLogItemsDelegate;
@@ -50,7 +49,6 @@
 @property (nonatomic, strong) NSDictionary *requestDict;
 
 // DOWN SYNC
-@property (nonatomic, weak) id<WSGetUserInfoDelegate> wsGetUserInfoDelegate;
 @property (nonatomic, weak) id<WSSyncFoodsDelegate> wsSyncFoodsDelegate;
 @property (nonatomic, weak) id<WSSyncFoodLogDelegate> wsSyncFoodLogDelegate;
 @property (nonatomic, weak) id<WSSyncFoodLogItemsDelegate> wsSyncFoodLogItemsDelegate;
@@ -91,10 +89,6 @@
 @end
 
 // DOWN SYNC
-@protocol WSGetUserInfoDelegate <NSObject>
-- (void)getUserInfoFinished:(NSMutableArray *)responseArray;
-- (void)getUserInfoFailed:(NSString *)failedMessage;
-@end
 @protocol WSSyncFoodsDelegate <NSObject>
 - (void)getSyncFoodsFinished:(NSMutableArray *)responseArray;
 - (void)getSyncFoodsFailed:(NSString *)failedMessage;

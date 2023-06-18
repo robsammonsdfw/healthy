@@ -24,7 +24,7 @@
 #import "DietMasterGoPlus-Swift.h"
 #import "DMUser.h"
 
-@interface LoginViewController() <UITextFieldDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, WSGetUserInfoDelegate, UpdateUserInfoDelegate, SyncDatabaseDelegate>
+@interface LoginViewController() <UITextFieldDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, SyncDatabaseDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;
@@ -265,8 +265,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             [defaults setBool:NO forKey:@"logout_dietmastergo"];
             [defaults setBool:YES forKey:@"user_loggedin"];
 
-            DMLog(@"User: %@, Message: %@", user.firstName, message);
+            DMLog(@"User signed in: %@, Message: %@", user.firstName, message);
             
+            // Now get the user's details.
             [weakSelf syncUserInfo:nil];
         }];
     }
@@ -332,59 +333,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)syncUserInfo:(id)sender {
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Loading..."];
 
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SyncUser", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                              nil];
-    
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsGetUserInfoDelegate = self;
-    [soapWebService callWebservice:infoDict];
-}
-
-#pragma mark - USER INFO DELEGATE METHODS
-
-- (void)getUserInfoFinished:(NSMutableArray *)responseArray {
-    [DMActivityIndicator hideActivityIndicator];
-
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.updateUserInfoDelegate = self;
-    [dietmasterEngine updateUserInfo:responseArray];
+    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    [fetcher getUserDetailsWithCompletion:^(DMUser *user, NSError *error) {
+        self.loginButton.enabled = YES;
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showError:error withTitle:@"Error" message:@"Error updating." inViewController:nil];
+            return;
+        }
+        [dietmasterEngine updateUserInfo:user];
+    }];
     
-    dietmasterEngine.syncDatabaseDelegate = self;
-    
+#pragma mark TODO: Hook up the exercise sync.
     //HHT new exercise sync
     [dietmasterEngine.arrExerciseSyncNew removeAllObjects];
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"userid_dietmastergo"] != nil) {
        [dietmasterEngine syncDatabase];
    }
-}
 
-- (void)getUserInfoFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-
-    UIAlertView *alert;
-    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Incorrect Login. Please check your username and/or mobile password and try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
-    _loginButton.enabled = YES;
-}
-
-- (void)updateUserInfoFinished:(NSString *)responseMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.updateUserInfoDelegate = nil;
-}
-
-- (void)updateUserInfoFailed:(NSString *)failedMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.updateUserInfoDelegate = nil;
-    
-    UIAlertView *alert;
-    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred processing your request. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
-    [DMActivityIndicator hideActivityIndicator];
-    _loginButton.enabled = YES;
 }
 
 #pragma mark - SYNC DELEGATE METHODS

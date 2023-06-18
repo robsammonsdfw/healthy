@@ -12,7 +12,6 @@
 
 @synthesize webData, soapResults, xmlParser;
 // DOWN SYNC
-@synthesize wsGetUserInfoDelegate;
 @synthesize wsSyncFoodsDelegate;
 @synthesize wsSyncFoodLogDelegate;
 @synthesize wsSyncFavoriteFoodsDelegate;
@@ -229,20 +228,7 @@
     NSString *soapMessage = nil;
     
     // Now lay out the different requests:
-    if ([requestType isEqualToString:@"SyncUser"]) {
-        
-        soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                        "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
-                        "<soap:Body>"
-                        "<SyncUser xmlns=\"http://webservice.dmwebpro.com/\">"
-                        "<UserID>%@</UserID>"
-                        "<AuthKey>%@</AuthKey>"
-                        "</SyncUser>"
-                        "</soap:Body>"
-                        "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"]];
-        
-        
-    } else if ([requestType isEqualToString:@"SyncWeightLog"]) {
+    if ([requestType isEqualToString:@"SyncWeightLog"]) {
         
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -778,9 +764,6 @@
     
     DMLog(@"ERROR with Connection");
     
-    if ([wsGetUserInfoDelegate respondsToSelector:@selector(getUserInfoFailed:)]) {
-        [wsGetUserInfoDelegate getUserInfoFailed:[error localizedDescription]];
-    }
     if ([wsSyncFoodsDelegate respondsToSelector:@selector(getSyncFoodsFailed:)]) {
         [wsSyncFoodsDelegate getSyncFoodsFailed:[error localizedDescription]];
     }
@@ -884,11 +867,7 @@
        [elementName isEqualToString:@"SaveFavoriteMealResult"] ||
        [elementName isEqualToString:@"SaveFavoriteMealItemResult"] ||
        [elementName isEqualToString:@"DeleteMealItemResult"] ||
-       [elementName isEqualToString:@"DeleteFavoriteFoodResult"] ||
-       [elementName isEqualToString:@"GetMessagesResult"] ||
-       [elementName isEqualToString:@"SendTokenResult"] ||
-       [elementName isEqualToString:@"SendMessageResult"] ||
-       [elementName isEqualToString:@"SetMessageReadResult"] )
+       [elementName isEqualToString:@"DeleteFavoriteFoodResult"])
     {
         if(!soapResults)
         {
@@ -899,10 +878,6 @@
     
     if( [elementName isEqualToString:@"faultstring"])
     {
-        if ([wsGetUserInfoDelegate respondsToSelector:@selector(getUserInfoFailed:)]) {
-            [wsGetUserInfoDelegate getUserInfoFailed:@"error"];
-        }
-        
         if ([wsSyncFoodsDelegate respondsToSelector:@selector(getSyncFoodsFailed:)]) {
             [wsSyncFoodsDelegate getSyncFoodsFailed:@"error"];
         }
@@ -1008,14 +983,7 @@
     if (soapResults.length) {
         responseArray = [NSJSONSerialization JSONObjectWithData:[soapResults dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     }
-    
-    if([elementName isEqualToString:@"SyncUserResult"])
-    {
-        if ([wsGetUserInfoDelegate respondsToSelector:@selector(getUserInfoFinished:)]) {
-            [wsGetUserInfoDelegate getUserInfoFinished:responseArray];
-        }
-    }
-    
+
     if([elementName isEqualToString:@"SyncWeightLogResult"])
     {
         
@@ -1251,10 +1219,6 @@
     
     webData = nil;
     
-    
-    if ([wsGetUserInfoDelegate respondsToSelector:@selector(getUserInfoFailed:)]) {
-        [wsGetUserInfoDelegate getUserInfoFailed:@"error"];
-    }
     if ([wsSyncFoodsDelegate respondsToSelector:@selector(getSyncFoodsFailed:)]) {
         [wsSyncFoodsDelegate getSyncFoodsFailed:@"error"];
     }

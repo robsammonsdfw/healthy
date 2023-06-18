@@ -16,6 +16,7 @@
 #import "FactualQuery.h"
 
 @class DMMessage;
+@class DMUser;
 
 @protocol WSGetFoodDelegate;
 
@@ -24,10 +25,9 @@ extern NSString * const UpdatingMessageNotification;
 typedef void (^DMGBooleanResponseBlock)(BOOL success, NSError *error);
 
 @protocol SyncDatabaseDelegate;
-@protocol UpdateUserInfoDelegate;
 @protocol UPSyncDatabaseDelegate;
 
-@interface DietmasterEngine : NSObject <WSSyncFavoriteFoodsDelegate, WSSyncFavoriteMealsDelegate, WSGetUserInfoDelegate,
+@interface DietmasterEngine : NSObject <WSSyncFavoriteFoodsDelegate, WSSyncFavoriteMealsDelegate,
 WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, SaveUPCDataWSDelegate, FactualAPIDelegate, GetDataWSDelegate> {
     
     NSMutableDictionary *exerciseSelectedDict;
@@ -85,7 +85,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 @property (nonatomic, weak) id<WSGetFoodDelegate> wsGetFoodDelegate;
 
 @property (nonatomic, weak) id<SyncDatabaseDelegate> syncDatabaseDelegate;
-@property (nonatomic, weak) id<UpdateUserInfoDelegate> updateUserInfoDelegate;
 @property (nonatomic, weak) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
 
 @property (nonatomic, strong) NSMutableDictionary *exerciseSelectedDict;
@@ -142,7 +141,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 -(void)getDataFrom:(NSString *)syncDate withBlock:(DMGBooleanResponseBlock)block;
 
 // DOWN SYNC
--(void)syncUserInfo:(id)sender;
 -(void)syncFavoriteFoods:(NSString *)dateString;
 -(void)syncFavoriteMeals:(NSString *)dateString;
 -(void)syncFavoriteMealItems:(NSString *)dateString;
@@ -162,8 +160,11 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 -(void)saveFavoriteMeal:(NSString *)dateString;
 -(void)saveFavoriteMealItem:(int)mealID;
 
-// OTHER
--(void)updateUserInfo:(NSMutableArray *)userInfo;
+/// Fetches any updates to a user, such as BMR, Goals, etc.
+-(void)syncUserInfo:(id)sender;
+/// Updates user details in the database with the user object provided.
+/// This does NOT update the UserID, CompanyID, or name, only things like Height, BMR, Weight, etc.
+- (void)updateUserInfo:(DMUser *)user;
 
 // Splash Image
 - (void)downloadFileIfUpdated;
@@ -233,10 +234,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 @protocol SyncDatabaseDelegate <NSObject>
 - (void)syncDatabaseFinished:(NSString *)responseMessage;
 - (void)syncDatabaseFailed:(NSString *)failedMessage;
-@end
-@protocol UpdateUserInfoDelegate <NSObject>
-- (void)updateUserInfoFinished:(NSString *)responseMessage;
-- (void)updateUserInfoFailed:(NSString *)failedMessage;
 @end
 @protocol UPSyncDatabaseDelegate <NSObject>
 - (void)syncUPDatabaseFinished:(NSString *)responseMessage;

@@ -17,7 +17,8 @@ class DataFetcher : NSObject {
     
     // MARK: - Public
 
-    /// Signs-in a user. Also used to syncronize the user's details such as name, etc.
+    /// Signs-in a user. Also used to syncronize the user's details such as name, etc. This does NOT sync
+    /// a user's BirthDate, BMR, Goals, etc. Use -getUserDetails for that information.
     /// NOTE: The reason an NSError is not returned is because the server returns a status message which is
     /// then parsed by the system.
     @objc func signInUser(password: String, completion : @escaping (_ object: DMUser?, _ status: String?, _ message: String?) -> Void) {
@@ -49,6 +50,50 @@ class DataFetcher : NSObject {
             } catch let error as NSError {
                 print(error)
                 completion(nil, "False", "Error! Please try again.")
+                return
+            }
+        }
+    }
+    
+    /// Fetches the current user's details, such as BMR, Height, Weight, etc.
+    /// This is very similar to -signInUser, except it doesn't give UserID, CompanyID, or name info.
+    @objc func getUserDetails(completion : @escaping (_ user: DMUser?, _ error: NSError?) -> Void) {
+        guard let userId = userId, let authKey = authKey else {
+            let error = DMGUtilities.error(withMessage: "User not authenticated.", code: 100) as NSError
+            completion(nil, error)
+            return
+        }
+        
+        let params = ["AuthKey": authKey.uppercased(),
+                      "UserID": userId ]
+        let method = "SyncUser"
+        
+        AlamofireSoap.soapRequest("http://webservice.dmwebpro.com/DMGoWS.asmx?op=" + method,
+                                  soapmethod: method, soapparameters: params, namespace: namespace).responseString { response in
+            guard let responseXML = response.value else {
+                let error = DMGUtilities.error(withMessage: "Response not valid.", code: 200) as NSError
+                completion(nil, error)
+                return
+            }
+            
+            // Parse the XML response.
+            guard let data = self.processXMLToData(xmlString: responseXML, for: method) else {
+                let error = DMGUtilities.error(withMessage: "Cannot parse XML.", code: 300) as NSError
+                completion(nil, error)
+                return
+            }
+            
+            do {
+                guard let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>] else {
+                    let error = DMGUtilities.error(withMessage: "Error parsing JSON or Invalid Auth.", code: 400) as NSError
+                    completion(nil, error)
+                    return
+                }
+                let jsonResult = jsonArray[0]
+                let user = DMUser(dictionary: (jsonResult as NSDictionary) as! [AnyHashable : Any])
+                completion(user, nil)
+            } catch let error as NSError {
+                completion(nil, error)
                 return
             }
         }
