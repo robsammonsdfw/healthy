@@ -224,22 +224,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         }
     }
 }
--(void)SyncFood:(NSString *)syncDate {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SyncFoods", @"RequestType",
-                              @{@"UserID" : [prefs valueForKey:@"userid_dietmastergo"],
-                                @"AuthKey" : [prefs valueForKey:@"authkey_dietmastergo"],
-                                @"LastSync" : syncDate
-                                }, @"parameters",
-                              nil];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        GetDataWebService *webService = [[GetDataWebService alloc] init];
-        webService.getDataWSDelegate = self;
-        [webService callWebservice:infoDict];
-    });
-}
 
 #pragma mark - Sync User Details
 

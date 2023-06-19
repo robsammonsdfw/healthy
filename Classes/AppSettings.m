@@ -376,7 +376,8 @@
     
 }
 
-#pragma mark ==== Update and SyncFood method...
+#pragma mark - Update and SyncFood
+
 -(IBAction)CheckForFoodUpdateSync:(id)sender {
     [FoodUpdateSyncSpinner startAnimating];
     strSyncDate = [[NSUserDefaults standardUserDefaults] valueForKey:@"FoodUpdateLastsyncDate"];
@@ -387,24 +388,7 @@
     [self SyncFood];
 }
 
--(void)SyncFood2{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SyncFoods", @"RequestType",
-                              @{@"UserID" : [prefs valueForKey:@"userid_dietmastergo"],
-                                @"AuthKey" : [prefs valueForKey:@"authkey_dietmastergo"],
-                                @"LastSync" : [prefs valueForKey:@"FoodUpdateLastsyncDate"]
-                                }, @"parameters",
-                              nil];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        GetDataWebService *webService = [[GetDataWebService alloc] init];
-        webService.getDataWSDelegate = self;
-        [webService callWebservice:infoDict];
-    });
-}
-
--(void)SyncFood{
+- (void)SyncFood {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"SyncFoodsNew", @"RequestType",
