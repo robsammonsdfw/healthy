@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class DMMove;
 
 @protocol WSWorkoutList,WSCategoryList,WSGetUserWorkoutplanOffline;
 
@@ -42,7 +43,9 @@
 /// Loads a list of tags from the database.
 - (NSArray *)loadListOfTags;
 
--(NSMutableArray *)loadFilteredListOfTitleToDb;
+/// Loads an array of moves (exercises) from the local database.
+- (NSArray<DMMove *> *)getMovesFromDatabase;
+
 -(NSMutableArray *)loadCategoryFilteredListOfTitleToDb:(int)catId;
 
 -(NSMutableArray *)loadWorkoutSynParamFromDb;

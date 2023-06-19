@@ -11,6 +11,8 @@
 #import "MyMovesDetailsViewController.h"
 #import "MBProgressHUD.h"
 
+#import "DMMove.h"
+
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
 static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
@@ -24,12 +26,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 @property (nonatomic, strong) MyMovesWebServices *soapWebService;
 @property (nonatomic, strong) NSArray *tagsArr;
 @property (nonatomic, strong) NSArray *BodyPartDataArr;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation MyMovesListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dateFormatter = [[NSDateFormatter alloc] init];
     
     _tableData = [[NSMutableArray alloc]init];
     _originalDataListArr = [[NSMutableArray alloc]init];
@@ -56,7 +60,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if(_isExchange)
     {
         [DMActivityIndicator showActivityIndicator];
-        NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
+        NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService getMovesFromDatabase]];
         NSMutableArray * tempArr1 = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
         if ([tempArr count] != 0) {
             NSString *filter = @"%K == %@";
@@ -116,19 +120,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
             [DMActivityIndicator showActivityIndicator];
             if ([[self.soapWebService loadListOfTitleToDb] count] != 0) {
-                _tableData = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
-                _workOutListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadFilteredListOfTitleToDb]];
+                _tableData = [self.soapWebService getMovesFromDatabase];
                 _originalDataListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
                 _BodyPartDataArr = [self.soapWebService loadListOfBodyPart];
                 _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
                 _tagsArr = [self.soapWebService loadListOfTags];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSSortDescriptor *sortDescriptor;
-                    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
-                                                                 ascending:YES];
-                    _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
-                    [tblView reloadData];
-                });
+                [tblView reloadData];
             }
             else
             {
@@ -338,67 +335,41 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark - TableView Delegate
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *simpleTableIdentifier = @"searchTable";
-    [DMActivityIndicator hideActivityIndicator];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"searchTable" forIndexPath:indexPath];
     
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-    }
-    
-    cell.textLabel.text = [[_tableData objectAtIndex:indexPath.row] valueForKey:@"WorkoutName"];
-    cell.textLabel.numberOfLines = 6;
+    DMMove *move = self.tableData[indexPath.row];
+    cell.textLabel.text = move.name;
     
     return cell;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [_tableData count];
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.tableData count];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"LLLL d, yyyy"];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.dateFormatter setDateFormat:@"LLLL d, yyyy"];
     
-    NSString * msgInfo = [NSString stringWithFormat:@"New Move will be added to %@",[dateFormatter stringFromDate:_selectedDate]];
-   
-    NSString * msgInfoForExchange = [NSString stringWithFormat:@"Exchange move on %@",[dateFormatter stringFromDate:_selectedDate]];
+    NSString *msgInfo = [NSString stringWithFormat:@"New Move will be added to %@",[self.dateFormatter stringFromDate:_selectedDate]];
+    NSString *msgInfoForExchange = [NSString stringWithFormat:@"Exchange move on %@",[self.dateFormatter stringFromDate:_selectedDate]];
    
     if (_isExchange) {
-        UIAlertController * alert = [UIAlertController
-                                     alertControllerWithTitle:@"Exchange My Moves"
-                                     message:msgInfoForExchange
-                                     preferredStyle:UIAlertControllerStyleAlert];
-        //Add Buttons
-        
-        UIAlertAction* yesButton = [UIAlertAction
-                                    actionWithTitle:@"Exchange"
-                                    style:UIAlertActionStyleDefault
-                                    handler:^(UIAlertAction * action) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Exchange My Moves" message:msgInfoForExchange preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* yesButton = [UIAlertAction actionWithTitle:@"Exchange"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
                                         
                                         MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
-                                        //                                            [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId];
                                         [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:_userId WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
-                                        
-                                        
                                         DMLog(@"%@",self.moveDetailDictToDelete);
-                                        //                                            [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue]];
-                                        
                                         [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
-                                        
-                                        //                                            [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName:@"Custom Plan"];
-                                        
                                         [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:_userId categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:_tagsId templateName: _moveDetailDictToDelete[@"TemplateName"] WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
                                         
-                                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                                        formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
+                                        self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
                                         
                                         NSArray *exerciseArray = [self.soapWebService loadExerciseFromDb];
-                                        NSArray *filteredExerciseArray = [exerciseArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [formatter stringFromDate:_selectedDate]]];
+                                        NSArray *filteredExerciseArray = [exerciseArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [self.dateFormatter stringFromDate:_selectedDate]]];
                                         NSMutableArray * tempArr = [filteredExerciseArray mutableCopy];
                                         
                                         DMLog(@"%@",tempArr[[tempArr count] - 1]);
@@ -407,13 +378,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                         moveDetailVc.workoutMethodID = [tempArr[[tempArr count] - 1][@"WorkoutUserDateID"]intValue];
                                         
                                         moveDetailVc.currentDate = self.selectedDate;
-                                        NSString *dateString = [formatter stringFromDate:self.selectedDate];
+                                        NSString *dateString = [self.dateFormatter stringFromDate:self.selectedDate];
                                         [self.soapWebService updateWorkoutToDb:dateString];
                                         
                                         MyMovesViewController *mymoveVc = [[MyMovesViewController alloc]initWithNibName:@"MyMovesViewController" bundle:nil];
                                         
                                         [[self navigationController] pushViewController:mymoveVc animated:YES];
-                                        //                                            [[self navigationController] popToViewController:mymoveVc animated:YES];
                                     }];
         
         UIAlertAction* noButton = [UIAlertAction

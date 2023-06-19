@@ -1876,58 +1876,23 @@
     return listOfTitlearr;
 }
 
--(NSMutableArray *)loadFilteredListOfTitleToDb
-{
-    
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+- (NSArray<DMMove *> *)getMovesFromDatabase {
+        DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
         
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+        FMDatabase *db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
         }
         [db beginTransaction];
         
-        NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM ListOfTitle_Table ORDER BY WorkoutName ASC"];
+        NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM MoveDetailsTable ORDER BY MoveName ASC"];
         FMResultSet *rs = [db executeQuery:getWeightSQL];
         
-        NSMutableArray *listOfTitlearr = [[NSMutableArray alloc]init];
+        NSMutableArray *movesArray = [NSMutableArray array];
         
         while ([rs next]) {
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            
-            int WorkoutID = [rs intForColumn:@"WorkoutID"];
-            int WorkoutCategoryID = [rs intForColumn:@"WorkoutCategoryID"];
-            int WorkoutTagsID = [rs intForColumn:@"WorkoutTagsID"];
-            
-            NSString * WorkoutName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutName"]];
-            
-           
-            NSArray *arrExercise = [WorkoutName componentsSeparatedByString:@"("];
-            
-            if ([WorkoutName containsString:@"("]) {
-                WorkoutName = [NSString stringWithFormat:@"%@",[arrExercise objectAtIndex:0]];
-            }
-            
-            NSString * Link = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Link"]];
-            NSString * Notes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Notes"]];
-//            NSString * Source = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Source"]];
-//            NSString * Email = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Email"]];
-            
-            
-            [dict setObject: [NSNumber numberWithInt:WorkoutID]  forKey: @"WorkoutID"];
-            [dict setObject: [NSNumber numberWithInt:WorkoutCategoryID]  forKey: @"WorkoutCategoryID"];
-            [dict setObject: [NSNumber numberWithInt:WorkoutTagsID]  forKey: @"WorkoutTagsID"];
-            
-            [dict setObject: WorkoutName  forKey: @"WorkoutName"];
-            [dict setObject: Link  forKey: @"Link"];
-            [dict setObject: Notes  forKey: @"Notes"];
-//            [dict setObject: Source  forKey: @"Source"];
-//            [dict setObject: Email  forKey: @"Email"];
-            
-            if (![WorkoutName isEqualToString:tempStr]) {
-                tempStr = WorkoutName;
-                [listOfTitlearr addObject:dict];
-            }// very important line to remove duplicates
-
+            NSDictionary *dict = [rs resultDictionary];
+            DMMove *move = [[DMMove alloc] initWithDictionary:dict];
+            [movesArray addObject:move];
         }
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -1935,7 +1900,7 @@
         
         [db commit];
     
-    return listOfTitlearr;
+    return [movesArray copy];
 }
 
 -(NSMutableArray *)loadListOfTitleToDb
@@ -1961,7 +1926,6 @@
         int WorkoutTagsID = [rs intForColumn:@"WorkoutTagsID"];
         
         NSString * WorkoutName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutName"]];
-        
         
         NSArray *arrExercise = [WorkoutName componentsSeparatedByString:@"("];
         

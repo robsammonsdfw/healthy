@@ -20,14 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
     CGFloat animatedDistance;
     IBOutlet UISearchBar *searchBar;
 }
+@property (nonatomic, strong) NSArray *tableData;
+
 @property (nonatomic, weak) id<loadDataToMovesTbl> passDataDel;
 
 @property (nonatomic, strong) NSMutableArray *originalDataListArr;
 @property (nonatomic, strong) NSMutableArray *workOutListArr;
 @property (nonatomic, strong) NSMutableArray *categoryFilteredListArr;
 @property (nonatomic, strong) NSMutableArray *filteredTableArr;
-
-@property (nonatomic, strong) NSMutableArray *tableData;
 
 @property (nonatomic, strong) IBOutlet UITextField *searchtxtfld;
 @property (nonatomic, strong) IBOutlet UITextField *bodypartTxtFld;
