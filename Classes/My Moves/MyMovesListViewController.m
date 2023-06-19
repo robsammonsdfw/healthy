@@ -467,10 +467,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     else
     {
-        UIAlertController * alert = [UIAlertController
-                                     alertControllerWithTitle:@"Add My Moves"
-                                     message:msgInfo
-                                     preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Add My Moves" message:msgInfo preferredStyle:UIAlertControllerStyleAlert];
         //Add Buttons
         
         UIAlertAction* yesButton = [UIAlertAction

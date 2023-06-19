@@ -15,16 +15,7 @@
 #import "MyMovesWebServices.h"
 #import "MyMovesViewController.h"
 
-static inline UIColor *GetRandomUIColor()
-{
-    CGFloat r = arc4random() % 255;
-    CGFloat g = arc4random() % 255;
-    CGFloat b = arc4random() % 255;
-    return [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f];
-}
-
-
-@interface DietMasterGoViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,CPTPieChartDelegate,GotoViewControllerDelegate,UIPopoverPresentationControllerDelegate> {
+@interface DietMasterGoViewController() <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,CPTPieChartDelegate,GotoViewControllerDelegate,UIPopoverPresentationControllerDelegate> {
     MKNumberBadgeView *numberBadge;
     UIBarButtonItem* rightButton;
     CGFloat sliceValuesSum;
@@ -41,11 +32,10 @@ static inline UIColor *GetRandomUIColor()
 @property (nonatomic, strong) NSMutableAttributedString *cpfValueStr;
 @property (nonatomic) BOOL inserting;
 
-
-
 @end
 
 @implementation DietMasterGoViewController
+
 @synthesize date_currentDate,num_BMR,carbs_circular,fat_circular,protein_Circular,progressbar;
 
 //- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -66,30 +56,14 @@ static inline UIColor *GetRandomUIColor()
 - (void)viewDidLoad{
     [super viewDidLoad];
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
-//
-//    UIBezierPath *maskPath = [UIBezierPath
-//        bezierPathWithRoundedRect:self.headerBlueVw.bounds
-//        byRoundingCorners:(UIRectCornerAllCorners)
-//        cornerRadii:CGSizeMake(20, 20)
-//    ];
-//
-//    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-//
-//    maskLayer.frame = self.view.bounds;
-//    maskLayer.path = maskPath.CGPath;
-//
-//    self.headerBlueVw.layer.mask = maskLayer;
     
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: _cpfLbl.attributedText];
-
     [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0xC15F6E) range:NSMakeRange(0, 1)];
     [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x64BB60) range:NSMakeRange(4, 1)];
     [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x0095B8) range:NSMakeRange(8, 1)];
-
     [_cpfLbl setAttributedText: text];
 
-    if (IS_IPHONE_5)
-    {
+    if (IS_IPHONE_5) {
         CGRect frame = _showPopUpVw.frame;
         frame.size = CGSizeMake(60, 80);
         _showPopUpVw.frame = frame;
@@ -122,9 +96,6 @@ static inline UIColor *GetRandomUIColor()
         _thirdExpVwHeightConst.constant = 115;
     }];
     
-    //    _calPullDwnBtn.imageEdgeInsets = UIEdgeInsetsMake(25, 0, 0, 0);
-    //    _macrosPullDwnBtn.imageEdgeInsets = UIEdgeInsetsMake(35, 0, 0, 0);
-    
     NSString *stepsCount = [NSString stringWithFormat:@"%ld",(long)[[NSUserDefaults standardUserDefaults] integerForKey:@"minutesExercised"]];
     
     if ([stepsCount containsString:@"(null)"])
@@ -140,15 +111,9 @@ static inline UIColor *GetRandomUIColor()
                                             [NSNumber numberWithBool:YES], @"LoggedExeTracking",
                                             nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsValuesDict];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:@"ReloadData" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
       
-    
-//    UIImage *image = [[UIImage imageNamed:@"up_arrow_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//    [_plannedArroewBtn setImage:image forState:UIControlStateNormal];
-//    _plannedArroewBtn.tintColor = PrimaryDarkColor;
     
     self.values = [[NSMutableArray alloc] init];
     self.cpf_Values = [[NSMutableArray alloc] init];
@@ -178,19 +143,16 @@ static inline UIColor *GetRandomUIColor()
     
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.showPopUpVw.hidden = false; 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-//    self.entireView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Background"]];
-    
+    self.showPopUpVw.hidden = false;
     
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     self.hidesBottomBarWhenPushed = true;
     self.tabBarController.tabBar.frame = CGRectMake(self.tabBarController.tabBar.frame.origin.x, self.tabBarController.tabBar.frame.origin.y, self.tabBarController.tabBar.frame.size.width, 0);
     
     NSString *stepsCount = [NSString stringWithFormat:@"%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"minutesExercised"]];
-    
     if ([stepsCount containsString:@"(null)"])
     {
         lblStepsCount.text = @"0";
@@ -218,6 +180,7 @@ static inline UIColor *GetRandomUIColor()
         self.scheduledView.hidden = YES;
     }
     
+    [self reloadData];
 }
 
 - (NSInteger)numberOfSlicesInPieChartView:(MCPieChartView *)pieChartView {
@@ -229,6 +192,8 @@ static inline UIColor *GetRandomUIColor()
     {
         return self.cpf_Values.count;
     }
+    
+    return 0;
 }
 
 - (UIImage*)pieChartView:(MCPieChartView *)pieChartView imageForSliceAtIndex:(NSInteger)index
@@ -268,13 +233,14 @@ static inline UIColor *GetRandomUIColor()
             return UIColorFromHex(0xE8E8E8);
         }
     }
+    
+    return [UIColor whiteColor];
 }
 
 - (UIColor*)pieChartView:(MCPieChartView *)pieChartView colorForTextAtIndex:(NSInteger)index
 {
     return [UIColor clearColor];
 }
-
 
 - (CGFloat)pieChartView:(MCPieChartView *)pieChartView valueForSliceAtIndex:(NSInteger)index {
     if (pieChartView == _remaining_Pie)
@@ -285,6 +251,8 @@ static inline UIColor *GetRandomUIColor()
     {
         return [[self.cpf_Values objectAtIndex:index] floatValue];
     }
+    
+    return 0;
 }
     
 -(void)plusButtonImageColor
@@ -381,7 +349,6 @@ static inline UIColor *GetRandomUIColor()
 }
 
 
-
 - (IBAction)sendMessageBtn:(id)sender {
     MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
     [self.navigationController pushViewController:vc animated:YES];
@@ -459,23 +426,7 @@ static inline UIColor *GetRandomUIColor()
 
 - (IBAction)expandBtnAvtion:(id)sender {
     
-    /*    CGRect contentRect = CGRectMake(0, 0, self.entireView.frame.size.width, self.entireView.frame.size.height);
-     
-     for (UIView *view in self.scrollView.subviews) {
-     contentRect = CGRectUnion(contentRect, view.frame);
-     }
-     self.scrollView.contentSize = contentRect.size;*/
-    
-    
-    //    [self rotateButtonImage:sender];
     _hideShowStack.hidden = false;
-    //    _secondHideShowStackVw.hidden = true;
-    //    _secondHideShowConstant.constant = 0;
-    //    _secondExpandViewHeightConst.constant = 125;
-    //
-    //    _weightHideShowStack.hidden = true;
-    //    _weightHideShowHeightConst.constant = 0;
-    //    _thirdExpVwHeightConst.constant = 115;
     
     if([status isEqualToString:@"first"])
     {
@@ -500,8 +451,6 @@ static inline UIColor *GetRandomUIColor()
         
         status = @"first";
     }
-    //    leftStatus = @"new";
-    //    weightStatus = @"up";
 }
 
 - (IBAction)leftExpandBtnAction:(id)sender{
@@ -580,7 +529,6 @@ static inline UIColor *GetRandomUIColor()
     if([weightStatus isEqualToString:@"up"])
     {
         [UIView transitionWithView:_weightView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            //               _macrosPullDwnBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 35, 0);
             _weightHideShowHeightConst.constant = 115;
             _thirdExpVwHeightConst.constant = 250;
         } completion:NULL];
@@ -597,10 +545,7 @@ static inline UIColor *GetRandomUIColor()
         _weightSeperatorLbl.text = @"";
         weightStatus = @"up";
     }
-    //    status = @"first";
-    //    leftStatus = @"new";
 }
-
 
 -(void)rotateButtonImage:(UIButton *)button
 {
@@ -613,7 +558,6 @@ static inline UIColor *GetRandomUIColor()
     }];
 }
 
-
 -(IBAction)showSettings:(id)sender {
         AppSettings *appVC = [[AppSettings alloc]initWithNibName:@"AppSettings" bundle:nil];
         appVC.hidesBottomBarWhenPushed = YES;
@@ -624,26 +568,15 @@ static inline UIColor *GetRandomUIColor()
     [super viewWillDisappear:animated];
     
     self.navigationController.navigationBar.layer.zPosition = 0;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    // I think this is the issue w/ reloading data. The view technically never is deallocated.
+    //[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.values removeAllObjects];
 }
-
--(void)viewDidUnload {
-    [super viewDidUnload];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ReloadData" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LaunchDietWizard" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UserLoginFinished" object:nil];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self reloadData];
-}
-
 
 - (void)initProgressBar
 {
@@ -709,10 +642,6 @@ static inline UIColor *GetRandomUIColor()
 
 -(IBAction)showManageFoods:(id) sender {
     
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - WorkOutList
@@ -1195,7 +1124,6 @@ static inline UIColor *GetRandomUIColor()
     
     //HHT change start
     if (caloriesREmaining < 0) {
-//        lblCaloriesRemainingValue.text = [NSString stringWithFormat:@"%.0f", caloriesREmaining/2];
         [self.remainingCalories_Circular_Progress setValue:1];
         [self.values removeAllObjects];
         [self.values addObject:[NSNumber numberWithInt:1]];
@@ -1203,7 +1131,6 @@ static inline UIColor *GetRandomUIColor()
         [_remaining_Pie reloadData];
     }
     else {
-//        lblCaloriesRemainingValue.text = [NSString stringWithFormat:@"%.0f", caloriesREmaining/2];
         [self.remainingCalories_Circular_Progress setValue:caloriesREmaining];
         [self.values removeAllObjects];
         [self.values addObject:[NSNumber numberWithInt:caloriesREmaining]];

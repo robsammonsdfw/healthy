@@ -1399,10 +1399,8 @@
     [db commit];
     
     [[NSUserDefaults standardUserDefaults] setObject:MoveNameUnique forKey:@"MoveNameUnique"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-//    [self mobilePlanMoveSetList:MoveNameUnique];
 }
+
 //new API
 -(void)mobilePlanDateList:(NSDate *)planDate DateUniqueID:(NSString *)uniqueID Dict:(NSDictionary *)dict
 {

@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Represents a "Move" aka exercise in DMG.
+/// Represents a "Move" aka exercise/workout in DMG.
 @interface DMMove : NSObject
 @property (nonatomic, strong, readonly) NSNumber *moveId;
 @property (nonatomic, strong, readonly) NSNumber *companyId;
