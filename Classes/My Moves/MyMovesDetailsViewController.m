@@ -274,14 +274,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                                     
                                     MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc]initWithNibName:@"MyMovesListViewController" bundle:nil];
-                                    
-                                    int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
-                                    
-                                    moveListVc.selectedDate = self.currentDate;
-                                    moveListVc.userId = UserID;
-                                    moveListVc.isExchange = "YES";
-                                    moveListVc.moveDetailDictToDelete = _moveDetailDict;
-                                    moveListVc.exchangeDel = self;
+#warning TODO: Reconnect this.
+//                                    int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
+//
+//                                    moveListVc.selectedDate = self.currentDate;
+//                                    moveListVc.userId = UserID;
+//                                    moveListVc.isExchange = "YES";
+//                                    moveListVc.moveDetailDictToDelete = _moveDetailDict;
+//                                    moveListVc.exchangeDel = self;
                                     
                                     [self.navigationController pushViewController:moveListVc animated:YES];
                                     //        }

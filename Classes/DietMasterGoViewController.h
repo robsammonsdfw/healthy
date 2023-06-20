@@ -24,7 +24,7 @@
 
 @class AppDelegate;
 
-@interface DietMasterGoViewController : UIViewController <MBProgressHUDDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate,UINavigationControllerDelegate,WSWorkoutList,MCPieChartViewDataSource, MCPieChartViewDelegate> {
+@interface DietMasterGoViewController : UIViewController <MBProgressHUDDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate> {
     
     AppDelegate *appddd;
     

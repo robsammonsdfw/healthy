@@ -13,88 +13,12 @@
 
 @implementation MyMovesWebServices
 
--(void)callGetWebservice:(NSDictionary *)requestDict {
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
-    recordResults = FALSE;
-    
-    NSString *requestType = [requestDict valueForKey:@"RequestType"];
-    NSString *soapMessage = nil;
-    
-    self.apiRequestType = requestType;
-    
-    if ([requestType isEqualToString:@"WorkoutOffline"]) {
-        soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                       "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.datacontract.org/2004/07/Lifestyles.BOL.Models>"
-                       "<soap:Body>"
-                       "</soap:Body>"
-                       "</soap:Envelope>"];
-    }
-    
-    if ([requestType isEqualToString:@"Category"]) {
-        soapMessage = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                       "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.datacontract.org/2004/07/Lifestyles.BOL.Models>"
-                       "<soap:Body>"
-                       "</soap:Body>"
-                       "</soap:Envelope>"];
-    }
-    
-    NSString *urlToWebservice = [NSString stringWithFormat:@"https://lifestyles.colanonline.net/api/List/%@", requestType];
-    NSString *tempuriValue = [NSString stringWithFormat:@"https://lifestyles.colanonline.net/api/List/%@", requestType];
-    
-    NSURL *url = [NSURL URLWithString:urlToWebservice];
-    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
-    NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
-    
-    if ([requestType isEqualToString:@"WorkoutOffline"]) {
-        [theRequest setHTTPMethod:@"GET"];
-        [theRequest addValue: @"application/json" forHTTPHeaderField:@"Content-Type"];
-    }
-    else
-    {
-        [theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-        [theRequest addValue: tempuriValue forHTTPHeaderField:@"SOAPAction"];
-        //    [theRequest addValue: msgLength forHTTPHeaderField:@"Content-Length"];
-        [theRequest setHTTPMethod:@"GET"];
-    }
-    //    [theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    NSURLSession *soapSession = [NSURLSession sessionWithConfiguration:   [NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *dataTask = [soapSession dataTaskWithURL: url];
-    self.responseData = [[NSMutableData alloc]init];
-    [dataTask resume];
-    
-    NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-    
-    timeOutTimer = [NSTimer scheduledTimerWithTimeInterval:60.0
-                                                    target:self
-                                                  selector:@selector(timeOutWebservice:)
-                                                  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:theConnection, @"connection", nil]
-                                                   repeats:NO];
-    
-    if( theConnection )
-    {
-        self.webData = [NSMutableData data];
-    }
-    else
-    {
-        DMLog(@"theConnection is NULL");
-    }
-    
-}
-
--(void)offlineSyncApi
-{
+- (void)offlineSyncApi {
     NSOperationQueue *operationQueue = [NSOperationQueue new];
     NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
         
-//        new API
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *AuthHash = [prefs valueForKey:@"authkey_dietmastergo"];
-      
-//        NSString *AuthHash = @"SRQ8MBFY2";
-//        NSString *AuthHash = @"TEWM6N113213";
 
         DietmasterEngine *engine = [DietmasterEngine sharedInstance];
         _myBool =  engine.sendAllServerData;
@@ -109,10 +33,8 @@
               
         NSDictionary *requestDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                      AuthHash, @"AuthHash",
-                                     [NSNumber numberWithBool:_myBool], @"SendAllServerData",
+                                     [NSNumber numberWithBool:YES], @"SendAllServerData",
                                      nil];
-    
-        DMLog(@"%@",requestDict);
         
         __block NSMutableDictionary *resultsDictionary;
         if ([NSJSONSerialization isValidJSONObject:requestDict]) {//validate it
@@ -131,7 +53,6 @@
                      resultsDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error1];
                     
                      [self clearTableDataS];
-                     DMLog(@"%@",resultsDictionary);
                      [self serverUserPlans:resultsDictionary];
                      [self.WSGetUserWorkoutplanOfflineDelegate getUserWorkoutplanOfflineListFinished:resultsDictionary];
                      [self updateFromNewToNormalToDb];
@@ -1258,8 +1179,18 @@
 }
 
 //new API
--(void)addMovesToDb:(NSDictionary *)dict SelectedDate:(NSDate*)planDate planName:(NSString *)planName categoryName:(NSString*)CatName CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId status:(NSString*)status PlanNameUnique:(NSString*)PlanNameUnique DateListUnique:(NSString*)DateListUnique MoveNameUnique:(NSString*)MoveNameUnique;
-{
+-(void)addMovesToDb:(NSDictionary *)dict
+       SelectedDate:(NSDate*)planDate
+           planName:(NSString *)planName
+       categoryName:(NSString*)CatName
+         CategoryID:(int)categoryID
+           tagsName:(NSString*)tag
+             TagsId:(int)tagsId
+             status:(NSString*)status
+     PlanNameUnique:(NSString*)PlanNameUnique
+     DateListUnique:(NSString*)DateListUnique
+     MoveNameUnique:(NSString*)MoveNameUnique {
+
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
@@ -1636,126 +1567,6 @@
     }
     [db commit];
 
-}
-#pragma mark My Moves List tags categories
--(void)saveMovesTagsCategoriesToDb:(NSDictionary *)movesDict
-{
-    if (movesDict[@"ListOfTitle"] != (id)[NSNull null])
-    {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-        if (![db open]) {
-        }
-        [db beginTransaction];
-        
-//        NSString * deleteSQL = [NSString stringWithFormat: @"DELETE FROM ListOfTitle_Table"];
-//        [db executeUpdate:deleteSQL];
-        
-        NSMutableArray * monthlyArr = [[NSMutableArray alloc]init];
-//        [monthlyArr addObjectsFromArray:movesDict[@"ListOfTitle"]];
-        
-        if([NSNull null] != [movesDict[@"ListOfTitle"] copy]) {
-            monthlyArr = [NSMutableArray arrayWithArray:[movesDict[@"ListOfTitle"] mutableCopy]];
-            if ([monthlyArr count] != 0)
-            {
-                for (NSDictionary*dict in monthlyArr) {
-                    
-                    int WorkoutID = [dict[@"WorkoutID"] integerValue];
-                    int WorkoutCategoryID = [dict[@"WorkoutCategoryID"] integerValue];
-                    int WorkoutTagsID = [dict[@"WorkoutTagsID"]integerValue];
-                    
-                    NSString * WorkoutName = dict[@"WorkoutName"];
-                    NSString * Link = dict[@"Link"];
-                    //              NSString * Notes = dict[@"Notes"];
-                    NSString * Notes = @"Notes";
-//                    NSString * Source = dict[@"Source"];
-//                    NSString * Email = dict[@"Email"];
-                    
-                    NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ListOfTitle_Table (WorkoutID,WorkoutCategoryID,WorkoutTagsID,WorkoutName,Link,Notes,Source,Email) VALUES(\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",WorkoutID,WorkoutCategoryID,WorkoutTagsID,WorkoutName,Link,Notes,nil,nil];
-                    
-                    [db executeUpdate:insertSQL];
-                    if ([db hadError]) {
-                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                    }
-                    [db commit];
-                }
-            }
-        }
-    }
-    
-    if (movesDict[@"ListOfBodyPart"] != (id)[NSNull null])
-    {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-        if (![db open]) {
-        }
-        [db beginTransaction];
-        
-        NSMutableArray * monthlyArr = [[NSMutableArray alloc]init];
-        
-        if([NSNull null] != [movesDict[@"ListOfBodyPart"] copy]) {
-            monthlyArr = [NSMutableArray arrayWithArray:[movesDict[@"ListOfBodyPart"] mutableCopy]];
-            
-            if ([monthlyArr count] != 0)
-            {
-                for (NSDictionary*dict in monthlyArr) {
-                    
-                    
-                    int WorkoutCategoryID = [dict[@"WorkoutCategoryID"] intValue];
-                    int WorkoutUserDateID = [dict[@"WorkoutUserDateID"] intValue];
-                    NSString * WorkoutCategoryName = dict[@"WorkoutCategoryName"];
-                    
-                    NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ListOfBodyPart_Table (WorkoutCategoryID,WorkoutCategoryName,WorkoutUserDateID) VALUES(\"%d\",\"%@\",\"%d\")",WorkoutCategoryID,WorkoutCategoryName,WorkoutUserDateID];
-                    
-                    [db executeUpdate:insertSQL];
-                    if ([db hadError]) {
-                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                    }
-                }
-            }
-            [db commit];
-        }
-    }
-    
-    if (movesDict[@"ListOfTags"] != (id)[NSNull null])
-    {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-        if (![db open]) {
-        }
-        [db beginTransaction];
-        
-        NSMutableArray * monthlyArr = [[NSMutableArray alloc]init];
-        
-        if([NSNull null] != [movesDict[@"ListOfBodyPart"] copy]) {
-            
-            monthlyArr = [NSMutableArray arrayWithArray:[movesDict[@"ListOfTags"] mutableCopy]];
-            
-            if ([monthlyArr count] != 0)
-            {
-                for (NSDictionary*dict in monthlyArr) {
-                    
-                    int WorkoutTagsID = [dict[@"WorkoutTagsID"] intValue];
-                    int WorkoutCategoryID = [dict[@"WorkoutCategoryID"] intValue];
-                    
-                    NSString * Tags = dict[@"Tags"];
-                    
-                    NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ListOfTags_Table (WorkoutTagsID,WorkoutCategoryID,Tags) VALUES(\"%d\",\"%d\",\"%@\")",WorkoutTagsID,WorkoutCategoryID,Tags];
-                    
-                    [db executeUpdate:insertSQL];
-                    if ([db hadError]) {
-                        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                    }
-                }
-            }
-            [db commit];
-        }
-       
-        
-    }
 }
 
 - (NSArray *)loadListOfTags {
@@ -2413,7 +2224,9 @@
     
     [db commit];
 }
--(void)addExerciseToDb:(NSDictionary *)dict workoutDate:(NSDate*)date userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutDateID:(int)WorkoutDateID
+-(void)addExerciseToDb:(NSDictionary *)dict
+           workoutDate:(NSDate*)date
+                userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutDateID:(int)WorkoutDateID
 {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
@@ -3200,6 +3013,7 @@
     
     return arr;
 }
+
 #pragma mark Sets for my moves
 -(void)updateTimeForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict WorkoutTimer:(NSString*)WorkoutTime
 {
@@ -3270,6 +3084,7 @@
     [db commit];
     
 }
+
 -(NSMutableArray *)loadSetsToBeDeletedFromDb
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
@@ -3310,6 +3125,7 @@
     [db commit];
     return arr;
 }
+
 -(NSMutableArray *)loadSetsToBeUpdatedFromDb
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
@@ -3356,6 +3172,7 @@
     [db commit];
     return arr;
 }
+
 -(NSMutableArray *)loadSetsToBeAddedFromDb
 {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
@@ -3402,6 +3219,7 @@
     [db commit];
     return arr;
 }
+
 -(void)addSetsForExercise:(int)WorkoutUserDateId Dict:(NSDictionary *)dict
 {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -3439,68 +3257,6 @@
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
-}
-
-#pragma mark TIMEOUT METHOD
--(void)timeOutWebservice:(NSTimer *)theTimer {
-    
-    NSURLConnection *connection = [[theTimer userInfo] objectForKey:@"connection"];
-    [connection cancel];
-    connection = nil;
-    
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
-    self.webData = nil;
-    
-    if ([self.WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
-        [self.WSWorkoutListDelegate getWorkoutListFailed:@"error"];
-    }
-    
-    if ([self.WSCategoryListListDelegate respondsToSelector:@selector(getCategoryListFailed:)]) {
-        [self.WSCategoryListListDelegate getCategoryListFailed:@"error"];
-    }
-}
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
-{
-    //handle data here
-    [self.responseData appendData:data];
-    
-}
-
-
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
-{
-    //Called when the data transfer is complete
-    //Client side errors are indicated with the error parameter
-    
-    if (error) {
-        
-        DMLog(@"%@ failed: %@", task.originalRequest.URL, error);
-        if ([self.WSWorkoutListDelegate respondsToSelector:@selector(getWorkoutListFailed:)]) {
-            [self.WSWorkoutListDelegate getWorkoutListFailed: [NSString stringWithFormat:@"%@",error]];
-        }
-        if ([self.WSCategoryListListDelegate respondsToSelector:@selector(getCategoryListFailed:)]) {
-            [self.WSCategoryListListDelegate getCategoryListFailed:[NSString stringWithFormat:@"%@",error]];
-        }
-        
-    }else{
-        
-        DMLog(@"DONE. Received Bytes: %lu", (unsigned long)[self.responseData length]);
-        
-        NSError *localError = nil;
-        NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:&localError];
-        
-        if ([self.apiRequestType isEqualToString:@"WorkoutOffline"]) {
-            [self.WSWorkoutListDelegate getWorkoutListFinished:parsedObject];
-            [self saveMovesTagsCategoriesToDb:parsedObject];
-        }
-        
-        if ([self.apiRequestType isEqualToString:@"Category"]) {
-            [self.WSCategoryListListDelegate getCategoryListFinished:parsedObject];
-        }
-        
-    }
 }
 
 - (NSMutableArray *)filterObjectsByKeys:(NSString *)key array:(NSArray *)array {

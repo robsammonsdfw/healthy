@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 @class DMMove;
 
-@protocol WSWorkoutList,WSCategoryList,WSGetUserWorkoutplanOffline;
+@protocol WSGetUserWorkoutplanOffline;
 
 @interface MyMovesWebServices : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate, NSURLSessionDelegate> {
     BOOL recordResults;
@@ -23,16 +23,11 @@
 @property (nonatomic, strong) NSString *apiRequestType;
 @property (nonatomic) BOOL myBool;
 
-@property (nonatomic, weak) id<WSWorkoutList> WSWorkoutListDelegate;
-@property (nonatomic, weak) id<WSCategoryList> WSCategoryListListDelegate;
 @property (nonatomic, weak) id<WSGetUserWorkoutplanOffline> WSGetUserWorkoutplanOfflineDelegate;
 
 @property (nonatomic, strong) NSMutableData *webData;
 @property (nonatomic, strong) NSMutableString *soapResults;
 @property (nonatomic, strong) NSXMLParser *xmlParser;
-
--(void)callGetWebservice:(NSDictionary *)requestDict;
--(void)timeOutWebservice:(NSTimer *)theTimer;
 
 - (NSArray *)loadExerciseFromDb;
 -(NSMutableArray *)loadWorkoutFromDb;
@@ -58,6 +53,7 @@
 -(void)clearedDataFromWeb:(NSString *)uniqueId;
 
 -(void)addMovesToDb:(NSDictionary *)dict SelectedDate:(NSDate*)planDate planName:(NSString *)planName categoryName:(NSString*)CatName CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId status:(NSString*)status PlanNameUnique:(NSString*)PlanNameUnique DateListUnique:(NSString*)DateListUnique MoveNameUnique:(NSString*)MoveNameUnique;
+
 -(void)mobilePlanDateList:(NSDate *)planDate DateUniqueID:(NSString *)uniqueID Dict:(NSDictionary *)dict;
 -(void)mobilePlanMoveList:(NSString *)MoveName VideoLink:(NSString *)VideoLink Notes:(NSString *)Notes UniqueID:(NSString *)UniqueID ParentUniqueID:(NSString *)ParentUniqueID MoveID:(int)MoveID PlanDateStr:(NSString *)PlanDateStr;
 -(void)mobilePlanMoveSetList:(NSString *)ParentUniqueID setDict:(NSDictionary *)dict;
@@ -127,17 +123,6 @@
 
 -(void)getMyMovesData;
 
-@end
-
-
-@protocol WSWorkoutList <NSObject>
-- (void)getWorkoutListFinished:(NSDictionary *)responseArray;
-- (void)getWorkoutListFailed:(NSString *)failedMessage;
-@end
-
-@protocol WSCategoryList <NSObject>
-- (void)getCategoryListFinished:(NSDictionary *)responseArray;
-- (void)getCategoryListFailed:(NSString *)failedMessage;
 @end
 
 @protocol WSGetUserWorkoutplanOffline <NSObject>

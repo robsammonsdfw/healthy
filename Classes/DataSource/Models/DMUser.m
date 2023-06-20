@@ -139,4 +139,9 @@
     return [self.dateFormatter stringFromDate:self.goalStartDate];
 }
 
+- (NSString *)description {
+    NSString *base = [super description];
+    return [NSString stringWithFormat:@"%@: %@", base, [self listPropertiesAsString]];
+}
+
 @end

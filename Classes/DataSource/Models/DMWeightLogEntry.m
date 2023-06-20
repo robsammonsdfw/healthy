@@ -55,4 +55,9 @@
     return self;
 }
 
+- (NSString *)description {
+    NSString *base = [super description];
+    return [NSString stringWithFormat:@"%@: %@", base, [self listPropertiesAsString]];
+}
+
 @end

@@ -8,9 +8,11 @@
 #import <UIKit/UIKit.h>
 #import "MyMovesListViewController.h"
 
+@protocol exchangeDelegate <NSObject>
+- (void)passDataOnExchange:(NSDictionary *)dict;
+@end
+
 @interface MyMovesDetailsViewController : UIViewController
-{
-}
 @property (nonatomic, strong) IBOutlet UIView *moveNameView;
 @property (nonatomic, strong) IBOutlet UITextView *exerciseNotesTxtView;
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
@@ -32,9 +34,4 @@
 @property (nonatomic, strong) IBOutlet UIButton *playVideoBtn;
 @property (nonatomic, strong) IBOutlet UIImageView *playImg;
 @property (nonatomic, strong) IBOutlet UIView *thumbNailView;
-
-@end
-
-@protocol exchangeDelegate <NSObject>
-- (void)passDataOnExchange:(NSDictionary *)dict;
 @end

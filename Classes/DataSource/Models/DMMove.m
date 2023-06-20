@@ -24,18 +24,19 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _moveId = dictionary[@"moveID"];
-        _companyId = dictionary[@"companyID"];
+        // See note in -dictionaryRepresentation why this looks at two sets of keys.
+        _moveId = dictionary[@"MoveID"] ?: dictionary[@"moveID"];
+        _companyId = dictionary[@"CompanyID"] ?: dictionary[@"companyID"];
         
-        NSString *name = dictionary[@"moveName"];
+        NSString *name = dictionary[@"MoveName"] ?: dictionary[@"moveName"];
         name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         _name = name;
         
-        _videoUrl = dictionary[@"videoLink"];
+        _videoUrl = dictionary[@"VideoLink"] ?: dictionary[@"videoLink"];
 
-        NSString *notes = dictionary[@"notes"];
+        NSString *notes = dictionary[@"Notes"] ?: dictionary[@"notes"];
         notes = [notes stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         notes = [notes stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         notes = [notes stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -46,6 +47,13 @@
 
 - (NSDictionary *)dictionaryRepresentation {
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                          self.moveId, @"MoveID",
+                          self.companyId, @"CompanyID",
+                          self.name, @"MoveName",
+                          self.videoUrl, @"VideoLink",
+                          self.notes, @"Notes",
+                          // Due to the awesome data design by the overseas vendor, the local database uses capital, while
+                          // the web API uses lowercase, thus to make this support both use cases we output both sets:
                           self.moveId, @"moveID",
                           self.companyId, @"companyID",
                           self.name, @"moveName",
@@ -64,6 +72,11 @@
                            self.videoUrl,
                            self.notes ];
     return sqlString;
+}
+
+- (NSString *)description {
+    NSString *base = [super description];
+    return [NSString stringWithFormat:@"%@: %@", base, [self listPropertiesAsString]];
 }
 
 @end

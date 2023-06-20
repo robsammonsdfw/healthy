@@ -50,4 +50,9 @@
     return sqlString;
 }
 
+- (NSString *)description {
+    NSString *base = [super description];
+    return [NSString stringWithFormat:@"%@: %@", base, [self listPropertiesAsString]];
+}
+
 @end

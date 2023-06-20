@@ -21,9 +21,6 @@
 #import "PopUpView.h"
 #import "DietMasterGoViewController.h"
 
-
-//#import "RSDFDatePickerView.h"
-
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
 static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
@@ -31,7 +28,7 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #import <HealthKit/HealthKit.h>
-@interface MyMovesViewController ()<FSCalendarDataSource,FSCalendarDelegate,FSCalendarDelegateAppearance,WSWorkoutList,WSCategoryList,WSGetUserWorkoutplanOffline,UITextViewDelegate,UITableViewDelegate,UITableViewDataSource,loadDataToMovesTbl,GotoViewControllerDelegate>
+@interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, WSGetUserWorkoutplanOffline, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, loadDataToMovesTbl, GotoViewControllerDelegate>
 {
     CGFloat animatedDistance;
     MyMovesWebServices *soapWebService;
@@ -86,7 +83,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     {
         self.showPopUpVw.hidden = false;
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"isNewDesign"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     else
     {
@@ -94,7 +90,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
     [self.navigationController setNavigationBarHidden:NO];
-
     self.navigationItem.hidesBackButton = YES;
 
     if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"])
@@ -194,15 +189,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.navigationItem.hidesBackButton = YES;
         self.navigationItem.title=@"My Moves";
         self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-        
-        //set right navigation bar
-        UIImage *btnImage1 = [[UIImage imageNamed:@"set32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.bounds = CGRectMake( 0, 0, btnImage1.size.width, btnImage1.size.height );
-        btn1.tintColor = [UIColor whiteColor];
-        [btn1 addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchDown];
-        [btn1 setImage:btnImage1 forState:UIControlStateNormal];
-        
+                
         UIImage *listImg = [[UIImage imageNamed:@"viewlist.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         listCalendarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         listCalendarBtn.bounds = CGRectMake( 0, 0, listImg.size.width, listImg.size.height );
@@ -226,10 +213,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [self tabBarAction:calendarViewBtn];
         self.navigationItem.leftBarButtonItems = [[NSArray alloc]initWithObjects:listCalendarBarBtn,nil];
         
-        UIBarButtonItem * settingsBtn = [[UIBarButtonItem alloc] initWithCustomView:btn1];
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.taskMode = @"View";
-        self.navigationItem.rightBarButtonItem = settingsBtn;
         
         //set date in current date variable
         NSDate* sourceDate = [NSDate date];
@@ -242,7 +227,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         // call functin to set date label
         [self setDateLbl:sourceDate];
-
         
         //set textView border color
         commentsTxtView.layer.borderColor = [UIColor grayColor].CGColor;
@@ -252,7 +236,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         soapWebService = [[MyMovesWebServices alloc] init];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            userId = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
+        userId = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
         
         if IS_IPHONE_X_XR_XS
         {
@@ -283,7 +267,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     else
     {
-        AppSettings*appSettings = [[AppSettings alloc] initWithNibName: @"AppSettings" bundle: nil];
+        AppSettings *appSettings = [[AppSettings alloc] initWithNibName: @"AppSettings" bundle: nil];
         appSettings.title = @"Settings";
         self.navigationItem.title = @"Settings";
         [self.navigationController setViewControllers:@[appSettings] animated:NO];
@@ -383,7 +367,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSOperationQueue *operationQueue = [NSOperationQueue new];
     NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
         DMLog(@"The block operation ended, Do something such as show a successmessage etc");
-        //This the completion block operation
     }];
     NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
         //This is the worker block operation
@@ -831,15 +814,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
         [self loadSectionsForMovesTbl];
     }
-}
-
-
--(IBAction)showSettings:(id)sender {
-    
-    AppSettings *appVC = [[AppSettings alloc]initWithNibName:@"AppSettings" bundle:nil];
-    appVC.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:appVC animated:YES];
-
 }
 
 -(void)apiCallOnMonthChangeFromList
@@ -1435,15 +1409,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 -(IBAction)addMove:(UIButton*)sender{
 
     dispatch_async(dispatch_get_main_queue(), ^{
+#warning TODO: Reconnect this.
         MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc]initWithNibName:@"MyMovesListViewController" bundle:nil];
-        moveListVc.selectedDate = self.date_currentDate;
-        moveListVc.userId = userId;
+//        moveListVc.selectedDate = self.date_currentDate;
+//        moveListVc.userId = userId;
         moveListVc.passDataDel = self;
         NSString *statusValue = @"New";
         NSString *filter = @"%K == %@";
         NSPredicate *newPredicate = [NSPredicate predicateWithFormat:filter,@"Status",statusValue];
         NSArray * tempArr = [[NSMutableArray alloc]initWithArray:[_userPlanListData filteredArrayUsingPredicate:newPredicate]];
-        moveListVc.newCount = [tempArr count];
+        //moveListVc.newCount = [tempArr count];
+#warning TODO: Reconnect this.
 //        sender.backgroundColor = UIColor.lightGrayColor;
         sender.alpha = 1;
         [self.navigationController pushViewController:moveListVc animated:YES];
@@ -1707,7 +1683,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     _userPlanMoveListData    = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanMoveList"]];
     _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanMoveSetList"]];
 
-       [self loadEventCalendar:[[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]]];
+    [self loadEventCalendar:[[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]]];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [movesTblView reloadData];

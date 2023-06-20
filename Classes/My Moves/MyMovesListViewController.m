@@ -19,14 +19,39 @@ static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
 static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
-@interface MyMovesListViewController ()<WSWorkoutList,WSCategoryList,UITableViewDelegate,UITableViewDataSource,SelectedBodyPartDelegate,UISearchBarDelegate>
-{
-    IBOutlet UITextField *templateNameTxtFld;
-}
+/// Cell identifier for a move's cell.
+static NSString *DMMovesCellIdentifier = @"MovesCellIdentifier";
+
+@interface MyMovesListViewController () <UITableViewDelegate, UITableViewDataSource, SelectedBodyPartDelegate, UISearchBarDelegate>
+
+@property (nonatomic, strong) IBOutlet UITableView *tblView;
+@property (nonatomic, strong) PickerViewController *picker;
+@property (nonatomic) CGFloat animatedDistance;
+@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) MyMovesWebServices *soapWebService;
 @property (nonatomic, strong) NSArray *tagsArr;
 @property (nonatomic, strong) NSArray *BodyPartDataArr;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSMutableArray *originalDataListArr;
+@property (nonatomic, strong) NSMutableArray *workOutListArr;
+@property (nonatomic, strong) NSMutableArray *categoryFilteredListArr;
+@property (nonatomic, strong) NSMutableArray *filteredTableArr;
+@property (nonatomic, strong) IBOutlet UITextField *templateNameTxtFld;
+@property (nonatomic, strong) IBOutlet UITextField *searchtxtfld;
+@property (nonatomic, strong) IBOutlet UITextField *bodypartTxtFld;
+@property (nonatomic, strong) IBOutlet UITextField *filter1;
+@property (nonatomic, strong) IBOutlet UITextField *filter2;
+@property (nonatomic, strong) IBOutlet UIButton *filterOneBtn;
+@property (nonatomic, strong) IBOutlet UIButton *bodyPartBtn;
+@property (nonatomic) BOOL isExchange;
+@property (nonatomic, strong) NSDate * selectedDate;
+@property (nonatomic) NSInteger userId;
+@property (nonatomic) NSInteger categoryID;
+@property (nonatomic) NSInteger tagsId;
+@property (nonatomic) NSInteger newCount;
+@property (nonatomic, strong) NSArray *tableData;
+@property (nonatomic, strong) NSDictionary * moveDetailDictToDelete;
+
 @end
 
 @implementation MyMovesListViewController
@@ -35,28 +60,28 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [super viewDidLoad];
     self.dateFormatter = [[NSDateFormatter alloc] init];
     
-    _tableData = [[NSMutableArray alloc]init];
-    _originalDataListArr = [[NSMutableArray alloc]init];
-    _workOutListArr = [[NSMutableArray alloc]init];
+    _tableData = [[NSMutableArray alloc] init];
+    _originalDataListArr = [[NSMutableArray alloc] init];
+    _workOutListArr = [[NSMutableArray alloc] init];
     _BodyPartDataArr = @[];
-    _categoryFilteredListArr = [[NSMutableArray alloc]init];
+    _categoryFilteredListArr = [[NSMutableArray alloc] init];
     _tagsArr = @[];
-    _filteredTableArr = [[NSMutableArray alloc]init];
+    _filteredTableArr = [[NSMutableArray alloc] init];
     
-    searchBar.delegate = self;
+    self.searchBar.delegate = self;
     
-    picker = [[PickerViewController alloc]initWithNibName:@"PickerViewController" bundle:nil];
+    self.picker = [[PickerViewController alloc]initWithNibName:@"PickerViewController" bundle:nil];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [self.navigationController.navigationBar setTranslucent:NO];
     
-    dispatch_async(dispatch_get_main_queue(), ^{ [self loadTable]; });
+    [self.tblView registerClass:[UITableViewCell class] forCellReuseIdentifier:DMMovesCellIdentifier];
+    
+    [self loadTable];
 }
 
 - (void)loadTable {
     self.soapWebService = [[MyMovesWebServices alloc] init];
-    NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @"WorkoutOffline", @"RequestType",nil];
-    
+
     if(_isExchange)
     {
         [DMActivityIndicator showActivityIndicator];
@@ -94,68 +119,43 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                                              ascending:YES];
                 _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
                 
-                [tblView reloadData];
+                [self.tblView reloadData];
             });
         }
-        else
-        {
-            [self.soapWebService callGetWebservice:wsWorkInfoDict];
-        }
     }
-    else
-    {
-        [DMActivityIndicator hideActivityIndicator];
+    else {
         [self.bodyPartBtn setUserInteractionEnabled:YES];
         [self.bodypartTxtFld setUserInteractionEnabled:YES];
         [self.filter1 setUserInteractionEnabled:YES];
         [self.filterOneBtn setUserInteractionEnabled:YES];
-        
-        self.soapWebService.WSWorkoutListDelegate = self;
-  
-        NSOperationQueue *operationQueue = [NSOperationQueue new];
-        NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-            DMLog(@"The block operation ended, Do something such as show a successmessage etc");
-            //This the completion block operation
-        }];
-        NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
-            [DMActivityIndicator showActivityIndicator];
-            if ([[self.soapWebService loadListOfTitleToDb] count] != 0) {
-                _tableData = [self.soapWebService getMovesFromDatabase];
-                _originalDataListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
-                _BodyPartDataArr = [self.soapWebService loadListOfBodyPart];
-                _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
-                _tagsArr = [self.soapWebService loadListOfTags];
-                [tblView reloadData];
-            }
-            else
-            {
-                [self.soapWebService callGetWebservice:wsWorkInfoDict];
-            }
-        }];
-        [blockCompletionOperation addDependency:blockOperation];
-        [operationQueue addOperation:blockCompletionOperation];
-        [operationQueue addOperation:blockOperation];
+          
+        self.tableData = [self.soapWebService getMovesFromDatabase];
+//                _originalDataListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
+//                _BodyPartDataArr = [self.soapWebService loadListOfBodyPart];
+//                _categoryFilteredListArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService loadListOfTitleToDb]];
+//                _tagsArr = [self.soapWebService loadListOfTags];
+        [self.tblView reloadData];
     }
 }
 
 - (IBAction)bodyPartAction:(id)sender {
     if ([_BodyPartDataArr count]!=0) {
-        picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
-        picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        picker.selectedBodyPartDel = self;
-        picker.pickerData = _BodyPartDataArr;
-        picker.dataType = DMPickerDataTypeMoveCategories;
-        [self presentViewController:picker animated:YES completion:nil];
+        self.picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        self.picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        self.picker.selectedBodyPartDel = self;
+        self.picker.pickerData = _BodyPartDataArr;
+        self.picker.dataType = DMPickerDataTypeMoveCategories;
+        [self presentViewController:self.picker animated:YES completion:nil];
     }
 }
 
 - (IBAction)filterOne:(id)sender {
-    picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    picker.selectedBodyPartDel = self;
-    picker.pickerData = _tagsArr;
-    picker.dataType = DMPickerDataTypeMoveTags;
-    [self presentViewController:picker animated:YES completion:nil];
+    self.picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    self.picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    self.picker.selectedBodyPartDel = self;
+    self.picker.pickerData = _tagsArr;
+    self.picker.dataType = DMPickerDataTypeMoveTags;
+    [self presentViewController:self.picker animated:YES completion:nil];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
@@ -178,7 +178,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
                                                                    ascending:YES];
     _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
-    [tblView reloadData];
+    [self.tblView reloadData];
 }
 
 - (IBAction)searchTxtFldEditingAction:(UITextField*)sender {
@@ -197,7 +197,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         _tableData = [[NSArray alloc]initWithArray:_workOutListArr];
     }
     
-    [tblView reloadData];
+    [self.tblView reloadData];
 }
 
 #pragma mark TEXTFIELD DELEGATE
@@ -219,8 +219,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if ([_filter2 isFirstResponder] && [touch view] != _filter2) {
         [_filter2 resignFirstResponder];
     }
-    if ([templateNameTxtFld isFirstResponder] && [touch view] != templateNameTxtFld) {
-        [templateNameTxtFld resignFirstResponder];
+    if ([self.templateNameTxtFld isFirstResponder] && [touch view] != self.templateNameTxtFld) {
+        [self.templateNameTxtFld resignFirstResponder];
     }
     [super touchesBegan:touches withEvent:event];
 }
@@ -252,13 +252,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     if (orientation == UIInterfaceOrientationPortrait ||
         orientation == UIInterfaceOrientationPortraitUpsideDown) {
-        animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
+        self.animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
     }
     else {
-        animatedDistance = floor(LANDSCAPE_KEYBOARD_HEIGHT * heightFraction);
+        self.animatedDistance = floor(LANDSCAPE_KEYBOARD_HEIGHT * heightFraction);
     }
     CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y -= animatedDistance;
+    viewFrame.origin.y -= self.animatedDistance;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -271,7 +271,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y += animatedDistance;
+    viewFrame.origin.y += self.animatedDistance;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -317,7 +317,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"WorkoutName"
                                                  ascending:YES];
     _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
-    [tblView reloadData];
+    [self.tblView reloadData];
 }
 
 // UniqueID
@@ -336,7 +336,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 #pragma mark - TableView Delegate
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"searchTable" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DMMovesCellIdentifier forIndexPath:indexPath];
     
     DMMove *move = self.tableData[indexPath.row];
     cell.textLabel.text = move.name;
@@ -351,8 +351,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.dateFormatter setDateFormat:@"LLLL d, yyyy"];
     
-    NSString *msgInfo = [NSString stringWithFormat:@"New Move will be added to %@",[self.dateFormatter stringFromDate:_selectedDate]];
-    NSString *msgInfoForExchange = [NSString stringWithFormat:@"Exchange move on %@",[self.dateFormatter stringFromDate:_selectedDate]];
+    NSString *msgInfo = [NSString stringWithFormat:@"New Move will be added to %@", [self.dateFormatter stringFromDate:_selectedDate]];
+    NSString *msgInfoForExchange = [NSString stringWithFormat:@"Exchange move on %@", [self.dateFormatter stringFromDate:_selectedDate]];
    
     if (_isExchange) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Exchange My Moves" message:msgInfoForExchange preferredStyle:UIAlertControllerStyleAlert];
@@ -481,11 +481,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                         
                                         moveDetailVc.parentUniqueID = moveNameUniqueID;
                                         
-                                        // NSString *planNameStr = [NSString stringWithFormat:@"Custom Plan (%ld)", _newCount + 1];
                                         NSString *planNameStr = @"Custom Plan";
 
 //                                        if (_bodypartTxtFld.text.length == 0) {
-                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row] SelectedDate:_selectedDate planName:planNameStr categoryName:tempArr[0][@"WorkoutCategoryName"] CategoryID:_categoryID tagsName:self.filter1.text TagsId:_tagsId status:@"New" PlanNameUnique:planNameUniqueID DateListUnique:planDateListUniqueID MoveNameUnique:moveNameUniqueID];
+                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row]
+                                                                 SelectedDate:_selectedDate
+                                                                     planName:planNameStr
+                                                                 categoryName:tempArr[0][@"WorkoutCategoryName"]
+                                                                   CategoryID:_categoryID
+                                                                     tagsName:self.filter1.text
+                                                                       TagsId:_tagsId status:@"New"
+                                                               PlanNameUnique:planNameUniqueID
+                                                               DateListUnique:planDateListUniqueID
+                                                               MoveNameUnique:moveNameUniqueID];
 //                                        }
 //                                        else
 //                                        {
@@ -614,7 +622,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [tblView reloadData];
+        [self.tblView reloadData];
     });
     
 }
@@ -695,7 +703,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     _tableData = [[_tableData sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [tblView reloadData];
+        [self.tblView reloadData];
     });
 }
 

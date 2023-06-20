@@ -10,7 +10,7 @@
 #import "DMMoveTag.h"
 #import "DMMoveCategory.h"
 
-@interface PickerViewController () <UIPickerViewDelegate,UIPickerViewDataSource,WSCategoryList>
+@interface PickerViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
 @property (nonatomic, strong) IBOutlet UIPickerView *picker;
 @property (nonatomic, strong) MyMovesWebServices *soapWebService;
 @end

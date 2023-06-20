@@ -10,6 +10,7 @@
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
+		0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
 		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
 		0E8EC8E12A3CF5430095BDEC /* DMActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */; };
 		0E8EC8E42A3CF7E50095BDEC /* DMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */; };
@@ -461,6 +462,8 @@
 		0E81811D14D46A49002C8520 /* ExercisesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExercisesViewController.h; sourceTree = "<group>"; };
 		0E81811E14D46A49002C8520 /* ExercisesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExercisesViewController.m; sourceTree = "<group>"; };
 		0E81811F14D46A49002C8520 /* ExercisesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExercisesViewController.xib; sourceTree = "<group>"; };
+		0E8588D82A41238400AAB096 /* NSObject+Description.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Description.h"; sourceTree = "<group>"; };
+		0E8588D92A41238400AAB096 /* NSObject+Description.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Description.m"; sourceTree = "<group>"; };
 		0E89824D2A33D47500DD7221 /* DietMasterGoPlus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DietMasterGoPlus-Bridging-Header.h"; sourceTree = "<group>"; };
 		0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeScanner.swift; sourceTree = "<group>"; };
 		0E8EC8DF2A3CF5430095BDEC /* DMActivityIndicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMActivityIndicator.h; sourceTree = "<group>"; };
@@ -1181,6 +1184,8 @@
 				65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */,
 				0E8EC8E62A3CF9770095BDEC /* NSString+Encode.h */,
 				0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */,
+				0E8588D82A41238400AAB096 /* NSObject+Description.h */,
+				0E8588D92A41238400AAB096 /* NSObject+Description.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2610,6 +2615,7 @@
 				401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */,
 				401B658920B3FC64004453E7 /* XMLReader.m in Sources */,
 				401B658A20B3FC64004453E7 /* Base64.m in Sources */,
+				0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */,
 				401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */,
 				650208FD25015A5700F412B0 /* MyGoalViewController.m in Sources */,
 				403D88AE21ECA98700B2F232 /* MyMovesViewController.m in Sources */,

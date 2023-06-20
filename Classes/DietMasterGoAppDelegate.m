@@ -502,9 +502,6 @@
             [db beginTransaction];
             NSString *createTableSQL = @"CREATE TABLE 'MoveTags' (TagID INTEGER PRIMARY KEY, TagName TEXT)";
             [db executeUpdate:createTableSQL];
-            // Drop the old table.
-//            NSString *dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTags_Table"];
-//            [db executeUpdate:dropTableSQL];
             if ([db hadError]) {
                 DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
@@ -544,9 +541,6 @@
                     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
             }
-            // Drop the old table.
-//            NSString *dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfBodyPart_Table"];
-//            [db executeUpdate:dropTableSQL];
             if ([db hadError]) {
                 DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
@@ -573,10 +567,17 @@
             }
             [db commit];
         }
-
-        // Cleanup unused tables
+        
+        // Cleanup unused, deprecated tables.
+        NSString *dropTableSQL = nil;
         [db beginTransaction];
-        NSString *dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table_Old"];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table"];
+        [db executeUpdate:dropTableSQL];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table_Old"];
+        [db executeUpdate:dropTableSQL];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfBodyPart_Table"];
+        [db executeUpdate:dropTableSQL];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTags_Table"];
         [db executeUpdate:dropTableSQL];
         [db commit];
 
