@@ -9,7 +9,7 @@
 
 @interface DMMoveCategory()
 @property (nonatomic, strong, readwrite) NSNumber *categoryId;
-@property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *name;
 @end
 
 @implementation DMMoveCategory
@@ -23,7 +23,7 @@
     if (self) {
         _categoryId = dictionary[@"categoryID"];
         
-        NSString *name = dictionary[@"CategoryName"];
+        NSString *name = dictionary[@"categoryName"];
         name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -35,7 +35,7 @@
 - (NSDictionary *)dictionaryRepresentation {
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                           self.categoryId, @"categoryID",
-                          self.name, @"CategoryName",
+                          self.name, @"categoryName",
                           nil];
     return dict;
 }

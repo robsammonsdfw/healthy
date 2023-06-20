@@ -25,7 +25,6 @@
 @property (nonatomic) int WorkoutMethodValueID;
 @property (nonatomic, strong) NSDate * currentDate;
 @property (nonatomic, strong) IBOutlet UIImageView *exchangeImgView;
-@property (nonatomic, weak) id<loadDataToMovesTbl> passDataDel;
 @property (nonatomic, strong) IBOutlet UIButton *exchangeBtnOutlet;
 @property (nonatomic) NSString *parentUniqueID;
 @property (nonatomic) NSString *deleteSetUniqueID;

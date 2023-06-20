@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,7 +14,6 @@
                 <outlet property="filter1" destination="kmv-ap-TI0" id="fd8-pW-HjO"/>
                 <outlet property="filterOneBtn" destination="hFx-zN-U18" id="WT8-gb-oAC"/>
                 <outlet property="searchBar" destination="eXi-2G-Tgm" id="IZl-kM-Zy1"/>
-                <outlet property="searchtxtfld" destination="AHy-CZ-UAc" id="ELx-vH-eVl"/>
                 <outlet property="tblView" destination="tbk-Br-Egk" id="3a1-Sp-i7d"/>
                 <outlet property="templateNameTxtFld" destination="3fx-5G-9sR" id="G5H-1I-J6H"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -30,50 +27,34 @@
                 <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zf7-bb-boi">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="151"/>
                     <subviews>
-                        <textField opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AHy-CZ-UAc">
-                            <rect key="frame" x="10" y="10" width="355" height="30"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="30" id="shO-cj-hhH"/>
-                            </constraints>
-                            <nil key="textColor"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <action selector="searchTxtFldEditingAction:" destination="-1" eventType="editingChanged" id="GJu-0C-Mmr"/>
-                                <outlet property="delegate" destination="-1" id="Wv5-Hj-Fpa"/>
-                            </connections>
-                        </textField>
                         <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="eXi-2G-Tgm">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Body Part" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O02-Jc-ZY5">
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Filter..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O02-Jc-ZY5">
                             <rect key="frame" x="10" y="66" width="355" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="Inf-ff-77G"/>
                             </constraints>
-                            <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="K44-Jr-RWB"/>
                             </connections>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Khu-nT-uxM">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Khu-nT-uxM">
                             <rect key="frame" x="10" y="66" width="355" height="30"/>
                             <connections>
                                 <action selector="bodyPartAction:" destination="-1" eventType="touchUpInside" id="b5O-KE-id9"/>
                             </connections>
                         </button>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Filter 1" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kmv-ap-TI0">
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Filter..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kmv-ap-TI0">
                             <rect key="frame" x="10" y="106" width="355" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="cUg-nr-H4T"/>
                             </constraints>
-                            <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -86,14 +67,13 @@
                             <constraints>
                                 <constraint firstAttribute="height" id="uFY-cn-1OR"/>
                             </constraints>
-                            <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="xPd-5s-ghR"/>
                             </connections>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hFx-zN-U18">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hFx-zN-U18">
                             <rect key="frame" x="10" y="106" width="355" height="30"/>
                             <connections>
                                 <action selector="filterOne:" destination="-1" eventType="touchUpInside" id="6gY-yI-Szt"/>
@@ -121,14 +101,12 @@
                         <constraint firstItem="zYa-jJ-NdL" firstAttribute="centerY" secondItem="kmv-ap-TI0" secondAttribute="centerY" id="1XA-f7-oam"/>
                         <constraint firstItem="Khu-nT-uxM" firstAttribute="top" secondItem="O02-Jc-ZY5" secondAttribute="top" id="6rW-nR-AAr"/>
                         <constraint firstItem="kmv-ap-TI0" firstAttribute="top" secondItem="O02-Jc-ZY5" secondAttribute="bottom" constant="10" id="7fD-b8-N87"/>
-                        <constraint firstAttribute="trailing" secondItem="AHy-CZ-UAc" secondAttribute="trailing" constant="10" id="83K-fz-mqU"/>
                         <constraint firstItem="kmv-ap-TI0" firstAttribute="leading" secondItem="Zf7-bb-boi" secondAttribute="leading" constant="10" id="B89-ml-f5x"/>
                         <constraint firstItem="kmv-ap-TI0" firstAttribute="leading" secondItem="O02-Jc-ZY5" secondAttribute="leading" id="D8V-BO-CPf"/>
                         <constraint firstItem="eXi-2G-Tgm" firstAttribute="top" secondItem="Zf7-bb-boi" secondAttribute="top" id="F26-bl-luL"/>
                         <constraint firstAttribute="trailing" secondItem="O02-Jc-ZY5" secondAttribute="trailing" constant="10" id="HyM-Ww-K1b"/>
                         <constraint firstAttribute="trailing" secondItem="Lev-Xm-JGh" secondAttribute="trailing" constant="21" id="KSR-6U-ILV"/>
                         <constraint firstItem="3fx-5G-9sR" firstAttribute="leading" secondItem="kmv-ap-TI0" secondAttribute="leading" id="MGY-1J-vfh"/>
-                        <constraint firstItem="AHy-CZ-UAc" firstAttribute="leading" secondItem="Zf7-bb-boi" secondAttribute="leading" constant="10" id="Qwd-db-t9f"/>
                         <constraint firstItem="O02-Jc-ZY5" firstAttribute="leading" secondItem="Zf7-bb-boi" secondAttribute="leading" constant="10" id="Qyi-C9-Nqu"/>
                         <constraint firstItem="Lev-Xm-JGh" firstAttribute="centerY" secondItem="O02-Jc-ZY5" secondAttribute="centerY" id="RJT-oz-ydG"/>
                         <constraint firstItem="Khu-nT-uxM" firstAttribute="bottom" secondItem="O02-Jc-ZY5" secondAttribute="bottom" id="RmA-1c-KXS"/>
@@ -148,7 +126,6 @@
                         <constraint firstItem="3fx-5G-9sR" firstAttribute="trailing" secondItem="kmv-ap-TI0" secondAttribute="trailing" id="qLe-GX-7qd"/>
                         <constraint firstItem="hFx-zN-U18" firstAttribute="trailing" secondItem="kmv-ap-TI0" secondAttribute="trailing" id="r7g-A7-Yd5"/>
                         <constraint firstItem="O02-Jc-ZY5" firstAttribute="top" secondItem="eXi-2G-Tgm" secondAttribute="bottom" constant="10" id="u2U-7f-FEs"/>
-                        <constraint firstItem="AHy-CZ-UAc" firstAttribute="top" secondItem="Zf7-bb-boi" secondAttribute="top" constant="10" id="uoL-bF-heT"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tbk-Br-Egk">

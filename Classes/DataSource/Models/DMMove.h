@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DMMove : NSObject
 @property (nonatomic, strong, readonly) NSNumber *moveId;
 @property (nonatomic, strong, readonly) NSNumber *companyId;
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, strong, readonly) NSString *videoUrl;
 @property (nonatomic, strong, readonly) NSString *notes;
 

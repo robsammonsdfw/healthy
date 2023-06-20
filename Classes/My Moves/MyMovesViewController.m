@@ -28,7 +28,7 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #import <HealthKit/HealthKit.h>
-@interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, WSGetUserWorkoutplanOffline, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, loadDataToMovesTbl, GotoViewControllerDelegate>
+@interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, WSGetUserWorkoutplanOffline, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, GotoViewControllerDelegate>
 {
     CGFloat animatedDistance;
     MyMovesWebServices *soapWebService;
@@ -167,27 +167,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         healthStore = [[HKHealthStore alloc] init];
         sd = [[StepData alloc]init];
         
-        //    self.datesWithInfo = @[@"2019/01/04",
-        //                            @"2019/01/08",
-        //                            @"2019/01/12",
-        //                            @"2019/01/25",
-        //                            @"2019/01/10",
-        //                            @"2019/01/28"];
-        //
-        //    self.datesExerciseCompletd = @[@"2019/01/05",
-        //                              @"2019/01/09",
-        //                              @"2019/01/13",
-        //                              @"2019/01/26",
-        //                              @"2019/01/11",
-        //                              @"2019/01/29"];
-        
-        //set title
         [self.navigationController setNavigationBarHidden:NO];
         [self.navigationController.navigationBar setTranslucent:NO];
         [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
         [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
         self.navigationItem.hidesBackButton = YES;
-        self.navigationItem.title=@"My Moves";
+        self.navigationItem.title = @"My Moves";
         self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
                 
         UIImage *listImg = [[UIImage imageNamed:@"viewlist.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -1207,7 +1192,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
             moveDetailVc.moveDetailDict =  moveNameListArr[indexPath.row];
             moveDetailVc.moveListDict =  rowListArr[indexPath.row];
-            moveDetailVc.passDataDel = self;
             moveDetailVc.parentUniqueID = rowListArr[indexPath.row][@"UniqueID"];
             moveDetailVc.currentDate = self.date_currentDate;
             moveDetailVc.moveSetListDict = _userPlanMoveSetListData;
@@ -1413,7 +1397,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc]initWithNibName:@"MyMovesListViewController" bundle:nil];
 //        moveListVc.selectedDate = self.date_currentDate;
 //        moveListVc.userId = userId;
-        moveListVc.passDataDel = self;
         NSString *statusValue = @"New";
         NSString *filter = @"%K == %@";
         NSPredicate *newPredicate = [NSPredicate predicateWithFormat:filter,@"Status",statusValue];
@@ -1424,21 +1407,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         sender.alpha = 1;
         [self.navigationController pushViewController:moveListVc animated:YES];
     });
-    
-    [self randomStringWithLength:11];
-}
-
-
--(NSString *) randomStringWithLength:(int)digit {
-    NSString *alphaNumaricStr = @"abcdefghijklmnopqrstuvwxyz0123456789";
-    NSMutableString *randomString = [NSMutableString stringWithCapacity: digit];
-    
-    for (int i=0; i<digit; i++) {
-        [randomString appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-    }
-    DMLog(@"S-%@",randomString);
-
-    return randomString;
 }
 
 -(IBAction)checkAction:(UIButton*)sender{

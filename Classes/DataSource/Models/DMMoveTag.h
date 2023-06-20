@@ -6,12 +6,13 @@
 //
 
 #import <Foundation/Foundation.h>
+@protocol DMPickerViewDataSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DMMoveTag : NSObject
+@interface DMMoveTag : NSObject <DMPickerViewDataSource>
 @property (nonatomic, strong, readonly) NSNumber *tagId;
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 

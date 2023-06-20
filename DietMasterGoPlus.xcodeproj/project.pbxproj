@@ -24,6 +24,7 @@
 		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
 		0E9F170E2A33BBE700217BF9 /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */; };
 		0E9F170F2A33BBE700217BF9 /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */; };
+		0ECFE7F12A41DB3900DE631E /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
 		0EDAB6A72A3B3A1000DB351A /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
 		0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
 		4018F11E20DA437800FE1252 /* AppDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4018F11D20DA437800FE1252 /* AppDefaults.plist */; };
@@ -536,6 +537,7 @@
 		0ECE6ED414BF3FC1004DEF36 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0ECE6F4614BF4A94004DEF36 /* TUTSimpleScatterPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUTSimpleScatterPlot.h; sourceTree = "<group>"; };
 		0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TUTSimpleScatterPlot.m; sourceTree = "<group>"; };
+		0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMPickerViewController.swift; sourceTree = "<group>"; };
 		0EDAB6A22A3B2B0E00DB351A /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		0EDAB6A52A3B3A1000DB351A /* DMGUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMGUtilities.h; sourceTree = "<group>"; };
 		0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMGUtilities.m; sourceTree = "<group>"; };
@@ -891,6 +893,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0ECFE7EF2A41DB2000DE631E /* Views */,
 				0E8EC8E52A3CF94A0095BDEC /* Categories */,
 				650208E72501552400F412B0 /* KeyChainWrapper */,
 				0E9F16FE2A33BBE700217BF9 /* PNPieChartView */,
@@ -1464,6 +1467,14 @@
 				0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */,
 			);
 			path = TUTSimpleScatterPlot;
+			sourceTree = "<group>";
+		};
+		0ECFE7EF2A41DB2000DE631E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		0EDAB6A82A3B4E9100DB351A /* DataSource */ = {

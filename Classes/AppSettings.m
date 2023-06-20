@@ -350,22 +350,22 @@
     [db executeUpdate:deleteWeightlog];
 
     //get company moves
-    NSString *selectCompanyMoves = [NSString stringWithFormat:@"SELECT MoveID From MoveDetailsTable WHERE CompanyID > 0"];
+    NSString *selectCompanyMoves = [NSString stringWithFormat:@"SELECT moveID From MoveDetails WHERE companyID > 0"];
     
     FMResultSet *rs = [db executeQuery:selectCompanyMoves];
     NSMutableString *idString = [NSMutableString stringWithFormat:@""];
     while ([rs next]) {
         if ([idString isEqualToString:@""]) {
-            idString = [NSMutableString stringWithFormat:@"%@", [rs stringForColumn:@"MoveID"]];
+            idString = [NSMutableString stringWithFormat:@"%@", [rs stringForColumn:@"moveID"]];
         } else {
-            idString = [NSMutableString stringWithFormat:@"%@,%@", idString, [rs stringForColumn:@"MoveID"]];
+            idString = [NSMutableString stringWithFormat:@"%@,%@", idString, [rs stringForColumn:@"moveID"]];
         }
     }
     
     NSString *deleteTitles = [NSString stringWithFormat:@"DELETE FROM ListOfTitle_Table WHERE WorkoutID IN (%@)", idString];
     [db executeUpdate:deleteTitles];
     
-    NSString *deleteCompanyMoves = [NSString stringWithFormat:@"DELETE FROM MoveDetailsTable WHERE CompanyID > 0"];
+    NSString *deleteCompanyMoves = [NSString stringWithFormat:@"DELETE FROM MoveDetails WHERE companyID > 0"];
     [db executeUpdate:deleteCompanyMoves];
     
     if ([db hadError]) {

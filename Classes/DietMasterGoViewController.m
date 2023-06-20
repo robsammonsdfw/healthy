@@ -647,16 +647,9 @@
 #pragma mark - WorkOutList
 
 - (void)getWorkoutListFailed:(NSString *)failedMessage {
-    
 }
 
 - (void)getWorkoutListFinished:(NSDictionary *)responseDict {
-    MyMovesWebServices * soapWebService = [[MyMovesWebServices alloc] init];
-    
-    if (responseDict != (id)[NSNull null])
-    {
-        [soapWebService saveMovesTagsCategoriesToDb:responseDict];
-    }
 }
 
 #pragma mark - Help and Support Methods

@@ -549,7 +549,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             [soapWebService deleteMoveFromDb:_moveListDict[@"UniqueID"]]; // send to server
             [soapWebService clearedDataFromWeb:_moveListDict[@"UniqueID"]];
-            [_passDataDel passDataOnAdd];
             [self.navigationController popViewControllerAnimated:YES];
         }
     }

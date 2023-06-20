@@ -11,6 +11,17 @@
 #import "DMMoveTag.h"
 #import "DMMoveCategory.h"
 
+@interface MyMovesWebServices()
+
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSMutableData *responseData;
+@property (nonatomic, strong) NSString *apiRequestType;
+@property (nonatomic) BOOL myBool;
+
+@end
+
 @implementation MyMovesWebServices
 
 - (void)offlineSyncApi {
@@ -118,9 +129,7 @@
     
     [db beginTransaction];
     
-//    NSString *addSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanList WHERE Status = 'New'"];
     NSString *addSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanList WHERE Status = 'Deleted'"];
-
     FMResultSet *rs = [db executeQuery:addSql];
     
     while ([rs next]) {
@@ -223,42 +232,6 @@
      }
      
     [db beginTransaction];
-//    NSString *workoutSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanMoveList WHERE Status = 'New'"];
-//    FMResultSet *rs = [db executeQuery:workoutSql];
-//
-//    while ([rs next]) {
-//        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-//
-//        int UserPlanMoveID = [rs intForColumn:@"UserPlanMoveID"];
-//        int UserPlanDateID = [rs intForColumn:@"UserPlanDateID"];
-//        int MoveID = [rs intForColumn:@"MoveID"];
-//
-//        NSString * MoveName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"MoveName"]];
-//        NSString * VideoLink = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"VideoLink"]];
-//        NSString * Notes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Notes"]];
-//        NSString * LastUpdated = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"LastUpdated"]];
-//        NSString * UniqueID = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"UniqueID"]];
-//        NSString * Status = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Status"]];
-//        NSString * SyncResult = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"SyncResult"]];
-//        NSString * ParentUniqueID = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"ParentUniqueID"]];
-//        NSString * UserPlanMoveSets = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"UserPlanMoveSets"]];
-//
-//        [dict setObject: [NSNumber numberWithInt:UserPlanMoveID]  forKey: @"UserPlanMoveID"];
-//        [dict setObject: [NSNumber numberWithInt:UserPlanDateID]  forKey: @"UserPlanDateID"];
-//        [dict setObject: [NSNumber numberWithInt:MoveID]  forKey: @"MoveID"];
-//
-//        [dict setObject: MoveName  forKey: @"MoveName"];
-//        [dict setObject: VideoLink  forKey: @"VideoLink"];
-//        [dict setObject: Notes  forKey: @"Notes"];
-//        [dict setObject: LastUpdated  forKey: @"LastUpdated"];
-//        [dict setObject: UniqueID  forKey: @"UniqueID"];
-//        [dict setObject: Status  forKey: @"Status"];
-//        [dict setObject: SyncResult  forKey: @"SyncResult"];
-//        [dict setObject: ParentUniqueID  forKey: @"ParentUniqueID"];
-//        [dict setObject: UserPlanMoveSets  forKey: @"UserPlanMoveSets"];
-//
-//        [arr addObject:dict];
-//    }
     
     NSString *deleteMoveSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanMoveList WHERE Status = 'Deleted'"];
     FMResultSet *result = [db executeQuery:deleteMoveSql];
@@ -317,98 +290,6 @@
     }
     
     [db beginTransaction];
-//    NSString *workoutSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanMoveSetList WHERE Status = 'New'"];
-//    FMResultSet *rs = [db executeQuery:workoutSql];
-//    
-//    while ([rs next]) {
-//        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-//        
-//        int SetID = [rs intForColumn:@"SetID"];
-//        int UserPlanMoveID = [rs intForColumn:@"UserPlanMoveID"];
-//        int SetNumber = [rs intForColumn:@"SetNumber"];
-//        int Unit1ID = [rs intForColumn:@"Unit1ID"];
-//        int Unit1Value = [rs intForColumn:@"Unit1Value"];
-//        int Unit2ID = [rs intForColumn:@"Unit2ID"];
-//        int Unit2Value = [rs intForColumn:@"Unit2Value"];
-//        
-//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-//        NSDate *currentDate = [NSDate date];
-//        NSString *LastUpdated = [formatter stringFromDate:currentDate];
-//        
-//        NSString * Unit1Name = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Unit1Name"]];
-//        NSString * Unit2Name = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Unit2Name"]];
-////        NSString * LastUpdated = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"LastUpdated"]];
-//        NSString * UniqueID = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"UniqueID"]];
-//        NSString * Status = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Status"]];
-//        NSString * SyncResult = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"SyncResult"]];
-//        NSString * ParentUniqueID = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"ParentUniqueID"]];
-//        
-//        [dict setObject: [NSNumber numberWithInt:SetID]  forKey: @"SetID"];
-//        [dict setObject: [NSNumber numberWithInt:UserPlanMoveID]  forKey: @"UserPlanMoveID"];
-//        [dict setObject: [NSNumber numberWithInt:SetNumber]  forKey: @"SetNumber"];
-//        [dict setObject: [NSNumber numberWithInt:Unit1ID]  forKey: @"Unit1ID"];
-//        [dict setObject: [NSNumber numberWithInt:Unit1Value]  forKey: @"Unit1Value"];
-//        [dict setObject: [NSNumber numberWithInt:Unit2ID]  forKey: @"Unit2ID"];
-//        [dict setObject: [NSNumber numberWithInt:Unit2Value]  forKey: @"Unit2Value"];
-//        
-//        [dict setObject: Unit1Name  forKey: @"Unit1Name"];
-//        [dict setObject: Unit2Name  forKey: @"Unit2Name"];
-//        [dict setObject: LastUpdated  forKey: @"LastUpdated"];
-//        [dict setObject: UniqueID  forKey: @"UniqueID"];
-//        [dict setObject: Status  forKey: @"Status"];
-//        [dict setObject: SyncResult  forKey: @"SyncResult"];
-//        [dict setObject: ParentUniqueID  forKey: @"ParentUniqueID"];
-//        
-//        [arr addObject:dict];
-//    }
-    
-//    NSString *setChangedSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanMoveSetList WHERE Status = 'Changed'"];
-//    FMResultSet *changeResult = [db executeQuery:setChangedSql];
-//
-//        while ([changeResult next]) {
-//            NSMutableDictionary *changeDict = [NSMutableDictionary dictionary];
-//
-//            int SetID = [changeResult intForColumn:@"SetID"];
-//            int UserPlanMoveID = [changeResult intForColumn:@"UserPlanMoveID"];
-//            int SetNumber = [changeResult intForColumn:@"SetNumber"];
-//            int Unit1ID = [changeResult intForColumn:@"Unit1ID"];
-//            int Unit1Value = [changeResult intForColumn:@"Unit1Value"];
-//            int Unit2ID = [changeResult intForColumn:@"Unit2ID"];
-//            int Unit2Value = [changeResult intForColumn:@"Unit2Value"];
-//
-//            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//            [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-//            NSDate *currentDate = [NSDate date];
-//            NSString *lastUpdated = [formatter stringFromDate:currentDate];
-//
-//
-//            NSString * Unit1Name = [NSString stringWithFormat:@"%@", [changeResult stringForColumn:@"Unit1Name"]];
-//            NSString * Unit2Name = [NSString stringWithFormat:@"%@", [changeResult stringForColumn:@"Unit2Name"]];
-////            NSString * LastUpdated = [NSString stringWithFormat:@"%@", [changeResult stringForColumn:@"LastUpdated"]];
-//            NSString * UniqueID = [NSString stringWithFormat:@"%@", [changeResult stringForColumn:@"UniqueID"]];
-//            NSString * Status = [NSString stringWithFormat:@"%@", [changeResult stringForColumn:@"Status"]];
-//            NSString * SyncResult = [NSString stringWithFormat:@"%@", [changeResult stringForColumn:@"SyncResult"]];
-//            NSString * ParentUniqueID = [NSString stringWithFormat:@"%@", [changeResult stringForColumn:@"ParentUniqueID"]];
-//
-//            [changeDict setObject: [NSNumber numberWithInt:SetID]  forKey: @"SetID"];
-//            [changeDict setObject: [NSNumber numberWithInt:UserPlanMoveID]  forKey: @"UserPlanMoveID"];
-//            [changeDict setObject: [NSNumber numberWithInt:SetNumber]  forKey: @"SetNumber"];
-//            [changeDict setObject: [NSNumber numberWithInt:Unit1ID]  forKey: @"Unit1ID"];
-//            [changeDict setObject: [NSNumber numberWithInt:Unit1Value]  forKey: @"Unit1Value"];
-//            [changeDict setObject: [NSNumber numberWithInt:Unit2ID]  forKey: @"Unit2ID"];
-//            [changeDict setObject: [NSNumber numberWithInt:Unit2Value]  forKey: @"Unit2Value"];
-//
-//            [changeDict setObject: Unit1Name  forKey: @"Unit1Name"];
-//            [changeDict setObject: Unit2Name  forKey: @"Unit2Name"];
-//            [changeDict setObject: lastUpdated  forKey: @"LastUpdated"];
-//            [changeDict setObject: UniqueID  forKey: @"UniqueID"];
-//            [changeDict setObject: Status  forKey: @"Status"];
-//            [changeDict setObject: SyncResult  forKey: @"SyncResult"];
-//            [changeDict setObject: ParentUniqueID  forKey: @"ParentUniqueID"];
-//
-//            [arr addObject:changeDict];
-//        }
     
     NSString *setDeleteddSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanMoveSetList WHERE Status = 'Deleted'"];
     FMResultSet *deleteResult = [db executeQuery:setDeleteddSql];
@@ -561,13 +442,6 @@
                 
                 [db executeUpdate:insertSQL];
                 
-//                NSString * inserQuery = [NSString stringWithFormat: @"INSERT INTO PlanDateUniqueID_Table (PlanDate,UniqueID) VALUES (\"%@\",\"%@\")",planDate,parentUniqueId];
-//
-//                [db executeUpdate:inserQuery];
-//
-//                NSString * insertSQLite = [NSString stringWithFormat: @"INSERT INTO PlanDateTable (PlanDate) VALUES (\"%@\")",planDate];
-//
-//             [db executeUpdate:insertSQLite];
             }
         }
         
@@ -636,9 +510,6 @@
         if (![db open]) {
         }
         [db beginTransaction];
-        
-//        NSString * deleteSQL = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanMoveSetList"];
-//        [db executeUpdate:deleteSQL];
         
         NSMutableArray * planMoveSetListArr = [[NSMutableArray alloc]init];
         [planMoveSetListArr addObjectsFromArray:planListDict[@"ServerUserPlanMoveSetList"]];
@@ -718,7 +589,7 @@
                 NSDate *date = [dateFormatter dateFromString:dateString];
                 NSString * lastUpdated = [dateFormatter stringFromDate:date];
                 
-                NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO MoveDetailsTable (MoveID,CompanyID,MoveName,VideoLink,Notes) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\")",moveId,companyID,moveName,videoLink,notes];
+                NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO MoveDetails (moveID,companyID,moveName,videoLink,notes) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\")",moveId,companyID,moveName,videoLink,notes];
                 
                 [db executeUpdate:insertSQL];
                 
@@ -984,7 +855,7 @@
     }
     [db beginTransaction];
     
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM MoveDetailsTable"];
+    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM MoveDetails"];
     FMResultSet *rs = [db executeQuery:getWeightSQL];
     
     NSMutableArray *listOfMoveArr = [[NSMutableArray alloc]init];
@@ -992,8 +863,8 @@
     while ([rs next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         
-        int WorkoutID = [rs intForColumn:@"MoveID"];
-        NSString * WorkoutName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"MoveName"]];
+        int WorkoutID = [rs intForColumn:@"moveID"];
+        NSString * WorkoutName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"moveName"]];
         
         NSArray *arrExercise = [WorkoutName componentsSeparatedByString:@"("];
         
@@ -1001,14 +872,14 @@
             WorkoutName = [NSString stringWithFormat:@"%@",[arrExercise objectAtIndex:0]];
         }
         
-        NSString * Link = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"VideoLink"]];
-        NSString * Notes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Notes"]];
+        NSString * Link = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"videoLink"]];
+        NSString * Notes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"notes"]];
         
-        [dict setObject: [NSNumber numberWithInt:WorkoutID]  forKey: @"MoveID"];
+        [dict setObject: [NSNumber numberWithInt:WorkoutID]  forKey: @"moveID"];
         
-        [dict setObject: WorkoutName  forKey: @"MoveName"];
-        [dict setObject: Link  forKey: @"VideoLink"];
-        [dict setObject: Notes  forKey: @"Notes"];
+        [dict setObject: WorkoutName  forKey: @"moveName"];
+        [dict setObject: Link  forKey: @"videoLink"];
+        [dict setObject: Notes  forKey: @"notes"];
         
         [listOfMoveArr addObject:dict];
         
@@ -1092,8 +963,6 @@
     if (![db open]) {
     }
     [db beginTransaction];
-//    NSString *userWorkoutPlanDeleteSQL = [NSString stringWithFormat: @"UPDATE ServerUserPlanMoveList SET Status = '%@' Where UniqueID = '%@'",status,UniqueID];
-
     
     NSString *normalStatus = @"Normal";
     NSString *newStatus = @"New";
@@ -1408,53 +1277,8 @@
     }
     [db commit];
 
-/*
-    NSString *searchSql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanDateList WHERE PlanDate = '%@'",PlanDateStr];
-    FMResultSet *result = [db executeQuery:searchSql];
-
-    NSMutableArray *arr = [NSMutableArray new];
-
-    while ([result next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-        NSString *uniqueIDs = [NSString stringWithFormat:@"%@", [result stringForColumn:@"UniqueID"]];
-        [dict setObject: uniqueIDs  forKey: @"UniqueID"];
-        [arr addObject:dict];
-    }
-    DMLog(@"%@",arr);
-
-    NSString *dateSearchSql = [NSString stringWithFormat:@"SELECT * FROM PlanDateTable WHERE PlanDate = '%@'",PlanDateStr];
-    FMResultSet *rs = [db executeQuery:dateSearchSql];
-
-    NSMutableArray *array = [NSMutableArray new];
-
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-        NSString *dateStr = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"PlanDate"]];
-        [dict setObject: dateStr  forKey: @"PlanDate"];
-        [array addObject:dict];
-    }
-    DMLog(@"%@",array);
-
-
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-
-    [db commit];
-*/
-//    if ([PlanDateStr isEqualToString:array[0][@"PlanDate"]])
-//    {
-//        NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanMoveList (MoveID,MoveName,VideoLink,Notes,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID,isCheckBoxClicked) VALUES (\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",MoveID,MoveName,VideoLink,Notes,lastUpdated,UniqueID,status,syncResult,arr[0][@"UniqueID"],isCheckBoxClicked];
-//        [db executeUpdate:insertSQL];
-//    }
-//    else
-//    {
         NSString * insertSQLite = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanMoveList (MoveID,MoveName,VideoLink,Notes,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID,isCheckBoxClicked) VALUES (\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",MoveID,MoveName,VideoLink,Notes,lastUpdated,UniqueID,status,syncResult,ParentUniqueID,isCheckBoxClicked];
         [db executeUpdate:insertSQLite];
-
-//    }
     
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -1569,7 +1393,7 @@
 
 }
 
-- (NSArray *)loadListOfTags {
+- (NSArray<DMMoveTag *> *)loadListOfTags {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1597,7 +1421,7 @@
     return [tagArray copy];
 }
 
-- (NSArray *)loadListOfBodyPart {
+- (NSArray<DMMoveCategory *> *)loadListOfBodyPart {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1623,149 +1447,57 @@
     return [categoriesArray copy];
 }
 
--(NSMutableArray *)loadCategoryFilteredListOfTitleToDb:(int)catId
-{
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+- (NSArray<DMMove *> *)getMovesFromDatabaseWithCategoryFilter:(DMMoveCategory *)categoryFilter
+                                                    tagFilter:(DMMoveTag *)tagFilter
+                                                   textSearch:(NSString *)textSearch {
+    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase *db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
     [db beginTransaction];
     
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM ListOfTitle_Table ORDER BY WorkoutName ASC"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
+    NSMutableString *sqlString = [NSMutableString string];
+    [sqlString appendString:@"SELECT DISTINCT d.moveID, d.companyID, d.moveName FROM MoveDetails d "];
+    if (categoryFilter) {
+        [sqlString appendString:@"INNER JOIN MovesCategories c ON d.moveID = c.moveID "];
+    }
+    if (tagFilter) {
+        [sqlString appendString:@"INNER JOIN MovesTags t ON d.moveID = t.moveID "];
+    }
+    if (categoryFilter || tagFilter || textSearch.length) {
+        [sqlString appendString:@"WHERE "];
+    }
+    if (categoryFilter) {
+        [sqlString appendFormat:@"c.categoryID = %i ", categoryFilter.categoryId.intValue];
+        if (tagFilter || textSearch.length) {
+            [sqlString appendString:@"AND "];
+        }
+    }
+    if (tagFilter) {
+        [sqlString appendFormat:@"t.tagID = %i ", tagFilter.tagId.intValue];
+        if (textSearch.length) {
+            [sqlString appendString:@"AND "];
+        }
+    }
+    if (textSearch.length) {
+        [sqlString appendFormat:@"d.moveName LIKE '%%%@%%'", textSearch];
+    }
+    [sqlString appendString:@" ORDER BY d.moveName"];
+    FMResultSet *rs = [db executeQuery:sqlString];
     
-    NSMutableArray *listOfTitlearr = [[NSMutableArray alloc]init];
-    
+    NSMutableArray *movesArray = [NSMutableArray array];
     while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutID = [rs intForColumn:@"WorkoutID"];
-        int WorkoutCategoryID = [rs intForColumn:@"WorkoutCategoryID"];
-        int WorkoutTagsID = [rs intForColumn:@"WorkoutTagsID"];
-        
-        NSString * WorkoutName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutName"]];
-        
-        
-        NSArray *arrExercise = [WorkoutName componentsSeparatedByString:@"("];
-        
-        if ([WorkoutName containsString:@"("]) {
-            WorkoutName = [NSString stringWithFormat:@"%@",[arrExercise objectAtIndex:0]];
-        }
-        
-        NSString * Link = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Link"]];
-        NSString * Notes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Notes"]];
-        //            NSString * Source = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Source"]];
-        //            NSString * Email = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Email"]];
-        
-        
-        [dict setObject: [NSNumber numberWithInt:WorkoutID]  forKey: @"WorkoutID"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutCategoryID]  forKey: @"WorkoutCategoryID"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutTagsID]  forKey: @"WorkoutTagsID"];
-        
-        [dict setObject: WorkoutName  forKey: @"WorkoutName"];
-        [dict setObject: Link  forKey: @"Link"];
-        [dict setObject: Notes  forKey: @"Notes"];
-        //            [dict setObject: Source  forKey: @"Source"];
-        //            [dict setObject: Email  forKey: @"Email"];
-        
-        if (![WorkoutName isEqualToString:tempStr]) {
-            if (catId == WorkoutCategoryID) {
-                tempStr = WorkoutName;
-                [listOfTitlearr addObject:dict];
-            }
-        }
-        
+        NSDictionary *dict = [rs resultDictionary];
+        DMMove *move = [[DMMove alloc] initWithDictionary:dict];
+        [movesArray addObject:move];
     }
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     
     [db commit];
-    
-    return listOfTitlearr;
-}
-
-- (NSArray<DMMove *> *)getMovesFromDatabase {
-        DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-        
-        FMDatabase *db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-        if (![db open]) {
-        }
-        [db beginTransaction];
-        
-        NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM MoveDetailsTable ORDER BY MoveName ASC"];
-        FMResultSet *rs = [db executeQuery:getWeightSQL];
-        
-        NSMutableArray *movesArray = [NSMutableArray array];
-        
-        while ([rs next]) {
-            NSDictionary *dict = [rs resultDictionary];
-            DMMove *move = [[DMMove alloc] initWithDictionary:dict];
-            [movesArray addObject:move];
-        }
-        if ([db hadError]) {
-            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        }
-        
-        [db commit];
     
     return [movesArray copy];
-}
-
--(NSMutableArray *)loadListOfTitleToDb
-{
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    [db beginTransaction];
-    
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM ListOfTitle_Table"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    NSMutableArray *listOfTitlearr = [[NSMutableArray alloc]init];
-    
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutID = [rs intForColumn:@"WorkoutID"];
-        int WorkoutCategoryID = [rs intForColumn:@"WorkoutCategoryID"];
-        int WorkoutTagsID = [rs intForColumn:@"WorkoutTagsID"];
-        
-        NSString * WorkoutName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutName"]];
-        
-        NSArray *arrExercise = [WorkoutName componentsSeparatedByString:@"("];
-        
-        if ([WorkoutName containsString:@"("]) {
-            WorkoutName = [NSString stringWithFormat:@"%@",[arrExercise objectAtIndex:0]];
-        }
-        
-        NSString * Link = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Link"]];
-        NSString * Notes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Notes"]];
-        
-        
-        [dict setObject: [NSNumber numberWithInt:WorkoutID]  forKey: @"WorkoutID"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutCategoryID]  forKey: @"WorkoutCategoryID"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutTagsID]  forKey: @"WorkoutTagsID"];
-        
-        [dict setObject: WorkoutName  forKey: @"WorkoutName"];
-        [dict setObject: Link  forKey: @"Link"];
-        [dict setObject: Notes  forKey: @"Notes"];
-        
-            [listOfTitlearr addObject:dict];
-        
-    }
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    
-    return listOfTitlearr;
 }
 
 -(NSMutableArray *)loadTable1Header
@@ -2952,59 +2684,6 @@
         [arr addObject:dict];
     }
     
-//
-//    NSString *updateSql = [NSString stringWithFormat:@"SELECT * FROM UserWorkoutPlan WHERE ToBeAdded = 'no' AND isEdited = 'yes'"];
-//    rs = [db executeQuery:updateSql];
-//
-//    while ([rs next]) {
-//        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-//
-//        int WorkoutTemplateId =  [rs intForColumn:@"WorkoutTemplateId"];
-//
-//        int UserID = [rs intForColumn:@"UserID"];
-//        NSString * strTempName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"TemplateName"]];
-//        int CategoryID =  [rs intForColumn:@"CategoryID"];
-//        int WorkoutID = [rs intForColumn:@"WorkoutID"];
-//        int tagsId = [rs intForColumn:@"TagsId"];
-//        NSString * SessionNotes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"SessionNotes"]];
-//        NSString * ExerciseNotes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"ExerciseNotes"]];
-//        NSString * strWorkoutTempId = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutDate"]];
-//        NSString * VideoURL = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"VideoURL"]];
-//        NSString * IsActive = @"true";
-//
-//        NSString * CreatedDate = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutDate"]];
-//        NSString * EditedDate = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutDate"]];
-//
-//
-//        [dict setObject: [NSNumber numberWithInt:1]  forKey: @"P1ID"];
-//        [dict setObject: [NSNumber numberWithInt:2]  forKey: @"P2ID"];
-//
-//        [dict setObject: [NSNumber numberWithInt:WorkoutTemplateId]  forKey: @"WorkoutTemplateId"];
-//        [dict setObject: [NSNumber numberWithInt:UserID]  forKey: @"UserID"];
-//        [dict setObject: strTempName  forKey: @"TemplateName"];
-//        [dict setObject: strWorkoutTempId  forKey: @"WorkoutDate"];
-//        [dict setObject: [NSNumber numberWithInt:WorkoutTemplateId]  forKey: @"WorkoutTemplateId"];
-//        [dict setObject: [NSNumber numberWithInt:CategoryID]  forKey: @"CategoryID"];
-//        [dict setObject: [NSNumber numberWithInt:WorkoutID]  forKey: @"WorkoutID"];
-//        [dict setObject: SessionNotes  forKey: @"SessionNotes"];
-//        [dict setObject: ExerciseNotes  forKey: @"ExerciseNotes"];
-//        [dict setObject: VideoURL  forKey: @"VideoURL"];
-//        [dict setObject: [NSNumber numberWithInt:tagsId]  forKey: @"TagsId"];
-//        [dict setObject: IsActive  forKey: @"IsActive"];
-//        [dict setObject: CreatedDate  forKey: @"CreatedDate"];
-//        [dict setObject: EditedDate  forKey: @"EditedDate"];
-//
-//        //        NSMutableArray * setArr = [[NSMutableArray alloc]init];
-//
-//        NSString *filter = @"%K == %d";
-//        NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutTemplateId",WorkoutTemplateId];
-//
-//        NSMutableArray * setArr = [[NSMutableArray alloc]initWithArray:[setsDbArr filteredArrayUsingPredicate:categoryPredicate]];
-//
-//        [dict setObject: setArr  forKey: @"WorkoutSets"];
-//
-//        [arr addObject:dict];
-//    }
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
@@ -3319,7 +2998,7 @@
                     }
                     
                     // Now save the TagID into the MovesTags database to link them to the Move.
-                    NSString *replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO MovesTags (TagID,MoveID) VALUES(\"%d\",\"%d\")",
+                    NSString *replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO MovesTags (tagID, moveID) VALUES(\"%d\",\"%d\")",
                                                  move.moveId.intValue,
                                                  tag.tagId.intValue];
                     [db executeUpdate:replaceIntoSQL];
@@ -3333,7 +3012,7 @@
                 NSArray *categories = [dict objectForKey:@"moveCategories"];
                 for (NSDictionary *categoryDict in categories) {
                     DMMoveCategory *category = [[DMMoveCategory alloc] initWithDictionary:categoryDict];
-                    NSString *replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO MovesCategories (CategoryID,MoveID) VALUES(\"%d\",\"%d\")",
+                    NSString *replaceIntoSQL = [NSString stringWithFormat: @"REPLACE INTO MovesCategories (moveID, categoryID) VALUES(\"%d\",\"%d\")",
                                                  move.moveId.intValue,
                                                  category.categoryId.intValue];
                     [db executeUpdate:replaceIntoSQL];

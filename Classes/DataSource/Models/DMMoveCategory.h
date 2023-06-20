@@ -6,14 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
+@protocol DMPickerViewDataSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /// A category ("bodypart") for an exercise.
 /// NOTE: The table "MoveCategories" is hard coded.
-@interface DMMoveCategory : NSObject
+@interface DMMoveCategory : NSObject <DMPickerViewDataSource>
 @property (nonatomic, strong, readonly) NSNumber *categoryId;
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 

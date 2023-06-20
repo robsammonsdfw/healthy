@@ -6,11 +6,12 @@
 //
 
 #import "DMMove.h"
+#import "DietMasterGoPlus-Swift.h"
 
 @interface DMMove()
 @property (nonatomic, strong, readwrite) NSNumber *moveId;
 @property (nonatomic, strong, readwrite) NSNumber *companyId;
-@property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *name;
 @property (nonatomic, strong, readwrite) NSString *videoUrl;
 @property (nonatomic, strong, readwrite) NSString *notes;
 @end
@@ -24,19 +25,18 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        // See note in -dictionaryRepresentation why this looks at two sets of keys.
-        _moveId = dictionary[@"MoveID"] ?: dictionary[@"moveID"];
-        _companyId = dictionary[@"CompanyID"] ?: dictionary[@"companyID"];
+        _moveId = dictionary[@"moveID"];
+        _companyId = dictionary[@"companyID"];
         
-        NSString *name = dictionary[@"MoveName"] ?: dictionary[@"moveName"];
+        NSString *name = dictionary[@"moveName"];
         name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         _name = name;
         
-        _videoUrl = dictionary[@"VideoLink"] ?: dictionary[@"videoLink"];
+        _videoUrl = dictionary[@"videoLink"];
 
-        NSString *notes = dictionary[@"Notes"] ?: dictionary[@"notes"];
+        NSString *notes = dictionary[@"notes"];
         notes = [notes stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         notes = [notes stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         notes = [notes stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -47,13 +47,6 @@
 
 - (NSDictionary *)dictionaryRepresentation {
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                          self.moveId, @"MoveID",
-                          self.companyId, @"CompanyID",
-                          self.name, @"MoveName",
-                          self.videoUrl, @"VideoLink",
-                          self.notes, @"Notes",
-                          // Due to the awesome data design by the overseas vendor, the local database uses capital, while
-                          // the web API uses lowercase, thus to make this support both use cases we output both sets:
                           self.moveId, @"moveID",
                           self.companyId, @"companyID",
                           self.name, @"moveName",
@@ -64,8 +57,8 @@
 }
 
 - (NSString *)replaceIntoSQLString {
-    NSString *sqlString = [NSString stringWithFormat:@"REPLACE INTO MoveDetailsTable "
-                            "(MoveID, CompanyID, MoveName, VideoLink, Notes) VALUES (\"%d\", \"%d\", \"%@\", \"%@\", '%@')",
+    NSString *sqlString = [NSString stringWithFormat:@"REPLACE INTO MoveDetails "
+                            "(moveID, companyID, moveName, videoLink, notes) VALUES (\"%d\", \"%d\", \"%@\", \"%@\", '%@')",
                            self.moveId.intValue,
                            self.companyId.intValue,
                            self.name,

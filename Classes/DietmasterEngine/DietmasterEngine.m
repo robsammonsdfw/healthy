@@ -101,7 +101,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 -(void)syncDatabase {
     syncsCompleted = 0;
     syncsFailed = 0;
-    syncsToComplete = 4;
+    syncsToComplete = 3; // changed by henry
     
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     [dateComponents setDay:-90];

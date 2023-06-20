@@ -9,7 +9,7 @@
 
 @interface DMMoveTag()
 @property (nonatomic, strong, readwrite) NSNumber *tagId;
-@property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *name;
 @end
 
 @implementation DMMoveTag
@@ -21,9 +21,9 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _tagId = dictionary[@"TagID"];
+        _tagId = dictionary[@"tagID"];
         
-        NSString *name = dictionary[@"TagName"];
+        NSString *name = dictionary[@"tag"];
         if (![name isEqualToString:@"(null)"]) {
             name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
             name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
@@ -44,7 +44,7 @@
 
 - (NSString *)replaceIntoSQLString {
     NSString *sqlString = [NSString stringWithFormat:@"REPLACE INTO MoveTags "
-                            "(TagID, TagName) VALUES (\"%d\", \"%@\")",
+                            "(tagID, tag) VALUES (\"%d\", \"%@\")",
                            self.tagId.intValue,
                            self.name ];
     return sqlString;

@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 @class DMMove;
+@class DMMoveCategory;
+@class DMMoveTag;
 
 @protocol WSGetUserWorkoutplanOffline;
 
@@ -19,29 +21,20 @@
     NSString * tempStr;
 }
 
-@property (nonatomic, strong) NSMutableData *responseData;
-@property (nonatomic, strong) NSString *apiRequestType;
-@property (nonatomic) BOOL myBool;
-
 @property (nonatomic, weak) id<WSGetUserWorkoutplanOffline> WSGetUserWorkoutplanOfflineDelegate;
-
-@property (nonatomic, strong) NSMutableData *webData;
-@property (nonatomic, strong) NSMutableString *soapResults;
-@property (nonatomic, strong) NSXMLParser *xmlParser;
 
 - (NSArray *)loadExerciseFromDb;
 -(NSMutableArray *)loadWorkoutFromDb;
 
--(NSMutableArray *)loadListOfTitleToDb;
 /// Loads a list of the categories from the database. Also called "Bodyparts".
--(NSArray *)loadListOfBodyPart;
+- (NSArray<DMMoveCategory *> *)loadListOfBodyPart;
 /// Loads a list of tags from the database.
-- (NSArray *)loadListOfTags;
-
-/// Loads an array of moves (exercises) from the local database.
-- (NSArray<DMMove *> *)getMovesFromDatabase;
-
--(NSMutableArray *)loadCategoryFilteredListOfTitleToDb:(int)catId;
+- (NSArray<DMMoveTag *> *)loadListOfTags;
+/// Loads an array of moves (exercises) from the local database. To filter, provide a
+/// category or tag object to filter by.
+- (NSArray<DMMove *> *)getMovesFromDatabaseWithCategoryFilter:(DMMoveCategory *)categoryFilter
+                                                    tagFilter:(DMMoveTag *)tagFilter
+                                                   textSearch:(NSString *)textSearch;
 
 -(NSMutableArray *)loadWorkoutSynParamFromDb;
 
@@ -89,8 +82,6 @@
 -(void)updateTimeToDb:(NSString *)WorkingStatus timeToSet:(NSString *)CurrentDuration excerciseDict:(NSDictionary *)dict;
 -(NSMutableArray *)loadWorkoutTime;
 
--(void)saveMovesTagsCategoriesToDb:(NSDictionary *)movesDict;
-
 -(void)updateTimeForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict WorkoutTimer:(NSString*)WorkoutTime;
 -(void)updateWorkoutToDb:(NSString *)exerciseDate;
 -(void)updateSetsForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict;
@@ -121,7 +112,9 @@
 
 -(void)serverUserPlans:(NSDictionary *)planListDict;
 
--(void)getMyMovesData;
+/// Fetches MyMoves data from the server and saves it locally.
+/// This includes Exercises (Moves) and Tags / Categories.
+- (void)getMyMovesData;
 
 @end
 

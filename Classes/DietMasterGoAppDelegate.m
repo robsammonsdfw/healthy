@@ -496,11 +496,28 @@
             [prefs setBool:YES forKey:@"1.5"];
         }
         
+        // MIGRATING, Moving old tables out of the way.
+//        NSString *dropTableSQL1;
+//        [db beginTransaction];
+//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MoveTags"];
+//        [db executeUpdate:dropTableSQL1];
+//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MoveCategories"];
+//        [db executeUpdate:dropTableSQL1];
+//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MovesCategories"];
+//        [db executeUpdate:dropTableSQL1];
+//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MovesTags"];
+//        [db executeUpdate:dropTableSQL1];
+//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MovesTags"];
+//        [db executeUpdate:dropTableSQL1];
+//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MoveDetailsTable"];
+//        [db executeUpdate:dropTableSQL1];
+//        [db commit];
+
         // Add optimized MyMoves Tags and Categories Tables.
         // Create table to store Tags associated with Moves.
         if (![db tableExists:@"MoveTags"]) {
             [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MoveTags' (TagID INTEGER PRIMARY KEY, TagName TEXT)";
+            NSString *createTableSQL = @"CREATE TABLE 'MoveTags' (tagID INTEGER PRIMARY KEY, tag TEXT)";
             [db executeUpdate:createTableSQL];
             if ([db hadError]) {
                 DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -508,32 +525,42 @@
             [db commit];
         }
 
+        if (![db tableExists:@"MoveDetails"]) {
+            [db beginTransaction];
+            NSString *createTableSQL = @"CREATE TABLE 'MoveDetails' (moveID INTEGER PRIMARY KEY, companyID INTEGER, moveName TEXT, videoLink TEXT, notes TEXT)";
+            [db executeUpdate:createTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
         // List of Categories that moves can be associated with. NOTE: Category = Bodypart.
         if (![db tableExists:@"MoveCategories"]) {
             [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MoveCategories' (CategoryID INTEGER PRIMARY KEY, CategoryName TEXT)";
+            NSString *createTableSQL = @"CREATE TABLE 'MoveCategories' (categoryID INTEGER PRIMARY KEY, categoryName TEXT)";
             [db executeUpdate:createTableSQL];
             // Now add the hard-coded values of Categories.
             NSArray *categorySQLArray = @[
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (1, 'Arms')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (2, 'Calves')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (3, 'Full Body')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (4, 'Chest')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (5, 'Back')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (6, 'Shoulders')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (7, 'Lats')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (8, 'Abdominals')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (9, 'Quads')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (10, 'Hamstrings')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (11, 'Legs')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (12, 'Upper Body')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (13, 'Biceps')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (14, 'Triceps')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (15, 'Lower Body')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (16, 'Traps')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (17, 'Core')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (18, 'Glutes')",
-                @"REPLACE INTO MoveCategories (CategoryID, CategoryName) VALUES (19, 'Hip Flexors')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (1, 'Arms')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (2, 'Calves')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (3, 'Full Body')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (4, 'Chest')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (5, 'Back')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (6, 'Shoulders')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (7, 'Lats')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (8, 'Abdominals')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (9, 'Quads')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (10, 'Hamstrings')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (11, 'Legs')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (12, 'Upper Body')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (13, 'Biceps')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (14, 'Triceps')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (15, 'Lower Body')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (16, 'Traps')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (17, 'Core')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (18, 'Glutes')",
+                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (19, 'Hip Flexors')",
             ];
             for (NSString *sqlStatement in categorySQLArray) {
                 [db executeUpdate:sqlStatement];
@@ -550,7 +577,7 @@
         // Create table to store the Categories that are associated with a Move.
         if (![db tableExists:@"MovesCategories"]) {
             [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MovesCategories' (MoveID INTEGER, CategoryID INTEGER)";
+            NSString *createTableSQL = @"CREATE TABLE 'MovesCategories' (moveID INTEGER, categoryID INTEGER, PRIMARY KEY (moveID, categoryID))";
             [db executeUpdate:createTableSQL];
             if ([db hadError]) {
                 DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -560,7 +587,7 @@
         // Create a table to store the Tags associated with the Moves.
         if (![db tableExists:@"MovesTags"]) {
             [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MovesTags' (MoveID INTEGER, TagID INTEGER)";
+            NSString *createTableSQL = @"CREATE TABLE 'MovesTags' (moveID INTEGER, tagID INTEGER)";
             [db executeUpdate:createTableSQL];
             if ([db hadError]) {
                 DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
