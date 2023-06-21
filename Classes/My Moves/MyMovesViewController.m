@@ -6,19 +6,16 @@
 //
 
 #import "MyMovesViewController.h"
-#import "AppSettings.h"
 #import "MyMovesTableViewCell.h"
 #import "MyMovesDetailsViewController.h"
 #import "MyMovesListViewController.h"
 #import "MyMovesWebServices.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "Reachability.h"
 #import "MyMovesListTableViewCell.h"
 #import "NSArray+HOF.h"
 #import "NSArray+HOFC.h"
 #import "MessageViewController.h"
-#import "PopUpView.h"
 #import "DietMasterGoViewController.h"
 
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
@@ -28,7 +25,7 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #import <HealthKit/HealthKit.h>
-@interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, WSGetUserWorkoutplanOffline, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, GotoViewControllerDelegate>
+@interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, WSGetUserWorkoutplanOffline, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     CGFloat animatedDistance;
     MyMovesWebServices *soapWebService;
@@ -71,192 +68,173 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 @property (nonatomic, strong) NSMutableArray *fullPlanListData;
 @property (nonatomic, strong) NSString *statusSs;
 
-
 @end
+
 @implementation MyMovesViewController
 
 @synthesize sd,arrData,healthStore,date_currentDate,calendar,prevDate;
+
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
      
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"changeDesign"]  isEqual: @"NewDesign"])
-    {
-        self.showPopUpVw.hidden = false;
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"isNewDesign"];
-    }
-    else
-    {
-        self.showPopUpVw.hidden = true;
-    }
-    
     [self.navigationController setNavigationBarHidden:NO];
     self.navigationItem.hidesBackButton = YES;
 
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"])
+    commentsTxtView.hidden = YES;
+    _userCommentsLbl.hidden = YES;
+    _sendMessageBtn.backgroundColor = PrimaryDarkColor;
+    _lineView.backgroundColor = PrimaryDarkColor;
+    _sendMessageBtn.layer.cornerRadius = 5.0;
+    [_sendMessageBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    
+    _dayToggleView.backgroundColor = AccentColor;
+    _dayToolBar.barTintColor = AccentColor;
+    UIImage *btnImage = [[UIImage imageNamed:@"log_up_arrow.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [expandBtn setImage:btnImage forState:UIControlStateNormal];
+    expandBtn.tintColor = AccentColor
+    
+    _exerciseDataWithoutDuplicate = [[NSMutableArray alloc]init];
+    _exerciseData = [[NSMutableArray alloc]init];
+    _userPlanListData = [[NSMutableArray alloc]init];
+    _userPlanDateListData = [[NSMutableArray alloc]init];
+    _userPlanMoveListData = [[NSMutableArray alloc]init];
+    _userPlanMoveSetListData = [[NSMutableArray alloc]init];
+    _loadMoveDetails = [[NSMutableArray alloc]init];
+    _listViewItem = [[NSMutableArray alloc]init];
+    _sectionCount = [[NSMutableArray alloc]init];
+    _sectionTitle = [[NSMutableArray alloc]init];
+    _fullDBData   = [[NSMutableArray alloc]init];
+    _loadMoveName = [[NSMutableArray alloc]init];
+    _fullDateListData = [[NSMutableArray alloc]init];
+    _fullPlanListData = [[NSMutableArray alloc]init];
+    _deletedPlanArr = [[NSMutableArray alloc]init];
+    _deletedPlanDateArr = [[NSMutableArray alloc]init];
+    _deletedMoveArr = [[NSMutableArray alloc]init];
+    _deletedMoveSetArr = [[NSMutableArray alloc]init];
+    _deletedArr = [[NSMutableArray alloc]init];
+    _tblData = [[NSMutableArray alloc]init];
+    prevDate = [[NSDate alloc]init];
+    prevDataArr = [[NSMutableArray alloc]init];
+    
+    movesTblView.delegate = self;
+    movesTblView.dataSource = self;
+    
+    listViewMoves.delegate = self;
+    listViewMoves.dataSource = self;
+    listViewMoves.tableFooterView = nil;
+    listViewMoves.sectionFooterHeight = 0;
+    
+    self.datesExerciseCompletd = [[NSMutableArray alloc]init];
+    self.datesWithInfo = [[NSMutableArray alloc]init];
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    self.dateFormatter.dateFormat = @"yyyy/MM/dd";
+    
+    self.monthFormat = [[NSDateFormatter alloc] init];
+    
+    calendar = [[FSCalendar alloc] initWithFrame:CGRectMake(_calendarView.bounds.origin.x, _calendarView.bounds.origin.y + 15, SCREEN_WIDTH, _calendarView.bounds.size.height - 50)];
+    calendar.dataSource = self;
+    calendar.delegate = self;
+    calendar.scrollDirection = FSCalendarScrollDirectionVertical;
+    calendar.backgroundColor = [UIColor whiteColor];
+    calendar.scope = FSCalendarScopeMonth;
+    calendar.appearance.subtitlePlaceholderColor = [UIColor darkTextColor];
+    calendar.appearance.subtitleDefaultColor = [UIColor yellowColor];
+    calendar.appearance.subtitleWeekendColor = [UIColor redColor];
+    
+    [calendar.calendarHeaderView setHidden:YES];
+    calendar.headerHeight = 0;
+    [calendar selectDate:[NSDate date]];
+    
+    [_calendarView addSubview:calendar];
+    
+    selectedExercisesArr = [[NSMutableArray alloc]init];
+    arrData = [NSMutableArray new];
+    healthStore = [[HKHealthStore alloc] init];
+    sd = [[StepData alloc]init];
+    
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.title = @"My Moves";
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+            
+    UIImage *listImg = [[UIImage imageNamed:@"viewlist.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    listCalendarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    listCalendarBtn.bounds = CGRectMake( 0, 0, listImg.size.width, listImg.size.height );
+    listCalendarBtn.tintColor = [UIColor whiteColor];
+    [listCalendarBtn addTarget:self action:@selector(tabBarAction:) forControlEvents:UIControlEventTouchDown];
+    [listCalendarBtn setImage:listImg forState:UIControlStateNormal];
+    listCalendarBtn.tag = 0;
+    
+    listCalendarBarBtn = [[UIBarButtonItem alloc] initWithCustomView:listCalendarBtn];
+    
+    UIImage *calendarViewImg = [[UIImage imageNamed:@"calendarview.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    calendarViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    calendarViewBtn.bounds = CGRectMake( 0, 0, calendarViewImg.size.width, calendarViewImg.size.height );
+    calendarViewBtn.tintColor = [UIColor whiteColor];
+    [calendarViewBtn addTarget:self action:@selector(tabBarAction:) forControlEvents:UIControlEventTouchDown];
+    [calendarViewBtn setImage:calendarViewImg forState:UIControlStateNormal];
+    calendarViewBtn.tag = 1;
+    
+    CalendarBarBtn = [[UIBarButtonItem alloc] initWithCustomView:calendarViewBtn];
+    
+    [self tabBarAction:calendarViewBtn];
+    self.navigationItem.leftBarButtonItems = [[NSArray alloc]initWithObjects:listCalendarBarBtn,nil];
+    
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    dietmasterEngine.taskMode = @"View";
+    
+    //set date in current date variable
+    NSDate* sourceDate = [NSDate date];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
+    [self.dateFormatter setTimeZone:systemTimeZone];
+    self.date_currentDate = sourceDate;
+    [self setDateLbl:sourceDate];
+    
+    //set textView border color
+    commentsTxtView.layer.borderColor = [UIColor grayColor].CGColor;
+    commentsTxtView.layer.borderWidth = 1.0;
+    commentsTxtView.layer.cornerRadius = 5.0;
+    
+    soapWebService = [[MyMovesWebServices alloc] init];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    userId = [[prefs valueForKey:@"userid_dietmastergo"] intValue];
+    
+    if IS_IPHONE_X_XR_XS
     {
-        commentsTxtView.hidden = YES;
-        _userCommentsLbl.hidden = YES;
-        _sendMessageBtn.backgroundColor = PrimaryDarkColor;
-        _lineView.backgroundColor = PrimaryDarkColor;
-        _sendMessageBtn.layer.cornerRadius = 5.0;
-        [_sendMessageBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-        
-        _dayToggleView.backgroundColor = AccentColor;
-        _dayToolBar.barTintColor = AccentColor;
-        UIImage *btnImage = [[UIImage imageNamed:@"log_up_arrow.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [expandBtn setImage:btnImage forState:UIControlStateNormal];
-        expandBtn.tintColor = AccentColor
-        
-        _exerciseDataWithoutDuplicate = [[NSMutableArray alloc]init];
-        _exerciseData = [[NSMutableArray alloc]init];
-        _userPlanListData = [[NSMutableArray alloc]init];
-        _userPlanDateListData = [[NSMutableArray alloc]init];
-        _userPlanMoveListData = [[NSMutableArray alloc]init];
-        _userPlanMoveSetListData = [[NSMutableArray alloc]init];
-        _loadMoveDetails = [[NSMutableArray alloc]init];
-        _listViewItem = [[NSMutableArray alloc]init];
-        _sectionCount = [[NSMutableArray alloc]init];
-        _sectionTitle = [[NSMutableArray alloc]init];
-        _fullDBData   = [[NSMutableArray alloc]init];
-        _loadMoveName = [[NSMutableArray alloc]init];
-        _fullDateListData = [[NSMutableArray alloc]init];
-        _fullPlanListData = [[NSMutableArray alloc]init];
-        _deletedPlanArr = [[NSMutableArray alloc]init];
-        _deletedPlanDateArr = [[NSMutableArray alloc]init];
-        _deletedMoveArr = [[NSMutableArray alloc]init];
-        _deletedMoveSetArr = [[NSMutableArray alloc]init];
-        _deletedArr = [[NSMutableArray alloc]init];
-        _tblData = [[NSMutableArray alloc]init];
-        prevDate = [[NSDate alloc]init];
-        prevDataArr = [[NSMutableArray alloc]init];
-        
-        movesTblView.delegate = self;
-        movesTblView.dataSource = self;
-        
-        listViewMoves.delegate = self;
-        listViewMoves.dataSource = self;
-        listViewMoves.tableFooterView = nil;
-        listViewMoves.sectionFooterHeight = 0;
-        
-        self.datesExerciseCompletd = [[NSMutableArray alloc]init];
-        self.datesWithInfo = [[NSMutableArray alloc]init];
-        
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        self.dateFormatter.dateFormat = @"yyyy/MM/dd";
-        
-        self.monthFormat = [[NSDateFormatter alloc] init];
-        
-        calendar = [[FSCalendar alloc] initWithFrame:CGRectMake(_calendarView.bounds.origin.x, _calendarView.bounds.origin.y + 15, SCREEN_WIDTH, _calendarView.bounds.size.height - 50)];
-        calendar.dataSource = self;
-        calendar.delegate = self;
-        calendar.scrollDirection = FSCalendarScrollDirectionVertical;
-        calendar.backgroundColor = [UIColor whiteColor];
-        calendar.scope = FSCalendarScopeMonth;
-        calendar.appearance.subtitlePlaceholderColor = [UIColor darkTextColor];
-        calendar.appearance.subtitleDefaultColor = [UIColor yellowColor];
-        calendar.appearance.subtitleWeekendColor = [UIColor redColor];
-        
-        [calendar.calendarHeaderView setHidden:YES];
-        calendar.headerHeight = 0;
-        [calendar selectDate:[NSDate date]];
-        
-        [_calendarView addSubview:calendar];
-        
-        selectedExercisesArr = [[NSMutableArray alloc]init];
-        arrData = [NSMutableArray new];
-        healthStore = [[HKHealthStore alloc] init];
-        sd = [[StepData alloc]init];
-        
-        [self.navigationController setNavigationBarHidden:NO];
-        [self.navigationController.navigationBar setTranslucent:NO];
-        [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-        [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-        self.navigationItem.hidesBackButton = YES;
-        self.navigationItem.title = @"My Moves";
-        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-                
-        UIImage *listImg = [[UIImage imageNamed:@"viewlist.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        listCalendarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        listCalendarBtn.bounds = CGRectMake( 0, 0, listImg.size.width, listImg.size.height );
-        listCalendarBtn.tintColor = [UIColor whiteColor];
-        [listCalendarBtn addTarget:self action:@selector(tabBarAction:) forControlEvents:UIControlEventTouchDown];
-        [listCalendarBtn setImage:listImg forState:UIControlStateNormal];
-        listCalendarBtn.tag = 0;
-        
-        listCalendarBarBtn = [[UIBarButtonItem alloc] initWithCustomView:listCalendarBtn];
-        
-        UIImage *calendarViewImg = [[UIImage imageNamed:@"calendarview.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        calendarViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        calendarViewBtn.bounds = CGRectMake( 0, 0, calendarViewImg.size.width, calendarViewImg.size.height );
-        calendarViewBtn.tintColor = [UIColor whiteColor];
-        [calendarViewBtn addTarget:self action:@selector(tabBarAction:) forControlEvents:UIControlEventTouchDown];
-        [calendarViewBtn setImage:calendarViewImg forState:UIControlStateNormal];
-        calendarViewBtn.tag = 1;
-        
-        CalendarBarBtn = [[UIBarButtonItem alloc] initWithCustomView:calendarViewBtn];
-        
-        [self tabBarAction:calendarViewBtn];
-        self.navigationItem.leftBarButtonItems = [[NSArray alloc]initWithObjects:listCalendarBarBtn,nil];
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.taskMode = @"View";
-        
-        //set date in current date variable
-        NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormat setTimeZone:systemTimeZone];
-        
-        self.date_currentDate = sourceDate;
-        
-        // call functin to set date label
-        [self setDateLbl:sourceDate];
-        
-        //set textView border color
-        commentsTxtView.layer.borderColor = [UIColor grayColor].CGColor;
-        commentsTxtView.layer.borderWidth = 1.0;
-        commentsTxtView.layer.cornerRadius = 5.0;
-        
-        soapWebService = [[MyMovesWebServices alloc] init];
-        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        userId = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
-        
-        if IS_IPHONE_X_XR_XS
+        if ([_workoutClickedFromHome isEqual: @"clicked"])
         {
-            if ([_workoutClickedFromHome isEqual: @"clicked"])
-            {
-                [self.calendarView setHidden:YES];
-                self.proportionalHeightCalConst.constant = 0;
-            }
-            else
-            {
-                self.proportionalHeightCalConst.constant = self.view.frame.size.height /4;
-                [self.calendarView setHidden:NO];
-            }
+            [self.calendarView setHidden:YES];
+            self.proportionalHeightCalConst.constant = 0;
         }
         else
         {
-            if ([_workoutClickedFromHome isEqual: @"clicked"])
-            {
-                [self.calendarView setHidden:YES];
-                self.proportionalHeightCalConst.constant = 0;
-            }
-            else
-            {
-                self.proportionalHeightCalConst.constant = self.view.frame.size.height /3;
-                [self.calendarView setHidden:NO];
-            }
+            self.proportionalHeightCalConst.constant = self.view.frame.size.height /4;
+            [self.calendarView setHidden:NO];
         }
     }
     else
     {
-        AppSettings *appSettings = [[AppSettings alloc] initWithNibName: @"AppSettings" bundle: nil];
-        appSettings.title = @"Settings";
-        self.navigationItem.title = @"Settings";
-        [self.navigationController setViewControllers:@[appSettings] animated:NO];
-        [soapWebService offlineSyncApi];
+        if ([_workoutClickedFromHome isEqual: @"clicked"])
+        {
+            [self.calendarView setHidden:YES];
+            self.proportionalHeightCalConst.constant = 0;
+        }
+        else
+        {
+            self.proportionalHeightCalConst.constant = self.view.frame.size.height /3;
+            [self.calendarView setHidden:NO];
+        }
     }
 }
 
@@ -293,27 +271,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
     }
 
-    
-    if (Reachability.reachabilityForInternetConnection) {
-        
-    }
-    else
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-                                                        message:@"No Internet Connection"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles: nil];
-        [alert show];
-    }
-    
     soapWebService = [[MyMovesWebServices alloc] init];
-
-//    [self loadCalendarOnMonthChange:self.date_currentDate];
-    
-//    [self loadCircleInCalendar:_exerciseData];
-
-    
     
     if (engine.sendAllServerData == true)
     {
@@ -327,23 +285,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.title=@"My Moves";
+    self.navigationItem.title = @"My Moves";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     if (self.isMovingFromParentViewController) {
         [[self navigationController] setNavigationBarHidden:YES animated:YES];
     }
 }
 
-
--(void)loadEventCalendar:(NSMutableArray*)datesArr
-{
-//    while(isLoading) {
-//        DMLog(@"Oh shit i think i broke it...");
-//    }
+-(void)loadEventCalendar:(NSMutableArray*)datesArr {
     prevDataArr = [[NSMutableArray alloc]initWithArray:datesArr];
     
     self.datesExerciseCompletd = [[NSMutableArray alloc]init];
@@ -358,8 +311,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         isLoading = YES;
         for (int i = 0 ;i < datesArr.count;i++)
         {
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+            [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
             
             NSDateFormatter *myFormat = [[NSDateFormatter alloc] init];
             [myFormat setDateFormat:@"yyyy-mm-dd hh:mm:ss Z"];
@@ -368,16 +320,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             {
                 NSArray *planDateArr = [datesArr[i][@"PlanDate"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[planDateArr objectAtIndex:0]];
-                NSDate *dateFormate = [dateFormatter dateFromString:dateString];
-                [dateFormatter setDateFormat:@"yyyy/MM/dd"];
-                [self.datesWithInfo addObject:[dateFormatter stringFromDate:dateFormate]];
+                NSDate *dateFormate = [self.dateFormatter dateFromString:dateString];
+                [self.dateFormatter setDateFormat:@"yyyy/MM/dd"];
+                [self.datesWithInfo addObject:[self.dateFormatter stringFromDate:dateFormate]];
             }
             else
             {
                 NSArray *planDateArr = [datesArr[i][@"PlanDate"] componentsSeparatedByString:@" "];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[planDateArr objectAtIndex:0]];
 
-                NSDate *dateFormate = [dateFormatter dateFromString:dateString];
+                NSDate *dateFormate = [self.dateFormatter dateFromString:dateString];
                 [myFormat setDateFormat:@"yyyy/MM/dd"];
                 [self.datesWithInfo addObject:[myFormat stringFromDate:dateFormate]];
             }
@@ -396,6 +348,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [operationQueue addOperation:blockCompletionOperation];
     [operationQueue addOperation:blockOperation];
 }
+
 - (IBAction)tabBarAction:(UIButton*)sender {
     [self setMonthLbl:self.date_currentDate];
     
@@ -418,8 +371,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 }
 
--(void)loadListTable
-{
+-(void)loadListTable {
     [_sectionCount removeAllObjects];
     [_sectionTitle removeAllObjects];
     currentSection = 1200;
@@ -430,25 +382,23 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     NSMutableArray *arrayWithCustomDateTitle = [[NSMutableArray alloc]init];
     NSMutableArray *arrayWithSameDate = [[NSMutableArray alloc]init];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM"];
+    [self.dateFormatter setDateFormat:@"yyyy-MM"];
     
     NSString *filter = @"%K CONTAINS %@";
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"LastUpdated",[dateFormatter stringFromDate:self.date_currentDate]];
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"LastUpdated",[self.dateFormatter stringFromDate:self.date_currentDate]];
     
     NSString *dateOneStr = @"-01";
-    NSString *monthYearStr = [dateFormatter stringFromDate:self.date_currentDate];
+    NSString *monthYearStr = [self.dateFormatter stringFromDate:self.date_currentDate];
     NSString *dateStr = [monthYearStr stringByAppendingString:dateOneStr];
     NSString *generatedDate = [dateStr stringByAppendingString:@"T00:00:00"];
 
     // Convert string to date object
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSDate *dateOfFirstDayMonth = [dateFormat dateFromString:generatedDate];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    NSDate *dateOfFirstDayMonth = [self.dateFormatter dateFromString:generatedDate];
     
     _listViewItem = [[NSMutableArray alloc]init];
     
-    if ([[dateFormatter stringFromDate:calendar.selectedDate]isEqualToString:[dateFormatter stringFromDate:self.date_currentDate]]) {
+    if ([[self.dateFormatter stringFromDate:calendar.selectedDate] isEqualToString:[self.dateFormatter stringFromDate:self.date_currentDate]]) {
         _exerciseDataWithoutDuplicate = [[NSMutableArray alloc]init];
     }
 
@@ -473,7 +423,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         NSMutableArray * arr = [[NSMutableArray alloc]init];
 
-        if ([[dateFormatter stringFromDate:calendar.selectedDate]isEqualToString:[dateFormatter stringFromDate:self.date_currentDate]]) {
+        if ([[self.dateFormatter stringFromDate:calendar.selectedDate] isEqualToString:[self.dateFormatter stringFromDate:self.date_currentDate]]) {
             _templatesList1 = [[NSMutableArray alloc]init];
             _templatesList2 = [[NSMutableArray alloc]init];
             for (int i =0 ; i<[_userPlanListData count]; i++) {
@@ -490,10 +440,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [_exerciseDataWithoutDuplicate addObject:_userPlanListData[i]];
                 }
             }
-            // DMLog(@"%@",_exerciseDataWithoutDuplicate);
         }
         
-        if ([[monthFormatter stringFromDate:self.date_currentDate]isEqualToString:[monthFormatter stringFromDate:date_Tomorrow]]) {
+        if ([[monthFormatter stringFromDate:self.date_currentDate] isEqualToString:[monthFormatter stringFromDate:date_Tomorrow]]) {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             NSDateFormatter *customFormatter = [[NSDateFormatter alloc] init];
 
@@ -538,13 +487,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             for (int i = 0 ;i < datesArr.count;i++)
             {
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+                [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [datesArr[i][@"WorkoutDate"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [dateFormatter dateFromString:dateString];
-                [dateFormatter setDateFormat:@"yyyy/MM/dd"];
-                [self.datesWithInfo addObject:[dateFormatter stringFromDate:date]];
+                NSDate *date = [self.dateFormatter dateFromString:dateString];
+                [self.dateFormatter setDateFormat:@"yyyy/MM/dd"];
+                [self.datesWithInfo addObject:[self.dateFormatter stringFromDate:date]];
             }
             
             NSString * completedExerciseStr = @"true";
@@ -555,15 +503,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             NSMutableArray *completedExerciseArrDates = [[NSMutableArray alloc]init];
             
-            for (int i = 0 ;i < completedExerciseArr.count;i++)
-            {
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+            for (int i = 0 ;i < completedExerciseArr.count;i++) {
+                [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [completedExerciseArr[i][@"WorkoutDate"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [dateFormatter dateFromString:dateString];
-                [dateFormatter setDateFormat:@"yyyy/MM/dd"];
-                [completedExerciseArrDates addObject:[dateFormatter stringFromDate:date]];
+                NSDate *date = [self.dateFormatter dateFromString:dateString];
+                [self.dateFormatter setDateFormat:@"yyyy/MM/dd"];
+                [completedExerciseArrDates addObject:[self.dateFormatter stringFromDate:date]];
             }
             
             NSString * str = @"false";
@@ -574,19 +520,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             NSMutableArray *incompletedExerciseArrDates = [[NSMutableArray alloc]init];
             
-            for (int i = 0 ;i < incompletedExerciseArr.count;i++)
-            {
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+            for (int i = 0 ;i < incompletedExerciseArr.count;i++) {
+                [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
                 NSArray *arr = [incompletedExerciseArr[i][@"WorkoutDate"] componentsSeparatedByString:@"T"];
                 NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                NSDate *date = [dateFormatter dateFromString:dateString];
-                [dateFormatter setDateFormat:@"yyyy/MM/dd"];
-                [incompletedExerciseArrDates addObject:[dateFormatter stringFromDate:date]];
+                NSDate *date = [self.dateFormatter dateFromString:dateString];
+                [self.dateFormatter setDateFormat:@"yyyy/MM/dd"];
+                [incompletedExerciseArrDates addObject:[self.dateFormatter stringFromDate:date]];
             }
             
-            if (incompletedExerciseArr != nil && ([incompletedExerciseArr count] != 0))
-            {
+            if (incompletedExerciseArr != nil && ([incompletedExerciseArr count] != 0)) {
                 NSMutableSet* firstArraySet = [[[NSMutableSet alloc] initWithArray:completedExerciseArrDates]mutableCopy];
                 NSMutableSet* secondArraySet = [[[NSMutableSet alloc] initWithArray:incompletedExerciseArrDates]mutableCopy];
                 
@@ -595,9 +538,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 NSArray *array = [firstArraySet allObjects];
                 
                 [self.datesExerciseCompletd addObjectsFromArray:array];
-            }
-            else
-            {
+            } else {
                 NSMutableSet* firstArraySet = [[NSMutableSet alloc] initWithArray:completedExerciseArrDates];
                 [firstArraySet unionSet:firstArraySet];
                 
@@ -618,118 +559,82 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [blockCompletionOperation addDependency:blockOperation];
         [operationQueue addOperation:blockCompletionOperation];
         [operationQueue addOperation:blockOperation];
-        
-
-    
 }
 
--(void)setMonthLbl:(NSDate*)dateToSet
-{
-    NSDateFormatter *setDisplayCalendarMonth = [[NSDateFormatter alloc] init];
-
-    [setDisplayCalendarMonth setDateFormat:@"MMMM YYYY"];
-    listCurrentMonthLbl.text = [setDisplayCalendarMonth stringFromDate:dateToSet];
+-(void)setMonthLbl:(NSDate*)dateToSet {
+    [self.dateFormatter setDateFormat:@"MMMM YYYY"];
+    listCurrentMonthLbl.text = [self.dateFormatter stringFromDate:dateToSet];
 }
 
--(void)setDateLbl:(NSDate*)dateToSet
-{
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+- (void)setDateLbl:(NSDate*)dateToSet {
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-    [dateFormat setTimeZone:systemTimeZone];
+    [self.dateFormatter setTimeZone:systemTimeZone];
     
-    // set date label
-    NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isddmm"] boolValue]) {
-        [dateFormat_display setDateFormat:@"MMMM d, yyyy"];
-        [dateFormat_display setTimeZone:systemTimeZone];
+        [self.dateFormatter setDateFormat:@"MMMM d, yyyy"];
+        [self.dateFormatter setTimeZone:systemTimeZone];
     }
     else{
-        [dateFormat_display setDateFormat:@"d MMMM, yyyy"];
-        [dateFormat_display setTimeZone:systemTimeZone];
+        [self.dateFormatter setDateFormat:@"d MMMM, yyyy"];
+        [self.dateFormatter setTimeZone:systemTimeZone];
     }
     
-    NSString *date_Display        = [dateFormat_display stringFromDate:dateToSet];
-
+    NSString *date_Display = [self.dateFormatter stringFromDate:dateToSet];
     lblDateHeader.text = date_Display;
-    
-  
-    //Load Calendar Data
-//    [self loadCalendarOnMonthChange:dateToSet];
-    
+        
     //api call to load table data
     [self loadTableData:dateToSet];
 
-    NSDateFormatter *setDisplayCalendarMonth = [[NSDateFormatter alloc] init];
-    [setDisplayCalendarMonth setDateFormat:@"MMMM"];
-
-    _displayedMonthLbl.text = [setDisplayCalendarMonth stringFromDate:dateToSet];
-    
+    [self.dateFormatter setDateFormat:@"MMMM"];
+    self.displayedMonthLbl.text = [self.dateFormatter stringFromDate:dateToSet];
 }
+
 //new API
--(void)loadCalendarOnMonthChange:(NSDate*)dateToSet
-{
-    NSDateFormatter *setDisplayCalendarMonth = [[NSDateFormatter alloc] init];
-    [setDisplayCalendarMonth setDateFormat:@"MMMM"];
-    
-    _displayedMonthLbl.text = [setDisplayCalendarMonth stringFromDate:dateToSet];
+-(void)loadCalendarOnMonthChange:(NSDate*)dateToSet {
+    [self.dateFormatter setDateFormat:@"MMMM"];
+    _displayedMonthLbl.text = [self.dateFormatter stringFromDate:dateToSet];
     
     [_monthFormat setDateFormat:@"MM"];
     
     //Month change api call & check
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM"];
+    [self.dateFormatter setDateFormat:@"yyyy-MM"];
     
     NSString *filter = @"%K CONTAINS %@";
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"LastUpdated",[dateFormatter stringFromDate:dateToSet]];
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"LastUpdated", [self.dateFormatter stringFromDate:dateToSet]];
     NSMutableArray * tempExDb = [[NSMutableArray alloc]init];
     tempExDb = [soapWebService loadUserPlanListFromDb];
     tempExDb = [soapWebService loadUserPlanDateListFromDb];
 
-    _exerciseData = [tempExDb filteredArrayUsingPredicate:categoryPredicate];
+    _exerciseData = [[tempExDb filteredArrayUsingPredicate:categoryPredicate] mutableCopy];
     
-    if ([[self.dateFormatter stringFromDate:[NSDate date]] isEqualToString:[self.dateFormatter stringFromDate:self.date_currentDate]]) {
-
-    }
-    
-    if (self.date_currentDate == calendar.currentPage) {
-
-    }
-    else
-    {
-
-    }
     [DMActivityIndicator hideActivityIndicator];
 }
 
--(void)loadTableData:(NSDate*)dateToSet
-{
+- (void)loadTableData:(NSDate *)dateToSet {
     [_userCommentsLbl setHidden:YES];
 
-    _userPlanListData        = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanListFromDb]];
-    _userPlanDateListData    = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanDateListFromDb]];
-    _userPlanMoveListData    = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveListFromDb]];
-    _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]];
+    _userPlanListData        = [[NSMutableArray alloc] initWithArray:[soapWebService loadUserPlanListFromDb]];
+    _userPlanDateListData    = [[NSMutableArray alloc] initWithArray:[soapWebService loadUserPlanDateListFromDb]];
+    _userPlanMoveListData    = [[NSMutableArray alloc] initWithArray:[soapWebService loadUserPlanMoveListFromDb]];
+    _userPlanMoveSetListData = [[NSMutableArray alloc] initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]];
     
-    _loadMoveDetails         = [[NSMutableArray alloc]initWithArray:[soapWebService loadListOfMovesFromDb]];
+    _loadMoveDetails         = [[NSMutableArray alloc] initWithArray:[soapWebService loadListOfMovesFromDb]];
    
-    _deletedPlanArr     = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanList]];
-    _deletedPlanDateArr = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanDateList]];
-    _deletedMoveArr     = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanMoveList]];
-    _deletedMoveSetArr  = [[NSMutableArray alloc]initWithArray:[soapWebService MobileUserPlanMoveSetList]];
+    _deletedPlanArr     = [[NSMutableArray alloc] initWithArray:[soapWebService MobileUserPlanList]];
+    _deletedPlanDateArr = [[NSMutableArray alloc] initWithArray:[soapWebService MobileUserPlanDateList]];
+    _deletedMoveArr     = [[NSMutableArray alloc] initWithArray:[soapWebService MobileUserPlanMoveList]];
+    _deletedMoveSetArr  = [[NSMutableArray alloc] initWithArray:[soapWebService MobileUserPlanMoveSetList]];
 
-
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-    NSString *dateString = [formatter stringFromDate:dateToSet];
+    self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
+    NSString *dateString = [self.dateFormatter stringFromDate:dateToSet];
 
     NSArray *arr = [dateString componentsSeparatedByString:@"T"];
     dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
     
-    if ([_userPlanDateListData count] != 0)
-    {
-        _tblData = [[NSMutableArray alloc]initWithArray:[_userPlanDateListData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(PlanDate contains[c] %@)", dateString]]];
+    if ([_userPlanDateListData count] != 0) {
+        _tblData = [[NSMutableArray alloc] initWithArray:[_userPlanDateListData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(PlanDate contains[c] %@)", dateString]]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [movesTblView reloadData];
         });
@@ -801,15 +706,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 }
 
--(void)apiCallOnMonthChangeFromList
-{
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    
+-(void)apiCallOnMonthChangeFromList {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
     NSDictionary *wsWorkInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    [prefs valueForKey:@"userid_dietmastergo"], @"UserID",[dateFormat stringFromDate:self.date_currentDate], @"WorkoutDate",nil];
+                                    [prefs valueForKey:@"userid_dietmastergo"], @"UserID",[self.dateFormatter stringFromDate:self.date_currentDate], @"WorkoutDate",nil];
     
     MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
     soapWebService.WSGetUserWorkoutplanOfflineDelegate = self;
@@ -818,80 +719,70 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (IBAction)previousMonthAction:(id)sender {
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    [components setMonth:-1];
+    NSDate *date_Yesterday = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
     
-//        [self showLoading];
-        NSDateComponents *components = [[NSDateComponents alloc] init];
-        NSCalendar *cal = [NSCalendar currentCalendar];
-        [components setMonth:-1];
-        NSDate *date_Yesterday = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
-        
-        self.date_currentDate = date_Yesterday;
-        [self setMonthLbl:date_Yesterday];
-        
-        [calendar selectDate:date_Yesterday];
-        
-        //HHT temp (IMP line)
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.dateSelected = date_Yesterday;
-        
-        HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-        
-        if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
-                //    [self readData];
-            }
-            else {
-                DMLog(@"** Auto update apple watch sync is off **");
-            }
+    self.date_currentDate = date_Yesterday;
+    [self setMonthLbl:date_Yesterday];
+    
+    [calendar selectDate:date_Yesterday];
+    
+    //HHT temp (IMP line)
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    dietmasterEngine.dateSelected = date_Yesterday;
+    
+    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
+    
+    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+            //    [self readData];
         }
-        else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-            DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        else {
+            DMLog(@"** Auto update apple watch sync is off **");
         }
-        
-        //HHT temp change
-        //    [self performSelector:@selector(updateData:) withObject:date_Yesterday afterDelay:0.25];
-
+    }
+    else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+    }
     [self loadCalendarOnMonthChange:self.date_currentDate];
     [self loadTableData:self.date_currentDate];
-//    [self setDateLbl:self.date_currentDate];
     [self tabBarAction:listCalendarBtn];
-    
-//    [self loadCalendarOnMonthChange:self.date_currentDate];
-//    [self apiCallOnMonthChangeFromList];
 }
 - (IBAction)nextMonthAction:(id)sender {
-        NSDateComponents *components = [[NSDateComponents alloc] init];
-        NSCalendar *cal = [NSCalendar currentCalendar];
-        [components setMonth:+1];
-        NSDate *date_Tomorrow = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
-        
-        self.date_currentDate = date_Tomorrow;
-        
-        [self setMonthLbl:date_Tomorrow];
-        [calendar selectDate:date_Tomorrow];
-        
-        //HHT temp (IMP line)
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.dateSelected = date_Tomorrow;
-        
-        HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-        
-        if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
-                //    [self readData];
-            }
-            else {
-                DMLog(@"** Auto update apple watch sync is off **");
-            }
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    [components setMonth:+1];
+    NSDate *date_Tomorrow = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
+    
+    self.date_currentDate = date_Tomorrow;
+    
+    [self setMonthLbl:date_Tomorrow];
+    [calendar selectDate:date_Tomorrow];
+    
+    //HHT temp (IMP line)
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    dietmasterEngine.dateSelected = date_Tomorrow;
+    
+    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
+    
+    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+            //    [self readData];
         }
-        else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-            DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        else {
+            DMLog(@"** Auto update apple watch sync is off **");
         }
-        
+    }
+    else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
+        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+    }
+    
     [self tabBarAction:listCalendarBtn];
 }
 
--(IBAction)shownextDate:(id)sender {
+- (IBAction)shownextDate:(id)sender {
     NSDateComponents *components = [[NSDateComponents alloc] init];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [components setDay:+1];
@@ -921,8 +812,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 }
 
-
--(IBAction)showprevDate:(id)sender {
+- (IBAction)showprevDate:(id)sender {
     NSDateComponents *components = [[NSDateComponents alloc] init];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [components setDay:-1];
@@ -950,13 +840,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
         DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
-    
-    //HHT temp change
-//    [self performSelector:@selector(updateData:) withObject:date_Yesterday afterDelay:0.25];
 }
 
--(void)loadSectionsForMovesTbl
-{
+- (void)loadSectionsForMovesTbl {
     _sectionTitleDataMovesTblView = [[NSMutableArray alloc]init];
     
     for (int i =0 ; i<[_tblData count]; i++)
@@ -971,7 +857,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     _sectionTitleDataMovesTblView = [[NSMutableArray alloc]initWithArray:[removeDuplicateSetInSection allObjects]];
      
     _sectionTitleDataMovesTblView = [[NSMutableArray alloc] initWithArray:[soapWebService filterObjectsByKeys:@"UniqueID" array:_sectionTitleDataMovesTblView]];
-
 }
 
 //new API
@@ -1039,8 +924,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         return [rowListArr count];
     }
 }
-
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1143,8 +1026,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark TABLE VIEW METHODS
 
-
-
 - (void)loadRowDataDateArr:(NSMutableArray*)arr {
     for (int i = 0; i < [arr count]; i++) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -1201,49 +1082,42 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             [self.navigationController pushViewController:moveDetailVc animated:YES];
         }
     }
-    else
-    {
+    else {
         [self tabBarAction:calendarViewBtn];
         [self expandButtonAction:expandBtn];
 
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"EEEE, d LLLL yyyy"];
+        [self.dateFormatter setDateFormat:@"EEEE, d LLLL yyyy"];
         NSString *dateStr = [_sectionTitle objectAtIndex:indexPath.section];
-        NSDate *date = [dateFormatter dateFromString:dateStr];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-        self.date_currentDate = [dateFormatter dateFromString:[dateFormatter stringFromDate:date]];
+        NSDate *date = [self.dateFormatter dateFromString:dateStr];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        self.date_currentDate = [self.dateFormatter dateFromString:[self.dateFormatter stringFromDate:date]];
 
         [calendar selectDate:self.date_currentDate];
         [listView setHidden:YES];
         [self setDateLbl:self.date_currentDate];
         [self loadTableData:self.date_currentDate];
-
     }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if(tableView == movesTblView)
-    {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (tableView == movesTblView) {
         if ([_sectionTitleDataMovesTblView count] == 0) {
             return nil;
-        }
-        else
-        {
-        static NSString *CellIdentifier = @"MyMovesTableViewCell";
+        } else {
+            static NSString *CellIdentifier = @"MyMovesTableViewCell";
 
-        NSArray *arrData = [[NSBundle mainBundle]loadNibNamed:@"MyMovesTableViewCell" owner:nil options:nil];
+            NSArray *arrData = [[NSBundle mainBundle]loadNibNamed:@"MyMovesTableViewCell" owner:nil options:nil];
 
-        MyMovesTableViewCell *cell = [[MyMovesTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell = [arrData objectAtIndex:0];
+            MyMovesTableViewCell *cell = [[MyMovesTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell = [arrData objectAtIndex:0];
 
-        UILabel * lbl = [[UILabel alloc]init];
-        lbl.frame = CGRectMake(cell.contentView.frame.origin.x, cell.contentView.frame.origin.y, cell.contentView.frame.size.width, cell.contentView.frame.size.height);
-        lbl.backgroundColor = PrimaryColor;
-        lbl.textAlignment = NSTextAlignmentCenter;
-        lbl.textColor = [UIColor whiteColor];
-        lbl.text = _sectionTitleDataMovesTblView[section][@"PlanName"];
-        return lbl;
+            UILabel * lbl = [[UILabel alloc]init];
+            lbl.frame = CGRectMake(cell.contentView.frame.origin.x, cell.contentView.frame.origin.y, cell.contentView.frame.size.width, cell.contentView.frame.size.height);
+            lbl.backgroundColor = PrimaryColor;
+            lbl.textAlignment = NSTextAlignmentCenter;
+            lbl.textColor = [UIColor whiteColor];
+            lbl.text = _sectionTitleDataMovesTblView[section][@"PlanName"];
+            return lbl;
         }
     }
     else
@@ -1256,10 +1130,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         cell = [arrData objectAtIndex:0];
 
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [button addTarget:self
-//                   action:@selector(didselectSection:)
-//         forControlEvents:UIControlEventTouchUpInside];
-//        button.frame = cell.contentView.bounds;
         button.frame = CGRectMake(cell.contentView.frame.origin.x, cell.contentView.frame.origin.y, cell.contentView.frame.size.width, cell.contentView.frame.size.height);
 
         [button setBackgroundColor:[UIColor whiteColor]];
@@ -1269,17 +1139,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
         NSString *myString = @"   ";
         NSString *dateLbl = [myString stringByAppendingString:[_datesTitleArr objectAtIndex:section]];
-//        button.backgroundColor = PrimaryDarkColor;
         [button setTitle:dateLbl forState:UIControlStateNormal];
 
         return button;
     }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if(tableView == movesTblView)
-    {
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if(tableView == movesTblView) {
         static NSString *CellIdentifier = @"MyMovesTableViewCell";
         
         NSArray *arrData = [[NSBundle mainBundle]loadNibNamed:@"MyMovesTableViewCell" owner:nil options:nil];
@@ -1287,7 +1154,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         MyMovesTableViewCell *cell = [[MyMovesTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell = [arrData objectAtIndex:0];
         [cell.checkBoxImgView setHidden:YES];
-        
 
         cell.exerciseDescriptionLbl.text = @"";
         cell.exerciseNameLbl.text = @"";
@@ -1299,8 +1165,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
         [cell.arrowImgV setHidden:NO];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-//        cell.bgView.backgroundColor = button.backgroundColor;
-//        cell.bgView.alpha = button.alpha;
 
         [button addTarget:self action:@selector(addMove:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"" forState:UIControlStateNormal];
@@ -1309,117 +1173,73 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [cell.contentView addSubview:button];
         
         return [cell contentView];
-    }
-    else
-    {
+    } else {
         return nil;
     }
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(tableView == movesTblView)
-    {
-        return 30;
-    }
-    else
-    {
-        return 30;
-    }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 30;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if(tableView != movesTblView)
-    {
+    if(tableView != movesTblView) {
         return 50;
-    }
-    else
-    {
-        if ([_sectionTitleDataMovesTblView count] == 0)
-        {
+    } else {
+        if ([_sectionTitleDataMovesTblView count] == 0) {
             return 0;
-        }
-        else
-        {
+        } else {
             return 30;
         }
     }
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if(tableView == movesTblView)
-    {
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if(tableView == movesTblView) {
         if (section == [_sectionTitleDataMovesTblView count] - 1) {
             return 30;
-        }
-        else if ([_sectionTitleDataMovesTblView count] == 0)
-        {
+        } else if ([_sectionTitleDataMovesTblView count] == 0) {
             return 30;
-        }
-        else
-        {
+        } else {
             return 0;
         }
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }
--(IBAction)didselectSection:(UIButton*)sender{
-//    [_listViewItem removeAllObjects];
 
-//    _listViewItem = [[NSMutableArray alloc]init];
-    
-    if(currentSection == sender.tag)
-    {
+- (IBAction)didselectSection:(UIButton *)sender {
+    if(currentSection == sender.tag) {
         currentSection = 1200;
-    }
-    else
-    {
+    } else {
         currentSection = sender.tag;
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"EEEE, d LLLL yyyy"];
-        NSDate *date = [dateFormatter dateFromString:_sectionTitle[sender.tag]];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        [self.dateFormatter setDateFormat:@"EEEE, d LLLL yyyy"];
+        NSDate *date = [self.dateFormatter dateFromString:_sectionTitle[sender.tag]];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
         
         NSString *filter = @"%K == %@";
-        NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutDate",[dateFormatter stringFromDate:date]];
+        NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutDate", [self.dateFormatter stringFromDate:date]];
        
         _listViewItem = [[NSMutableArray alloc]initWithArray:[_exerciseData filteredArrayUsingPredicate:categoryPredicate]];
     }
     [listViewMoves reloadData];
 }
 
--(IBAction)addMove:(UIButton*)sender{
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-#warning TODO: Reconnect this.
-        MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc]initWithNibName:@"MyMovesListViewController" bundle:nil];
-//        moveListVc.selectedDate = self.date_currentDate;
-//        moveListVc.userId = userId;
-        NSString *statusValue = @"New";
-        NSString *filter = @"%K == %@";
-        NSPredicate *newPredicate = [NSPredicate predicateWithFormat:filter,@"Status",statusValue];
-        NSArray * tempArr = [[NSMutableArray alloc]initWithArray:[_userPlanListData filteredArrayUsingPredicate:newPredicate]];
-        //moveListVc.newCount = [tempArr count];
-#warning TODO: Reconnect this.
-//        sender.backgroundColor = UIColor.lightGrayColor;
-        sender.alpha = 1;
-        [self.navigationController pushViewController:moveListVc animated:YES];
-    });
+/// Shows the my moves list view controller for a user to select an exercise.
+- (IBAction)addMove:(UIButton *)sender {
+    MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc]initWithNibName:@"MyMovesListViewController" bundle:nil];
+    NSString *statusValue = @"New";
+    NSString *filter = @"%K == %@";
+    NSPredicate *newPredicate = [NSPredicate predicateWithFormat:filter,@"Status",statusValue];
+    NSArray * tempArr = [[NSMutableArray alloc]initWithArray:[_userPlanListData filteredArrayUsingPredicate:newPredicate]];
+#warning TODO: Reconnect this??
+    [self.navigationController pushViewController:moveListVc animated:YES];
 }
 
--(IBAction)checkAction:(UIButton*)sender{
-    
+-(IBAction)checkAction:(UIButton *)sender {
     CGPoint touchPoint = [sender convertPoint:CGPointZero toView:movesTblView]; // maintable --> replace your tableview name
     NSIndexPath *clickedButtonIndexPath = [movesTblView indexPathForRowAtPoint:touchPoint];
-    
-    DMLog(@"index path.section ==%ld",(long)clickedButtonIndexPath.section);
-    DMLog(@"index path.row ==%ld",(long)clickedButtonIndexPath.row);
-    
-//    NSString *filter = @"%K == %@";
-//    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"PlanName",_sectionTitleDataMovesTblView[clickedButtonIndexPath.section]];
-//    NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[_tblData filteredArrayUsingPredicate:categoryPredicate]];
     
     NSString *filter = @"%K == %@";
     NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"ParentUniqueID",_sectionTitleDataMovesTblView[clickedButtonIndexPath.section][@"UniqueID"]]; //new API
@@ -1522,38 +1342,20 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.healthStore executeQuery:query];
 }
 */
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 #pragma mark - <FSCalendarDelegate>
 
-- (BOOL)calendar:(FSCalendar *)calendar shouldSelectDate:(NSDate *)date atMonthPosition:(FSCalendarMonthPosition)monthPosition
-{
+- (BOOL)calendar:(FSCalendar *)calendar shouldSelectDate:(NSDate *)date atMonthPosition:(FSCalendarMonthPosition)monthPosition {
     return YES;
 }
 
-- (void)calendar:(FSCalendar *)calendar didSelectDate:(NSDate *)date atMonthPosition:(FSCalendarMonthPosition)monthPosition
-{
+- (void)calendar:(FSCalendar *)calendar didSelectDate:(NSDate *)date atMonthPosition:(FSCalendarMonthPosition)monthPosition {
     if (monthPosition == FSCalendarMonthPositionNext || monthPosition == FSCalendarMonthPositionPrevious) {
         [calendar setCurrentPage:date animated:YES];
     }
     self.date_currentDate = calendar.selectedDate;
     [self setDateLbl:calendar.selectedDate];
 }
-
-
 
 - (void)calendarCurrentPageDidChange:(FSCalendar *)calendar {
     // No-op.
@@ -1578,62 +1380,29 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
     }
     return 0;
-}_satiz*/
-//- (NSDate *)minimumDateForCalendar:(FSCalendar *)calendar
-//{
-//    return [self.dateFormatter dateFromString:@"1990/10/01"];
-//}
-//
-//- (NSDate *)maximumDateForCalendar:(FSCalendar *)calendar
-//{
-//    return [self.dateFormatter dateFromString:@"2030/10/10"];
-//}
+}*/
+
 #pragma mark - <FSCalendarDelegateAppearance>
 
-//- (NSArray *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance eventDefaultColorsForDate:(NSDate *)date
-//{
-//        return @[[UIColor blackColor]];
-//}
-
-- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance fillSelectionColorForDate:(NSDate *)date
-{
+- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance fillSelectionColorForDate:(NSDate *)date {
     return [UIColor blackColor];
 }
 
-- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance fillDefaultColorForDate:(NSDate *)date
-{
+- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance fillDefaultColorForDate:(NSDate *)date {
     return [UIColor whiteColor];
 }
 
-- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderDefaultColorForDate:(NSDate *)date
-{
-//    if ([self.datesExerciseCompletd containsObject:[self.dateFormatter stringFromDate:date]])
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy/MM/dd";
-    NSString *dateString = [dateFormatter stringFromDate:date];
-    
-    while(isLoading) {
-        DMLog(@"PREVENTING A CRASH HERE!");
-        //containsObject below cannot run while loadEventCalendar block operation adds objs to datesWithInfo
-        usleep(1000);
-    }
-
-    //lock it down while enumerating.
-    isLoading = YES;
-    if ([self.datesWithInfo containsObject:dateString])
-    {
-        isLoading = NO;
+- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderDefaultColorForDate:(NSDate *)date {
+    self.dateFormatter.dateFormat = @"yyyy/MM/dd";
+    NSString *dateString = [self.dateFormatter stringFromDate:date];
+    if ([[self.datesWithInfo copy] containsObject:dateString]) {
         return [UIColor greenColor];
-    }
-    else
-    {
-        isLoading=  NO;
+    } else {
         return [UIColor whiteColor];
     }
 }
 
-- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderSelectionColorForDate:(NSDate *)date
-{
+- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderSelectionColorForDate:(NSDate *)date {
     return [UIColor blackColor];
 }
 
@@ -1646,12 +1415,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)getUserWorkoutplanOfflineListFinished:(NSDictionary *)responseArray {
     [DMActivityIndicator hideActivityIndicator];
 
-    _userPlanListData        = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanList"]];
-    _userPlanDateListData    = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]];
-    _userPlanMoveListData    = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanMoveList"]];
-    _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanMoveSetList"]];
+    _userPlanListData        = [[NSMutableArray alloc] initWithArray:[responseArray objectForKey:@"ServerUserPlanList"]];
+    _userPlanDateListData    = [[NSMutableArray alloc] initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]];
+    _userPlanMoveListData    = [[NSMutableArray alloc] initWithArray:[responseArray objectForKey:@"ServerUserPlanMoveList"]];
+    _userPlanMoveSetListData = [[NSMutableArray alloc] initWithArray:[responseArray objectForKey:@"ServerUserPlanMoveSetList"]];
 
-    [self loadEventCalendar:[[NSMutableArray alloc]initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]]];
+    [self loadEventCalendar:[[NSMutableArray alloc] initWithArray:[responseArray objectForKey:@"ServerUserPlanDateList"]]];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [movesTblView reloadData];
@@ -1670,10 +1439,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
-    CGRect textFieldRect =
-    [self.view.window convertRect:textView.bounds fromView:textView];
-    CGRect viewRect =
-    [self.view.window convertRect:self.view.bounds fromView:self.view];
+    CGRect textFieldRect = [self.view.window convertRect:textView.bounds fromView:textView];
+    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
     
     CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
     CGFloat numerator =
@@ -1704,95 +1471,69 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y -= animatedDistance;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
+        [self.view setFrame:viewFrame];
+    }];
 }
 
-- (void)textViewDidChange:(UITextView *)textView
-{
+- (void)textViewDidChange:(UITextView *)textView {
     if([commentsTxtView.text length] != 0)
     {
         [_userCommentsLbl setHidden:YES];
-    }
-    else
-    {
-//        [_userCommentsLbl setHidden:NO];
+    } else {
         [_userCommentsLbl setHidden:YES];
-
     }
 }
+
 - (void)textViewDidEndEditing:(UITextView *)textView{
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y += animatedDistance;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    //            commentsTxtView.text = [NSString stringWithFormat:@"%@",_tblData[0][@"Comments"]];
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-    NSString *dateString = [formatter stringFromDate:self.date_currentDate];
+    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
+        [self.view setFrame:viewFrame];
+    }];
+
+    self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
+    NSString *dateString = [self.dateFormatter stringFromDate:self.date_currentDate];
     
     [soapWebService updateUserCommentsToDb:dateString commentsToUpdate:commentsTxtView.text];
     
-    
-    if([commentsTxtView.text length] != 0)
-    {
+    if ([commentsTxtView.text length] != 0) {
+        [_userCommentsLbl setHidden:YES];
+    } else {
         [_userCommentsLbl setHidden:YES];
     }
-    else
-    {
-//        [_userCommentsLbl setHidden:NO];
-        [_userCommentsLbl setHidden:YES];
-
-    }
-    [UIView commitAnimations];
 }
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    
-    if([text isEqualToString:@"\n"]) {
+    if ([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
         return NO;
     }
     
     return YES;
 }
+
 - (IBAction)expandButtonAction:(id)sender {
     
-    if IS_IPHONE_X_XR_XS
-    {
+    if IS_IPHONE_X_XR_XS {
         [UIView animateWithDuration:0.3 animations:^{
             if (self.proportionalHeightCalConst.constant == self.view.frame.size.height /4) {
                 self.proportionalHeightCalConst.constant = 0;
                 [self.calendarView setHidden:YES];
-            }
-            else
-            {
+            } else {
                 self.proportionalHeightCalConst.constant = self.view.frame.size.height /4;
                 [self.calendarView setHidden:NO];
             }
             [self.view layoutIfNeeded];
             [self.view layoutSubviews];
         }];
-    }
-    else
-    {
+    } else {
         [UIView animateWithDuration:0.3 animations:^{
             if (self.proportionalHeightCalConst.constant == self.view.frame.size.height /3) {
                 self.proportionalHeightCalConst.constant = 0;
                 [self.calendarView setHidden:YES];
-            }
-            else
-            {
+            } else {
                 self.proportionalHeightCalConst.constant = self.view.frame.size.height /3;
                 [self.calendarView setHidden:NO];
             }
@@ -1802,93 +1543,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 }
 
-
 - (void)passDataOnAdd {
     [self loadTableData:self.date_currentDate];
-//    [self loadCircleInCalendar:_exerciseData];
 }
+
 - (IBAction)sendMsgBtnAction:(id)sender {
     MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
     [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (IBAction)popUpBtn:(id)sender {
-    PopUpView* popUpView = [[PopUpView alloc]initWithNibName:@"PopUpView" bundle:nil];
-    popUpView.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    popUpView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    popUpView.gotoDelegate = self;
-    _showPopUpVw.hidden = true;
-    popUpView.vc = @"MyMoves";
-    [self presentViewController:popUpView animated:YES completion:nil];
-}
-
--(void)DietMasterGoViewController
-{
-    DietMasterGoViewController *vc = [[DietMasterGoViewController alloc] initWithNibName:@"DietMasterGoViewController" bundle:nil];
-    vc.title = @"Today";
-    vc.showPopUpVw.hidden = false;
-    vc.navigationController.navigationItem.hidesBackButton = true;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
--(void)MyGoalViewController
-{
-    MyGoalViewController *vc = [[MyGoalViewController alloc] initWithNibName:@"MyGoalViewController" bundle:nil];
-    vc.title = @"My Goal";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-- (void)MyLogViewController
-{
-    MyLogViewController *vc = [[MyLogViewController alloc] initWithNibName:@"MyLogViewController" bundle:nil];
-    vc.title = @"My Log";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)MealPlanViewController
-{
-    MealPlanViewController *vc = [[MealPlanViewController alloc] initWithNibName:@"MealPlanViewController" bundle:nil];
-    vc.title = @"My Goal";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
--(void)AppSettings
-{
-    AppSettings *vc = [[AppSettings alloc] initWithNibName:@"AppSettings" bundle:nil];
-    vc.title = @"My Goal";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)MyMovesViewController
-{
-    MyMovesViewController *vc = [[MyMovesViewController alloc] initWithNibName:@"MyMovesViewController" bundle:nil];
-    vc.title = @"MyMovesViewController";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)RemovePreviousViewControllerFromStack
-{
-    NSMutableArray *navigationArray = [[NSMutableArray alloc] initWithArray: self.navigationController.viewControllers];
-
-    // [navigationArray removeAllObjects];    // This is just for remove all view controller from navigation stack.
-    if (navigationArray.count > 2) {
-        [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
-        self.navigationController.viewControllers = navigationArray;
-    }
-}
-
-
-- (void)hideShowPopUpView
-{
-    self.showPopUpVw.hidden = false;
 }
 
 @end

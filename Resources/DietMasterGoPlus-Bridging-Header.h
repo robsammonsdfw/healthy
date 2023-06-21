@@ -10,3 +10,10 @@
 #import "DMMove.h"
 #import "DMMoveCategory.h"
 #import "DMMoveTag.h"
+
+#import "DietMasterGoViewController.h"
+#import "LoginViewController.h"
+#import "MyLogViewController.h"
+#import "MealPlanViewController.h"
+#import "AppSettings.h"
+#import "MyMovesViewController.h"

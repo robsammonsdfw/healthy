@@ -96,49 +96,6 @@
     
 }
 
-- (IBAction)dismissOnTap:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [_gotoDelegate hideShowPopUpView];
-    }];
-}
-
-- (IBAction)dismissBtnAction:(id)sender {
-    [self dismissViewControllerAnimated:false completion:^{
-        [_gotoDelegate hideShowPopUpView];
-    }];
-}
-- (IBAction)gotoHome:(id)sender {
-    [self dismissViewControllerAnimated:false completion:^{
-        [_gotoDelegate DietMasterGoViewController];
-    }];
-}
-- (IBAction)myGoal:(id)sender {
-    [self dismissViewControllerAnimated:false completion:^{
-        [_gotoDelegate MyGoalViewController];
-    }];
-}
-
-- (IBAction)gotoMyLog:(id)sender {
-    [self dismissViewControllerAnimated:false completion:^{
-        [_gotoDelegate MyLogViewController];
-    }];
-}
-- (IBAction)gotoMyMeal:(id)sender {
-    [self dismissViewControllerAnimated:false completion:^{
-        [_gotoDelegate MealPlanViewController];
-    }];
-}
-- (IBAction)gotoAppSett:(id)sender {
-    [self dismissViewControllerAnimated:false completion:^{
-        [_gotoDelegate AppSettings];
-    }];
-}
-- (IBAction)gotoMyMove:(id)sender {
-    [self dismissViewControllerAnimated:false completion:^{
-        [_gotoDelegate MyMovesViewController];
-    }];
-}
-
 -(void)imageColor:(UIImageView *)image
 {
     image.image = [image.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

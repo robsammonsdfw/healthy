@@ -32,8 +32,6 @@
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 // Graph
 @property (nonatomic, strong) TUTSimpleScatterPlot *scatterPlot;
-@property (nonatomic, strong) IBOutlet UIView *popUpView;
-@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 
 -(IBAction) showRecordWeightView:(id) sender;
 -(IBAction) changeGraphTime:(id) sender;

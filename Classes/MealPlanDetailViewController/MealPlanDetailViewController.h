@@ -13,7 +13,7 @@
 #import "TDDatePickerController.h"
 #import "TTTAttributedLabel.h"
 
-@interface MealPlanDetailViewController : PullRefreshTableViewController <MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, WSGetUserPlannedMealNames, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, TTTAttributedLabelDelegate> {
+@interface MealPlanDetailViewController : PullRefreshTableViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, WSGetUserPlannedMealNames, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, TTTAttributedLabelDelegate> {
     int selectedIndex;
     IBOutlet UILabel *titleLabel;
     IBOutlet UILabel *recommendedCaloriesLabel;

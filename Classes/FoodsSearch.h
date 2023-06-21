@@ -10,7 +10,7 @@
 #import "MBProgressHUD.h"
 #import "TTTAttributedLabel.h"
 
-@interface FoodsSearch : UIViewController <UISearchBarDelegate, MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource,UISearchDisplayDelegate,TTTAttributedLabelDelegate> {
+@interface FoodsSearch : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource,UISearchDisplayDelegate,TTTAttributedLabelDelegate> {
 	
     UISearchBar                 *mySearchBar;
     BOOL                        bSearchIsOn;

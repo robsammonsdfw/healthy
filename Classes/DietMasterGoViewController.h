@@ -24,7 +24,8 @@
 
 @class AppDelegate;
 
-@interface DietMasterGoViewController : UIViewController <MBProgressHUDDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate> {
+/// The "tile layout" home screen for a user to move around the app.
+@interface DietMasterGoViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate> {
     
     AppDelegate *appddd;
     
@@ -236,7 +237,6 @@
 @property (nonatomic, strong) IBOutlet UIButton *sendMsgBtnOutlet;
 @property (nonatomic, strong) IBOutlet UILabel *nameLbl;
 @property (nonatomic, strong) IBOutlet UIButton *popUpBtn;
-@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 @property (nonatomic, strong) IBOutlet UIButton *weightPullDwnBtn;
 @property (nonatomic, strong) IBOutlet UIStackView *weightHideShowStack;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *weightHideShowHeightConst;

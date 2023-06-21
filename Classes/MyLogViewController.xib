@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,11 +23,9 @@
                 <outlet property="lbl_CaloriesRecommended" destination="12" id="102"/>
                 <outlet property="lbl_dateHdr" destination="28" id="97"/>
                 <outlet property="openCloseDetailButton" destination="108" id="124"/>
-                <outlet property="popUpVwBottonContrain" destination="ACs-9y-8TT" id="qfU-uh-0xX"/>
                 <outlet property="recCarbLabel" destination="113" id="125"/>
                 <outlet property="recFatLabel" destination="123" id="126"/>
                 <outlet property="recProtLabel" destination="119" id="127"/>
-                <outlet property="showPopUpVw" destination="no3-BC-OTu" id="pW5-LI-EZS"/>
                 <outlet property="staticActualCarbLbl" destination="112" id="TbG-df-VLU"/>
                 <outlet property="staticActualFatLbl" destination="120" id="wBd-Rd-3Wo"/>
                 <outlet property="staticActualProtLbl" destination="118" id="JcF-rs-XmP"/>
@@ -256,39 +254,6 @@
                     </subviews>
                     <color key="backgroundColor" red="0.53725490196078429" green="0.71764705882352942" blue="0.67843137254901964" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="no3-BC-OTu">
-                    <rect key="frame" x="125" y="410" width="70" height="90"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2O4-e7-vjR">
-                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <inset key="imageEdgeInsets" minX="20" minY="15" maxX="20" maxY="30"/>
-                            <state key="normal" image="popup icon"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                    <integer key="value" value="35"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <action selector="popUpBtn:" destination="-1" eventType="touchUpInside" id="Rdy-Bp-e8b"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="trailing" secondItem="2O4-e7-vjR" secondAttribute="trailing" id="2Xj-f2-Dm8"/>
-                        <constraint firstItem="2O4-e7-vjR" firstAttribute="top" secondItem="no3-BC-OTu" secondAttribute="top" id="D6Q-ni-Thb"/>
-                        <constraint firstItem="2O4-e7-vjR" firstAttribute="leading" secondItem="no3-BC-OTu" secondAttribute="leading" id="QfY-ug-iOD"/>
-                        <constraint firstAttribute="width" constant="70" id="Vsy-EZ-6ZJ"/>
-                        <constraint firstAttribute="bottom" secondItem="2O4-e7-vjR" secondAttribute="bottom" constant="20" id="aiv-lq-rVQ"/>
-                        <constraint firstAttribute="height" constant="90" id="hcs-uB-Veo"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                            <integer key="value" value="35"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P3x-LJ-KKv">
                     <rect key="frame" x="0.0" y="450" width="320" height="30"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -299,9 +264,7 @@
             </subviews>
             <color key="backgroundColor" red="0.66666668653488159" green="0.66666668653488159" blue="0.66666668653488159" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="no3-BC-OTu" secondAttribute="bottom" constant="-20" id="ACs-9y-8TT"/>
                 <constraint firstAttribute="bottom" secondItem="P3x-LJ-KKv" secondAttribute="bottom" id="Ovp-nj-Fq0"/>
-                <constraint firstItem="no3-BC-OTu" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="TxB-YX-nWM"/>
                 <constraint firstAttribute="trailing" secondItem="P3x-LJ-KKv" secondAttribute="trailing" id="gpb-9G-jeM"/>
                 <constraint firstItem="P3x-LJ-KKv" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="uc7-M8-Yjc"/>
             </constraints>
@@ -312,9 +275,8 @@
     <resources>
         <image name="btn_Arrow-Left.png" width="22" height="22"/>
         <image name="btn_Arrow-Right.png" width="22" height="22"/>
-        <image name="info.circle" catalog="system" width="128" height="121"/>
+        <image name="info.circle" catalog="system" width="128" height="123"/>
         <image name="log_up_arrow.png" width="31" height="12"/>
-        <image name="popup icon" width="512" height="512"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

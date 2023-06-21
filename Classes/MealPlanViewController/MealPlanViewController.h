@@ -11,7 +11,7 @@
 #import "PullRefreshTableViewController.h"
 #import "MBProgressHUD.h"
 
-@interface MealPlanViewController : PullRefreshTableViewController <MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource, WSGetUserPlannedMealNames, WSGetGroceryList, UIActionSheetDelegate> {
+@interface MealPlanViewController : PullRefreshTableViewController <UITableViewDelegate, UITableViewDataSource, WSGetUserPlannedMealNames, WSGetGroceryList, UIActionSheetDelegate> {
     
     NSMutableArray *selectedRows;
     BOOL isChoosingForGroceryList;
@@ -19,8 +19,7 @@
     IBOutlet UIButton *learnHowWeCalculateBtn;
 }
 @property (nonatomic, strong) IBOutlet UIImageView *imgbg;
-@property (nonatomic,retain)MealPlanWebService *soapWebService;
-@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
+@property (nonatomic,retain) MealPlanWebService *soapWebService;
 
 -(void)loadData;
 -(void)showGroceryList;

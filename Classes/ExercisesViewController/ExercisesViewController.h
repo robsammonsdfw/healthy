@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 
-@interface ExercisesViewController : UIViewController <UISearchBarDelegate, MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface ExercisesViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	
     UISearchBar *mySearchBar;
     BOOL bSearchIsOn;

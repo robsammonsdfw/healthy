@@ -5,17 +5,15 @@
 #import "DietmasterEngine.h"
 #import "MessageViewController.h"
 #import "MKNumberBadgeView.h"
-#import "AppSettings.h"
 #import <Crashlytics/Crashlytics.h>
 #import "MyLogViewController.h"
 #import "MyGoalViewController.h"
 #import "MealPlanViewController.h"
-#import "PopUpView.h"
 #import "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"
 #import "MyMovesWebServices.h"
 #import "MyMovesViewController.h"
 
-@interface DietMasterGoViewController() <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,CPTPieChartDelegate,GotoViewControllerDelegate,UIPopoverPresentationControllerDelegate> {
+@interface DietMasterGoViewController() <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CPTPieChartDelegate, UIPopoverPresentationControllerDelegate> {
     MKNumberBadgeView *numberBadge;
     UIBarButtonItem* rightButton;
     CGFloat sliceValuesSum;
@@ -31,27 +29,16 @@
 @property (nonatomic, strong) NSMutableArray *individualSugarValues;
 @property (nonatomic, strong) NSMutableAttributedString *cpfValueStr;
 @property (nonatomic) BOOL inserting;
-
 @end
 
 @implementation DietMasterGoViewController
 
 @synthesize date_currentDate,num_BMR,carbs_circular,fat_circular,protein_Circular,progressbar;
 
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//    if (self) {
-//
-//    }
-//    return self;
-//}
-//
-//-(id)init {
-//    self = [super initWithNibName:@"DietMasterGoViewController" bundle:nil];
-//    if (self) {
-//    }
-//    return self;
-//}
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
 
 - (void)viewDidLoad{
     [super viewDidLoad];
@@ -63,12 +50,6 @@
     [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x0095B8) range:NSMakeRange(8, 1)];
     [_cpfLbl setAttributedText: text];
 
-    if (IS_IPHONE_5) {
-        CGRect frame = _showPopUpVw.frame;
-        frame.size = CGSizeMake(60, 80);
-        _showPopUpVw.frame = frame;
-    }
-    
     [self setShadowForViews];
     [self setColorsForViews];
     [self changeImageColors];
@@ -145,9 +126,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    self.showPopUpVw.hidden = false;
-    
+        
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     self.hidesBottomBarWhenPushed = true;
     self.tabBarController.tabBar.frame = CGRectMake(self.tabBarController.tabBar.frame.origin.x, self.tabBarController.tabBar.frame.origin.y, self.tabBarController.tabBar.frame.size.width, 0);
@@ -414,16 +393,6 @@
     [self.navigationController pushViewController:vc animated:false] ;
 }
 
-- (IBAction)popUpBtnAction:(id)sender {
-    PopUpView* popUpView = [[PopUpView alloc]initWithNibName:@"PopUpView" bundle:nil];
-    popUpView.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    popUpView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    popUpView.gotoDelegate = self;
-    _showPopUpVw.hidden = true;
-    popUpView.vc = @"DietMasterGoViewController"; 
-    [self presentViewController:popUpView animated:YES completion:nil];
-}
-
 - (IBAction)expandBtnAvtion:(id)sender {
     
     _hideShowStack.hidden = false;
@@ -556,12 +525,6 @@
             button.transform = CGAffineTransformIdentity;
         }
     }];
-}
-
--(IBAction)showSettings:(id)sender {
-        AppSettings *appVC = [[AppSettings alloc]initWithNibName:@"AppSettings" bundle:nil];
-        appVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:appVC animated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -755,12 +718,9 @@
     totalCarbs = 0.0;
     totalProtein = 0.0;
     double difference = 0.0;
-    
-//    NSString *query = [NSString stringWithFormat: @"SELECT Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food_Log_Items.NumberOfServings, Food.FoodKey, Food.Name, Food.Calories, Food.Fat, Food.Carbohydrates, Food.Protein, FoodMeasure.GramWeight, Food.ServingSize FROM Food_Log INNER JOIN Food_Log_Items ON Food_Log.MealID = Food_Log_Items.MealID INNER JOIN Food ON Food.FoodKey = Food_Log_Items.FoodID INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey WHERE (Food_Log.MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) AND Food_Log_Items.MeasureID = FoodMeasure.MeasureID ORDER BY Food_Log_Items.MealCode ASC", date_Today, date_Today];
-    
+        
     NSString *query = [NSString stringWithFormat: @"SELECT Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food_Log_Items.NumberOfServings, Food.FoodKey, Food.Name, Food.Calories, Food.Fat, Food.Carbohydrates, Food.Protein,Food.Sugars, FoodMeasure.GramWeight, Food.ServingSize FROM Food_Log INNER JOIN Food_Log_Items ON Food_Log.MealID = Food_Log_Items.MealID INNER JOIN Food ON Food.FoodKey = Food_Log_Items.FoodID INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey WHERE (Food_Log.MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) AND Food_Log_Items.MeasureID = FoodMeasure.MeasureID ORDER BY Food_Log_Items.MealCode ASC", date_Today, date_Today];
 
-    
     FMResultSet *rs = [db executeQuery:query];
     totalSugarValue = 0;
     double totalSugarCalories = 0;
@@ -1367,9 +1327,7 @@
     
 }
 
-
--(void)animateCircularProgressbar
-{
+- (void)animateCircularProgressbar {
     [UIView animateWithDuration:1.f animations:^{
         
         [fat_circular setValue:totalFat / 9];
@@ -1386,79 +1344,11 @@
         
     }];
 }
--(void)calculateBMI {
+
+- (void)calculateBMI {
     double bodyMassIndex = currentWeight / (currentHeight * currentHeight) * 703;
     currentBMILabel.text = [NSString stringWithFormat:@"%.1f", bodyMassIndex];
     lblCurrent_BMI.text = [NSString stringWithFormat:@"BMI: %.1f", bodyMassIndex];
 }
 
--(void)DietMasterGoViewController
-{
-    DietMasterGoViewController *vc = [[DietMasterGoViewController alloc] initWithNibName:@"DietMasterGoViewController" bundle:nil];
-    vc.title = @"Today";
-    vc.showPopUpVw.hidden = false;
-    vc.navigationController.navigationItem.hidesBackButton = true;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
--(void)MyGoalViewController
-{
-    MyGoalViewController *vc = [[MyGoalViewController alloc] initWithNibName:@"MyGoalViewController" bundle:nil];
-    vc.title = @"My Goal";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-- (void)MyLogViewController
-{
-    MyLogViewController *vc = [[MyLogViewController alloc] initWithNibName:@"MyLogViewController" bundle:nil];
-    vc.title = @"My Log";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)MealPlanViewController
-{
-    MealPlanViewController *vc = [[MealPlanViewController alloc] initWithNibName:@"MealPlanViewController" bundle:nil];
-    vc.title = @"My Goal";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
--(void)AppSettings
-{
-    AppSettings *vc = [[AppSettings alloc] initWithNibName:@"AppSettings" bundle:nil];
-    vc.title = @"My Goal";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)MyMovesViewController
-{
-    MyMovesViewController *vc = [[MyMovesViewController alloc] initWithNibName:@"MyMovesViewController" bundle:nil];
-    vc.title = @"MyMovesViewController";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)RemovePreviousViewControllerFromStack
-{
-    NSMutableArray *navigationArray = [[NSMutableArray alloc] initWithArray: self.navigationController.viewControllers];
-
-    // [navigationArray removeAllObjects];    // This is just for remove all view controller from navigation stack.
-    if (navigationArray.count > 2) {
-        [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
-        self.navigationController.viewControllers = navigationArray;
-    }
-}
-
--(void)hideShowPopUpView
-{
-    self.showPopUpVw.hidden = false;
-}
-
 @end
-

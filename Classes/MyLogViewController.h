@@ -23,11 +23,8 @@
 #import "MyLogViewController.h"
 #import "MyGoalViewController.h"
 #import "MealPlanViewController.h"
-#import "AppSettings.h"
-#import "PopUpView.h"
 
-
-@interface MyLogViewController : UIViewController <MBProgressHUDDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate> {
+@interface MyLogViewController : UIViewController <UIAlertViewDelegate, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate> {
 	
 	IBOutlet UITableView *tblSimpleTable;
 	IBOutlet UILabel *lbl_dateHdr;
@@ -136,7 +133,6 @@
 @property (nonatomic, strong) IBOutlet UILabel *staticProteinLbl;
 @property (nonatomic, strong) IBOutlet UILabel *staticFatLbl;
 
-@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 @property (nonatomic, strong) IBOutlet UIView *overallView;
 
 @property (nonatomic, strong) IBOutlet UIView *vw;

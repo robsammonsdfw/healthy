@@ -12,8 +12,7 @@
 #import "MBProgressHUD.h"
 #import "TTTAttributedLabel.h"
 
-
-@interface GroceryListViewController : UIViewController <MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, WSGetGroceryList, UIAlertViewDelegate, TTTAttributedLabelDelegate> {
+@interface GroceryListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, WSGetGroceryList, UIAlertViewDelegate, TTTAttributedLabelDelegate> {
         
     IBOutlet UILabel *titleLabel;
     

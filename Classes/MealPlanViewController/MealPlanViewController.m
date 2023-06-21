@@ -11,25 +11,19 @@
 #import "DietmasterEngine.h"
 #import "MealPlanDetailViewController.h"
 #import "GroceryListViewController.h"
-#import "AppSettings.h"
-#import "PopUpView.h"
 #import "MyMovesViewController.h"
 
-@interface MyLogViewController ()<GotoViewControllerDelegate, SFSafariViewControllerDelegate> {
-}
+@interface MyLogViewController <SFSafariViewControllerDelegate>
 @end
+
 @implementation MealPlanViewController{
     UIBarButtonItem *aBarButtonItem;
 }
 
 @synthesize soapWebService;
 
--(id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle {
-    return [self init];
-}
-
--(id)init {
-    self = [super initWithNibName:@"MealPlanViewController" bundle:nil];
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     return self;
 }
 
@@ -45,15 +39,6 @@
 #pragma mark VIEW LIFECYCLE
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"changeDesign"]  isEqual: @"NewDesign"])
-    {
-        self.showPopUpVw.hidden = false;
-    }
-    else
-    {
-        self.showPopUpVw.hidden = true;
-    }
     
     [self.navigationController setNavigationBarHidden:NO];
 
@@ -111,39 +96,19 @@
     }
 }
 
--(IBAction)showSettings:(id)sender {
-    
-    AppSettings *appVC = [[AppSettings alloc]initWithNibName:@"AppSettings" bundle:nil];
-    appVC.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:appVC animated:YES];
-    
-}
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"changeDesign"]  isEqual: @"NewDesign"])
-       {
-           self.showPopUpVw.hidden = false;
-       }
-       else
-       {
-           self.showPopUpVw.hidden = true;
-       }
-       [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
--(void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if ([dietmasterEngine.mealPlanArray count] == 0) {
         [self startLoading];
     }
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    selectedRows = nil;
 }
 
 #pragma mark GROCERY LIST
@@ -464,78 +429,4 @@
     }
 }
 
-- (IBAction)popUpBtn:(id)sender {
-    PopUpView* popUpView = [[PopUpView alloc]initWithNibName:@"PopUpView" bundle:nil];
-    popUpView.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    popUpView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    popUpView.gotoDelegate = self;
-    _showPopUpVw.hidden = true;
-    popUpView.vc = @"MealPlanViewController";
-    [self presentViewController:popUpView animated:YES completion:nil];
-}
--(void)DietMasterGoViewController
-{
-    DietMasterGoViewController *vc = [[DietMasterGoViewController alloc] initWithNibName:@"DietMasterGoViewController" bundle:nil];
-    vc.title = @"Today";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
--(void)MyGoalViewController
-{
-    MyGoalViewController *vc = [[MyGoalViewController alloc] initWithNibName:@"MyGoalViewController" bundle:nil];
-    vc.title = @"My Goal";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-- (void)MyLogViewController
-{
-    MyLogViewController *vc = [[MyLogViewController alloc] initWithNibName:@"MyLogViewController" bundle:nil];
-    vc.title = @"My Log";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)MealPlanViewController
-{
-    MealPlanViewController *vc = [[MealPlanViewController alloc] initWithNibName:@"MealPlanViewController" bundle:nil];
-    vc.title = @"My Meals";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
--(void)AppSettings
-{
-    AppSettings *vc = [[AppSettings alloc] initWithNibName:@"AppSettings" bundle:nil];
-    vc.title = @"Settings";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
--(void)MyMovesViewController
-{
-    MyMovesViewController *vc = [[MyMovesViewController alloc] initWithNibName:@"MyMovesViewController" bundle:nil];
-    vc.title = @"MyMovesViewController";
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
-    [self RemovePreviousViewControllerFromStack];
-}
-
--(void)RemovePreviousViewControllerFromStack
-{
-    NSMutableArray *navigationArray = [[NSMutableArray alloc] initWithArray: self.navigationController.viewControllers];
-
-    // [navigationArray removeAllObjects];    // This is just for remove all view controller from navigation stack.
-    if (navigationArray.count > 2) {
-        [navigationArray removeObjectAtIndex: 1];  // You can pass your index here
-        self.navigationController.viewControllers = navigationArray;
-    }
-}
-
-- (void)hideShowPopUpView
-{
-    self.showPopUpVw.hidden = false;
-}
 @end

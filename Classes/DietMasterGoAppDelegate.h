@@ -17,15 +17,10 @@
 @class DetailViewController;
 @class LoginViewController;
 
-@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, SyncDatabaseDelegate, MBProgressHUDDelegate, UIAlertViewDelegate, UITextFieldDelegate,UITabBarControllerDelegate,MFMailComposeViewControllerDelegate,UINavigationControllerDelegate> {
+@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, SyncDatabaseDelegate, UIAlertViewDelegate, UITextFieldDelegate, UITabBarControllerDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate> {
                           
-    DietMasterGoViewController *viewController;     //To Enable NEW DESIGN
-    
-    
-    UIWindow *window;
     DetailViewController *navigationController;
     LoginViewController *loginViewController;
-    UITabBarController *rootController;
     sqlite3 *database;
     
     UIImageView *splashView;
@@ -33,13 +28,11 @@
     NSString *strchekeditornot;
 }
 
-@property (nonatomic, strong) IBOutlet DietMasterGoViewController *viewController;    //To Enable NEW DESIGN
+@property (nonatomic, strong) IBOutlet DietMasterGoViewController *viewController;
 
 @property(strong,nonatomic) NSString *strchekeditornot;
 @property (nonatomic) double caloriesremaning;
 @property (readwrite) BOOL isFromBarcode;
-@property (nonatomic, strong) IBOutlet UIWindow *window;
-@property (nonatomic, strong) IBOutlet UIViewController *rootController;
 @property (nonatomic, strong) IBOutlet DetailViewController *navigationController;
 
 @property (nonatomic, strong) LoginViewController *loginViewController;
@@ -55,7 +48,6 @@
 -(void)showSplashScreen;
 -(void)removeSplashScreen;
 
--(void)loadMainViews;
 -(void)checkUserLogin;
 -(void)getUserLogin;
 - (void)userLoginFinished:(NSString *)statusMessage;

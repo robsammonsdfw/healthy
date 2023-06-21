@@ -21,7 +21,8 @@ def core_pods
   pod 'FSCalendar' # https://github.com/WenchaoD/FSCalendar
   pod 'MBProgressHUD' # https://github.com/matej/MBProgressHUD
   pod 'MKNumberBadgeView' # https://github.com/erichoracek/MKNumberBadgeView
-  
+  pod 'JJFloatingActionButton' # https://github.com/jjochen/JJFloatingActionButton
+
   # To be deprecated:
   pod 'ASIHTTPRequest' # https://cocoapods.org/pods/ASIHTTPRequest
   pod 'ZipArchive' # https://github.com/mattconnolly/ZipArchive

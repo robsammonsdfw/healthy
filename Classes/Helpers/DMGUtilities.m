@@ -29,13 +29,11 @@
 }
 
 + (UIViewController *)rootViewController {
-    UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-    if (@available(iOS 13, *)) {
-        UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
-        if([scene.delegate conformsToProtocol:@protocol(UIWindowSceneDelegate)]){
-            UIWindow *window = [(id <UIWindowSceneDelegate>)scene.delegate window];
-            rootViewController = window.rootViewController;
-        }
+    UIViewController *rootViewController = nil;
+    UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
+    if([scene.delegate conformsToProtocol:@protocol(UIWindowSceneDelegate)]){
+        UIWindow *window = [(id <UIWindowSceneDelegate>)scene.delegate window];
+        rootViewController = window.rootViewController;
     }
     return rootViewController;
 }

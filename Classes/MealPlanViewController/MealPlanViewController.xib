@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,35 +34,7 @@
                         <outlet property="delegate" destination="-1" id="23"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cgb-R1-Ac1" userLabel="Show Pop Up Vw">
-                    <rect key="frame" x="152.5" y="592" width="70" height="90"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZIA-vv-0bN">
-                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <inset key="imageEdgeInsets" minX="20" minY="5" maxX="20" maxY="40"/>
-                            <state key="normal" image="popup icon"/>
-                            <connections>
-                                <action selector="popUpBtn:" destination="-1" eventType="touchUpInside" id="QIR-6M-bvm"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="90" id="6Bg-Gc-KT9"/>
-                        <constraint firstItem="ZIA-vv-0bN" firstAttribute="leading" secondItem="Cgb-R1-Ac1" secondAttribute="leading" id="Caf-sy-fMq"/>
-                        <constraint firstItem="ZIA-vv-0bN" firstAttribute="top" secondItem="Cgb-R1-Ac1" secondAttribute="top" id="MFy-C6-Oui"/>
-                        <constraint firstAttribute="trailing" secondItem="ZIA-vv-0bN" secondAttribute="trailing" id="SaO-C8-IeY"/>
-                        <constraint firstAttribute="width" constant="70" id="e32-ch-ST3"/>
-                        <constraint firstAttribute="bottom" secondItem="ZIA-vv-0bN" secondAttribute="bottom" constant="20" id="mib-lf-4RB"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                            <integer key="value" value="35"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </view>
-                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AsX-hT-dLu" userLabel="learnHowWeCalculateBtn">
+                <button opaque="NO" contentMode="scaleAspectFit" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AsX-hT-dLu" userLabel="learnHowWeCalculateBtn">
                     <rect key="frame" x="0.0" y="554" width="375" height="30"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
@@ -78,11 +50,8 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="Cgb-R1-Ac1" firstAttribute="centerX" secondItem="19" secondAttribute="centerX" id="K5W-xs-Vfy"/>
                 <constraint firstAttribute="trailing" secondItem="AsX-hT-dLu" secondAttribute="trailing" id="X2m-MG-Fcg"/>
-                <constraint firstAttribute="bottom" secondItem="Cgb-R1-Ac1" secondAttribute="bottom" constant="-15" id="XMe-7l-mvz"/>
                 <constraint firstItem="AsX-hT-dLu" firstAttribute="centerX" secondItem="19" secondAttribute="centerX" id="YhX-ea-5ff"/>
-                <constraint firstItem="Cgb-R1-Ac1" firstAttribute="top" secondItem="AsX-hT-dLu" secondAttribute="bottom" constant="8" id="Z6m-05-vi8"/>
                 <constraint firstItem="AsX-hT-dLu" firstAttribute="leading" secondItem="19" secondAttribute="leading" id="bIk-6g-Aep"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
@@ -90,7 +59,4 @@
             <point key="canvasLocation" x="133.59999999999999" y="152.47376311844079"/>
         </view>
     </objects>
-    <resources>
-        <image name="popup icon" width="512" height="512"/>
-    </resources>
 </document>

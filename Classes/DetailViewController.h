@@ -18,7 +18,7 @@
 #define cSection2 1
 #define cSection3 2
 
-@interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate, MBProgressHUDDelegate, WSUpdateUserPlannedMealItems, WSDeleteMealItemDelegate, WSInsertUserPlannedMealItems, WSDeleteUserPlannedMealItems, WSDeleteFavoriteFoodDelegate> {
+@interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate, WSUpdateUserPlannedMealItems, WSDeleteMealItemDelegate, WSInsertUserPlannedMealItems, WSDeleteUserPlannedMealItems, WSDeleteFavoriteFoodDelegate> {
 
 	IBOutlet UILabel *lblText;
 	IBOutlet UILabel *lblMealName;

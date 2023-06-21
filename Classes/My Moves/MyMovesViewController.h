@@ -31,7 +31,6 @@
     IBOutlet UIButton *expandBtn;
     int currentSection;
 }
-@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *proportionalHeightCalConst;
 @property (nonatomic,retain) HKHealthStore *healthStore;

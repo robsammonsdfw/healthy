@@ -120,6 +120,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
+  - JJFloatingActionButton (2.5.0)
   - MBProgressHUD (1.2.0)
   - MKNumberBadgeView (0.0.1)
   - nanopb (2.30909.0):
@@ -145,6 +146,7 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - FMDB
   - FSCalendar
+  - JJFloatingActionButton
   - MBProgressHUD
   - MKNumberBadgeView
   - SBPickerSelector (= 1.0.4)
@@ -170,6 +172,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
+    - JJFloatingActionButton
     - MBProgressHUD
     - MKNumberBadgeView
     - nanopb
@@ -198,6 +201,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: d3dabccdb336fc0ae44b633c8abaa26559893cd9
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
+  JJFloatingActionButton: fdc3aefb0f28f04d0f988fa25d5fac97028a9ea7
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MKNumberBadgeView: 4007883b46f7babcf8bca339ecddff187e0cbb1f
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
@@ -208,6 +212,6 @@ SPEC CHECKSUMS:
   SWXMLHash: dd733a457e9c4fe93b1538654057aefae4acb382
   ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: b77be5f6c4a641815469f35c108cad48b45009af
+PODFILE CHECKSUM: 7243789395b38978e66fdbadb0d8a0ab99a8f6ea
 
 COCOAPODS: 1.12.1

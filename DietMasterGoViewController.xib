@@ -61,7 +61,6 @@
                 <outlet property="plannedArroewBtn" destination="rfD-mN-uJc" id="Mmq-FM-L71"/>
                 <outlet property="plannedImage" destination="qI2-DS-7za" id="pWr-7y-yyh"/>
                 <outlet property="plannedView" destination="f7L-Pj-mMS" id="thQ-mh-xLE"/>
-                <outlet property="popUpBtn" destination="xMq-XB-EPs" id="Wb0-dR-vfs"/>
                 <outlet property="remaining_Pie" destination="5kh-5t-COY" id="IW5-oM-RWh"/>
                 <outlet property="rightStackVw" destination="ldn-no-sqe" id="Su5-I2-6h8"/>
                 <outlet property="scheduledImage" destination="U9X-l6-O8i" id="k3j-1u-Kwa"/>
@@ -73,13 +72,11 @@
                 <outlet property="secondHideShowStackVw" destination="6sh-qR-hlT" id="u6Q-bg-gcW"/>
                 <outlet property="sendMsgBtnOutlet" destination="EcA-7T-kjD" id="xRn-At-OIM"/>
                 <outlet property="seperateLineLbl" destination="pWa-Le-34Q" id="vzy-s9-msK"/>
-                <outlet property="showPopUpVw" destination="R5L-eE-C6x" id="Tcz-0w-Fbd"/>
                 <outlet property="stepsImage" destination="8iA-Az-GQM" id="AXi-Hb-GvG"/>
                 <outlet property="stepsView" destination="cPr-RX-d47" id="aaR-SJ-Zs8"/>
                 <outlet property="suagrGraphImageVw" destination="HQU-zV-KB0" id="ggJ-xH-w7f"/>
                 <outlet property="sugarView" destination="WY9-6K-Fan" id="XPy-Us-fzU"/>
                 <outlet property="thirdExpVwHeightConst" destination="yKu-mk-2m5" id="g3I-xu-p7g"/>
-                <outlet property="thirtyConst" destination="gXz-l1-nZT" id="cSH-HK-lDv"/>
                 <outlet property="view" destination="cHF-bz-2I6" id="Ou6-j2-01H"/>
                 <outlet property="weightHideShowHeightConst" destination="zGv-Mz-tu2" id="mA9-UR-1x4"/>
                 <outlet property="weightHideShowStack" destination="66H-AK-n1D" id="nS2-Dm-G0b"/>
@@ -1291,43 +1288,13 @@
                     <viewLayoutGuide key="contentLayoutGuide" id="Fx0-mu-jps"/>
                     <viewLayoutGuide key="frameLayoutGuide" id="Cn9-mB-gwh"/>
                 </scrollView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R5L-eE-C6x">
-                    <rect key="frame" x="162" y="1144" width="70" height="90"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xMq-XB-EPs">
-                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <inset key="imageEdgeInsets" minX="20" minY="15" maxX="20" maxY="30"/>
-                            <state key="normal" image="popup icon"/>
-                            <connections>
-                                <action selector="popUpBtnAction:" destination="-1" eventType="touchUpInside" id="Np7-Mf-1ij"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="90" id="Fc6-99-NMr"/>
-                        <constraint firstItem="xMq-XB-EPs" firstAttribute="top" secondItem="R5L-eE-C6x" secondAttribute="top" id="HSJ-gr-9kt"/>
-                        <constraint firstAttribute="width" constant="70" id="WCY-bL-B2J"/>
-                        <constraint firstItem="xMq-XB-EPs" firstAttribute="leading" secondItem="R5L-eE-C6x" secondAttribute="leading" id="Ycy-r1-Ofp"/>
-                        <constraint firstAttribute="trailing" secondItem="xMq-XB-EPs" secondAttribute="trailing" id="f7x-no-VKB"/>
-                        <constraint firstAttribute="bottom" secondItem="xMq-XB-EPs" secondAttribute="bottom" constant="20" id="z61-ce-hYh"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                            <integer key="value" value="35"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="d1b-re-7W1"/>
             <constraints>
                 <constraint firstItem="j28-Ra-7Z7" firstAttribute="top" secondItem="cHF-bz-2I6" secondAttribute="top" id="21M-fw-ork"/>
                 <constraint firstItem="j28-Ra-7Z7" firstAttribute="leading" secondItem="cHF-bz-2I6" secondAttribute="leading" id="B2D-V3-2dc"/>
                 <constraint firstAttribute="bottom" secondItem="j28-Ra-7Z7" secondAttribute="bottom" id="PKd-9m-Ipo"/>
-                <constraint firstAttribute="bottom" secondItem="R5L-eE-C6x" secondAttribute="bottom" constant="-25" id="gXz-l1-nZT"/>
                 <constraint firstAttribute="trailing" secondItem="j28-Ra-7Z7" secondAttribute="trailing" id="kSL-QS-3Td"/>
-                <constraint firstItem="R5L-eE-C6x" firstAttribute="centerX" secondItem="cHF-bz-2I6" secondAttribute="centerX" id="q94-aY-Bqg"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="769.56521739130437" y="-91.71195652173914"/>
@@ -1346,7 +1313,6 @@
         <image name="Icon metro-fire" width="29.666666030883789" height="34.333332061767578"/>
         <image name="Icon metro-spoon-fork" width="29" height="34.333332061767578"/>
         <image name="Icon metro-steps" width="21.333333969116211" height="30"/>
-        <image name="popup icon" width="512" height="512"/>
         <image name="scheduled" width="31.666666030883789" height="36"/>
         <image name="up_arrow_icon" width="327.33334350585938" height="326.66665649414062"/>
         <systemColor name="systemBackgroundColor">

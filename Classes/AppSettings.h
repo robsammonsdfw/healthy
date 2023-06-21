@@ -11,7 +11,7 @@
 #import <MessageUI/MessageUI.h>
 #import "MyMovesWebServices.h"
 
-@interface AppSettings : UIViewController <UPSyncDatabaseDelegate, SyncDatabaseDelegate, MFMailComposeViewControllerDelegate,UINavigationControllerDelegate,GetDataWSDelegate,UIGestureRecognizerDelegate> {
+@interface AppSettings : UIViewController <UPSyncDatabaseDelegate, SyncDatabaseDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, GetDataWSDelegate, UIGestureRecognizerDelegate> {
 	
     IBOutlet UIActivityIndicatorView *downSyncSpinner;
     IBOutlet UIActivityIndicatorView *upSyncSpinner;
@@ -41,7 +41,5 @@
 
 @property (nonatomic, strong) IBOutlet UIView *viewtoptobottom;
 @property (nonatomic, strong) IBOutlet UIScrollView *myScrollBG;
-@property (nonatomic, strong) IBOutlet UIView *popUpView;
-@property (nonatomic, strong) IBOutlet UIView *showPopUpVw;
 
 @end

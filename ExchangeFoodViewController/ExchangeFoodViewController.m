@@ -5,7 +5,7 @@
 #import "DietmasterEngine.h"
 #import "GetDataWebService.h"
 
-@interface ExchangeFoodViewController () <UISearchBarDelegate, MBProgressHUDDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems, GetDataWSDelegate>
+@interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems, GetDataWSDelegate>
 
 @property (nonatomic, strong) NSDictionary *deleteDict;
 @property (nonatomic, strong) NSDictionary *insertDict;

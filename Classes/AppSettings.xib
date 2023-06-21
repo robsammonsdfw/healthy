@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,7 +33,6 @@
                 <outlet property="lblStaticLoggedExe" destination="9TJ-x8-rE5" id="F94-bw-Kzr"/>
                 <outlet property="mwlBookletButton" destination="YYf-ps-TXd" id="0l0-46-y5C"/>
                 <outlet property="myScrollBG" destination="uOa-09-4bj" id="CRo-yL-fQv"/>
-                <outlet property="showPopUpVw" destination="qlI-lj-ggb" id="WhT-a1-g3e"/>
                 <outlet property="upSyncSpinner" destination="28" id="30"/>
                 <outlet property="versionLabel" destination="36" id="37"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -413,40 +412,8 @@
                         </view>
                     </subviews>
                 </scrollView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qlI-lj-ggb">
-                    <rect key="frame" x="125" y="662" width="70" height="90"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAK-hP-AlT">
-                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <inset key="imageEdgeInsets" minX="20" minY="15" maxX="20" maxY="30"/>
-                            <state key="normal" image="popup icon"/>
-                            <connections>
-                                <action selector="popUpBtn:" destination="-1" eventType="touchUpInside" id="KbN-Dz-2f8"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstItem="eAK-hP-AlT" firstAttribute="leading" secondItem="qlI-lj-ggb" secondAttribute="leading" id="12R-ok-7nb"/>
-                        <constraint firstAttribute="height" constant="90" id="7kT-nJ-XV3"/>
-                        <constraint firstAttribute="width" constant="70" id="APm-My-ciC"/>
-                        <constraint firstAttribute="trailing" secondItem="eAK-hP-AlT" secondAttribute="trailing" id="Dkc-qs-tF3"/>
-                        <constraint firstAttribute="bottom" secondItem="eAK-hP-AlT" secondAttribute="bottom" constant="20" id="QfO-qk-NWE"/>
-                        <constraint firstItem="eAK-hP-AlT" firstAttribute="top" secondItem="qlI-lj-ggb" secondAttribute="top" id="nKb-h6-2eS"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                            <integer key="value" value="35"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </view>
             </subviews>
             <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <constraints>
-                <constraint firstAttribute="bottom" secondItem="qlI-lj-ggb" secondAttribute="bottom" constant="-25" id="Ouc-uQ-9ld"/>
-                <constraint firstItem="qlI-lj-ggb" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="bzl-tZ-4vP"/>
-            </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
             <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -456,7 +423,6 @@
     <resources>
         <image name="btn_GroceryList.png" width="131" height="30"/>
         <image name="close_btn.png" width="37" height="22"/>
-        <image name="popup icon" width="512" height="512"/>
         <image name="radio_btn.png" width="20.5" height="20.5"/>
         <image name="radio_btn_act.png" width="20.5" height="20.5"/>
     </resources>

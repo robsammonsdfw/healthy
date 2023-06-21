@@ -5,6 +5,7 @@
 //  Copyright 2010 AE Studios. All rights reserved.
 
 #import "DietMasterGoAppDelegate.h"
+
 #import "DietMasterGoViewController.h"
 #import "MyLogViewController.h"
 #import "LoginViewController.h"
@@ -12,7 +13,6 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "MyMovesDetailsViewController.h"
-#import "PopUpView.h"
 #import "PurchaseIAPHelper.h"
 
 #import "DietMasterGoPlus-Swift.h"
@@ -29,7 +29,7 @@
 
 @implementation DietMasterGoAppDelegate
 
-@synthesize window, viewController, navigationController, rootController, loginViewController;
+@synthesize viewController, navigationController, loginViewController;
 @synthesize splashView;
 @synthesize incomingDBFilePath;
 @synthesize isSessionExp;
@@ -48,102 +48,25 @@
     // -checkUserLogin will set the values to enable MyMoves and NewDesign.
     /*==========================================To Enable & Disable MyMoves==========================*/
         [[NSUserDefaults standardUserDefaults]setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
-//        [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"switch"]; // To disable MyMoves
-    /*====================================================================================================*/
-        
-    /*==========================================To Enable & Disable Old design=============================*/
-        [[NSUserDefaults standardUserDefaults]setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
-    //    [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"changeDesign"];          /// To Enable OLD DESIGN
-    /*=================================================================================================*/
+//      [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"switch"]; // To disable MyMoves
         
     [FIRApp configure];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-    }
-    
-    if (@available(iOS 15.0, *)) {
-        UITableView.appearance.sectionHeaderTopPadding = 0;
-    }
-    
-    self.isFromBarcode = NO;
-    viewController.view.tag = 35;
-    viewController.view.alpha = 0.0;
-    viewController.view.hidden = YES;
-    rootController.view.tag = 30;
-    rootController.view.alpha = 0.0;
-    rootController.view.hidden = YES;
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"changeDesign"]  isEqual: @"NewDesign"])
-    {
-        self.window.rootViewController = rootController;
-        [self.window makeKeyAndVisible];
-        
-        UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-        tabBarController.view.frame = CGRectMake(viewController.view.frame.origin.x, viewController.view.frame.origin.y, viewController.view.frame.size.width, viewController.view.frame.size.height);
-        tabBarController.delegate = self;
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    }
-    else
-    {
-        self.window.rootViewController = rootController;
-        [self.window makeKeyAndVisible];
-        
-        UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-        tabBarController.delegate = self;
-        UITabBar *tabBar = tabBarController.tabBar;
-        
-        UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];
-        UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:1];
-        UITabBarItem *tabBarItem3 = [tabBar.items objectAtIndex:2];
-        UITabBarItem *tabBarItem4 = [tabBar.items objectAtIndex:3];
-        UITabBarItem *tabBarItem5 = [tabBar.items objectAtIndex:4];
-        
-        tabBarItem1.selectedImage = [[UIImage imageNamed:@"today_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        tabBarItem1.image = [[UIImage imageNamed:@"today_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        
-        tabBarItem2.selectedImage = [[UIImage imageNamed:@"mygoal_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        tabBarItem2.image = [[UIImage imageNamed:@"mygoal_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        
-        tabBarItem3.selectedImage = [[UIImage imageNamed:@"mylog_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        tabBarItem3.image = [[UIImage imageNamed:@"mylog_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        
-        
-        tabBarItem4.selectedImage = [[UIImage imageNamed:@"myplan_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        tabBarItem4.image = [[UIImage imageNamed:@"myplan_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        
-        //    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"])
-        //    {
-        //        tabBarItem5.selectedImage = [[UIImage imageNamed:@"MyMovesactives.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        //        tabBarItem5.image = [[UIImage imageNamed:@"MyMovesinactives.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        //    }
-        //    else
-        //    {
-        tabBarItem5.selectedImage = [[UIImage imageNamed:@"settings_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        tabBarItem5.image = [[UIImage imageNamed:@"settings_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-        //    }
-        
-    }
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    UITableView.appearance.sectionHeaderTopPadding = 0;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+
+    // NOTE: The RootViewController is created in the SceneDelegate now.
+
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     DMLog(@"Handle the URL: %@", url);
     return YES;
-}
-
-//HHT (Set taskMode to View when user select Setting tab)
--(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    if (tabBarController.selectedIndex == 4){
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.taskMode = @"View";
-    }
-    //HHT save selected current index for scan page (Managefood)
-    self.selectedIndex = (int)tabBarController.selectedIndex;
-    
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
@@ -160,9 +83,7 @@
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
     DMLog(@"Open the URL: %@", url);
     
-    [[NSUserDefaults standardUserDefaults] synchronize];
     BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
@@ -190,12 +111,10 @@
             [self.window insertSubview:[loginViewController view] atIndex:0];
             [self.window bringSubviewToFront:loginViewController.view];
             
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:0.75];
-            [UIView setAnimationDelegate:self];
-            loginViewController.view.alpha = 1.0;
-            [UIView commitAnimations];
-            
+            [UIView animateWithDuration:0.75 animations:^{
+                loginViewController.view.alpha = 1.0;
+            }];
+
             UIView *v = [self.window viewWithTag:30];
             v.alpha = 0.0;
             v.hidden = YES;
@@ -210,10 +129,8 @@
     return YES;
 }
 
--(void)loginFromUrl:(NSString *)loginUrl {
-    [[NSUserDefaults standardUserDefaults] synchronize];
+- (void)loginFromUrl:(NSString *)loginUrl {
     BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
@@ -237,13 +154,11 @@
             
             [self.window insertSubview:[loginViewController view] atIndex:0];
             [self.window bringSubviewToFront:loginViewController.view];
-            
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:0.75];
-            [UIView setAnimationDelegate:self];
-            loginViewController.view.alpha = 1.0;
-            [UIView commitAnimations];
-            
+                        
+            [UIView animateWithDuration:0.75 animations:^{
+                loginViewController.view.alpha = 1.0;
+            }];
+
             UIView *v = [self.window viewWithTag:30];
             v.alpha = 0.0;
             v.hidden = YES;
@@ -255,10 +170,6 @@
         
         [loginViewController loginFromUrl:loginUrl];
     }
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -274,7 +185,6 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
     if (self.selectedIndex == 4) {
         
     }
@@ -630,10 +540,9 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
-    
 }
--(void)clearTableData
-{
+
+- (void)clearTableData {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
@@ -662,86 +571,37 @@
     NSString *deleteWeightlog = [NSString stringWithFormat:@"DELETE FROM weightlog"];
     [db executeUpdate:deleteWeightlog];
     
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
-    
     [db commit];
-    
 }
 
+#pragma mark - SPLASH METHODS
 
-#pragma mark SPLASH METHODS
--(void)showSplashScreen {
+- (void)showSplashScreen {
     NSString *imageFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];
     splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT)];
     splashView.contentMode = UIViewContentModeScaleAspectFill;
     splashView.image = [UIImage imageWithContentsOfFile:imageFilePath];
-    [window addSubview:splashView];
-    [window bringSubviewToFront:splashView];
+//    [window addSubview:splashView];
+//    [window bringSubviewToFront:splashView];
 }
 
--(void)removeSplashScreen {
+- (void)removeSplashScreen {
     [splashView removeFromSuperview];
     splashView = nil;
 }
 
-#pragma mark -
-#pragma mark Memory management
-- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    
-}
-
-#pragma mark LOAD VIEW METHODS
--(void)loadMainViews {
-    [viewController loadData];
-    
-    UIView *v = [self.window viewWithTag:30];
-    UIView *v1 = [self.window viewWithTag:35];
-    UIView *v2 = [self.window viewWithTag:40];
-    if(!self.isFromBarcode){
-        rootController.selectedIndex = 0;
-    }
-    else {
-        self.isFromBarcode = NO;
-    }
-    
-    if (v.hidden == YES) {
-        v.hidden = NO;
-        v1.hidden = NO;
-        v1.alpha = 1.0;
-        v.alpha = 1.0;
-        
-        [UIView animateWithDuration:0.75 animations:^{
-            v2.alpha = 0.0;
-        }];
-        
-        v2.hidden = YES;
-        [self.window sendSubviewToBack:v2];
-    }
-}
-
 #pragma mark USER LOGIN
--(void)checkUserLogin {
-    [[NSUserDefaults standardUserDefaults] synchronize];
+
+- (void)checkUserLogin {
     BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-//        NSArray *paths2 = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//        NSString *tempPath2 = [paths2 objectAtIndex:0];
-//        NSFileManager *fileManager2 = [NSFileManager defaultManager];
-//        NSString *tempFile2 = [tempPath2 stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
-//        [fileManager2 removeItemAtPath:tempFile2 error:NULL];
-//        if(![[NSFileManager defaultManager] fileExistsAtPath: tempFile2]) {
-//            DMLog(@"DMG.sqlite does not exist anymore");
-//        }
-        
-#pragma mark LOG OUT
-        
+                
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"userid_dietmastergo"];
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"companyemail1_dietmastergo"];
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"companyemail2_dietmastergo"];
@@ -795,15 +655,13 @@
             [fileManager removeItemAtPath:logoFilePath2x error:NULL];
         }
         [self getUserLogin];
-    }
-    else {
-#pragma mark Logged In
-        [self loadMainViews];
+
+    } else {
         [viewController loadData];
     }
 }
 
--(void)getUserLogin {
+- (void)getUserLogin {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"logout_dietmastergo"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -828,11 +686,9 @@
         [self.window insertSubview:[loginViewController view] atIndex:0];
         [self.window bringSubviewToFront:loginViewController.view];
         
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.75];
-        [UIView setAnimationDelegate:self];
-        loginViewController.view.alpha = 1.0;
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.75 animations:^{
+            loginViewController.view.alpha = 1.0;
+        }];
         
         UIView *v = [self.window viewWithTag:30];
         v.alpha = 0.0;
@@ -846,13 +702,10 @@
 
 - (void)userLoginFinished:(NSString *)statusMessage {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"user_loggedin"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UserLoginFinished" object:nil]; //today
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UserLoginFinished" object:nil];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:[NSDate date] forKey:@"lastmodified"];
-    [prefs synchronize];
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APP_NAME message:@"Do you want to make changes to optional settings?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     alertView.tag = 1;
@@ -860,7 +713,7 @@
     
     [self syncDatabase];
     
-    [self loadMainViews];
+    [viewController loadData];
 }
 
 //DownSync
@@ -925,7 +778,6 @@
     [DMActivityIndicator hideActivityIndicator];
 }
 
-
 - (NSInteger)hoursAfterDate:(NSDate *)aDate {
     NSTimeInterval ti = [[NSDate date] timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_HOUR);
@@ -935,6 +787,7 @@
     NSTimeInterval ti = [[NSDate date] timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_MINUTE);
 }
+
 #pragma mark SYNC DATABASE
 -(void)syncDatabase {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -986,7 +839,7 @@
 }
 
 #pragma mark UPDATE 1.1. METHOD
--(void)updateMeasureTable {
+- (void)updateMeasureTable {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -1037,7 +890,7 @@
 
 #pragma mark IMPORT DATABASE METHODS
 
--(void)confirmUpdateDatabase {
+- (void)confirmUpdateDatabase {
     if (incomingDBFilePath == nil || incomingDBFilePath.length == 0) {
         UIAlertView *alert;
         alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No database was found. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -1128,7 +981,7 @@
         if (buttonIndex == 1) {
             AppDel.isFromAlert = YES;
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
-            [rootController setSelectedIndex:4];
+//            [rootController setSelectedIndex:4];
         }
         else {
             
@@ -1230,9 +1083,21 @@
         DMLog(@"Temp DB Zip File Deleted...");
     }
     //    });
-    
-    
 }
 
+#pragma mark - UISceneDelegate
+
+- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions API_AVAILABLE(ios(13)) {
+    // Called when the user discards a scene session.
+    // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
+    // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+}
+
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
+    // Called when a new scene session is being created.
+    // Use this method to select a configuration to create the new scene with.
+    UISceneConfiguration *config = [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+    return config;
+}
 
 @end
