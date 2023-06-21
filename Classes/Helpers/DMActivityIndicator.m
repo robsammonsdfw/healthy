@@ -74,6 +74,7 @@ static MBProgressHUD *activityView;
 + (void)showCompletedIndicatorWithMessage:(NSString *)message {
     if ([NSThread isMainThread]) {
         UIImage *image = [UIImage imageNamed:@"37x-Checkmark"];
+        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [DMActivityIndicator showWithCustomImage:image andMessage:message];
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -86,6 +87,7 @@ static MBProgressHUD *activityView;
     if ([NSThread isMainThread]) {
         [DMActivityIndicator defaultSetup];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.tintColor = [UIColor blackColor];
         activityView.customView = imageView;
         activityView.mode = MBProgressHUDModeCustomView;
         activityView.label.text = [message copy];

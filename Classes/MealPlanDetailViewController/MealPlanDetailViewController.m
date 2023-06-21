@@ -130,13 +130,6 @@
     [self.navigationController.navigationBar setTranslucent:NO];
 }
 
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    titleLabel = nil;
-//    recommendedCaloriesLabel = nil;
-//    caloriesPlannedLabel = nil;
-//}
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -155,7 +148,6 @@
         [self.tableView reloadData];
     }
 }
-
 
 -(IBAction)goToSafetyGuidelines:(id)sender {
     SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://advancedwebservicegroup.com/AWSGDocuments/GuidelinesAndSafety.html"]];

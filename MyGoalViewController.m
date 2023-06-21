@@ -14,6 +14,7 @@
 #import "MyMovesViewController.h"
 
 @interface MyGoalViewController() <SFSafariViewControllerDelegate>
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation MyGoalViewController
@@ -30,17 +31,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.title=@"My Goal";
+    self.navigationItem.title = @"My Goal";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeInfoLight];
     [btn1 addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchDown];
     btn1.tintColor = UIColor.whiteColor;
+    
     UIBarButtonItem * infoButton = [[UIBarButtonItem alloc] initWithCustomView:btn1];
     self.navigationItem.leftBarButtonItem = infoButton;
 
@@ -59,11 +63,11 @@
     segmentedControl.tintColor = AccentColor
     
     UIColor *tintColor = [segmentedControl tintColor];
-    UIImage *tintColorImage = [self imageWithColor:tintColor];
+    UIImage *tintColorImage = [DMGUtilities imageWithColor:tintColor];
     // Must set the background image for normal to something (even clear) else the rest won't work
-    [segmentedControl setBackgroundImage:[self imageWithColor:segmentedControl.backgroundColor ? segmentedControl.backgroundColor : [UIColor clearColor]] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [segmentedControl setBackgroundImage:[DMGUtilities imageWithColor:segmentedControl.backgroundColor ? segmentedControl.backgroundColor : [UIColor clearColor]] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [segmentedControl setBackgroundImage:tintColorImage forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-    [segmentedControl setBackgroundImage:[self imageWithColor:[tintColor colorWithAlphaComponent:0.2]] forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
+    [segmentedControl setBackgroundImage:[DMGUtilities imageWithColor:[tintColor colorWithAlphaComponent:0.2]] forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
     [segmentedControl setBackgroundImage:tintColorImage forState:UIControlStateSelected|UIControlStateSelected barMetrics:UIBarMetricsDefault];
     [segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName: tintColor, NSFontAttributeName: [UIFont systemFontOfSize:13]} forState:UIControlStateNormal];
     [segmentedControl setDividerImage:tintColorImage forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -73,7 +77,6 @@
     self.scatterPlot = nil;
     self.scatterPlot = [[TUTSimpleScatterPlot alloc] initWithHostingView:_graphHostingView];
     [self getDataForDays:30];
-    
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
@@ -94,8 +97,7 @@
         }
     }
     
-    _goalWeightLbl.text = [[NSUserDefaults standardUserDefaults]
-                            stringForKey:@"GoalWeight"];
+    _goalWeightLbl.text = [[NSUserDefaults standardUserDefaults] stringForKey:@"GoalWeight"];
     
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         switch ((int)[[UIScreen mainScreen] nativeBounds].size.height) {
@@ -139,51 +141,10 @@
                 break;
         }
     }
-
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"])
-    {
-        UIImage *btnImage1 = [[UIImage imageNamed:@"set32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.bounds = CGRectMake( 0, 0, btnImage1.size.width, btnImage1.size.height );
-        btn1.tintColor = [UIColor whiteColor];
-        [btn1 addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchDown];
-        [btn1 setImage:btnImage1 forState:UIControlStateNormal];
-        
-        UIBarButtonItem * settingsBtn = [[UIBarButtonItem alloc] initWithCustomView:btn1];
-        self.navigationItem.rightBarButtonItem = settingsBtn;
-    }
-    else
-    {
-        
-    }
-
 }
 
-//-(UIImage *)imageFromLayer:(CALayer *)layer
-//{
-//    UIGraphicsBeginImageContext([layer frame].size);
-//
-//    [layer renderInContext:UIGraphicsGetCurrentContext()];
-//    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
-//
-//    UIGraphicsEndImageContext();
-//
-//    return outputImage;
-//}
-
-- (UIImage *)imageWithColor: (UIColor *)color {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return theImage;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     if (self.isMovingFromParentViewController) {
         [[self navigationController] setNavigationBarHidden:YES animated:YES];
         self.scatterPlot = nil;
@@ -247,16 +208,10 @@
     }
     
 }
-- (void)viewDidUnload {
-    [super viewDidUnload];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 
 #pragma mark BUTTON ACTIONS
--(IBAction) changeGraphTime:(id) sender {
+
+-(IBAction)changeGraphTime:(id) sender {
     _graphHostingView.hidden = YES;
     
     int selectedIndex = segmentedControl.selectedSegmentIndex;
@@ -283,7 +238,7 @@
     _graphHostingView.hidden = NO;
 }
 
--(IBAction) showRecordWeightView:(id) sender {
+-(IBAction)showRecordWeightView:(id) sender {
     RecordWeightView *dvController = [[RecordWeightView alloc] initWithNibName:@"RecordWeightView" bundle:nil];
     [self.navigationController pushViewController:dvController animated:YES];
     dvController = nil;
@@ -298,12 +253,11 @@
     }
 
     NSDate* sourceDate = [NSDate date];
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-    [dateFormat setTimeZone:systemTimeZone];
-    NSString *date_string = [dateFormat stringFromDate:sourceDate];
-    NSDate *currDate = [dateFormat dateFromString:date_string];
+    [self.dateFormatter setTimeZone:systemTimeZone];
+    NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
+    NSDate *currDate = [self.dateFormatter dateFromString:date_string];
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
@@ -339,17 +293,15 @@
         maxCountStep = 10;
     }
     
-    NSDate *tempDate=[startDate copy];
-    for (int i=0;i<numberOfDays;i++) {
-        tempDate=[tempDate dateByAddingTimeInterval:(60*60*24)];
+    NSDate *tempDate = [startDate copy];
+    for (int i=0; i < numberOfDays; i++) {
+        tempDate = [tempDate dateByAddingTimeInterval:(60*60*24)];
         
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"MMM dd"];
-        [dateFormat setLenient:YES];
+        [self.dateFormatter setDateFormat:@"MMM dd"];
+        [self.dateFormatter setLenient:YES];
         
-        NSString *dateString = [dateFormat stringFromDate:tempDate];
-        tempDate=[dateFormat dateFromString:dateString];
-        
+        NSString *dateString = [self.dateFormatter stringFromDate:tempDate];
+        tempDate = [self.dateFormatter dateFromString:dateString];
     }
     
     NSMutableArray *pointsData = [NSMutableArray array];
@@ -402,12 +354,11 @@
 
         NSString *dateLogged  = [rs2 stringForColumn:@"logtime"];
         
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setLenient:YES];
-        [dateFormat setDateFormat:@"yyyy-MM-dd"];
-        NSDate *dateToConvert = [dateFormat dateFromString:dateLogged];
-        [dateFormat setDateFormat:@"MMM dd"];
-        NSString *dateString = [dateFormat stringFromDate:dateToConvert];
+        [self.dateFormatter setLenient:YES];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        NSDate *dateToConvert = [self.dateFormatter dateFromString:dateLogged];
+        [self.dateFormatter setDateFormat:@"MMM dd"];
+        NSString *dateString = [self.dateFormatter stringFromDate:dateToConvert];
     
         [dates setValue:[NSValue valueWithCGPoint:CGPointMake(counter, [weightLogged intValue])] forKey:@"point"];
         [dates setValue:dateString forKey:@"date"];

@@ -447,16 +447,6 @@
     }
 }
 
-- (void)viewDidUnload {
-    dateToolBar = nil;
-    [super viewDidUnload];
-    
-    foodResults = nil;
-    exerciseResults = nil;
-    tblSimpleTable = nil;
-    dayDetailView = nil;
-}
-
 #pragma mark TABLE VIEW METHODS
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if ([exerciseResults count] > 0) {

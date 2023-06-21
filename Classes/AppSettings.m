@@ -101,7 +101,6 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back" style: UIBarButtonItemStylePlain target: nil action: nil];
-    
     [self.navigationItem setBackBarButtonItem: backButton];
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
@@ -253,7 +252,7 @@
     [self btnClkCloseSetting:self];
 }
 
--(IBAction) myFoods:(id) sender {
+-(IBAction)myFoods:(id) sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"View";
     

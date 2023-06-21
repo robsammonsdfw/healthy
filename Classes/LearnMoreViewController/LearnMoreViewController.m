@@ -116,10 +116,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if ([learnMoreTitle isEqualToString:@"termsofservice"] || [learnMoreTitle isEqualToString:@"privacypolicy"]) {
-        
+    if ([learnMoreTitle isEqualToString:@"termsofservice"] || [learnMoreTitle isEqualToString:@"privacypolicy"]) {        
         myNavBar.hidden = NO;
-//        myWebView.frame = CGRectMake(0, myNavBar.frame.size.height, myWebView.frame.size.width,  self.view.frame.size.height - myNavBar.frame.size.height);
     }
     else {
         [[self navigationItem] setTitle:learnMoreTitle];
@@ -129,22 +127,4 @@
     [self loadWebView];
 }
 
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-//- (void)viewDidUnload {
-//    [super viewDidUnload];
-//    activityIndicator = nil;
-//    learnMoreTitle = nil;
-//    myNavBar = nil;
-//}
-
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-//    return YES;
-//}
 @end

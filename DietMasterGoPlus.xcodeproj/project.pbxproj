@@ -161,6 +161,7 @@
 		0E6F91342A4328A000956F1E /* DietMasterGo-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90972A43289F00956F1E /* DietMasterGo-Info.plist */; };
 		0E6F91362A4328A000956F1E /* DMGO_v3.9.2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90992A43289F00956F1E /* DMGO_v3.9.2.sqlite */; };
 		0E6F91382A432A4B00956F1E /* MainMenuFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */; };
+		0E6F913A2A4350E300956F1E /* DMDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */; };
 		0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
 		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
 		0E8EC8E12A3CF5430095BDEC /* DMActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */; };
@@ -187,7 +188,6 @@
 		401B63C120B3FC64004453E7 /* RecordWeightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FF54FD12D781D900E81066 /* RecordWeightView.xib */; };
 		401B63C220B3FC64004453E7 /* FoodsHome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2417DD7F131D942200346132 /* FoodsHome.xib */; };
 		401B63C320B3FC64004453E7 /* FoodsSearch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2417DE0D131DA14E00346132 /* FoodsSearch.xib */; };
-		401B63C420B3FC64004453E7 /* DatePickerControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 246F2D61132A671E00DF8157 /* DatePickerControl.xib */; };
 		401B63D920B3FC64004453E7 /* MessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3568E2A6187EDE40004A542C /* MessageCell.xib */; };
 		401B63E520B3FC64004453E7 /* SendView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3568E2B7187EDE40004A542C /* SendView.xib */; };
 		401B63E920B3FC64004453E7 /* ManageFoods.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247695B013FEA91000ED37E6 /* ManageFoods.xib */; };
@@ -237,7 +237,6 @@
 		401B647920B3FC64004453E7 /* RecordWeightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 24FF54FC12D781D900E81066 /* RecordWeightView.m */; };
 		401B647A20B3FC64004453E7 /* FoodsHome.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DD7E131D942200346132 /* FoodsHome.m */; };
 		401B647B20B3FC64004453E7 /* FoodsSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DE0C131DA14E00346132 /* FoodsSearch.m */; };
-		401B647C20B3FC64004453E7 /* DatePickerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F2D60132A671E00DF8157 /* DatePickerControl.m */; };
 		401B647D20B3FC64004453E7 /* ManageFoods.m in Sources */ = {isa = PBXBuildFile; fileRef = 247695AF13FEA91000ED37E6 /* ManageFoods.m */; };
 		401B647E20B3FC64004453E7 /* FoodCategoryPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CE65381148EB2AA00A3C992 /* FoodCategoryPicker.m */; };
 		401B647F20B3FC64004453E7 /* MeasurePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC71492DB950098A0C1 /* MeasurePicker.m */; };
@@ -593,6 +592,7 @@
 		0E6F90992A43289F00956F1E /* DMGO_v3.9.2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = DMGO_v3.9.2.sqlite; sourceTree = "<group>"; };
 		0E6F909A2A43289F00956F1E /* DietMasterGoPlus-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DietMasterGoPlus-Bridging-Header.h"; sourceTree = "<group>"; };
 		0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuFAB.swift; sourceTree = "<group>"; };
+		0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDatePickerViewController.swift; sourceTree = "<group>"; };
 		0E71B79014DE157C008C9576 /* ExercisesDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExercisesDetailViewController.h; sourceTree = "<group>"; };
 		0E71B79114DE157C008C9576 /* ExercisesDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExercisesDetailViewController.m; sourceTree = "<group>"; };
 		0E71B79214DE157C008C9576 /* ExercisesDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExercisesDetailViewController.xib; sourceTree = "<group>"; };
@@ -704,9 +704,6 @@
 		2467EC6712D5749600B5591E /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		2467EC6812D5749600B5591E /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; wrapsLines = 1; };
 		2467EC6912D5749600B5591E /* DetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
-		246F2D5F132A671E00DF8157 /* DatePickerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerControl.h; sourceTree = "<group>"; };
-		246F2D60132A671E00DF8157 /* DatePickerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerControl.m; sourceTree = "<group>"; };
-		246F2D61132A671E00DF8157 /* DatePickerControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DatePickerControl.xib; sourceTree = "<group>"; };
 		247695AE13FEA91000ED37E6 /* ManageFoods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ManageFoods.h; path = ../ManageFoods.h; sourceTree = "<group>"; };
 		247695AF13FEA91000ED37E6 /* ManageFoods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ManageFoods.m; path = ../ManageFoods.m; sourceTree = "<group>"; };
 		247695B013FEA91000ED37E6 /* ManageFoods.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ManageFoods.xib; path = ../ManageFoods.xib; sourceTree = "<group>"; };
@@ -967,7 +964,6 @@
 				0E4788AF14EAC78C00B8FFE3 /* SoapWebServiceEngine */,
 				0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */,
 				0E75DD8B1586532B003B1BB7 /* MealPlanWebService */,
-				0ECE6EDC14BF4093004DEF36 /* DatePickerControl */,
 				0E71B79514DE1ABD008C9576 /* DietmasterEngine */,
 				0E4788B414EACBFE00B8FFE3 /* LoginViewController */,
 				59DA2ACF1A1B6228008D749F /* Today */,
@@ -1546,16 +1542,6 @@
 			name = MyLogViewController;
 			sourceTree = "<group>";
 		};
-		0ECE6EDC14BF4093004DEF36 /* DatePickerControl */ = {
-			isa = PBXGroup;
-			children = (
-				246F2D5F132A671E00DF8157 /* DatePickerControl.h */,
-				246F2D60132A671E00DF8157 /* DatePickerControl.m */,
-				246F2D61132A671E00DF8157 /* DatePickerControl.xib */,
-			);
-			name = DatePickerControl;
-			sourceTree = "<group>";
-		};
 		0ECE6EDD14BF40A5004DEF36 /* DietMasterGoViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1671,6 +1657,7 @@
 			children = (
 				0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */,
 				0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */,
+				0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2308,7 +2295,6 @@
 				0E6F91242A4328A000956F1E /* Icon-50@2x.png in Resources */,
 				401B63C320B3FC64004453E7 /* FoodsSearch.xib in Resources */,
 				0E6F91252A4328A000956F1E /* Icon-Small.png in Resources */,
-				401B63C420B3FC64004453E7 /* DatePickerControl.xib in Resources */,
 				65462D2226BD1D99004D1654 /* DailyActivityTypeVC.xib in Resources */,
 				0E6F90AC2A43289F00956F1E /* 29-heart@2x.png in Resources */,
 				0E6F90D32A43289F00956F1E /* checkmark_off.png in Resources */,
@@ -2576,7 +2562,6 @@
 				401B647A20B3FC64004453E7 /* FoodsHome.m in Sources */,
 				40DD776F220082BA003EE6E9 /* MyMovesWebServices.m in Sources */,
 				401B647B20B3FC64004453E7 /* FoodsSearch.m in Sources */,
-				401B647C20B3FC64004453E7 /* DatePickerControl.m in Sources */,
 				401B647D20B3FC64004453E7 /* ManageFoods.m in Sources */,
 				401B647E20B3FC64004453E7 /* FoodCategoryPicker.m in Sources */,
 				401B647F20B3FC64004453E7 /* MeasurePicker.m in Sources */,
@@ -2643,6 +2628,7 @@
 				401B652720B3FC64004453E7 /* SendView.m in Sources */,
 				403D88A921ECA95F00B2F232 /* MyMovesTableViewCell.m in Sources */,
 				0ECFE7F12A41DB3900DE631E /* DMPickerViewController.swift in Sources */,
+				0E6F913A2A4350E300956F1E /* DMDatePickerViewController.swift in Sources */,
 				401B653720B3FC64004453E7 /* MessageViewController.m in Sources */,
 				650208CB250152FA00F412B0 /* PurchaseIAPHelper.m in Sources */,
 				0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */,

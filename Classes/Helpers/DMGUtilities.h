@@ -39,6 +39,9 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 /// Utilities used across the project.
 @interface DMGUtilities : NSObject
 
+/// Returns an image with the provided UIColor.
++ (UIImage *)imageWithColor:(UIColor *)color;
+
 #pragma mark - View Helpers
 
 /// Iterates presentedViewController until it finds the top most controller.
