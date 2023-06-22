@@ -882,13 +882,30 @@
     favoriteMealName = @"";
     favoriteMealSectionID = [sender tag];
     
-    UIAlertView *favoriteMealAlert = [[UIAlertView alloc] initWithTitle:@"Save as Favorite Meal"
-                                                                message:@"Enter short name or description"
-                                                               delegate:self cancelButtonTitle:@"Cancel"
-                                                      otherButtonTitles:@"OK",nil];
-    favoriteMealAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    favoriteMealAlert.tag = 10;
-    [favoriteMealAlert show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Save as Favorite Meal"
+                                                                   message:@"Enter short name or description."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        // Configure.
+    }];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Save"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        favoriteMealName = alert.textFields.firstObject.text;
+        if ([favoriteMealName length] == 0) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:@"Favorite Meal Name is required. Please try again." inViewController:nil];
+        } else {
+            [self saveFavoriteMealToDatabase:nil];
+        }
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        favoriteMealName = @"";
+        favoriteMealSectionID = 0;
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 // Save Fav Meal
@@ -970,31 +987,6 @@
     [DMActivityIndicator showCompletedIndicator];
 
     favoriteMealID = 0;
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
-    if ([alertView tag] == 10) {
-        if (buttonIndex == 0) {
-            favoriteMealName = @"";
-            favoriteMealSectionID = 0;
-        }
-        if (buttonIndex == 1) {
-            
-            favoriteMealName = [alertView textFieldAtIndex:0].text;
-            
-            if ([favoriteMealName length] == 0) {
-                UIAlertView *alert;
-                alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Favorite Meal Name is required. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [alert setTag:7];
-                [alert show];
-                
-            }
-            else {
-                [self saveFavoriteMealToDatabase:nil];
-            }
-        }
-    }
 }
 
 #pragma mark DATA METHODS

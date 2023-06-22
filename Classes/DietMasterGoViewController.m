@@ -12,6 +12,7 @@
 #import "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"
 #import "MyMovesWebServices.h"
 #import "MyMovesViewController.h"
+#import "NSString+Encode.h"
 
 @interface DietMasterGoViewController() <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CPTPieChartDelegate, UIPopoverPresentationControllerDelegate> {
     MKNumberBadgeView *numberBadge;
@@ -328,24 +329,28 @@
 }
 
 - (IBAction)sendMailBtn:(id)sender {
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
+    NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]];
+    NSString *emailTo = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
+
     if ([MFMailComposeViewController canSendMail]) {
-        NSString *path = [[NSBundle mainBundle] bundlePath];
-        NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-        
         MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
-        [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
-        NSString *emailTo = [[NSString alloc] initWithFormat:@""];
-        [mailComposer setMessageBody:emailTo isHTML:NO];
-        NSString *emailTo1 = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
-        NSArray *toArray = [NSArray arrayWithObjects:emailTo1, nil];
-        [mailComposer setToRecipients:toArray];
+        [mailComposer setSubject:subjectString];
+        [mailComposer setMessageBody:@"" isHTML:NO];
+        [mailComposer setToRecipients:@[emailTo]];
         mailComposer.mailComposeDelegate = self;
         [self presentViewController:mailComposer animated:YES completion:nil];
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        NSString *urlString = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", emailTo, [subjectString encodeStringForURL], [@"" encodeStringForURL]];
+        NSURL *mailToURL = [NSURL URLWithString:urlString];
+        [[UIApplication sharedApplication] openURL:mailToURL options:@{} completionHandler:^(BOOL success) {
+            if (!success) {
+                [DMGUtilities showAlertWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
+            }
+        }];
     }
 }
 
@@ -569,73 +574,37 @@
 }
 
 #pragma mark - Help and Support Methods
-- (void)mailAction:(id)sender {
-    MessageViewController *vc = [[MessageViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
--(IBAction)showActionSheet:(id)sender {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSString *alertTitle = [NSString stringWithFormat:@"%@ Help & Support", [prefs valueForKey:@"companyname_dietmastergo"]];
-    
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:alertTitle delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Send an Email", nil];
-    popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [popupQuery showInView:self.tabBarController.view];
-}
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        [self emailUs:nil];
-    }
-    else if (buttonIndex == 2) {
-    }
-}
-
--(void)emailUs:(id)sender {
-    if ([MFMailComposeViewController canSendMail]) {
-        NSString *path = [[NSBundle mainBundle] bundlePath];
-        NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-        
-        MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
-        [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
-        NSString *emailTo = [[NSString alloc] initWithFormat:@""];
-        [mailComposer setMessageBody:emailTo isHTML:NO];
-        NSString *emailTo1 = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
-        NSArray *toArray = [NSArray arrayWithObjects:emailTo1, nil];
-        [mailComposer setToRecipients:toArray];
-        mailComposer.mailComposeDelegate = self;
-        [self presentViewController:mailComposer animated:YES completion:nil];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-}
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller
-          didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    UIAlertView *alert;
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error {
+    
+    NSString *title = nil;
+    NSString *message = nil;
     switch (result) {
         case MFMailComposeResultCancelled:
-            alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Email was cancelled." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Cancelled";
+            message = @"Email was cancelled.";
             break;
         case MFMailComposeResultSaved:
-            alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was saved as a draft." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Saved";
+            message = @"Email was saved as a draft.";
             break;
         case MFMailComposeResultSent:
-            alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was sent successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Success!";
+            message = @"Email was sent successfully.";
             break;
         case MFMailComposeResultFailed:
-            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Error";
+            message = @"Email was not sent.";
             break;
         default:
-            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Error";
+            message = @"Email was not sent.";
             break;
     }
-    [alert show];
-    [self dismissViewControllerAnimated:YES completion:nil];
+
+    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
 }
 
 #pragma mark DATA LOADING METHODS

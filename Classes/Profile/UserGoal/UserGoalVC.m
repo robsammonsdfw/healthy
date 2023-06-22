@@ -135,8 +135,7 @@
                 {
                     if (goalWeight <1.00 || goalWeight >990.00)
                     {
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Create Profile" message:@"Please enter goalWeight between 1 & 990" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        [alert show];
+                        [DMGUtilities showAlertWithTitle:@"Create Profile" message:@"Please enter goalWeight between 1 & 990." inViewController:nil];
                         return NO;
                     }
                     else{
@@ -150,8 +149,7 @@
                 {
                     if (goalWeight <1.00 || goalWeight >450.00)
                     {
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter goalWeight between 1 & 450" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        [alert show];
+                        [DMGUtilities showAlertWithTitle:@"Create Profile" message:@"Please enter goalWeight between 1 & 450." inViewController:nil];
                         return NO;
                     }
                     else{
@@ -164,8 +162,7 @@
             } else {
                 if (goalWeight <1.00 || goalWeight >450.00)
                 {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter goalWeight between 1 & 450" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    [alert show];
+                    [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter goalWeight between 1 & 450." inViewController:nil];
                     return NO;
                 }
                 else{
@@ -177,8 +174,7 @@
             }
         }
         else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Goal Weight" message:@"Please enter Goal Weight" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
+            [DMGUtilities showAlertWithTitle:@"Goal Weight" message:@"Please enter a Goal Weight." inViewController:nil];
             return NO;
         }
     }
@@ -192,8 +188,7 @@
                 {
                     if (goalWeight <1.00 || goalWeight >990.00)
                     {
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter goalWeight between 1 & 990" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        [alert show];
+                        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter a GoalWeight between 1 & 990." inViewController:nil];
                         return NO;
                     }
                     else{
@@ -207,8 +202,7 @@
                 {
                     if (goalWeight <1.00 || goalWeight >450.00)
                     {
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter goalWeight between 1 & 450" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        [alert show];
+                        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter a GoalWeight between 1 & 450." inViewController:nil];
                         return NO;
                     }
                     else{
@@ -221,8 +215,7 @@
             } else {
                 if (goalWeight <1.00 || goalWeight >990.00)
                 {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Goal weight" message:@"Please enter a weight between 1 & 990" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    [alert show];
+                    [DMGUtilities showAlertWithTitle:@"Goal weight" message:@"Please enter a GoalWeight between 1 & 990." inViewController:nil];
                     return NO;
                 }
                 else{
@@ -233,7 +226,6 @@
                 }
             }
             [_userInfoDict setObject:goalRate forKey:@"goalRate"];
-//            [Defaults setObject:self.txtGoalWeight.text forKey:@"goalWeight"];
         }
         else{
             [_userInfoDict setObject:@"0" forKey:@"goalWeight"];
@@ -251,8 +243,7 @@
                 {
                     if (goalWeight <1.00 || goalWeight >990.00)
                     {
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter goalWeight between 1 & 990" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        [alert show];
+                        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter a GoalWeight between 1 & 990." inViewController:nil];
                         return NO;
                     }
                     else{
@@ -266,8 +257,7 @@
                 {
                     if (goalWeight <1.00 || goalWeight >450.00)
                     {
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter goalWeight between 1 & 450" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        [alert show];
+                        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter a GoalWeight between 1 & 450." inViewController:nil];
                         return NO;
                     }
                     else{
@@ -280,8 +270,7 @@
             } else {
                 if (goalWeight <1.00 || goalWeight >990.00)
                 {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Goal weight" message:@"Please enter weight between 1 & 990" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    [alert show];
+                    [DMGUtilities showAlertWithTitle:@"Goal Weight" message:@"Please enter a GoalWeight between 1 & 990." inViewController:nil];
                     return NO;
                 }
                 else{
@@ -291,10 +280,8 @@
                     return YES;
                 }
             }
-//            [Defaults setObject:self.txtGoalWeight.text forKey:@"goalWeight"];
         }else{
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter Goal Weight" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
+            [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter a GoalWeight." inViewController:nil];
             return NO;
         }
     }

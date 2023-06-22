@@ -411,16 +411,9 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
-                   {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                           [downSyncSpinner stopAnimating];
-                           UIAlertView *alert;
-                           alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"The database was sync'd successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                           [alert show];
-                       });
-                   });
-    
+    [downSyncSpinner stopAnimating];
+    [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
+
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
     [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
@@ -430,23 +423,11 @@
 }
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
-    
-    //HHT mail change
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
-                   {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                           [downSyncSpinner stopAnimating];
-                           
-                           UIAlertView *alert;
-                           alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
-                           alert.tag = 1001;
-                           [alert show];
-                       });
-                   });
-    
+    [downSyncSpinner stopAnimating];
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again.." inViewController:nil];
 }
 
 - (void)syncUPDatabaseFinished:(NSString *)responseMessage {
@@ -454,27 +435,15 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
-                   {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                           [upSyncSpinner stopAnimating];
-                           
-                           if (AppDel.isSessionExp) {
-                               
-                           }
-                           else{
-                               UIAlertView *alert;
-                               alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"The database was sync'd successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                               [alert show];
-                           }
-                       });
-                   });
-    
+    [upSyncSpinner stopAnimating];
+    if (!AppDel.isSessionExp) {
+        [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
+    }
+
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
     [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
     NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-    
     
     lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
 }
@@ -483,20 +452,10 @@
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
-                   {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                           [upSyncSpinner stopAnimating];
-                           
-                           //HHT mail change
-                           UIAlertView *alert;
-                           alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Send Database to support",nil];
-                           alert.tag = 1001;
-                           [alert show];
-                       });
-                   });
-    
+
+    [upSyncSpinner stopAnimating];
+   
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
 }
 
 //HHT mail change
@@ -525,77 +484,65 @@
                 [self presentViewController:mailComposer animated:YES completion:nil];
             }
             else {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                [alert show];
+                [DMGUtilities showAlertWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
             }
         }
     }
     else {
         if (buttonIndex == 0) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"logout_dietmastergo"];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            //HHT change 2018
-            [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
-            DietMasterGoAppDelegate *appDel = (DietMasterGoAppDelegate*)[UIApplication sharedApplication].delegate;
-            [self clearTableData];
-            [appDel checkUserLogin];
         }
     }
 }
 
-#pragma mark SUPPORT METHODS
--(IBAction)sendSupportEmail:(id)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:APP_NAME
-                                                    message:@"Are you sure you want to log out?"
-                                                   delegate:self
-                                          cancelButtonTitle:@"Yes"
-                                          otherButtonTitles:@"Cancel",nil];
-    [alert show];
+-(IBAction)logoutUser:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
+                                                                   message:@"Are you sure you want to log out?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"logout_dietmastergo"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
+        // Wipe all NSUserDefaults.
+        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
+        [self clearTableData];
+        [AppDel checkUserLogin];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"No"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    UIAlertView *alert;
+    NSString *title = nil;
+    NSString *message = nil;
     switch (result) {
         case MFMailComposeResultCancelled:
-            alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Email was cancelled." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Cancelled";
+            message = @"Email was cancelled.";
             break;
         case MFMailComposeResultSaved:
-            alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was saved as a draft." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Saved";
+            message = @"Email was saved as a draft.";
             break;
         case MFMailComposeResultSent:
-            alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was sent successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Success!";
+            message = @"Email was sent successfully.";
             break;
         case MFMailComposeResultFailed:
-            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Error";
+            message = @"Email was not sent.";
             break;
         default:
-            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Error";
+            message = @"Email was not sent.";
             break;
     }
-    [alert show];
-    
-    // This ugly thing is required because dismissModalViewControllerAnimated causes a crash
-    // if called right away when "Cancel" is touched.
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC), dispatch_get_current_queue(), ^
-    //                   {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    //                   });
-    
-    // Remove Zip File
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.05 * NSEC_PER_SEC), dispatch_get_current_queue(), ^
-    //                   {
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:@"dietmaster_db.dmgo"];
-    if([[NSFileManager defaultManager] fileExistsAtPath:zipFilePath])
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:zipFilePath error:NULL];
-        DMLog(@"Temp DB Zip File Deleted...");
-    }
-    //                   });
-    
-    
+
+    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
 }
 
 #pragma mark Custom Buttons for Tampa Rejuvination
@@ -859,8 +806,7 @@
         pageNumberCounter = 1;
         [FoodUpdateSyncSpinner stopAnimating];
         [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:@"FoodUpdateLastsyncDate"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"The Food database was sync'd successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Success" message:@"The Food database was sync'd successfully." inViewController:nil];
         return;
     }
     pageNumberCounter++;
@@ -1026,9 +972,7 @@
         return;
     }
     [downSyncSpinner stopAnimating];
-    UIAlertView *alert;
-    alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"An error occurred while processing. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
 }
 
 @end

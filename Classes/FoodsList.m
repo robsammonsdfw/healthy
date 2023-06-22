@@ -76,16 +76,6 @@
     NSUInteger row = [indexPath row];
     NSString *rowValue = [foodsNameList objectAtIndex:row];
     
-    NSString *message = [[NSString alloc] initWithFormat:
-                         @"You selected %@", rowValue];
-    UIAlertView *alert = [[UIAlertView alloc] 
-                          initWithTitle:@"Row Selected!"
-                          message:message 
-                          delegate:nil 
-                          cancelButtonTitle:@"Yes I Did" 
-                          otherButtonTitles:nil];
-    [alert show];
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

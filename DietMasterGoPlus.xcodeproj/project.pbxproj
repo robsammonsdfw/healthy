@@ -128,7 +128,6 @@
 		401B656220B3FC64004453E7 /* MBCircularProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B301681FBC4AE90018C016 /* MBCircularProgressBarView.m */; };
 		401B656720B3FC64004453E7 /* YLProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 09AB77F71FBDABCE00924A51 /* YLProgressBar.m */; };
 		401B656B20B3FC64004453E7 /* StepData.m in Sources */ = {isa = PBXBuildFile; fileRef = 403FEB521FD149A5006D9B8F /* StepData.m */; };
-		401B656D20B3FC64004453E7 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C0147E18911B4600C3E996 /* UIAlertView+Blocks.m */; };
 		401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28E187EDE28004A542C /* NSDate+ConvertToString.m */; };
 		401B658920B3FC64004453E7 /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 685DFA2A18E2E99600FB97A7 /* XMLReader.m */; };
 		401B658A20B3FC64004453E7 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E436E172ABB7B00C400D4 /* Base64.m */; };
@@ -449,8 +448,6 @@
 		3568E2B5187EDE40004A542C /* SendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendView.h; sourceTree = "<group>"; };
 		3568E2B6187EDE40004A542C /* SendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendView.m; sourceTree = "<group>"; };
 		3568E2B7187EDE40004A542C /* SendView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendView.xib; sourceTree = "<group>"; };
-		35C0147D18911B4600C3E996 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
-		35C0147E18911B4600C3E996 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		35E541DF1887BAD5004DECCF /* config-adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-adhoc.xcconfig"; sourceTree = "<group>"; };
 		35E541E01887BAD5004DECCF /* config-appstore.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-appstore.xcconfig"; sourceTree = "<group>"; };
 		35E541E11887BAD5004DECCF /* config-debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-debug.xcconfig"; sourceTree = "<group>"; };
@@ -1313,8 +1310,6 @@
 				3568E294187EDE28004A542C /* UIView+FrameControl.m */,
 				3568E295187EDE28004A542C /* UIViewController+Keyboard.h */,
 				3568E296187EDE28004A542C /* UIViewController+Keyboard.m */,
-				35C0147D18911B4600C3E996 /* UIAlertView+Blocks.h */,
-				35C0147E18911B4600C3E996 /* UIAlertView+Blocks.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1987,7 +1982,6 @@
 				401B656720B3FC64004453E7 /* YLProgressBar.m in Sources */,
 				401B656B20B3FC64004453E7 /* StepData.m in Sources */,
 				0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */,
-				401B656D20B3FC64004453E7 /* UIAlertView+Blocks.m in Sources */,
 				0E6F8FF42A43104200956F1E /* SceneDelegate.swift in Sources */,
 				650208B62500D34000F412B0 /* PopUpView.m in Sources */,
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,

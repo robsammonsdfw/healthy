@@ -90,13 +90,7 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error
 {
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to load list of products."
-                                                      message:nil
-                                                     delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
-    [message show];
-    DMLog(@"Failed to load list of products.");
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"Failed to load list of products." inViewController:nil];
     _productsRequest = nil;
     _completionHandler(NO, nil);
     _completionHandler = nil;
@@ -166,12 +160,6 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     [_inAppPurchaseViewController dismissViewControllerAnimated:YES completion:^{
         [topController presentViewController:nav animated:YES completion:nil];
     }];
-//    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Purchased successfully!"
-//                                                      message:@"Thank you for your purchase. Please complete your profile now."
-//                                                     delegate:self
-//                                            cancelButtonTitle:@"Complete Profile Setup"
-//                                            otherButtonTitles:nil];
-//    [message show];
 }
 
 - (void)restoreCompletedTransactions {
@@ -181,13 +169,7 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
 // called when a transaction has been restored and successfully completed
 - (void)restoreTransaction:(SKPaymentTransaction *)transaction
 {
-    DMLog(@"restoreTransaction...");
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Restored successfully!"
-                                                      message:@"Enjoy!"
-                                                     delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
-    [message show];
+    [DMGUtilities showAlertWithTitle:@"Restored" message:@"Restored successfully." inViewController:nil];
  
     [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -196,84 +178,21 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
 // called when a transaction has failed
 - (void)failedTransaction:(SKPaymentTransaction *)transaction
 {
-    DMLog(@"failedTransaction...");
     if (transaction.error.code != 0) { //this will be 0 for interrupted purchases
         if (transaction.error.code != SKErrorPaymentCancelled) {
-            DMLog(@"Transaction error: %@", transaction.error.localizedDescription);
-            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Oops!"
-                                                              message:transaction.error.localizedDescription
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:nil];
-            [message show];
+            [DMGUtilities showAlertWithTitle:@"Error" message:transaction.error.localizedDescription inViewController:nil];
         }
         else{
-            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Cancelled"
-                                                              message:@"Oops!, You have cancelled this purchase."
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"Dismiss"
-                                                    otherButtonTitles:nil];
-            [message show];
+            [DMGUtilities showAlertWithTitle:@"Cancelled" message:@"You have cancelled this purchase." inViewController:nil];
         }
-
     }
 
     [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
 }
 
 - (void)provideContentForProductIdentifier:(NSString *)productIdentifier {
-    DMLog(@"provideContentForProductIdentifier");
-//    NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:_purchasedProductIdentifiers];
-//    NSArray *arrayWithoutDuplicates = [orderedSet array];
-//    [_purchasedProductIdentifiers addObject:arrayWithoutDuplicates];
-    
-
-//    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductPurchasedNotification object:productIdentifier userInfo:nil];
 }
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-//    ProfileAlertVCViewController *desVc= [[ProfileAlertVCViewController alloc] initWithNibName:@"ProfileAlertVCViewController" bundle:nil];
-//    desVc.hidesBottomBarWhenPushed = YES;
-//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:desVc];
-//    navigationController.modalPresentationStyle = UIModalPresentationFullScreen;
-//
-//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:desVc];
-//
-//    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
-//
-//    [topController presentViewController:nav animated:YES completion:nil];
-
-//    NSArray *products = [_purchasedProductIdentifiers allObjects];
-//    NSString *productIdentifier = [products objectAtIndex:(products.count - 1)];
-//
-//    NSString *productWebAddress = nil;
-//    if ([productIdentifier isEqualToString:Bronze30DayPID]) {
-//        productWebAddress = Bronze30DayWebaddress;
-//    } else if ([productIdentifier isEqualToString:Silver30DayPID]) {
-//        productWebAddress = Silver30DayWebaddress;
-//    } else if ([productIdentifier isEqualToString:Gold30DayPID]) {
-//        productWebAddress = Gold30DayWebaddress;
-//    } else if ([productIdentifier isEqualToString:Bronze90DayPID]) {
-//        productWebAddress = Bronze90DayWebaddress;
-//    } else if ([productIdentifier isEqualToString:Silver90DayPID]) {
-//        productWebAddress = Silver90DayWebaddress;
-//    } else if ([productIdentifier isEqualToString:Gold90DayPID]) {
-//        productWebAddress = Gold90DayWebaddress;
-//    } else {
-//        DMLog(@"NO PRODUCT IDENTIFIER FOUND TO CREATE ACCOUNT");
-//    }
-//
-//    SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:productWebAddress]];
-//    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
-//    [topController presentViewController:sfvc animated:YES completion:nil];
-}
-
-//- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
-//    [self dismissViewControllerAnimated:true completion:nil];
-//}
 
 @end
 

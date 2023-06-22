@@ -16,7 +16,7 @@
 
 @class AppDelegate;
 
-@interface ManageFoods : UIViewController <UITextFieldDelegate, MeasurePickerDelegate, FoodCategoryDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, SaveUPCDataWSDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate> {
+@interface ManageFoods : UIViewController <UITextFieldDelegate, MeasurePickerDelegate, FoodCategoryDelegate, UIImagePickerControllerDelegate, SaveUPCDataWSDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate> {
 	
 	AppDelegate *mainDelegate;
 	

@@ -264,9 +264,5 @@
 -(void)calculateBMI;
 -(void)reloadData;
 
-// for help and support
--(IBAction)showActionSheet:(id)sender;
--(void)emailUs:(id)sender;
-
 @end
 

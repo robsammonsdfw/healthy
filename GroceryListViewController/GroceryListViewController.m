@@ -365,9 +365,7 @@
     [DMActivityIndicator hideActivityIndicator];
     [[self tableView] reloadData];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please pull to refresh & try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:200];
-    [alert show];
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
 }
 
 #pragma mark PULL REFRESH METHODS

@@ -24,7 +24,7 @@
 #import "MyGoalViewController.h"
 #import "MealPlanViewController.h"
 
-@interface MyLogViewController : UIViewController <UIAlertViewDelegate, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate> {
+@interface MyLogViewController : UIViewController <UIGestureRecognizerDelegate, TTTAttributedLabelDelegate> {
 	
 	IBOutlet UITableView *tblSimpleTable;
 	IBOutlet UILabel *lbl_dateHdr;

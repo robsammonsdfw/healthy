@@ -193,15 +193,14 @@
 
         result = [currentDate compare:selectedBDate]; // comparing two dates
 
-        if(result==NSOrderedAscending) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Create Profile" message:@"Birthdate must not be greater than current date!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
+        if(result == NSOrderedAscending) {
+            [DMGUtilities showAlertWithTitle:@"Create Profile" message:@"Birthdate must not be greater than current date!" inViewController:nil];
         }
-        else if(result==NSOrderedDescending){
-            DMLog(@"newDate is less");
+        else if(result == NSOrderedDescending){
+           // DMLog(@"newDate is less");
         }
         else {
-            DMLog(@"Both dates are same");
+            //DMLog(@"Both dates are same");
         }
     }
 }
@@ -250,8 +249,7 @@
     }
     if (self.txtBirthDate.text.length == 0)
     {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please Select Date" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please select date." inViewController:nil];
         return NO;
     }
     else{
@@ -290,8 +288,8 @@
         {
             if (weight <1.00 || weight >990.00)
             {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Create Profile" message:@"Please enter Weight between 1 & 990" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                [alert show];
+                [DMGUtilities showAlertWithTitle:@"Create Profile" message:@"Please enter Weight between 1 & 990." inViewController:nil];
+
                 return NO;
             }
             else{
@@ -304,8 +302,7 @@
         {
             if (weight <1.00 || weight >450.00)
             {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Create Profile" message:@"Please enter Weight between 1 & 450" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                [alert show];
+                [DMGUtilities showAlertWithTitle:@"Create Profile" message:@"Please enter Weight between 1 & 450." inViewController:nil];
                 return NO;
             }
             else{
@@ -318,8 +315,7 @@
     else {
         if (weight <1.00 || weight >990.00)
         {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter Weight between 1 & 990" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
+            [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter Weight between 1 & 990." inViewController:nil];
             return NO;
         }
         else{
@@ -331,8 +327,7 @@
     float height = [self.txtHeight.text floatValue];
     if (height < 12.00 || height > 119.00)
     {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter Height between 12 & 119 inches" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter Height between 12 & 119 inches." inViewController:nil];
         return NO;
     }
     else{
@@ -341,17 +336,9 @@
     return YES;
 }
 #pragma mark - ToolBar method -
--(void)doneClicked:(id)sender
-{
+
+- (void)doneClicked:(id)sender {
     UITextField *textField =(UITextField *)sender;
-    if (textField == self.txtHeight)
-    {
-        DMLog(@"height textField");
-    }
-    else if (textField == self.txtWeight)
-    {
-        DMLog(@"Weight textField");
-    }
     [self.view endEditing:YES];
 }
 

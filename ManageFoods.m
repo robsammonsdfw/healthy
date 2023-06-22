@@ -541,19 +541,14 @@ CGPoint svos;
     
     if (([txtfieldFoodName.text length] > 0 || [txtfieldCalories.text length] > 0 || [txtfieldCarbs.text length] > 0 || [txtfieldProtein.text length] > 0 || [txtfieldTotalFat.text length] > 0 || [intMeasureID intValue] > 0) && [intCategoryID intValue] == 0) {
         
-        UIAlertView *alert;
-        alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Category is Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert setTag:88];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Category is Required. Please try again." inViewController:nil];
         return;
     }
     
     if ([txtfieldFoodName.text length] == 0 || [txtfieldCalories.text length] == 0 || [txtfieldCarbs.text length] == 0 || [txtfieldProtein.text length] == 0 || [txtfieldTotalFat.text length] == 0 || [intMeasureID intValue] == 0 || [intCategoryID intValue] == 0) {
         
-        UIAlertView *alert;
-        alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Food Name, Measure, Category, Calories, Fat, Carbs & Protein are Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert setTag:88];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Food Name, Measure, Category, Calories, Fat, Carbs & Protein are Required. Please try again." inViewController:nil];
+
         return;
     }
     else {
@@ -762,19 +757,15 @@ CGPoint svos;
     
     if (([txtfieldFoodName.text length] > 0 || [txtfieldCalories.text length] > 0 || [txtfieldCarbs.text length] > 0 || [txtfieldProtein.text length] > 0 || [txtfieldTotalFat.text length] > 0 || [intMeasureID intValue] > 0) && [intCategoryID intValue] == 0) {
         
-        UIAlertView *alert;
-        alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Category is Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert setTag:88];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Category is Required. Please try again." inViewController:nil];
+
         return;
     }
     
     if ([txtfieldFoodName.text length] == 0 || [txtfieldCalories.text length] == 0 || [txtfieldCarbs.text length] == 0 || [txtfieldProtein.text length] == 0 || [txtfieldTotalFat.text length] == 0 || [intMeasureID intValue] == 0 || [intCategoryID intValue] == 0) {
         
-        UIAlertView *alert;
-        alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Food Name, Measure, Category, Calories, Fat, Carbs & Protein are Required.\nPlease try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert setTag:88];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Food Name, Measure, Category, Calories, Fat, Carbs & Protein are Required. Please try again." inViewController:nil];
+
         return;
     }
     else {
@@ -899,30 +890,6 @@ CGPoint svos;
     }
 }
 
-#pragma mark ALERT VIEW DELEGATE
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == 90099) {
-        if (buttonIndex == 0) {
-            scanned_UPCA = nil;
-            scanned_UPCA = [[NSString alloc] initWithString:@"empty"];
-            scanned_factualID = nil;
-            scanned_factualID = [[NSString alloc] initWithString:@"empty"];
-            isSaved = YES;
-        }
-        else if (buttonIndex == 1) {
-            
-        }
-    }
-    
-    if (alertView.tag == 770088) {
-        if (buttonIndex == 0) {
-        }
-        else if (buttonIndex == 1) {
-            
-        }
-    }
-}
-
 #pragma mark BARCODE SCANNER METHODS
 
 - (IBAction)loadBarcodeScanner:(id)sender {
@@ -995,13 +962,7 @@ CGPoint svos;
             
             //Error handling
             if ([[jsonDictionary valueForKey:@"message"] isEqualToString:@"resource not found"]) {
-                UIAlertView *alert;
-                NSString *errorMessageString = @"Nutritional information for the UPC scanned was not found. Would you like to add it?";
-                alert = [[UIAlertView alloc] initWithTitle:@"Not Found" message:errorMessageString delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-                [alert addButtonWithTitle:@"No"];
-                [alert addButtonWithTitle:@"Yes"];
-                [alert setTag:90099];
-                [alert show];
+                [self showUPCNotFoundConfirmation];
             }
             else {
                 [responseP addObject:jsonDictionary];
@@ -1014,6 +975,28 @@ CGPoint svos;
             }
         }
     }
+}
+
+- (void)showUPCNotFoundConfirmation {
+    NSString *errorMessageString = @"Nutritional information for the UPC scanned was not found. Would you like to add it?";
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Not Found"
+                                                                   message:errorMessageString
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"No"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        scanned_UPCA = nil;
+        scanned_UPCA = [[NSString alloc] initWithString:@"empty"];
+        scanned_factualID = nil;
+        scanned_factualID = [[NSString alloc] initWithString:@"empty"];
+        isSaved = YES;
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Nutritionix -
@@ -1141,10 +1124,8 @@ CGPoint svos;
         txtfieldPot.text = [NSString stringWithFormat:@"%.2f",[[dict valueForKey:@"nf_potassium"] doubleValue]];
     }
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Nutritional information found! Please confirm values then select Category." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:123456];
-    [alert show];
-    
+    [DMGUtilities showAlertWithTitle:@"Success" message:@"Nutritional information found! Please confirm values then select Category." inViewController:nil];
+
     ScannedFoodis=YES;
     
 }
@@ -1187,6 +1168,7 @@ CGPoint svos;
 }
 
 #pragma mark ACTIONSHEET METHODS
+
 -(IBAction)showActionSheet:(id)sender {
     [self.view endEditing:YES];
     UIImageView *imageView = (UIImageView *)[self.view viewWithTag:5566];
@@ -1265,249 +1247,6 @@ CGPoint svos;
                              message:@"Serving Size must be a number greater than 0."
                     inViewController:nil];
 }
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
-    }
-    else {
-        if (buttonIndex == 0) {
-            [self performSelector:@selector(loadBarcodeScanner:) withObject:nil afterDelay:0.5];
-        }
-        else if (buttonIndex == 1) {
-            // do something
-            if ([txtfieldServingSize.text doubleValue]<=0) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:APP_NAME message:@"Serving Size must be a number greater than 0." delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-                [alert show];
-                return;
-            }
-            
-            _saveToLog = NO;
-            [self performSelector:@selector(recordFood:) withObject:nil afterDelay:0.5];
-        }
-        else if (buttonIndex == 2) {
-            //HHT (uncomment this code)
-            //save and add to log
-            _saveToLog = YES;
-            [self performSelector:@selector(recordFood:) withObject:nil afterDelay:0.5];
-        }
-        else if (buttonIndex == 3) {
-            // cancel
-        }
-    }
-}
-
-#pragma mark - FACTUAL API METHOD DELEGATES -
-//-(void)factualAPISuccess:(NSNotification *)notification {
-//    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
-//
-//    FactualQueryResult *queryResult = [[notification userInfo] valueForKey:@"FactualQueryResult"];
-//    int rowCount = [[[notification userInfo] valueForKey:@"ResultCount"] intValue];
-//
-//    if (rowCount <= 0) {
-//        scanned_factualID = nil;
-//        scanned_factualID = [[NSString alloc] initWithString:@"empty"];
-//
-//        UIAlertView *alert;
-//        NSString *errorMessageString = @"Nutritional information for the UPC scanned was not found. Would you like to add it?";
-//        alert = [[UIAlertView alloc] initWithTitle:@"Not Found" message:errorMessageString delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-//        [alert addButtonWithTitle:@"No"];
-//        [alert addButtonWithTitle:@"Yes"];
-//        [alert setTag:90099];
-//        [alert show];
-//        
-//    }
-//
-//    if (rowCount > 0) {
-//        isSaved = NO;
-//
-//        FactualRow* row = [queryResult.rows objectAtIndex:0];
-//        scannerDict = nil;
-//        scannerDict = [[NSMutableDictionary alloc] initWithDictionary:row.namesAndValues];
-//
-//        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-//                              scannerDict, @"scannerDict",
-//                              @"SAVE", @"action",
-//                              nil];
-//        SaveUPCDataWebService *webservice = [[SaveUPCDataWebService alloc] init];
-//        webservice.delegate = self;
-//        [webservice callWebservice:dict];
-//        [webservice release];
-//        
-//
-//        //HHT change 2018 barcode scan
-//        scanned_factualID = nil;
-//        scanned_factualID = [[NSString alloc] initWithString:[row valueForName:@"nix_item_id"]];
-//
-//        NSString *servingSizeFull = [row valueForName:@"serving_size"];
-//        NSArray *servingSizeArray = [servingSizeFull componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//        NSString *servingMeasure = nil;
-//
-//        if ([servingSizeArray count] > 0) {
-//            NSString *serving_size = [servingSizeArray objectAtIndex:0];
-//            if (serving_size != nil && ![serving_size isEqualToString:@""]) {
-//                txtfieldServingSize.text = [NSString stringWithFormat:@"%.2f",[serving_size doubleValue]];
-//            }
-//            else {
-//                txtfieldServingSize.text = [NSString stringWithFormat:@"%i",1];
-//            }
-//            if ([servingSizeArray count] > 1) {
-//                servingMeasure = [servingSizeArray objectAtIndex:1];
-//            }
-//        }
-//        else {
-//            txtfieldServingSize.text = [NSString stringWithFormat:@"%i",1];
-//        }
-//
-//        if (servingMeasure != nil) {
-//            if ([servingMeasure isEqualToString:@"oz"]) {
-//
-//                intMeasureID = [NSNumber numberWithInt:2];
-//                self.strMeasureName = @"ounce(s)";
-//            }
-//            else if ([servingMeasure isEqualToString:@"ea"]) {
-//                intMeasureID = [NSNumber numberWithInt:3];
-//                self.strMeasureName = @"each";
-//            }
-//            else if ([servingMeasure isEqualToString:@"tablespoon"]) {
-//                intMeasureID = [NSNumber numberWithInt:7];
-//                self.strMeasureName = @"tablespoon";
-//            }
-//            else if ([servingMeasure isEqualToString:@"teaspoon"]) {
-//                intMeasureID = [NSNumber numberWithInt:6];
-//                self.strMeasureName = @"teaspoon";
-//            }
-//            else if ([servingMeasure isEqualToString:@"cup"]) {
-//                intMeasureID = [NSNumber numberWithInt:4];
-//                self.strMeasureName = @"cup";
-//            }
-//            else if ([servingMeasure isEqualToString:@"g"]) {
-//                intMeasureID = [NSNumber numberWithInt:9];
-//                self.strMeasureName = @"gram(s)";
-//            }
-//            else if ([servingMeasure isEqualToString:@"pack"]) {
-//                intMeasureID = [NSNumber numberWithInt:21];
-//                self.strMeasureName = @"pack";
-//            }
-//            else if ([servingMeasure isEqualToString:@"packet"]) {
-//                intMeasureID = [NSNumber numberWithInt:36];
-//                self.strMeasureName = @"packet";
-//            }
-//            else if ([servingMeasure isEqualToString:@"slice"]) {
-//                intMeasureID = [NSNumber numberWithInt:22];
-//                self.strMeasureName = @"slice";
-//            }
-//            else if ([servingMeasure isEqualToString:@"capsule"]) {
-//                intMeasureID = [NSNumber numberWithInt:35];
-//                self.strMeasureName = @"capsule";
-//            }
-//            else if ([servingMeasure isEqualToString:@"bag"]) {
-//                intMeasureID = [NSNumber numberWithInt:29];
-//                self.strMeasureName = @"bag";
-//            }
-//            else {
-//                intMeasureID = [NSNumber numberWithInt:3];
-//                self.strMeasureName = @"each";
-//            }
-//
-//            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateNormal];
-//            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateHighlighted];
-//            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
-//
-//            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-//            dietmasterEngine.selectedMeasureID = intMeasureID;
-//        }
-//        else {
-//            intMeasureID = [NSNumber numberWithInt:3];
-//            self.strMeasureName = @"each";
-//            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateNormal];
-//            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateHighlighted];
-//            [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
-//            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-//            dietmasterEngine.selectedMeasureID = intMeasureID;
-//        }
-//
-//
-//        txtfieldFoodName.text = [NSString stringWithFormat:@"%@ %@",
-//                                 [row valueForName:@"brand_name"], [row valueForName:@"food_name"]];
-//
-//        if ([row valueForName:@"nf_calories"] != [NSNull null]) {
-//            txtfieldCalories.text = [NSString stringWithFormat:@"%.2f",[[scannerDict valueForKey:@"nf_calories"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_total_fat"] != [NSNull null]) {
-//            txtfieldTotalFat.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_total_fat"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_saturated_fat"] != [NSNull null]) {
-//            txtfieldSatFat.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_saturated_fat"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_sodium"] != [NSNull null]) {
-//            txtfieldSodium.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_sodium"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_total_carbohydrate"] != [NSNull null]) {
-//            txtfieldCarbs.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_total_carbohydrate"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_cholesterol"] != [NSNull null]) {
-//            txtfieldCholesterol.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_cholesterol"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_protein"]  != [NSNull null]) {
-//            txtfieldProtein.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_protein"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_dietary_fiber"] != [NSNull null]) {
-//            txtfieldFiber.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_dietary_fiber"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_sugars"] != [NSNull null]) {
-//            txtfieldSugars.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_sugars"] doubleValue]];
-//        }
-//
-//        //not found
-//        if ([row valueForName:@"trans_fat"] != [NSNull null]) {
-//            txtfieldTransFat.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"trans_fat"] doubleValue]];
-//        }
-//
-//        if ([row valueForName:@"nf_potassium"] != [NSNull null]) {
-//            txtfieldPot.text = [NSString stringWithFormat:@"%.2f",[[row valueForName:@"nf_potassium"] doubleValue]];
-//        }
-//
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Nutritional information found! Please confirm values then select Category." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//        [alert setTag:123456];
-//        [alert show];
-//        
-//
-//        ScannedFoodis=YES;
-//    }
-//}
-//
-//-(void)factualAPIDidFail:(NSNotification *)notification {
-//    NSString *failMessage = [[notification userInfo] valueForKey:@"ErrorDescription"];
-//    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:NO];
-//
-//    scannerDict = nil;
-//    scanned_UPCA = nil;
-//    scanned_UPCA = [[NSString alloc] initWithString:@"empty"];
-//    scanned_factualID = nil;
-//    scanned_factualID = [[NSString alloc] initWithString:@"empty"];
-//
-//    txtfieldFoodName.text = @"";
-//
-//    DMLog(@"factualAPIDidFail, desc: %@", failMessage);
-//
-//    UIAlertView *alert;
-//    alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"An error occured while looking up Food data. Please check your internet connection and try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//    [alert setTag:90099];
-//    [alert show];
-//    
-//
-//    isSaved = YES;
-//
-//}
 
 #pragma mark - SCROLL VIEW DELEGATES -
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -1591,11 +1330,8 @@ CGPoint svos;
                                       [dietmasterEngine getFoodDetails:tempFoodDict]];
             [dietmasterEngine.foodSelectedDict setDictionary:foodDict];
             
-            UIAlertView *alert;
-            alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"There was an error saving to log. Please check your internet connection and try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert setTag:88];
-            [alert show];
-            
+            [DMGUtilities showAlertWithTitle:@"Error" message:@"There was an error saving to log. Please try again." inViewController:nil];
+
             [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
         }
     }

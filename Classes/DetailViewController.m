@@ -569,10 +569,7 @@
 
 - (void)updateUserPlannedMealItemsFailed:(NSString *)failedMessage {
     [DMActivityIndicator hideActivityIndicator];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:200];
-    [alert show];
-    
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
 }
 
 #pragma mark BUTTON ACTIONS
@@ -1041,11 +1038,7 @@
 
 - (void)insertUserPlannedMealItemsFailed:(NSString *)failedMessage {
     [DMActivityIndicator hideActivityIndicator];
-
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:200];
-    [alert show];
-    
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
 }
 
 #pragma mark DELETE MEAL PLAN ITEMS DELEGATE
@@ -1060,10 +1053,7 @@
 
 - (void)deleteUserPlannedMealItemsFailed:(NSString *)failedMessage {
     [DMActivityIndicator hideActivityIndicator];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:200];
-    [alert show];
-    
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
 }
 
 #pragma mark WEBSERVICE DELETE MEAL ITEM DELEGATE

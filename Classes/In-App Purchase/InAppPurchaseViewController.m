@@ -16,7 +16,7 @@
 @import StoreKit;
 
 //SKProductsRequestDelegate, SKPaymentTransactionObserver,
-@interface InAppPurchaseViewController () <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
+@interface InAppPurchaseViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) NSArray *products;
 @property (nonatomic, strong) NSNumberFormatter *priceFormatter;
 

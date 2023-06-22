@@ -5,7 +5,7 @@
 #import "DietmasterEngine.h"
 #import "GetDataWebService.h"
 
-@interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems, GetDataWSDelegate>
+@interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems, GetDataWSDelegate>
 
 @property (nonatomic, strong) NSDictionary *deleteDict;
 @property (nonatomic, strong) NSDictionary *insertDict;
@@ -208,17 +208,23 @@
 }
 
 #pragma mark EXCHANGE METHODS
--(void)confirmExchangeItem {
-    
+
+- (void)confirmExchangeItem {
     NSString *message = @"Are you sure you wish to exchange with this food?";
-    
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setTitle:@"Confirm Exchange"];
-    [alert setMessage:message];
-    [alert setDelegate:self];
-    [alert addButtonWithTitle:@"Yes"];
-    [alert addButtonWithTitle:@"No"];
-    [alert show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Exchange"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self exchangeFood];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"No"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)exchangeFood_Original {
@@ -442,15 +448,6 @@
     [soapWebService2 callWebservice:wsInfoDict];
 }
 
-#pragma mark ALERT VIEW DELEGATE
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        [self exchangeFood];
-    }
-    else if (buttonIndex == 1) {
-    }
-}
-
 #pragma mark TABLE VIEW METHODS
 - (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     return indexPath;
@@ -595,10 +592,7 @@
     if ([[[responseArray objectAtIndex:0] valueForKey:@"Status"] isEqualToString:@"Error"]) {
         [DMActivityIndicator hideActivityIndicator];
 
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert setTag:200];
-        [alert show];
-        
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
     }
     else {
         [self deleteFood:_deleteDict];
@@ -609,10 +603,8 @@
     [DMActivityIndicator hideActivityIndicator];
     _insertDict = nil;
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:200];
-    [alert show];
-    
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
+
 }
 
 #pragma mark Webservice
@@ -641,8 +633,7 @@
 - (void)getDataFailed:(NSString *)failedMessage {
     [DMActivityIndicator hideActivityIndicator];
 
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please check your internet connection and try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
 }
 
 - (void)getDataFinished:(NSDictionary *)responseDict {

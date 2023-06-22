@@ -5,7 +5,7 @@
 #import "LoginViewController.h"
 #import "ProfileVC.h"
 
-@interface ProfileContactVC ()<UIAlertViewDelegate,UITextFieldDelegate> {
+@interface ProfileContactVC ()<UITextFieldDelegate> {
     CGFloat viewOriginY;
 }
 
@@ -99,8 +99,7 @@
     {
         [_userInfoDict setValue:self.txtUsername.text forKey:@"Username"];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter a username between 4 and 50 characters." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter a username between 4 and 50 characters." inViewController:nil];
         return NO;
     }
     
@@ -109,8 +108,7 @@
     {
         [_userInfoDict setObject:self.txtPassword.text forKey:@"Password"];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter a password between 4 and 25 characters." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter a password between 4 and 25 characters." inViewController:nil];
         return NO;
     }
     
@@ -120,8 +118,7 @@
         [_userInfoDict setObject:self.txtFirstName.text forKey:@"FirstName"];
         [_userInfoDict setObject:self.txtLastName.text forKey:@"LastName"];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter first and last name (max 50 characters)." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter first and last name (max 50 characters)." inViewController:nil];
         return NO;
     }
     
@@ -130,8 +127,7 @@
     {
         [_userInfoDict setObject:self.txtEmail.text forKey:@"Email"];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please enter your email (max 100 characters)." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please enter your email (max 100 characters)." inViewController:nil];
         return NO;
     }
     
@@ -148,7 +144,6 @@
     [textField resignFirstResponder];
     return YES;
 }
-
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
@@ -176,75 +171,48 @@
     [textField resignFirstResponder];
 }
 
-#pragma mark - keyboard movements
-//- (void)keyboardWillShow:(NSNotification *)notification
-//{
-//    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-//
-//    [UIView animateWithDuration:0.3 animations:^{
-//        CGRect f = self.view.frame;
-//        if (viewOriginY == 0.0f) {
-//            viewOriginY = f.origin.y;
-//        }
-//        f.origin.y = -(keyboardSize.height - 50);
-//        self.view.frame = f;
-//    }];
-//}
-//
-//-(void)keyboardWillHide:(NSNotification *)notification
-//{
-//    [UIView animateWithDuration:0.3 animations:^{
-//        CGRect f = self.view.frame;
-//        f.origin.y = viewOriginY;
-//        self.view.frame = f;
-//    }];
-//}
+#pragma mark - MailComposer Delegate Method
 
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error {    
+    NSString *title = nil;
+    NSString *message = nil;
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            title = @"Cancelled";
+            message = @"Email was cancelled.";
+            break;
+        case MFMailComposeResultSaved:
+            title = @"Saved";
+            message = @"Email was saved as a draft.";
+            break;
+        case MFMailComposeResultSent:
+            title = @"Success!";
+            message = @"Email was sent successfully.";
+            break;
+        case MFMailComposeResultFailed:
+            title = @"Error";
+            message = @"Email was not sent.";
+            break;
+        default:
+            title = @"Error";
+            message = @"Email was not sent.";
+            break;
+    }
 
-#pragma mark - MailComposer Delegate Method -
-- (void)mailComposeController:(MFMailComposeViewController*)controller
-          didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
-{
-    // Notifies users about errors associated with the interface
+    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        UIAlertView *alert;
-        //alert.delegate=self;
-        switch (result)
-        {
-            case MFMailComposeResultCancelled:
-                //message.text = @"Result: canceled";
-                alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Email was cancelled." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                break;
-            case MFMailComposeResultSaved:
-                //message.text = @"Result: saved";
-                alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was saved as a draft." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                break;
-            case MFMailComposeResultSent:
-                //message.text = @"Result: sent";
-                alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was sent successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                break;
-            case MFMailComposeResultFailed:
-                //message.text = @"Result: failed";
-                alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                break;
-            default:
-                //message.text = @"Result: not sent";
-                alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                break;
-        }
-        [alert show];
-        
-        [[NSUserDefaults standardUserDefaults]setObject:@"False" forKey:@"Reserved"];
-        if(AppDel.loginViewController){
-            [AppDel.loginViewController syncUserInfo:nil];
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }else{
-            AppDel.loginViewController = [[LoginViewController alloc] init];
-            [AppDel.loginViewController syncUserInfo:nil];
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
-    }];
+    [[NSUserDefaults standardUserDefaults]setObject:@"False" forKey:@"Reserved"];
+    if (AppDel.loginViewController){
+        [AppDel.loginViewController syncUserInfo:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        AppDel.loginViewController = [[LoginViewController alloc] init];
+        [AppDel.loginViewController syncUserInfo:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
+
 @end
 

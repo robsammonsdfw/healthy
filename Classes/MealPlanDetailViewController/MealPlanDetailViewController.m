@@ -719,16 +719,20 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     NSString *date_Display		= [dateFormat_display stringFromDate:dietmasterEngine.dateSelected];
     
     NSString *message = [NSString stringWithFormat:@"You are about to add this meal to:\n %@\nIs this correct?", date_Display];
-    
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setTitle:@"Confirm Log Date"];
-    [alert setMessage:message];
-    [alert setDelegate:self];
-    [alert addButtonWithTitle:@"Yes"];
-    [alert addButtonWithTitle:@"No"];
-    [alert setTag:50];
-    [alert show];
-    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Log Date"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self addMealToLog:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"No"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)confirmAddToLog {
@@ -739,37 +743,20 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     
     NSString *date_Display		= [dateFormat_display stringFromDate:dietmasterEngine.dateSelected];
     NSString *message = [NSString stringWithFormat:@"You are about to add this plan to:\n %@\nIs this correct?", date_Display];
-    
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setTitle:@"Confirm Log Date"];
-    [alert setMessage:message];
-    [alert setDelegate:self];
-    [alert addButtonWithTitle:@"Yes"];
-    [alert addButtonWithTitle:@"No"];
-    [alert setTag:40];
-    [alert show];
-
-}
-
-#pragma mark ALERT VIEW DELEGATE
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == 40) {
-        if (buttonIndex == 0) {
-            [self addPlanToLog];
-        }
-        else if (buttonIndex == 1) {
-            
-        }
-    }
-    
-    if (alertView.tag == 50) {
-        if (buttonIndex == 0) {
-            [self addMealToLog:nil];
-        }
-        else if (buttonIndex == 1) {
-            
-        }
-    }
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Log Date"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self addPlanToLog];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"No"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - TTTAttributedLabel Delegate

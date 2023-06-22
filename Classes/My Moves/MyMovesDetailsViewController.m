@@ -21,12 +21,11 @@ static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
 static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
-@interface MyMovesDetailsViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UICollectionViewDataSource,UIAlertViewDelegate,UITextFieldDelegate,exchangeDelegate,changedRepsAndWeightDelegate>
+@interface MyMovesDetailsViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate,exchangeDelegate,changedRepsAndWeightDelegate>
 {
     CGFloat animatedDistance;
     MyMovesWebServices *soapWebService;
     BOOL addSet;
-    UIAlertView *alertViewToSetDelete;
     NSString *repsTxt;
     NSString *weightTxt;
     IBOutlet UIImageView *thumbNailImgV;
@@ -87,13 +86,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    
-    alertViewToSetDelete = [[UIAlertView alloc] initWithTitle:@"Delete Set"
-                                                      message:@"Are you sure, you want to delete"
-                                                     delegate:self
-                                            cancelButtonTitle:@"Yes"
-                                            otherButtonTitles:@"No", nil];
-    
+        
     [self setData:_moveDetailDict];
     [self loadSetValues];
     
@@ -517,42 +510,54 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [self.view layoutIfNeeded];
 }
-- (IBAction)deleteBtnAction:(id)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete Exercise"
-                                                    message:@"Are you sure, you want to delete this exercise"
-                                                   delegate:self
-                                          cancelButtonTitle:@"Yes"
-                                          otherButtonTitles:@"No", nil];
-    [alert show];
-}
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 
-    if (alertView == alertViewToSetDelete)
-    {
-        if (buttonIndex == 0)
-        {
-            [soapWebService deleteSetFromDb:_deleteSetUniqueID];
-            [soapWebService clearedDataFromWeb:_deleteSetUniqueID];
-            [soapWebService clearTableDataS];
-//            [soapWebService loadUserPlanMoveSetListFromDb];
-            [self loadSetValues];
-        }
-    }
-    else
-    {
-        if (buttonIndex == 0) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
-           
-            [soapWebService saveDeletedExerciseToDb:[self.moveDetailDict[@"WorkoutTemplateId"] intValue] UserId:UserID WorkoutUserDateID:[self.moveDetailDict[@"WorkoutUserDateID"] intValue]];
-            [soapWebService deleteWorkoutFromDb:[self.moveDetailDict[@"WorkoutUserDateID"] intValue]];
-            
-            [soapWebService deleteMoveFromDb:_moveListDict[@"UniqueID"]]; // send to server
-            [soapWebService clearedDataFromWeb:_moveListDict[@"UniqueID"]];
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
-    
+- (IBAction)deleteBtnAction:(id)sender {
+    [self showDeleteExerciseConfirmation];
+}
+
+- (void)showDeleteSetConfirmation {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Set"
+                                                                   message:@"Are you sure, you want to delete?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [soapWebService deleteSetFromDb:_deleteSetUniqueID];
+        [soapWebService clearedDataFromWeb:_deleteSetUniqueID];
+        [soapWebService clearTableDataS];
+        [self loadSetValues];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"No"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showDeleteExerciseConfirmation {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Exercise"
+                                                                   message:@"Are you sure, you want to delete this exercise?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
+       
+        [soapWebService saveDeletedExerciseToDb:[self.moveDetailDict[@"WorkoutTemplateId"] intValue] UserId:UserID WorkoutUserDateID:[self.moveDetailDict[@"WorkoutUserDateID"] intValue]];
+        [soapWebService deleteWorkoutFromDb:[self.moveDetailDict[@"WorkoutUserDateID"] intValue]];
+        
+        [soapWebService deleteMoveFromDb:_moveListDict[@"UniqueID"]]; // send to server
+        [soapWebService clearedDataFromWeb:_moveListDict[@"UniqueID"]];
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"No"
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(IBAction)weightEditAction:(UITextField*)sender{
@@ -565,12 +570,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [soapWebService updateSetInSecondColumn:unit2Value uniqueID:_userPlanSetListArr[sender.tag][@"UniqueID"]];
 }
 
--(IBAction)deleteSetBtnAction:(UIButton*)sender{
-    
+- (IBAction)deleteSetBtnAction:(UIButton*)sender{
     _deleteSetUniqueID = _userPlanSetListArr[sender.tag][@"UniqueID"];
-    [alertViewToSetDelete show];
-    
+    [self showDeleteSetConfirmation];
 }
+
 -(IBAction)repsHeadAction:(UIButton*)sender{
     PickerViewController* picker = [[PickerViewController alloc]initWithNibName:@"PickerViewController" bundle:nil];
     picker.modalPresentationStyle = UIModalPresentationOverFullScreen;

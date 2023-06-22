@@ -9,7 +9,7 @@
 #import "DietMasterGoAppDelegate.h"
 #import "DietMasterGoViewController.h"
 
-@interface UserMealType ()<UIAlertViewDelegate,NSURLConnectionDelegate,UITextFieldDelegate,SBPickerSelectorDelegate>
+@interface UserMealType ()<NSURLConnectionDelegate,UITextFieldDelegate,SBPickerSelectorDelegate>
 {
     SBPickerSelector *picker;
     
@@ -62,8 +62,7 @@
 - (IBAction)btnNextClicked:(id)sender {
     if (self.txtMealType.text.length == 0)
     {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please Select Meal type" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+        [DMGUtilities showAlertWithTitle:@"Error" message:@"Please Select Meal type." inViewController:nil];
     }
     else{
         [self ProfileCompletion];
@@ -76,13 +75,9 @@
     {
         [self.btnYes setSelected:YES];
         [self.btnNo setSelected:NO];
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Notice" message:@"This program or products are not intended to replace the expert advice of a medical practitioner and are not designed to treat diseases of any kind. Users of this program or products assume all risk. The publishers of this application, its owners, distributors, licensors and any related parties, assume no liability or risk of any kind." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        
         //reword the message. if they click YES to health condition, show the message, but allow them to continue.
-        alert.delegate=self;
-        [alert show];
-    }
-    else if (btn.tag == 21)
+        [DMGUtilities showAlertWithTitle:@"Notice" message:@"This program or products are not intended to replace the expert advice of a medical practitioner and are not designed to treat diseases of any kind. Users of this program or products assume all risk. The publishers of this application, its owners, distributors, licensors and any related parties, assume no liability or risk of any kind." inViewController:nil];
+    } else if (btn.tag == 21)
     {
         [self.btnYes setSelected:NO];
         [self.btnNo setSelected:YES];
@@ -110,12 +105,7 @@
     
     return string;
 }
-#pragma mark - AlertView Delegate method -
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    DMLog(@"Button Clicked");
-//    exit(0);
-}
+
 #pragma mark - APi Call -
 -(void)getMealType
 {
@@ -291,8 +281,8 @@
                             errorMessage = @"You have had one or more validation errors.";
                         }
                         
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        [alert show];
+                        [DMGUtilities showAlertWithTitle:@"Error" message:errorMessage inViewController:nil];
+
                     } else {
                         [defaults setValue:[profileResponse objectForKey:@"mobileToken"] forKey:@"authkey_dietmastergo"];
                         [defaults setValue:[profileResponse objectForKey:@"userId"] forKey:@"userid_dietmastergo"];
