@@ -13,7 +13,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
-@interface ExercisesDetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate> {
+@interface ExercisesDetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
     
 	IBOutlet UIPickerView *pickerView;
 	

@@ -38,7 +38,6 @@
     double selectedServing = [[dietmasterEngine.foodSelectedDict valueForKey:@"Servings"] floatValue];
     
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
-//    _foodIdLbl.text = _foodIdValue;
     
     lblFat.text			= [NSString stringWithFormat:@"%.2f",foodFat * (gramWeight / 100)];
     lblCarbs.text		= [NSString stringWithFormat:@"%.2f",foodCarbs * (gramWeight / 100)];
@@ -160,7 +159,6 @@
     lblProtein.textColor = PrimaryFontColor
     lblFat.textColor = PrimaryFontColor
     lblCarbs.textColor = PrimaryFontColor
-
     
     if (!pickerColumn1Array) {
         pickerColumn1Array = [[NSMutableArray alloc] init];
@@ -211,17 +209,13 @@
     [pickerColumn3Array removeAllObjects];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    lblText.text		= [dietmasterEngine.foodSelectedDict valueForKey:@"Name"];
+    lblText.text = [dietmasterEngine.foodSelectedDict valueForKey:@"Name"];
     
-    UIImage *plusImage = [UIImage imageNamed:@"menuscan"];
-    plusImage = [plusImage imageWithTintColor:[UIColor whiteColor] renderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton *plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    plusButton.frame = CGRectMake(0, 0, 30, 30);
-    [plusButton setImage:plusImage forState:UIControlStateNormal];
-    [plusButton addTarget:self action:@selector(showActionSheet:)
-       forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithCustomView:plusButton];
-    self.navigationItem.rightBarButtonItem = addButton;
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                 target:self
+                                                                                 action:@selector(showActionSheet:)];
+    rightButton.style = UIBarButtonItemStylePlain;
+    self.navigationItem.rightBarButtonItem = rightButton;
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
@@ -308,115 +302,146 @@
 -(void)showActionSheet:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-    UIActionSheet *popupQuery = nil;
     NSString *favoriteOrNot = nil;
     if (num_isFavorite == 0) {
         favoriteOrNot = @"Save as Favorite";
     } else {
         favoriteOrNot = @"Remove from Favorites";
     }
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         if (dietmasterEngine.isMealPlanItem) {
-            popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to Log", favoriteOrNot, @"Exchange Food", @"Save Changes",  @"Remove from Plan", nil];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                [self saveToLog:nil];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                if (num_isFavorite == 0) {
+                    [self saveToFavorites];
+                } else {
+                    [self confirmDeleteFromFavorite];
+                }
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Exchange Food"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                [self exchangeFood];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Save Changes"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                [self updateFoodServings];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Remove from Plan"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                [self deleteFromPlan];
+            }]];
         }
         else {
-            popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to Log", favoriteOrNot, nil];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                [self saveToLog:nil];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                if (num_isFavorite == 0) {
+                    [self saveToFavorites];
+                } else {
+                    [self confirmDeleteFromFavorite];
+                }
+            }]];
+
         }
     }
     
     if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
-        popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save Changes", favoriteOrNot, @"Remove from Log", nil];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Save Changes"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            [self saveToLog:nil];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            if (num_isFavorite == 0) {
+                [self saveToFavorites];
+            } else {
+                [self confirmDeleteFromFavorite];
+            }
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Remove from log"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            [self confirmDeleteFromLog];
+        }]];
     }
     
     if ([dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
-        popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to Plan", favoriteOrNot, nil];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Add to Plan"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            [self insertNewFood];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            if (num_isFavorite == 0) {
+                [self saveToFavorites];
+            } else {
+                [self confirmDeleteFromFavorite];
+            }
+        }]];
     }
-    
-    popupQuery.tag = 10;
-    popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
-    
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)confirmDeleteFromLog {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Remove from Log?" delegate:self cancelButtonTitle:@"Don't Remove" destructiveButtonTitle:@"Yes, Remove" otherButtonTitles:nil];
-    actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    actionSheet.tag = 5;
-    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove from Log?"
+                                                                   message:@"Are you sure you wish to remove this from the log?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Remove"
+                                              style:UIAlertActionStyleDestructive
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self delLog:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Don't Remove" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)confirmDeleteFromFavorite {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Remove from Favorites?" delegate:self cancelButtonTitle:@"Don't Remove" destructiveButtonTitle:@"Yes, Remove" otherButtonTitles:nil];
-    actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    actionSheet.tag = 1;
-    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    
-}
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove from Favorites?"
+                                                                   message:@"Are you sure you wish to remove this?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Remove"
+                                              style:UIAlertActionStyleDestructive
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteFromFavorites];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Don't Remove" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
 
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-
-    if (actionSheet.tag == 10) {
-        if (buttonIndex == 0) {
-            if([dietmasterEngine.taskMode isEqualToString:@"Edit"] || [dietmasterEngine.taskMode isEqualToString:@"Save"]) {
-                [self saveToLog:nil];
-            }
-            
-            if([dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
-                [self insertNewFood];
-            }
-        }
-        else if (buttonIndex == 1) {
-            if (num_isFavorite == 0) {
-                [self saveToFavorites];
-            }
-            else {
-                [self confirmDeleteFromFavorite];
-            }
-        }
-        else if (buttonIndex == 2) {
-            if([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
-                [self confirmDeleteFromLog];
-                
-            }
-            else {
-                if(![dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
-                    if (dietmasterEngine.isMealPlanItem) {
-                        [self exchangeFood];
-                    }
-                }
-            }
-        }
-        else if (buttonIndex == 3) {
-            if (dietmasterEngine.isMealPlanItem) {
-                [self updateFoodServings];
-            }
-        }
-        else if (buttonIndex == 4) {
-            if (dietmasterEngine.isMealPlanItem) {
-                [self deleteFromPlan];
-            }
-        }
-    }
-    else if (actionSheet.tag == 5) {
-        if (buttonIndex == 0) {
-            [self delLog:nil];
-        }
-        else if (buttonIndex == 1) {
-        }
-    }
-    else if (actionSheet.tag == 1) {
-        if (buttonIndex == 0) {
-            [self deleteFromFavorites];
-        }
-        else if (buttonIndex == 1) {
-        }
-    }
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark CLEAN UP METHODS
+
 -(void)cleanUpView {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -426,7 +451,6 @@
 -(void)exchangeFood {
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back" style: UIBarButtonItemStylePlain target: nil action: nil];
     [self.navigationItem setBackBarButtonItem: backButton];
-    
     
     DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     NSMutableDictionary *exchangeDict = dietmasterEngine.foodSelectedDict;
@@ -464,9 +488,6 @@
                                 servingAmount, @"ServingSize",
                                 [NSNumber numberWithInt:num_measureID], @"MeasureID",
                                 nil];
-    
-    for (id key in updateDict) {
-    }
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -510,9 +531,6 @@
                                 servingAmount, @"ServingSize",
                                 nil];
     
-    for (id key in insertDict) {
-    }
-    
     NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"InsertUserPlannedMealItems", @"RequestType",
                                 [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
@@ -552,10 +570,6 @@
     MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
     soapWebService.wsDeleteUserPlannedMealItems = self;
     [soapWebService callWebservice:infoDict];
-    
-    
-    
-    
 }
 
 #pragma mark MEAL PLAN WEBSERVICE DELEGATES

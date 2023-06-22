@@ -687,30 +687,30 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
 #pragma mark ACTION SHEET METHODS
 -(void)showActionSheet:(id)sender {
-    UIActionSheet *popupQuery;
-    popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add today's plan to MyLog", @"Add New Food", nil];
-    
-    popupQuery.tag = 10;
-    popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
-    
-}
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-#pragma mark ACTION SHEET DELEGATES
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.tag == 10) {
-        if (buttonIndex == 0) {
-            addToPlanButtonIndex = 0;
-            [self selectAllMealDate:nil];
-        }
-        else if (buttonIndex == 1) {
-            [self addItemToMealPlan:nil];
-        }
-    }
+    [alert addAction:[UIAlertAction actionWithTitle:@"Add today's plan to MyLog"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        addToPlanButtonIndex = 0;
+        [self selectAllMealDate:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Add New Food"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self addItemToMealPlan:nil];
+    }]];
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark CONFIRM DIALOG
--(void)confirmAddMealToLog:(id)sender {
+
+- (void)confirmAddMealToLog:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];

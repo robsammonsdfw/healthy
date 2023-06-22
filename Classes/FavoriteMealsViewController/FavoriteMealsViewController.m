@@ -16,36 +16,28 @@
 @synthesize tableView;
 @synthesize searchType;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+#pragma mark VIEW LIFECYCLE
+
+- (instancetype)init {
+    self = [super initWithNibName:@"FavoriteMealsViewController" bundle:nil];
     if (self) {
+        searchResults = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
--(id)init {
-    self = [super initWithNibName:@"FavoriteMealsViewController" bundle:nil];
-    return self;
-}
-
-#pragma mark VIEW LIFECYCLE
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
-    if (!searchResults) {
-        searchResults = [[NSMutableArray alloc] init];
-    }
-    
+    [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationItem setTitle:@"Favorite Meals"];
     rowToSaveToLog = -1;
-    [self.navigationController.navigationBar setTranslucent:NO];
 }
 
--(void) viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(loadSearchData:) withObject:nil afterDelay:0.25];
+    [self loadSearchData:nil];
 }
 
 #pragma mark DATA METHODS
@@ -266,45 +258,45 @@
     [self performSelector:@selector(loadSearchData:) withObject:nil afterDelay:0.10];
 }
 
-#pragma mark BUTTON ACTIONS
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.tag == 5) {
-        if (buttonIndex == 0) {
-            [self saveToLog:nil];
-        }
-        else if (buttonIndex == 1) {
-            [self confirmRemoveFromLog];
-        }
-        else if (buttonIndex == 2) {
-            rowToSaveToLog = -1;
-        }
-    }
-    
-    if (actionSheet.tag == 10) {
-        if (buttonIndex == 0) {
-            [self deleteFromFavorites];
-        }
-        else if (buttonIndex == 2) {
-            rowToSaveToLog = -1;
-        }
-    }
-}
-
 #pragma mark ACTION SHEET METHODS
+
 -(void)confirmAddToLog {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to Log", @"Remove Favorite Meal", nil];
-    actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    actionSheet.tag = 5;
-    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self saveToLog:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Remove Favorite Meal"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self confirmRemoveFromLog];
+    }]];
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        rowToSaveToLog = -1;
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)confirmRemoveFromLog {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Remove from Favorites?" delegate:self cancelButtonTitle:@"Don't Remove" destructiveButtonTitle:@"Yes, Remove" otherButtonTitles:nil];
-    actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    actionSheet.tag = 10;
-    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove from Favorites?"
+                                                                   message:@"Are you sure you wish to remove this?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Remove"
+                                              style:UIAlertActionStyleDestructive
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteFromFavorites];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Don't Remove" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        rowToSaveToLog = -1;
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)checkButtonTapped:(id)sender event:(id)event {

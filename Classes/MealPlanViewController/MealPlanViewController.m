@@ -375,31 +375,29 @@ static NSString *CellIdentifier = @"Cell";
         if ([dietmasterEngine.groceryArray count] > 0) {
             buttonString = @"View Saved List";
         }
-        UIActionSheet *popupQuery;
         
-        popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"New Grocery List", buttonString, nil];
-        
-        popupQuery.tag = 10;
-        popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-        [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
-        
-    }
-}
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-#pragma mark ACTION SHEET DELEGATES
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.tag == 10) {
-        if (buttonIndex == 0) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"New Grocery List"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
             [self showGroceryList];
-        }
-        else if (buttonIndex == 1) {
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:buttonString
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             if ([dietmasterEngine.groceryArray count] > 0) {
                 GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
                 [self.navigationController pushViewController:groceryListVC animated:YES];
             }
-        }
+        }]];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }]];
+
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 

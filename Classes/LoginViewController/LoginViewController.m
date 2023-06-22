@@ -25,7 +25,7 @@
 #import "DMUser.h"
 #import "NSString+Encode.h"
 
-@interface LoginViewController() <UITextFieldDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, SyncDatabaseDelegate>
+@interface LoginViewController() <UITextFieldDelegate, MFMailComposeViewControllerDelegate, SyncDatabaseDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;

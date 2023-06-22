@@ -26,7 +26,6 @@
 - (IBAction)forceDBSync:(id)sender;
 - (IBAction)forceUPDBSync:(id)sender;
 - (IBAction)CheckForFoodUpdateSync:(id)sender;
-- (IBAction)sendSupportEmail:(id)sender;
 
 @property (nonatomic, strong) IBOutlet UIButton *btnoptionsetting;
 @property (nonatomic, strong) IBOutlet UIButton *btnmycustomfood;
@@ -456,42 +455,6 @@
     [upSyncSpinner stopAnimating];
    
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
-}
-
-//HHT mail change
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == 1001){
-        if (buttonIndex == alertView.cancelButtonIndex){
-            return;
-        }
-        else if (buttonIndex == 1){
-            if ([MFMailComposeViewController canSendMail]) {
-                NSString *path = [[NSBundle mainBundle] bundlePath];
-                NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-                NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-                
-                MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
-                [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
-                NSString *emailTo = [[NSString alloc] initWithFormat:@""];
-                [mailComposer setMessageBody:emailTo isHTML:NO];
-                NSString *emailTo1 = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
-                NSArray *toArray = [NSArray arrayWithObjects:emailTo1, nil];
-                [mailComposer setToRecipients:toArray];
-                mailComposer.mailComposeDelegate = self;
-                
-                DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-                NSData *zipData = dietmasterEngine.createZipFileOfDatabase;                [mailComposer addAttachmentData:zipData mimeType:@"application/zip" fileName:@"Document.Zip"];
-                [self presentViewController:mailComposer animated:YES completion:nil];
-            }
-            else {
-                [DMGUtilities showAlertWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
-            }
-        }
-    }
-    else {
-        if (buttonIndex == 0) {
-        }
-    }
 }
 
 -(IBAction)logoutUser:(id)sender {

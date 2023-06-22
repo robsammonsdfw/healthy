@@ -31,7 +31,6 @@
 @implementation MyLogViewController {
     double currentWeight;
     double currentHeight;
-    
     //HHT apple watch
     double stepCount;
     double calories;
@@ -162,7 +161,7 @@
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"XYZ"]) {
         imgSwipeHint = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-        [imgSwipeHint setImage:[UIImage imageNamed:@"swipe_hint.png"]];
+        [imgSwipeHint setImage:[UIImage imageNamed:@"swipe_hint"]];
         [imgSwipeHint setUserInteractionEnabled:YES];
         [self.view addSubview:imgSwipeHint];
         
@@ -530,9 +529,6 @@
             int minutesExercised = [[dict valueForKey:@"Exercise_Time_Minutes"] intValue];
             Remanig = (Recommendded - (calorieslodded + minutesExercised));
             
-            //comment BY HHT because it will update wrong value to lable
-            //lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%.0f",AppDel.caloriesremaning];
-            
             double totalCaloriesBurned;
             if (exerciseID == 257 || exerciseID == 267) {
                 totalCaloriesBurned = minutesExercised;
@@ -570,7 +566,6 @@
                 totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
                 cell.lblCalories.text                = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
-            DMLog(@"%@",[dict valueForKey:@"ActivityName"]);
             cell.lblFoodName.text                = [dict valueForKey:@"ActivityName"];
             cell.lblFoodName.backgroundColor    = [UIColor clearColor];
             cell.lblFoodName.textColor        = [UIColor whiteColor];

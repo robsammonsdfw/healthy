@@ -424,74 +424,60 @@
     });
 }
 
-#pragma mark ACTION SHEET METHODS
--(void)showActionSheet:(id)sender {
+- (void)showActionSheet:(id)sender {
     [self.view endEditing:YES];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-    UIActionSheet *popupQuery;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
-        popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to Log", nil];
-    }
-    
-    if([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
-        popupQuery = [[UIActionSheet alloc] initWithTitle:@"Select Action" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save Changes", @"Remove from Log", nil];
-    }
-    
-    popupQuery.tag = 10;
-    popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
-    
-}
-
--(void)confirmDeleteFromLog {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Remove from Log?" delegate:self cancelButtonTitle:@"Don't Remove" destructiveButtonTitle:@"Yes, Remove" otherButtonTitles:nil];
-    actionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    actionSheet.tag = 5;
-    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    
-}
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    if (actionSheet.tag == 10) {
-        if (buttonIndex == 0) {
+    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
             [self saveToLog:nil];
-        }
-        else if (buttonIndex == 1) {
-            if([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
-                [self confirmDeleteFromLog];
-            }
-            else {
-            }
-        }
+        }]];
     }
-    else if (actionSheet.tag == 5) {
-        if (buttonIndex == 0) {
-            [self delLog:nil];
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"minutesExercised"];
+    
+    if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"Save Changes"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            [self saveToLog:nil];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Remove from Log"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            [self confirmDeleteFromLog];
+        }]];
+    }
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
 
-           dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-               [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"minutesExercised"];
-               [[NSUserDefaults standardUserDefaults] synchronize];
-           });
-        }
-        else if (buttonIndex == 1) {
-        }
-    }
-    else if (actionSheet.tag == 1) {
-        if (buttonIndex == 0) {
-            [self deleteFromFavorites];
-        }
-        else if (buttonIndex == 1) {
-            // Don't Remove
-        }
-    }
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+/// Confirms with the user they want to delete this exercise from the log.
+-(void)confirmDeleteFromLog {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove from Log?"
+                                                                   message:@"Are you sure you wish to remove this from the log?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Delete"
+                                              style:UIAlertActionStyleDestructive
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self delLog:nil];
+        [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"minutesExercised"];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark CLEAN UP METHODS
+
 -(void)cleanUpView {
     [self.navigationController popViewControllerAnimated:YES];
 }

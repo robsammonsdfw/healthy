@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 
-@interface FavoriteMealsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
+@interface FavoriteMealsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 	    
 	IBOutlet UITableView *tableView;
 	

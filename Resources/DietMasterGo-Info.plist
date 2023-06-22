@@ -41,20 +41,6 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>3.0</string>
-	<key>Fabric</key>
-	<dict>
-		<key>APIKey</key>
-		<string>412c7303e89c78b3be71d0b8e2efb0f66233bf08</string>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Crashlytics</string>
-			</dict>
-		</array>
-	</dict>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>comgooglemaps</string>

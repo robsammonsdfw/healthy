@@ -136,10 +136,9 @@
 
 -(void)getBMR;
 
--(IBAction) showLogAdd:(id) sender;
--(IBAction) shownextDate:(id) sender;
+-(IBAction)shownextDate:(id) sender;
 -(IBAction)showprevDate:(id)sender;
--(IBAction) goToSafetyGuidelines:(id) sender;
+-(IBAction)goToSafetyGuidelines:(id) sender;
 
 -(void)updateData:(NSDate *)date;
 -(void)loadExerciseData:(NSDate *)date;
@@ -147,6 +146,5 @@
 -(IBAction)saveFavoriteMeal:(id)sender;
 -(void)saveFavoriteMealToDatabase:(id)sender;
 -(void)reloadData;
--(IBAction)showHideDetailView:(id)sender;
 
 @end

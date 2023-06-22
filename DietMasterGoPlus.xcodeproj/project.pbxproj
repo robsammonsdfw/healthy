@@ -2092,10 +2092,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Classes/ZBarSDK",
-					"$(PROJECT_DIR)/Libs/CorePlot",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Frameworks/FactualSDK.framework/Versions/1.3.9",
 				);
 				MARKETING_VERSION = 4.8;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2162,10 +2159,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Classes/ZBarSDK",
-					"$(PROJECT_DIR)/Libs/CorePlot",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Frameworks/FactualSDK.framework/Versions/1.3.9",
 				);
 				MARKETING_VERSION = 4.8;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2232,10 +2226,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Classes/ZBarSDK",
-					"$(PROJECT_DIR)/Libs/CorePlot",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Frameworks/FactualSDK.framework/Versions/1.3.9",
 				);
 				MARKETING_VERSION = 4.8;
 				ONLY_ACTIVE_ARCH = YES;

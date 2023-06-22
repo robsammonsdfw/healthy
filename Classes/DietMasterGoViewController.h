@@ -25,7 +25,7 @@
 @class AppDelegate;
 
 /// The "tile layout" home screen for a user to move around the app.
-@interface DietMasterGoViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate> {
+@interface DietMasterGoViewController : UIViewController <MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate> {
     
     AppDelegate *appddd;
     

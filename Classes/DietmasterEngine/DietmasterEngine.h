@@ -221,5 +221,4 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 - (void)syncUPDatabaseFinished:(NSString *)responseMessage;
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage;
 -(void)callSyncDatabase;
-
 @end
