@@ -83,7 +83,6 @@
     NSString *scanned_UPCA;
     NSString *scanned_factualID;
     IBOutlet UIButton *scannerButton;
-    BOOL helperBubbleWasShown;
     
     BOOL isSaved;
     

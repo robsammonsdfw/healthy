@@ -39,9 +39,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     BOOL updatingMessage;
     
 }
-
-@property (nonatomic, strong ) NSDateFormatter *dateformatter;
-
+@property (nonatomic, strong) NSDateFormatter *dateformatter;
+@property (nonatomic, strong) NSTimer *messagesUpdateTimer;
 @end
 
 @implementation DietmasterEngine
@@ -50,7 +49,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 @synthesize exerciseSelectedDict, foodSelectedDict, currentWeight, taskMode, dateSelected, dateSelectedFormatted,userHeight,userGender;
 @synthesize selectedMealID, selectedMeasureID, selectedCategoryID;
 @synthesize syncDatabaseDelegate, syncUPDatabaseDelegate;
-@synthesize mealPlanArray, isMealPlanItem, mealPlanItemToExchangeDict, indexOfItemToExchange, selectedMealPlanID, didInsertNewFood, ArrMealNotes;
+@synthesize mealPlanArray, isMealPlanItem, mealPlanItemToExchangeDict, indexOfItemToExchange, selectedMealPlanID, didInsertNewFood;
 @synthesize groceryArray;
 @synthesize apiObject=_apiObject;
 @synthesize queryResult=_queryResult;
@@ -408,17 +407,56 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark - MESSAGES
-- (void)updateByTimer {
+
+- (void)stopUpdatingMessages {
+    [self.messagesUpdateTimer invalidate];
+    self.messagesUpdateTimer = nil;
+    updatingMessage = NO;
+}
+
+- (void)startUpdatingMessages {
     if (updatingMessage == NO) {
-        DataFetcher *fetcher = [[DataFetcher alloc] init];
-        [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
-            if (error) {
-                return;
-            }
-            [self getMessagesFinished:messages];
-            [[NSNotificationCenter defaultCenter] postNotificationName:UpdatingMessageNotification object:nil];
-        }];
+        updatingMessage = YES;
+        [self syncMessages];
     }
+}
+
+- (void)syncMessages {
+    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
+        if (error) {
+            return;
+        }
+        [self processIncomingMessages:messages];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UpdatingMessageNotification object:nil];
+    }];
+}
+
+- (void)processIncomingMessages:(NSArray<DMMessage *> *)messages {
+    if (!messages.count) {
+        return;
+    }
+    
+    FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
+    if (![dataBase open]) {
+    }
+    
+    for (DMMessage *message in messages) {
+        [dataBase beginTransaction];
+        NSString *sqlQuery = [message replaceIntoSQLString];
+        [dataBase executeUpdate:sqlQuery];
+
+        BOOL statusMsg = YES;
+        
+        if ([dataBase hadError]) {
+            DM_LOG(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+            statusMsg = NO;
+        }
+        [dataBase commit];
+    }
+    
+    self.messagesUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:UpdateMessagesTimeInterval target:self selector:@selector(startUpdatingMessages) userInfo:nil repeats:YES];
+    updatingMessage = NO;
 }
 
 - (NSArray<DMMessage *> *)unreadMessages {
@@ -436,7 +474,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     [rs close];
     
-    return result;
+    return [result copy];
 }
 
 - (int)countOfUnreadingMessages {
@@ -541,33 +579,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [UIApplication sharedApplication].applicationIconBadgeNumber = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
 }
 
-- (void)getMessagesFinished:(NSArray<DMMessage *> *)messages {
-    if (!messages.count) {
-        return;
-    }
-    
-    FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![dataBase open]) {
-    }
-    
-    for (DMMessage *message in messages) {
-        [dataBase beginTransaction];
-        NSString *sqlQuery = [message replaceIntoSQLString];
-        [dataBase executeUpdate:sqlQuery];
-
-        BOOL statusMsg = YES;
-        
-        if ([dataBase hadError]) {
-            DM_LOG(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
-            statusMsg = NO;
-        }
-        [dataBase commit];
-    }
-    
-    [NSTimer scheduledTimerWithTimeInterval:UpdateMessagesTimeInterval target:self selector:@selector(updateByTimer) userInfo:nil repeats:NO];
-    updatingMessage = NO;
-}
-
 #pragma mark UP SYNC METHODS
 -(void)saveMeals:(NSString *)dateString {
     
@@ -630,7 +641,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     NSString *query;
-    
     if (dateString != nil && [dateString containsString:@"T"]) {
         dateString = [dateString stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     }
@@ -2261,7 +2271,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark Food Plan Methods
--(void)getMissingFoods:(NSDictionary *)foodDict {
+
+- (void)getMissingFoods:(NSDictionary *)foodDict {
     
     int selectedFoodID = [[foodDict valueForKey:@"FoodID"] intValue];
     int measureID = [[foodDict valueForKey:@"MeasureID"] intValue];
@@ -2270,7 +2281,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     if (![db open]) {
         
     }
-    
     
     NSString *query = [NSString stringWithFormat: @"SELECT Food.CategoryID, Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, FoodMeasure.GramWeight, Measure.MeasureID, Measure.Description FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE Food.FoodKey = %i AND Measure.MeasureID = %i LIMIT 1", selectedFoodID, measureID];
     
@@ -2285,8 +2295,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     [rs close];
     
-    if (resultCount == 0)
-    {
+    if (resultCount == 0) {
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
@@ -2661,190 +2670,19 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark My Moves Assigned RETREIVAL METHODS
--(void)saveMyMovesAssignedOnDateArray {
-    NSArray *tempArray = [[NSArray alloc] initWithArray:_myMovesAssignedArray];
-    NSString *completePath = [self getmyMovesAssignedFilePath];
-    NSString *path = [completePath stringByDeletingLastPathComponent];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    [tempArray writeToFile:completePath atomically:YES];
-}
 
--(void)saveMyMovesAssignedOnDateToDatabase:(NSMutableArray*)movesArr{
+#warning TODO: I think this was never implemented (htk)
+- (void)saveMyMovesAssignedOnDateToDatabase:(NSMutableArray*)movesArr {
 
-}
-
--(NSString *)getmyMovesAssignedFilePath {
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *baseDocumentPath = [paths objectAtIndex:0];
-    
-    NSString *completePath = [baseDocumentPath stringByAppendingPathComponent:@"myMovesAssigned.plist"];
-    
-    return completePath;
-}
-
--(BOOL)hasMyMovesAssignedSaved {
-    return ([_myMovesAssignedArray count] > 0);
-}
-
--(void)loadMyMovesAssignedOnDateList {
-    if (_myMovesAssignedArray) {
-        _myMovesAssignedArray = nil;
-    }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[self getmyMovesAssignedFilePath]]) {
-        _myMovesAssignedArray = [[NSMutableArray alloc] initWithArray:
-                         [NSArray arrayWithContentsOfFile:[self getmyMovesAssignedFilePath]]];
-        
-    } else {
-        _myMovesAssignedArray = [[NSMutableArray alloc] init];
-    }
-}
-
-#pragma mark SAVED MEAL PLAN RETREIVAL METHODS
--(void)saveMealPlanArray {
-    NSArray *tempArray = [[NSArray alloc] initWithArray:mealPlanArray];
-    NSString *completePath = [self getSavedMealPlanFilePath];
-    NSString *path = [completePath stringByDeletingLastPathComponent];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    [tempArray writeToFile:completePath atomically:YES];
-    
-    DMLog(@"%@", completePath);
-}
-
--(void)saveMealNotesArray {
-    
-}
-
--(BOOL)hasMealPlanSaved {
-    return ([mealPlanArray count] > 0);
-}
-
--(void)purgeMealPlanArray {
-    
-    if (mealPlanArray) {
-        [mealPlanArray removeAllObjects];
-    }
-    
-    NSArray *paths2 = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *tempPath2 = [paths2 objectAtIndex:0];
-    NSFileManager *fileManager2 = [NSFileManager defaultManager];
-    NSString *tempFile2 = [tempPath2 stringByAppendingPathComponent:@"meal_plan.plist"];
-    [fileManager2 removeItemAtPath:tempFile2 error:NULL];
-    if(![[NSFileManager defaultManager] fileExistsAtPath: tempFile2])
-    {
-        
-    }
-    NSFileManager *fileManager3 = [NSFileManager defaultManager];
-    NSString *tempFile3 = [tempPath2 stringByAppendingPathComponent:@"meal_plan.plist"];
-    [fileManager3 removeItemAtPath:tempFile3 error:NULL];
-    if(![[NSFileManager defaultManager] fileExistsAtPath: tempFile3])
-    {
-        
-    }
-    
-}
-
--(NSString *)getSavedMealPlanFilePath {
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *baseDocumentPath = [paths objectAtIndex:0];
-    
-    NSString *completePath = [baseDocumentPath stringByAppendingPathComponent:@"meal_plan.plist"];
-    
-    return completePath;
-}
-
--(void)loadSavedMealPlan {
-    
-    if (mealPlanArray) {
-        mealPlanArray = nil;
-    }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[self getSavedMealPlanFilePath]])
-    {
-        mealPlanArray = [[NSMutableArray alloc] initWithArray:
-                          [NSArray arrayWithContentsOfFile:[self getSavedMealPlanFilePath]]];
-    } else {
-        mealPlanArray = [[NSMutableArray alloc] init];
-    }
-    
-}
-
-#pragma mark SAVED GROCERY LIST RETREIVAL METHODS
--(void)saveGroceryListArray {
-    NSArray *tempArray = [[NSArray alloc] initWithArray:groceryArray];
-    
-    NSString *completePath = [self getGroceryListFilePath];
-    NSString *path = [completePath stringByDeletingLastPathComponent];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path])
-    {
-        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    
-    [tempArray writeToFile:completePath atomically:YES];
-}
-
--(BOOL)hasGroceryListSaved {
-    return ([groceryArray count] > 0);
-}
-
--(void)purgeGroceryListArray {
-    if (groceryArray) {
-        [groceryArray removeAllObjects];
-    }
-    
-    NSArray *paths2 = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *tempPath2 = [paths2 objectAtIndex:0];
-    NSFileManager *fileManager2 = [NSFileManager defaultManager];
-    NSString *tempFile2 = [tempPath2 stringByAppendingPathComponent:@"grocery_list.plist"];
-    [fileManager2 removeItemAtPath:tempFile2 error:NULL];
-    if(![[NSFileManager defaultManager] fileExistsAtPath: tempFile2])
-    {
-        
-    }
-    NSFileManager *fileManager3 = [NSFileManager defaultManager];
-    NSString *tempFile3 = [tempPath2 stringByAppendingPathComponent:@"grocery_list.plist"];
-    [fileManager3 removeItemAtPath:tempFile3 error:NULL];
-    if(![[NSFileManager defaultManager] fileExistsAtPath: tempFile3])
-    {
-        
-    }
-}
-
--(NSString *)getGroceryListFilePath {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *baseDocumentPath = [paths objectAtIndex:0];
-    
-    NSString *completePath = [baseDocumentPath stringByAppendingPathComponent:@"grocery_list.plist"];
-    
-    return completePath;
-}
-
--(void)loadSavedGroceryList {
-    if (groceryArray) {
-        groceryArray = nil;
-    }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[self getGroceryListFilePath]]) {
-        groceryArray = [[NSMutableArray alloc] initWithArray:
-                         [NSArray arrayWithContentsOfFile:[self getGroceryListFilePath]]];
-        
-    } else {
-        groceryArray = [[NSMutableArray alloc] init];
-    }
 }
 
 #pragma DATABASE HELPERS
--(NSString *)databasePath {
+
+- (NSString *)databasePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [paths objectAtIndex:0];
     NSString *fullPath = [path stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
-    DMLog(@"%@",fullPath);
+    //DMLog(@"%@",fullPath);
     NSFileManager *fm = [NSFileManager defaultManager];
     BOOL exists = [fm fileExistsAtPath:fullPath];
     if (!exists) {
@@ -2857,7 +2695,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark SAVE FOOD W UPC METHODS
--(void)saveUPCFood:(int)foodKey {
+
+- (void)saveUPCFood:(int)foodKey {
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
     if (![db open]) {
         
@@ -3010,96 +2849,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     return [NSData dataWithContentsOfFile:zipFilePath];
-}
-
-- (void)processIncomingDatabase:(NSDictionary *)dict {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains
-    (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *unZipDirectory = [documentsDirectory stringByAppendingPathComponent:@"/Incoming_Databases"];
-    
-    ZipArchive *zipArchive = [[ZipArchive alloc] init];
-    [zipArchive UnzipOpenFile:[dict valueForKey:@"incomingDBFilePath"] Password:@"NRTsKdxpRg$"];
-    [zipArchive UnzipFileTo:unZipDirectory overWrite:YES];
-    [zipArchive UnzipCloseFile];
-    
-    if([[NSFileManager defaultManager] fileExistsAtPath:[dict valueForKey:@"incomingDBFilePath"]])
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:[dict valueForKey:@"incomingDBFilePath"] error:NULL];
-        DMLog(@"incomingDBFilePath Deleted...");
-    }
-    
-    NSString *dbSettingsPath = [unZipDirectory stringByAppendingPathComponent:@"/db_settings.plist"];
-    NSDictionary *dbSettingsDict = nil;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:dbSettingsPath])
-    {
-        dbSettingsDict = [[NSDictionary alloc] initWithDictionary:
-                          [NSDictionary dictionaryWithContentsOfFile:dbSettingsPath]];
-    } else {
-        dbSettingsDict = [[NSDictionary alloc] init];
-    }
-    
-    
-    if (dbSettingsDict == nil) {
-        DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"Error!", @"title",
-                              @"An error occurred while importing the database. Please try again.", @"message",
-                              nil];
-        [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:dict waitUntilDone:NO];
-        return;
-    }
-    
-    if (![[dbSettingsDict valueForKey:@"auth_key"] isEqualToString:[dict valueForKey:@"mobilePassword"]]) {
-        DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"Error!", @"title",
-                              @"Mobile Password does not match. Please try again.", @"message",
-                              [NSNumber numberWithBool:YES], @"try_password_again",
-                              nil];
-        [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:dict waitUntilDone:NO];
-        return;
-    }
-    
-    NSArray *dbPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = [dbPaths objectAtIndex:0];
-    NSString *fullPath = [path stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
-    NSFileManager *fm = [NSFileManager defaultManager];
-    BOOL exists = [fm fileExistsAtPath:fullPath];
-    BOOL moveSuccess = NO;
-    if (exists) {
-        [[NSFileManager defaultManager] removeItemAtPath:fullPath error:NULL];
-        
-        NSString *newDBPath = [unZipDirectory stringByAppendingPathComponent:@"/User_DMG.sqlite"];
-        moveSuccess = [fm moveItemAtPath:newDBPath toPath:fullPath error:NULL];
-        if (!moveSuccess) {
-            
-        }
-        else {
-        }
-    }
-    
-    if (moveSuccess) {
-        DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSDictionary *messageDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                     @"Success!", @"title",
-                                     @"The database was successfully imported.", @"message",
-                                     nil];
-        [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:messageDict waitUntilDone:NO];
-    }
-    else {
-        DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"Error!", @"title",
-                              @"An error occurred while importing the database. Please try again.", @"message",
-                              nil];
-        [appDelegate performSelectorOnMainThread:@selector(processDatabaseMessage:) withObject:dict waitUntilDone:NO];
-        return;
-    }
-    
-    if([[NSFileManager defaultManager] fileExistsAtPath:unZipDirectory]){
-        [[NSFileManager defaultManager] removeItemAtPath:unZipDirectory error:NULL];
-    }
 }
 
 #pragma mark FACTUAL API

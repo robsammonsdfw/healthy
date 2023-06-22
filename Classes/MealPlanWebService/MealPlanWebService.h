@@ -38,10 +38,6 @@
 @property (nonatomic, weak) id<WSUpdateUserPlannedMealItems> wsUpdateUserPlannedMealItems;
 @property (nonatomic, weak) id<WSUpdateUserPlannedMealNames> wsUpdateUserPlannedMealNames;
 
-@property (nonatomic, strong) NSMutableData *webData;
-@property (nonatomic, strong) NSMutableString *soapResults;
-@property (nonatomic, strong) NSXMLParser *xmlParser;
-
 -(void)callWebservice:(NSDictionary *)requestDict;
 -(void)timeOutWebservice:(NSTimer *)theTimer;
 
@@ -49,8 +45,8 @@
 
 // DOWN SYNC
 @protocol WSGetUserPlannedMealNames <NSObject>
-- (void)getUserPlannedMealNamesFinished:(NSMutableArray *)responseArray;
-- (void)getUserPlannedMealNamesFailed:(NSString *)failedMessage;
+- (void)getUserPlannedMealNamesFinished:(NSArray *)responseArray;
+- (void)getUserPlannedMealNamesFailed:(NSError *)error;
 @end
 @protocol WSGetGroceryList <NSObject>
 - (void)getGroceryListFinished:(NSMutableArray *)responseArray;

@@ -12,15 +12,10 @@
 #import "DietmasterEngine.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "MNMBottomPullToRefreshManager.h"
 
-#import "MBProgressHUD.h"
-#import "NSObject+Blocks.h"
 #import "UIView+FrameControl.h"
 #import "NSDate+ConvertToString.h"
 #import "NSString+ConvertToDate.h"
-#import "UIViewController+Keyboard.h"
-#import "UIAlertView+Blocks.h"
 
 #import "DMMessage.h"
 
@@ -28,30 +23,137 @@ static NSString *OpponentCellIdentifier = @"OpponentCellIdentifier";
 static NSString *OwnerCellIdentifier = @"OwnerCellIdentifier";
 
 int const ShowMessageCountStep = 10;
-
 int const MaximumStringLength = 300;
 
-@interface MessageViewController ()<HPGrowingTextViewDelegate,SendViewDelegate,MNMBottomPullToRefreshManagerClient,UITableViewDataSource,UITableViewDelegate,TTTAttributedLabelDelegate> {
-    SendView *sendView;
-    IBOutlet UITableView *tableView;
-    MBProgressHUD *hud;
+@interface MessageViewController () <SendViewDelegate, UITableViewDataSource, UITableViewDelegate> {
     NSString *userId;
-    FMDatabase *dataBase;
-    NSDictionary *createMessage;
-    NSMutableArray *sections;
-    MNMBottomPullToRefreshManager *pullToRefreshManager;
-    int countShowedMessage;
 }
+
+@property (nonatomic, strong) SendView *sendView;
+/// Dictionary of messages, with the key = date, and value = array of messages.
+@property (nonatomic, strong) NSMutableDictionary *messagesDict;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic) int countShowedMessage;
 
 @end
 
 @implementation MessageViewController
+
+#pragma mark - View Lifecycle
+
+- (instancetype)init {
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        _messagesDict = [[NSMutableDictionary alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    }
+    return self;
+}
+
+- (void)loadView {
+    [super loadView];
+    
+    self.view = [[UIView alloc] initWithFrame:CGRectZero];
+    self.view.backgroundColor = UIColorFromHex(0xF3F3F3);
+    self.title = @"Messages";
+
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.scrollsToTop = NO;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 25, 0);
+    [self.tableView registerClass:[MessageCell class] forCellReuseIdentifier:OpponentCellIdentifier];
+    [self.tableView registerClass:[MessageCell class] forCellReuseIdentifier:OwnerCellIdentifier];
+    [self.view addSubview:self.tableView];
+    
+    self.sendView = loadNib([SendView class], @"SendView", self);
+    self.sendView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.sendView.delegate = self;
+    [self.view addSubview:self.sendView];
+    
+    // Constrain.
+    UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
+    [self.tableView.leadingAnchor constraintEqualToAnchor:layoutGuide.leadingAnchor constant:0].active = YES;
+    [self.tableView.trailingAnchor constraintEqualToAnchor:layoutGuide.trailingAnchor constant:0].active = YES;
+    [self.tableView.topAnchor constraintEqualToAnchor:layoutGuide.topAnchor constant:0].active = YES;
+
+    [self.sendView.topAnchor constraintEqualToAnchor:self.tableView.bottomAnchor constant:0].active = YES;
+    [self.sendView.leadingAnchor constraintEqualToAnchor:layoutGuide.leadingAnchor constant:0].active = YES;
+    [self.sendView.trailingAnchor constraintEqualToAnchor:layoutGuide.trailingAnchor constant:0].active = YES;
+    [self.sendView.heightAnchor constraintEqualToConstant:50.0f].active = YES;
+    UILayoutGuide *keyboardGuide = self.view.keyboardLayoutGuide;
+    [self.sendView.bottomAnchor constraintEqualToAnchor:keyboardGuide.topAnchor constant:0].active = YES;
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 32)];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.layer.cornerRadius = 10;
+    button.layer.masksToBounds = YES;
+    button.backgroundColor = UIColorFromHex(0x8e8e93);
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitle:@"Show Previous Messages" forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.];
+    [button setSize:CGSizeMake(200, 20)];
+    [button addTarget:self action:@selector(addMessage) forControlEvents:UIControlEventTouchUpInside];
+    button.center = CGPointMake(headerView.frame.size.width / 2, headerView.frame.size.height / 2);
+    [headerView addSubview:button];
+    self.tableView.tableHeaderView = headerView;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    self.countShowedMessage = ShowMessageCountStep;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    userId = [prefs valueForKey:@"userid_dietmastergo"];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(backAction:)];
+    [self.navigationItem setLeftBarButtonItem: backButton];
+    
+    UIBarButtonItem *syncButton = [[UIBarButtonItem alloc] initWithTitle:@"Sync"
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(syncMessages:)];
+    self.navigationItem.rightBarButtonItem = syncButton;
+
+    [self.navigationController setNavigationBarHidden:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+        
+    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
+    [engine startUpdatingMessages];
+    
+    [self reloadDataWithScroll:@(YES)];
+    [self updateHeaderView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadDataWithScroll:)
+                                                 name:UpdatingMessageNotification
+                                               object:nil];
+    [self setMessagesRead];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
+    [engine stopUpdatingMessages];
+}
+
+#pragma mark - Helpers
+
 - (FMDatabase *)database {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
     return db;
 }
@@ -76,194 +178,17 @@ int const MaximumStringLength = 300;
     else if ([self isCurrentWeekDate:date])
         resultStr = [date stringWithFormat:@"eeee"];
     else
-        resultStr = [date stringWithFormat:@"dd MMMM"];
+        resultStr = [date stringWithFormat:@"MMMM dd"];
     
     return resultStr;
 }
 
-- (void)reloadDataWithScroll:(NSNumber *)scroll {
-    int beforeMessagesCount = [self messageCount];
-    
-    NSString *query = [NSString stringWithFormat: @"SELECT * FROM (SELECT * FROM Messages ORDER BY Id DESC LIMIT %d) ORDER BY Id ASC",countShowedMessage];
-    
-    sections = [[NSMutableArray alloc] init];
-    
-    dataBase = [self database];
-    FMResultSet *rs = [dataBase executeQuery:query];
-    
-    while ([rs next]) {
-        
-        NSDictionary *message = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [rs stringForColumn:@"Id"],    @"MessageID",
-                                 [rs stringForColumn:@"Text"],   @"Text",
-                                 [rs stringForColumn:@"Sender"], @"Sender",
-                                 [rs dateForColumn:@"Date"],     @"DsteTime", nil];
-        NSDate *date = [rs dateForColumn:@"Date"];
-        NSString *dayString = [self dayStringFromDate:date];
-        
-        NSDictionary * section = nil;
-        NSArray *filter = [sections filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"day == %@",dayString]];
-        
-        if (filter.count == 0) {
-            section = [NSDictionary dictionaryWithObjectsAndKeys:dayString,@"day",
-                       [NSMutableArray array], @"items", nil];
-            [sections addObject:section];
-        }
-        else {
-            section = filter[0];
-        }
-        
-        NSMutableArray *items = section[@"items"];
-        [items addObject:message];
-    }
-    
-    if ([dataBase hadError]) {
-        DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
-    }
-    
-    [rs close];
-    [tableView reloadData];
-    
-    BOOL reloadWithScroll = ([scroll isKindOfClass:[NSNumber class]] ? scroll.boolValue : NO);
-    int afterMessagesCount = [self messageCount];
-    if (beforeMessagesCount != afterMessagesCount && reloadWithScroll == YES)
-        [self scrollToBottom];
-    
-    [pullToRefreshManager tableViewReloadFinished];
-}
+#pragma mark - Message Datasource
 
 - (void)syncMessages:(id)sender {
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
-    
-    DataFetcher *fetcher = [[DataFetcher alloc] init];
-    [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
-        [pullToRefreshManager tableViewReloadFinished];
-        [DMActivityIndicator hideActivityIndicator];
-        if (!error) {
-            [self reloadDataWithScroll:@(YES)];
-            [DMActivityIndicator hideActivityIndicator];
-        }
-    }];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    tableView.scrollsToTop = NO;
-    
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;//11-02-2016
-    
-    self.title = @"Mail";
-    
-    countShowedMessage = ShowMessageCountStep;
-    self.keyboardAutoScrolling = YES;
-    [self setKeyboardAutoDismissing:YES view:tableView];
-    
-    sendView = loadNib([SendView class], @"SendView", self);
-    sendView.messageView.delegate = self;
-    sendView.delegate = self;
-    [self.view addSubview:sendView];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    userId = [prefs valueForKey:@"userid_dietmastergo"];
-    
-    pullToRefreshManager = [[MNMBottomPullToRefreshManager alloc] initWithPullToRefreshViewHeight:30.0f
-                                                                                        tableView:tableView
-                                                                                       withClient:self];
-    
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,
-                                                                  tableView.frame.size.width,
-                                                                  32)];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.layer.cornerRadius = 10;
-    button.layer.masksToBounds = YES;
-    button.backgroundColor = UIColorFromHex(0x8e8e93);
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitle:@"Show previous messages" forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.];
-    [button setSize:CGSizeMake(200, 20)];
-    [button addTarget:self action:@selector(addMessage) forControlEvents:UIControlEventTouchUpInside];
-    button.center = CGPointMake(headerView.frame.size.width / 2, headerView.frame.size.height / 2);
-    [headerView addSubview:button];
-    tableView.tableHeaderView = headerView;
-    
-    if (IsIOS7) {
-        [self.navigationController.navigationBar setBarTintColor:[UIColor blackColor]];
-        [self.navigationController.navigationBar setTranslucent:YES];
-    }
-    else {
-        [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
-        [self.navigationController.navigationBar setTranslucent:NO];
-    }
-    
-    [self.navigationController setNavigationBarHidden:NO];
-}
-
-
-- (int)messageCount {
-    int count = 0;
-    NSArray *messages = [sections valueForKey:@"items"];
-    for (NSArray *items in messages) {
-        count += items.count;
-    }
-    return count;
-}
-
-- (void)updateHeaderView {
-    if ([self messageCount] < countShowedMessage) {
-        tableView.tableHeaderView = nil;
-    }
-}
-
-- (void)addMessage {
-    [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
-    [self performAfterDelay:0.1 block:^{
-        countShowedMessage += ShowMessageCountStep;
-        [self reloadDataWithScroll:@(NO)];
-        [self updateHeaderView];
-        [DMActivityIndicator hideActivityIndicator];
-    }];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    [pullToRefreshManager relocatePullToRefreshView];
-}
-
-- (void)scrollToBottom {
-    CGFloat yOffset = 0;
-    
-    if (tableView.contentSize.height > tableView.bounds.size.height) {
-        yOffset = tableView.contentSize.height - tableView.bounds.size.height + ((IsIOS7)?65:0);
-    }
-    
-    [tableView setContentOffset:CGPointMake(0, yOffset) animated:NO];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    CGFloat boundsHeight = self.view.bounds.size.height;
-    [sendView setOrigin:CGPointMake(0,boundsHeight - sendView.bounds.size.height)];
-    [sendView setSize:CGSizeMake(SCREEN_WIDTH, sendView.bounds.size.height)];
-    [tableView setSize:CGSizeMake(tableView.bounds.size.width,
-                                  boundsHeight - sendView.bounds.size.height - ((IsIOS7)?65:0))];
-    
-    [self reloadDataWithScroll:@(YES)];
-    [self syncMessages:nil];
-    [self updateHeaderView];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadDataWithScroll:)
-                                                 name:UpdatingMessageNotification
-                                               object:nil];
-    
-    [self setMessagesRead];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
+    [engine syncMessages];
 }
 
 - (void)setMessagesRead {
@@ -276,6 +201,7 @@ int const MaximumStringLength = 300;
     [fetcher setMessagesReadWithMessages:messages completion:^(NSArray<DMMessage *> *messages, NSError *error) {
         if (error) {
             DMLog(@"Error: %@", error.localizedDescription);
+            return;
         }
         for (DMMessage *message in messages) {
             [[DietmasterEngine sharedInstance] setReadedMessageId:message.messageId];
@@ -283,35 +209,86 @@ int const MaximumStringLength = 300;
     }];
 }
 
-- (void)keyboardLayoutSubviews {
-    CGFloat boundsHeight = self.view.bounds.size.height;
+- (int)messageCount {
+    __block int count = 0;
+    [self.messagesDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSMutableArray *value, BOOL * _Nonnull stop) {
+        count += value.count;
+    }];
+    return count;
+}
+
+- (void)reloadDataWithScroll:(NSNumber *)scroll {
+    [DMActivityIndicator hideActivityIndicator];
     
-    if (self.keyboardInfo) {
-        CGRect keyboardFrameInWindow = [self.keyboardInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    int beforeMessagesCount = [self messageCount];
+    
+    NSString *query = [NSString stringWithFormat: @"SELECT * FROM (SELECT * FROM Messages ORDER BY Id DESC) ORDER BY Id ASC"];
+    FMResultSet *rs = [[self database] executeQuery:query];
+    
+    [self.messagesDict removeAllObjects];
+    while ([rs next]) {
+        NSDictionary *dict = [rs resultDictionary];
+        DMMessage *message = [[DMMessage alloc] initWithDictionary:dict];
+        NSString *dayString = [self dayStringFromDate:message.dateSent];
         
-        CGPoint tableTopOffset = tableView.contentOffset;
-        CGPoint tableBottomOffset = CGPointMake(tableTopOffset.x,
-                                                tableTopOffset.y+tableView.bounds.size.height);
-        [sendView setOrigin:CGPointMake(0,
-                                        boundsHeight-keyboardFrameInWindow.size.height -
-                                        sendView.frame.size.height)];
-        [tableView setSize:CGSizeMake(tableView.frame.size.width, sendView.frame.origin.y - ((IsIOS7)?65:0))];
-        
-        tableTopOffset = CGPointMake(tableBottomOffset.x,
-                                     tableBottomOffset.y-tableView.bounds.size.height);
-        tableTopOffset.y = fminf(tableTopOffset.y,
-                                 tableView.contentSize.height-tableView.bounds.size.height);
-        tableTopOffset.y = fmaxf(tableTopOffset.y,0);
-        
-        [tableView setContentOffset:tableTopOffset animated:NO];
+        if (self.messagesDict[dayString]) {
+            NSMutableArray *messages = self.messagesDict[dayString];
+            [messages addObject:message];
+        } else {
+            NSMutableArray *messages = [NSMutableArray array];
+            [messages addObject:message];
+            self.messagesDict[dayString] = messages;
+        }
     }
-    else {
-        [sendView setOrigin:CGPointMake(0, boundsHeight-sendView.frame.size.height)];
-        [tableView setSize:CGSizeMake(tableView.frame.size.width, sendView.frame.origin.y - ((IsIOS7)?65:0))];
+    
+    if ([[self database] hadError]) {
+        DMLog(@"Err %d: %@", [[self database] lastErrorCode], [[self database] lastErrorMessage]);
+    }
+    
+    [rs close];
+    [self.tableView reloadData];
+    
+    BOOL reloadWithScroll = ([scroll isKindOfClass:[NSNumber class]] ? scroll.boolValue : NO);
+    int afterMessagesCount = [self messageCount];
+    if (beforeMessagesCount != afterMessagesCount && reloadWithScroll == YES) {
+        [self scrollToBottom];
     }
 }
 
+#pragma mark - Actions
+
+- (void)backAction:(id)sender {
+    [self.navigationController popViewControllerAnimated:true];
+}
+
+- (void)addMessage {
+    [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
+    self.countShowedMessage += ShowMessageCountStep;
+    [self reloadDataWithScroll:@(NO)];
+    [self updateHeaderView];
+    [DMActivityIndicator hideActivityIndicator];
+}
+
+- (void)updateHeaderView {
+    if ([self messageCount] < self.countShowedMessage) {
+        self.tableView.tableHeaderView = nil;
+    }
+}
+
+- (void)scrollToBottom {
+    NSInteger lastSection = self.tableView.numberOfSections - 1;
+    NSInteger numberOfRows = [self.tableView numberOfRowsInSection:lastSection];
+    if (numberOfRows) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:numberOfRows-1 inSection:lastSection] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
+
+#pragma mark - SendViewDelegate
+
 - (void)sendView:(SendView *)sendView_ didSendText:(NSString *)text {
+    if (!text.length) {
+        return;
+    }
     [sendView_.messageView resignFirstResponder];
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Sending..."];
 
@@ -337,122 +314,55 @@ int const MaximumStringLength = 300;
 
         [DMActivityIndicator hideActivityIndicator];
         [self reloadDataWithScroll:@(YES)];
-        [pullToRefreshManager tableViewReleased];
     }];
 }
 
-- (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height {
-    float diff = (sendView.messageView.frame.size.height - height);
-    
-    CGRect r = sendView.frame;
-    r.size.height -= diff;
-    r.origin.y += diff;
-    sendView.frame = r;
-    [self keyboardLayoutSubviews];
-}
+#pragma mark - Messages
 
-- (void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView {
-    sendView.sendButton.enabled = growingTextView.text.length > 0;
-}
-
-- (BOOL)growingTextView:(HPGrowingTextView *)growingTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    NSString *result = growingTextView.text;
-    result = [result stringByReplacingCharactersInRange:range withString:text];
-    if (result.length > MaximumStringLength)
-        return NO;
-    else
-        return YES;
-}
-
-#pragma mark - messges
-- (NSString *)cellIdentifierForType:(MessageType)type {
-    if (type == MessageOwnerType)
+- (NSString *)cellIdentifierForType:(DMMessageCellType)type {
+    if (type == DMMessageCellTypeMine)
         return OwnerCellIdentifier;
-    else if (type == MessageOpponentType)
+    else if (type == DMMessageCellTypeResponse)
         return OpponentCellIdentifier;
     
     return nil;
 }
 
-- (MessageType)typeFromMessage:(NSDictionary *)message {
-    if ([message[@"Sender"] isEqualToString:userId])
-        return MessageOwnerType;
+- (DMMessageCellType)typeFromMessage:(DMMessage *)message {
+    if ([message.senderId isEqualToString:userId])
+        return DMMessageCellTypeMine;
     else
-        return MessageOpponentType;
+        return DMMessageCellTypeResponse;
 }
 
-- (NSString *)textFromMessage:(NSDictionary *)message {
-    return message[@"Text"];
-}
+#pragma mark - UITableView Delegate/Datasource
 
-#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return sections.count;
+    return self.messagesDict.allKeys.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSDictionary *currentSection = sections[section];
-    NSArray *messages = currentSection[@"items"];
-    
-    int additional = (section == (sections.count - 1)) ? 1 : 0;
-    return messages.count + additional;
-    
-}
-
-#pragma mark -
-
-- (id)dequeueReusableCellWithMessageType:(MessageType)messageType {
-    NSString *cellIdentifier = [self cellIdentifierForType:messageType];
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (cell == nil) {
-        cell = loadNibForCell(cellIdentifier, @"MessageCell", self);
-    }
-    
-    return cell;
+    NSString *key = self.messagesDict.allKeys[section];
+    NSArray *messages = [self.messagesDict[key] copy];
+    return messages.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *section = sections[indexPath.section];
+    NSString *key = self.messagesDict.allKeys[indexPath.section];
+    NSArray *messages = [self.messagesDict[key] copy];
+    DMMessage *message = messages[indexPath.row];
     
-    NSArray *messages = section[@"items"];
-    DMLog(@"%@",messages);
-    
-    if ((indexPath.section == (sections.count - 1)) && indexPath.row == messages.count) {
-        static NSString *cellIdentifier = @"lastCellIdentifier";
-        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                                       reuseIdentifier:cellIdentifier];
-        cell.textLabel.text = @"Pull up the screen to update the message list";
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.backgroundColor = [UIColor clearColor];
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        if (IsIOS7)
-            cell.textLabel.textColor = UIColorFromHex(0x8e8e93);
-        else
-            cell.textLabel.textColor = UIColorFromHex(0x8892a5);
-        return cell;
-    }
-    else {
-        //HHT Change to detect Link
-        NSDictionary *message = messages[indexPath.row];
-        MessageType type = [self typeFromMessage:message];
-        
-        MessageCell *cell = [self dequeueReusableCellWithMessageType:type];
-        
-        cell.timeLabel.text = @"";
-        cell.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
-        cell.messageLabel.delegate = self;
-        cell.messageLabel.text = message[@"Text"];
-        cell.messageType = type;
-        
-        return cell;
-    }
+    DMMessageCellType type = [self typeFromMessage:message];
+    NSString *cellIdentifier = [self cellIdentifierForType:type];
+    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    [cell setMessage:message withCellType:type];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 20;
+    return 30;
 }
 
 - (UIView *)tableView:(UITableView *)tableView_ viewForHeaderInSection:(NSInteger)section {
@@ -461,97 +371,36 @@ int const MaximumStringLength = 300;
     label.text = [self tableView:tableView_ titleForHeaderInSection:section];
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.0];
-    label.backgroundColor = UIColorFromHex(IsIOS7?0xdbe2ed:0xffffff);
-    if (IsIOS7)
-        label.textColor = UIColorFromHex(0x8e8e93);
-    else {
-        label.textColor = UIColorFromHex(0x8892a5);
-        label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:0.75];
-        label.shadowOffset = CGSizeMake(0, 2);
-    }
-    
+    label.backgroundColor = UIColorFromHex(0xffffff);
+    label.textColor = UIColorFromHex(0x8892a5);
+    label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:0.75];
+    label.shadowOffset = CGSizeMake(0, 2);
+
     return label;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSDictionary *currentSection = sections[section];
-    NSArray *items = currentSection[@"items"];
-    NSDictionary *message = [items firstObject];
-    NSDate *date = message[@"DsteTime"];
+    NSString *key = self.messagesDict.allKeys[section];
     
-    return [NSString stringWithFormat:@"%@, %@", currentSection[@"day"], [date stringWithFormat:@"hh:mm"]];
+    return [NSString stringWithFormat:@"%@", key];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 55.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *section = sections[indexPath.section];
-    NSArray *messages = section[@"items"];
-    
-    if ((indexPath.section == (sections.count - 1)) && indexPath.row == messages.count) {
-        return 20.;
-    }
-    else {
-        NSDictionary *message = messages[indexPath.row];
-        MessageType type = [self typeFromMessage:message];
-        MessageCell *cell = [self dequeueReusableCellWithMessageType:type];
-        NSString *text = message[@"Text"];
-        
-        cell.messageLabel.text = text;
-        
-        /*CGSize containerSize = CGSizeZero;
-         CGSize area = [text sizeWithFont:cell.messageLabel.font
-         constrainedToSize:CGSizeMake(cell.messageLabel.frame.size.width,
-         CGFLOAT_MAX)
-         lineBreakMode:cell.messageLabel.lineBreakMode];
-         if (area.width != cell.messageLabel.frame.size.width)
-         area.width = cell.messageLabel.frame.size.width;
-         area.width = fmaxf(area.width, cell.messageLabel.frame.size.width);
-         UIEdgeInsets borders = viewInsetsInSuperview(cell.messageLabel);
-         containerSize = CGSizeMake(area.width+borders.left+borders.right,area.height+borders.top+borders.bottom);
-         */
-        //float height = [self heightForLabel:cell.messageLabel withText:text];
-        
-        //HHT change for height of message lable
-        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName:cell.messageLabel.font}];
-        
-        CGSize size = CGSizeMake(cell.messageLabel.frame.size.width, CGFLOAT_MAX);
-        
-        CGSize finalSize = [TTTAttributedLabel sizeThatFitsAttributedString:attributedText withConstraints:size limitedToNumberOfLines:0];
-        
-        if (finalSize.height < 40) {
-            return 40;
-        }
-        
-        return roundf(finalSize.height);
-    }
+    return UITableViewAutomaticDimension;
 }
 
--(CGFloat)heightForLabel:(UILabel *)label withText:(NSString *)text {
-    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName:label.font}];
-    CGRect rect = [attributedText boundingRectWithSize:(CGSize){label.frame.size.width, CGFLOAT_MAX}
-                                               options:NSStringDrawingUsesLineFragmentOrigin
-                                               context:nil];
-    
-    return ceil(rect.size.height);
+#pragma mark - Notification Handlers
+
+- (void)keyboardDidShow:(NSNotification *)notification {
+    [self scrollToBottom];
 }
 
-#pragma mark - TTTAttributedLabel Delegate
-//HHT to redirct on link click
-- (void)attributedLabel:(__unused TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
-    [[UIApplication sharedApplication] openURL:url];
-}
-
-#pragma mark - MNMBottomPullToRefreshManagerClient
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [pullToRefreshManager tableViewScrolled];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    [pullToRefreshManager tableViewReleased];
-}
-
-- (void)bottomPullToRefreshTriggered:(MNMBottomPullToRefreshManager *)manager {
-    [self syncMessages:manager];
+- (void)keyboardDidHide:(NSNotification *)notification {
+    [self scrollToBottom];
 }
 
 @end
-

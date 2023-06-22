@@ -6,28 +6,110 @@
 //  Copyright (c) 2012 Henry T Kirk. All rights reserved.
 //
 
-@import SafariServices;
 #import "MealPlanViewController.h"
+
+@import SafariServices;
 #import "DietmasterEngine.h"
 #import "MealPlanDetailViewController.h"
 #import "GroceryListViewController.h"
 #import "MyMovesViewController.h"
+#import "MealPlanWebService.h"
 
-@interface MyLogViewController <SFSafariViewControllerDelegate>
+@interface MealPlanViewController() <SFSafariViewControllerDelegate, WSGetUserPlannedMealNames, WSGetGroceryList, UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) MealPlanWebService *soapWebService;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *selectedRows;
+@property (nonatomic) BOOL isChoosingForGroceryList;
+@property (nonatomic, strong) UIBarButtonItem *aBarButtonItem;
 @end
 
-@implementation MealPlanViewController{
-    UIBarButtonItem *aBarButtonItem;
-}
+static NSString *CellIdentifier = @"Cell";
 
-@synthesize soapWebService;
+@implementation MealPlanViewController
+
+#pragma mark VIEW LIFECYCLE
 
 - (instancetype)init {
-    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        _selectedRows = [[NSMutableArray alloc] init];
+        _isChoosingForGroceryList = NO;
+    }
     return self;
 }
 
--(IBAction)goToSafetyGuidelines:(id)sender {
+- (void)loadView {
+    [super loadView];
+    self.view = [[UIView alloc] initWithFrame:CGRectZero];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.estimatedRowHeight = 48;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [self.view addSubview:self.tableView];
+    
+    UILayoutGuide *guide = [self.view safeAreaLayoutGuide];
+    [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.tableView.topAnchor constraintEqualToAnchor:guide.topAnchor constant:0].active = YES;
+    [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
+                                   initWithTitle: @"Back"
+                                   style: UIBarButtonItemStylePlain
+                                   target: nil action: nil];
+    [self.navigationItem setBackBarButtonItem: backButton];
+    
+    
+    UIImage *shopCartImage = [UIImage imageNamed:@"80-shopping-cart"];
+    shopCartImage = [shopCartImage imageWithTintColor:[UIColor whiteColor] renderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.aBarButtonItem = [[UIBarButtonItem alloc] initWithImage:shopCartImage
+                                                           style:UIBarButtonItemStylePlain
+                                                          target:self
+                                                          action:@selector(showActionSheet:)];
+    self.aBarButtonItem.tintColor = [UIColor whiteColor];
+    [self.navigationItem setLeftBarButtonItem:self.aBarButtonItem];
+    
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
+    UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
+    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+        backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    self.title = @"My Meals";
+    self.parentViewController.title = @"My Meals";
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    if ([dietmasterEngine.mealPlanArray count] == 0) {
+        [self loadData];
+    }
+}
+
+#pragma mark - Safari
+
+- (void)goToSafetyGuidelines:(id)sender {
     SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://advancedwebservicegroup.com/AWSGDocuments/GuidelinesAndSafety.html"]];
     [self presentViewController:sfvc animated:YES completion:nil];
 }
@@ -36,96 +118,16 @@
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
-#pragma mark VIEW LIFECYCLE
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self.navigationController setNavigationBarHidden:NO];
-
-    _imgbg.backgroundColor=[UIColor whiteColor];
-    
-    self.navigationItem.title=@"My Meals";
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    [self.tableView setBackgroundView:nil];
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
-                                   initWithTitle: @"Back"
-                                   style: UIBarButtonItemStylePlain
-                                   target: nil action: nil];
-    
-    [self.navigationItem setBackBarButtonItem: backButton];
-    
-    
-    aBarButtonItem = [[UIBarButtonItem alloc] initWithImage:
-                      [UIImage imageNamed:@"80-shopping-cart"]
-                                                      style:UIBarButtonItemStylePlain
-                                                     target:self action:@selector(showActionSheet:)];
-    aBarButtonItem.tintColor=[UIColor whiteColor];
-    [self.navigationItem setLeftBarButtonItem:aBarButtonItem];
-    
-    selectedRows = [[NSMutableArray alloc] init];
-    isChoosingForGroceryList = NO;
-    
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
-    UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
-        backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
-    }
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.navigationController.navigationBar setTranslucent:NO];
-    
-//    UIImage *btnImage1 = [[UIImage imageNamed:@"set32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn1.bounds = CGRectMake( 0, 0, btnImage1.size.width, btnImage1.size.height );
-//    btn1.tintColor = [UIColor whiteColor];
-//    [btn1 addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchDown];
-//    [btn1 setImage:btnImage1 forState:UIControlStateNormal];
-//    
-//    UIBarButtonItem * settingsBtn = [[UIBarButtonItem alloc] initWithCustomView:btn1];
-//    self.navigationItem.rightBarButtonItem = settingsBtn;
-    
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    if (self.isMovingFromParentViewController) {
-        [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if ([dietmasterEngine.mealPlanArray count] == 0) {
-        [self startLoading];
-    }
-}
-
 #pragma mark GROCERY LIST
--(void)showGroceryList {
-    if (isChoosingForGroceryList) {
-        isChoosingForGroceryList = NO;
-        UIBarButtonItem *aBarButtonItem1 = [[UIBarButtonItem alloc] initWithImage:
-                                            [UIImage imageNamed:@"80-shopping-cart"]
-                                                                            style:UIBarButtonItemStylePlain
-                                                                           target:self action:@selector(showActionSheet:)];
-        
-        [self.navigationItem setRightBarButtonItem:aBarButtonItem1];
-        
+
+- (void)showGroceryList {
+    if (self.isChoosingForGroceryList) {
+        self.isChoosingForGroceryList = NO;
+        [self.navigationItem setRightBarButtonItem:self.aBarButtonItem];
         [self.navigationItem setLeftBarButtonItem:nil];
     }
     else {
-        isChoosingForGroceryList = YES;
+        self.isChoosingForGroceryList = YES;
         
         UIBarButtonItem *aBarButtonItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(loadGroceryList)];
         [self.navigationItem setRightBarButtonItem:aBarButtonItem2];
@@ -137,13 +139,11 @@
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
--(void)loadGroceryList {
+- (void)loadGroceryList {
     [DMActivityIndicator showActivityIndicator];
 
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
     NSMutableArray *mealIDArray = [[NSMutableArray alloc] init];
-    for (NSIndexPath *indexPath in selectedRows) {
+    for (NSIndexPath *indexPath in [self.selectedRows copy]) {
         
         NSMutableDictionary *mealIDDict = [[NSMutableDictionary alloc] init];
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -152,6 +152,7 @@
         [mealIDArray addObject:mealIDDict];
     }
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetGroceryList", @"RequestType",
                               [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
@@ -160,12 +161,13 @@
                               nil];
     
     self.soapWebService = [[MealPlanWebService alloc] init];
-    soapWebService.wsGetGroceryList = self;
-    [soapWebService callWebservice:infoDict];
+    self.soapWebService.wsGetGroceryList = self;
+    [self.soapWebService callWebservice:infoDict];
 }
 
 #pragma mark LOAD DATA METHODS
--(void)loadData {
+
+- (void)loadData {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetUserPlannedMealNames", @"RequestType",
@@ -174,11 +176,8 @@
                               nil];
     
     self.soapWebService = [[MealPlanWebService alloc] init];
-    soapWebService.wsGetUserPlannedMealNames = self;
-    [soapWebService callWebservice:infoDict];
-    
-    
-    
+    self.soapWebService.wsGetUserPlannedMealNames = self;
+    [self.soapWebService callWebservice:infoDict];
 }
 
 #pragma mark TABLE VIEW METHODS
@@ -203,47 +202,39 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 48;
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    return ([dietmasterEngine.mealPlanArray count] > 0 ? [dietmasterEngine.mealPlanArray count] : 1);
+    NSArray *planArray = [dietmasterEngine.mealPlanArray copy];
+    return MAX(planArray.count, 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-
-        UIImageView * rowCellImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver.png"]];
-        rowCellImgView.tintColor = PrimaryColor;
-        
-        cell.backgroundView = rowCellImgView;
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    if ([dietmasterEngine.mealPlanArray count] > 0) {
+    NSArray *planArray = [dietmasterEngine.mealPlanArray copy];
+
+    if ([planArray count] > 0) {
         
-        NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.mealPlanArray objectAtIndex:[indexPath row]]];
+        NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[planArray objectAtIndex:[indexPath row]]];
         
-        cell.textLabel.text			= [tempDict valueForKey:@"MealName"];
+        cell.textLabel.text = [tempDict valueForKey:@"MealName"];
         cell.textLabel.textColor = [UIColor whiteColor];
         
         [cell textLabel].adjustsFontSizeToFitWidth = YES;
-        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
-        cell.textLabel.minimumScaleFactor = 10.0f;
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+        cell.textLabel.font = [UIFont systemFontOfSize:16.0];
+        cell.textLabel.minimumScaleFactor = 12.0f;
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.textLabel.highlightedTextColor = [UIColor whiteColor];
         cell.backgroundColor = [UIColor clearColor];
         
-        if (isChoosingForGroceryList) {
+        if (self.isChoosingForGroceryList) {
             UIImage *image = nil;
-            if ([selectedRows containsObject:indexPath]) {
+            if ([[self.selectedRows copy] containsObject:indexPath]) {
                 image = [UIImage imageNamed:@"checkmark"];
             } else {
                 image = [UIImage imageNamed:@"checkmark_off"];
@@ -260,8 +251,6 @@
         else {
             cell.accessoryView = nil;
         }
-        
-        
     }
     else {
         cell.textLabel.text = @"Contact your program provider regarding meal plans";
@@ -283,19 +272,20 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    if ([dietmasterEngine.mealPlanArray count] > 0) {
-        if (isChoosingForGroceryList) {
+    NSArray *planArray = [dietmasterEngine.mealPlanArray copy];
+
+    if ([planArray count] > 0) {
+        if (self.isChoosingForGroceryList) {
             
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             
             UIImage *image = nil;
-            if ([selectedRows containsObject:indexPath]) {
-                [selectedRows removeObject:indexPath];
+            if ([[self.selectedRows copy] containsObject:indexPath]) {
+                [self.selectedRows removeObject:indexPath];
                 image = [UIImage imageNamed:@"checkmark_off"];
             }
             else {
-                [selectedRows addObject:indexPath];
+                [self.selectedRows addObject:indexPath];
                 image = [UIImage imageNamed:@"checkmark"];
             }
             
@@ -318,9 +308,6 @@
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         }
     }
-    else {
-        return;
-    }
 }
 
 #pragma mark CHECKMARK ACTION
@@ -336,6 +323,7 @@
 }
 
 #pragma mark GROCERY LIST DELEGATES
+
 - (void)getGroceryListFinished:(NSMutableArray *)responseArray {
     [DMActivityIndicator hideActivityIndicator];
 
@@ -358,39 +346,28 @@
 - (void)getGroceryListFailed:(NSString *)failedMessage {
     [DMActivityIndicator hideActivityIndicator];
 
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred! Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:200];
-    [alert show];
+    [DMGUtilities showAlertWithTitle:@"Oops!" message:@"An error occurred! Please try again." inViewController:nil];
 }
 
 #pragma mark GET MEAL PLAN NAME DELEGATES
 
-- (void)getUserPlannedMealNamesFinished:(NSMutableArray *)responseArray {
+- (void)getUserPlannedMealNamesFinished:(NSArray *)responseArray {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine.mealPlanArray removeAllObjects];
     [dietmasterEngine.mealPlanArray addObjectsFromArray:responseArray];
     
-    [self stopLoading];
     [[self tableView] reloadData];
-    
-}
-- (void)getUserPlannedMealNamesFailed:(NSString *)failedMessage {
-    [self stopLoading];
-    [[self tableView] reloadData];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"An error occurred. Please pull to refresh & try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:200];
-    [alert show];
 }
 
-#pragma mark PULL REFRESH METHODS
-- (void)refresh {
-    [self performSelector:@selector(loadData) withObject:nil afterDelay:1.0];
+- (void)getUserPlannedMealNamesFailed:(NSError *)error {
+    [[self tableView] reloadData];
+    
+    [DMGUtilities showError:error withTitle:@"Error" message:@"An error occurred! Please try again." inViewController:nil];
 }
 
 #pragma mark ACTION SHEET METHODS
 
--(void)showActionSheet:(id)sender {
+- (void)showActionSheet:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if ([dietmasterEngine.mealPlanArray count] > 0) {
@@ -407,14 +384,11 @@
         [popupQuery showInView:[UIApplication sharedApplication].keyWindow];
         
     }
-    else {
-        
-        return;
-    }
 }
 
 #pragma mark ACTION SHEET DELEGATES
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (actionSheet.tag == 10) {
         if (buttonIndex == 0) {
             [self showGroceryList];

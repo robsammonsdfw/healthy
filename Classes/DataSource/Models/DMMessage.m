@@ -9,10 +9,10 @@
 
 @interface DMMessage()
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
-@property (nonatomic, strong, readwrite) NSString *messageId;
+@property (nonatomic, strong, readwrite) NSNumber *messageId;
 @property (nonatomic, strong, readwrite) NSString *text;
 @property (nonatomic, strong, readwrite) NSDate *dateSent;
-@property (nonatomic, strong, readwrite) NSString *senderName;
+@property (nonatomic, strong, readwrite) NSString *senderId;
 @end
 
 @implementation DMMessage
@@ -27,14 +27,22 @@
         _dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateFormat:@"MM/dd/yyyy hh:mm:ss a"];
         
-        // Note: YES! There is a typo on the server. It is DsteTime, not DateTime.
-        NSString *dateSent = ValidString(dictionary[@"DsteTime"]);
-        if (dateSent.length) {
-            _dateSent = [_dateFormatter dateFromString:dateSent];
+        // Check if dictionary was created from local database or server.
+        if (dictionary[@"Date"]) {
+            // Local database.
+            NSNumber *dateSent = ValidNSNumber(dictionary[@"Date"]);
+            _dateSent = [NSDate dateWithTimeIntervalSince1970:dateSent.doubleValue];
+        } else {
+            // Note: YES! There is a typo on the server. It is DsteTime, not DateTime.
+            NSString *dateSent = ValidString(dictionary[@"DsteTime"]);
+            if (dateSent.length) {
+                _dateSent = [_dateFormatter dateFromString:dateSent];
+            }
         }
         
-        _messageId = ValidString(dictionary[@"MessageID"]);
-        _senderName = ValidString(dictionary[@"Sender"]);
+        // Load messageID based on server or database.
+        _messageId = ValidNSNumber(dictionary[@"MessageID"] ?: dictionary[@"Id"]);
+        _senderId = ValidString(dictionary[@"Sender"]);
         
         // Escape quotes.
         NSString *text = dictionary[@"Text"];
@@ -50,18 +58,18 @@
 
 - (NSString *)replaceIntoSQLString {
     NSString *sqlString = [NSString stringWithFormat:@"REPLACE INTO Messages "
-                            "(Text, Sender, Date, Id, Read) VALUES (\"%@\", \"%@\", %f, %@, %d)",
+                            "(Text, Sender, Date, Id, Read) VALUES (\"%@\", \"%@\", %f, %i, %d)",
                            self.text,
-                           self.senderName,
+                           self.senderId,
                            [self.dateSent timeIntervalSince1970],
-                           self.messageId,
+                           self.messageId.intValue,
                            self.isRead];
     return sqlString;
 }
 
-- (void)updateText:(NSString *)text senderName:(NSString *)senderName dateSent:(NSDate *)dateSent {
+- (void)updateText:(NSString *)text senderId:(NSNumber *)senderId dateSent:(NSDate *)dateSent {
     self.text = [text stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    self.senderName = senderName;
+    self.senderId = ValidString(senderId);
     self.dateSent = dateSent;
 }
 
@@ -80,7 +88,7 @@
 }
 
 - (BOOL)isEqualToMessage:(DMMessage *)message {
-    if (![self.messageId isEqualToString:message.messageId]) {
+    if (![self.messageId isEqualToNumber:message.messageId]) {
         return NO;
     }
 

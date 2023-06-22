@@ -387,7 +387,7 @@
                 
 //                if (![status isEqualToString:@"Deleted"])
 //                {
-                    NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanList (PlanID,UserID,PlanName,Notes,LastUpdated,UniqueID,Status,SyncResult,UserPlanDates) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",planId,userId,planName,notes,lastUpdated,uniqueId,status,syncResult,userPlanDates];
+                    NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanList (PlanID,UserID,PlanName,Notes,LastUpdated,UniqueID,Status,SyncResult,UserPlanDates) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",planId,userId,planName,notes,lastUpdated,uniqueId,status,syncResult,userPlanDates];
                     [db executeUpdate:insertSQL];
 //                }
                 
@@ -438,7 +438,7 @@
                 NSString *parentUniqueId = dict[@"ParentUniqueID"];
                 NSString *userPlanMoves = dict[@"UserPlanMoves"];
                 
-                NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanDateList (UserPlanDateID,PlanID,PlanDate,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID,UserPlanMoves) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",userPlanDateID,planId,planDate,lastUpdated,uniqueId,status,syncResult,parentUniqueId,userPlanMoves];
+                NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanDateList (UserPlanDateID,PlanID,PlanDate,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID,UserPlanMoves) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",userPlanDateID,planId,planDate,lastUpdated,uniqueId,status,syncResult,parentUniqueId,userPlanMoves];
                 
                 [db executeUpdate:insertSQL];
                 
@@ -490,7 +490,7 @@
                 NSString *userPlanMoveSets = dict[@"UserPlanMoveSets"];
                 NSString *isCheckBoxClicked = @"no";
                 
-                NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanMoveList (UserPlanMoveID,UserPlanDateID,MoveID,MoveName,VideoLink,Notes,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID,UserPlanMoveSets,isCheckBoxClicked) VALUES (\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",userPlanMoveId,userPlanDateID,moveId,moveName,videoLink,notes,lastUpdated,uniqueId,status,syncResult,parentUniqueId,userPlanMoveSets,isCheckBoxClicked];
+                NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanMoveList (UserPlanMoveID,UserPlanDateID,MoveID,MoveName,VideoLink,Notes,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID,UserPlanMoveSets,isCheckBoxClicked) VALUES (\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",userPlanMoveId,userPlanDateID,moveId,moveName,videoLink,notes,lastUpdated,uniqueId,status,syncResult,parentUniqueId,userPlanMoveSets,isCheckBoxClicked];
                 
                 [db executeUpdate:insertSQL];
                 
@@ -545,7 +545,7 @@
                 NSString *parentUniqueId = dict[@"ParentUniqueID"];
                 
                 
-                NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanMoveSetList (SetID,UserPlanMoveID,SetNumber,Unit1ID,Unit1Value,Unit2ID,Unit2Value,Unit1Name,Unit2Name,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID) VALUES (\"%d\",\"%d\",\"%d\",\"%d\",\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",setId,userPlanMoveID,setNumber,unit1ID,unit1Value,unit2ID,unit2Value,unit1Name,unit2Name,lastUpdated,uniqueId,status,syncResult,parentUniqueId];
+                NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanMoveSetList (SetID,UserPlanMoveID,SetNumber,Unit1ID,Unit1Value,Unit2ID,Unit2Value,Unit1Name,Unit2Name,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID) VALUES (\"%d\",\"%d\",\"%d\",\"%d\",\"%d\",\"%d\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",setId,userPlanMoveID,setNumber,unit1ID,unit1Value,unit2ID,unit2Value,unit1Name,unit2Name,lastUpdated,uniqueId,status,syncResult,parentUniqueId];
                 
                 [db executeUpdate:insertSQL];
                 
@@ -589,8 +589,7 @@
                 NSDate *date = [dateFormatter dateFromString:dateString];
                 NSString * lastUpdated = [dateFormatter stringFromDate:date];
                 
-                NSString * insertSQL = [NSString stringWithFormat: @"INSERT INTO MoveDetails (moveID,companyID,moveName,videoLink,notes) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\")",moveId,companyID,moveName,videoLink,notes];
-                
+                NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO MoveDetails (moveID,companyID,moveName,videoLink,notes) VALUES (\"%d\",\"%d\",\"%@\",\"%@\",\"%@\")",moveId,companyID,moveName,videoLink,notes];
                 [db executeUpdate:insertSQL];
                 
             }

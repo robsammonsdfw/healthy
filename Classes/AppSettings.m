@@ -256,8 +256,8 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"View";
     
-    FoodsSearch *fsController = [[FoodsSearch alloc] initWithNibName:@"FoodsSearch" bundle:nil];
-    fsController.searchType = @"My Foods";
+    FoodsSearch *fsController = [[FoodsSearch alloc] init];
+    fsController.searchType = DMFoodSearchTypeMyFoods;
     fsController.title = @"My Foods";
     [self.navigationController pushViewController:fsController animated:YES];
 }

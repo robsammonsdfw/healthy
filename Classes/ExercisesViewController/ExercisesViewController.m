@@ -16,17 +16,9 @@
 
 @synthesize tableView;
 @synthesize mySearchBar, bSearchIsOn, searchType;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        
-    }
-    return self;
-}
 
--(id)init {
-    if (self = [super initWithNibName:@"ExercisesViewController" bundle:nil]) {
-    }
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     return self;
 }
 

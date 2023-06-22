@@ -16,6 +16,12 @@
 @synthesize pickerDecimalArray, pickerFractionArray;
 
 #pragma mark DATA METHODS
+
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
+
 -(void)loadData {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
@@ -49,7 +55,6 @@
         _foodIdLbl.text = [NSString stringWithFormat:@"%@",dict[@"FoodID"]];
         
     }
-
     
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
@@ -63,8 +68,6 @@
         
         rowListArr = [[NSMutableArray alloc]initWithArray:[self filterObjectsByKeys:@"MeasureID" array:pickerColumn3Array]];
         pickerColumn3Array = rowListArr;
-
-        
         
     }
     
@@ -112,7 +115,7 @@
             }
         }
         
-        for(NSInteger i = 0; i < [pickerFractionArray count]; i++){
+        for (NSInteger i = 0; i < [pickerFractionArray count]; i++){
             double pickerValue = [[pickerFractionArray objectAtIndex:i] floatValue];
             
             if(pickerValue == pickerCompare){
@@ -210,18 +213,15 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     lblText.text		= [dietmasterEngine.foodSelectedDict valueForKey:@"Name"];
     
-    UIImage* image3 = [UIImage imageNamed:@"menuscan.png"];
-    UIButton *urButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    urButton.frame = CGRectMake(0, 0, 30, 30);
-    [urButton setBackgroundImage:image3 forState:UIControlStateNormal];
-    [urButton addTarget:self action:@selector(showActionSheet:)
+    UIImage *plusImage = [UIImage imageNamed:@"menuscan"];
+    plusImage = [plusImage imageWithTintColor:[UIColor whiteColor] renderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIButton *plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    plusButton.frame = CGRectMake(0, 0, 30, 30);
+    [plusButton setImage:plusImage forState:UIControlStateNormal];
+    [plusButton addTarget:self action:@selector(showActionSheet:)
        forControlEvents:UIControlEventTouchUpInside];
-    urButton.clipsToBounds = YES;
-    urButton.layer.cornerRadius =3;
-    urButton.layer.borderColor=[UIColor blackColor].CGColor;
-    urButton.layer.borderWidth=0.8f;
-    UIBarButtonItem *doneButton =[[UIBarButtonItem alloc] initWithCustomView:urButton];
-    self.navigationItem.rightBarButtonItem=doneButton;
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithCustomView:plusButton];
+    self.navigationItem.rightBarButtonItem = addButton;
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];

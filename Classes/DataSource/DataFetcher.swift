@@ -194,7 +194,7 @@ class DataFetcher : NSObject {
                 }
                 let jsonResult = jsonArray[0]
                 let message = DMMessage(dictionary: jsonResult)
-                message.updateText(text, senderName: userId, dateSent: Date())
+                message.updateText(text, senderId: userId, dateSent: Date())
                 completion(message, nil)
             } catch let error as NSError {
                 completion(nil, error)
@@ -218,13 +218,14 @@ class DataFetcher : NSObject {
         }
         
         // Create array of messageIDs we will send to server.
-        var messageIds = [[String: Any]]()
+        var messageIds = [[String: NSNumber]]()
         for message in messages {
-            messageIds.append(["MessageID" : message.messageId])
+            let dict = ["MessageID" : message.messageId]
+            messageIds.append(dict)
         }
         do {
             // Convert messages to JSON.
-            let messageJSON = try JSONSerialization.data(withJSONObject: messages)
+            let messageJSON = try JSONSerialization.data(withJSONObject: messageIds)
             let params = ["AuthKey": authKey.uppercased(),
                           "UserID": userId,
                           "strJSON": messageJSON] as [String : Any]

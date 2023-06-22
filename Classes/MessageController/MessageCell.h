@@ -4,17 +4,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TTAttributeLable/TTTAttributedLabel.h"
+@class DMMessage;
 
-typedef enum {
-  MessageOwnerType = 0,
-  MessageOpponentType,
-} MessageType;
+/// The type of message, be it mine or the advisor responding.
+typedef NS_ENUM(NSUInteger, DMMessageCellType) {
+    DMMessageCellTypeMine = 0,
+    /// A response from the person being messaged.
+    DMMessageCellTypeResponse = 1
+};
 
 @interface MessageCell : UITableViewCell
 
-@property (nonatomic,strong) IBOutlet UILabel *timeLabel;
-@property (nonatomic, strong) IBOutlet TTTAttributedLabel *messageLabel;
-@property (nonatomic) MessageType messageType;
+/// Sets the message on the cell.
+- (void)setMessage:(DMMessage *)message withCellType:(DMMessageCellType)cellType;
 
 @end

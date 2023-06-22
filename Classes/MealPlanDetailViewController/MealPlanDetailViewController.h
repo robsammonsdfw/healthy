@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "MealPlanWebService.h"
-#import "PullRefreshTableViewController.h"
 #import "MBProgressHUD.h"
 #import "TDDatePickerController.h"
 #import "TTTAttributedLabel.h"
 
-@interface MealPlanDetailViewController : PullRefreshTableViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, WSGetUserPlannedMealNames, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, TTTAttributedLabelDelegate> {
+@interface MealPlanDetailViewController : UIViewController <UIActionSheetDelegate, WSGetUserPlannedMealNames, UIAlertViewDelegate, WSDeleteUserPlannedMealItems, TTTAttributedLabelDelegate> {
     int selectedIndex;
     IBOutlet UILabel *titleLabel;
     IBOutlet UILabel *recommendedCaloriesLabel;

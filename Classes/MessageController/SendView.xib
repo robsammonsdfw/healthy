@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,11 +13,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="send_bg.png" id="XWb-lg-uxz">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="send_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="XWb-lg-uxz">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" id="7">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7">
                     <rect key="frame" x="253" y="12" width="60" height="27"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -36,12 +34,12 @@
                         <action selector="sendButtonTouched:" destination="4" eventType="touchUpInside" id="S7j-rn-9bS"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="inutfield_bg.png" id="6">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="inutfield_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="6">
                     <rect key="frame" x="8" y="7" width="243" height="37"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <rect key="contentStretch" x="0.5" y="0.5" width="0.0" height="0.0"/>
                 </imageView>
-                <view contentMode="scaleToFill" id="5" customClass="HPGrowingTextView">
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5" customClass="GrowingTextView" customModule="GrowingTextView">
                     <rect key="frame" x="8" y="8" width="243" height="36"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -55,11 +53,12 @@
                 <outlet property="messageView" destination="5" id="ZmE-F8-aRu"/>
                 <outlet property="sendButton" destination="7" id="19"/>
             </connections>
+            <point key="canvasLocation" x="139" y="18"/>
         </view>
     </objects>
     <resources>
-        <image name="inutfield_bg.png" width="214" height="27"/>
+        <image name="inutfield_bg.png" width="214.5" height="27"/>
         <image name="send_bg.png" width="320" height="40"/>
-        <image name="send_btn_bg.png" width="59" height="27"/>
+        <image name="send_btn_bg.png" width="59.5" height="27"/>
     </resources>
 </document>

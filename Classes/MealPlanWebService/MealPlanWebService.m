@@ -9,6 +9,12 @@
 #import "MealPlanWebService.h"
 #import "DietmasterEngine.h"
 
+@interface MealPlanWebService()
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
+@end
+
 @implementation MealPlanWebService
 
 @synthesize wsGetUserPlannedMealNames;
@@ -28,7 +34,8 @@
     timeOutTimer = nil;
 
 	recordResults = FALSE;
-    
+    self.soapResults = [[NSMutableString alloc] init];
+
     NSString *requestType = [requestDict valueForKey:@"RequestType"];
     NSString *soapMessage = nil;
         
@@ -166,7 +173,7 @@
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", requestType];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", requestType];
     
-    DMLog(@"%@", soapMessage);
+    //DMLog(@"%@", soapMessage);
 	
 	NSURL *url = [NSURL URLWithString:urlToWebservice];
 	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
@@ -206,43 +213,21 @@
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-
-    if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]) {
-        [wsGetUserPlannedMealNames getUserPlannedMealNamesFailed:[error localizedDescription]];
-    }
-    if ([wsGetGroceryList respondsToSelector:@selector(getGroceryListFailed:)]) {
-        [wsGetGroceryList getGroceryListFailed:[error localizedDescription]];
-    }
-
-	if ([wsDeleteUserPlannedMealItems respondsToSelector:@selector(deleteUserPlannedMealItemsFailed:)]) {
-        [wsDeleteUserPlannedMealItems deleteUserPlannedMealItemsFailed:[error localizedDescription]];
-    }
-	if ([wsInsertUserPlannedMealItems respondsToSelector:@selector(insertUserPlannedMealItemsFailed:)]) {
-        [wsInsertUserPlannedMealItems insertUserPlannedMealItemsFailed:[error localizedDescription]];
-    }
-    if ([wsInsertUserPlannedMeals respondsToSelector:@selector(insertUserPlannedMealsFailed:)]) {
-        [wsInsertUserPlannedMeals insertUserPlannedMealsFailed:[error localizedDescription]];
-    }
-	if ([wsUpdateUserPlannedMealItems respondsToSelector:@selector(updateUserPlannedMealItemsFailed:)]) {
-        [wsUpdateUserPlannedMealItems updateUserPlannedMealItemsFailed:[error localizedDescription]];
-    }
-	if ([wsUpdateUserPlannedMealNames respondsToSelector:@selector(updateUserPlannedMealNamesFailed:)]) {
-        [wsUpdateUserPlannedMealNames updateUserPlannedMealNamesFailed:[error localizedDescription]];
-    }
+    [self processError:error];
 }
 
--(void)connectionDidFinishLoading:(NSURLConnection *)connection {
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     [timeOutTimer invalidate];
     timeOutTimer = nil;
 
-	NSString *theXML = [[NSString alloc] initWithBytes: [self.webData mutableBytes] length:[self.webData length] encoding:NSUTF8StringEncoding];
-	
-	self.xmlParser = [[NSXMLParser alloc] initWithData: self.webData];
-	[self.xmlParser setDelegate: self];
-	[self.xmlParser setShouldResolveExternalEntities: YES];
-	[self.xmlParser parse];
+    if (self.webData.length) {
+        self.xmlParser = [[NSXMLParser alloc] initWithData:self.webData];
+        [self.xmlParser setDelegate: self];
+        [self.xmlParser setShouldResolveExternalEntities: YES];
+        [self.xmlParser parse];
+    } else {
+        DMLog(@"Error loading connection.");
+    }
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName attributes: (NSDictionary *)attributeDict {
@@ -250,43 +235,17 @@
        [elementName isEqualToString:@"InsertUserPlannedMealItemsResult"] || [elementName isEqualToString:@"InsertUserPlannedMealsResult"] ||
        [elementName isEqualToString:@"UpdateUserPlannedMealItemsResult"] || [elementName isEqualToString:@"UpdateUserPlannedMealNamesResult"] ||
        [elementName isEqualToString:@"GetGroceryListResult"]) {
-		if(!self.soapResults) {
-			self.soapResults = [[NSMutableString alloc] init];
-		}
 		recordResults = TRUE;
 	}
     
-    if( [elementName isEqualToString:@"faultstring"]) {
-        
-        if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]) {
-            [wsGetUserPlannedMealNames getUserPlannedMealNamesFailed:@"error"];
-        }
-        if ([wsGetGroceryList respondsToSelector:@selector(getGroceryListFailed:)]) {
-            [wsGetGroceryList getGroceryListFailed:@"error"];
-        }
-        
-        if ([wsDeleteUserPlannedMealItems respondsToSelector:@selector(deleteUserPlannedMealItemsFailed:)]) {
-            [wsDeleteUserPlannedMealItems deleteUserPlannedMealItemsFailed:@"error"];
-        }
-        if ([wsInsertUserPlannedMealItems respondsToSelector:@selector(insertUserPlannedMealItemsFailed:)]) {
-            [wsInsertUserPlannedMealItems insertUserPlannedMealItemsFailed:@"error"];
-        }
-        if ([wsInsertUserPlannedMeals respondsToSelector:@selector(insertUserPlannedMealsFailed:)]) {
-            [wsInsertUserPlannedMeals insertUserPlannedMealsFailed:@"error"];
-        }
-        if ([wsUpdateUserPlannedMealItems respondsToSelector:@selector(updateUserPlannedMealItemsFailed:)]) {
-            [wsUpdateUserPlannedMealItems updateUserPlannedMealItemsFailed:@"error"];
-        }
-        if ([wsUpdateUserPlannedMealNames respondsToSelector:@selector(updateUserPlannedMealNamesFailed:)]) {
-            [wsUpdateUserPlannedMealNames updateUserPlannedMealNamesFailed:@"error"];
-        }
+    if ([elementName isEqualToString:@"faultstring"]) {
+        NSError *error = [DMGUtilities errorWithMessage:@"The webservice returned a fault." code:200];
+        [self processError:error];
 	}
 }
 
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	if( recordResults )
-	{
+-(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+	if (recordResults) {
 		[self.soapResults appendString: string];
 	}
 }
@@ -294,75 +253,75 @@
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     recordResults = FALSE;
     if ([self.soapResults isEqualToString:@"\"Empty\""]) {
-        self.soapResults = nil;
         self.soapResults = [[NSMutableString alloc] init];
 		[self.soapResults appendFormat:@"%@",@"[]"];
     }
     
-    NSMutableArray *responseArray = [NSJSONSerialization JSONObjectWithData:[self.soapResults dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];;
-    NSString *strCheck;
-    if([responseArray count]!= 0) {
-        NSDictionary *dictCheck = [responseArray objectAtIndex:0];
-        strCheck = [dictCheck objectForKey:@"Response"];
-    } else {
-        strCheck = @"";
+    NSArray *responseArray;
+    @try {
+        NSError *error;
+        NSData *data = [self.soapResults dataUsingEncoding:NSUTF8StringEncoding];
+        if (data) {
+            responseArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+        }
+        // Handle error.
+        if (error || !data) {
+            [self processError:error];
+            return;
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+        NSError *error = [DMGUtilities errorWithMessage:exception.reason code:999];
+        [self processError:error];
+        return;
     }
     
-	if([elementName isEqualToString:@"GetUserPlannedMealNamesResult"]) {
-        if ([strCheck isEqualToString:@"Invalid Auth"]) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APP_NAME message:@"Service has been terminated. Contact your plan provider." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            alertView.tag = 1;
-            [alertView show];
-        } else {
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+	if ([elementName isEqualToString:@"GetUserPlannedMealNamesResult"]) {
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *mealDict in responseArray) {
             
-            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+            NSMutableDictionary *newMealPlanDict = [[NSMutableDictionary alloc] init];
+            [newMealPlanDict setObject:[mealDict valueForKey:@"MealName"] forKey:@"MealName"];
+            [newMealPlanDict setObject:[mealDict valueForKey:@"MealID"] forKey:@"MealID"];
+            [newMealPlanDict setObject:[mealDict valueForKey:@"MealTypeID"] forKey:@"MealTypeID"];
             
-            for (NSDictionary *mealDict in responseArray) {
-                
-                NSMutableDictionary *newMealPlanDict = [[NSMutableDictionary alloc] init];
-                [newMealPlanDict setObject:[mealDict valueForKey:@"MealName"] forKey:@"MealName"];
-                [newMealPlanDict setObject:[mealDict valueForKey:@"MealID"] forKey:@"MealID"];
-                [newMealPlanDict setObject:[mealDict valueForKey:@"MealTypeID"] forKey:@"MealTypeID"];
-                
-                
-                NSMutableArray *newMealItemsArray = [[NSMutableArray alloc] init];
-                for (int i = 0; i <=5; i++) {
-                    NSMutableArray *mealItemsTemp = [[NSMutableArray alloc] init];
-                    for (NSDictionary *mealItems in [mealDict valueForKey:@"MealItems"]) {
-                        int mealCode = [[mealItems valueForKey:@"MealCode"] intValue];
-                        if (mealCode == i) {
-                            [mealItemsTemp addObject:mealItems];
-                           
-                            NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                      [NSNumber numberWithInt:[[mealItems valueForKey:@"FoodID"] intValue]], @"FoodID",
-                                                      [NSNumber numberWithInt:[[mealItems valueForKey:@"MeasureID"] intValue]], @"MeasureID", nil];
-                            
-                            [dietmasterEngine getMissingFoods:tempDict];
-                        }
+            NSMutableArray *newMealItemsArray = [[NSMutableArray alloc] init];
+            for (int i = 0; i <=5; i++) {
+                NSMutableArray *mealItemsTemp = [[NSMutableArray alloc] init];
+                for (NSDictionary *mealItems in [mealDict valueForKey:@"MealItems"]) {
+                    int mealCode = [[mealItems valueForKey:@"MealCode"] intValue];
+                    if (mealCode == i) {
+                        [mealItemsTemp addObject:mealItems];
+                       
+                        NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                  [NSNumber numberWithInt:[[mealItems valueForKey:@"FoodID"] intValue]], @"FoodID",
+                                                  [NSNumber numberWithInt:[[mealItems valueForKey:@"MeasureID"] intValue]], @"MeasureID", nil];
+                        
+                        [dietmasterEngine getMissingFoods:tempDict];
                     }
-                    [newMealItemsArray addObject:mealItemsTemp];
                 }
-                [newMealPlanDict setObject:newMealItemsArray forKey:@"MealItems"];
-                
-                if ([[mealDict valueForKey:@"MealNotes"] count] != 0) {
-                    NSMutableArray *newMealNotesArray = [[NSMutableArray alloc] init];
-                    for (NSDictionary *mealNotes in [mealDict valueForKey:@"MealNotes"]) {
-                        [newMealNotesArray addObject:mealNotes];
-                    }
-                    [newMealPlanDict setObject:newMealNotesArray forKey:@"MealNotes"];
+                [newMealItemsArray addObject:mealItemsTemp];
+            }
+            [newMealPlanDict setObject:newMealItemsArray forKey:@"MealItems"];
+            
+            if ([[mealDict valueForKey:@"MealNotes"] count] != 0) {
+                NSMutableArray *newMealNotesArray = [[NSMutableArray alloc] init];
+                for (NSDictionary *mealNotes in [mealDict valueForKey:@"MealNotes"]) {
+                    [newMealNotesArray addObject:mealNotes];
                 }
-                [tempArray addObject:newMealPlanDict];
-                
+                [newMealPlanDict setObject:newMealNotesArray forKey:@"MealNotes"];
             }
+            [tempArray addObject:newMealPlanDict];
             
-            
-            if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFinished:)]) {
-                [wsGetUserPlannedMealNames getUserPlannedMealNamesFinished:tempArray];
-            }
+        }
+        
+        if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFinished:)]) {
+            [wsGetUserPlannedMealNames getUserPlannedMealNamesFinished:[tempArray copy]];
         }
     }
-    if([elementName isEqualToString:@"GetGroceryListResult"]) {
+    if ([elementName isEqualToString:@"GetGroceryListResult"]) {
         
         if ([wsGetGroceryList respondsToSelector:@selector(getGroceryListFinished:)]) {
             [wsGetGroceryList getGroceryListFinished:responseArray];
@@ -405,19 +364,40 @@
         }
         
     }
-    
-    self.soapResults = nil;
 }
 
+/// Processes an incoming error.
+- (void)processError:(NSError *)error {
+    DM_LOG(@"Error: %@", error.localizedDescription);
+    
+    [timeOutTimer invalidate];
+    timeOutTimer = nil;
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 1) {
-        exit(0);
+    if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]) {
+        [wsGetUserPlannedMealNames getUserPlannedMealNamesFailed:error];
+    }
+    if ([wsGetGroceryList respondsToSelector:@selector(getGroceryListFailed:)]) {
+        [wsGetGroceryList getGroceryListFailed:[error localizedDescription]];
+    }
+
+    if ([wsDeleteUserPlannedMealItems respondsToSelector:@selector(deleteUserPlannedMealItemsFailed:)]) {
+        [wsDeleteUserPlannedMealItems deleteUserPlannedMealItemsFailed:[error localizedDescription]];
+    }
+    if ([wsInsertUserPlannedMealItems respondsToSelector:@selector(insertUserPlannedMealItemsFailed:)]) {
+        [wsInsertUserPlannedMealItems insertUserPlannedMealItemsFailed:[error localizedDescription]];
+    }
+    if ([wsInsertUserPlannedMeals respondsToSelector:@selector(insertUserPlannedMealsFailed:)]) {
+        [wsInsertUserPlannedMeals insertUserPlannedMealsFailed:[error localizedDescription]];
+    }
+    if ([wsUpdateUserPlannedMealItems respondsToSelector:@selector(updateUserPlannedMealItemsFailed:)]) {
+        [wsUpdateUserPlannedMealItems updateUserPlannedMealItemsFailed:[error localizedDescription]];
+    }
+    if ([wsUpdateUserPlannedMealNames respondsToSelector:@selector(updateUserPlannedMealNamesFailed:)]) {
+        [wsUpdateUserPlannedMealNames updateUserPlannedMealNamesFailed:[error localizedDescription]];
     }
 }
 
-#pragma mark TIMEOUT METHOD
--(void)timeOutWebservice:(NSTimer *)theTimer {
+- (void)timeOutWebservice:(NSTimer *)theTimer {
     
     NSURLConnection *connection = [[theTimer userInfo] objectForKey:@"connection"];
     [connection cancel];
@@ -425,31 +405,10 @@
     
     [timeOutTimer invalidate];
     timeOutTimer = nil;
-    
     self.webData = nil;
     
-    if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]) {
-        [wsGetUserPlannedMealNames getUserPlannedMealNamesFailed:@"error"];
-    }
-    if ([wsGetGroceryList respondsToSelector:@selector(getGroceryListFailed:)]) {
-        [wsGetGroceryList getGroceryListFailed:@"error"];
-    }
-
-    if ([wsDeleteUserPlannedMealItems respondsToSelector:@selector(deleteUserPlannedMealItemsFailed:)]) {
-        [wsDeleteUserPlannedMealItems deleteUserPlannedMealItemsFailed:@"error"];
-    }
-    if ([wsInsertUserPlannedMealItems respondsToSelector:@selector(insertUserPlannedMealItemsFailed:)]) {
-        [wsInsertUserPlannedMealItems insertUserPlannedMealItemsFailed:@"error"];
-    }
-    if ([wsInsertUserPlannedMeals respondsToSelector:@selector(insertUserPlannedMealsFailed:)]) {
-        [wsInsertUserPlannedMeals insertUserPlannedMealsFailed:@"error"];
-    }
-    if ([wsUpdateUserPlannedMealItems respondsToSelector:@selector(updateUserPlannedMealItemsFailed:)]) {
-        [wsUpdateUserPlannedMealItems updateUserPlannedMealItemsFailed:@"error"];
-    }
-    if ([wsUpdateUserPlannedMealNames respondsToSelector:@selector(updateUserPlannedMealNamesFailed:)]) {
-        [wsUpdateUserPlannedMealNames updateUserPlannedMealNamesFailed:@"error"];
-    }
+    NSError *error = [DMGUtilities errorWithMessage:@"The network request timed out." code:300];
+    [self processError:error];
 }
 
 @end

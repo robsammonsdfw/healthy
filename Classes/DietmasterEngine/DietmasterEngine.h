@@ -77,13 +77,10 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
     __block BOOL getDataComplete;
     __block BOOL getDataDidFail;
     dispatch_semaphore_t semaphore;
-    
-    
 }
 
 // delegate
 @property (nonatomic, weak) id<WSGetFoodDelegate> wsGetFoodDelegate;
-
 @property (nonatomic, weak) id<SyncDatabaseDelegate> syncDatabaseDelegate;
 @property (nonatomic, weak) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
 
@@ -105,7 +102,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 
 // Meal Plan
 @property (nonatomic, strong) NSMutableArray *mealPlanArray;
-@property (nonatomic, strong) NSMutableArray *ArrMealNotes; // BHADRESH
 @property (nonatomic) BOOL isMealPlanItem;
 @property (nonatomic) BOOL sendAllServerData;
 @property (nonatomic, strong) NSMutableDictionary *mealPlanItemToExchangeDict;
@@ -182,26 +178,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 -(NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey;
 -(NSNumber *)getGramWeightForFoodID:(NSNumber *)foodID andMeasureID:(NSNumber *)measureID;
 
--(void)saveMealPlanArray;
--(void)saveMealNotesArray;  // BHADRESH.
--(void)GetMealNotesArray;   // BHADRESH.
--(BOOL)hasMealPlanSaved;
--(void)purgeMealPlanArray;
--(NSString *)getSavedMealPlanFilePath;
--(void)loadSavedMealPlan;
-
--(void)saveGroceryListArray;
--(BOOL)hasGroceryListSaved;
--(void)purgeGroceryListArray;
--(NSString *)getGroceryListFilePath;
--(void)loadSavedGroceryList;
-
--(void)saveMyMovesAssignedOnDateArray;
--(NSString *)getmyMovesAssignedFilePath;
--(BOOL)hasMyMovesAssignedSaved;
--(void)loadMyMovesAssignedOnDateList;
-
-
 // Database helper methods
 -(NSString *)databasePath;
 
@@ -223,6 +199,12 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 - (int)countOfUnreadingMessages;
 - (void)setReadedMessageId:(NSString *)messageId;
 - (NSDictionary *)messageById:(NSString *)uid;
+/// Updates messages every few seconds.
+- (void)startUpdatingMessages;
+/// Stops updating messages.
+- (void)stopUpdatingMessages;
+/// Syncronizes messages now.
+- (void)syncMessages;
 
 -(NSMutableArray *)getGroceryFoodDetails:(NSMutableArray *) foods;
 

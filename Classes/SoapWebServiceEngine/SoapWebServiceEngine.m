@@ -219,7 +219,8 @@
     timeOutTimer = nil;
     
     recordResults = FALSE;
-    
+    soapResults = [[NSMutableString alloc] init];
+
     self.requestDict = nil;
     self.requestDict = [[NSDictionary alloc] initWithDictionary:requestDict];
     
@@ -740,74 +741,8 @@
     [webData appendData:data];
 }
 
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    // Kill the timeout timer
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
-    DMLog(@"ERROR with Connection");
-    
-    if ([wsSyncFoodLogDelegate respondsToSelector:@selector(getSyncFoodLogFailed:)]) {
-        [wsSyncFoodLogDelegate getSyncFoodLogFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFoodLogItemsDelegate respondsToSelector:@selector(getSyncFoodLogItemsFailed:)]) {
-        [wsSyncFoodLogItemsDelegate getSyncFoodLogItemsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFavoriteFoodsDelegate respondsToSelector:@selector(getSyncFavoriteFoodsFailed:)]) {
-        [wsSyncFavoriteFoodsDelegate getSyncFavoriteFoodsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFavoriteMealsDelegate respondsToSelector:@selector(getSyncFavoriteMealsFailed:)]) {
-        [wsSyncFavoriteMealsDelegate getSyncFavoriteMealsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncWeightLogDelegate respondsToSelector:@selector(getSyncWeightLogFailed:)]) {
-        [wsSyncWeightLogDelegate getSyncWeightLogFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFavoriteMealItemsDelegate respondsToSelector:@selector(getSyncFavoriteMealItemsFailed:)]) {
-        [wsSyncFavoriteMealItemsDelegate getSyncFavoriteMealItemsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncExerciseLogDelegate respondsToSelector:@selector(getSyncExerciseLogFailed:)]) {
-        [wsSyncExerciseLogDelegate getSyncExerciseLogFailed:[error localizedDescription]];
-    }
-    
-    //HHT new exercise sync
-    if ([wsSyncExerciseLogNewDelegate respondsToSelector:@selector(getSyncExerciseLogNewFailed:)]) {
-        [wsSyncExerciseLogNewDelegate getSyncExerciseLogNewFailed:[error localizedDescription]];
-    }
-    
-    if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFailed:)]) {
-        [wsSaveMealDelegate saveMealFailed:[error localizedDescription]];
-    }
-    if ([wsSaveMealItemDelegate respondsToSelector:@selector(saveMealItemFailed:)]) {
-        [wsSaveMealItemDelegate saveMealItemFailed:[error localizedDescription]];
-    }
-    if ([wsSaveExerciseLogsDelegate respondsToSelector:@selector(saveExerciseLogsFailed:)]) {
-        [wsSaveExerciseLogsDelegate saveExerciseLogsFailed:[error localizedDescription]];
-    }
-    if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFailed:)]) {
-        [wsGetFoodDelegate getFoodFailed:[error localizedDescription]];
-    }
-    if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFailed:)]) {
-        [wsSaveWeightLogDelegate saveWeightLogFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFoodDelegate respondsToSelector:@selector(saveFoodFailed:)]) {
-        [wsSaveFoodDelegate saveFoodFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFailed:)]) {
-        [wsSaveFavoriteFoodDelegate saveFavoriteFoodFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFavoriteMealDelegate respondsToSelector:@selector(saveFavoriteMealFailed:)]) {
-        [wsSaveFavoriteMealDelegate saveFavoriteMealFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFavoriteMealItemDelegate respondsToSelector:@selector(saveFavoriteMealItemFailed:)]) {
-        [wsSaveFavoriteMealItemDelegate saveFavoriteMealItemFailed:[error localizedDescription]];
-    }
-    if ([wsDeleteMealItemDelegate respondsToSelector:@selector(deleteMealItemFailed:)]) {
-        [wsDeleteMealItemDelegate deleteMealItemFailed:[error localizedDescription]];
-    }
-    if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFailed:)]) {
-        [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFailed:[error localizedDescription]];
-    }
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [self processError:error];
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -849,10 +784,6 @@
        [elementName isEqualToString:@"DeleteMealItemResult"] ||
        [elementName isEqualToString:@"DeleteFavoriteFoodResult"])
     {
-        if(!soapResults)
-        {
-            soapResults = [[NSMutableString alloc] init];
-        }
         recordResults = TRUE;
     }
     
@@ -955,11 +886,25 @@
     }
     
     // Create a dictionary from the JSON string
-    NSArray *responseArray = @[];
-    if (soapResults.length) {
-        responseArray = [NSJSONSerialization JSONObjectWithData:[soapResults dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    NSArray *responseArray;
+    @try {
+        NSError *error;
+        NSData *data = [soapResults dataUsingEncoding:NSUTF8StringEncoding];
+        if (data) {
+            responseArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+        }
+        // Handle error.
+        if (error || !data) {
+            [self processError:error];
+            return;
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+        NSError *error = [DMGUtilities errorWithMessage:exception.reason code:999];
+        [self processError:error];
+        return;
     }
-
+    
     if([elementName isEqualToString:@"SyncWeightLogResult"])
     {
         
@@ -1174,6 +1119,78 @@
 //- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
 //    [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
 //}
+
+/// Processes an incoming error.
+- (void)processError:(NSError *)error {
+    DM_LOG(@"Error: %@", error.localizedDescription);
+    
+    // Kill the timeout timer
+    [timeOutTimer invalidate];
+    timeOutTimer = nil;
+    
+    DMLog(@"ERROR with Connection");
+    
+    if ([wsSyncFoodLogDelegate respondsToSelector:@selector(getSyncFoodLogFailed:)]) {
+        [wsSyncFoodLogDelegate getSyncFoodLogFailed:[error localizedDescription]];
+    }
+    if ([wsSyncFoodLogItemsDelegate respondsToSelector:@selector(getSyncFoodLogItemsFailed:)]) {
+        [wsSyncFoodLogItemsDelegate getSyncFoodLogItemsFailed:[error localizedDescription]];
+    }
+    if ([wsSyncFavoriteFoodsDelegate respondsToSelector:@selector(getSyncFavoriteFoodsFailed:)]) {
+        [wsSyncFavoriteFoodsDelegate getSyncFavoriteFoodsFailed:[error localizedDescription]];
+    }
+    if ([wsSyncFavoriteMealsDelegate respondsToSelector:@selector(getSyncFavoriteMealsFailed:)]) {
+        [wsSyncFavoriteMealsDelegate getSyncFavoriteMealsFailed:[error localizedDescription]];
+    }
+    if ([wsSyncWeightLogDelegate respondsToSelector:@selector(getSyncWeightLogFailed:)]) {
+        [wsSyncWeightLogDelegate getSyncWeightLogFailed:[error localizedDescription]];
+    }
+    if ([wsSyncFavoriteMealItemsDelegate respondsToSelector:@selector(getSyncFavoriteMealItemsFailed:)]) {
+        [wsSyncFavoriteMealItemsDelegate getSyncFavoriteMealItemsFailed:[error localizedDescription]];
+    }
+    if ([wsSyncExerciseLogDelegate respondsToSelector:@selector(getSyncExerciseLogFailed:)]) {
+        [wsSyncExerciseLogDelegate getSyncExerciseLogFailed:[error localizedDescription]];
+    }
+    
+    //HHT new exercise sync
+    if ([wsSyncExerciseLogNewDelegate respondsToSelector:@selector(getSyncExerciseLogNewFailed:)]) {
+        [wsSyncExerciseLogNewDelegate getSyncExerciseLogNewFailed:[error localizedDescription]];
+    }
+    
+    if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFailed:)]) {
+        [wsSaveMealDelegate saveMealFailed:[error localizedDescription]];
+    }
+    if ([wsSaveMealItemDelegate respondsToSelector:@selector(saveMealItemFailed:)]) {
+        [wsSaveMealItemDelegate saveMealItemFailed:[error localizedDescription]];
+    }
+    if ([wsSaveExerciseLogsDelegate respondsToSelector:@selector(saveExerciseLogsFailed:)]) {
+        [wsSaveExerciseLogsDelegate saveExerciseLogsFailed:[error localizedDescription]];
+    }
+    if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFailed:)]) {
+        [wsGetFoodDelegate getFoodFailed:[error localizedDescription]];
+    }
+    if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFailed:)]) {
+        [wsSaveWeightLogDelegate saveWeightLogFailed:[error localizedDescription]];
+    }
+    if ([wsSaveFoodDelegate respondsToSelector:@selector(saveFoodFailed:)]) {
+        [wsSaveFoodDelegate saveFoodFailed:[error localizedDescription]];
+    }
+    if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFailed:)]) {
+        [wsSaveFavoriteFoodDelegate saveFavoriteFoodFailed:[error localizedDescription]];
+    }
+    if ([wsSaveFavoriteMealDelegate respondsToSelector:@selector(saveFavoriteMealFailed:)]) {
+        [wsSaveFavoriteMealDelegate saveFavoriteMealFailed:[error localizedDescription]];
+    }
+    if ([wsSaveFavoriteMealItemDelegate respondsToSelector:@selector(saveFavoriteMealItemFailed:)]) {
+        [wsSaveFavoriteMealItemDelegate saveFavoriteMealItemFailed:[error localizedDescription]];
+    }
+    if ([wsDeleteMealItemDelegate respondsToSelector:@selector(deleteMealItemFailed:)]) {
+        [wsDeleteMealItemDelegate deleteMealItemFailed:[error localizedDescription]];
+    }
+    if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFailed:)]) {
+        [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFailed:[error localizedDescription]];
+    }
+}
 
 #pragma mark TIMEOUT METHOD
 -(void)timeOutWebservice:(NSTimer *)theTimer {

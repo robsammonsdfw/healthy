@@ -70,13 +70,6 @@
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    NSString *filepath = [url path];
-    incomingDBFilePath = @"";
-    
-    if ([sourceApplication isEqualToString:@"com.apple.mobilemail"]) {
-        incomingDBFilePath = [[NSString alloc] initWithFormat:@"%@", filepath];
-        [self confirmUpdateDatabase];
-    }
     return YES;
 }
 
@@ -179,9 +172,6 @@
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine saveMealItems:lastUpdate]; //should not be passing nil
-    [dietmasterEngine saveMealPlanArray];
-    [dietmasterEngine saveGroceryListArray];
-    [dietmasterEngine saveMyMovesAssignedOnDateArray];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -210,22 +200,6 @@
             [self addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:fullPath]];
         }
         
-        if ([dietmasterEngine hasMealPlanSaved]) {
-            [dietmasterEngine loadSavedMealPlan];
-        }
-        
-        if ([dietmasterEngine hasMyMovesAssignedSaved]){
-            [dietmasterEngine loadMyMovesAssignedOnDateList];
-        }
-        
-        if ([dietmasterEngine hasGroceryListSaved]) {
-            [dietmasterEngine loadSavedGroceryList];
-        }
-        
-        if ([dietmasterEngine hasMyMovesAssignedSaved]) {
-            [dietmasterEngine loadMyMovesAssignedOnDateList];
-        }
-                
         BOOL upgraded11 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1"];
         if (upgraded11 == NO && [prefs boolForKey:@"user_loggedin"] == YES) {
             [self performSelectorInBackground:@selector(updateMeasureTable) withObject:nil];
@@ -626,8 +600,7 @@
         [prefs setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
         [prefs setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
         
-        [dietmasterEngine purgeGroceryListArray];
-        [dietmasterEngine purgeMealPlanArray];
+        [dietmasterEngine.mealPlanArray removeAllObjects];
         [viewController loadData];
         
         #pragma mark DELETE ALL USER DATA
@@ -707,10 +680,18 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:[NSDate date] forKey:@"lastmodified"];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APP_NAME message:@"Do you want to make changes to optional settings?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-    alertView.tag = 1;
-    [alertView show];
-    
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
+//                                                                   message:@"Do you want to make changes to optional settings?"
+//                                                            preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        AppDel.isFromAlert = YES;
+//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+//        [alert dismissViewControllerAnimated:YES completion:nil];
+//    }]];
+//    [[DMGUtilities rootViewController] presentViewController:alert animated:YES completion:nil];
+
     [self syncDatabase];
     
     [viewController loadData];
@@ -728,7 +709,6 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:[NSDate date] forKey:@"lastmodified"];
     [prefs synchronize];
-    
 }
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
@@ -888,134 +868,6 @@
     return success;
 }
 
-#pragma mark IMPORT DATABASE METHODS
-
-- (void)confirmUpdateDatabase {
-    if (incomingDBFilePath == nil || incomingDBFilePath.length == 0) {
-        UIAlertView *alert;
-        alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No database was found. Please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert setTag:1000];
-        [alert show];
-        return;
-    }
-    
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setTitle:@"Import New Database"];
-    [alert setMessage:@"Are you sure you wish to overwrite your existing database? Any data not synchronized with the cloud system will be lost."];
-    [alert setDelegate:self];
-    [alert addButtonWithTitle:@"No"];
-    [alert addButtonWithTitle:@"Yes"];
-    [alert setTag:223];
-    [alert show];
-}
-
--(void)confirmDatabaseUserPassword {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm Mobile Password"
-                                                    message:@"Please enter the Mobile Password associated with this database."
-                                                   delegate:self
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:@"Ok", nil];
-    
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert textFieldAtIndex:0].autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
-    [alert setTag:321];
-    [alert show];
-}
-
-#pragma mark ALERT VIEW DELEGATE
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == 223) {
-        if (buttonIndex == 0) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.15 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
-                           {
-                UIAlertView *alert;
-                alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Importing of new database was cancelled." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [alert setTag:1000];
-                [alert show];
-            });
-            
-        }
-        else if (buttonIndex == 1) {
-            [self confirmDatabaseUserPassword];
-        }
-    }
-    
-    if (alertView.tag == 1005) {
-        [self performSelector:@selector(confirmDatabaseUserPassword) withObject:nil afterDelay:0.65];
-    }
-    
-    if (alertView.tag == 321) {
-        if (buttonIndex == 0) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.15 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
-                           {
-                UIAlertView *alert;
-                alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Importing of new database was cancelled." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [alert setTag:1000];
-                [alert show];
-            });
-            
-        }
-        else if (buttonIndex == 1) {
-            NSString *mobilePassword = [[alertView textFieldAtIndex:0] text];
-            
-            if (mobilePassword == nil || mobilePassword.length == 0) {
-                UIAlertView *alert;
-                alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Mobile Password is required. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [alert setTag:1005];
-                [alert show];
-                return;
-            }
-            
-            [DMActivityIndicator showActivityIndicator];
-
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                   mobilePassword, @"mobilePassword",
-                                   incomingDBFilePath, @"incomingDBFilePath",
-                                   nil];
-            [dietmasterEngine processIncomingDatabase:dict];
-            
-        }
-    }
-    else if (alertView.tag == 1) {
-        if (buttonIndex == 1) {
-            AppDel.isFromAlert = YES;
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
-//            [rootController setSelectedIndex:4];
-        }
-        else {
-            
-        }
-    }
-}
-
--(void)processDatabaseMessage:(NSDictionary *)messageDict {
-    [DMActivityIndicator hideActivityIndicator];
-
-    int tag = 112233;
-    if ([[messageDict valueForKey:@"try_password_again"] boolValue] == YES) {
-        tag = 1005;
-    }
-    
-    UIAlertView *alert;
-    alert = [[UIAlertView alloc] initWithTitle:[messageDict valueForKey:@"title"] message:[messageDict valueForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert setTag:tag];
-    [alert show];
-}
-
-
-//HHT mail change
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == 1001){
-        if (buttonIndex == alertView.cancelButtonIndex){
-            return;
-        }
-        else if (buttonIndex == 1){
-            [self openMailForApp];
-        }
-    }
-}
-
 - (void)openMailForApp {
     if ([MFMailComposeViewController canSendMail]) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
@@ -1037,52 +889,42 @@
         [AppDel.window.rootViewController presentViewController:mailComposer animated:YES completion:^{
 
         }];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+    } else {
+        [DMGUtilities showAlertWithTitle:APP_NAME
+                                 message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings"
+                        inViewController:nil];
     }
 }
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    UIAlertView *alert;
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error {
+    NSString *title = nil;
+    NSString *message = nil;
     switch (result) {
         case MFMailComposeResultCancelled:
-            alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"Email was cancelled." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Cancelled";
+            message = @"Email was cancelled.";
             break;
         case MFMailComposeResultSaved:
-            alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was saved as a draft." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Saved";
+            message = @"Email was saved as a draft.";
             break;
         case MFMailComposeResultSent:
-            alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Email was sent successfully." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Success!";
+            message = @"Email was sent successfully.";
             break;
         case MFMailComposeResultFailed:
-            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Error";
+            message = @"Email was not sent.";
             break;
         default:
-            alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Email was not sent." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            title = @"Error";
+            message = @"Email was not sent.";
             break;
     }
-    [alert show];
-    
-    // This ugly thing is required because dismissModalViewControllerAnimated causes a crash
-    // if called right away when "Cancel" is touched.
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC), dispatch_get_current_queue(), ^
-    //                   {
-    [AppDel.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-    //    });
-    
-    // Remove Zip File
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.05 * NSEC_PER_SEC), dispatch_get_current_queue(), ^
-    //                   {
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:@"dietmaster_db.dmgo"];
-    if([[NSFileManager defaultManager] fileExistsAtPath:zipFilePath])
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:zipFilePath error:NULL];
-        DMLog(@"Temp DB Zip File Deleted...");
-    }
-    //    });
+
+    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
 }
 
 #pragma mark - UISceneDelegate

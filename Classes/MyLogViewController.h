@@ -76,12 +76,6 @@
     int dinnerCalories;
     int snack3Calories;
     
-    // day detail view
-    IBOutlet UIView *dayDetailView;
-    BOOL detailViewInView;
-    CGRect closedDetailRect;
-    CGRect openedDetailRect;
-    IBOutlet UIButton *openCloseDetailButton;
     // labels
     IBOutlet UILabel *recCarbLabel;
     IBOutlet UILabel *recProtLabel;
@@ -119,7 +113,6 @@
 @property (nonatomic, strong) NSDate *date_currentDate;
 @property (nonatomic, strong) UITableView *tblSimpleTable;
 @property (nonatomic) int num_BMR;
-@property (nonatomic, strong) IBOutlet UIView *dayDetailView;
 
 @property (nonatomic, strong) IBOutlet UILabel *staticRecommendedLbl;
 @property (nonatomic, strong) IBOutlet UILabel *staticRemainingLbl;
@@ -135,16 +128,13 @@
 
 @property (nonatomic, strong) IBOutlet UIView *overallView;
 
-@property (nonatomic, strong) IBOutlet UIView *vw;
-
 //HHT apple watch
 @property (nonatomic,retain) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *arrData;
 @property (nonatomic, strong) NSSet *readDataTypes;
 @property (nonatomic, strong) StepData * sd;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *whiteViewHeightConst;
 
--(void) getBMR;
+-(void)getBMR;
 
 -(IBAction) showLogAdd:(id) sender;
 -(IBAction) shownextDate:(id) sender;
@@ -159,6 +149,5 @@
 -(void)reloadData;
 -(IBAction)showHideDetailView:(id)sender;
 -(void)movedDetailView:(id)sender;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *popUpVwBottonContrain;
 
 @end

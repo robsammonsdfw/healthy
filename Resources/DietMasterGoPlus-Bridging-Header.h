@@ -17,3 +17,7 @@
 #import "MealPlanViewController.h"
 #import "AppSettings.h"
 #import "MyMovesViewController.h"
+#import "MessageViewController.h"
+#import "ExercisesDetailViewController.h"
+#import "DetailViewController.h"
+#import "MealPlanDetailViewController.h"

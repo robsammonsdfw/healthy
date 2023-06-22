@@ -9,10 +9,11 @@
 #import "DietMasterGoPlus-Swift.h"
 
 @interface ManageFoods()
-
 /// Barcode Scanner.
 @property (nonatomic, strong) BarCodeScanner *barcodeScanner;
-
+/// Determines if a user saw the scanner helper popup. Backed by
+/// NSUserDefaults value, so only shown once per user login.
+@property (nonatomic) BOOL helperBubbleWasShown;
 @end
 
 @implementation ManageFoods
@@ -25,6 +26,11 @@ static const int NUMBER_OF_TEXTFIELDS = 28;
 CGPoint svos;
 
 #pragma mark VIEW LIFECYCLE
+
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -75,7 +81,7 @@ CGPoint svos;
                                      scannerButton.frame.size.width, scannerButton.frame.size.height);
     scannerButton.alpha = 0.80;
     
-    helperBubbleWasShown = NO;
+    self.helperBubbleWasShown = NO;
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedScrollView:)];
     tapGesture.numberOfTapsRequired = 1.0;
@@ -86,7 +92,6 @@ CGPoint svos;
                                    initWithTitle: @"Back"
                                    style: UIBarButtonItemStylePlain
                                    target: self action: @selector(customBackAction:)];
-    
     [self.navigationItem setLeftBarButtonItem: backButton];
     
     isSaved = YES;
@@ -96,7 +101,7 @@ CGPoint svos;
     [self.navigationController.navigationBar setTranslucent:NO];
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
@@ -122,18 +127,18 @@ CGPoint svos;
         [self.navigationItem setTitle:@"Add New Food"];
     }
     
-    UIImage* image3 = [UIImage imageNamed:@"menuscan.png"];
+    UIImage *image3 = [UIImage imageNamed:@"menuscan"];
     UIButton *urButton = [UIButton buttonWithType:UIButtonTypeCustom];
     urButton.frame = CGRectMake(0, 0, 30, 30);
     [urButton setBackgroundImage:image3 forState:UIControlStateNormal];
     [urButton addTarget:self action:@selector(showActionSheet:)
        forControlEvents:UIControlEventTouchUpInside];
     urButton.clipsToBounds = YES;
-    urButton.layer.cornerRadius =3;
-    urButton.layer.borderColor=[UIColor blackColor].CGColor;
-    urButton.layer.borderWidth=0.8f;
+    urButton.layer.cornerRadius = 3;
+    urButton.layer.borderColor = [UIColor blackColor].CGColor;
+    urButton.layer.borderWidth = 0.8f;
     UIBarButtonItem *doneButton =[[UIBarButtonItem alloc] initWithCustomView:urButton];
-    self.navigationItem.rightBarButtonItem=doneButton;
+    self.navigationItem.rightBarButtonItem = doneButton;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -146,7 +151,7 @@ CGPoint svos;
         [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
     }
     
-    if (!helperBubbleWasShown && ![dietmasterEngine.taskMode isEqualToString:@"View"]) {
+    if (!self.helperBubbleWasShown && ![dietmasterEngine.taskMode isEqualToString:@"View"]) {
         
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"calloutbubble"]];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -171,22 +176,35 @@ CGPoint svos;
                                               }
                                               completion: ^ (BOOL finished) {
                                                   [imageView removeFromSuperview];
-                                                  helperBubbleWasShown = YES;
+                                                  self.helperBubbleWasShown = YES;
                                               }];
                          }];
     }
 }
 
-#pragma mark BACK METHODS
+#pragma mark - Setter/Getter
+
+- (BOOL)helperBubbleWasShown {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:@"HelperBubbleWasShown"];
+}
+
+- (void)setHelperBubbleWasShown:(BOOL)helperBubbleWasShown {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:helperBubbleWasShown forKey:@"HelperBubbleWasShown"];
+}
+
+#pragma mark - BACK METHODS
 -(void)customBackAction:(id)sender {
     if (!isSaved) {
-        UIAlertView *alert;
         NSString *errorMessageString = @"This Food has not been saved. Are you sure you wish to exit?";
-        alert = [[UIAlertView alloc] initWithTitle:@"Wait a second!" message:errorMessageString delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-        [alert addButtonWithTitle:@"Yes, Exit"];
-        [alert addButtonWithTitle:@"No, Stay"];
-        [alert setTag:770088];
-        [alert show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wait a second!" message:errorMessageString preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Exit" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"No, Stay" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }]];
         return;
     }
     
@@ -284,20 +302,25 @@ CGPoint svos;
     return NO;
 }
 
-#pragma mark GET MEASURE / CATEGORY ACTIONS
-- (IBAction) getCategory:(id) sender {
-    FoodCategoryPicker *gcControl = [[FoodCategoryPicker alloc] initWithNibName:@"FoodCategoryPicker" bundle:nil];
+#pragma mark - GET MEASURE / CATEGORY ACTIONS
+
+- (IBAction)getCategory:(id)sender {
+    FoodCategoryPicker *gcControl = [[FoodCategoryPicker alloc] init];
+    gcControl.modalPresentationStyle = UIModalPresentationPageSheet;
+    gcControl.sheetPresentationController.detents = @[[UISheetPresentationControllerDetent mediumDetent]];
     gcControl.delegate = self;
     [self presentViewController:gcControl animated:YES completion:nil];
 }
 
-- (IBAction) getMeasure:(id) sender {
-    MeasurePicker *mpControl = [[MeasurePicker alloc] initWithNibName:@"MeasurePicker" bundle:nil];
+- (IBAction)getMeasure:(id)sender {
+    MeasurePicker *mpControl = [[MeasurePicker alloc] init];
+    mpControl.modalPresentationStyle = UIModalPresentationPageSheet;
+    mpControl.sheetPresentationController.detents = @[[UISheetPresentationControllerDetent mediumDetent]];
     mpControl.delegate = self;
     [self presentViewController:mpControl animated:YES completion:nil];
 }
 
--(void)didChooseCategory:(NSString *)chosenID withName:(NSString *)chosenName {
+- (void)didChooseCategory:(NSString *)chosenID withName:(NSString *)chosenName {
     reloadData = NO;
     
     intCategoryID = [NSNumber numberWithInt:[chosenID intValue]];
@@ -312,7 +335,7 @@ CGPoint svos;
     isSaved = NO;
 }
 
--(void)didChooseMeasure:(NSString *)chosenMID withName:(NSString *)chosenMName {
+- (void)didChooseMeasure:(NSString *)chosenMID withName:(NSString *)chosenMName {
     reloadData = NO;
     
     intMeasureID = [NSNumber numberWithInt:[chosenMID intValue]];
@@ -893,7 +916,6 @@ CGPoint svos;
     
     if (alertView.tag == 770088) {
         if (buttonIndex == 0) {
-            [self.navigationController popViewControllerAnimated:YES];
         }
         else if (buttonIndex == 1) {
             
@@ -906,7 +928,7 @@ CGPoint svos;
 - (IBAction)loadBarcodeScanner:(id)sender {
     self.barcodeScanner = [[BarCodeScanner alloc] init];
     self.barcodeScanner.modalPresentationStyle = UIModalPresentationFullScreen;
-    [AppDel.window.rootViewController presentViewController:self.barcodeScanner animated:YES completion:Nil];
+    [self presentViewController:self.barcodeScanner animated:YES completion:Nil];
 }
 
 - (void)barcodeWasScanned:(NSNotification *)notification {
@@ -1173,7 +1195,7 @@ CGPoint svos;
             imageView.alpha = 0.0;
         } completion: ^ (BOOL finished) {
             [imageView removeFromSuperview];
-            helperBubbleWasShown = YES;
+            self.helperBubbleWasShown = YES;
         }];
     }
     
@@ -1196,57 +1218,59 @@ CGPoint svos;
     }
     
     NSString *alertTitle = @"Select Action";
-    UIActionSheet *popupQuery;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:alertTitle message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+
     if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
-        popupQuery = [[UIActionSheet alloc] initWithTitle:alertTitle delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:actionButtonName, saveToLogName, nil];
+        [alert addAction:[UIAlertAction actionWithTitle:actionButtonName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if ([self->txtfieldServingSize.text doubleValue]<=0) {
+                [self alertServingSizeInvalid];
+                return;
+            }
+            self->_saveToLog = NO;
+            [self updateFood:nil];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:saveToLogName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            self->_saveToLog = YES;
+            [self updateFood:nil];
+        }]];
     }
     else {
-        popupQuery = [[UIActionSheet alloc] initWithTitle:alertTitle delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Scan UPC Barcode", actionButtonName, saveToLogName, nil];
-        NSString *ver = [[UIDevice currentDevice]systemVersion];
-        if ([ver integerValue] >= 8) {
-        }
-        else {
-            UIImage *barCodeImage = [UIImage imageNamed:@"195-barcode.png"];
-            [[[popupQuery valueForKey:@"_buttons"] objectAtIndex:0] setImage:barCodeImage forState:UIControlStateNormal];
-            [[[popupQuery valueForKey:@"_buttons"] objectAtIndex:0] setImage:barCodeImage forState:UIControlStateHighlighted];
-            [[[popupQuery valueForKey:@"_buttons"] objectAtIndex:0] setImage:barCodeImage forState:UIControlStateSelected];
-        }
+        [alert addAction:[UIAlertAction actionWithTitle:@"Scan Barcode" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self loadBarcodeScanner:nil];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:actionButtonName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if ([self->txtfieldServingSize.text doubleValue]<=0) {
+                [self alertServingSizeInvalid];
+                return;
+            }
+            self->_saveToLog = NO;
+            [self recordFood:nil];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:saveToLogName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            self->_saveToLog = YES;
+            [self recordFood:nil];
+        }]];
     }
-    popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [popupQuery showInView:self.tabBarController.view];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+/// Shows an alert to the user that serving size is invalid.
+- (void)alertServingSizeInvalid {
+    [DMGUtilities showAlertWithTitle:APP_NAME
+                             message:@"Serving Size must be a number greater than 0."
+                    inViewController:nil];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
-        //HHT
-        if (buttonIndex == actionSheet.cancelButtonIndex) {
-            return;
-        }
-        
-        if (buttonIndex == 0) {
-            if ([txtfieldServingSize.text doubleValue]<=0) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:APP_NAME message:@"Serving Size must be a number greater than 0." delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-                [alert show];
-                return;
-            }
-            _saveToLog = NO;
-            [self performSelector:@selector(updateFood:) withObject:nil afterDelay:0.5];
-        }
-        else if (buttonIndex == 1) {
-            _saveToLog = YES;
-            [self performSelector:@selector(updateFood:) withObject:nil afterDelay:0.5];
-        }
-        else if (buttonIndex == 2) {
-            
-        }
     }
     else {
-        //HHT
-        if (buttonIndex == actionSheet.cancelButtonIndex) {
-            return;
-        }
-        
         if (buttonIndex == 0) {
             [self performSelector:@selector(loadBarcodeScanner:) withObject:nil afterDelay:0.5];
         }
@@ -1500,7 +1524,7 @@ CGPoint svos;
                      }
                      completion: ^ (BOOL finished) {
                          [imageView removeFromSuperview];
-                         helperBubbleWasShown = YES;
+                         self.helperBubbleWasShown = YES;
                      }];
     
 }
@@ -1524,7 +1548,7 @@ CGPoint svos;
                      }
                      completion: ^ (BOOL finished) {
                          [imageView removeFromSuperview];
-                         helperBubbleWasShown = YES;
+                         self.helperBubbleWasShown = YES;
                      }];
     
 }

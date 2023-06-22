@@ -10,7 +10,7 @@ import JJFloatingActionButton
 
 /// Menu floating action button that allows a user to
 /// navigate between the different screens in DMG.
-class MainMenuFAB: NSObject {
+class MainMenuFAB: NSObject, UINavigationControllerDelegate {
     /// The colors of the button and images.
     private let buttonColor:UIColor = .white
     private let buttonImageColor:UIColor = .black
@@ -114,10 +114,40 @@ class MainMenuFAB: NSObject {
     @objc public func presentInNavController(controller: UINavigationController?) {
         guard let controller = controller else { return }
         navigationController = controller
+        navigationController?.delegate = self
         
         controller.view.addSubview(actionButton)
         let safeAreaLayoutGuide = controller.view.safeAreaLayoutGuide
         actionButton.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
         actionButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        // Hide on settings.
+        if viewController == self.appSettingsViewController {
+            actionButton.isHidden = true
+            return
+        }
+        // Hide on message view.
+        if viewController.isKind(of: MessageViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        // Hide on ExercisesDetailViewController
+        if viewController.isKind(of: ExercisesDetailViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        // Hide on DetailViewController
+        if viewController.isKind(of: DetailViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        // Hide on MealPlanDetailViewController
+        if viewController.isKind(of: MealPlanDetailViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        actionButton.isHidden = false
     }
 }

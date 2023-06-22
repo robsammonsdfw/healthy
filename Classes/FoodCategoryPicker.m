@@ -14,6 +14,11 @@
 @synthesize mainDelegate;
 @synthesize arry3,str_categoryName,num_categoryID,pickerRow3,categoryIDs, selectedCategoryID,delegate;
 
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.navigationController.navigationBar setTranslucent:NO];

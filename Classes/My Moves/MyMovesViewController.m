@@ -1548,7 +1548,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (IBAction)sendMsgBtnAction:(id)sender {
-    MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
+    MessageViewController *vc = [[MessageViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

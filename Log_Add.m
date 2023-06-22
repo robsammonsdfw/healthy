@@ -4,14 +4,18 @@
 #import "ExercisesViewController.h"
 #import "DietmasterEngine.h"
 
+@interface Log_Add()
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@end
+
 @implementation Log_Add
 
 @synthesize date_currentDate, int_mealID;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
-        
+        _dateFormatter = [[NSDateFormatter alloc] init];
     }
     return self;
 }
@@ -45,20 +49,18 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [self.navigationController.navigationBar setTranslucent:NO];
 
-    if(self.date_currentDate == NULL) {
+    if(!self.date_currentDate) {
         NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormat setTimeZone:systemTimeZone];
-        NSString *date_string = [dateFormat stringFromDate:sourceDate];
-        NSDate *destinationDate = [dateFormat dateFromString:date_string];
-        
+        [self.dateFormatter setTimeZone:systemTimeZone];
+        NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
+        NSDate *destinationDate = [self.dateFormatter dateFromString:date_string];
         self.date_currentDate = destinationDate;
     }
     
-    if(self.int_mealID == NULL) {
-        self.int_mealID = 0;
+    if(!self.int_mealID) {
+        self.int_mealID = @0;
     }
         
     tblLogAdd.rowHeight = 44;
@@ -70,10 +72,6 @@
     }
     
     [super viewDidLoad];
-}
-
--(void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -157,7 +155,7 @@
             dietmasterEngine.taskMode = @"Save";
         }
         
-        FoodsHome *fhController = [[FoodsHome alloc] initWithNibName:@"FoodsHome" bundle:nil];
+        FoodsHome *fhController = [[FoodsHome alloc] init];
         fhController.date_currentDate	= date_currentDate;
         fhController.title = MealsName;
         [self.navigationController pushViewController:fhController animated:YES];

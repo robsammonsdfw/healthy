@@ -12,10 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// Message sent between DMG user and coach.
 @interface DMMessage : NSObject
 
-@property (nonatomic, strong, readonly) NSString *messageId;
+@property (nonatomic, strong, readonly) NSNumber *messageId;
 @property (nonatomic, strong, readonly) NSString *text;
 @property (nonatomic, strong, readonly) NSDate *dateSent;
-@property (nonatomic, strong, readonly) NSString *senderName;
+@property (nonatomic, strong, readonly) NSString *senderId;
 @property (nonatomic) BOOL isRead;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)replaceIntoSQLString;
 
 /// Updates the text, sender, and date. This is used to create a message that was accepted by the server.
-- (void)updateText:(NSString *)text senderName:(NSString *)senderName dateSent:(NSDate *)dateSent;
+- (void)updateText:(NSString *)text senderId:(NSString *)senderId dateSent:(NSDate *)dateSent;
 
 @end
 

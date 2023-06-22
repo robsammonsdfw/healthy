@@ -7,48 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
-#import "TTTAttributedLabel.h"
 
-@interface FoodsSearch : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource,UISearchDisplayDelegate,TTTAttributedLabelDelegate> {
-	
-    UISearchBar                 *mySearchBar;
-    BOOL                        bSearchIsOn;
-	IBOutlet UITableView *tableView;
+/// The type of search the user is performing.
+/// Note: This enum aligns with the order of the SegmentedControl.
+typedef NS_ENUM(NSUInteger, DMFoodSearchType) {
+    DMFoodSearchTypeAllFoods = 0,
+    DMFoodSearchTypeMyFoods,
+    DMFoodSearchTypeFavoriteFoods,
+    DMFoodSearchTypeProgramFoods,
+    DMFoodSearchTypeFavoriteMeals
+};
+
+@interface FoodsSearch : UIViewController {
 	int uniqueID;
 	int int_foodID;
 	NSString *date_foodLogtime;
 	NSDate *date_currentDate;
 	NSNumber *int_mealID;
-	
-    NSString *searchType;
-    NSMutableArray *foodResults;
-	NSMutableArray *arrBtnNames;
-
 }
--(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array;
 
-@property (nonatomic, strong) IBOutlet UIButton *btnfavfoods;
-@property (nonatomic, strong) IBOutlet UIButton *btnprogram;
-@property (nonatomic, strong) IBOutlet UIButton *btnfacmeals;
-@property (nonatomic, strong) IBOutlet UIButton *btnall;
-@property (nonatomic, strong) IBOutlet UIButton *btnfood;
-
-- (IBAction)ScrollBtnClick:(id)sender;
-
-@property (nonatomic, strong) IBOutlet UIImageView *imgscrl;
-@property (nonatomic, strong) IBOutlet UIScrollView *scroll;
-
-- (IBAction)ScanbtnPressed:(id)sender;
-
-@property (nonatomic, strong) UITableView *tableView;
+/// Type of search user if performing.
+@property (nonatomic) DMFoodSearchType searchType;
 @property (nonatomic, strong) NSDate *date_currentDate;
 @property (nonatomic, strong) NSNumber *int_mealID;
-@property (nonatomic, copy) NSString *searchType;
-@property (nonatomic, strong) UISearchBar *mySearchBar; 
-@property (nonatomic) BOOL bSearchIsOn;
-
--(void)searchBar:(id)object;
--(void)loadSearchData:(NSString *)searchTerm;
 
 @end

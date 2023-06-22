@@ -17,7 +17,7 @@
 @class DetailViewController;
 @class LoginViewController;
 
-@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, SyncDatabaseDelegate, UIAlertViewDelegate, UITextFieldDelegate, UITabBarControllerDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate> {
+@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, SyncDatabaseDelegate, UITextFieldDelegate, UITabBarControllerDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate> {
                           
     DetailViewController *navigationController;
     LoginViewController *loginViewController;
@@ -64,13 +64,7 @@
 // remove from icloud
 - (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL;
 
-// update database
--(void)confirmUpdateDatabase;
--(void)confirmDatabaseUserPassword;
--(void)processDatabaseMessage:(NSDictionary *)messageDict;
-
-//store selected index
-
+// store selected index
 @property (readwrite) int selectedIndex;
 
 @end

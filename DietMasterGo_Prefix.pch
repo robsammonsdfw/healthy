@@ -12,6 +12,7 @@
     // Import all Swift files.
     #import "DietMasterGoPlus-Swift.h"
     #import "NSObject+Description.h"
+    #import "UIViewController+Navigation.h"
 #endif
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width

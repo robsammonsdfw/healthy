@@ -4,8 +4,18 @@
 #import "FavoriteMealsViewController.h"
 #import "ManageFoods.h"
 
+@interface FoodsHome() <UITableViewDelegate, UITableViewDataSource>
+@end
+
+static NSString *CellIdentifier = @"Cell";
+
 @implementation FoodsHome
 @synthesize date_currentDate, int_mealID;
+
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,8 +36,9 @@
 		self.date_currentDate = destinationDate;
 	}
 	
-	tblFoodsHome.rowHeight = 44;
-	
+	tblFoodsHome.estimatedRowHeight = 44;
+    [tblFoodsHome registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
 	NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
@@ -54,17 +65,15 @@
     else if (section == 2) {
         return arrayFavoriteMeals.count;
     }
-    return nil;
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	static NSString *CellIdentifier = @"Cell";
-	
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 	
     if(indexPath.section == 0) {
 		cell.textLabel.text = [arrySearch objectAtIndex:indexPath.row];
@@ -92,11 +101,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tblFoodsHome deselectRowAtIndexPath:indexPath animated:NO];
 	
-	UIBarButtonItem *backButton = [[UIBarButtonItem alloc] 
-								   initWithTitle: @"Back" 
-								   style: UIBarButtonItemStylePlain
-								   target: nil action: nil];
-	
+	UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back"
+                                                                    style: UIBarButtonItemStylePlain
+                                                                   target:nil action:nil];
+
 	[self.navigationItem setBackBarButtonItem: backButton];
 	
     if (indexPath.section == 2) {
@@ -104,7 +112,7 @@
         [self.navigationController pushViewController:favoriteMealsViewController animated:YES];
     }
     else {
-        FoodsSearch *fsController = [[FoodsSearch alloc] initWithNibName:@"FoodsSearch" bundle:nil];
+        FoodsSearch *fsController = [[FoodsSearch alloc] init];
         fsController.date_currentDate	= date_currentDate;
         
         if (indexPath.section == 0) {
@@ -118,7 +126,7 @@
                 DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
                 dietmasterEngine.taskMode = @"Save";
                 
-                ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
+                ManageFoods *mfController = [[ManageFoods alloc] init];
                 
                 //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
                 mfController.intTabId = AppDel.selectedIndex;

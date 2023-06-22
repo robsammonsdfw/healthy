@@ -17,6 +17,11 @@
 @synthesize mainDelegate;
 @synthesize arry3,pickerRow3,measureIDs, selectedMeasureID,delegate;
 
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     rowListArr = [[NSMutableArray alloc] init];

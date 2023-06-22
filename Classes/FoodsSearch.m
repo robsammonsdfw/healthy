@@ -7,177 +7,121 @@
 //
 
 #import "FoodsSearch.h"
-#import "DietMasterGoAppDelegate.h"
 #import "DetailViewController.h"
-#import "DietmasterEngine/DietmasterEngine.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
 #import "ManageFoods.h"
 #import "FavoriteMealsViewController.h"
 #import "MyLogTableViewCell.h"
+#import "TTTAttributedLabel.h"
+@import ScrollableSegmentedControl;
 
-@implementation FoodsSearch {
-    UISearchController *searchDisplayController;
+static NSString *CellIdentifier = @"MyLogTableViewCell";
+
+@interface FoodsSearch() <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, TTTAttributedLabelDelegate>
+/// Search bar for searching foods.
+@property (nonatomic, strong) UISearchBar *mySearchBar;
+/// Tableview for showing results.
+@property (nonatomic, strong) UITableView *tableView;
+/// Segmented control for users to choose different categories.
+@property (nonatomic, strong) ScrollableSegmentedControl *segmentedControl;
+@property (nonatomic, strong) NSMutableArray *foodResults;
+
+@end
+
+@implementation FoodsSearch
+
+@synthesize date_currentDate, int_mealID;
+
+#pragma mark - VIEW LIFECYCLE
+
+- (instancetype)init {
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        _searchType = DMFoodSearchTypeAllFoods;
+        _foodResults = [[NSMutableArray alloc] init];
+    }
+    return self;
 }
 
-@synthesize tableView, date_currentDate, int_mealID;
-@synthesize mySearchBar, bSearchIsOn, searchType;
+- (void)loadView {
+    [super loadView];
+    self.view = [[UIView alloc] initWithFrame:CGRectZero];
+    self.view.backgroundColor = [UIColor whiteColor];
 
-#pragma mark SEARCH BAR METHODS
-- (void)searchBar:(id)object {
-    if (bSearchIsOn) {
-        bSearchIsOn = NO;
-    }
-    else {
-        bSearchIsOn = YES;
-    }
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.estimatedRowHeight = 46;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    UINib *cellNib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:CellIdentifier];
+    [self.view addSubview:self.tableView];
+
+    self.segmentedControl = [[ScrollableSegmentedControl alloc] init];
+    self.segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
+    self.segmentedControl.underlineSelected = YES;
+    self.segmentedControl.segmentStyle = ScrollableSegmentedControlSegmentStyleTextOnly;
+    self.segmentedControl.segmentContentColor = [UIColor darkGrayColor];
+    self.segmentedControl.selectedSegmentContentColor = [UIColor blackColor];
+    self.segmentedControl.backgroundColor = [UIColor whiteColor];
+    [self.segmentedControl addTarget:self action:@selector(categorySegmentChanged:) forControlEvents:UIControlEventValueChanged];
+    // Set the different segment values.
+    [self.segmentedControl insertSegmentWithTitle:@"All Foods" at:0];
+    [self.segmentedControl insertSegmentWithTitle:@"My Foods" at:1];
+    [self.segmentedControl insertSegmentWithTitle:@"Fav Foods" at:2];
+    [self.segmentedControl insertSegmentWithTitle:@"Program" at:3];
+    [self.segmentedControl insertSegmentWithTitle:@"Fav Meals" at:4];
+    self.segmentedControl.selectedSegmentIndex = (int)DMFoodSearchTypeAllFoods;
+    [self.view addSubview:self.segmentedControl];
     
-    if (bSearchIsOn) {
-        self.tableView.tableHeaderView = mySearchBar;
-        [mySearchBar becomeFirstResponder];
-    }
-    else {
-        [UIView beginAnimations:@"foo" context:NULL];
-        [UIView setAnimationDuration:0.5f];
-        [UIView commitAnimations];
-        [mySearchBar resignFirstResponder];
-    }
+    self.mySearchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+    self.mySearchBar.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mySearchBar.placeholder = @"Search";
+    self.mySearchBar.delegate = self;
+    self.mySearchBar.tintColor = [UIColor blackColor];
+    self.mySearchBar.showsCancelButton = YES;
+    [self.mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [self.view addSubview:self.mySearchBar];
     
-    [self.tableView scrollRectToVisible:[[self.tableView tableHeaderView] bounds] animated:YES];
-}
+    // Constrain views.
+    [self.mySearchBar.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:0].active = YES;
+    [self.mySearchBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.mySearchBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
-    bSearchIsOn = YES;
-    self.tableView.scrollEnabled = NO;
-    [self.tableView reloadData];
-}
+    [self.segmentedControl.topAnchor constraintEqualToAnchor:self.mySearchBar.bottomAnchor constant:0].active = YES;
+    [self.segmentedControl.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.segmentedControl.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.segmentedControl.heightAnchor constraintEqualToConstant:40.0].active = YES;
 
-- (void)searchBarSearchButtonClicked:(UISearchBar*) theSearchBar {
-    self.tableView.scrollEnabled = YES;
-    [mySearchBar resignFirstResponder];
-    [DMActivityIndicator showActivityIndicator];
-
-    [self performSelector:@selector(loadSearchData:) withObject:theSearchBar.text afterDelay:0.25];
-}
-
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.tableView.topAnchor constraintEqualToAnchor:self.segmentedControl.bottomAnchor constant:0].active = YES;
+    [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
     
-    bSearchIsOn = YES;
-    [self.tableView reloadData];
-    return YES;
+    [self categorySegmentChanged:self.segmentedControl];
 }
-
--(BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    [self.tableView reloadData];
-    return YES;
-}
-
-- (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {
-    if([searchText length] > 0) {
-        bSearchIsOn = YES;
-        self.tableView.scrollEnabled = YES;
-    }
-    else {
-        bSearchIsOn = NO;
-        self.tableView.scrollEnabled = YES;
-    }
-    
-    [self performSelector:@selector(loadSearchData:) withObject:theSearchBar.text afterDelay:0.25];
-    [self.tableView reloadData];
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [[event allTouches] anyObject];
-    if ([self.mySearchBar isFirstResponder] && [touch view] != self.mySearchBar) {
-        [self.mySearchBar resignFirstResponder];
-        self.tableView.scrollEnabled = YES;
-        self.tableView.userInteractionEnabled = YES;
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-    }
-    [super touchesBegan:touches withEvent:event];
-}
-
-#pragma mark Keyboard Hide/Show Register
-- (void)registerForKeyboardNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-#pragma mark Keyboard Hide/Show Delegate Methods
-- (void)keyboardWasShown:(NSNotification*)aNotification {
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height - self.mySearchBar.frame.size.height, 0.0);
-    self.tableView.contentInset = contentInsets;
-    self.tableView.scrollIndicatorInsets = contentInsets;
-    
-    CGRect aRect = self.view.frame;
-    aRect.size.height -= kbSize.height - mySearchBar.frame.size.height - mySearchBar.frame.origin.y;
-    if (!CGRectContainsPoint(aRect, mySearchBar.frame.origin) ) {
-        [self.tableView scrollRectToVisible:mySearchBar.frame animated:YES];
-    }
-}
-
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.tableView.contentInset = contentInsets;
-    self.tableView.scrollIndicatorInsets = contentInsets;
-}
-
-#pragma mark VIEW LIFECYCLE
 
 - (void)viewDidLoad {
-    if ([searchType isEqualToString:@"All Foods"] && [mySearchBar.text length] == 0) {
-        [_btnall setTitleColor:[UIColor colorWithRed:(221/255.f) green:(134/255.f) blue:(10/255.f) alpha:1.0f] forState:UIControlStateNormal];
-        [_btnfood setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    }
-    else {
-        [_btnall setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfood setTitleColor:[UIColor colorWithRed:(221/255.f) green:(134/255.f) blue:(10/255.f) alpha:1.0f] forState:UIControlStateNormal];
-    }
-    
-    [_btnfavfoods setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [_btnprogram setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [_btnfacmeals setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    
-    if ([searchType isEqualToString:@"All Foods"] && [mySearchBar.text length] == 0)
-        _imgscrl.frame = CGRectMake(_btnall.frame.origin.x, 28, 100, 2);
-    else
-        _imgscrl.frame = CGRectMake(_btnfood.frame.origin.x, 28, 100, 2);
-    
-    _scroll.contentSize=CGSizeMake(500, 30);
-    
+    [super viewDidLoad];
+         
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setFrame:CGRectMake(0, 0, 24, 18)];
-    [btnRight setImage:[UIImage imageNamed:@"195-barcode"] forState:UIControlStateNormal];
-    [btnRight setBackgroundColor:[UIColor whiteColor]];
-    [btnRight addTarget:self action:@selector(ScanbtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *plusImage = [UIImage imageNamed:@"05-plus"];
+    plusImage = [plusImage imageWithTintColor:[UIColor whiteColor] renderingMode:UIImageRenderingModeAlwaysTemplate];
+    [btnRight setImage:plusImage forState:UIControlStateNormal];
+    [btnRight setBackgroundColor:[UIColor clearColor]];
+    [btnRight addTarget:self action:@selector(userTappedAddNewFoodButton:) forControlEvents:UIControlEventTouchUpInside];
+    [btnRight setTintColor:[UIColor whiteColor]];
     UIBarButtonItem *barBtnRight = [[UIBarButtonItem alloc] initWithCustomView:btnRight];
-    [barBtnRight setTintColor:[UIColor whiteColor]];
-    self.navigationItem.rightBarButtonItem=barBtnRight;
-
-    mySearchBar = [[UISearchBar alloc] init];
-    mySearchBar.placeholder = @"Search";
-    mySearchBar.delegate = self;
-    self.bSearchIsOn = NO;
-    mySearchBar.tintColor = [UIColor blackColor];
-    mySearchBar.showsCancelButton = YES;
-    [mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    mySearchBar.backgroundColor=[UIColor redColor];
-    mySearchBar.frame=CGRectMake(0, 50, 50, 40);
-    self.tableView.tableHeaderView = mySearchBar;
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationItem.rightBarButtonItem = barBtnRight;
     
-    if(!date_currentDate) {
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+
+    if (!date_currentDate) {
         NSDate* sourceDate = [NSDate date];
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -188,49 +132,95 @@
         
         self.date_currentDate = date_today;
     }
-    
-    if (!foodResults)
-        foodResults = [[NSMutableArray alloc] init];
-    
-    [self.navigationController.navigationBar setTranslucent:NO];
-    [self registerForKeyboardNotifications];
-    
-    [super viewDidLoad];
 }
 
--(void) viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [DMActivityIndicator showActivityIndicator];
-
-    [self performSelector:@selector(loadSearchData:) withObject:mySearchBar.text afterDelay:0.25];
+    [self loadSearchData:self.mySearchBar.text];
+    if (self.searchType == DMFoodSearchTypeAllFoods && [self.mySearchBar.text length] == 0) {
+        [self.mySearchBar becomeFirstResponder];
+    }
     
-    if ([searchType isEqualToString:@"All Foods"] && [mySearchBar.text length] == 0) {
-        [mySearchBar becomeFirstResponder];
+    // If we're coming back from Favorite Meals, reset view.
+    if (self.searchType == DMFoodSearchTypeFavoriteMeals) {
+        self.searchType = DMFoodSearchTypeAllFoods;
+        [self loadSearchData:self.mySearchBar.text];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    if (bSearchIsOn) {
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-    }
-    else {
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-    }
-    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if (dietmasterEngine.isMealPlanItem) {
         self.title = @"Equivalent Foods";
     }
 }
 
-#pragma mark DATA METHODS
--(void)loadSearchData:(NSString *)searchTerm {
-    if (foodResults) {
-        [foodResults removeAllObjects];
-    }
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
+    self.tableView.scrollEnabled = NO;
+    [self.tableView reloadData];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar*) theSearchBar {
+    self.tableView.scrollEnabled = YES;
+    [self.mySearchBar resignFirstResponder];
+    [DMActivityIndicator showActivityIndicator];
+
+    [self loadSearchData:theSearchBar.text];
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    [self.tableView reloadData];
+    return YES;
+}
+
+-(BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    [self.tableView reloadData];
+    return YES;
+}
+
+- (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {
+    self.tableView.scrollEnabled = YES;
+    [self loadSearchData:searchText];
+    [self.tableView reloadData];
+}
+
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
     
+    self.tableView.scrollEnabled = YES;
+    self.tableView.userInteractionEnabled = YES;
+        
+    searchBar.text = @"";
+    [DMActivityIndicator showActivityIndicator];
+
+    [self loadSearchData:nil];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([self.mySearchBar isFirstResponder] && [touch view] != self.mySearchBar) {
+        [self.mySearchBar resignFirstResponder];
+        self.tableView.scrollEnabled = YES;
+        self.tableView.userInteractionEnabled = YES;
+    }
+    [super touchesBegan:touches withEvent:event];
+}
+
+#pragma mark - DATA METHODS
+
+- (void)loadSearchData:(NSString *)searchTerm {
+    [self.foodResults removeAllObjects];
+
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     int userID = [[prefs valueForKey:@"userid_dietmastergo"] intValue];
@@ -272,35 +262,35 @@
             }
         }
         
-        if ([searchType isEqualToString:@"My Foods"]) {
+        if (self.searchType == DMFoodSearchTypeMyFoods) {
             query = [NSString stringWithFormat: @"SELECT Food.FoodID,Food.ServingSize,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE (Food.Name LIKE '%@%%') %@ AND Food.UserID = %i ORDER BY Food.FoodKey ASC LIMIT %@", searchTerm, additionalQuery, userID, @"150"];
             query2 = [NSString stringWithFormat: @"SELECT Food.FoodID,Food.ServingSize,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE (Food.Name LIKE '%%%@%%' OR Food.FoodTags LIKE '%%%@%%') %@ AND Food.UserID = %i ORDER BY Food.FoodKey DESC LIMIT %@", searchTerm, searchTerm, additionalQuery, userID, @"150"];
-        } else if ([searchType isEqualToString:@"Favorite Foods"]) {
+        } else if (self.searchType == DMFoodSearchTypeFavoriteFoods) {
             query = [NSString stringWithFormat: @"SELECT fav.Favorite_FoodID, fav.FoodID, food.ServingSize,food.Name,food.Calories,food.Fat,food.Carbohydrates,food.Protein,food.FoodKey,food.UserID,food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID  FROM Favorite_Food fav INNER JOIN Food food ON fav.FoodID = food.FoodKey WHERE (food.Name LIKE '%@%%') %@ ORDER BY food.Frequency ASC LIMIT %@", searchTerm, additionalQuery, @"150"];
             query2 = [NSString stringWithFormat: @"SELECT fav.Favorite_FoodID, fav.FoodID, food.ServingSize,food.Name,food.Calories,food.Fat,food.Carbohydrates,food.Protein,food.FoodKey,food.UserID,food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID  FROM Favorite_Food fav INNER JOIN Food food ON fav.FoodID = food.FoodKey WHERE (food.Name LIKE '%%%@%%' OR food.FoodTags LIKE '%%%@%%') %@ ORDER BY food.Frequency DESC LIMIT %@", searchTerm, searchTerm, additionalQuery, @"150"];
             
-        } else if ([searchType isEqualToString:@"All Foods"]) {
+        } else if (self.searchType == DMFoodSearchTypeAllFoods) {
             query = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE (Food.Name LIKE '%@%%') %@ ORDER BY Food.Frequency ASC LIMIT %@", searchTerm, additionalQuery, @"150"];
             query2 = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE (Food.Name LIKE '%%%@%%' OR Food.FoodTags LIKE '%%%@%%') %@ ORDER BY Food.Frequency DESC LIMIT %@", searchTerm, searchTerm, additionalQuery, @"150"];
             
         }
-        else if ([searchType isEqualToString:@"Program Foods"]) {
+        else if (self.searchType == DMFoodSearchTypeProgramFoods) {
             query = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE (Food.Name LIKE '%@%%') %@ AND Food.CompanyID = %i ORDER BY Food.Frequency ASC LIMIT %@", searchTerm, additionalQuery, companyID, @"150"];
             query2 = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE (Food.Name LIKE '%%%@%%' OR Food.FoodTags LIKE '%%%@%%') %@ AND Food.CompanyID = %i ORDER BY Food.Frequency DESC LIMIT %@", searchTerm, searchTerm, additionalQuery, companyID, @"150"];
         }
     } else {
-        if ([searchType isEqualToString:@"My Foods"]) {
+        if (self.searchType == DMFoodSearchTypeMyFoods) {
             query = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE Food.UserID = %i ORDER BY LOWER(Food.Name) ASC LIMIT %@", userID, @"150"];
         }
-        else if ([searchType isEqualToString:@"Favorite Foods"]) {
+        else if (self.searchType == DMFoodSearchTypeFavoriteFoods) {
             query = [NSString stringWithFormat: @"SELECT fav.Favorite_FoodID, fav.FoodID, food.ServingSize,food.Name,food.Calories,food.Fat,food.Carbohydrates,food.Protein,food.FoodKey,food.UserID,food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Favorite_Food fav INNER JOIN Food food ON fav.FoodID = food.FoodKey ORDER BY food.Frequency DESC LIMIT %@", @"150"];
             
         }
-        else if ([searchType isEqualToString:@"All Foods"]) {
+        else if (self.searchType == DMFoodSearchTypeAllFoods) {
             query = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food ORDER BY Food.Frequency DESC LIMIT %@", @"150"];
             
         }
-        else if ([searchType isEqualToString:@"Program Foods"]) {
+        else if (self.searchType == DMFoodSearchTypeProgramFoods) {
             query = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, Food.CategoryID, Food.FoodURL, Food.RecipeID FROM Food WHERE Food.CompanyID = %i ORDER BY LOWER(Food.Name) ASC LIMIT 150", companyID];
         }
     }
@@ -333,9 +323,7 @@
                               nil];
         
         [arrFoodIDs addObject:[NSString stringWithFormat:@"%@", [rs stringForColumn:@"Name"]]];
-        [foodResults addObject:dict];
-       
-        
+        [self.foodResults addObject:dict];
     }
     [rs close];
     
@@ -371,9 +359,9 @@
                               nil];
         
         if (![arrFoodIDs containsObject:[rs2 stringForColumn:@"Name"]]) {
-            [foodResults addObject:dict];
+            [self.foodResults addObject:dict];
             
-            if ([foodResults count]>= 150) {
+            if ([self.foodResults count] >= 150) {
                 break;
             }
         }
@@ -400,74 +388,44 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([foodResults count] == 0) {
-        return 46;
-    }
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[foodResults objectAtIndex:indexPath.row]];
-    NSString *text = [dict valueForKey:@"Name"];
-    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
-//    CGSize labelSize = [text sizeWithFont:[UIFont systemFontOfSize:14.0]
-//                        constrainedToSize:constraintSize
-//                            lineBreakMode:NSLineBreakByWordWrapping];
-    CGRect textRect = [text boundingRectWithSize:constraintSize
-                                     options:NSStringDrawingUsesLineFragmentOrigin
-                                  attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0]}
-                                     context:nil];
-
-    CGSize labelSize = textRect.size;
-    
-//    BOOBIES
-    
-    
-    
-    if (labelSize.height < 46) {
-        return 48;
-    }
-    else {
-        return labelSize.height + 6;
-    }
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([foodResults count] == 0) {
+    if ([self.foodResults count] == 0) {
         return 1;
     }
     else {
-        return [foodResults count];
+        return [self.foodResults count];
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"MyLogTableViewCell";
-    
-    MyLogTableViewCell *cell = (MyLogTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    MyLogTableViewCell *cell = (MyLogTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-    if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MyLogTableViewCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-    }
     
     cell.lblFoodName.numberOfLines = 0;
     cell.lblFoodName.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.lblFoodName.textColor = [UIColor blackColor];
+    cell.lblFoodName.font = [UIFont systemFontOfSize:15.0];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle =  UITableViewCellSelectionStyleGray;
+    [cell lblFoodName].adjustsFontSizeToFitWidth = NO;
     cell.lblCalories = nil;
-    
-    if ([foodResults count] == 0) {
+
+    if (self.foodResults.count == 0) {
         [cell lblFoodName].adjustsFontSizeToFitWidth = YES;
         cell.lblFoodName.textColor = [UIColor lightGrayColor];
         [[cell lblFoodName] setText:@"No results found..."];
-        cell.lblFoodName.font = [UIFont systemFontOfSize:14.0];
+        cell.lblFoodName.font = [UIFont systemFontOfSize:15.0];
         cell.selectionStyle =  UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.userInteractionEnabled = NO;
         cell.accessoryView = nil;
-    }
-
-    if ([foodResults count] > 0) {
+    } else {
         cell.userInteractionEnabled = YES;
         
-        NSDictionary *dict1 = [[NSDictionary alloc] initWithDictionary:[foodResults objectAtIndex:indexPath.row]];
+        NSDictionary *dict1 = [[NSDictionary alloc] initWithDictionary:[self.foodResults objectAtIndex:indexPath.row]];
         NSString *nameString = [dict1 valueForKey:@"Name"];
         
         NSRange r = [nameString rangeOfString:nameString];
@@ -497,13 +455,6 @@
                 cell.lblFoodName.delegate = nil;
             }
         }
-        
-        cell.lblFoodName.textColor = [UIColor blackColor];
-        
-        cell.lblFoodName.font = [UIFont systemFontOfSize:14.0];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.selectionStyle =  UITableViewCellSelectionStyleGray;
-        [cell lblFoodName].adjustsFontSizeToFitWidth = NO;
     }
     
     return cell;
@@ -522,14 +473,14 @@
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[foodResults objectAtIndex:indexPath.row]];
+    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[self.foodResults objectAtIndex:indexPath.row]];
     [dietmasterEngine.foodSelectedDict setDictionary:dict];
     dietmasterEngine.dateSelected = date_currentDate;
     
     if ([dietmasterEngine.taskMode isEqualToString:@"View"]) {
         
         [self.navigationController setNavigationBarHidden:NO animated:YES];
-        ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
+        ManageFoods *mfController = [[ManageFoods alloc] init];
         
         //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
         mfController.intTabId = AppDel.selectedIndex;
@@ -539,123 +490,37 @@
     }
     else {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
-        DetailViewController *dvController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
+        DetailViewController *dvController = [[DetailViewController alloc] init];
         dvController.foodIdValue = [NSString stringWithFormat:@"%@",[dietmasterEngine.foodSelectedDict valueForKey:@"FoodID"]];
         dvController.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:dvController animated:YES];
     }
 }
 
-- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    return YES;
-}
+#pragma mark - Actions
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
+/// Action called when the user changes the value in the segmented control.
+- (void)categorySegmentChanged:(id)sender {
+    ScrollableSegmentedControl *control = (ScrollableSegmentedControl *)sender;
+    self.searchType = (DMFoodSearchType)control.selectedSegmentIndex;
     
-    self.tableView.scrollEnabled = YES;
-    self.tableView.userInteractionEnabled = YES;
-    
-    [UIView beginAnimations:@"foo" context:NULL];
-    [UIView setAnimationDuration:0.25f];
-    [UIView commitAnimations];
-    
-    bSearchIsOn = NO;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    searchBar.text = @"";
-    [DMActivityIndicator showActivityIndicator];
-
-    [self performSelector:@selector(loadSearchData:) withObject:@"" afterDelay:0.25];
-    
-}
-
-- (IBAction)ScrollBtnClick:(id)sender {
-    
-    UIButton *btnn=(UIButton *)sender;
-    
-    if (btnn.tag ==1) {
-        searchType=@"All Foods";
-        
-        [_btnall setTitleColor:[UIColor colorWithRed:(221/255.f) green:(134/255.f) blue:(10/255.f) alpha:1.0f] forState:UIControlStateNormal];
-        [_btnfood setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfavfoods setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnprogram setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfacmeals setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        
-        //HHT change 2018
-        [self loadSearchData:@""];
-        
-        [self performSelector:@selector(loadSearchData:) withObject:mySearchBar.text afterDelay:0.25];
-    }
-    else if (btnn.tag==2) {
-        [_btnfood setTitleColor:[UIColor colorWithRed:(221/255.f) green:(134/255.f) blue:(10/255.f) alpha:1.0f] forState:UIControlStateNormal];
-        [_btnall setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfavfoods setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnprogram setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfacmeals setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        
-        searchType = @"My Foods";
-        //[self loadSearchData:searchType];
-        
-        //HHT change 2018
-        [self loadSearchData:@""];
-    }
-    else if (btnn.tag==3) {
-        [_btnfavfoods setTitleColor:[UIColor colorWithRed:(221/255.f) green:(134/255.f) blue:(10/255.f) alpha:1.0f] forState:UIControlStateNormal];
-        [_btnfood setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnall setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnprogram setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfacmeals setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        searchType=@"Favorite Foods";
-        //[self loadSearchData:searchType];
-        
-        //HHT change 2018
-        [self loadSearchData:@""];
-    }
-    else if (btnn.tag==4) {
-        [_btnprogram setTitleColor:[UIColor colorWithRed:(221/255.f) green:(134/255.f) blue:(10/255.f) alpha:1.0f] forState:UIControlStateNormal];
-        [_btnfood setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfavfoods setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnall setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfacmeals setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        
-        self.searchType=@"Program Foods";
-        //[self loadSearchData:searchType];
-        
-        //HHT change 2018
-        [self loadSearchData:@""];
-    }
-    else if (btnn.tag==5) {
-        [_btnfacmeals setTitleColor:[UIColor colorWithRed:(221/255.f) green:(134/255.f) blue:(10/255.f) alpha:1.0f] forState:UIControlStateNormal];
-        [_btnfood setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnfavfoods setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnprogram setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_btnall setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        
+    if (self.searchType == DMFoodSearchTypeFavoriteMeals) {
         FavoriteMealsViewController *favoriteMealsViewController = [[FavoriteMealsViewController alloc] init];
         [self.navigationController pushViewController:favoriteMealsViewController animated:YES];
+        return;
     }
-    
-    _imgscrl.frame=CGRectMake(btnn.frame.origin.x, 28, 100, 2);
-    
+
     self.tableView.scrollEnabled = YES;
     self.tableView.userInteractionEnabled = YES;
-    
-    [UIView beginAnimations:@"foo" context:NULL];
-    [UIView setAnimationDuration:0.25f];
-    [UIView commitAnimations];
-    bSearchIsOn = NO;
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(loadSearchData:) withObject:@"" afterDelay:0.25];
+    [self loadSearchData:@""];
+    [self loadSearchData:self.mySearchBar.text];
 }
 
-- (IBAction)ScanbtnPressed:(id)sender {
+- (IBAction)userTappedAddNewFoodButton:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"Save";
     
-    ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
+    ManageFoods *mfController = [[ManageFoods alloc] init];
     
     //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
     mfController.intTabId = AppDel.selectedIndex;
@@ -663,22 +528,11 @@
     [self.navigationController pushViewController:mfController animated:YES];
     mfController = nil;
 }
--(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array {
-    NSMutableSet *tempValues = [[NSMutableSet alloc] init];
-    NSMutableArray *ret = [NSMutableArray array];
-    for(id obj in array) {
-        if(! [tempValues containsObject:[obj valueForKey:key]]) {
-            [tempValues addObject:[obj valueForKey:key]];
-            [ret addObject:obj];
-        }
-    }
-    return ret;
-}
 
 #pragma mark - TTTAttributedLabel Delegate
 //HHT to redirct on link click
 - (void)attributedLabel:(__unused TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
-    [[UIApplication sharedApplication] openURL:url];
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
 @end

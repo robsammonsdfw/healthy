@@ -101,7 +101,6 @@
     self.sugarArray = [[NSMutableArray alloc] init];
     self.individualSugarValues = [[NSMutableArray alloc] init];
 
-    
     self.remaining_Pie.dataSource = self;
     self.remaining_Pie.delegate = self;
     self.remaining_Pie.animationDuration = 0.5;
@@ -112,16 +111,12 @@
     self.cpf_Pie.internalRadius = 28;
     self.cpf_Pie.sliceColor = UIColor.lightGrayColor;
     self.cpf_Pie.borderPercentage = 0.5;
-//        self.cpf_Pie.sliceColor = [MCUtil flatWetAsphaltColor];
-//        self.cpf_Pie.borderColor = UIColor.redColor;
-//        self.cpf_Pie.selectedSliceColor = [MCUtil flatSunFlowerColor];
-//        self.cpf_Pie.textColor = [MCUtil flatSunFlowerColor];
-//        self.cpf_Pie.selectedTextColor = [MCUtil flatWetAsphaltColor];
+
     numberBadge = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(self.sendMsgBtnOutlet.frame.origin.x + 20, self.sendMsgBtnOutlet.frame.origin.y - 10, 20, 20)];
+    numberBadge.backgroundColor = [UIColor clearColor];
+    numberBadge.shadow = NO;
     numberBadge.font = [UIFont systemFontOfSize:12];
     numberBadge.hideWhenZero = YES;
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -327,11 +322,11 @@
     [self iconsColor:_scheduledImage];
 }
 
-
 - (IBAction)sendMessageBtn:(id)sender {
-    MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
+    MessageViewController *vc = [[MessageViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
+
 - (IBAction)sendMailBtn:(id)sender {
     if ([MFMailComposeViewController canSendMail]) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
@@ -355,46 +350,45 @@
 }
 
 - (IBAction)addFoodBtn:(id)sender {
-    MyLogViewController *vc = [[MyLogViewController alloc] initWithNibName:@"MyLogViewController" bundle:nil];
+    MyLogViewController *vc = [[MyLogViewController alloc] init];
     vc.title = @"My Log";
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (IBAction)addWeightBtn:(id)sender {
-    MyGoalViewController *vc = [[MyGoalViewController alloc] initWithNibName:@"MyGoalViewController" bundle:nil];
+    MyGoalViewController *vc = [[MyGoalViewController alloc] init];
     vc.title = @"My Goal";
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 
 }
 - (IBAction)addExerciseBtn:(id)sender {
-    MyLogViewController *vc = [[MyLogViewController alloc] initWithNibName:@"MyLogViewController" bundle:nil];
+    MyLogViewController *vc = [[MyLogViewController alloc] init];
     vc.title = @"My Log";
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (IBAction)goToMyMealsBtn:(id)sender {
-    MealPlanViewController *vc = [[MealPlanViewController alloc] initWithNibName:@"MealPlanViewController" bundle:nil];
-    vc.title = @"My Meals";
+    MealPlanViewController *vc = [[MealPlanViewController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 
 }
 - (IBAction)gotoWorkoutBtn:(id)sender {
-    MyMovesViewController *vc = [[MyMovesViewController alloc] initWithNibName:@"MyMovesViewController" bundle:nil];
+    MyMovesViewController *vc = [[MyMovesViewController alloc] init];
     vc.workoutClickedFromHome = @"clicked";
     [self.navigationController pushViewController:vc animated:false];
 }
+
 - (IBAction)gotoScheduledBtn:(id)sender {
-    MyMovesViewController *vc = [[MyMovesViewController alloc] initWithNibName:@"MyMovesViewController" bundle:nil];
+    MyMovesViewController *vc = [[MyMovesViewController alloc] init];
     vc.title = @"MyMovesViewController";
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:false] ;
 }
 
 - (IBAction)expandBtnAvtion:(id)sender {
-    
     _hideShowStack.hidden = false;
     
     if([status isEqualToString:@"first"])
@@ -422,35 +416,17 @@
     }
 }
 
-- (IBAction)leftExpandBtnAction:(id)sender{
-    /* CGRect contentRect = CGRectMake(0, 0, self.entireView.frame.size.width, self.entireView.frame.size.height);
-     
-     for (UIView *view in self.scrollView.subviews) {
-     contentRect = CGRectUnion(contentRect, view.frame);
-     }
-     self.scrollView.contentSize = contentRect.size;*/
-    
-    //    _hideShowStack.hidden = true;
-    //    _hideShowConstant.constant = 0;
-    //    _expandViewHeightConst.constant = 125;
+- (IBAction)leftExpandBtnAction:(id)sender {
     _secondHideShowStackVw.hidden = false;
-    //    _seperateLineVw.hidden = true;
-    //
-    //    _weightHideShowStack.hidden = true;
-    //    _weightHideShowHeightConst.constant = 0;
-    //    _thirdExpVwHeightConst.constant = 115;
-    //
     _seperateLineLbl.hidden = FALSE;
     _headerStackVw.hidden = FALSE;
     _leftStackVw.hidden = FALSE;
     _rightStackVw.hidden = FALSE;
     _midLineVw.hidden = FALSE;
     
-    //    [self rotateButtonImage:sender];
     if([leftStatus isEqualToString:@"new"])
     {
         [UIView transitionWithView:_secondExpandVw duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            //               _macrosPullDwnBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 35, 0);
             _secondHideShowConstant.constant = 173;
             _secondExpandViewHeightConst.constant = 262;
         } completion:NULL];
@@ -466,27 +442,9 @@
         } completion:NULL];
         leftStatus = @"new";
     }
-    //    status = @"first";
-    //    weightStatus = @"up";
 }
 
 - (IBAction)weightExpBtnAction:(id)sender {
-    /* CGRect contentRect = CGRectMake(0, 0, self.entireView.frame.size.width, self.entireView.frame.size.height);
-     
-     for (UIView *view in self.scrollView.subviews) {
-     contentRect = CGRectUnion(contentRect, view.frame);
-     }
-     self.scrollView.contentSize = contentRect.size;
-     */
-    //    _hideShowStack.hidden = true;
-    //    _hideShowConstant.constant = 0;
-    //    _expandViewHeightConst.constant = 125;
-    //    _seperateLineVw.hidden = true;
-    //
-    //    _secondHideShowStackVw.hidden = true;
-    //    _secondHideShowConstant.constant = 0;
-    //    _secondExpandViewHeightConst.constant = 125;
-    //
     _weightHideShowStack.hidden = false;
     _seperateLineLbl.hidden = FALSE;
     _headerStackVw.hidden = FALSE;
@@ -529,20 +487,15 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
     self.navigationController.navigationBar.layer.zPosition = 0;
-    
-    // I think this is the issue w/ reloading data. The view technically never is deallocated.
-    //[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.values removeAllObjects];
 }
 
-- (void)initProgressBar
-{
+- (void)initProgressBar {
     [progressbar setProgress:0.0f animated:YES];
     progressbar.type = YLProgressBarTypeFlat;
     
@@ -592,7 +545,7 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSInteger bmrValue = [dietmasterEngine getBMR];
-    num_BMR = bmrValue;
+    num_BMR = (int)bmrValue;
     lbl_CaloriesRecommended.text = [NSString stringWithFormat:@"%li", (long)bmrValue];
     
     [self updateCalorieTotal];
@@ -617,7 +570,7 @@
 
 #pragma mark - Help and Support Methods
 - (void)mailAction:(id)sender {
-    MessageViewController *vc = [[MessageViewController alloc] initWithNibName:@"MessageView" bundle:nil];
+    MessageViewController *vc = [[MessageViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
