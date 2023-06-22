@@ -529,21 +529,18 @@
     viewSetting.hidden=FALSE;
     btnSafetyGuidelines.hidden = TRUE;
     if (IS_IPHONE_5) {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.5];
-        viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height+44);
-        //HHT change 2018 to solve issue of large scroll in main screen
-        [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, lblStaticLoggedExe.frame.origin.y + lblStaticLoggedExe.frame.size.height + 20)];
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.5 animations:^{
+            viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height+44);
+            //HHT change 2018 to solve issue of large scroll in main screen
+            [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, lblStaticLoggedExe.frame.origin.y + lblStaticLoggedExe.frame.size.height + 20)];
+        }];
     }
     else {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.5];
-        viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height + 44);
-        //HHT change 2018 to solve issue of large scroll in main screen
-        [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, lblStaticLoggedExe.frame.origin.y + lblStaticLoggedExe.frame.size.height + 20)];
-        
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.5 animations:^{
+            viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height + 44);
+            //HHT change 2018 to solve issue of large scroll in main screen
+            [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, lblStaticLoggedExe.frame.origin.y + lblStaticLoggedExe.frame.size.height + 20)];
+        }];
     }
 }
 
@@ -555,47 +552,14 @@
         [self.tabBarController setSelectedIndex:0];
     }
     
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5];
-    viewSetting.frame = CGRectMake(0, myScrollBG.contentSize.height, viewSetting.frame.size.width, viewSetting.frame.size.height);
-    
-    //HHT change 2018 to solve issue in ipad setting lbl cut
-    [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, versionLabel.frame.origin.y + versionLabel.frame.size.height + 20)];
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.5 animations:^{
+        viewSetting.frame = CGRectMake(0, myScrollBG.contentSize.height, viewSetting.frame.size.width, viewSetting.frame.size.height);
+        
+        //HHT change 2018 to solve issue in ipad setting lbl cut
+        [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, versionLabel.frame.origin.y + versionLabel.frame.size.height + 20)];
+    }];
     viewSetting.hidden=TRUE;
 }
-
-//-(IBAction)btnClkOpenSetting:(id)sender{
-//    self.navigationItem.title=@"Optional Settings";
-//    viewSetting.hidden=FALSE;
-//    if (IS_IPHONE_5) {
-//        [UIView beginAnimations:nil context:nil];
-//        [UIView setAnimationDuration:0.5];
-//        viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height+44);
-//        [UIView commitAnimations];
-//    }
-//    else {
-//        [UIView beginAnimations:nil context:nil];
-//        [UIView setAnimationDuration:0.5];
-//        viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height);
-//        [UIView commitAnimations];
-//    }
-//}
-//
-//-(IBAction)btnClkCloseSetting:(id)sender{
-//    self.navigationItem.title=@"Settings";
-//    if (AppDel.isFromAlert) {
-//        AppDel.isFromAlert = NO;
-//        [self.tabBarController setSelectedIndex:0];
-//    }
-//
-//    [UIView beginAnimations:nil context:nil];
-//    [UIView setAnimationDuration:0.5];
-//    viewSetting.frame = CGRectMake(0, myScrollBG.contentSize.height, viewSetting.frame.size.width, viewSetting.frame.size.height);
-//    [UIView commitAnimations];
-//    viewSetting.hidden=TRUE;
-//}
 
 -(IBAction)btnClkWeightSelection:(id)sender{
     UIButton *btn = (UIButton *)sender;

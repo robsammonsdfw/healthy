@@ -2899,7 +2899,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
         NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                                  queryResultObj, @"FactualQueryResult",
-                                 [NSNumber numberWithInt:[queryResultObj rowCount]], @"ResultCount",
+                                 [NSNumber numberWithInteger:[queryResultObj rowCount]], @"ResultCount",
                                  nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FactualAPISuccess" object:nil userInfo:options];
         _activeRequest = nil;

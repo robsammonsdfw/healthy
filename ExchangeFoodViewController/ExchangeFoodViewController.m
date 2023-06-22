@@ -52,10 +52,9 @@
         [_mySearchBar becomeFirstResponder];
     }
     else {
-        [UIView beginAnimations:@"foo" context:NULL];
-        [UIView setAnimationDuration:0.5f];
-        [self.tableView setContentOffset:CGPointMake(0,44)];
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.tableView setContentOffset:CGPointMake(0,0)];
+        }];
         [_mySearchBar resignFirstResponder];
     }
     [self.tableView scrollRectToVisible:[[self.tableView tableHeaderView] bounds] animated:YES];
@@ -99,10 +98,9 @@
     self.tableView.scrollEnabled = YES;
     self.tableView.userInteractionEnabled = YES;
     
-    [UIView beginAnimations:@"foo" context:NULL];
-    [UIView setAnimationDuration:0.25f];
-    [self.tableView setContentOffset:CGPointMake(0,44)];
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.tableView setContentOffset:CGPointMake(0,0)];
+    }];
     
     _bSearchIsOn = NO;
     

@@ -202,38 +202,24 @@ static char kKeyboardDismissing;
 	
 	UIViewAnimationCurve animationCurve = [[info valueForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
 	NSTimeInterval animationDuration = [[info valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-	
-	[UIView beginAnimations:@"RS_showKeyboardAnimation" context:nil];
-	[UIView setAnimationBeginsFromCurrentState:YES];
-	[UIView setAnimationCurve:animationCurve];
-	[UIView setAnimationDuration:animationDuration];
   
-	[self keyboardLayoutSubviews];
-	
-	[UIView commitAnimations];
-  
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self keyboardLayoutSubviews];
+    }];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
 	NSDictionary *info = [notification userInfo];
-  self.keyboardInfo = nil;
+    self.keyboardInfo = nil;
 	
-  if (info) {
-    UIViewAnimationCurve animationCurve = [[info valueForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
-    NSTimeInterval animationDuration = [[info valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    
-    [UIView beginAnimations:@"RS_hideKeyboardAnimation" context:nil];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationCurve:animationCurve];
-    [UIView setAnimationDuration:animationDuration];
-	}
-  
-	[self keyboardLayoutSubviews];
-	
-  if (info) {
-    [UIView commitAnimations];
-  }
+    if (info) {
+        UIViewAnimationCurve animationCurve = [[info valueForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+        NSTimeInterval animationDuration = [[info valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+        
+        [UIView animateWithDuration:animationDuration animations:^{
+            [self keyboardLayoutSubviews];
+        }];
+    }
 }
-
 
 @end

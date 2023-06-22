@@ -715,27 +715,20 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y -= animatedDistance;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
+        [self.view setFrame:viewFrame];
+    }];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView{
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y += animatedDistance;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
+        [self.view setFrame:viewFrame];
+    }];
 }
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     CGRect textFieldRect =
     [self.view.window convertRect:textField.bounds fromView:textField];
@@ -771,13 +764,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y -= animatedDistance;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
+        [self.view setFrame:viewFrame];
+    }];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
