@@ -12,62 +12,93 @@
 #import "DietmasterEngine.h"
 #import "ExercisesDetailViewController.h"
 
+@interface ExercisesViewController() <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UISearchBar *mySearchBar;
+@property (nonatomic, strong) NSMutableArray *searchResults;
+@end
+
+static NSString *CellIdentifier = @"Cell";
+
 @implementation ExercisesViewController
 
-@synthesize tableView;
-@synthesize mySearchBar, bSearchIsOn, searchType;
+#pragma mark VIEW LIFECYCLE
 
 - (instancetype)init {
-    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        _searchResults = [[NSMutableArray alloc] init];
+    }
     return self;
 }
 
-#pragma mark SEARCH BAR METHODS
-- (void) searchBar: (id) object {
-    if (bSearchIsOn) {
-        bSearchIsOn = NO;
-    }
-    else {
-        bSearchIsOn = YES;
-    }
+- (void)loadView {
+    [super loadView];
+    self.view = [[UIView alloc] initWithFrame:CGRectZero];
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    if (bSearchIsOn) {
-        self.tableView.tableHeaderView = mySearchBar;
-        [mySearchBar becomeFirstResponder];
-    }
-    else {
-        [UIView beginAnimations:@"foo" context:NULL];
-        [UIView setAnimationDuration:0.5f];
-        [self.tableView setContentOffset:CGPointMake(0,44)];
-        [UIView commitAnimations];
-        [mySearchBar resignFirstResponder];
-    }
+    self.mySearchBar = [[UISearchBar alloc] init];
+    self.mySearchBar.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mySearchBar.placeholder = @"Search";
+    self.mySearchBar.delegate = self;
+    self.mySearchBar.showsCancelButton = YES;
+    [self.mySearchBar setTranslucent:NO];
+    [self.mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [self.view addSubview:self.mySearchBar];
     
-    [self.tableView scrollRectToVisible:[[self.tableView tableHeaderView] bounds] animated:YES];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [self.view addSubview:self.tableView];
+    
+    // Constrain.
+    UILayoutGuide *layoutGuide = [self.view safeAreaLayoutGuide];
+    [self.mySearchBar.topAnchor constraintEqualToAnchor:layoutGuide.topAnchor constant:0].active = YES;
+    [self.mySearchBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.mySearchBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.tableView.topAnchor constraintEqualToAnchor:self.mySearchBar.bottomAnchor constant:0].active = YES;
+    [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
 }
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
-    bSearchIsOn = YES;
-    self.tableView.scrollEnabled = NO;
-    [self.tableView reloadData];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+
+    [self.navigationItem setTitle:@"Exercises"];
+    self.title = @"Exercises";
 }
 
-- (void) searchBarSearchButtonClicked:(UISearchBar*) theSearchBar {
-    self.tableView.scrollEnabled = YES;
-    [mySearchBar resignFirstResponder ];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(loadSearchData) withObject:theSearchBar.text afterDelay:0.25];
+    [self loadSearchData];
 }
 
-- (BOOL) searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-    bSearchIsOn = YES;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+#pragma mark UISearchBar
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
+    [self.mySearchBar resignFirstResponder];
+    [DMActivityIndicator showActivityIndicator];
+    [self loadSearchData];
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     [self.tableView reloadData];
     return YES;
 }
 
 -(BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [self.tableView reloadData];
     return YES;
 }
@@ -77,98 +108,23 @@
     self.tableView.scrollEnabled = YES;
     self.tableView.userInteractionEnabled = YES;
     
-    [UIView beginAnimations:@"foo" context:NULL];
-    [UIView setAnimationDuration:0.25f];
-    [self.tableView setContentOffset:CGPointMake(0,44)];
-    [UIView commitAnimations];
-    
-    bSearchIsOn = NO;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [UIView animateWithDuration:0.25f animations:^{
+        [self.tableView setContentOffset:CGPointMake(0,0)];
+    }];
+        
     searchBar.text = @"";
     [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(loadSearchData) withObject:@"" afterDelay:0.25];
+    [self loadSearchData];
 }
 
 - (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {
-    if([searchText length] > 0) {
-        bSearchIsOn = YES;
-        self.tableView.scrollEnabled = NO;
-    }
-    else {
-        bSearchIsOn = NO;
-        self.tableView.scrollEnabled = YES;
-    }
-    
-    [self.tableView reloadData];
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [[event allTouches] anyObject];
-    if ([self.mySearchBar isFirstResponder] && [touch view] != self.mySearchBar) {
-        [self.mySearchBar resignFirstResponder];
-        self.tableView.scrollEnabled = YES;
-        self.tableView.userInteractionEnabled = YES;
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-    }
-    
-    [super touchesBegan:touches withEvent:event];
-}
-
-#pragma mark VIEW LIFECYCLE
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    UIBarButtonItem* bi = [[UIBarButtonItem alloc]
-                           initWithBarButtonSystemItem: UIBarButtonSystemItemSearch target:self action:@selector(searchBar:)];
-    bi.style = UIBarButtonItemStylePlain;
-    self.navigationItem.rightBarButtonItem = bi;
-    
-    mySearchBar = [[UISearchBar alloc] init];
-    mySearchBar.placeholder = @"Search";
-    mySearchBar.delegate = self;
-    [mySearchBar sizeToFit];
-    self.bSearchIsOn = NO;
-    mySearchBar.tintColor = [UIColor blackColor];
-    mySearchBar.showsCancelButton = YES;
-    [mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [mySearchBar sizeToFit];
-    
-    self.tableView.tableHeaderView = mySearchBar;
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
-    if (!searchResults) {
-        searchResults = [[NSMutableArray alloc] init];
-    }
-    
-    [self.navigationItem setTitle:@"Exercises"];
-}
-
--(void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(loadSearchData) withObject:mySearchBar.text afterDelay:0.25];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    if (bSearchIsOn) {
-        [self.navigationController setNavigationBarHidden:YES animated:NO];
-        [self.tableView setContentOffset:CGPointMake(0,0)];
-    }
-    else {
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-        [self.tableView setContentOffset:CGPointMake(0,44)];
-    }
+    [self loadSearchData];
 }
 
 #pragma mark DATA METHODS
+
 -(void)loadSearchData {
-    if (searchResults) {
-        [searchResults removeAllObjects];
-    }
-    
+    [self.searchResults removeAllObjects];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
@@ -177,8 +133,8 @@
     }
     
     NSString *query;
-    if ([mySearchBar.text length] > 0) {
-        query = [NSString stringWithFormat:@"SELECT ExerciseID,ActivityName,CaloriesPerHour FROM Exercises WHERE ActivityName LIKE '%%%@%%' ORDER BY ActivityName", mySearchBar.text];
+    if ([self.mySearchBar.text length] > 0) {
+        query = [NSString stringWithFormat:@"SELECT ExerciseID,ActivityName,CaloriesPerHour FROM Exercises WHERE ActivityName LIKE '%%%@%%' ORDER BY ActivityName", self.mySearchBar.text];
     }
     else {
         query = @"SELECT ExerciseID,ActivityName,CaloriesPerHour FROM Exercises ORDER BY ActivityName";
@@ -205,7 +161,7 @@
                               activityName, @"ActivityName",
                               caloriesPerHour, @"CaloriesPerHour",
                               nil];
-        [searchResults addObject:dict];
+        [self.searchResults addObject:dict];
     }
     
     [rs close];
@@ -215,6 +171,7 @@
 }
 
 #pragma mark TABLE VIEW METHODS
+
 - (NSIndexPath *)tableView :(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     return indexPath;
 }
@@ -224,15 +181,15 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return Nil;
+    return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([searchResults count] == 0) {
+    NSArray *results = [self.searchResults copy];
+    if ([results count] == 0) {
         return 1;
-    }
-    else {
-        return [searchResults count];
+    } else {
+        return [results count];
     }
 }
 
@@ -241,18 +198,12 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    
-    if ([searchResults count] == 0) {
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
+    NSArray *results = [self.searchResults copy];
+
+    UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+
+    // Show empty cell if needed.
+    if ([results count] == 0) {
         [cell textLabel].adjustsFontSizeToFitWidth = YES;
         cell.textLabel.textColor = [UIColor lightGrayColor];
         cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
@@ -262,43 +213,31 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.userInteractionEnabled = NO;
         cell.accessoryView = nil;
+        return cell;
     }
     
-    if ([searchResults count] > 0) {
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        if (bSearchIsOn) {
-            cell.userInteractionEnabled = YES;
-        }
-        else {
-            cell.userInteractionEnabled = YES;
-        }
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:indexPath.row]];
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        double totalCaloriesBurned = [[dict valueForKey:@"CaloriesPerHour"] floatValue] * [dietmasterEngine.currentWeight floatValue];
-        
-        cell.textLabel.text = [dict valueForKey:@"ActivityName"];
-        cell.textLabel.textColor = [UIColor blackColor];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Calories Burned Per Hour: %.2f",totalCaloriesBurned];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:15.0];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.selectionStyle =  UITableViewCellSelectionStyleGray;
-        [cell textLabel].adjustsFontSizeToFitWidth = NO;
-    }
+    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[results objectAtIndex:indexPath.row]];
     
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    double totalCaloriesBurned = [[dict valueForKey:@"CaloriesPerHour"] floatValue] * [dietmasterEngine.currentWeight floatValue];
+    
+    cell.textLabel.text = [dict valueForKey:@"ActivityName"];
+    cell.textLabel.textColor = [UIColor blackColor];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Calories Burned Per Hour: %.2f",totalCaloriesBurned];
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:15.0];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle =  UITableViewCellSelectionStyleGray;
+    [cell textLabel].adjustsFontSizeToFitWidth = NO;
+
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSArray *results = [self.searchResults copy];
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:indexPath.row]];
+    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[results objectAtIndex:indexPath.row]];
     [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
     dietmasterEngine.taskMode = @"Save";
     

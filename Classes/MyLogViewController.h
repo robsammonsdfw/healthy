@@ -148,6 +148,5 @@
 -(void)saveFavoriteMealToDatabase:(id)sender;
 -(void)reloadData;
 -(IBAction)showHideDetailView:(id)sender;
--(void)movedDetailView:(id)sender;
 
 @end

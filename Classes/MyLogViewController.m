@@ -181,7 +181,6 @@
     [self.logDaySummary.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
     [self.logDaySummary.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
     [self.logDaySummary.bottomAnchor constraintEqualToAnchor:layoutGuide.bottomAnchor constant:0].active = YES;
-
 }
 
 - (IBAction)Tap_Action:(UITapGestureRecognizer *)sender {
@@ -453,10 +452,13 @@
         return 0;
     }
     else {
-        if ([exerciseResults count] > 0 && ((section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0))) {
-            if ([[exerciseResults objectAtIndex:0] isKindOfClass:[NSDictionary class]]) {
-                if ([exerciseResults objectAtIndex:0][@"Testing1"]) {
-                    NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[exerciseResults objectAtIndex:0] objectAtIndex:0]];
+        NSArray *exerciseResultsArray = [exerciseResults copy];
+        NSArray *foodResultsArray = [foodResults copy];
+
+        if ([exerciseResultsArray count] > 0 && ((section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0))) {
+            if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSDictionary class]]) {
+                if ([exerciseResultsArray objectAtIndex:0][@"Testing1"]) {
+                    NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[exerciseResultsArray objectAtIndex:0] objectAtIndex:0]];
                     
                     if ([tmpDICT objectForKey:@"Testing1"])
                     {
@@ -466,25 +468,28 @@
                 else
                     DMLog(@"Does not exist");
             }
-            else if ([[exerciseResults objectAtIndex:0] isKindOfClass:[NSArray class]]) {
+            else if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSArray class]]) {
                 return 0;
             }
-            return [exerciseResults count];
+            return [exerciseResultsArray count];
         }
         else {
-            NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:section] objectAtIndex:0]];
+            NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:section] objectAtIndex:0]];
             
             if ([tmpDICT objectForKey:@"Testing1"]) {
                 return 0;
             }
             
-            return [[foodResults objectAtIndex:section] count];
+            return [[foodResultsArray objectAtIndex:section] count];
         }
     }
 }
 
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ((indexPath.section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0)) {
+    NSArray *exerciseResultsArray = [exerciseResults copy];
+    NSArray *foodResultsArray = [foodResults copy];
+
+    if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
         return indexPath;
     }
     else {
@@ -494,7 +499,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"MyLogTableViewCell";
-    
+    NSArray *exerciseResultsArray = [exerciseResults copy];
+    NSArray *foodResultsArray = [foodResults copy];
+
     MyLogTableViewCell *cell = (MyLogTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -511,10 +518,10 @@
     cell.lblFoodName.textColor = [UIColor whiteColor];
     cell.lblCalories.textColor = [UIColor whiteColor];
     
-    if ((indexPath.section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0)) {
+    if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
         if (isExerciseData) {
             
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResults objectAtIndex:indexPath.row]];
+            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
             DMLog(@"%@",dict);
             int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -581,13 +588,13 @@
         }
     }
     else {
-        NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:indexPath.section] objectAtIndex:0]];
+        NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:indexPath.section] objectAtIndex:0]];
         
         if ([tmpDICT objectForKey:@"Testing1"]) {
             return cell;
         }
         else {
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
             NSString *nameString = [dict valueForKey:@"Name"];
             if ([nameString length] > 25) {
                 NSRange stringRange = {0, MIN([nameString length], 25)};
@@ -640,8 +647,6 @@
             cell.lblFoodName.adjustsFontSizeToFitWidth = NO;
             
             cell.userInteractionEnabled = YES;
-            
-            
         }
     }
     cell.lblFoodName.textColor = [UIColor whiteColor];
@@ -661,13 +666,16 @@
         
     }
     else {
+        NSArray *exerciseResultsArray = [exerciseResults copy];
+        NSArray *foodResultsArray = [foodResults copy];
+        
         [self.dateFormatter setDateFormat:@"MMMM d, yyyy"];
         [tblSimpleTable deselectRowAtIndexPath:indexPath animated:NO];
         
-        if ((indexPath.section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0)) {
+        if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
             
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResults objectAtIndex:indexPath.row]];
+            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
             [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
             dietmasterEngine.taskMode = @"Edit";
             dietmasterEngine.isMealPlanItem = NO;
@@ -736,14 +744,21 @@
 /// Shows the food list or exercise list to user, so they can select
 /// a food or exercise for that time of day selected.
 - (IBAction)logFoodOrExercise:(id)sender {
-    UIButton *button = (UIButton *)sender;
-    int bTag = button.tag;
+    NSArray *foodResultsArray = [foodResults copy];
+    NSArray *sectionArray = [selectSectionArray copy];
     
+    UIButton *button = (UIButton *)sender;
+    NSInteger section = button.tag;
+    
+    if (foodResultsArray.count <= section && sectionArray.count <= section) {
+        return; // Array not updated yet, return or we'll crash w/ index out of bounds.
+    }
+
     NSString *MealsName;
-    if (foodResults.count == 0) {
-        MealsName = [foodResults objectAtIndex:bTag];
+    if (foodResultsArray.count == 0) {
+        MealsName = [foodResultsArray objectAtIndex:section];
     } else {
-        MealsName = [selectSectionArray objectAtIndex:bTag];
+        MealsName = [sectionArray objectAtIndex:section];
     }
     
     if ([MealsName isEqualToString:@"Breakfast"]) {
@@ -768,7 +783,7 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.isMealPlanItem = NO;
     
-    if (bTag==0) {
+    if (section == 0) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         
@@ -780,7 +795,7 @@
         [self.navigationController pushViewController:fhController1 animated:YES];
         
     }
-    else if (bTag==1) {
+    else if (section == 1) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         dietmasterEngine.taskMode = @"Save";
@@ -790,7 +805,7 @@
         [self.navigationController pushViewController:fhController1 animated:YES];
         
     }
-    else if (bTag==2) {
+    else if (section == 2) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         dietmasterEngine.taskMode = @"Save";
@@ -802,7 +817,7 @@
         [self.navigationController pushViewController:fhController1 animated:YES];
         
     }
-    else if (bTag==3) {
+    else if (section == 3) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         dietmasterEngine.taskMode = @"Save";
@@ -813,7 +828,7 @@
         [self.navigationController pushViewController:fhController1 animated:YES];
         
     }
-    else if (bTag==4) {
+    else if (section == 4) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         dietmasterEngine.taskMode = @"Save";
@@ -824,7 +839,7 @@
         [self.navigationController pushViewController:fhController1 animated:YES];
         
     }
-    else if (bTag==5) {
+    else if (section == 5) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         dietmasterEngine.taskMode = @"Save";
@@ -835,7 +850,7 @@
         [self.navigationController pushViewController:fhController1 animated:YES];
         
     }
-    else if (bTag==6) {
+    else if (section == 6) {
         ExercisesViewController *exercisesViewController = [[ExercisesViewController alloc] init];
         [self.navigationController pushViewController:exercisesViewController animated:YES];
     }

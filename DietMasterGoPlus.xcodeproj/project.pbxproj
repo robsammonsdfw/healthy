@@ -70,7 +70,6 @@
 		401B63EC20B3FC64004453E7 /* FoodCategoryPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CE65382148EB2AA00A3C992 /* FoodCategoryPicker.xib */; };
 		401B63ED20B3FC64004453E7 /* MeasurePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC81492DB950098A0C1 /* MeasurePicker.xib */; };
 		401B63EE20B3FC64004453E7 /* FoodsList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B54DB14A2A72800D210CA /* FoodsList.xib */; };
-		401B63F120B3FC64004453E7 /* ExercisesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E81811F14D46A49002C8520 /* ExercisesViewController.xib */; };
 		401B63F320B3FC64004453E7 /* ExercisesDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E71B79214DE157C008C9576 /* ExercisesDetailViewController.xib */; };
 		401B63F420B3FC64004453E7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5423014E2FBD60023BA4C /* Settings.bundle */; };
 		401B640420B3FC64004453E7 /* FavoriteMealsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5424D14E325210023BA4C /* FavoriteMealsViewController.xib */; };
@@ -325,7 +324,6 @@
 		0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MealPlanDetailViewController.xib; sourceTree = "<group>"; };
 		0E81811D14D46A49002C8520 /* ExercisesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExercisesViewController.h; sourceTree = "<group>"; };
 		0E81811E14D46A49002C8520 /* ExercisesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExercisesViewController.m; sourceTree = "<group>"; };
-		0E81811F14D46A49002C8520 /* ExercisesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExercisesViewController.xib; sourceTree = "<group>"; };
 		0E8588D82A41238400AAB096 /* NSObject+Description.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Description.h"; sourceTree = "<group>"; };
 		0E8588D92A41238400AAB096 /* NSObject+Description.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Description.m"; sourceTree = "<group>"; };
 		0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeScanner.swift; sourceTree = "<group>"; };
@@ -918,7 +916,6 @@
 			children = (
 				0E81811D14D46A49002C8520 /* ExercisesViewController.h */,
 				0E81811E14D46A49002C8520 /* ExercisesViewController.m */,
-				0E81811F14D46A49002C8520 /* ExercisesViewController.xib */,
 			);
 			path = ExercisesViewController;
 			sourceTree = "<group>";
@@ -1765,7 +1762,6 @@
 				401B63EC20B3FC64004453E7 /* FoodCategoryPicker.xib in Resources */,
 				401B63ED20B3FC64004453E7 /* MeasurePicker.xib in Resources */,
 				401B63EE20B3FC64004453E7 /* FoodsList.xib in Resources */,
-				401B63F120B3FC64004453E7 /* ExercisesViewController.xib in Resources */,
 				401B63F320B3FC64004453E7 /* ExercisesDetailViewController.xib in Resources */,
 				0E6F91322A4328A000956F1E /* Icon-Small@2x.png in Resources */,
 				401B63F420B3FC64004453E7 /* Settings.bundle in Resources */,

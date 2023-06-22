@@ -148,7 +148,6 @@
     _mySearchBar.delegate = self;
     [_mySearchBar sizeToFit];
     self.bSearchIsOn = NO;
-    _mySearchBar.tintColor = [UIColor blackColor];
     _mySearchBar.showsCancelButton = YES;
     [_mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [_mySearchBar sizeToFit];

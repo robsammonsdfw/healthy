@@ -7,24 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
 
-@interface ExercisesViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	
-    UISearchBar *mySearchBar;
-    BOOL bSearchIsOn;
-	IBOutlet UITableView *tableView;
-	
-    NSString *searchType;
-    NSMutableArray *searchResults;
-}
-
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, copy) NSString *searchType;
-@property (nonatomic, strong) UISearchBar *mySearchBar; 
-@property (nonatomic) BOOL bSearchIsOn;
-
--(void)searchBar: (id) object;
--(void)loadSearchData:(NSString *)searchTerm;
-
+/// Displays exercises for the user to choose for their day's plan.
+@interface ExercisesViewController : UIViewController
 @end

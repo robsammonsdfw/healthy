@@ -13,7 +13,7 @@
 @implementation UIViewController (DMNavigation)
 
 - (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar {
-    return UIBarPositionTopAttached;
+    return UIBarPositionTop;
 }
 
 @end

@@ -80,7 +80,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.mySearchBar.translatesAutoresizingMaskIntoConstraints = NO;
     self.mySearchBar.placeholder = @"Search";
     self.mySearchBar.delegate = self;
-    self.mySearchBar.tintColor = [UIColor blackColor];
     self.mySearchBar.showsCancelButton = YES;
     [self.mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [self.view addSubview:self.mySearchBar];

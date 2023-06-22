@@ -44,7 +44,8 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: _cpfLbl.attributedText];
     [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0xC15F6E) range:NSMakeRange(0, 1)];
     [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x64BB60) range:NSMakeRange(4, 1)];
@@ -125,7 +126,6 @@
         
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     self.hidesBottomBarWhenPushed = true;
-    self.tabBarController.tabBar.frame = CGRectMake(self.tabBarController.tabBar.frame.origin.x, self.tabBarController.tabBar.frame.origin.y, self.tabBarController.tabBar.frame.size.width, 0);
     
     NSString *stepsCount = [NSString stringWithFormat:@"%@", [[NSUserDefaults standardUserDefaults] valueForKey:@"minutesExercised"]];
     if ([stepsCount containsString:@"(null)"])

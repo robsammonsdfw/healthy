@@ -95,7 +95,7 @@ static NSString *CellIdentifier = @"Cell";
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     self.title = @"My Meals";
-    self.parentViewController.title = @"My Meals";
+    [self.navigationItem setTitle:@"My Meals"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

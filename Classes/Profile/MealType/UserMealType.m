@@ -37,7 +37,8 @@
     
     [self getMealType];
     self.title = @"Meal Type";
-    
+    [self.navigationItem setTitle:@"Meal Type"];
+
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationItem.hidesBackButton = YES;

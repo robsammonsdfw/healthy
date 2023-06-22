@@ -69,8 +69,8 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [infoBtn setUserInteractionEnabled:YES];
     
     self.title = @"My Meals";
-    self.navigationItem.title=@"My Meals";
-    
+    [self.navigationItem setTitle:@"My Meals"];
+
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [self.navigationController.navigationBar setTranslucent:NO];
 
