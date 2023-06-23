@@ -28,14 +28,7 @@
 
 @implementation ExercisesDetailViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-    }
-    return self;
-}
-
--(id)init {
+-(instancetype)init {
     self = [super initWithNibName:@"ExercisesDetailViewController" bundle:nil];
     return self;
 }
@@ -123,6 +116,7 @@
     rightButton = [[UIBarButtonItem alloc]
                            initWithBarButtonSystemItem: UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
+    rightButton.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = rightButton;
     
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274){

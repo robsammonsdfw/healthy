@@ -12,22 +12,24 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MealPlanDetailsTableViewCell.h"
 
+static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
+
 @implementation GroceryListViewController
 @synthesize selectedIndex, tableView;
 
--(id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle {
-    return [self init];
-}
-
--(id)init {
+- (instancetype)init {
     self = [super initWithNibName:@"GroceryListViewController" bundle:nil];
-    selectedIndex = 0;
+    if (self) {
+        selectedIndex = 0;
+    }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    UINib *nib = [UINib nibWithNibName:@"MealPlanDetailsTableViewCell" bundle:nil];
+    [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
     
     self.title = @"Grocery List";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -155,18 +157,12 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
-    MealPlanDetailsTableViewCell *cell = (MealPlanDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
+    MealPlanDetailsTableViewCell *cell = (MealPlanDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MealPlanDetailsTableViewCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-        cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver2.png"]];
-        cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver_on2.png"]];
-    }
-    
+    cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver2.png"]];
+    cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver_on2.png"]];
+
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     //HHT Change (Temp)
@@ -295,10 +291,6 @@
     return YES;
 }
 
--(void)tableView:(UITableView*)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
 - (void)tableView:(UITableView *)myTableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [myTableView beginUpdates];
@@ -315,7 +307,6 @@
         
         [myTableView endUpdates];
         [myTableView reloadData];
-        
     }
 }
 

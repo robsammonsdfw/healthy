@@ -117,10 +117,11 @@ int const MaximumStringLength = 300;
                                                                   action:@selector(backAction:)];
     [self.navigationItem setLeftBarButtonItem: backButton];
     
-    UIBarButtonItem *syncButton = [[UIBarButtonItem alloc] initWithTitle:@"Sync"
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(syncMessages:)];
+    UIBarButtonItem *syncButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                                 target:self
+                                                                                 action:@selector(syncMessages:)];
+    syncButton.style = UIBarButtonItemStylePlain;
+    syncButton.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = syncButton;
 
     [self.navigationController setNavigationBarHidden:NO];

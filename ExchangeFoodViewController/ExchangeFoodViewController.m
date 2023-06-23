@@ -139,6 +139,7 @@
 - (void)viewDidLoad {
     UIBarButtonItem* bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSearch target:self action:@selector(searchBar:)];
     bi.style = UIBarButtonItemStylePlain;
+    bi.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = bi;
     
     _mySearchBar = [[UISearchBar alloc] init];

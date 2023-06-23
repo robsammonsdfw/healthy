@@ -371,10 +371,6 @@ static NSString *CellIdentifier = @"Cell";
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if ([dietmasterEngine.mealPlanArray count] > 0) {
-        NSString *buttonString = nil;
-        if ([dietmasterEngine.groceryArray count] > 0) {
-            buttonString = @"View Saved List";
-        }
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
@@ -383,15 +379,18 @@ static NSString *CellIdentifier = @"Cell";
                                                 handler:^(UIAlertAction * _Nonnull action) {
             [self showGroceryList];
         }]];
-        [alert addAction:[UIAlertAction actionWithTitle:buttonString
-                                                  style:UIAlertActionStyleDefault
-                                                handler:^(UIAlertAction * _Nonnull action) {
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            if ([dietmasterEngine.groceryArray count] > 0) {
-                GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
-                [self.navigationController pushViewController:groceryListVC animated:YES];
-            }
-        }]];
+        if ([dietmasterEngine.groceryArray count] > 0) {
+            NSString *buttonString = @"View Saved List";
+            [alert addAction:[UIAlertAction actionWithTitle:buttonString
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+                if ([dietmasterEngine.groceryArray count] > 0) {
+                    GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
+                    [self.navigationController pushViewController:groceryListVC animated:YES];
+                }
+            }]];
+        }
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [alert dismissViewControllerAnimated:YES completion:nil];

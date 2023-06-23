@@ -215,6 +215,7 @@
                                                                                  target:self
                                                                                  action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
+    rightButton.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = rightButton;
     
     NSString *path = [[NSBundle mainBundle] bundlePath];

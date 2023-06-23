@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MealPlanWebService.h"
-#import "PullRefreshTableViewController.h"
-#import "MBProgressHUD.h"
 #import "TTTAttributedLabel.h"
 
 @interface GroceryListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, WSGetGroceryList, TTTAttributedLabelDelegate> {

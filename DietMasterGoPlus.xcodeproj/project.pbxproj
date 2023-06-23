@@ -108,7 +108,6 @@
 		401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E002FF3153E19560094341F /* NSData+Blocks.m */; };
 		401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */; };
 		401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DD8E15865347003B1BB7 /* MealPlanWebService.m */; };
-		401B649C20B3FC64004453E7 /* PullRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DD9715866BF6003B1BB7 /* PullRefreshTableViewController.m */; };
 		401B649D20B3FC64004453E7 /* MealPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */; };
 		401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */; };
 		401B649F20B3FC64004453E7 /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65971589365800CCE0AD /* GroceryListViewController.m */; };
@@ -317,8 +316,6 @@
 		0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DietmasterEngine.m; sourceTree = "<group>"; };
 		0E75DD8D15865347003B1BB7 /* MealPlanWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanWebService.h; sourceTree = "<group>"; };
 		0E75DD8E15865347003B1BB7 /* MealPlanWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanWebService.m; sourceTree = "<group>"; };
-		0E75DD9615866BF6003B1BB7 /* PullRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRefreshTableViewController.h; sourceTree = "<group>"; };
-		0E75DD9715866BF6003B1BB7 /* PullRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRefreshTableViewController.m; sourceTree = "<group>"; };
 		0E75DDA415867E50003B1BB7 /* MealPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanDetailViewController.h; sourceTree = "<group>"; };
 		0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanDetailViewController.m; sourceTree = "<group>"; };
 		0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MealPlanDetailViewController.xib; sourceTree = "<group>"; };
@@ -657,7 +654,6 @@
 				685DFA0118E2E99600FB97A7 /* XMLReader */,
 				0E0A2C6C174A5D8A003AB90A /* 1.2.1 New Files */,
 				0E002FF1153E19550094341F /* NSData+Blocks */,
-				0E75DD9415866BF6003B1BB7 /* PullRefreshTableView */,
 				0E4788BD14EACCCC00B8FFE3 /* SHA1PHPClass */,
 				0E4788AF14EAC78C00B8FFE3 /* SoapWebServiceEngine */,
 				0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */,
@@ -887,15 +883,6 @@
 				0E75DD8E15865347003B1BB7 /* MealPlanWebService.m */,
 			);
 			path = MealPlanWebService;
-			sourceTree = "<group>";
-		};
-		0E75DD9415866BF6003B1BB7 /* PullRefreshTableView */ = {
-			isa = PBXGroup;
-			children = (
-				0E75DD9615866BF6003B1BB7 /* PullRefreshTableViewController.h */,
-				0E75DD9715866BF6003B1BB7 /* PullRefreshTableViewController.m */,
-			);
-			path = PullRefreshTableView;
 			sourceTree = "<group>";
 		};
 		0E75DD9E15867929003B1BB7 /* MealPlanDetailViewController */ = {
@@ -1921,7 +1908,6 @@
 				0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */,
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
 				401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */,
-				401B649C20B3FC64004453E7 /* PullRefreshTableViewController.m in Sources */,
 				65462D1226BD1D48004D1654 /* ProfileAlertVCViewController.m in Sources */,
 				401B649D20B3FC64004453E7 /* MealPlanDetailViewController.m in Sources */,
 				401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */,

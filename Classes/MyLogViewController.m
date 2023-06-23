@@ -82,6 +82,8 @@
     _imgbottomline.backgroundColor=RGB(255, 255, 255, 0.5);
     self.tbl.backgroundColor = [UIColor whiteColor];
     self.tblSimpleTable.backgroundColor = [UIColor whiteColor];
+    self.tblSimpleTable.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+    
     _tbl.hidden=true;
     dateToolBar.backgroundColor=AccentColor;
     dateToolBar.barTintColor = AccentColor;
@@ -180,6 +182,12 @@
     [self.logDaySummary.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
     [self.logDaySummary.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
     [self.logDaySummary.bottomAnchor constraintEqualToAnchor:layoutGuide.bottomAnchor constant:0].active = YES;
+    
+    self.tblSimpleTable.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.tblSimpleTable.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.tblSimpleTable.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.tblSimpleTable.topAnchor constraintEqualToAnchor:dateToolBar.bottomAnchor constant:0].active = YES;
+    [self.tblSimpleTable.bottomAnchor constraintEqualToAnchor:self.logDaySummary.topAnchor constant:0].active = YES;
 }
 
 - (IBAction)Tap_Action:(UITapGestureRecognizer *)sender {
