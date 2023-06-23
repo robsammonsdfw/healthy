@@ -371,9 +371,9 @@ int const MaximumStringLength = 300;
     
     label.text = [self tableView:tableView_ titleForHeaderInSection:section];
     label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.0];
-    label.backgroundColor = UIColorFromHex(0xffffff);
-    label.textColor = UIColorFromHex(0x8892a5);
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIColor darkGrayColor];
     label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:0.75];
     label.shadowOffset = CGSizeMake(0, 2);
 
