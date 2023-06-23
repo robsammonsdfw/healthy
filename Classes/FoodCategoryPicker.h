@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <sqlite3.h>
 
 @protocol FoodCategoryDelegate <NSObject>
 -(void)didChooseCategory:(NSString *)chosenID withName:(NSString *)chosenName;
@@ -17,8 +16,6 @@
 
 @interface FoodCategoryPicker : UIViewController {
 	AppDelegate *mainDelegate;
-	sqlite3 *database;
-	NSString *dbPath;
 	IBOutlet UIPickerView *pickerView;
 	NSString *str_categoryName;
 	NSNumber *num_categoryID;

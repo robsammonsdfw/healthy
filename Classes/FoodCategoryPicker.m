@@ -27,33 +27,25 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    DietmasterEngine *dietEngine = [DietmasterEngine sharedInstance];
-    dbPath	= [dietEngine databasePath];
+    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase *db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    if (![db open]) {
+        DMLog(@"Could not open db.");
+    }
+
+    NSString *query = @"SELECT CategoryID, Name FROM FoodCategory ORDER BY CategoryID";
+    arry3 = [[NSMutableArray alloc] init];
+    categoryIDs = [[NSMutableArray alloc] init];
     
-    if (sqlite3_open([dbPath UTF8String], &database) == SQLITE_OK) {
-        NSString *query = @"SELECT CategoryID, Name FROM FoodCategory ORDER BY CategoryID";
-        
-        sqlite3_stmt *statement;
-        
-        if (sqlite3_prepare_v2(database, [query UTF8String], -1, &statement, nil) ==SQLITE_OK) {
-            arry3 = [[NSMutableArray alloc] init];
-            categoryIDs = [[NSMutableArray alloc] init];
-            
-            while (sqlite3_step(statement) == SQLITE_ROW) {
-                char *Name			= (char *) sqlite3_column_text(statement, 1);
-                str_categoryName	= [[NSString alloc] initWithUTF8String:Name];
-                num_categoryID		= [NSNumber numberWithInt:sqlite3_column_int(statement, 0)];
-                
-                [arry3 addObject:str_categoryName];
-                [categoryIDs addObject:num_categoryID];
-                
-            }
-            sqlite3_finalize(statement);
-        }
-        sqlite3_close(database);
+    FMResultSet *rs = [db executeQuery:query];
+    while ([rs next]) {
+        NSDictionary *dict = [rs resultDictionary];
+        str_categoryName = dict[@"Name"];
+        num_categoryID = dict[@"CategoryID"];
+        [arry3 addObject:str_categoryName];
+        [categoryIDs addObject:num_categoryID];
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     selectedCategoryID = dietmasterEngine.selectedCategoryID;
     
     for (int i = 0; i <[categoryIDs count]; i++) {

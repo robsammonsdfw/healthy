@@ -265,7 +265,6 @@
             
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            [db close];
             if (![db open]) {
                 DMLog(@"Could not open db.");
             }
@@ -289,7 +288,6 @@
             
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            [db close];
             if (![db open]) {
                 DMLog(@"Could not open db.");
             }
@@ -362,7 +360,6 @@
             
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            [db close];
             if (![db open]) {
                 DMLog(@"Could not open db.");
             }
@@ -616,7 +613,6 @@
             [db executeUpdate:@"DELETE FROM weightlog"];
             [db executeUpdate:@"DELETE FROM Messages"];
             [db commit];
-            [db close];
         }
 
         NSFileManager *fileManager = [NSFileManager defaultManager];

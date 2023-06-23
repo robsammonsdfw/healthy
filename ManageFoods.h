@@ -7,12 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <sqlite3.h>
 #import "FoodCategoryPicker.h"
 #import "MeasurePicker.h"
-#import "MBProgressHUD.h"
 #import "SaveUPCDataWebService.h"
-#import "FactualQuery.h"
 
 @class AppDelegate;
 
@@ -25,10 +22,7 @@
 	NSString *date_Today;
 	NSString *date_Display;
 	NSString *date_DB;
-	
-	sqlite3 *database;
-	NSString *dbPath;
-	
+		
 	BOOL keyboardIsShown;
 	BOOL ScannedFoodis;
 	int intFoodID;

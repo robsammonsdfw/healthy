@@ -60,12 +60,9 @@ CGPoint svos;
                                                  name:@"BarCodeScanned"
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(factualAPISuccess:) name:@"FactualAPISuccess" object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(factualAPIDidFail:) name:@"FactualAPIDidFail" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(foodWasSavedToCloud:) name:@"FoodWasSavedToCloud" object:nil];
+                                             selector:@selector(foodWasSavedToCloud:)
+                                                 name:@"FoodWasSavedToCloud" object:nil];
     
     scannerDict = nil;
     scanned_UPCA = nil;

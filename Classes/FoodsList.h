@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#import <sqlite3.h>
 
 @class AppDelegate;
 
@@ -11,9 +10,6 @@
 	NSNumber *int_foodKey;
 	
 	AppDelegate *mainDelegate;
-	
-	sqlite3 *database;
-	NSString *dbPath;
 }
 
 @property (nonatomic, strong) NSMutableArray *foodsNameList;

@@ -51,8 +51,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 @synthesize syncDatabaseDelegate, syncUPDatabaseDelegate;
 @synthesize mealPlanArray, isMealPlanItem, mealPlanItemToExchangeDict, indexOfItemToExchange, selectedMealPlanID, didInsertNewFood;
 @synthesize groceryArray;
-@synthesize apiObject=_apiObject;
-@synthesize queryResult=_queryResult;
 
 + (instancetype)sharedInstance {
     static DietmasterEngine *sharedInstance = nil;
@@ -87,9 +85,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         isMealPlanItem = NO;
         mealPlanItemToExchangeDict = [[NSMutableDictionary alloc] init];
         didInsertNewFood = NO;
-        
-        _apiObject = [[FactualAPI alloc] initWithAPIKey:@"RoVC1FLS03kfhzCBS6AfGNwlI8gvZl4R9Ne2eynV" secret:@"MpTAbOCn1PNWzVHv37lcEdcLHQWWPhMMPYboN5YZ"];
-        
+                
         getDataComplete = NO;
         getDataDidFail = NO;
     }
@@ -477,20 +473,18 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return [result copy];
 }
 
-- (int)countOfUnreadingMessages {
+- (int)unreadMessageCount {
     FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
     if (![dataBase open]) {
-        
+        return 0;
     }
     NSString *query = @"SELECT * FROM Messages WHERE Sender = 0 AND Read = 0";
     
     FMResultSet *rs = [dataBase executeQuery:query];
     int count = 0;
-    while ([rs next])
-    {
+    while ([rs next]) {
         ++count;
     }
-    
     [rs close];
     
     return count;
@@ -555,28 +549,21 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return result;
 }
 
-- (void)setReadedMessageId:(NSString *)messageId {
+- (void)setReadedMessageId:(NSNumber *)messageId {
     FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
     if (![dataBase open]) {
-        
+        return;
     }
-    
     [dataBase beginTransaction];
     NSString *sqlQuery = [NSString stringWithFormat:@"UPDATE Messages SET Read = 1 "
-                          "WHERE Id = '%@'", messageId];
-    
-    
+                          "WHERE Id = %@", messageId];
     [dataBase executeUpdate:sqlQuery];
-    
-    BOOL statusMsg = YES;
-    
     if ([dataBase hadError]) {
         DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
-        statusMsg = NO;
     }
     [dataBase commit];
     
-    [UIApplication sharedApplication].applicationIconBadgeNumber = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [[DietmasterEngine sharedInstance] unreadMessageCount];
 }
 
 #pragma mark UP SYNC METHODS
@@ -2849,61 +2836,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     return [NSData dataWithContentsOfFile:zipFilePath];
-}
-
-#pragma mark FACTUAL API
--(void)searchFactualDatabase:(NSString *)upcString {
-    if (!_apiObject){
-        _apiObject = [[FactualAPI alloc] initWithAPIKey:@"RoVC1FLS03kfhzCBS6AfGNwlI8gvZl4R9Ne2eynV" secret:@"MpTAbOCn1PNWzVHv37lcEdcLHQWWPhMMPYboN5YZ"];
-    }
-    
-    FactualQuery* queryObject = [FactualQuery query];
-    FactualSortCriteria* primarySort = [[FactualSortCriteria alloc] initWithFieldName:@"$relevance" sortOrder:FactualSortOrder_Ascending];
-    [queryObject setPrimarySortCriteria:primarySort];
-    [queryObject addRowFilter:[FactualRowFilter fieldName:@"upc" equalTo:upcString]];
-    
-    _activeRequest = [_apiObject queryTable:@"products-cpg-nutrition" optionalQueryParams:queryObject withDelegate:self];
-}
-
-#pragma mark FactualAPIDelegate methods
-- (void)requestDidReceiveInitialResponse:(FactualAPIRequest *)request {
-    if (request == _activeRequest) {
-        
-    }
-}
-
-- (void)requestDidReceiveData:(FactualAPIRequest *)request {
-    if (request == _activeRequest) {
-        
-    }
-}
-
--(void) requestComplete:(FactualAPIRequest *)request failedWithError:(NSError *)error {
-    if (_activeRequest == request) {
-        _activeRequest = nil;
-        
-        DMLog(@"Active request failed with Error:%@", [error localizedDescription]);
-        
-        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [error localizedDescription], @"ErrorDescription",
-                                 nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"FactualAPIDidFail" object:nil userInfo:options];
-        
-    }
-}
-
--(void) requestComplete:(FactualAPIRequest *)request receivedQueryResult:(FactualQueryResult *)queryResultObj {
-    if (_activeRequest == request) {
-        
-        self.queryResult = queryResultObj;
-        
-        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 queryResultObj, @"FactualQueryResult",
-                                 [NSNumber numberWithInteger:[queryResultObj rowCount]], @"ResultCount",
-                                 nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"FactualAPISuccess" object:nil userInfo:options];
-        _activeRequest = nil;
-    }
 }
 
 #pragma mark Helpers

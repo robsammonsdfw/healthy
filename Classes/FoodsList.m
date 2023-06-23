@@ -1,81 +1,65 @@
 #import "FoodsList.h"
 #import "DietmasterEngine.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
+
+static NSString *CellIdentifier = @"FoodsTableCellIdentifer";
+
+@interface FoodsList() <UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@end
 
 @implementation FoodsList
 
-@synthesize foodsNameList,foodsIDList, mainDelegate;
+@synthesize foodsNameList, foodsIDList, mainDelegate;
+
+- (instancetype)init {
+    self = [super initWithNibName:@"FoodsList" bundle:nil];
+    return self;
+}
 
 - (void)viewDidLoad {
-    DietmasterEngine *dietEngine = [DietmasterEngine sharedInstance];
-	dbPath	= [dietEngine databasePath];
-	
-	if (sqlite3_open([dbPath UTF8String], &database) == SQLITE_OK) {	
-		
-		NSString *query = @"SELECT FoodKey, Name FROM Food ORDER BY Name LIMIT 250";
-		sqlite3_stmt *statement;
-		
-		if (sqlite3_prepare_v2(database, [query UTF8String], -1, &statement, nil) == SQLITE_OK) {
-			foodsIDList = [[NSMutableArray alloc] init];
-			self.foodsNameList = [[NSMutableArray alloc] init];
-			
-			while (sqlite3_step(statement) == SQLITE_ROW) {
-				
-				char *foodName = (char *) sqlite3_column_text(statement, 1);
-				str_foodName = [[NSString alloc] initWithUTF8String:foodName] ;
-				
-				int_foodKey = [NSNumber numberWithInt: sqlite3_column_int(statement, 0)];	
-				
-				[foodsIDList addObject:int_foodKey];
-				[self.foodsNameList addObject:str_foodName];
-			
-			}
-		sqlite3_finalize(statement);	
-		}
-		
-		sqlite3_close(database);
-	}
-    
-    [self.navigationController.navigationBar setTranslucent:NO];
     [super viewDidLoad];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase *db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    if (![db open]) {
+        
+    }
+    
+    NSString *query = @"SELECT FoodKey, Name FROM Food ORDER BY Name LIMIT 250";
+    FMResultSet *rs = [db executeQuery:query];
+    foodsIDList = [[NSMutableArray alloc] init];
+    self.foodsNameList = [[NSMutableArray alloc] init];
+    while ([rs next]) {
+        NSDictionary *dict = [rs resultDictionary];
+        str_foodName = dict[@"Name"];
+        int_foodKey = dict[@"FoodKey"];
+        [foodsIDList addObject:int_foodKey];
+        [self.foodsNameList addObject:str_foodName];
+    }
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [self.navigationController.navigationBar setTranslucent:NO];
 }
 
--(void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-#pragma mark -
-#pragma mark Table View Data Source Methods
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.foodsNameList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *FoodsTable = @"FoodsTable";
 	
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:
-                             FoodsTable];
-    if (cell == nil) {
-		
-        cell = [[UITableViewCell alloc] 
-				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FoodsTable];
-    }
-	
-    NSUInteger row = [indexPath row];
-    cell.textLabel.text = [foodsNameList objectAtIndex:row];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath:indexPath];
+    cell.textLabel.text = [foodsNameList objectAtIndex:indexPath.row];
     cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 	
     return cell;
 }
 
--(void)openUrl:(id)sender {
-    DMLog(@"we did it!");
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger row = [indexPath row];
-    NSString *rowValue = [foodsNameList objectAtIndex:row];
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

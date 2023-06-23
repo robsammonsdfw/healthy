@@ -530,12 +530,12 @@
 }
 
 - (void)updateBadge {
-    numberBadge.value = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
+    numberBadge.value = [[DietmasterEngine sharedInstance] unreadMessageCount];
     [UIApplication sharedApplication].applicationIconBadgeNumber = numberBadge.value;
 }
 
 - (void)reloadMessages {
-    numberBadge.value = [[DietmasterEngine sharedInstance] countOfUnreadingMessages];
+    numberBadge.value = [[DietmasterEngine sharedInstance] unreadMessageCount];
     
     DataFetcher *fetcher = [[DataFetcher alloc] init];
     [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
@@ -562,8 +562,8 @@
     [self updateCalorieTotal];
 }
 
--(IBAction) showGroceryList:(id) sender {
-    FoodsList *flController = [[FoodsList alloc] initWithNibName:@"FoodsList" bundle:nil];
+- (IBAction)showGroceryList:(id) sender {
+    FoodsList *flController = [[FoodsList alloc] init];
     [self.navigationController pushViewController:flController animated:YES];
 }
 

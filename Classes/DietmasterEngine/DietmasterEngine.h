@@ -8,12 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "SoapWebServiceEngine.h"
-// get data
 #import "GetDataWebService.h"
-
 #import "SaveUPCDataWebService.h"
-#import "FactualAPI.h"
-#import "FactualQuery.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 
 @class DMMessage;
 @class DMUser;
@@ -28,7 +26,7 @@ typedef void (^DMGBooleanResponseBlock)(BOOL success, NSError *error);
 @protocol UPSyncDatabaseDelegate;
 
 @interface DietmasterEngine : NSObject <WSSyncFavoriteFoodsDelegate, WSSyncFavoriteMealsDelegate,
-WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, SaveUPCDataWSDelegate, FactualAPIDelegate, GetDataWSDelegate> {
+WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, SaveUPCDataWSDelegate, GetDataWSDelegate> {
     
     NSMutableDictionary *exerciseSelectedDict;
     // Dict for Food Selected Detail
@@ -67,11 +65,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
     BOOL didInsertNewFood;
     // Grocery List
     NSMutableArray *groceryArray;
-    
-    // Factual API
-    FactualAPI* _apiObject;
-    FactualQueryResult* _queryResult;
-    FactualAPIRequest* _activeRequest;
     
     // Get Data
     __block BOOL getDataComplete;
@@ -114,10 +107,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 
 // Grocery List
 @property (nonatomic, strong) NSMutableArray *groceryArray;
-
-// factual api
-@property (nonatomic, readonly) FactualAPI* apiObject;
-@property (nonatomic,retain)  FactualQueryResult* queryResult;
 
 //HHT new exercise sync
 @property (nonatomic, strong) NSMutableArray *arrExerciseSyncNew;
@@ -167,7 +156,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 - (void)downloadFileIfUpdatedInBackground;
 - (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;
 
-
 // Food Plan Methods
 -(NSDictionary *)getFoodDetails:(NSDictionary *)foodDict;
 -(void)getMissingFoods:(NSDictionary *)foodDict;
@@ -196,8 +184,8 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 - (NSInteger)getBMR;
 
 - (NSArray<DMMessage *> *)unreadMessages;
-- (int)countOfUnreadingMessages;
-- (void)setReadedMessageId:(NSString *)messageId;
+- (int)unreadMessageCount;
+- (void)setReadedMessageId:(NSNumber *)messageId;
 - (NSDictionary *)messageById:(NSString *)uid;
 /// Updates messages every few seconds.
 - (void)startUpdatingMessages;
@@ -209,6 +197,7 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 -(NSMutableArray *)getGroceryFoodDetails:(NSMutableArray *) foods;
 
 @end
+
 @protocol WSGetFoodDelegate <NSObject>
 - (void)getFoodFinished:(NSMutableArray *)responseArray;
 - (void)getFoodFailed:(NSString *)failedMessage;

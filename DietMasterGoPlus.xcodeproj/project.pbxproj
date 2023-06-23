@@ -207,7 +207,6 @@
 		65462D2726BD1DAF004D1654 /* UserGoalVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2426BD1DAE004D1654 /* UserGoalVC.xib */; };
 		65462D2B26BD1DC3004D1654 /* OtherHealthServiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D2826BD1DC2004D1654 /* OtherHealthServiceVC.m */; };
 		65462D2C26BD1DC3004D1654 /* OtherHealthServiceVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2926BD1DC3004D1654 /* OtherHealthServiceVC.xib */; };
-		65BE2707247E43FA00E6939F /* FactualSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = 65BE2706247E43F600E6939F /* FactualSDK */; };
 		65F2DE86249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */; };
 		65FF437C2497F4B900583000 /* MealPlanDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF437A2497F4B900583000 /* MealPlanDetailsTableViewCell.m */; };
 		65FF437D2497F4B900583000 /* MealPlanDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF437B2497F4B900583000 /* MealPlanDetailsTableViewCell.xib */; };
@@ -493,28 +492,6 @@
 		43D254AD1D62F564008513A0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		43D586621D59BB53005354D2 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		43D586641D59BB5F005354D2 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		549496A319867E84005D66FF /* FactualAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualAPI.h; sourceTree = "<group>"; };
-		549496A419867E84005D66FF /* FactualAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualAPIHelper.h; sourceTree = "<group>"; };
-		549496A519867E84005D66FF /* FactualAPIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualAPIPrivate.h; sourceTree = "<group>"; };
-		549496A619867E84005D66FF /* FactualAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualAPIRequest.h; sourceTree = "<group>"; };
-		549496A719867E84005D66FF /* FactualAPIRequestImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualAPIRequestImpl.h; sourceTree = "<group>"; };
-		549496A819867E84005D66FF /* FactualBase64Transcoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualBase64Transcoder.h; sourceTree = "<group>"; };
-		549496A919867E84005D66FF /* FactualFieldMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualFieldMetadata.h; sourceTree = "<group>"; };
-		549496AA19867E84005D66FF /* FactualFieldMetadataImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualFieldMetadataImpl.h; sourceTree = "<group>"; };
-		549496AB19867E84005D66FF /* FactualQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualQuery.h; sourceTree = "<group>"; };
-		549496AC19867E84005D66FF /* FactualQueryImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualQueryImpl.h; sourceTree = "<group>"; };
-		549496AD19867E84005D66FF /* FactualQueryResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualQueryResult.h; sourceTree = "<group>"; };
-		549496AE19867E84005D66FF /* FactualQueryResultImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualQueryResultImpl.h; sourceTree = "<group>"; };
-		549496AF19867E84005D66FF /* FactualRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualRow.h; sourceTree = "<group>"; };
-		549496B019867E84005D66FF /* FactualRowImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualRowImpl.h; sourceTree = "<group>"; };
-		549496B119867E84005D66FF /* FactualRowMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualRowMetadata.h; sourceTree = "<group>"; };
-		549496B219867E84005D66FF /* FactualRowMetadataImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualRowMetadataImpl.h; sourceTree = "<group>"; };
-		549496B319867E84005D66FF /* FactualSchemaResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualSchemaResult.h; sourceTree = "<group>"; };
-		549496B419867E84005D66FF /* FactualSchemaResultImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualSchemaResultImpl.h; sourceTree = "<group>"; };
-		549496B519867E84005D66FF /* FactualUpdateResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualUpdateResult.h; sourceTree = "<group>"; };
-		549496B619867E84005D66FF /* FactualUrlUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactualUrlUtil.h; sourceTree = "<group>"; };
-		549496B719867E84005D66FF /* NSString(Escaping).h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString(Escaping).h"; sourceTree = "<group>"; };
-		59CA3D371A6A4AE700461558 /* FactualSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FactualSDK.framework; path = Frameworks/FactualSDK.framework; sourceTree = "<group>"; };
 		650208B22500D34000F412B0 /* PopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopUpView.h; sourceTree = "<group>"; };
 		650208B32500D34000F412B0 /* PopUpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopUpView.xib; sourceTree = "<group>"; };
 		650208B42500D34000F412B0 /* PopUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopUpView.m; sourceTree = "<group>"; };
@@ -562,7 +539,6 @@
 		65462D2826BD1DC2004D1654 /* OtherHealthServiceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OtherHealthServiceVC.m; sourceTree = "<group>"; };
 		65462D2926BD1DC3004D1654 /* OtherHealthServiceVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherHealthServiceVC.xib; sourceTree = "<group>"; };
 		65462D2A26BD1DC3004D1654 /* OtherHealthServiceVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OtherHealthServiceVC.h; sourceTree = "<group>"; };
-		65BE2706247E43F600E6939F /* FactualSDK */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FactualSDK; path = Frameworks/FactualSDK.framework/Versions/1.3.9/FactualSDK; sourceTree = "<group>"; };
 		65F2DE84249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSNull+NullCategoryExtension.h"; sourceTree = "<group>"; };
 		65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSNull+NullCategoryExtension.m"; sourceTree = "<group>"; };
 		65FF43792497F4B900583000 /* MealPlanDetailsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanDetailsTableViewCell.h; sourceTree = "<group>"; };
@@ -598,7 +574,6 @@
 				401B659920B3FC64004453E7 /* Security.framework in Frameworks */,
 				401B659C20B3FC64004453E7 /* WebKit.framework in Frameworks */,
 				401B659D20B3FC64004453E7 /* CoreTelephony.framework in Frameworks */,
-				65BE2707247E43FA00E6939F /* FactualSDK in Frameworks */,
 				401B65A420B3FC64004453E7 /* CFNetwork.framework in Frameworks */,
 				401B65A520B3FC64004453E7 /* MobileCoreServices.framework in Frameworks */,
 				401B65A920B3FC64004453E7 /* AudioToolbox.framework in Frameworks */,
@@ -1253,14 +1228,11 @@
 			children = (
 				0EDAB6A22A3B2B0E00DB351A /* libsqlite3.0.tbd */,
 				650208E5250154CC00F412B0 /* StoreKit.framework */,
-				65BE2706247E43F600E6939F /* FactualSDK */,
 				402C5060221577C600259359 /* AVKit.framework */,
 				403FEB4E1FD1379C006D9B8F /* HealthKit.framework */,
 				43D254AD1D62F564008513A0 /* Security.framework */,
 				43D586641D59BB5F005354D2 /* WebKit.framework */,
 				43D586621D59BB53005354D2 /* CoreTelephony.framework */,
-				59CA3D371A6A4AE700461558 /* FactualSDK.framework */,
-				549496A219867E84005D66FF /* Headers */,
 				685DFA4318E2F38800FB97A7 /* SystemConfiguration.framework */,
 				685DFA4118E2F37900FB97A7 /* CFNetwork.framework */,
 				685DFA3F18E2F37200FB97A7 /* MobileCoreServices.framework */,
@@ -1392,34 +1364,6 @@
 				431EEE491D82AA7D0022AFEA /* TTTAttributedLabel.m */,
 			);
 			path = TTAttributeLable;
-			sourceTree = "<group>";
-		};
-		549496A219867E84005D66FF /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				549496A319867E84005D66FF /* FactualAPI.h */,
-				549496A419867E84005D66FF /* FactualAPIHelper.h */,
-				549496A519867E84005D66FF /* FactualAPIPrivate.h */,
-				549496A619867E84005D66FF /* FactualAPIRequest.h */,
-				549496A719867E84005D66FF /* FactualAPIRequestImpl.h */,
-				549496A819867E84005D66FF /* FactualBase64Transcoder.h */,
-				549496A919867E84005D66FF /* FactualFieldMetadata.h */,
-				549496AA19867E84005D66FF /* FactualFieldMetadataImpl.h */,
-				549496AB19867E84005D66FF /* FactualQuery.h */,
-				549496AC19867E84005D66FF /* FactualQueryImpl.h */,
-				549496AD19867E84005D66FF /* FactualQueryResult.h */,
-				549496AE19867E84005D66FF /* FactualQueryResultImpl.h */,
-				549496AF19867E84005D66FF /* FactualRow.h */,
-				549496B019867E84005D66FF /* FactualRowImpl.h */,
-				549496B119867E84005D66FF /* FactualRowMetadata.h */,
-				549496B219867E84005D66FF /* FactualRowMetadataImpl.h */,
-				549496B319867E84005D66FF /* FactualSchemaResult.h */,
-				549496B419867E84005D66FF /* FactualSchemaResultImpl.h */,
-				549496B519867E84005D66FF /* FactualUpdateResult.h */,
-				549496B619867E84005D66FF /* FactualUrlUtil.h */,
-				549496B719867E84005D66FF /* NSString(Escaping).h */,
-			);
-			path = Headers;
 			sourceTree = "<group>";
 		};
 		59DA2ACF1A1B6228008D749F /* Today */ = {

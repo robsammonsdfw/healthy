@@ -5,7 +5,6 @@
 //  Copyright 2010 AE Studios. All rights reserved.
 
 #import <UIKit/UIKit.h>
-#import <sqlite3.h>
 #import "DietmasterEngine.h"
 #import "MBProgressHUD.h"
 #import <MessageUI/MessageUI.h>
@@ -21,7 +20,6 @@
                           
     DetailViewController *navigationController;
     LoginViewController *loginViewController;
-    sqlite3 *database;
     
     UIImageView *splashView;
     double caloriesremaning;
