@@ -199,13 +199,14 @@ int const MaximumStringLength = 300;
     }
     
     DataFetcher *fetcher = [[DataFetcher alloc] init];
-    [fetcher setMessagesReadWithMessages:messages completion:^(NSArray<DMMessage *> *messages, NSError *error) {
+    [fetcher setMessagesReadWithMessages:messages completion:^(NSArray<NSDictionary<NSString *, NSNumber *> *> *messageIds,
+                                                               NSError *error) {
         if (error) {
             DMLog(@"Error: %@", error.localizedDescription);
             return;
         }
-        for (DMMessage *message in messages) {
-            [[DietmasterEngine sharedInstance] setReadedMessageId:message.messageId];
+        for (NSDictionary *dict in messageIds) {
+            [[DietmasterEngine sharedInstance] setReadedMessageId:dict[@"MessageID"]];
         }
     }];
 }

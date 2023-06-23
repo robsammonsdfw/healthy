@@ -459,6 +459,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     FMDatabase* dataBase = [FMDatabase databaseWithPath:[self databasePath]];
     if (![dataBase open]) {
     }
+    // Sender = 0 means it was sent by an advisor or coach. Sender will be >0
+    // if it was sent by the current user.
     NSString *query = @"SELECT * FROM Messages WHERE Sender = 0 AND Read = 0";
     
     FMResultSet *rs = [dataBase executeQuery:query];

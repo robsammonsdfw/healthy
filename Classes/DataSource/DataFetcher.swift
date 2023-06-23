@@ -204,7 +204,8 @@ class DataFetcher : NSObject {
     }
     
     /// Fetches the messages between the user and coach/provider.
-    @objc func setMessagesRead(messages: [DMMessage]?, completion : @escaping (_ messages: [DMMessage]?, _ error: NSError?) -> Void) {
+    /// Response is an array of dictionarys: {\"Status\":\"Success\",\"MessageID\":\"1722482\"}.
+    @objc func setMessagesRead(messages: [DMMessage]?, completion : @escaping (_ messageIds: [Dictionary<String, Any>]?, _ error: NSError?) -> Void) {
         guard let messages = messages, messages.count > 0 else {
             let error = DMGUtilities.error(withMessage: "No message to set as read.", code: 000) as NSError
             completion(nil, error)
@@ -218,14 +219,19 @@ class DataFetcher : NSObject {
         }
         
         // Create array of messageIDs we will send to server.
-        var messageIds = [[String: NSNumber]]()
+        var messageIds = [[String: Any]]()
         for message in messages {
             let dict = ["MessageID" : message.messageId]
             messageIds.append(dict)
         }
         do {
             // Convert messages to JSON.
-            let messageJSON = try JSONSerialization.data(withJSONObject: messageIds)
+            let messageData = try JSONSerialization.data(withJSONObject: messageIds)
+            guard let messageJSON = String(data: messageData, encoding: .utf8) else {
+                let error = DMGUtilities.error(withMessage: "JSON is invalid.", code: 150) as NSError
+                completion(nil, error)
+                return
+            }
             let params = ["AuthKey": authKey.uppercased(),
                           "UserID": userId,
                           "strJSON": messageJSON] as [String : Any]
@@ -253,9 +259,7 @@ class DataFetcher : NSObject {
                         completion(nil, error)
                         return
                     }
-                    // TODO: Finish this once we can test message replies.
-                    //let jsonResult = jsonArray[0]
-                    completion(nil, nil)
+                    completion(jsonArray, nil)
                 } catch let error as NSError {
                     completion(nil, error)
                     return
