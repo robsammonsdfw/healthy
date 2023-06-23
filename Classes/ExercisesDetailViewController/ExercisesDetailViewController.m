@@ -10,19 +10,36 @@
 #import <HealthKit/HealthKit.h>
 #import "StepData.h"
 
-@interface ExercisesDetailViewController ()
-{
-    //HHT apple watch
-    double stepCount;
-    double calories;
-    UIBarButtonItem* rightButton;
-}
+@interface ExercisesDetailViewController() <UITextFieldDelegate>
+@property (nonatomic) double stepCount;
+@property (nonatomic, strong) UIBarButtonItem *rightButton;
+@property (nonatomic) double calories;
 
 //HHT apple watch
-@property (nonatomic,retain) HKHealthStore *healthStore;
+@property (nonatomic, strong) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *arrData;
 @property (nonatomic, strong) NSSet *readDataTypes;
 @property (nonatomic, strong) StepData * sd;
+
+@property (nonatomic, strong) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, strong) NSMutableArray *pickerComponentOneArray;
+@property (nonatomic, strong) NSMutableArray *pickerComponentTwoArray;
+@property (nonatomic, strong) IBOutlet UILabel *lblCaloriesBurnedTitle;
+@property (nonatomic, strong) IBOutlet UILabel *caloriesBurnedLabel;
+@property (nonatomic, strong) IBOutlet UILabel *exerciseNameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *dateLabel;
+@property (nonatomic, strong) IBOutlet UITextField *tfCalories;//09-02-2016
+
+//HHT apple watch
+@property (nonatomic, strong) IBOutlet UIButton *btnAllowHealthAccess;
+@property (nonatomic, strong) IBOutlet UIView *viewAllowHealthAccess;
+@property (nonatomic, strong) IBOutlet UILabel *permissionTagLbl;
+@property (nonatomic, strong) IBOutlet UIButton *permissionBtn;
+
+@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
+
+/// Constraint that attaches the imgBar to the bottom.
+@property (nonatomic, strong) NSLayoutConstraint *imgBarBottomConstraint;
 
 @end
 
@@ -40,10 +57,10 @@
     NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
     NSString *appName = [appDefaults valueForKey:@"app_name_long"];
-    [permissionBtn setTitle:[NSString stringWithFormat:@"Allow %@ to access Apple Heath data.", appName] forState:UIControlStateNormal];
+    [self.permissionBtn setTitle:[NSString stringWithFormat:@"Allow %@ to access Apple Heath data.", appName] forState:UIControlStateNormal];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    exerciseNameLabel.text = [dietmasterEngine.exerciseSelectedDict valueForKey:@"ActivityName"];
+    self.exerciseNameLabel.text = [dietmasterEngine.exerciseSelectedDict valueForKey:@"ActivityName"];
     
     [DMActivityIndicator hideActivityIndicator];
 
@@ -52,15 +69,15 @@
     if (exerciseIDTemp == 257 || exerciseIDTemp == 267 || exerciseIDTemp == 268 || exerciseIDTemp == 269 || exerciseIDTemp == 275){
         int caloriesOverride = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Time_Minutes"] intValue];
         if (caloriesOverride != 0)
-            tfCalories.text = [NSString stringWithFormat:@"%d", caloriesOverride];
-        [pickerView selectRow:caloriesOverride inComponent:0 animated:YES];
+            self.tfCalories.text = [NSString stringWithFormat:@"%d", caloriesOverride];
+        [self.pickerView selectRow:caloriesOverride inComponent:0 animated:YES];
     }
     else if (exerciseIDTemp == 259 || exerciseIDTemp == 276) {
-        lblCaloriesBurnedTitle.text = @"Step Count";
+        self.lblCaloriesBurnedTitle.text = @"Step Count";
         int stepsTaken = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Time_Minutes"] intValue];
         if (stepsTaken != 0)
-            tfCalories.text = [NSString stringWithFormat:@"%d", stepsTaken];
-        [pickerView selectRow:stepsTaken inComponent:0 animated:YES];
+            self.tfCalories.text = [NSString stringWithFormat:@"%d", stepsTaken];
+        [self.pickerView selectRow:stepsTaken inComponent:0 animated:YES];
     }
     else if (exerciseIDTemp == 272 || exerciseIDTemp == 274 ){
         
@@ -70,18 +87,18 @@
         int hours = totalTime / 60;
         int minutes = (totalTime % 60);
         
-        [pickerView selectRow:hours inComponent:0 animated:YES];
-        [pickerView selectRow:minutes inComponent:1 animated:YES];
+        [self.pickerView selectRow:hours inComponent:0 animated:YES];
+        [self.pickerView selectRow:minutes inComponent:1 animated:YES];
     }
     
-    [pickerView reloadAllComponents];
+    [self.pickerView reloadAllComponents];
     
     [self performSelector:@selector(updateCalorieLabel) withObject:nil afterDelay:0.50];
         
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Food_Detail_Screen"];
-        pickerView.backgroundColor = [UIColor whiteColor];
+        self.pickerView.backgroundColor = [UIColor whiteColor];
     }
 }
 
@@ -89,11 +106,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    lblCaloriesBurnedTitle.textColor = PrimaryFontColor;
-    caloriesBurnedLabel.textColor = PrimaryFontColor;
-    tfCalories.textColor = PrimaryFontColor;
-
-    //HHT apple watch start
+    self.tfCalories.delegate = self;
+    self.tfCalories.placeholder = @"0";
+    self.lblCaloriesBurnedTitle.textColor = PrimaryFontColor;
+    self.caloriesBurnedLabel.textColor = PrimaryFontColor;
+    self.tfCalories.textColor = PrimaryFontColor;
+    self.exerciseNameLabel.textAlignment = NSTextAlignmentCenter;
+    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
@@ -104,26 +123,20 @@
         
         [self checkForPremission];
     }
-    //HHT apple watch end
     
-    _imgbar.backgroundColor= PrimaryColor
+    self.imgbar.backgroundColor = PrimaryColor;
     
-    if (IS_IPHONE_4)
-        tfCalories.frame = CGRectMake(tfCalories.frame.origin.x, 109, tfCalories.frame.size.width, tfCalories.frame.size.height);
-    else
-        tfCalories.frame = CGRectMake(tfCalories.frame.origin.x, 199, tfCalories.frame.size.width, tfCalories.frame.size.height);
-    
-    rightButton = [[UIBarButtonItem alloc]
+    self.rightButton = [[UIBarButtonItem alloc]
                            initWithBarButtonSystemItem: UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
-    rightButton.style = UIBarButtonItemStylePlain;
-    rightButton.tintColor = [UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem = rightButton;
+    self.rightButton.style = UIBarButtonItemStylePlain;
+    self.rightButton.tintColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem = self.rightButton;
     
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274){
-        [rightButton setEnabled:NO];
+        [self.rightButton setEnabled:NO];
     }
     else {
-       [rightButton setEnabled:YES];
+       [self.rightButton setEnabled:YES];
     }
     [self.navigationController.navigationBar setTranslucent:NO];
 }
@@ -139,26 +152,18 @@
         self.arrData = [NSMutableArray new];
         self.healthStore = [[HKHealthStore alloc] init];
         self.sd = [[StepData alloc]init];
-        
         [self checkForPremission];
     }
-    //HHT apple watch end
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
     
-    exerciseLogID = 0;
+    self.exerciseLogID = 0;
     [DMActivityIndicator showActivityIndicator];
     [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
 }
 
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CleanUpView" object:nil];
-}
-
--(void)deleteExerciseAPICALL {
+- (void)deleteExerciseAPICALL {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
@@ -194,9 +199,9 @@
     [super viewWillAppear:animated];
     
     //HHT apple watch
-    btnAllowHealthAccess.hidden = YES;
-    permissionBtn.hidden = YES;
-    viewAllowHealthAccess.hidden = YES;
+    self.btnAllowHealthAccess.hidden = YES;
+    self.permissionBtn.hidden = YES;
+    self.viewAllowHealthAccess.hidden = YES;
     
     [[UITextField appearance] setTintColor:[UIColor whiteColor]];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -207,63 +212,77 @@
         self.navigationItem.title = @"Edit Log";
     }
     
-    if (!pickerComponentOneArray) {
-        pickerComponentOneArray = [[NSMutableArray alloc] init];
+    if (!self.pickerComponentOneArray) {
+        self.pickerComponentOneArray = [[NSMutableArray alloc] init];
     }
     
-    if (!pickerComponentTwoArray) {
-        pickerComponentTwoArray = [[NSMutableArray alloc] init];
+    if (!self.pickerComponentTwoArray) {
+        self.pickerComponentTwoArray = [[NSMutableArray alloc] init];
     }
     
-    [pickerComponentOneArray removeAllObjects];
-    [pickerComponentTwoArray removeAllObjects];
+    [self.pickerComponentOneArray removeAllObjects];
+    [self.pickerComponentTwoArray removeAllObjects];
     
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+    BOOL showTextField = NO;
     
     if (exerciseID == 259) {
-        pickerView.hidden = YES;
-        caloriesBurnedLabel.hidden = YES;
-        [tfCalories becomeFirstResponder];
-        
+        self.pickerView.hidden = YES;
+        self.caloriesBurnedLabel.hidden = YES;
+        self.tfCalories.hidden = NO;
+        [self.tfCalories becomeFirstResponder];
+        showTextField = YES;
         for (int i=0; i < 10001; i++) {
             NSString *hourString = [[NSString alloc] initWithFormat:@"%i", i];
-            [pickerComponentOneArray addObject:hourString];
+            [self.pickerComponentOneArray addObject:hourString];
         }
     }
     else if (exerciseID == 257 || exerciseID == 267 || exerciseID == 268 || exerciseID == 269 || exerciseID == 275 || exerciseID == 276) {
-        pickerView.hidden = YES;
-        caloriesBurnedLabel.hidden = YES;
-        [tfCalories becomeFirstResponder];
+        self.pickerView.hidden = YES;
+        self.caloriesBurnedLabel.hidden = YES;
+        self.tfCalories.hidden = NO;
+        [self.tfCalories becomeFirstResponder];
+        showTextField = YES;
         
         for (int i=0; i < 2501; i++) {
             NSString *hourString = [[NSString alloc] initWithFormat:@"%i", i];
-            [pickerComponentOneArray addObject:hourString];
+            [self.pickerComponentOneArray addObject:hourString];
         }
-    }
-    
-    //HHT apple watch
-    else if (exerciseID == 272 || exerciseID == 274 || exerciseID == 275  || exerciseID == 276){
-        btnAllowHealthAccess.hidden = NO;
-        permissionBtn.hidden = NO;
-        viewAllowHealthAccess.hidden = NO;
-        
-        pickerView.hidden = YES;
-        caloriesBurnedLabel.hidden = YES;
-        tfCalories.hidden = YES;
-        _imgbar.hidden = YES;
-        lblCaloriesBurnedTitle.hidden = YES;
+    } else if (exerciseID == 272 || exerciseID == 274 || exerciseID == 275  || exerciseID == 276){
+        self.btnAllowHealthAccess.hidden = NO;
+        self.permissionBtn.hidden = NO;
+        self.viewAllowHealthAccess.hidden = NO;
+        self.pickerView.hidden = YES;
+        self.caloriesBurnedLabel.hidden = YES;
+        self.tfCalories.hidden = YES;
+        self.lblCaloriesBurnedTitle.hidden = YES;
     }
     else {
+        showTextField = NO;
+        self.tfCalories.hidden = YES;
+        self.pickerView.hidden = NO;
+
         for (int i=0; i < 24; i++) {
             NSString *hourString = [[NSString alloc] initWithFormat:@"%i", i];
-            [pickerComponentOneArray addObject:hourString];
+            [self.pickerComponentOneArray addObject:hourString];
         }
         for (int i=0; i < 60; i++) {
             NSString *minuteString = [[NSString alloc] initWithFormat:@"%i", i];
-            [pickerComponentTwoArray addObject:minuteString];
+            [self.pickerComponentTwoArray addObject:minuteString];
         }
     }
-    dateLabel.text = [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
+    self.dateLabel.text = [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
+    
+    // Set the constraint based on if TextField is in view or not.
+    if (!showTextField) {
+        // Attach to picker.
+        self.imgBarBottomConstraint = [self.imgbar.bottomAnchor constraintEqualToAnchor:self.pickerView.topAnchor constant:0];
+        self.imgBarBottomConstraint.active = YES;
+    } else {
+        UIKeyboardLayoutGuide *layoutGuide = [self.view keyboardLayoutGuide];
+        self.imgBarBottomConstraint = [self.imgbar.bottomAnchor constraintEqualToAnchor:layoutGuide.topAnchor constant:0];
+        self.imgBarBottomConstraint.active = YES;
+    }
 }
 
 //HHT apple watch
@@ -272,9 +291,9 @@
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        btnAllowHealthAccess.hidden = YES;
-        permissionBtn.hidden = YES;
-        viewAllowHealthAccess.hidden = YES;
+        self.btnAllowHealthAccess.hidden = YES;
+        self.permissionBtn.hidden = YES;
+        self.viewAllowHealthAccess.hidden = YES;
         
         [self readData];
     }
@@ -347,36 +366,21 @@
             if (quantity) {
                 NSDate *date = result.endDate;
                 
-                stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
-                //double cals = [self.sd stepsToCalories:value];
-                DMLog(@"%@: %.0f", date,stepCount);
-                
+                self.stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
+                //DMLog(@"%@: %.0f", date, self.stepCount);
                 [self showStepData];
-                
-                //NSString *strStatics = [NSString stringWithFormat:@"%@,%.0f,%.0f",date,value,cals];
-                //NSString *strStatics = [NSString stringWithFormat:@"%@,%.0f",date,stepCount];
-                //[self.arrData addObject:strStatics];
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    lblCaloriesBurnedTitle.text = @"Data not available";
+                    self.lblCaloriesBurnedTitle.text = @"Data not available";
                     
-                    btnAllowHealthAccess.hidden = YES;
-                    permissionBtn.hidden = YES;
-                    viewAllowHealthAccess.hidden = YES;
-                    pickerView.hidden = YES;
-                    caloriesBurnedLabel.hidden = NO;
-                    tfCalories.hidden = YES;
-                    _imgbar.hidden = NO;
-                    lblCaloriesBurnedTitle.hidden = NO;
-                });
-            }
-            
-            if(stop)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    //double temp = [self getMostRecentActiveCalories];
-                    //DMLog(@"%f",temp);
+                    self.btnAllowHealthAccess.hidden = YES;
+                    self.permissionBtn.hidden = YES;
+                    self.viewAllowHealthAccess.hidden = YES;
+                    self.pickerView.hidden = YES;
+                    self.caloriesBurnedLabel.hidden = NO;
+                    self.tfCalories.hidden = YES;
+                    self.lblCaloriesBurnedTitle.hidden = NO;
                 });
             }
         }];
@@ -389,31 +393,29 @@
 //HHT apple watch
 -(void)showStepData {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self.rightButton setEnabled:YES];
+        self.btnAllowHealthAccess.hidden = YES;
+        self.permissionBtn.hidden = YES;
+        self.viewAllowHealthAccess.hidden = YES;
         
-        [rightButton setEnabled:YES];
-        btnAllowHealthAccess.hidden = YES;
-        permissionBtn.hidden = YES;
-        viewAllowHealthAccess.hidden = YES;
-        
-        pickerView.hidden = YES;
-        caloriesBurnedLabel.hidden = NO;
-        tfCalories.hidden = YES;
-        _imgbar.hidden = NO;
-        lblCaloriesBurnedTitle.hidden = NO;
+        self.pickerView.hidden = YES;
+        self.caloriesBurnedLabel.hidden = NO;
+        self.tfCalories.hidden = YES;
+        self.lblCaloriesBurnedTitle.hidden = NO;
     
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         
         int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
         
         if (exerciseIDTemp == 272 || exerciseIDTemp == 275){
-            lblCaloriesBurnedTitle.text = @"Calories Burned";
-            double caloriesBurned = [self.sd stepsToCalories:stepCount];
-            calories = caloriesBurned;
-            caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",caloriesBurned];
+            self.lblCaloriesBurnedTitle.text = @"Calories Burned";
+            double caloriesBurned = [self.sd stepsToCalories:self.stepCount];
+            self.calories = caloriesBurned;
+            self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",caloriesBurned];
         }
         else if (exerciseIDTemp == 274 || exerciseIDTemp == 276) {
-            lblCaloriesBurnedTitle.text = @"Step Count";
-            caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",stepCount];
+            self.lblCaloriesBurnedTitle.text = @"Step Count";
+            self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",self.stepCount];
         }
     });
 }
@@ -510,7 +512,7 @@
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 259 || exerciseID == 267 || exerciseID == 268 || exerciseID == 269 || exerciseID == 275 || exerciseID == 276) {
-        return [pickerComponentOneArray count];
+        return [self.pickerComponentOneArray count];
     }
     else if (exerciseID == 272 || exerciseID == 274){
         return 0;
@@ -518,10 +520,10 @@
     else {
         switch (component){
             case 0:
-                return [pickerComponentOneArray count];
+                return [self.pickerComponentOneArray count];
                 break;
             case 1:
-                return [pickerComponentTwoArray count];
+                return [self.pickerComponentTwoArray count];
                 break;
         }
     }
@@ -533,16 +535,16 @@
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 267 || exerciseID == 275) {
-        return [NSString stringWithFormat:@"%@ Calories", [pickerComponentOneArray objectAtIndex:row]];
+        return [NSString stringWithFormat:@"%@ Calories", [self.pickerComponentOneArray objectAtIndex:row]];
     }
     else if (exerciseID == 268 ) {
-        return [NSString stringWithFormat:@"%@ Moves", [pickerComponentOneArray objectAtIndex:row]];
+        return [NSString stringWithFormat:@"%@ Moves", [self.pickerComponentOneArray objectAtIndex:row]];
     }
     else if ( exerciseID == 269 || exerciseID == 276) {
-        return [NSString stringWithFormat:@"%@ Steps", [pickerComponentOneArray objectAtIndex:row]];
+        return [NSString stringWithFormat:@"%@ Steps", [self.pickerComponentOneArray objectAtIndex:row]];
     }
     else if (exerciseID == 259) {
-        return [NSString stringWithFormat:@"%@ Steps", [pickerComponentOneArray objectAtIndex:row]];
+        return [NSString stringWithFormat:@"%@ Steps", [self.pickerComponentOneArray objectAtIndex:row]];
     }
     else if (exerciseID == 272 || exerciseID == 274){
         return @"";
@@ -551,15 +553,15 @@
         switch (component){
             case 0:
                 if (row == 1)
-                    return [NSString stringWithFormat:@"%@ Hour", [pickerComponentOneArray objectAtIndex:row]];
+                    return [NSString stringWithFormat:@"%@ Hour", [self.pickerComponentOneArray objectAtIndex:row]];
                 else
-                    return [NSString stringWithFormat:@"%@ Hours", [pickerComponentOneArray objectAtIndex:row]];
+                    return [NSString stringWithFormat:@"%@ Hours", [self.pickerComponentOneArray objectAtIndex:row]];
                 break;
             case 1:
                 if (row == 1)
-                    return [NSString stringWithFormat:@"%@ Minute", [pickerComponentTwoArray objectAtIndex:row]];
+                    return [NSString stringWithFormat:@"%@ Minute", [self.pickerComponentTwoArray objectAtIndex:row]];
                 else
-                    return [NSString stringWithFormat:@"%@ Minutes", [pickerComponentTwoArray objectAtIndex:row]];
+                    return [NSString stringWithFormat:@"%@ Minutes", [self.pickerComponentTwoArray objectAtIndex:row]];
                 break;
         }
     }
@@ -584,22 +586,22 @@
     
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     if (exerciseIDTemp == 257 || exerciseIDTemp == 267 || exerciseIDTemp == 268 || exerciseIDTemp == 269 || exerciseIDTemp == 275 || exerciseIDTemp == 276) {
-        minutesExercised = [tfCalories.text intValue];
+        minutesExercised = [self.tfCalories.text intValue];
     }
     else if (exerciseIDTemp == 259) {
-        minutesExercised = [tfCalories.text intValue];
+        minutesExercised = [self.tfCalories.text intValue];
     }
     //HHT apple watch
     else if (exerciseIDTemp == 272) {
-        minutesExercised = calories;
+        minutesExercised = self.calories;
     }
     //HHT apple watch
     else if (exerciseIDTemp == 274){
-        minutesExercised = stepCount;
+        minutesExercised = self.stepCount;
     }
     else {
-        hoursExercised = [[pickerComponentOneArray objectAtIndex:[pickerView selectedRowInComponent:0]] intValue];
-        minutesExercised = [[pickerComponentTwoArray objectAtIndex:[pickerView selectedRowInComponent:1]] intValue];
+        hoursExercised = [[self.pickerComponentOneArray objectAtIndex:[self.pickerView selectedRowInComponent:0]] intValue];
+        minutesExercised = [[self.pickerComponentTwoArray objectAtIndex:[self.pickerView selectedRowInComponent:1]] intValue];
         minutesExercised = minutesExercised + (hoursExercised * 60);
     }
     
@@ -663,29 +665,22 @@
         }
         [db commit];
         
-        exerciseLogID = [db lastInsertRowId];
+        self.exerciseLogID = [db lastInsertRowId];
         
         [DMActivityIndicator showCompletedIndicator];
         [self.navigationController popToRootViewControllerAnimated:YES];
         
     }
     else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
-        exerciseLogID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Log_ID"] intValue];
+        self.exerciseLogID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Log_ID"] intValue];
         
         [db beginTransaction];
         
-//        NSDate* sourceDate = [NSDate date];
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-//        [dateFormatter setTimeZone:systemTimeZone];
-//        NSString *date_string = [dateFormatter stringFromDate:sourceDate];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *date_string = [dateFormatter stringFromDate:[NSDate date]];
-
         
-        NSString *updateQuery = [[NSString alloc] initWithFormat:@"UPDATE Exercise_Log SET Exercise_Time_Minutes = %i, Date_Modified = '%@' WHERE Exercise_Log_ID = %i", minutesExercised, date_string, exerciseLogID];
+        NSString *updateQuery = [[NSString alloc] initWithFormat:@"UPDATE Exercise_Log SET Exercise_Time_Minutes = %i, Date_Modified = '%@' WHERE Exercise_Log_ID = %i", minutesExercised, date_string, self.exerciseLogID];
         
         [db executeUpdate:updateQuery];
         
@@ -709,9 +704,9 @@
     
     [db beginTransaction];
     
-    exerciseLogID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Log_ID"] intValue];
+    self.exerciseLogID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Log_ID"] intValue];
     
-    NSString *deleteQuery = [[NSString alloc] initWithFormat:@"DELETE FROM Exercise_Log WHERE Exercise_Log_ID = %i", exerciseLogID];
+    NSString *deleteQuery = [[NSString alloc] initWithFormat:@"DELETE FROM Exercise_Log WHERE Exercise_Log_ID = %i", self.exerciseLogID];
     
     [db executeUpdate:deleteQuery];
     
@@ -740,20 +735,20 @@
     
     if (exerciseID == 257 || exerciseID == 267 || exerciseID == 275) {
         
-        int overrideCalories = [[pickerComponentOneArray objectAtIndex:[pickerView selectedRowInComponent:0]] intValue];
-        caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i", overrideCalories];
+        int overrideCalories = [[self.pickerComponentOneArray objectAtIndex:[self.pickerView selectedRowInComponent:0]] intValue];
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i", overrideCalories];
     }
     else if (exerciseID == 268) {
-        int overrideCalories = [[pickerComponentOneArray objectAtIndex:[pickerView selectedRowInComponent:0]] intValue];
-        caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i Moves Taken", overrideCalories];
+        int overrideCalories = [[self.pickerComponentOneArray objectAtIndex:[self.pickerView selectedRowInComponent:0]] intValue];
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i Moves Taken", overrideCalories];
     }
     else if (exerciseID == 269  || exerciseID == 276) {
-        int overrideCalories = [[pickerComponentOneArray objectAtIndex:[pickerView selectedRowInComponent:0]] intValue];
-        caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i Steps Taken", overrideCalories];
+        int overrideCalories = [[self.pickerComponentOneArray objectAtIndex:[self.pickerView selectedRowInComponent:0]] intValue];
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i Steps Taken", overrideCalories];
     }
     else if (exerciseID == 259) {
-        int stepsTaken = [[pickerComponentOneArray objectAtIndex:[pickerView selectedRowInComponent:0]] intValue];
-        caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i Steps Taken", stepsTaken];
+        int stepsTaken = [[self.pickerComponentOneArray objectAtIndex:[self.pickerView selectedRowInComponent:0]] intValue];
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%i Steps Taken", stepsTaken];
     }
     else if (exerciseID == 272 || exerciseID == 274){
         
@@ -763,13 +758,13 @@
         
         int hoursExercised = 0;
         double minutesExercised = 0;
-        hoursExercised = [[pickerComponentOneArray objectAtIndex:[pickerView selectedRowInComponent:0]] intValue];
-        minutesExercised = [[pickerComponentTwoArray objectAtIndex:[pickerView selectedRowInComponent:1]] intValue];
+        hoursExercised = [[self.pickerComponentOneArray objectAtIndex:[self.pickerView selectedRowInComponent:0]] intValue];
+        minutesExercised = [[self.pickerComponentTwoArray objectAtIndex:[self.pickerView selectedRowInComponent:1]] intValue];
         minutesExercised = minutesExercised + (hoursExercised * 60);
         
         double totalCaloriesBurned = (caloriesPerHour / 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
         
-        caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.2f", totalCaloriesBurned];
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.2f", totalCaloriesBurned];
     }
 }
 

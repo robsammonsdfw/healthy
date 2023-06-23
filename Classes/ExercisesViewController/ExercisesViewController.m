@@ -229,6 +229,7 @@ static NSString *CellIdentifier = @"Cell";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle =  UITableViewCellSelectionStyleGray;
     [cell textLabel].adjustsFontSizeToFitWidth = NO;
+    cell.userInteractionEnabled = YES;
 
     return cell;
 }

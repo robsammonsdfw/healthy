@@ -15,27 +15,10 @@
 
 @interface ExercisesDetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
     
-	IBOutlet UIPickerView *pickerView;
-	
-    NSMutableArray *pickerComponentOneArray;
-    NSMutableArray *pickerComponentTwoArray;
-    int exerciseLogID;
-    IBOutlet UILabel *lblCaloriesBurnedTitle;
-    IBOutlet UILabel *caloriesBurnedLabel;
-    IBOutlet UILabel *exerciseNameLabel;
-    IBOutlet UILabel *dateLabel;
-    IBOutlet UITextField *tfCalories;//09-02-2016
-    
-    //HHT apple watch
-    IBOutlet UIButton *btnAllowHealthAccess;
-    IBOutlet UIView *viewAllowHealthAccess;
-    
-    IBOutlet UILabel *permissionTagLbl;
-    
-    IBOutlet UIButton *permissionBtn;
 }
+@property (nonatomic) int exerciseLogID;
 
-@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
+
 - (IBAction) delLog:(id) sender;
 -(void) saveToLog:(id) sender;
 
