@@ -29,14 +29,6 @@
 
 @implementation DietMasterGoAppDelegate
 
-@synthesize viewController, navigationController, loginViewController;
-@synthesize splashView;
-@synthesize incomingDBFilePath;
-@synthesize isSessionExp;
-@synthesize isFromAlert;
-@synthesize caloriesremaning;
-@synthesize strchekeditornot;
-
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -59,17 +51,14 @@
     UITableView.appearance.sectionHeaderTopPadding = 0;
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
+    // Print out the location of the database
+    DMLog(@"Database path: %@", [[DietmasterEngine sharedInstance] databasePath]);
+
+    // Perform updates.
+    [self upgradeSystem];
+    
     // NOTE: The RootViewController is created in the SceneDelegate now.
 
-    return YES;
-}
-
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    DMLog(@"Handle the URL: %@", url);
-    return YES;
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return YES;
 }
 
@@ -83,29 +72,29 @@
         NSString *authString = [url absoluteString];
         authString = [authString stringByReplacingOccurrencesOfString:@"dietmastersoftware://" withString:@""];
         
-        if (!loginViewController) {
-            loginViewController = [[LoginViewController alloc] init];
-            loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            loginViewController.view.tag = 40;
-            loginViewController.view.alpha = 0.0;
-            loginViewController.view.hidden = YES;
+        if (!self.loginViewController) {
+            self.loginViewController = [[LoginViewController alloc] init];
+            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
+            self.loginViewController.view.tag = 40;
+            self.loginViewController.view.alpha = 0.0;
+            self.loginViewController.view.hidden = YES;
         }
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
         
-        if (loginViewController.view.hidden == YES) {
+        if (self.loginViewController.view.hidden == YES) {
             
-            loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            loginViewController.view.tag = 40;
-            loginViewController.view.alpha = 0.0;
-            loginViewController.view.hidden = NO;
+            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
+            self.loginViewController.view.tag = 40;
+            self.loginViewController.view.alpha = 0.0;
+            self.loginViewController.view.hidden = NO;
             
-            [self.window insertSubview:[loginViewController view] atIndex:0];
-            [self.window bringSubviewToFront:loginViewController.view];
+            [self.window insertSubview:[self.loginViewController view] atIndex:0];
+            [self.window bringSubviewToFront:self.loginViewController.view];
             
             [UIView animateWithDuration:0.75 animations:^{
-                loginViewController.view.alpha = 1.0;
+                self.loginViewController.view.alpha = 1.0;
             }];
 
             UIView *v = [self.window viewWithTag:30];
@@ -117,7 +106,7 @@
             v1.hidden = YES;
         }
         
-        [loginViewController loginFromUrl:authString];
+        [self.loginViewController loginFromUrl:authString];
     }
     return YES;
 }
@@ -127,29 +116,29 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
-        if (!loginViewController) {
-            loginViewController = [[LoginViewController alloc] init];
-            loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            loginViewController.view.tag = 40;
-            loginViewController.view.alpha = 0.0;
-            loginViewController.view.hidden = YES;
+        if (!self.loginViewController) {
+            self.loginViewController = [[LoginViewController alloc] init];
+            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
+            self.loginViewController.view.tag = 40;
+            self.loginViewController.view.alpha = 0.0;
+            self.loginViewController.view.hidden = YES;
         }
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
         
-        if (loginViewController.view.hidden == YES) {
+        if (self.loginViewController.view.hidden == YES) {
             
-            loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            loginViewController.view.tag = 40;
-            loginViewController.view.alpha = 0.0;
-            loginViewController.view.hidden = NO;
+            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
+            self.loginViewController.view.tag = 40;
+            self.loginViewController.view.alpha = 0.0;
+            self.loginViewController.view.hidden = NO;
             
-            [self.window insertSubview:[loginViewController view] atIndex:0];
-            [self.window bringSubviewToFront:loginViewController.view];
+            [self.window insertSubview:[self.loginViewController view] atIndex:0];
+            [self.window bringSubviewToFront:self.loginViewController.view];
                         
             [UIView animateWithDuration:0.75 animations:^{
-                loginViewController.view.alpha = 1.0;
+                self.loginViewController.view.alpha = 1.0;
             }];
 
             UIView *v = [self.window viewWithTag:30];
@@ -161,7 +150,7 @@
             v1.hidden = YES;
         }
         
-        [loginViewController loginFromUrl:loginUrl];
+        [self.loginViewController loginFromUrl:loginUrl];
     }
 }
 
@@ -175,337 +164,23 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    if (self.selectedIndex == 4) {
-        
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [self checkUserLogin];
+    
+    BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
+    if ([prefs boolForKey:@"user_loggedin"] == YES && userLogout == NO) {
+        NSString *pngFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:pngFilePath]) {
+            [self performSelector:@selector(removeSplashScreen) withObject:nil afterDelay:3.5];
+        }
+        else {
+            
+        }
     }
-    else
-    {
-        [self checkUserLogin];
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-        if (![db open]) {
-            DMLog(@"Could not open db.");
-        }
-        
-#pragma mark ON APP LOAD
-        
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *path = [paths objectAtIndex:0];
-        NSString *fullPath = [path stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
-        NSFileManager *fm = [NSFileManager defaultManager];
-        BOOL exists = [fm fileExistsAtPath:fullPath];
-        if (exists) {
-            [self addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:fullPath]];
-        }
-        
-        BOOL upgraded11 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1"];
-        if (upgraded11 == NO && [prefs boolForKey:@"user_loggedin"] == YES) {
-            [self performSelectorInBackground:@selector(updateMeasureTable) withObject:nil];
-        }
-                
-        BOOL upgraded102 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.2"];
-        if (upgraded102 == NO) {
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            if (![db open]) {
-                DMLog(@"Could not open db.");
-            }
-            
-            NSString *updateSQL = @"DELETE FROM Food WHERE Name LIKE '%infant%'";
-            [db beginTransaction];
-            [db executeUpdate:updateSQL];
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-            
-            NSString *updateSQL2 = @"DELETE FROM Food WHERE Name LIKE '%babyfood%'";
-            [db beginTransaction];
-            [db executeUpdate:updateSQL2];
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-            
-            NSString *updateSQL3 = @"DELETE FROM Food WHERE Name LIKE '%baby meal%'";
-            [db beginTransaction];
-            [db executeUpdate:updateSQL3];
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-            
-            [prefs setBool:YES forKey:@"1.0.2"];
-        }
-        
-        BOOL upgraded111 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1.11.1"];
-        if (upgraded111 == NO) {
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            if (![db open]) {
-                DMLog(@"Could not open db.");
-            }
-            
-            BOOL upgraded103 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.3"];
-            if (upgraded103 == NO && [prefs boolForKey:@"user_loggedin"] == YES) {
-                
-                [prefs setBool:YES forKey:@"1.0.3"];
-            }
-            
-            [prefs setBool:YES forKey:@"1.1.11.1"];
-        }
-        
-        BOOL upgraded121 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.2.1.1"];
-        upgraded121 = NO;
-        if (upgraded121 == NO) {
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            if (![db open]) {
-                DMLog(@"Could not open db.");
-            }
-            
-            if (![db columnExists:@"FactualID" inTableWithName:@"Food"]) {
-                NSString *updateSQL = @"ALTER TABLE Food ADD FactualID TEXT";
-                [db beginImmediateTransaction];
-                [db executeUpdate:updateSQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            [prefs setBool:YES forKey:@"1.2.1.1"];
-        }
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        BOOL upgraded14 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.4"];
-        if (upgraded14 == NO) {
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            if (![db open]) {
-                DMLog(@"Could not open db.");
-            }
-            
-            if (![db columnExists:@"ProteinRatio" inTableWithName:@"user"]) {
-                [db beginTransaction];
-                NSString *proteinSQL = @"ALTER TABLE user ADD ProteinRatio INTEGER DEFAULT 0";
-                [db executeUpdate:proteinSQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            if (![db columnExists:@"CarbRatio" inTableWithName:@"user"]) {
-                [db beginTransaction];
-                NSString *carbSQL = @"ALTER TABLE user ADD CarbRatio INTEGER DEFAULT 0";
-                [db executeUpdate:carbSQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            if (![db columnExists:@"FatRatio" inTableWithName:@"user"]) {
-                [db beginTransaction];
-                NSString *fatSQL = @"ALTER TABLE user ADD FatRatio INTEGER DEFAULT 0";
-                [db executeUpdate:fatSQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            if (![db columnExists:@"CompanyID" inTableWithName:@"user"]) {
-                [db beginTransaction];
-                NSString *companySQL = @"ALTER TABLE user ADD CompanyID INTEGER DEFAULT 0";
-                [db executeUpdate:companySQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            if (![db columnExists:@"bodyfat" inTableWithName:@"weightlog"]) {
-                [db beginTransaction];
-                NSString *bodyFatSQL = @"ALTER TABLE weightlog ADD bodyfat REAL DEFAULT 0";
-                [db executeUpdate:bodyFatSQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            if (![db columnExists:@"entry_type" inTableWithName:@"weightlog"]) {
-                [db beginTransaction];
-                NSString *entryTypeSQL = @"ALTER TABLE weightlog ADD entry_type INTEGER DEFAULT 0";
-                [db executeUpdate:entryTypeSQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            [prefs setBool:YES forKey:@"1.4"];
-        }
-        
-        BOOL upgraded15 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.5"];
-        if (upgraded15 == NO) {
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            if (![db open]) {
-                DMLog(@"Could not open db.");
-            }
-            
-            if (![db tableExists:@"Messages"]) {
-                [db beginTransaction];
-                NSString *messageSQL = @"CREATE TABLE 'Messages' (Id INTEGER, 'Text' TEXT, Sender TEXT, 'Date' DATE, Read BOOLEAN)";
-                [db executeUpdate:messageSQL];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-                [db commit];
-            }
-            
-            [prefs setBool:YES forKey:@"1.5"];
-        }
-        
-        // MIGRATING, Moving old tables out of the way.
-//        NSString *dropTableSQL1;
-//        [db beginTransaction];
-//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MoveTags"];
-//        [db executeUpdate:dropTableSQL1];
-//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MoveCategories"];
-//        [db executeUpdate:dropTableSQL1];
-//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MovesCategories"];
-//        [db executeUpdate:dropTableSQL1];
-//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MovesTags"];
-//        [db executeUpdate:dropTableSQL1];
-//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MovesTags"];
-//        [db executeUpdate:dropTableSQL1];
-//        dropTableSQL1 = [NSString stringWithFormat:@"DROP TABLE IF EXISTS MoveDetailsTable"];
-//        [db executeUpdate:dropTableSQL1];
-//        [db commit];
-
-        // Add optimized MyMoves Tags and Categories Tables.
-        // Create table to store Tags associated with Moves.
-        if (![db tableExists:@"MoveTags"]) {
-            [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MoveTags' (tagID INTEGER PRIMARY KEY, tag TEXT)";
-            [db executeUpdate:createTableSQL];
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-        }
-
-        if (![db tableExists:@"MoveDetails"]) {
-            [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MoveDetails' (moveID INTEGER PRIMARY KEY, companyID INTEGER, moveName TEXT, videoLink TEXT, notes TEXT)";
-            [db executeUpdate:createTableSQL];
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-        }
-        
-        // List of Categories that moves can be associated with. NOTE: Category = Bodypart.
-        if (![db tableExists:@"MoveCategories"]) {
-            [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MoveCategories' (categoryID INTEGER PRIMARY KEY, categoryName TEXT)";
-            [db executeUpdate:createTableSQL];
-            // Now add the hard-coded values of Categories.
-            NSArray *categorySQLArray = @[
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (1, 'Arms')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (2, 'Calves')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (3, 'Full Body')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (4, 'Chest')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (5, 'Back')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (6, 'Shoulders')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (7, 'Lats')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (8, 'Abdominals')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (9, 'Quads')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (10, 'Hamstrings')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (11, 'Legs')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (12, 'Upper Body')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (13, 'Biceps')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (14, 'Triceps')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (15, 'Lower Body')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (16, 'Traps')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (17, 'Core')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (18, 'Glutes')",
-                @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (19, 'Hip Flexors')",
-            ];
-            for (NSString *sqlStatement in categorySQLArray) {
-                [db executeUpdate:sqlStatement];
-                if ([db hadError]) {
-                    DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-                }
-            }
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-        }
-        
-        // Create table to store the Categories that are associated with a Move.
-        if (![db tableExists:@"MovesCategories"]) {
-            [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MovesCategories' (moveID INTEGER, categoryID INTEGER, PRIMARY KEY (moveID, categoryID))";
-            [db executeUpdate:createTableSQL];
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-        }
-        // Create a table to store the Tags associated with the Moves.
-        if (![db tableExists:@"MovesTags"]) {
-            [db beginTransaction];
-            NSString *createTableSQL = @"CREATE TABLE 'MovesTags' (moveID INTEGER, tagID INTEGER)";
-            [db executeUpdate:createTableSQL];
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-        }
-        
-        // Cleanup unused, deprecated tables.
-        NSString *dropTableSQL = nil;
-        [db beginTransaction];
-        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table"];
-        [db executeUpdate:dropTableSQL];
-        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table_Old"];
-        [db executeUpdate:dropTableSQL];
-        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfBodyPart_Table"];
-        [db executeUpdate:dropTableSQL];
-        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTags_Table"];
-        [db executeUpdate:dropTableSQL];
-        [db commit];
-
-        BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-        if ([prefs boolForKey:@"user_loggedin"] == YES && userLogout == NO) {
-            NSString *pngFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            if ([fileManager fileExistsAtPath:pngFilePath]) {
-                [self performSelector:@selector(removeSplashScreen) withObject:nil afterDelay:3.5];
-            }
-            else {
-                
-            }
-        }
-        
-        if ([prefs boolForKey:@"user_loggedin"] == YES) {
-            [self syncDatabase];
-        }
-
-//        [dietmasterEngine downloadFileIfUpdatedInBackground];
+    
+    if ([prefs boolForKey:@"user_loggedin"] == YES) {
+        [self syncDatabase];
     }
 }
 
@@ -515,7 +190,6 @@
 
 - (void)clearTableData {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -546,22 +220,6 @@
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
-}
-
-#pragma mark - SPLASH METHODS
-
-- (void)showSplashScreen {
-    NSString *imageFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];
-    splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT)];
-    splashView.contentMode = UIViewContentModeScaleAspectFill;
-    splashView.image = [UIImage imageWithContentsOfFile:imageFilePath];
-//    [window addSubview:splashView];
-//    [window bringSubviewToFront:splashView];
-}
-
-- (void)removeSplashScreen {
-    [splashView removeFromSuperview];
-    splashView = nil;
 }
 
 #pragma mark USER LOGIN
@@ -598,7 +256,7 @@
         [prefs setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
         
         [dietmasterEngine.mealPlanArray removeAllObjects];
-        [viewController loadData];
+        [self.viewController loadData];
         
         #pragma mark DELETE ALL USER DATA
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
@@ -626,7 +284,7 @@
         [self getUserLogin];
 
     } else {
-        [viewController loadData];
+        [self.viewController loadData];
     }
 }
 
@@ -634,29 +292,29 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"logout_dietmastergo"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    if (!loginViewController) {
-        loginViewController = [[LoginViewController alloc] init];
-        loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-        loginViewController.view.tag = 40;
-        loginViewController.view.alpha = 0.0;
-        loginViewController.view.hidden = YES;
+    if (!self.loginViewController) {
+        self.loginViewController = [[LoginViewController alloc] init];
+        self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
+        self.loginViewController.view.tag = 40;
+        self.loginViewController.view.alpha = 0.0;
+        self.loginViewController.view.hidden = YES;
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
     
-    if (loginViewController.view.hidden == YES) {
+    if (self.loginViewController.view.hidden == YES) {
         
-        loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-        loginViewController.view.tag = 40;
-        loginViewController.view.alpha = 0.0;
-        loginViewController.view.hidden = NO;
+        self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
+        self.loginViewController.view.tag = 40;
+        self.loginViewController.view.alpha = 0.0;
+        self.loginViewController.view.hidden = NO;
         
-        [self.window insertSubview:[loginViewController view] atIndex:0];
-        [self.window bringSubviewToFront:loginViewController.view];
+        [self.window insertSubview:[self.loginViewController view] atIndex:0];
+        [self.window bringSubviewToFront:self.loginViewController.view];
         
         [UIView animateWithDuration:0.75 animations:^{
-            loginViewController.view.alpha = 1.0;
+            self.loginViewController.view.alpha = 1.0;
         }];
         
         UIView *v = [self.window viewWithTag:30];
@@ -690,7 +348,7 @@
 
     [self syncDatabase];
     
-    [viewController loadData];
+    [self.viewController loadData];
 }
 
 //DownSync
@@ -704,7 +362,6 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:[NSDate date] forKey:@"lastmodified"];
-    [prefs synchronize];
 }
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
@@ -717,16 +374,13 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:nil forKey:@"lastmodified"];
     [prefs setValue:nil forKey:@"lastsyncdate"];
-    [prefs synchronize];
 }
 
-//UpSync
 - (void)syncUPDatabaseFinished:(NSString *)responseMessage {
     [self performSelector:@selector(callSyncDatabase) withObject:nil afterDelay:1.00];
 }
 
--(void)callSyncDatabase
-{
+-(void)callSyncDatabase {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
@@ -738,7 +392,6 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:[NSDate date] forKey:@"lastmodified"];
-    [prefs synchronize];
 }
 
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage {
@@ -771,7 +424,6 @@
         
         MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
         [soapWebService offlineSyncApi];
-        
         [soapWebService getMyMovesData];
         
         if (![prefs valueForKey:@"lastmodified"]) {
@@ -814,11 +466,330 @@
     }
 }
 
-#pragma mark UPDATE 1.1. METHOD
-- (void)updateMeasureTable {
-    
+#pragma mark - System Updates
+
+- (void)upgradeSystem {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    if (![db open]) {
+        DMLog(@"Error: Could not open db to upgrade.");
+        return;
+    }
     
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    NSString *fullPath = [path stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    BOOL exists = [fm fileExistsAtPath:fullPath];
+    if (exists) {
+        [self addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:fullPath]];
+    }
+    
+    BOOL upgraded11 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1"];
+    if (upgraded11 == NO) {
+        [self updateMeasureTable];
+    }
+            
+    BOOL upgraded102 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.2"];
+    if (upgraded102 == NO) {
+        NSString *updateSQL = @"DELETE FROM Food WHERE Name LIKE '%infant%'";
+        [db beginTransaction];
+        [db executeUpdate:updateSQL];
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+        
+        NSString *updateSQL2 = @"DELETE FROM Food WHERE Name LIKE '%babyfood%'";
+        [db beginTransaction];
+        [db executeUpdate:updateSQL2];
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+        
+        NSString *updateSQL3 = @"DELETE FROM Food WHERE Name LIKE '%baby meal%'";
+        [db beginTransaction];
+        [db executeUpdate:updateSQL3];
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+        
+        [prefs setBool:YES forKey:@"1.0.2"];
+    }
+    
+    BOOL upgraded111 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1.11.1"];
+    if (upgraded111 == NO) {
+        BOOL upgraded103 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.3"];
+        if (upgraded103 == NO) {
+            [prefs setBool:YES forKey:@"1.0.3"];
+        }
+        [prefs setBool:YES forKey:@"1.1.11.1"];
+    }
+    
+    BOOL upgraded121 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.2.1.1"];
+    upgraded121 = NO;
+    if (upgraded121 == NO) {
+        if (![db columnExists:@"FactualID" inTableWithName:@"Food"]) {
+            NSString *updateSQL = @"ALTER TABLE Food ADD FactualID TEXT";
+            [db beginTransaction];
+            [db executeUpdate:updateSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
+        [prefs setBool:YES forKey:@"1.2.1.1"];
+    }
+    
+    BOOL upgraded14 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.4"];
+    if (upgraded14 == NO) {
+        if (![db columnExists:@"ProteinRatio" inTableWithName:@"user"]) {
+            [db beginTransaction];
+            NSString *proteinSQL = @"ALTER TABLE user ADD ProteinRatio INTEGER DEFAULT 0";
+            [db executeUpdate:proteinSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
+        if (![db columnExists:@"CarbRatio" inTableWithName:@"user"]) {
+            [db beginTransaction];
+            NSString *carbSQL = @"ALTER TABLE user ADD CarbRatio INTEGER DEFAULT 0";
+            [db executeUpdate:carbSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
+        if (![db columnExists:@"FatRatio" inTableWithName:@"user"]) {
+            [db beginTransaction];
+            NSString *fatSQL = @"ALTER TABLE user ADD FatRatio INTEGER DEFAULT 0";
+            [db executeUpdate:fatSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
+        if (![db columnExists:@"CompanyID" inTableWithName:@"user"]) {
+            [db beginTransaction];
+            NSString *companySQL = @"ALTER TABLE user ADD CompanyID INTEGER DEFAULT 0";
+            [db executeUpdate:companySQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
+        if (![db columnExists:@"bodyfat" inTableWithName:@"weightlog"]) {
+            [db beginTransaction];
+            NSString *bodyFatSQL = @"ALTER TABLE weightlog ADD bodyfat REAL DEFAULT 0";
+            [db executeUpdate:bodyFatSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
+        if (![db columnExists:@"entry_type" inTableWithName:@"weightlog"]) {
+            [db beginTransaction];
+            NSString *entryTypeSQL = @"ALTER TABLE weightlog ADD entry_type INTEGER DEFAULT 0";
+            [db executeUpdate:entryTypeSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        
+        [prefs setBool:YES forKey:@"1.4"];
+    }
+    
+    BOOL upgraded15 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.5"];
+    if (upgraded15 == NO) {
+        if (![db tableExists:@"Messages"]) {
+            [db beginTransaction];
+            NSString *messageSQL = @"CREATE TABLE 'Messages' (Id INTEGER PRIMARY KEY, 'Text' TEXT, Sender TEXT, 'Date' DATE, Read BOOLEAN)";
+            [db executeUpdate:messageSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+        }
+        [prefs setBool:YES forKey:@"1.5"];
+    }
+    
+    // Add optimized MyMoves Tags and Categories Tables.
+    // Create table to store Tags associated with Moves.
+    if (![db tableExists:@"MoveTags"]) {
+        [db beginTransaction];
+        NSString *createTableSQL = @"CREATE TABLE 'MoveTags' (tagID INTEGER PRIMARY KEY, tag TEXT)";
+        [db executeUpdate:createTableSQL];
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+    }
+
+    if (![db tableExists:@"MoveDetails"]) {
+        [db beginTransaction];
+        NSString *createTableSQL = @"CREATE TABLE 'MoveDetails' (moveID INTEGER PRIMARY KEY, companyID INTEGER, moveName TEXT, videoLink TEXT, notes TEXT)";
+        [db executeUpdate:createTableSQL];
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+    }
+    
+    // List of Categories that moves can be associated with. NOTE: Category = Bodypart.
+    if (![db tableExists:@"MoveCategories"]) {
+        [db beginTransaction];
+        NSString *createTableSQL = @"CREATE TABLE 'MoveCategories' (categoryID INTEGER PRIMARY KEY, categoryName TEXT)";
+        [db executeUpdate:createTableSQL];
+        // Now add the hard-coded values of Categories.
+        NSArray *categorySQLArray = @[
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (1, 'Arms')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (2, 'Calves')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (3, 'Full Body')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (4, 'Chest')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (5, 'Back')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (6, 'Shoulders')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (7, 'Lats')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (8, 'Abdominals')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (9, 'Quads')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (10, 'Hamstrings')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (11, 'Legs')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (12, 'Upper Body')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (13, 'Biceps')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (14, 'Triceps')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (15, 'Lower Body')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (16, 'Traps')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (17, 'Core')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (18, 'Glutes')",
+            @"REPLACE INTO MoveCategories (categoryID, categoryName) VALUES (19, 'Hip Flexors')",
+        ];
+        for (NSString *sqlStatement in categorySQLArray) {
+            [db executeUpdate:sqlStatement];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+        }
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+    }
+    
+    // Create table to store the Categories that are associated with a Move.
+    if (![db tableExists:@"MovesCategories"]) {
+        [db beginTransaction];
+        NSString *createTableSQL = @"CREATE TABLE 'MovesCategories' (moveID INTEGER, categoryID INTEGER, PRIMARY KEY (moveID, categoryID))";
+        [db executeUpdate:createTableSQL];
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+    }
+    // Create a table to store the Tags associated with the Moves.
+    if (![db tableExists:@"MovesTags"]) {
+        [db beginTransaction];
+        NSString *createTableSQL = @"CREATE TABLE 'MovesTags' (moveID INTEGER, tagID INTEGER)";
+        [db executeUpdate:createTableSQL];
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+    }
+
+    NSString *upgradedMyMovesKey = @"MyMoves2023Update2";
+    BOOL upgradedMyMoves = [[NSUserDefaults standardUserDefaults] boolForKey:upgradedMyMovesKey];
+    if (upgradedMyMoves == NO) {
+        // Cleanup unused, deprecated tables.
+        NSString *dropTableSQL = nil;
+        [db beginTransaction];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table"];
+        [db executeUpdate:dropTableSQL];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTitle_Table_Old"];
+        [db executeUpdate:dropTableSQL];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfBodyPart_Table"];
+        [db executeUpdate:dropTableSQL];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ListOfTags_Table"];
+        [db executeUpdate:dropTableSQL];
+        [db commit];
+        
+        // Re-build Databases with correct primary keys.
+        [db beginTransaction];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ServerUserPlanDateList"];
+        [db executeUpdate:dropTableSQL];
+        [db commit];
+        [db beginTransaction];
+        if (![db tableExists:@"ServerUserPlanDateList"]) {
+            NSString *createTableSQL = @"CREATE TABLE 'ServerUserPlanDateList' (UserPlanDateID INTEGER, "
+                                        "PlanID INTEGER, PlanDate TEXT, LastUpdated TEXT, UniqueID TEXT, "
+                                        "Status TEXT, SyncResult TEXT, ParentUniqueID TEXT, UserPlanMoves TEXT, "
+                                        "PRIMARY KEY (UserPlanDateID, PlanID))";
+            [db executeUpdate:createTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+        }
+        [db commit];
+        [db beginTransaction];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ServerUserPlanList"];
+        [db executeUpdate:dropTableSQL];
+        if (![db tableExists:@"ServerUserPlanList"]) {
+            NSString *createTableSQL = @"CREATE TABLE 'ServerUserPlanList' (PlanID INTEGER ,UserID INTEGER, "
+                                        "PlanName TEXT, Notes TEXT, LastUpdated TEXT, UniqueID TEXT, Status TEXT, "
+                                        "SyncResult TEXT, UserPlanDates TEXT, "
+                                        "PRIMARY KEY (PlanID, UserID))";
+            [db executeUpdate:createTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+        }
+        [db commit];
+        [db beginTransaction];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ServerUserPlanMoveList"];
+        [db executeUpdate:dropTableSQL];
+        if (![db tableExists:@"ServerUserPlanMoveList"]) {
+            NSString *createTableSQL = @"CREATE TABLE 'ServerUserPlanList' (UserPlanMoveID INTEGER, UserPlanDateID INTEGER, "
+                                        "MoveID INTEGER, MoveName TEXT, VideoLink TEXT, Notes TEXT, LastUpdated TEXT, "
+                                        "UniqueID TEXT, Status TEXT, SyncResult TEXT, ParentUniqueID TEXT, UserPlanMoveSets TEXT, "
+                                        "isCheckBoxClicked TEXT, "
+                                        "PRIMARY KEY (UserPlanMoveID, UserPlanDateID, MoveID))";
+            [db executeUpdate:createTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+        }
+        [db commit];
+        [db beginTransaction];
+        dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ServerUserPlanMoveSetList"];
+        [db executeUpdate:dropTableSQL];
+        if (![db tableExists:@"ServerUserPlanMoveSetList"]) {
+            NSString *createTableSQL = @"CREATE TABLE 'ServerUserPlanMoveSetList' (SetID INTEGER, UserPlanMoveID INTEGER, "
+                                        "SetNumber INTEGER, Unit1ID INTEGER, Unit1Value INTEGER, Unit2ID INTEGER, "
+                                        "Unit2Value INTEGER, Unit1Name TEXT, Unit2Name TEXT, LastUpdated TEXT, "
+                                        "UniqueID TEXT, Status TEXT, SyncResult TEXT, ParentUniqueID TEXT, "
+                                        "PRIMARY KEY (SetID, UserPlanMoveID))";
+            [db executeUpdate:createTableSQL];
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+        }
+        [db commit];
+        
+        [prefs setBool:YES forKey:upgradedMyMovesKey];
+    }
+}
+
+- (void)updateMeasureTable {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -830,28 +801,24 @@
     if (filePath) {
         NSString *measure_sql = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
         if (measure_sql) {
-            
             NSArray *measureArray = [measure_sql componentsSeparatedByString:@"\n"];
-            
+            [db beginTransaction];
             for (NSString *sql in measureArray) {
-                [db beginTransaction];
                 [db executeUpdate:sql];
                 if ([db hadError]) {
                     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                     success = NO;
                 }
-                [db commit];
             }
+            [db commit];
         }
     }
     
     if (success) {
         [prefs setBool:YES forKey:@"1.1"];
-        [prefs synchronize];
     }
 }
 
-#pragma mark REMOVE DB FROM ICLOUD BACKUP
 - (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL {
     assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
     
