@@ -37,9 +37,9 @@
     self.messageLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
     
     self.bgOpponentImage = [UIImage imageNamed:@"opponent_bg"];
-    self.bgOpponentImage = [self.bgOpponentImage resizableImageWithCapInsets:UIEdgeInsetsMake(3, 14, 3, 14) resizingMode:UIImageResizingModeStretch];
+    self.bgOpponentImage = [self.bgOpponentImage resizableImageWithCapInsets:UIEdgeInsetsMake(10, 15, 10, 15) resizingMode:UIImageResizingModeStretch];
     self.bgOwnerImage = [UIImage imageNamed:@"owner_bg"];
-    self.bgOwnerImage = [self.bgOwnerImage resizableImageWithCapInsets:UIEdgeInsetsMake(3, 14, 3, 14) resizingMode:UIImageResizingModeStretch];
+    self.bgOwnerImage = [self.bgOwnerImage resizableImageWithCapInsets:UIEdgeInsetsMake(10, 15, 10, 15) resizingMode:UIImageResizingModeStretch];
     
     self.opponentTextColor = [UIColor blackColor];
     self.ownerTextColor = [UIColor whiteColor];
@@ -94,6 +94,7 @@
     
     self.timeLabel.text = @"";
     
+    [self.contentView setNeedsLayout];
     [self.contentView layoutIfNeeded];
 }
 
