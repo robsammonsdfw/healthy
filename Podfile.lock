@@ -120,7 +120,6 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
-  - GrowingTextView (0.7.2)
   - JJFloatingActionButton (2.5.0)
   - MBProgressHUD (1.2.0)
   - MKNumberBadgeView (0.0.1)
@@ -148,7 +147,6 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - FMDB
   - FSCalendar
-  - GrowingTextView
   - JJFloatingActionButton
   - MBProgressHUD
   - MKNumberBadgeView
@@ -176,7 +174,6 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
-    - GrowingTextView
     - JJFloatingActionButton
     - MBProgressHUD
     - MKNumberBadgeView
@@ -207,7 +204,6 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: d3dabccdb336fc0ae44b633c8abaa26559893cd9
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
-  GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   JJFloatingActionButton: fdc3aefb0f28f04d0f988fa25d5fac97028a9ea7
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MKNumberBadgeView: 4007883b46f7babcf8bca339ecddff187e0cbb1f
@@ -220,6 +216,6 @@ SPEC CHECKSUMS:
   SWXMLHash: dd733a457e9c4fe93b1538654057aefae4acb382
   ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: da33bf970dad879b57f53ad2afcd7a98be463fd8
+PODFILE CHECKSUM: 4558dcb6d46714cf0376708fd596001911b53ede
 
 COCOAPODS: 1.12.1

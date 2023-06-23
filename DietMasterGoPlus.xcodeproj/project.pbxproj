@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E0D09F72A45CD1B0032162E /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
@@ -64,8 +65,6 @@
 		401B63C020B3FC64004453E7 /* Log_Add.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2409564F12D749660065548F /* Log_Add.xib */; };
 		401B63C120B3FC64004453E7 /* RecordWeightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FF54FD12D781D900E81066 /* RecordWeightView.xib */; };
 		401B63C220B3FC64004453E7 /* FoodsHome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2417DD7F131D942200346132 /* FoodsHome.xib */; };
-		401B63D920B3FC64004453E7 /* MessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3568E2A6187EDE40004A542C /* MessageCell.xib */; };
-		401B63E520B3FC64004453E7 /* SendView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3568E2B7187EDE40004A542C /* SendView.xib */; };
 		401B63E920B3FC64004453E7 /* ManageFoods.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247695B013FEA91000ED37E6 /* ManageFoods.xib */; };
 		401B63EC20B3FC64004453E7 /* FoodCategoryPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CE65382148EB2AA00A3C992 /* FoodCategoryPicker.xib */; };
 		401B63ED20B3FC64004453E7 /* MeasurePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC81492DB950098A0C1 /* MeasurePicker.xib */; };
@@ -243,6 +242,7 @@
 		0E002FF3153E19560094341F /* NSData+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Blocks.m"; sourceTree = "<group>"; };
 		0E0A294F1744187D003AB90A /* UIDevice+machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+machine.h"; sourceTree = "<group>"; };
 		0E0A29501744187D003AB90A /* UIDevice+machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+machine.m"; sourceTree = "<group>"; };
+		0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingTextView.swift; sourceTree = "<group>"; };
 		0E1A3B392A3B66AC004C6033 /* DMMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessage.h; sourceTree = "<group>"; };
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
 		0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMFood.h; sourceTree = "<group>"; };
@@ -436,12 +436,10 @@
 		3568E296187EDE28004A542C /* UIViewController+Keyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Keyboard.m"; sourceTree = "<group>"; };
 		3568E2A4187EDE40004A542C /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
 		3568E2A5187EDE40004A542C /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
-		3568E2A6187EDE40004A542C /* MessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageCell.xib; sourceTree = "<group>"; };
 		3568E2A8187EDE40004A542C /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		3568E2A9187EDE40004A542C /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		3568E2B5187EDE40004A542C /* SendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendView.h; sourceTree = "<group>"; };
 		3568E2B6187EDE40004A542C /* SendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendView.m; sourceTree = "<group>"; };
-		3568E2B7187EDE40004A542C /* SendView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendView.xib; sourceTree = "<group>"; };
 		35E541DF1887BAD5004DECCF /* config-adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-adhoc.xcconfig"; sourceTree = "<group>"; };
 		35E541E01887BAD5004DECCF /* config-appstore.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-appstore.xcconfig"; sourceTree = "<group>"; };
 		35E541E11887BAD5004DECCF /* config-debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-debug.xcconfig"; sourceTree = "<group>"; };
@@ -1132,6 +1130,7 @@
 				0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */,
 				0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */,
 				0E6F913E2A43C1F500956F1E /* LogDaySummary.swift */,
+				0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1276,12 +1275,10 @@
 				431EEE471D82AA7D0022AFEA /* TTAttributeLable */,
 				3568E2A4187EDE40004A542C /* MessageCell.h */,
 				3568E2A5187EDE40004A542C /* MessageCell.m */,
-				3568E2A6187EDE40004A542C /* MessageCell.xib */,
 				3568E2A8187EDE40004A542C /* MessageViewController.h */,
 				3568E2A9187EDE40004A542C /* MessageViewController.m */,
 				3568E2B5187EDE40004A542C /* SendView.h */,
 				3568E2B6187EDE40004A542C /* SendView.m */,
-				3568E2B7187EDE40004A542C /* SendView.xib */,
 			);
 			path = MessageController;
 			sourceTree = "<group>";
@@ -1687,8 +1684,6 @@
 				65462D2726BD1DAF004D1654 /* UserGoalVC.xib in Resources */,
 				403D88AF21ECA98700B2F232 /* MyMovesViewController.xib in Resources */,
 				650208B52500D34000F412B0 /* PopUpView.xib in Resources */,
-				401B63D920B3FC64004453E7 /* MessageCell.xib in Resources */,
-				401B63E520B3FC64004453E7 /* SendView.xib in Resources */,
 				401B63E920B3FC64004453E7 /* ManageFoods.xib in Resources */,
 				401B63EC20B3FC64004453E7 /* FoodCategoryPicker.xib in Resources */,
 				401B63ED20B3FC64004453E7 /* MeasurePicker.xib in Resources */,
@@ -1893,6 +1888,7 @@
 				401B653720B3FC64004453E7 /* MessageViewController.m in Sources */,
 				650208CB250152FA00F412B0 /* PurchaseIAPHelper.m in Sources */,
 				0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */,
+				0E0D09F72A45CD1B0032162E /* GrowingTextView.swift in Sources */,
 				0E6F91382A432A4B00956F1E /* MainMenuFAB.swift in Sources */,
 				650208CE2501531B00F412B0 /* IAPHelper.m in Sources */,
 				401B654E20B3FC64004453E7 /* UIView+FrameControl.m in Sources */,

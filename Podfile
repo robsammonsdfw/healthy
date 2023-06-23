@@ -22,7 +22,8 @@ def core_pods
   pod 'MBProgressHUD' # https://github.com/matej/MBProgressHUD
   pod 'MKNumberBadgeView' # https://github.com/erichoracek/MKNumberBadgeView
   pod 'JJFloatingActionButton' # https://github.com/jjochen/JJFloatingActionButton
-  pod 'GrowingTextView' # https://github.com/KennethTsang/GrowingTextView
+  # Note: See GrowingTextView.swift in the project for details why this is commented out.
+  #pod 'GrowingTextView' # https://github.com/KennethTsang/GrowingTextView
   
   # Note, this pod is archived as of 2021, but should last 2 years before needing replacement.
   pod 'ScrollableSegmentedControl' # https://github.com/GocePetrovski/ScrollableSegmentedControl

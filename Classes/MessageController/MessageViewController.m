@@ -70,7 +70,7 @@ int const MaximumStringLength = 300;
     [self.tableView registerClass:[MessageCell class] forCellReuseIdentifier:OwnerCellIdentifier];
     [self.view addSubview:self.tableView];
     
-    self.sendView = loadNib([SendView class], @"SendView", self);
+    self.sendView = [[SendView alloc] initWithFrame:CGRectZero];
     self.sendView.translatesAutoresizingMaskIntoConstraints = NO;
     self.sendView.delegate = self;
     [self.view addSubview:self.sendView];
@@ -84,7 +84,7 @@ int const MaximumStringLength = 300;
     [self.sendView.topAnchor constraintEqualToAnchor:self.tableView.bottomAnchor constant:0].active = YES;
     [self.sendView.leadingAnchor constraintEqualToAnchor:layoutGuide.leadingAnchor constant:0].active = YES;
     [self.sendView.trailingAnchor constraintEqualToAnchor:layoutGuide.trailingAnchor constant:0].active = YES;
-    [self.sendView.heightAnchor constraintEqualToConstant:50.0f].active = YES;
+    [self.sendView.heightAnchor constraintGreaterThanOrEqualToConstant:50.0f].active = YES;
     UILayoutGuide *keyboardGuide = self.view.keyboardLayoutGuide;
     [self.sendView.bottomAnchor constraintEqualToAnchor:keyboardGuide.topAnchor constant:0].active = YES;
     
@@ -287,11 +287,15 @@ int const MaximumStringLength = 300;
 
 #pragma mark - SendViewDelegate
 
+- (void)sendView:(SendView *)textView didChangeHeight:(CGFloat)height {
+    // No-Op.
+}
+
 - (void)sendView:(SendView *)sendView_ didSendText:(NSString *)text {
     if (!text.length) {
         return;
     }
-    [sendView_.messageView resignFirstResponder];
+    [self.sendView resignFirstResponder];
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Sending..."];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
