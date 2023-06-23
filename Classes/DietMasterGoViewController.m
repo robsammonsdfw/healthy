@@ -121,9 +121,15 @@
     numberBadge.hideWhenZero = YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    UIEdgeInsets layoutGuide = self.view.safeAreaInsets;
+    self.scrollView.contentOffset = CGPointMake(0, layoutGuide.top - layoutGuide.bottom);
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-        
+
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     self.hidesBottomBarWhenPushed = true;
     

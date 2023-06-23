@@ -15,7 +15,6 @@
 @synthesize delegate, responseData;
 
 -(void)callWebservice:(NSDictionary *)userData {
-    [Base64 initialize];
     NSString *webservicekey = @"api_key_here"; // Enter Key Here
     NSData *webkeydata = [webservicekey dataUsingEncoding: NSASCIIStringEncoding];
     NSString *b64EncStrwebservicekey = [Base64 encode:webkeydata];

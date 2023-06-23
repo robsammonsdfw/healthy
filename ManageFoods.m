@@ -127,18 +127,12 @@ CGPoint svos;
         [self.navigationItem setTitle:@"Add New Food"];
     }
     
-    UIImage *image3 = [UIImage imageNamed:@"menuscan"];
-    UIButton *urButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    urButton.frame = CGRectMake(0, 0, 30, 30);
-    [urButton setBackgroundImage:image3 forState:UIControlStateNormal];
-    [urButton addTarget:self action:@selector(showActionSheet:)
-       forControlEvents:UIControlEventTouchUpInside];
-    urButton.clipsToBounds = YES;
-    urButton.layer.cornerRadius = 3;
-    urButton.layer.borderColor = [UIColor blackColor].CGColor;
-    urButton.layer.borderWidth = 0.8f;
-    UIBarButtonItem *doneButton =[[UIBarButtonItem alloc] initWithCustomView:urButton];
-    self.navigationItem.rightBarButtonItem = doneButton;
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                 target:self
+                                                                                 action:@selector(showActionSheet:)];
+    rightButton.style = UIBarButtonItemStylePlain;
+    rightButton.tintColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem = rightButton;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -905,7 +899,6 @@ CGPoint svos;
     
     [DMActivityIndicator showActivityIndicator];
     NSString *strURL = [NSString stringWithFormat:@"https://trackapi.nutritionix.com/v2/search/item?upc=%@",[upcDict2 valueForKey:@"UPC"]];
-    //DMLog(@"%@",strURL);
     
     [self getApiCall:nil urlStr:strURL response:nil];
 }
