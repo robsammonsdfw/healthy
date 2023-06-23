@@ -20,8 +20,6 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 @interface MyMovesListViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
-@property (nonatomic) BOOL isExchange;
-@property (nonatomic, strong) NSDate *selectedDate;
 @property (nonatomic, strong) NSDictionary *moveDetailDictToDelete;
 
 /// Data source for exercises.
@@ -235,14 +233,22 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                             
                                             MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
                                             
-                                            [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:0 WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
+                                            [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue]
+                                                                                  UserId:0
+                                                                       WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                             DMLog(@"%@",self.moveDetailDictToDelete);
                                             
                                             [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
                                             
-                                            
-                                            [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:0 categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:0 templateName: _moveDetailDictToDelete[@"TemplateName"] WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
-                                            
+                                            [self.soapWebService addExerciseToDb:_tableData[indexPath.row]
+                                                                     workoutDate:_selectedDate
+                                                                          userId:0
+                                                                    categoryName:_bodypartTxtFld.text
+                                                                      CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue]
+                                                                        tagsName:self.filter1.text
+                                                                          TagsId:0
+                                                                    templateName: _moveDetailDictToDelete[@"TemplateName"]
+                                                                   WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
                                             
                                             self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
                                             
@@ -309,7 +315,8 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                                                  categoryName:nil
                                                                    CategoryID:0
                                                                      tagsName:self.filter1.text
-                                                                       TagsId:0 status:@"New"
+                                                                       TagsId:0
+                                                                       status:@"New"
                                                                PlanNameUnique:planNameUniqueID
                                                                DateListUnique:planDateListUniqueID
                                                                MoveNameUnique:moveNameUniqueID];
@@ -353,7 +360,17 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                             
                                             NSString *planNameStr = @"Custom Plan";
 
-                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row] SelectedDate:_selectedDate planName:planNameStr categoryName:nil CategoryID:nil tagsName:self.filter1.text TagsId:0 status:@"New" PlanNameUnique:planNameUniqueID DateListUnique:planDateListUniqueID MoveNameUnique:moveNameUniqueID];
+                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row]
+                                                                 SelectedDate:_selectedDate
+                                                                     planName:planNameStr
+                                                                 categoryName:nil
+                                                                   CategoryID:nil
+                                                                     tagsName:self.filter1.text
+                                                                       TagsId:0
+                                                                       status:@"New"
+                                                               PlanNameUnique:planNameUniqueID
+                                                               DateListUnique:planDateListUniqueID
+                                                               MoveNameUnique:moveNameUniqueID];
                                             
                                             MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
                                             
@@ -375,7 +392,6 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                             [self.soapWebService updateWorkoutToDb:dateString];
                                             
                                             [self.navigationController pushViewController:moveDetailVc animated:YES];
-                                            
                                         }];
         
         [alert addAction:yesButton];

@@ -116,7 +116,7 @@ static NSString *CellIdentifier = @"Cell";
         fsController.date_currentDate	= date_currentDate;
         
         if (indexPath.section == 0) {
-            fsController.searchType = @"All Foods";
+            fsController.searchType = DMFoodSearchTypeAllFoods;
             fsController.title = @"All Foods";
         }
         
@@ -128,8 +128,6 @@ static NSString *CellIdentifier = @"Cell";
                 
                 ManageFoods *mfController = [[ManageFoods alloc] init];
                 
-                //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
-                mfController.intTabId = AppDel.selectedIndex;
                 [self.navigationController pushViewController:mfController animated:YES];
                 mfController = nil;
                 return;

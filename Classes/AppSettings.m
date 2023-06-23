@@ -267,9 +267,6 @@
     
     ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
     
-    //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
-    mfController.intTabId = AppDel.selectedIndex;
-    
     [self.navigationController pushViewController:mfController animated:YES];
     mfController.hideAddToLog = YES;
     mfController = nil;

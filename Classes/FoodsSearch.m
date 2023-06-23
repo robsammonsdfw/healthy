@@ -106,7 +106,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [super viewDidLoad];
          
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnRight setFrame:CGRectMake(0, 0, 24, 18)];
+    [btnRight setFrame:CGRectMake(0, 0, 28, 28)];
     UIImage *plusImage = [UIImage imageNamed:@"05-plus"];
     plusImage = [plusImage imageWithTintColor:[UIColor whiteColor] renderingMode:UIImageRenderingModeAlwaysTemplate];
     [btnRight setImage:plusImage forState:UIControlStateNormal];
@@ -480,10 +480,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         ManageFoods *mfController = [[ManageFoods alloc] init];
-        
-        //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
-        mfController.intTabId = AppDel.selectedIndex;
-        
         [self.navigationController pushViewController:mfController animated:YES];
         mfController.hideAddToLog = YES;
     }
@@ -520,9 +516,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     dietmasterEngine.taskMode = @"Save";
     
     ManageFoods *mfController = [[ManageFoods alloc] init];
-    
-    //HHT we save the selected Tab in appdegate and pass to manageFood and when scan complete we use that to select the current tab
-    mfController.intTabId = AppDel.selectedIndex;
     
     [self.navigationController pushViewController:mfController animated:YES];
     mfController = nil;

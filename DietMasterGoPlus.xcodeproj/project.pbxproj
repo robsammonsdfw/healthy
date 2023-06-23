@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0E0D09F72A45CD1B0032162E /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
 		0E0D09F92A45DD8E0032162E /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DataProvider.swift */; };
+		0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FB2A4635940032162E /* DMMovePickerRow.m */; };
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
@@ -164,13 +165,9 @@
 		403D88B421ECD53200B2F232 /* MyMovesDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88B221ECD53200B2F232 /* MyMovesDetailsViewController.xib */; };
 		4040282C224E2DDD0081FFD3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4318E2F38800FB97A7 /* SystemConfiguration.framework */; };
 		40402832224E414C0081FFD3 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40402831224E414C0081FFD3 /* sound.mp3 */; };
-		40674543221DBAAA00D001A6 /* TimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40674541221DBAAA00D001A6 /* TimerViewController.m */; };
-		40674544221DBAAA00D001A6 /* TimerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40674542221DBAAA00D001A6 /* TimerViewController.xib */; };
 		40AFA92E21FA13CD009140D9 /* MyMovesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */; };
 		40AFA92F21FA13CD009140D9 /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
 		40DD776F220082BA003EE6E9 /* MyMovesWebServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 40DD776E220082BA003EE6E9 /* MyMovesWebServices.m */; };
-		40DF2E5F220487AE00476BE0 /* PickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40DF2E5D220487AE00476BE0 /* PickerViewController.m */; };
-		40DF2E60220487AE00476BE0 /* PickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40DF2E5E220487AE00476BE0 /* PickerViewController.xib */; };
 		40E035C721F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035BF21F1F29E00968755 /* MyMovesDetailHeaderCollectionReusableView.xib */; };
 		40E035C821F1F2A100968755 /* MyMovesDetailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035C021F1F29F00968755 /* MyMovesDetailCollectionViewCell.xib */; };
 		40E035C921F1F2A100968755 /* MyMovesDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */; };
@@ -245,6 +242,8 @@
 		0E0A29501744187D003AB90A /* UIDevice+machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+machine.m"; sourceTree = "<group>"; };
 		0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingTextView.swift; sourceTree = "<group>"; };
 		0E0D09F82A45DD8E0032162E /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
+		0E0D09FA2A4635940032162E /* DMMovePickerRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMovePickerRow.h; sourceTree = "<group>"; };
+		0E0D09FB2A4635940032162E /* DMMovePickerRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMovePickerRow.m; sourceTree = "<group>"; };
 		0E1A3B392A3B66AC004C6033 /* DMMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessage.h; sourceTree = "<group>"; };
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
 		0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMFood.h; sourceTree = "<group>"; };
@@ -468,17 +467,11 @@
 		403FEB521FD149A5006D9B8F /* StepData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepData.m; sourceTree = "<group>"; };
 		403FEB531FD149A5006D9B8F /* StepData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepData.h; sourceTree = "<group>"; };
 		40402831224E414C0081FFD3 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound.mp3; path = Classes/sound.mp3; sourceTree = "<group>"; };
-		40674540221DBAAA00D001A6 /* TimerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimerViewController.h; sourceTree = "<group>"; };
-		40674541221DBAAA00D001A6 /* TimerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimerViewController.m; sourceTree = "<group>"; };
-		40674542221DBAAA00D001A6 /* TimerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimerViewController.xib; sourceTree = "<group>"; };
 		40AFA92B21FA13CD009140D9 /* MyMovesListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesListViewController.h; sourceTree = "<group>"; };
 		40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesListViewController.m; sourceTree = "<group>"; };
 		40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMovesListViewController.xib; sourceTree = "<group>"; };
 		40DD776D220082BA003EE6E9 /* MyMovesWebServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesWebServices.h; sourceTree = "<group>"; };
 		40DD776E220082BA003EE6E9 /* MyMovesWebServices.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesWebServices.m; sourceTree = "<group>"; };
-		40DF2E5C220487AE00476BE0 /* PickerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PickerViewController.h; sourceTree = "<group>"; };
-		40DF2E5D220487AE00476BE0 /* PickerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PickerViewController.m; sourceTree = "<group>"; };
-		40DF2E5E220487AE00476BE0 /* PickerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PickerViewController.xib; sourceTree = "<group>"; };
 		40E035BF21F1F29E00968755 /* MyMovesDetailHeaderCollectionReusableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMovesDetailHeaderCollectionReusableView.xib; sourceTree = "<group>"; };
 		40E035C021F1F29F00968755 /* MyMovesDetailCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMovesDetailCollectionViewCell.xib; sourceTree = "<group>"; };
 		40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMovesDetailCollectionViewCell.m; sourceTree = "<group>"; };
@@ -1164,6 +1157,8 @@
 				0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */,
 				0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */,
 				0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */,
+				0E0D09FA2A4635940032162E /* DMMovePickerRow.h */,
+				0E0D09FB2A4635940032162E /* DMMovePickerRow.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1318,12 +1313,6 @@
 				40AFA92B21FA13CD009140D9 /* MyMovesListViewController.h */,
 				40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */,
 				40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */,
-				40DF2E5C220487AE00476BE0 /* PickerViewController.h */,
-				40DF2E5D220487AE00476BE0 /* PickerViewController.m */,
-				40DF2E5E220487AE00476BE0 /* PickerViewController.xib */,
-				40674540221DBAAA00D001A6 /* TimerViewController.h */,
-				40674541221DBAAA00D001A6 /* TimerViewController.m */,
-				40674542221DBAAA00D001A6 /* TimerViewController.xib */,
 				403D88B021ECD53200B2F232 /* MyMovesDetailsViewController.h */,
 				403D88B121ECD53200B2F232 /* MyMovesDetailsViewController.m */,
 				403D88B221ECD53200B2F232 /* MyMovesDetailsViewController.xib */,
@@ -1682,7 +1671,6 @@
 				0E6F91252A4328A000956F1E /* Icon-Small.png in Resources */,
 				65462D2226BD1D99004D1654 /* DailyActivityTypeVC.xib in Resources */,
 				0E6F91262A4328A000956F1E /* Icon-76.png in Resources */,
-				40674544221DBAAA00D001A6 /* TimerViewController.xib in Resources */,
 				652B915724B92A72007B08ED /* GoogleService-Info.plist in Resources */,
 				65462D2726BD1DAF004D1654 /* UserGoalVC.xib in Resources */,
 				403D88AF21ECA98700B2F232 /* MyMovesViewController.xib in Resources */,
@@ -1737,7 +1725,6 @@
 				65462D2C26BD1DC3004D1654 /* OtherHealthServiceVC.xib in Resources */,
 				650208F6250158BC00F412B0 /* DietMasterGoViewController.xib in Resources */,
 				402A3C1421F88697005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
-				40DF2E60220487AE00476BE0 /* PickerViewController.xib in Resources */,
 				40AFA92F21FA13CD009140D9 /* MyMovesListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1862,6 +1849,7 @@
 				65462D1726BD1D6B004D1654 /* ProfileContactVC.m in Sources */,
 				65462D1D26BD1D82004D1654 /* UserMealType.m in Sources */,
 				B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */,
+				0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */,
 				402A9062221AED1900568860 /* NSArray+HOF.m in Sources */,
 				401B64C220B3FC64004453E7 /* Common.m in Sources */,
 				401B64C420B3FC64004453E7 /* NSString+ConvertToDate.m in Sources */,
@@ -1871,7 +1859,6 @@
 				401B64D420B3FC64004453E7 /* NSObject+Blocks.m in Sources */,
 				402A3C1121F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m in Sources */,
 				401B64DF20B3FC64004453E7 /* UIViewController+Keyboard.m in Sources */,
-				40674543221DBAAA00D001A6 /* TimerViewController.m in Sources */,
 				0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */,
 				650208E0250153C300F412B0 /* headerVw.m in Sources */,
 				0E8EC8F32A3E08E00095BDEC /* DataFetcher.swift in Sources */,
@@ -1897,7 +1884,6 @@
 				401B654E20B3FC64004453E7 /* UIView+FrameControl.m in Sources */,
 				40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
 				0E6F913D2A43580A00956F1E /* UIViewController+Navigation.m in Sources */,
-				40DF2E5F220487AE00476BE0 /* PickerViewController.m in Sources */,
 				65462D2126BD1D99004D1654 /* DailyActivityTypeVC.m in Sources */,
 				0EDAB6A72A3B3A1000DB351A /* DMGUtilities.m in Sources */,
 				401B655F20B3FC64004453E7 /* MessageCell.m in Sources */,

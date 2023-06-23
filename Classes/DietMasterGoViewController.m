@@ -468,21 +468,21 @@
     [self.navigationController pushViewController:vc animated:YES];
 
 }
+
 - (IBAction)gotoWorkoutBtn:(id)sender {
     MyMovesViewController *vc = [[MyMovesViewController alloc] init];
-    vc.workoutClickedFromHome = @"clicked";
-    [self.navigationController pushViewController:vc animated:false];
+    [self.navigationController pushViewController:vc animated:NO];
 }
 
 - (IBAction)gotoScheduledBtn:(id)sender {
     MyMovesViewController *vc = [[MyMovesViewController alloc] init];
     vc.title = @"MyMovesViewController";
     vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:false] ;
+    [self.navigationController pushViewController:vc animated:NO] ;
 }
 
 - (IBAction)expandBtnAvtion:(id)sender {
-    _hideShowStack.hidden = false;
+    _hideShowStack.hidden = NO;
     
     if([self.status isEqualToString:@"first"])
     {

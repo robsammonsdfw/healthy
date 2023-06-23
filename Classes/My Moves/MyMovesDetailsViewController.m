@@ -11,9 +11,8 @@
 #import "MyMovesDetailHeaderCollectionReusableView.h"
 #import "MyMovesDetailFooterCollectionReusableView.h"
 #import "MyMovesWebServices.h"
-#import "TimerViewController.h"
-#import "PickerViewController.h"
 #import "MyMovesVideoPlayerViewController.h"
+#import "DMMovePickerRow.h"
 
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
@@ -21,21 +20,25 @@ static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
 static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
-@interface MyMovesDetailsViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate,exchangeDelegate,changedRepsAndWeightDelegate>
+@interface MyMovesDetailsViewController () <UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, exchangeDelegate>
 {
     CGFloat animatedDistance;
     MyMovesWebServices *soapWebService;
     BOOL addSet;
-    NSString *repsTxt;
-    NSString *weightTxt;
     IBOutlet UIImageView *thumbNailImgV;
 }
+
+@property (nonatomic, strong) NSString *repsTxt;
+@property (nonatomic, strong) NSString *weightTxt;
+
 @property (nonatomic, strong) NSMutableArray<NSDictionary *> *exerciseSetArr;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *collectionViewHeightCons;
 @property (nonatomic, strong) IBOutlet UIImageView *deleteImgB;
 
 @property (nonatomic, strong) NSMutableArray *userPlanMoveSetListData;
 @property (nonatomic, strong) NSMutableArray *userPlanSetListArr;
+
+@property (nonatomic, strong) DMPickerViewController *pickerView;
 
 @end
 
@@ -57,21 +60,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //set title
     self.navigationItem.title=@"My Moves Details";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
-    //set right navigation bar //timer
-    // UIImage *btnImage1 = [[UIImage imageNamed:@"stopwatch.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    // UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    // btn1.bounds = CGRectMake( 0, 0, btnImage1.size.width, btnImage1.size.height );
-    // btn1.tintColor = [UIColor whiteColor];
-    // [btn1 addTarget:self action:@selector(showTimer:) forControlEvents:UIControlEventTouchDown];
-    // [btn1 setImage:btnImage1 forState:UIControlStateNormal];
-    //
-    // UIBarButtonItem * settingsBtn = [[UIBarButtonItem alloc] initWithCustomView:btn1];
-    // DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    // dietmasterEngine.taskMode = @"View";
-    // self.navigationItem.rightBarButtonItem = settingsBtn;
-    
-    //set textView border color
+        
     _exerciseNotesTxtView.layer.borderColor = [UIColor grayColor].CGColor;
     _exerciseNotesTxtView.layer.borderWidth = 1.0;
     _exerciseNotesTxtView.layer.cornerRadius = 10.0;
@@ -164,8 +153,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 }
 
-- (void)loadSetValues
-{
+- (void)loadSetValues {
     [_userPlanSetListArr removeAllObjects];
     _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]];
     NSArray *LoadSetsHeader = @[@"None", @"Feet", @"Kilograms", @"Kilometers", @"KilometerPerHour",@"Meters", @"Miles", @"MilesPerHour", @"Minutes", @"Pounds", @"Repetitions", @"RestSeconds", @"Seconds", @"Yards"];
@@ -183,9 +171,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
     }
     
-    if (_addMovesArray != NULL)
-    {
-//        NSMutableArray *addedMoveList = [NSMutableArray arrayWithObject:_addMovesArray];
+    if (_addMovesArray != NULL) {
         for (int i =0 ; i<[_addMovesArray count]; i++)
         {
             NSMutableArray * predicatedArr = [[NSMutableArray alloc]initWithArray:[_userPlanMoveSetListData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(ParentUniqueID MATCHES[c] %@)", _addMovesArray[i][@"UniqueID"]]]];
@@ -193,19 +179,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
     }
 
-    
     if ([_userPlanSetListArr count] != 0)
     {
         NSInteger unit1Id = [_userPlanSetListArr[0][@"Unit1ID"]integerValue];
         NSInteger unit2Id = [_userPlanSetListArr[0][@"Unit2ID"]integerValue];
         
-        repsTxt = LoadSetsHeader[unit1Id];
-        weightTxt = LoadSetsHeader[unit2Id];
+        self.repsTxt = LoadSetsHeader[unit1Id];
+        self.weightTxt = LoadSetsHeader[unit2Id];
     }
     else
     {
-        repsTxt = LoadSetsHeader[0];
-        weightTxt = LoadSetsHeader[0];
+        self.repsTxt = LoadSetsHeader[0];
+        self.weightTxt = LoadSetsHeader[0];
     }
     
     if ([_userPlanSetListArr count] > 2)
@@ -217,10 +202,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         _collectionViewHeightCons.constant = (2 * 30) + 45;
     }
     [_collectionView reloadData];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
 }
 
 -(void)setData:(NSDictionary*)dict
@@ -267,17 +248,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                                     
                                     MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc]initWithNibName:@"MyMovesListViewController" bundle:nil];
-#warning TODO: Reconnect this.
-//                                    int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
-//
-//                                    moveListVc.selectedDate = self.currentDate;
-//                                    moveListVc.userId = UserID;
-//                                    moveListVc.isExchange = "YES";
-//                                    moveListVc.moveDetailDictToDelete = _moveDetailDict;
-//                                    moveListVc.exchangeDel = self;
+                                    int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
+
+                                    moveListVc.selectedDate = self.currentDate;
+                                    // moveListVc.userId = UserID;
+                                    moveListVc.isExchange = "YES";
+                                    //moveListVc.moveDetailDictToDelete = _moveDetailDict;
+                                    moveListVc.exchangeDel = self;
                                     
                                     [self.navigationController pushViewController:moveListVc animated:YES];
-                                    //        }
                                     
                                 }];
     
@@ -295,22 +274,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
--(IBAction)showTimer:(id)sender {
-    
-    TimerViewController *moveDetailVc = [[TimerViewController alloc]initWithNibName:@"TimerViewController" bundle:nil];
-    moveDetailVc.moveDetailDict = _moveDetailDict;
-    
-    if ([_moveDetailDict[@"CurrentDuration"] isEqualToString:@""])
-    {
-        moveDetailVc.currentTimeInSeconds = 0;
-    }
-    else
-    {
-        moveDetailVc.currentTimeInSeconds = [_moveDetailDict[@"CurrentDuration"] integerValue];
-    }
-    [self.navigationController pushViewController:moveDetailVc animated:YES];
-}
-
 - (IBAction)showVideoInBrowserAction:(id)sender {
     MyMovesVideoPlayerViewController *moveDetailVc = [[MyMovesVideoPlayerViewController alloc]initWithNibName:@"MyMovesVideoPlayerViewController" bundle:nil]; //within the app
     if ([[_moveDetailDict allKeys] containsObject:@"VideoLink"]) ///To check whether the NSMutableDictionary contains key or kot. ***
@@ -324,23 +287,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.navigationController pushViewController:moveDetailVc animated:YES];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
 
@@ -368,12 +315,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         cell.repsTxtFld.text = [NSString stringWithFormat:@"%@", _userPlanSetListArr[indexPath.row][@"Unit1Value"]];
         cell.weightTxtFld.text = [NSString stringWithFormat:@"%@", _userPlanSetListArr[indexPath.row][@"Unit2Value"]];
     }
-    else
-    {
-        //        cell.repsTxtFld.text = [NSString stringWithFormat:@"%d", 0];
-        //        cell.weightTxtFld.text = [NSString stringWithFormat:@"%d", 0];
-    }
-    
     
     cell.repsTxtFld.tag = indexPath.row;
     cell.weightTxtFld.tag = indexPath.row;
@@ -395,28 +336,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     cell.editWeightImgView.image = [cell.editWeightImgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [cell.editWeightImgView setTintColor:[UIColor lightGrayColor]];
     
-    
-    //    if ([_moveDetailDict[@"WorkingStatus"]isEqualToString:@"true"]) {
-    //
-    ////        [cell.deleteBtn setHidden:YES];
-    ////        [cell.weightBtn setHidden:YES];
-    ////        [cell.repsBtn setHidden:YES];
-    ////
-    ////        [cell.deleteImgV setHidden:YES];
-    //        [cell.editRepsImgView setHidden:YES];
-    //        [cell.editWeightImgView setHidden:YES];
-    //
-    //    }
-    //    else
-    //    {
-    ////        [cell.deleteBtn setHidden:NO];
-    ////        [cell.weightBtn setHidden:NO];
-    ////        [cell.repsBtn setHidden:NO];
-    ////
-    ////        [cell.deleteImgV setHidden:NO];
-    //        [cell.editRepsImgView setHidden:NO];
-    //        [cell.editWeightImgView setHidden:NO];
-    //    }
     return cell;
 }
 
@@ -427,22 +346,22 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     MyMovesDetailFooterCollectionReusableView *footer = nil;
     
     if (kind == UICollectionElementKindSectionHeader) {
+        // Header that lets you choose the type of reps or weight.
         header = [collectionView dequeueReusableSupplementaryViewOfKind:kind
                                                     withReuseIdentifier:@"MyMovesDetailHeaderCollectionReusableView"
                                                            forIndexPath:indexPath];
         
-        
         [header.repsHeadBtn addTarget:self action:@selector(repsHeadAction:) forControlEvents:UIControlEventAllEvents];
-        
         [header.weightHeadBtn addTarget:self action:@selector(weightHeadAction:) forControlEvents:UIControlEventAllEvents];
         
-        header.repsLbl.text = repsTxt;
-        header.weightLbl.text = weightTxt;
+        header.repsLbl.text = self.repsTxt;
+        header.weightLbl.text = self.weightTxt;
 
         return header;
     }
     
     if (kind == UICollectionElementKindSectionFooter) {
+        // View that lets you add sets.
         footer = [collectionView dequeueReusableSupplementaryViewOfKind:kind
                                                     withReuseIdentifier:@"MyMovesDetailFooterCollectionReusableView"
                                                            forIndexPath:indexPath];
@@ -461,7 +380,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 -(IBAction)addSet:(UIButton*)sender{
-    
     
     NSMutableDictionary *setDict = [NSMutableDictionary dictionary];
     NSString *status = @"New";
@@ -504,7 +422,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
    
     [soapWebService mobilePlanMoveSetList:_parentUniqueID setDict:setDict];
     [_userPlanSetListArr addObject:setDict];
-//    [self.collectionView reloadData];
     [self loadSetValues];
     _collectionViewHeightCons.constant = _collectionViewHeightCons.constant + 30;
     
@@ -575,67 +492,47 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self showDeleteSetConfirmation];
 }
 
--(IBAction)repsHeadAction:(UIButton*)sender{
-    PickerViewController* picker = [[PickerViewController alloc]initWithNibName:@"PickerViewController" bundle:nil];
-    picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    picker.repsWeightDel = self;
-    if ([soapWebService loadFirstHeaderTable].count != 0)
-    {
-        picker.pickerData = [soapWebService loadFirstHeaderTable];
-    }
-    picker.pickerData = [soapWebService loadFirstHeaderTable];
-    picker.dataType = DMPickerDataTypeUnknown;
-    picker.parentUniqueId = _parentUniqueID;
-    picker.secondColumn = YES;
-    if (_userPlanSetListArr.count == 0)
-    {
+- (IBAction)repsHeadAction:(UIButton*)sender {
+    self.pickerView = [[DMPickerViewController alloc] init];
+    NSArray *pickerData = [soapWebService loadFirstHeaderTable];
+    [self.pickerView setDataSourceWithDataArray:pickerData showNoneRow:NO];
+    __weak typeof(self) weakSelf = self;
+    self.pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
+        weakSelf.repsTxt = object.name;
+        [weakSelf.collectionView reloadData];
+    };
+
+    if (_userPlanSetListArr.count == 0) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Please Add Set!" message:@"Please add sets to select sets method." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {}];
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
-    }
-    else
-    {
-        [self presentViewController:picker animated:YES completion:nil];
+    } else {
+        [self.pickerView presentPickerIn:self];
     }
 }
 
--(IBAction)weightHeadAction:(UIButton*)sender{
-    PickerViewController* picker = [[PickerViewController alloc]initWithNibName:@"PickerViewController" bundle:nil];
-    picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    picker.repsWeightDel = self;
-    if ([soapWebService loadSecondHeaderTable].count != 0)
-    {
-        picker.pickerData = [soapWebService loadSecondHeaderTable];
-        picker.dataType = DMPickerDataTypeUnknown;
-    }
-    picker.parentUniqueId = _parentUniqueID;
-    picker.secondColumn = NO;
-    if (_userPlanSetListArr.count == 0)
-    {
+- (IBAction)weightHeadAction:(UIButton*)sender {
+    NSArray *pickerData = [soapWebService loadSecondHeaderTable];
+    [self.pickerView setDataSourceWithDataArray:pickerData showNoneRow:NO];
+    __weak typeof(self) weakSelf = self;
+    self.pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
+        weakSelf.weightTxt = object.name;
+        [weakSelf.collectionView reloadData];
+    };
+
+    if (_userPlanSetListArr.count == 0) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Please Add Set!" message:@"Please add sets to select sets method." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {}];
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [self.pickerView presentPickerIn:self];
     }
-    else
-    {
-        [self presentViewController:picker animated:YES completion:nil];
-    }}
-- (void)getReps:(NSString *)str
-{
-    repsTxt = str;
-    [_collectionView reloadData];
 }
-- (void)getWeight:(NSString *)str
-{
-    weightTxt = str;
-    [_collectionView reloadData];
-}
+
 -(IBAction)repsEditAction:(UITextField*)sender{
     int unit1Value = 0;
     if ([sender.text length] != 0)

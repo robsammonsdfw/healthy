@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DMMovePickerRow.h"
 @class DMMove;
 @class DMMoveCategory;
 @class DMMoveTag;
@@ -70,9 +71,6 @@
 
 -(void)addExerciseToDb:(NSDictionary *)dict workoutDate:(NSDate*)date userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutTempId:(int)workoutTempId WorkoutDateID:(int)WorkoutDateID;
 
--(void)updateUserCommentsToDb:(NSString *)exerciseDate commentsToUpdate:(NSString *)comments;
--(NSMutableArray *)loadUserComments;
-
 -(void)deleteWorkoutFromDb:(int)workoutTempId;
 
 -(void)saveDeletedExerciseToDb:(int)workoutTempId UserId:(int)userId WorkoutUserDateID:(int)workoutUserDateID;
@@ -80,7 +78,6 @@
 -(NSMutableArray *)loadDeletedExerciseFromDb;
 
 -(void)updateTimeToDb:(NSString *)WorkingStatus timeToSet:(NSString *)CurrentDuration excerciseDict:(NSDictionary *)dict;
--(NSMutableArray *)loadWorkoutTime;
 
 -(void)updateTimeForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict WorkoutTimer:(NSString*)WorkoutTime;
 -(void)updateWorkoutToDb:(NSString *)exerciseDate;
@@ -95,17 +92,18 @@
 -(NSMutableArray *)loadTable1Header;
 -(NSMutableArray *)loadTable2Header;
 
--(NSMutableArray *)loadFirstHeaderTable;
--(NSMutableArray *)loadSecondHeaderTable;
-
+/// Loads the list of options for the MyMoves set list in first option.
+-(NSArray<DMMovePickerRow *> *)loadFirstHeaderTable;
+/// Loads the list of options for the MyMoves set list in the second option.
+-(NSArray<DMMovePickerRow *> *)loadSecondHeaderTable;
 
 //new API
 -(NSMutableArray *)MobileUserPlanList;
 - (NSMutableArray *)MobileUserPlanDateList;
 - (NSMutableArray *)MobileUserPlanMoveList;
 - (NSMutableArray *)MobileUserPlanMoveSetList;
-- (NSMutableArray *)loadUserPlanListFromDb;
-- (NSMutableArray *)loadUserPlanDateListFromDb;
+- (NSArray *)loadUserPlanListFromDb;
+- (NSArray *)loadUserPlanDateListFromDb;
 - (NSMutableArray *)loadUserPlanMoveListFromDb;
 - (NSMutableArray *)loadUserPlanMoveSetListFromDb;
 - (NSMutableArray *)loadListOfMovesFromDb;
