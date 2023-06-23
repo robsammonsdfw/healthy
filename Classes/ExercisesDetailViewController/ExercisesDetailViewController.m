@@ -461,7 +461,7 @@
                                               style:UIAlertActionStyleDestructive
                                             handler:^(UIAlertAction * _Nonnull action) {
         [self delLog:nil];
-        [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"minutesExercised"];
+        //[DataProvider sharedInstance].minutesExercisedToday = 0;
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         [alert dismissViewControllerAnimated:YES completion:nil];

@@ -126,8 +126,6 @@
 @property (nonatomic, strong) IBOutlet UILabel *staticProteinLbl;
 @property (nonatomic, strong) IBOutlet UILabel *staticFatLbl;
 
-@property (nonatomic, strong) IBOutlet UIView *overallView;
-
 //HHT apple watch
 @property (nonatomic,retain) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *arrData;

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0E0D09F72A45CD1B0032162E /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
+		0E0D09F92A45DD8E0032162E /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DataProvider.swift */; };
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
@@ -243,6 +244,7 @@
 		0E0A294F1744187D003AB90A /* UIDevice+machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+machine.h"; sourceTree = "<group>"; };
 		0E0A29501744187D003AB90A /* UIDevice+machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+machine.m"; sourceTree = "<group>"; };
 		0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingTextView.swift; sourceTree = "<group>"; };
+		0E0D09F82A45DD8E0032162E /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		0E1A3B392A3B66AC004C6033 /* DMMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessage.h; sourceTree = "<group>"; };
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
 		0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMFood.h; sourceTree = "<group>"; };
@@ -1140,6 +1142,7 @@
 			children = (
 				0EDAB6A92A3B4E9A00DB351A /* Models */,
 				0E8EC8F22A3E08E00095BDEC /* DataFetcher.swift */,
+				0E0D09F82A45DD8E0032162E /* DataProvider.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -1913,6 +1916,7 @@
 				401B658A20B3FC64004453E7 /* Base64.m in Sources */,
 				0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */,
 				401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */,
+				0E0D09F92A45DD8E0032162E /* DataProvider.swift in Sources */,
 				650208FD25015A5700F412B0 /* MyGoalViewController.m in Sources */,
 				403D88AE21ECA98700B2F232 /* MyMovesViewController.m in Sources */,
 				401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */,

@@ -1243,9 +1243,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         for (int i=0; i < [arrTemp count]; i++) {
             NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[arrTemp objectAtIndex:i]];
             
-            //HHT change 2018 (Date format change)
             [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            //[dateformatter setDateFormat:@"MM/dd/yyyy h:mm:ss aaa"];
             NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
             [self.dateformatter setLocale:en_US];
             NSDate *logTimeDate = [self.dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
@@ -2677,7 +2675,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     if (!exists) {
         NSString *path = [[NSBundle mainBundle] bundlePath];
         NSString *pathForStartingDB = [path stringByAppendingPathComponent:@"DMGO_v3.9.2.sqlite"];
-        BOOL success = [fm copyItemAtPath:pathForStartingDB toPath:fullPath error:NULL];
+        [fm copyItemAtPath:pathForStartingDB toPath:fullPath error:nil];
     }
     
     return fullPath;

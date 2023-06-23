@@ -26,14 +26,14 @@
 @interface MyLogViewController ()<SFSafariViewControllerDelegate>
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) LogDaySummary *logDaySummary;
+@property (nonatomic) double stepCount;
+@property (nonatomic) double calories;
 @end
 
 @implementation MyLogViewController {
     double currentWeight;
     double currentHeight;
     //HHT apple watch
-    double stepCount;
-    double calories;
 }
 
 @synthesize primaryKey, date_currentDate, tblSimpleTable,num_BMR,int_mealID,date_currentDate1;
@@ -529,12 +529,12 @@
         if (isExerciseData) {
             
             NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
-            DMLog(@"%@",dict);
             int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
             NSNumber *caloriesPerHour = [dict valueForKey:@"CaloriesPerHour"];
             
             int minutesExercised = [[dict valueForKey:@"Exercise_Time_Minutes"] intValue];
+            //[DataProvider sharedInstance].minutesExercisedToday = minutesExercised;
             Remanig = (Recommendded - (calorieslodded + minutesExercised));
             
             double totalCaloriesBurned;
@@ -549,14 +549,10 @@
             else if (exerciseID == 269 || exerciseID == 276) {
                 totalCaloriesBurned = minutesExercised;
                 cell.lblCalories.text                = [NSString stringWithFormat:@"%.0f Steps",totalCaloriesBurned];
-                [[NSUserDefaults standardUserDefaults] setInteger:minutesExercised forKey:@"minutesExercised"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
             }
             else if (exerciseID == 259) {
                 totalCaloriesBurned = 0.0;
-                cell.lblCalories.text                = [NSString stringWithFormat:@"%i Steps",minutesExercised];
-                [[NSUserDefaults standardUserDefaults] setInteger:minutesExercised forKey:@"minutesExercised"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
+                cell.lblCalories.text = [NSString stringWithFormat:@"%i Steps",minutesExercised];
             }
             //HHT apple watch
             else if (exerciseID == 272 || exerciseID == 275) {
@@ -567,8 +563,6 @@
             else if (exerciseID == 274) {
                 totalCaloriesBurned = 0.0;
                 cell.lblCalories.text                = [NSString stringWithFormat:@"%i Steps",minutesExercised];
-                [[NSUserDefaults standardUserDefaults] setInteger:minutesExercised forKey:@"minutesExercised"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
             }
             else {
                 totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
@@ -583,7 +577,6 @@
             cell.lblFoodName.font            = [UIFont systemFontOfSize:12.0];
             cell.lblCalories.font    = [UIFont boldSystemFontOfSize:12.0];
             cell.lblFoodName.adjustsFontSizeToFitWidth = NO;
-            
         }
         else {
             cell.lblFoodName.text = nil;
@@ -1089,7 +1082,6 @@
 }
 
 -(void)loadExerciseData:(NSDate *)date {
-    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     if (exerciseResults) {
@@ -1457,72 +1449,6 @@
     [self updateCalorieTotal];
 }
 
-#pragma mark - Custom method for total calculation -
-//-(void)loadExerciseData {
-//
-//    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-//
-//    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-//    if (![db open]) {
-//
-//    }
-//
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-//    NSDate* sourceDate = [NSDate date];
-//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-//    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-//    [dateFormat setTimeZone:systemTimeZone];
-//    NSString *date_string = [dateFormat stringFromDate:sourceDate];
-//    NSDate *date_homeDate = [dateFormat dateFromString:date_string];
-//
-//    [dateFormatter setTimeZone:systemTimeZone];
-//    NSString *date_Today        = [dateFormatter stringFromDate:date_homeDate];
-//
-//    NSString *query;
-//
-//    query = [NSString stringWithFormat:@"SELECT Exercise_Log.Exercise_Log_ID, Exercise_Log.ExerciseID, Exercise_Log.Exercise_Time_Minutes, Exercise_Log.Log_Date, Exercises.ActivityName, Exercises.CaloriesPerHour FROM Exercise_Log INNER JOIN Exercises ON Exercise_Log.ExerciseID = Exercises.ExerciseID WHERE (Exercise_Log.Log_Date BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) ORDER BY Log_Date", date_Today, date_Today];
-//
-//    num_totalCaloriesBurned = 0;
-//
-//    FMResultSet *rs = [db executeQuery:query];
-//    while ([rs next]) {
-//        NSNumber *exerciseTimeMinutes = [NSNumber numberWithInt:[rs intForColumn:@"Exercise_Time_Minutes"]];
-//        NSNumber *caloriesPerHour = [NSNumber numberWithDouble:[rs doubleForColumn:@"CaloriesPerHour"]];
-//
-//        int minutesExercised = [exerciseTimeMinutes intValue];
-//
-//        double totalCaloriesBurned = ([caloriesPerHour floatValue] / 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
-//
-//        int exerciseID = [rs intForColumn:@"ExerciseID"];
-//
-//        if (exerciseID == 259) {
-//
-//        }
-//        //HHT apple watch
-//        else if (exerciseID == 257 || exerciseID == 267 || exerciseID == 272) {
-//            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"]) {
-//                num_totalCaloriesBurned = num_totalCaloriesBurned + minutesExercised;
-//            }
-//        }
-//        else {
-//            //HHT change 28-11
-//            //YES means add LoggedExeTracking and no means not add
-//            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == YES) {
-//                num_totalCaloriesBurned = num_totalCaloriesBurned + totalCaloriesBurned;
-//            }
-//            else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
-//
-//            }
-//        }
-//    }
-//
-//    [rs close];
-//    
-//    [self updateCalorieTotal];
-//}
-
 //HHT apple watch
 - (void)readData {
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -1560,11 +1486,11 @@
                 //NSDate *date = result.endDate;
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
+                    self.stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
                     [self stepCountSave];
                     
-                    double caloriesBurned = [self.sd stepsToCalories:stepCount];
-                    calories = caloriesBurned;
+                    double caloriesBurned = [self.sd stepsToCalories:self.stepCount];
+                    self.calories = caloriesBurned;
                     [self caloriesCount];
                 });
             }
@@ -1603,7 +1529,7 @@
     int minutesExercised = 0;
     
     int exerciseIDTemp = 274;
-    minutesExercised = stepCount;
+    minutesExercised = self.stepCount;
     
     [db beginTransaction];
     
@@ -1678,7 +1604,7 @@
     int minutesExercised = 0;
     
     int exerciseIDTemp = 272;
-    minutesExercised = calories;
+    minutesExercised = self.calories;
     
     [db beginTransaction];
     
@@ -1739,9 +1665,6 @@
     [db commit];
     
     [self performSelector:@selector(loadExerciseData:) withObject:self.date_currentDate afterDelay:1.0];
-    
-    //[self performSelector:@selector(updateData:) withObject:self.date_currentDate afterDelay:10];
-    
     exerciseLogID = [db lastInsertRowId];
 }
 
