@@ -240,7 +240,7 @@
     }
     
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    DMLog(@"pass Parameter is--->:%@",jsonString);
+    //DMLog(@"pass Parameter is--->:%@",jsonString);
     
     //create body for company login
     NSString *companyAuthBody = [NSString stringWithFormat:@"{\"companyId\": \"%@\",\"passThruKey\": \"%@\"}", companyID, passThruKey];

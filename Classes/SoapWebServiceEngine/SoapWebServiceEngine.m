@@ -434,9 +434,12 @@
         
     } else if ([requestType isEqualToString:@"SaveMealItems"]) {
         
+        NSString *jsonString = @"[]";
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
+        if (jsonData) {
+            jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        }
         
-        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"MealItems"] options:0 error:nil];
-
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -455,7 +458,11 @@
         
     } else if ([requestType isEqualToString:@"SaveExerciseLogs"]) {
         
-        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"ExerciseLog"] options:0 error:nil];
+        NSString *jsonString = @"[]";
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"ExerciseLog"] options:0 error:nil];
+        if (jsonData) {
+            jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        }
 
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -502,7 +509,11 @@
         //DMLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
     } else if ([requestType isEqualToString:@"SaveWeightLogs"]) {
         
-        NSString *jsonString = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"WeightLog"] options:0 error:nil];
+        NSString *jsonString = @"[]";
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[requestDict valueForKey:@"WeightLog"] options:0 error:nil];
+        if (jsonData) {
+            jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        }
 
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -880,7 +891,6 @@
     
     // Empty results?
     if ([soapResults isEqualToString:@"\"Empty\""]) {
-        soapResults = nil;
         soapResults = [[NSMutableString alloc] init];
         [soapResults appendFormat:@"%@",@"[]"];
     }
@@ -1106,10 +1116,7 @@
             [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFinished:responseArray];
         }
         
-    }
-
-    soapResults = nil;
-    
+    }    
 }
 
 //- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
