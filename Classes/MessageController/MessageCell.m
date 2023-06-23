@@ -55,10 +55,6 @@
     self.bgImageView.translatesAutoresizingMaskIntoConstraints = NO;
     self.messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
-    // For testing layouts.
-//    self.messageLabel.layer.borderColor = [UIColor redColor].CGColor;
-//    self.messageLabel.layer.borderWidth = 2.0f;
-    
     [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.bgImageView];
     [self.contentView addSubview:self.messageLabel];

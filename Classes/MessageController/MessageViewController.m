@@ -68,6 +68,7 @@ int const MaximumStringLength = 300;
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 25, 0);
     [self.tableView registerClass:[MessageCell class] forCellReuseIdentifier:OpponentCellIdentifier];
     [self.tableView registerClass:[MessageCell class] forCellReuseIdentifier:OwnerCellIdentifier];
+    self.tableView.estimatedRowHeight = 25.0f;
     [self.view addSubview:self.tableView];
     
     self.sendView = [[SendView alloc] initWithFrame:CGRectZero];
@@ -133,14 +134,19 @@ int const MaximumStringLength = 300;
     DietmasterEngine *engine = [DietmasterEngine sharedInstance];
     [engine startUpdatingMessages];
     
-    [self reloadDataWithScroll:@(YES)];
+    [self reloadDataWithScroll];
     [self updateHeaderView];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadDataWithScroll:)
+                                             selector:@selector(reloadDataWithScroll)
                                                  name:UpdatingMessageNotification
                                                object:nil];
     [self setMessagesRead];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self scrollToBottom];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -211,18 +217,22 @@ int const MaximumStringLength = 300;
     }];
 }
 
-- (int)messageCount {
-    __block int count = 0;
-    [self.messagesDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSMutableArray *value, BOOL * _Nonnull stop) {
+/// Counts the number of messages in the dictionary.
+- (NSInteger)countMessagesInDict:(NSDictionary *)dict {
+    if (!dict) {
+        return 0;
+    }
+    __block NSInteger count = 0;
+    [dict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSMutableArray *value, BOOL * _Nonnull stop) {
         count += value.count;
     }];
     return count;
 }
 
-- (void)reloadDataWithScroll:(NSNumber *)scroll {
+- (void)reloadDataWithScroll {
     [DMActivityIndicator hideActivityIndicator];
     
-    int beforeMessagesCount = [self messageCount];
+    NSInteger beforeMessageCount = [self countMessagesInDict:self.messagesDict];
     
     NSString *query = [NSString stringWithFormat: @"SELECT * FROM (SELECT * FROM Messages ORDER BY Id DESC) ORDER BY Id ASC"];
     FMResultSet *rs = [[self database] executeQuery:query];
@@ -242,17 +252,15 @@ int const MaximumStringLength = 300;
             self.messagesDict[dayString] = messages;
         }
     }
-    
     if ([[self database] hadError]) {
         DMLog(@"Err %d: %@", [[self database] lastErrorCode], [[self database] lastErrorMessage]);
     }
-    
     [rs close];
-    [self.tableView reloadData];
     
-    BOOL reloadWithScroll = ([scroll isKindOfClass:[NSNumber class]] ? scroll.boolValue : NO);
-    int afterMessagesCount = [self messageCount];
-    if (beforeMessagesCount != afterMessagesCount && reloadWithScroll == YES) {
+    NSInteger afterMessageCount = [self countMessagesInDict:self.messagesDict];
+    
+    [self.tableView reloadData];
+    if (beforeMessageCount != afterMessageCount) {
         [self scrollToBottom];
     }
 }
@@ -266,13 +274,13 @@ int const MaximumStringLength = 300;
 - (void)addMessage {
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
     self.countShowedMessage += ShowMessageCountStep;
-    [self reloadDataWithScroll:@(NO)];
+    [self reloadDataWithScroll];
     [self updateHeaderView];
     [DMActivityIndicator hideActivityIndicator];
 }
 
 - (void)updateHeaderView {
-    if ([self messageCount] < self.countShowedMessage) {
+    if ([self countMessagesInDict:self.messagesDict] < self.countShowedMessage) {
         self.tableView.tableHeaderView = nil;
     }
 }
@@ -319,7 +327,7 @@ int const MaximumStringLength = 300;
         [db commit];
 
         [DMActivityIndicator hideActivityIndicator];
-        [self reloadDataWithScroll:@(YES)];
+        [self reloadDataWithScroll];
     }];
 }
 
@@ -389,10 +397,6 @@ int const MaximumStringLength = 300;
     NSString *key = self.messagesDict.allKeys[section];
     
     return [NSString stringWithFormat:@"%@", key];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 55.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
