@@ -15,8 +15,9 @@ class DMEmptyRow: NSObject, DMPickerViewDataSource {
 /// Controller that displays a picker for the user to choose and
 /// option from.
 class DMPickerViewController : UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    private weak var presentingController: UIViewController?
     private var navController: UINavigationController?
-    private lazy var pickerView = {
+    private var pickerView = {
         let pickerView = UIPickerView()
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         return pickerView
@@ -26,6 +27,9 @@ class DMPickerViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     /// If there should be a row added that's blank.
     private var showNoneRow = false
     
+    /// Sets the selected index on the picker.
+    @objc public var selectedIndex = 0
+
     /// Closure that will be called when a user selects an option. Note, this could be called
     /// multiple times as the user makes their selection.
     @objc public var didSelectOptionCallback: ((_ object: DMPickerViewDataSource, _ row: Int) -> Void)?
@@ -58,9 +62,14 @@ class DMPickerViewController : UIViewController, UIPickerViewDelegate, UIPickerV
     
     // MARK: - Public
     
-    /// Presents the picker in a bottom sheet.
+    /// Presents the picker in a bottom sheet with default index selected (0).
     @objc public func presentPicker(in controller: UIViewController) {
-        navController = UINavigationController(rootViewController: self)
+        self.presentPicker(in: controller, selectedIndex: 0)
+    }
+
+    /// Presents the picker in a bottom sheet with optional selected index.
+    @objc public func presentPicker(in controller: UIViewController, selectedIndex: Int) {
+        self.navController = UINavigationController(rootViewController: self)
         guard let navController = navController else { return }
         navController.setNavigationBarHidden(false, animated: false)
         navController.modalPresentationStyle = .pageSheet
@@ -70,12 +79,18 @@ class DMPickerViewController : UIViewController, UIPickerViewDelegate, UIPickerV
             sheet.detents = [.medium()]
         }
         self.title = "Select Option"
-        controller.present(navController, animated: true, completion: nil)
+        self.selectedIndex = selectedIndex
+        presentingController = controller
+        presentingController?.present(navController, animated: true, completion: {
+            self.pickerView.selectRow(self.selectedIndex, inComponent: 0, animated: true)
+        })
     }
     
     /// Dismisses the presented picker, if visible.
     @objc public func dismissPicker() {
-        navController?.dismiss(animated: true)
+        presentingController?.dismiss(animated: true)
+        navController = nil
+        selectedIndex = 0
     }
     
     @objc public func setDataSource(dataArray: [DMPickerViewDataSource]?, showNoneRow: Bool) {
