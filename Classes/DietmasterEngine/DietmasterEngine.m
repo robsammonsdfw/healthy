@@ -2107,12 +2107,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                         NSData *data1 = [NSData dataWithData:UIImagePNGRepresentation(stdImage)];
                         NSData *data2 = [NSData dataWithData:UIImagePNGRepresentation(stdImage2x)];
                         
-                        if ([data1 writeToFile:pngFilePath atomically:YES]) {
-                        }
-                        
-                        if ([data2 writeToFile:pngFilePath2x atomically:YES]) {
-                            
-                        }
+                        [data1 writeToFile:pngFilePath atomically:YES];
+                        [data2 writeToFile:pngFilePath2x atomically:YES];
                         
                         if (lastModifiedServer) {
                             NSDictionary *fileAttributes = [NSDictionary dictionaryWithObject:lastModifiedServer forKey:NSFileModificationDate];
@@ -2144,10 +2140,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     UIGraphicsEndImageContext();
     
     return newImage;
-}
-
--(void)saveMealNotesTemp:(NSDictionary *)foodDict {
-    
 }
 
 #pragma mark Food Plan Methods
@@ -2392,6 +2384,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     return [NSNumber numberWithInt:num_BMR];
 }
+
 -(NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey {
     
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
