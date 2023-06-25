@@ -80,7 +80,6 @@
 
 -(void)deleteFromWSLog;
 -(void)deleteFromLog;
--(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSMutableArray *)array;
 -(IBAction) goToSafetyGuidelines:(id) sender;
 
 @property (nonatomic, strong) IBOutlet UILabel *staticCalLbl;
