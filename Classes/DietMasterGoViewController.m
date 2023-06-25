@@ -237,8 +237,8 @@
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     self.hidesBottomBarWhenPushed = true;
     
-    //NSInteger minutesExercised = [DataProvider sharedInstance].minutesExercisedToday;
-    self.lblStepsCount.text = [NSString stringWithFormat:@"%li", 999];
+    int stepsTaken = (int)[[DataProvider sharedInstance] getStepsTakenToday];
+    self.lblStepsCount.text = [NSString stringWithFormat:@"%i", stepsTaken];
     
     [self.sendMsgBtnOutlet addSubview:self.numberBadge];
     [self reloadMessages];
@@ -782,11 +782,10 @@
     
     [rs close];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    [dateFormatter setTimeZone:systemTimeZone];
-    [dateFormatter setLenient:YES];
-    NSString *StrCurrentDate = [dateFormatter stringFromDate:[NSDate date]];
+    [dateFormat setDateFormat:@"yyyy-MM-dd"];
+    [dateFormat setTimeZone:systemTimeZone];
+    [dateFormat setLenient:YES];
+    NSString *StrCurrentDate = [dateFormat stringFromDate:[NSDate date]];
     
     NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT weight FROM weightlog where logtime in (select logtime from weightlog WHERE logtime = '%@') AND deleted = 1", StrCurrentDate];
     
@@ -858,7 +857,6 @@
     [DMActivityIndicator hideActivityIndicator];
 }
 
-#warning TODO: This is unused?
 - (void)caloriesRemainUpdate {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     double calRecommended = [dietmasterEngine getBMR];
@@ -866,49 +864,9 @@
 }
 
 -(void)loadExerciseData {
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-        return;
-    }
-    BOOL combineTrackingCalories = [[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"];
-    NSDate* sourceDate = [NSDate date];
+    self.num_totalCaloriesBurnedTracked = (int)[[DataProvider sharedInstance] getCaloriesBurnedTodayViaTracker];
+    self.num_totalCaloriesBurned = (int)[[DataProvider sharedInstance] getCaloriesBurnedToday];
 
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-    [dateFormat setTimeZone:systemTimeZone];
-    NSString *date_Today = [dateFormat stringFromDate:sourceDate];
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT Exercise_Log.Exercise_Log_ID, Exercise_Log.ExerciseID, Exercise_Log.Exercise_Time_Minutes, Exercise_Log.Log_Date, Exercises.ActivityName, Exercises.CaloriesPerHour FROM Exercise_Log INNER JOIN Exercises ON Exercise_Log.ExerciseID = Exercises.ExerciseID WHERE (Exercise_Log.Log_Date BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) ORDER BY Log_Date", date_Today, date_Today];
-    
-    self.num_totalCaloriesBurned = 0;
-    self.num_totalCaloriesBurnedTracked = 0;
-    
-    FMResultSet *rs = [db executeQuery:query];
-    
-    while ([rs next]) {
-        NSNumber *exerciseTimeMinutes = [NSNumber numberWithInt:[rs intForColumn:@"Exercise_Time_Minutes"]];
-        NSNumber *caloriesPerHour = [NSNumber numberWithDouble:[rs doubleForColumn:@"CaloriesPerHour"]];
-        
-        int minutesExercised = [exerciseTimeMinutes intValue];
-        double totalCaloriesBurned = ([caloriesPerHour floatValue] / 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
-        int exerciseID = [rs intForColumn:@"ExerciseID"];
-        
-        // Apple watch 274 for step count
-        // Apple watch (272) calories apple watch
-        if (exerciseID == 257 || exerciseID == 267 || exerciseID == 272 || exerciseID == 275) {
-            self.num_totalCaloriesBurnedTracked += minutesExercised;
-            if (combineTrackingCalories) {
-                self.num_totalCaloriesBurned += minutesExercised;
-            }
-        } else {
-            self.num_totalCaloriesBurned += totalCaloriesBurned;
-        }
-    }
-    
-    [rs close];
-    
     [self updateCalorieTotal];
     [self calculateBMI];
 }

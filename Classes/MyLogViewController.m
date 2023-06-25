@@ -534,48 +534,45 @@
             NSNumber *caloriesPerHour = [dict valueForKey:@"CaloriesPerHour"];
             
             int minutesExercised = [[dict valueForKey:@"Exercise_Time_Minutes"] intValue];
-            //[DataProvider sharedInstance].minutesExercisedToday = minutesExercised;
             Remanig = (Recommendded - (calorieslodded + minutesExercised));
             
             double totalCaloriesBurned;
             if (exerciseID == 257 || exerciseID == 267) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text                = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
             else if (exerciseID == 268) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text                = [NSString stringWithFormat:@"-%.0f Moves",totalCaloriesBurned];
+                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Moves",totalCaloriesBurned];
             }
             else if (exerciseID == 269 || exerciseID == 276) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text                = [NSString stringWithFormat:@"%.0f Steps",totalCaloriesBurned];
+                cell.lblCalories.text = [NSString stringWithFormat:@"%.0f Steps",totalCaloriesBurned];
             }
             else if (exerciseID == 259) {
                 totalCaloriesBurned = 0.0;
-                cell.lblCalories.text = [NSString stringWithFormat:@"%i Steps",minutesExercised];
+                cell.lblCalories.text = [NSString stringWithFormat:@"%i Steps", minutesExercised];
             }
-            //HHT apple watch
             else if (exerciseID == 272 || exerciseID == 275) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text                = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
-            //HHT apple watch
             else if (exerciseID == 274) {
                 totalCaloriesBurned = 0.0;
-                cell.lblCalories.text                = [NSString stringWithFormat:@"%i Steps",minutesExercised];
+                cell.lblCalories.text = [NSString stringWithFormat:@"%i Steps",minutesExercised];
             }
             else {
                 totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
-                cell.lblCalories.text                = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
-            cell.lblFoodName.text                = [dict valueForKey:@"ActivityName"];
-            cell.lblFoodName.backgroundColor    = [UIColor clearColor];
-            cell.lblFoodName.textColor        = [UIColor whiteColor];
-            cell.lblCalories.backgroundColor    = [UIColor clearColor];
-            cell.lblCalories.textColor            = [UIColor whiteColor];
+            cell.lblFoodName.text = [dict valueForKey:@"ActivityName"];
+            cell.lblFoodName.backgroundColor = [UIColor clearColor];
+            cell.lblFoodName.textColor = [UIColor whiteColor];
+            cell.lblCalories.backgroundColor = [UIColor clearColor];
+            cell.lblCalories.textColor = [UIColor whiteColor];
             
-            cell.lblFoodName.font            = [UIFont systemFontOfSize:12.0];
-            cell.lblCalories.font    = [UIFont boldSystemFontOfSize:12.0];
+            cell.lblFoodName.font = [UIFont systemFontOfSize:12.0];
+            cell.lblCalories.font = [UIFont boldSystemFontOfSize:12.0];
             cell.lblFoodName.adjustsFontSizeToFitWidth = NO;
         }
         else {
@@ -597,10 +594,6 @@
                 stringRange = [nameString rangeOfComposedCharacterSequencesForRange:stringRange];
                 NSString *shortNameString = [nameString substringWithRange:stringRange];
                 nameString = [NSString stringWithFormat:@"%@...",shortNameString];
-            }
-            
-            if ([nameString isEqualToString:@"Milk - skim, no fat"]) {
-                ;
             }
             
             NSRange r = [nameString rangeOfString:nameString];
@@ -631,15 +624,15 @@
                 }
             }
                         
-            cell.lblFoodName.backgroundColor    = [UIColor clearColor];
-            cell.lblFoodName.textColor        = [UIColor whiteColor];
+            cell.lblFoodName.backgroundColor = [UIColor clearColor];
+            cell.lblFoodName.textColor = [UIColor whiteColor];
 
-            cell.lblCalories.text                = [NSString stringWithFormat:@"%i Calories",[[dict valueForKey:@"TotalCalories"] intValue]];
-            cell.lblCalories.backgroundColor    = [UIColor clearColor];
-            cell.lblCalories.textColor            = [UIColor whiteColor];
+            cell.lblCalories.text = [NSString stringWithFormat:@"%i Calories",[[dict valueForKey:@"TotalCalories"] intValue]];
+            cell.lblCalories.backgroundColor = [UIColor clearColor];
+            cell.lblCalories.textColor = [UIColor whiteColor];
             
-            cell.lblFoodName.font            = [UIFont systemFontOfSize:12.0];
-            cell.lblCalories.font    = [UIFont boldSystemFontOfSize:12.0];
+            cell.lblFoodName.font = [UIFont systemFontOfSize:12.0];
+            cell.lblCalories.font = [UIFont boldSystemFontOfSize:12.0];
             cell.lblFoodName.adjustsFontSizeToFitWidth = NO;
             
             cell.userInteractionEnabled = YES;
@@ -682,7 +675,7 @@
             [self.navigationController pushViewController:eDVController animated:YES];
         }
         else {
-            DetailViewController *dvController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
+            DetailViewController *dvController = [[DetailViewController alloc] init];
             
             NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -733,7 +726,6 @@
     
     [DMActivityIndicator showActivityIndicator];
 
-    //HHT temp change
     [self performSelector:@selector(updateData:) withObject:date_Tomorrow afterDelay:0.25];
 }
 
