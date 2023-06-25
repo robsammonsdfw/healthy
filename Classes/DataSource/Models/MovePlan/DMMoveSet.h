@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSNumber *unitTwoId;
 @property (nonatomic, strong, readonly) NSNumber *unitTwoValue;
 
-/// Creates a new set with default values.
+/// Creates a new set with default values. Note: setId will be nil.
 + (instancetype)setWithDefaultValues;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;

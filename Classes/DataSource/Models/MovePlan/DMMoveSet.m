@@ -22,7 +22,7 @@
 
 + (instancetype)setWithDefaultValues {
     DMMoveSet *set = [[DMMoveSet alloc] init];
-    set.setId = @0;
+    set.setId = nil;
     set.routineId = @0;
     set.dayId = @0;
     set.setNumber = @0;
