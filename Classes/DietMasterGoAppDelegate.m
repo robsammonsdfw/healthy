@@ -168,15 +168,6 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [self checkUserLogin];
     
-    BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-    if ([prefs boolForKey:@"user_loggedin"] == YES && userLogout == NO) {
-        NSString *pngFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        if ([fileManager fileExistsAtPath:pngFilePath]) {
-            [self performSelector:@selector(removeSplashScreen) withObject:nil afterDelay:3.5];
-        }
-    }
-    
     if ([prefs boolForKey:@"user_loggedin"] == YES) {
         [self syncDatabase];
     }
