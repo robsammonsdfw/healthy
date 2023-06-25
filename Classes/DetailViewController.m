@@ -141,7 +141,7 @@
     
     [pickerView selectRow:[pickerRow3 intValue] inComponent:2 animated:YES];
     
-    [self performSelector:@selector(updateCalorieCount) withObject:nil afterDelay:0.50];
+    [self updateCalorieCount];
     
     [DMActivityIndicator hideActivityIndicator];
 }
@@ -693,8 +693,11 @@
 }
 
 -(void)updateCalorieCount {
+    double gramWeight = 0.0;
+    if (pickerColumn3Array.count) {
+        double gramWeight = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"GramWeight"] floatValue];
+    }
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    double gramWeight = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"GramWeight"] floatValue];
     double servingSize = [[dietmasterEngine.foodSelectedDict valueForKey:@"ServingSize"] floatValue];
     double foodCalories = [[dietmasterEngine.foodSelectedDict valueForKey:@"Calories"] floatValue];
     
