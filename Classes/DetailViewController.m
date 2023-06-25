@@ -9,6 +9,9 @@
 #import "DetailViewController.h"
 #import "ExchangeFoodViewController.h"
 
+@interface DetailViewController() <WSInsertUserPlannedMealItems>
+@end
+
 @implementation DetailViewController
 
 @synthesize pickerColumn1Array, pickerColumn3Array;
@@ -441,8 +444,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark CLEAN UP METHODS
-
 -(void)cleanUpView {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -458,7 +459,6 @@
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ExchangeFoodViewController *exchangeVC = [[ExchangeFoodViewController alloc] init];
-    exchangeVC.hidesBottomBarWhenPushed = YES;
     exchangeVC.foodID = [exchangeDict valueForKey:@"FoodID"];
     exchangeVC.mealTypeID = [exchangeDict valueForKey:@"MealTypeID"];
     exchangeVC.CaloriesToMaintain = [lblCalories.text doubleValue];
@@ -728,41 +728,32 @@
 }
 
 #pragma mark LOG METHODS
--(void) saveToLog:(id) sender {
+ 
+- (void)saveToLog:(id) sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
+        return;
     }
-    
-    int num_measureID	= [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
-    
-    NSDecimalNumber *servingSize1	= [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+
+    int num_measureID = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
+    NSDecimalNumber *servingSize1 = [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
     NSDecimalNumber *servingSize2;
     if (fractionPicker) {
-        servingSize2	= [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+        servingSize2 = [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+    } else {
+        servingSize2 = [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
     }
-    else {
-        servingSize2	= [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
-    }
-    NSDecimalNumber *servingAmount		= [servingSize1 decimalNumberByAdding:servingSize2];
+    NSDecimalNumber *servingAmount = [servingSize1 decimalNumberByAdding:servingSize2];
     
-    if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
+    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         
         int mealIDValue = 0;
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd"];
-        
         NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
         [dateFormat setTimeZone:systemTimeZone];
         NSString *date_Today = [dateFormat stringFromDate:dietmasterEngine.dateSelected];
-//        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
-//
-//        NSString *date_Today = [dateFormat stringFromDate:[NSDate date]];
-
-        
-        
-        
         
         NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
         FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
@@ -799,19 +790,10 @@
         
         [db beginTransaction];
         
-        NSDate* sourceDate = [NSDate date];
-
-        
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormatter setTimeZone:systemTimeZone];
-//        NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
-//        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
-        
-        NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
-
+        [dateFormat setTimeZone:systemTimeZone];
+        NSString *date_string = [dateFormat stringFromDate:dietmasterEngine.dateSelected];
 
         NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_string];
         [db executeUpdate:insertSQL];
@@ -821,17 +803,11 @@
         NSString *strChkRecord = [NSString stringWithFormat:@"SELECT count(*) FROM Food_Log_Items where FoodID = '%d' AND MealCode = '%d'AND MealID = '%d'",foodID,mealCode,mealID];
         FMResultSet *objChk = [db executeQuery:strChkRecord];
         while ([objChk next]) {
-            if ([objChk intForColumn:@"count(*)"]>0) {
-                DMLog(@"%d",[objChk intForColumn:@"count(*)"]);
-                DMLog(@"Skip...");
-            }
-            else{
-                
+            if ([objChk intForColumn:@"count(*)"] > 0) {
+            } else {
                 NSDate* sourceDate = [NSDate date];
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//                [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
-                NSString *date_string1 = [dateFormatter stringFromDate:sourceDate];
+                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSString *date_string1 = [dateFormat stringFromDate:sourceDate];
                 
                 insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
                              "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
@@ -846,38 +822,21 @@
         }
         [db commit];
         [DMActivityIndicator showCompletedIndicator];
-
-//        if (dietmasterEngine.isMealPlanItem) {
-//            [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
-//        }
-//        else {
-//            [self.navigationController popToRootViewControllerAnimated:YES];
-//        }
+        [self.navigationController popViewControllerAnimated:YES];
         
-        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
-
-    }
-    else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
+    } else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
         
         [db beginTransaction];
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-
         [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        
         NSString *date_string = [dateFormat stringFromDate:[NSDate date]];
-
         
         int foodMealID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
         int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
         int MealCode  = [dietmasterEngine.selectedMealID intValue];
         
         NSString *updateSQL = [NSString stringWithFormat: @"UPDATE Food_Log_Items SET MeasureID = %i, NumberOfServings = %f, LastModified = '%@' WHERE FoodID = %i AND MealID = %i AND MealCode = %i", num_measureID,[servingAmount floatValue], date_string, foodID,foodMealID ,MealCode];
-        
-        
         [db executeUpdate:updateSQL];
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
@@ -885,35 +844,29 @@
         
         [DMActivityIndicator showCompletedIndicator];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
--(IBAction) delLog:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+- (IBAction)delLog:(id)sender {
     [self deleteFromWSLog];
     [self deleteFromLog];
 }
 
--(void)deleteFromLog {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
+- (void)deleteFromLog {
+    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
     
     [db beginTransaction];
-    
     int foodMealID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
-    NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealID = %i AND MealCode = %i", foodID,foodMealID,[dietmasterEngine.selectedMealID intValue]];
+    NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealID = %i AND MealCode = %i", foodID, foodMealID, [dietmasterEngine.selectedMealID intValue]];
     [db executeUpdate:updateSQL];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
-    
     [db commit];
     
     [DMActivityIndicator hideActivityIndicator];
@@ -921,21 +874,17 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void) deleteFromFavorites {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+- (void)deleteFromFavorites {
+    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
+        return;
     }
     
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
-    
     [db beginTransaction];
-    
     NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Favorite_Food WHERE FoodID = %i", foodID];
-    
-    
     [db executeUpdate:updateSQL];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
@@ -943,6 +892,7 @@
     
     num_isFavorite = 0;
     
+    [DMActivityIndicator showActivityIndicator];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"DeleteFavoriteFood", @"RequestType",
@@ -951,16 +901,19 @@
                                 [NSNumber numberWithInt:foodID], @"FoodID",
                                 nil];
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    [soapWebService callWebservice:wsInfoDict];
-    
-    
+    [soapWebService callWebservice:wsInfoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            DMLog(@"Error DeleteFavoriteFood: %@", error.localizedDescription);
+        }
+    }];
     [DMActivityIndicator showCompletedIndicator];
 }
 
--(void)saveToFavorites {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+- (void)saveToFavorites {
+    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
+        return;
     }
     
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
@@ -987,25 +940,15 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-
     NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
     [dateFormatter setTimeZone:systemTimeZone];
     NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
-    
-//    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
-    
-//    NSString *date_string = [dateFormatter stringFromDate:[NSDate date]];
 
     NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Favorite_Food (Favorite_FoodID, FoodID,modified,MeasureID) VALUES (%i, %i,DATETIME('%@'),%i)", minIDvalue, foodID, date_string, num_measureID];
-    
-    DMLog(@"Save insertSQL for DetailView is %@", insertSQL);
-    
     [db executeUpdate:insertSQL];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
-    
     [db commit];
     
     num_isFavorite = 1;
@@ -1014,7 +957,6 @@
 
 - (void)deleteFromWSLog {
     [DMActivityIndicator showActivityIndicator];
-
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int foodLogID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
@@ -1039,16 +981,10 @@
         [DMActivityIndicator hideActivityIndicator];
         [self deleteFromLog];
     }];
-    
-    
-}
-
-#pragma mark MEMORY METHODS
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark WEBSERVICE INSERT MEAL ITEM DELEGATE
+
 - (void)insertUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
     [DMActivityIndicator hideActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -1063,6 +999,7 @@
 }
 
 #pragma mark DELETE MEAL PLAN ITEMS DELEGATE
+
 - (void)deleteUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
     [DMActivityIndicator hideActivityIndicator];
 
@@ -1077,17 +1014,9 @@
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
 }
 
-#pragma mark WEBSERVICE DELETE FAVORITE FOOD DELEGATE
-- (void)deleteFavoriteFoodFinished:(NSMutableArray *)responseArray {
-    
-}
-- (void)deleteFavoriteFoodFailed:(NSString *)failedMessage {
-    DMLog(@"deleteFavoriteFoodFailed");
-}
-
 #pragma mark CUSTOM SUPERSCRIPT NSSTRING METHOD
+
 -(NSString *)superScriptOf:(NSString *)inputNumber {
-    
     NSString *outp=@"";
     for (int i =0; i<[inputNumber length]; i++) {
         unichar chara=[inputNumber characterAtIndex:i] ;
@@ -1182,6 +1111,8 @@
     }
     return ret;
 }
+
+#pragma mark Safari
 
 -(IBAction)goToSafetyGuidelines:(id)sender {
     SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://advancedwebservicegroup.com/AWSGDocuments/GuidelinesAndSafety.html"]];

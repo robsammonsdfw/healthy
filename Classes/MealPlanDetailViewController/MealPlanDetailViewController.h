@@ -7,42 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MealPlanWebService.h"
-#import "MBProgressHUD.h"
-#import "TDDatePickerController.h"
-#import "TTTAttributedLabel.h"
 
-@interface MealPlanDetailViewController : UIViewController <WSGetUserPlannedMealNames, WSDeleteUserPlannedMealItems, TTTAttributedLabelDelegate> {
-    int selectedIndex;
+@interface MealPlanDetailViewController : UIViewController {
     IBOutlet UILabel *titleLabel;
     IBOutlet UILabel *recommendedCaloriesLabel;
     IBOutlet UILabel *caloriesPlannedLabel;
     int mealCodeToAdd;
-    
-    int addToPlanButtonIndex;
     IBOutlet UIButton *infoBtn;
-
 }
 
-@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
 @property (nonatomic) int selectedIndex;
-@property (nonatomic, strong) IBOutlet UIImageView *imgbarline;
-@property (nonatomic, strong) IBOutlet UILabel *staticCalPlannedLbl;
-@property (nonatomic, strong) IBOutlet UILabel *staticRecomCalLbl;
-
--(void)loadData;
--(void)showActionSheet:(id)sender;
--(void)addPlanToLog;
--(void)deleteMealPlanItem:(NSDictionary *)dict;
--(void)updateCalorieLabels;
--(void)confirmAddToLog;
--(void)confirmAddMealToLog:(id)sender;
--(void)addMealToLog:(id)sender;
--(void)addItemToMealPlan:(id)sender;
--(void)selectMealDate:(id)sender;
--(void)selectAllMealDate:(id)sender;
--(void)removeMissingFood:(NSIndexPath *)indexPath;
--(void)checkForMissingFoods;
--(IBAction) goToSafetyGuidelines:(id) sender;
-
 @end

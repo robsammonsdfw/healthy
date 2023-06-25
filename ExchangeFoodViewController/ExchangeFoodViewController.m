@@ -341,9 +341,7 @@
     double numberOfCalories = [[dict valueForKey:@"Calories"] doubleValue];
     double gramWeight = [[dietmasterEngine getGramWeightForFoodID:@([[dict valueForKey:@"FoodKey"] intValue]) andMeasureID:measureID] doubleValue];
     
-    //change by HHT on 23-08-2016
-    //if gramWeight = 0 exchage food error occuered
-    
+    // If gramWeight = 0, and exchange food error will occur.
     if (gramWeight == 0){
         gramWeight = 100;
     }
@@ -353,7 +351,6 @@
     
     servings = totalCaloriesToExchange / ((numberOfCalories * gramWeight) / servingSize);
     totalCalories = servings * ((numberOfCalories * gramWeight) / servingSize);
-    
     
     double dblNewFoodCaloriesPerServing = numberOfCalories / servingSize;
     double dblNewFoodNumberOfServings = ((totalCalories) * 100) / (dblNewFoodCaloriesPerServing * gramWeight);
@@ -374,7 +371,6 @@
     if (totalServingAmount == 0) {
         totalServingAmount = 0.5;
     }
-    
     
     NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID", dietmasterEngine.selectedMealID, @"MealCode", [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"FoodID"], @"FoodID", nil];
     _deleteDict = nil;
@@ -467,7 +463,6 @@
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexPath.row]];
     NSString *text = [dict valueForKey:@"Name"];
     CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
-//    CGSize labelSize = [text sizeWithFont:[UIFont systemFontOfSize:14.0]  constrainedToSize:constraintSize  lineBreakMode:NSLineBreakByWordWrapping];
     
     CGRect textRect = [text boundingRectWithSize:constraintSize
                                      options:NSStringDrawingUsesLineFragmentOrigin
@@ -589,7 +584,6 @@
     
     if ([[[responseArray objectAtIndex:0] valueForKey:@"Status"] isEqualToString:@"Error"]) {
         [DMActivityIndicator hideActivityIndicator];
-
         [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
     }
     else {

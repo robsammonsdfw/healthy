@@ -21,7 +21,6 @@
 
 @interface MealPlanWebService : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate> {
 	BOOL recordResults;
-    
     // Vars to Hold Data for Session
     int tempID;
 }

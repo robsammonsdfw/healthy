@@ -85,7 +85,6 @@
 		401B642C20B3FC64004453E7 /* MealPlanDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */; };
 		401B643B20B3FC64004453E7 /* ExchangeFoodViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65811588CA5200CCE0AD /* ExchangeFoodViewController.xib */; };
 		401B643F20B3FC64004453E7 /* GroceryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65981589365800CCE0AD /* GroceryListViewController.xib */; };
-		401B644820B3FC64004453E7 /* TDDatePickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B415924DEC00AD6E9D /* TDDatePickerController.xib */; };
 		401B646E20B3FC64004453E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		401B646F20B3FC64004453E7 /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
 		401B647020B3FC64004453E7 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 431EEE491D82AA7D0022AFEA /* TTTAttributedLabel.m */; };
@@ -116,7 +115,6 @@
 		401B649D20B3FC64004453E7 /* MealPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */; };
 		401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */; };
 		401B649F20B3FC64004453E7 /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65971589365800CCE0AD /* GroceryListViewController.m */; };
-		401B64A020B3FC64004453E7 /* TDDatePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B315924DEC00AD6E9D /* TDDatePickerController.m */; };
 		401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */; };
 		401B64A220B3FC64004453E7 /* UIViewController+TDSemiModalExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B915924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.m */; };
 		401B64C220B3FC64004453E7 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28C187EDE28004A542C /* Common.m */; };
@@ -367,9 +365,6 @@
 		0EB5424B14E325210023BA4C /* FavoriteMealsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteMealsViewController.h; sourceTree = "<group>"; };
 		0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteMealsViewController.m; sourceTree = "<group>"; };
 		0EB5424D14E325210023BA4C /* FavoriteMealsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoriteMealsViewController.xib; sourceTree = "<group>"; };
-		0EBFA6B215924DEC00AD6E9D /* TDDatePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDatePickerController.h; sourceTree = "<group>"; };
-		0EBFA6B315924DEC00AD6E9D /* TDDatePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDatePickerController.m; sourceTree = "<group>"; };
-		0EBFA6B415924DEC00AD6E9D /* TDDatePickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TDDatePickerController.xib; sourceTree = "<group>"; };
 		0EBFA6B515924DEC00AD6E9D /* TDSemiModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSemiModal.h; sourceTree = "<group>"; };
 		0EBFA6B615924DEC00AD6E9D /* TDSemiModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSemiModalViewController.h; sourceTree = "<group>"; };
 		0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSemiModalViewController.m; sourceTree = "<group>"; };
@@ -986,9 +981,6 @@
 		0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */ = {
 			isa = PBXGroup;
 			children = (
-				0EBFA6B215924DEC00AD6E9D /* TDDatePickerController.h */,
-				0EBFA6B315924DEC00AD6E9D /* TDDatePickerController.m */,
-				0EBFA6B415924DEC00AD6E9D /* TDDatePickerController.xib */,
 				0EBFA6B515924DEC00AD6E9D /* TDSemiModal.h */,
 				0EBFA6B615924DEC00AD6E9D /* TDSemiModalViewController.h */,
 				0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */,
@@ -1753,7 +1745,6 @@
 				0E6F91342A4328A000956F1E /* DietMasterGo-Info.plist in Resources */,
 				40E035C721F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */,
 				401B643F20B3FC64004453E7 /* GroceryListViewController.xib in Resources */,
-				401B644820B3FC64004453E7 /* TDDatePickerController.xib in Resources */,
 				650208E4250153C300F412B0 /* PlansTableViewCell.xib in Resources */,
 				4018F11E20DA437800FE1252 /* AppDefaults.plist in Resources */,
 				65462D2C26BD1DC3004D1654 /* OtherHealthServiceVC.xib in Resources */,
@@ -1879,7 +1870,6 @@
 				401B649F20B3FC64004453E7 /* GroceryListViewController.m in Sources */,
 				40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */,
 				0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */,
-				401B64A020B3FC64004453E7 /* TDDatePickerController.m in Sources */,
 				401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */,
 				401B64A220B3FC64004453E7 /* UIViewController+TDSemiModalExtension.m in Sources */,
 				65462D1726BD1D6B004D1654 /* ProfileContactVC.m in Sources */,

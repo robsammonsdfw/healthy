@@ -2253,10 +2253,10 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return dict;
 }
 
--(BOOL)insertMealPlanToLog:(NSDictionary *)dict {
+- (BOOL)insertMealPlanToLog:(NSDictionary *)dict {
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
     if (![db open]) {
-        
+        return NO;
     }
     
     int mealIDValue = 0;
@@ -2264,7 +2264,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [self.dateformatter setDateFormat:@"yyyy-MM-dd"];
     self.dateformatter.timeZone = [NSTimeZone systemTimeZone];
     NSString *date_Today = [self.dateformatter stringFromDate:dateSelected];
-        
     [self.dateformatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
     
     NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
@@ -2303,9 +2302,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     double servingAmount = [[NSString stringWithFormat:@"%@",[dict valueForKey:@"NumberOfServings"]] doubleValue];
     
     [db beginTransaction];
-    
     NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_Today];
-    
     [db executeUpdate:insertSQL];
     
     int mealID = minIDvalue;
@@ -2317,19 +2314,15 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                  "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
                  " VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))",
                  mealID, foodID, mealCode, num_measureID, servingAmount, date_string];
-    
     [db executeUpdate:insertSQL];
-    
-    
-    
+
     BOOL success = YES;
-    
     if ([db hadError]) {
         success = NO;
     }
     [db commit];
     
-    return success = YES;
+    return success;
 }
 
 -(NSNumber *)getMealCodeCalories:(NSArray *)array {

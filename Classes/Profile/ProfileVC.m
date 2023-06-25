@@ -1,16 +1,11 @@
 #import "ProfileVC.h"
 #import "DailyActivityTypeVC.h"
-#import "TDDatePickerController.h"
 
-@interface ProfileVC ()<UITextFieldDelegate>
-{
+@interface ProfileVC ()<UITextFieldDelegate> {
     int flag;
     NSString *dateFromateType;
-    
-    //HHT change check BD validation
     NSDate *selectedBDate;
     NSDate *currentDate;
-    
 }
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
@@ -24,16 +19,12 @@
     
     flag=0;
     [self.btnMale setSelected:YES];
-    // Do any additional setup after loading the view from its nib.
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self action:@selector(dismissKeyboard)];
-
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [DMActivityIndicator hideActivityIndicator];
     

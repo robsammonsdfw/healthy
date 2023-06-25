@@ -10,7 +10,8 @@ import UIKit
 /// Controller that displays a date picker for the user to choose from.
 class DMDatePickerViewController : UIViewController {
     private var navController: UINavigationController?
-    private lazy var pickerView = {
+    private weak var presentingController: UIViewController?
+    private var pickerView = {
         let pickerView = UIDatePicker()
         pickerView.datePickerMode = .date
         pickerView.preferredDatePickerStyle = .wheels
@@ -20,6 +21,8 @@ class DMDatePickerViewController : UIViewController {
     
     /// Closure that will be called when a user selects an option. Note, this could be called
     /// multiple times as the user makes their selection.
+    @objc public var pickerDateChangedCallback: ((_ date: Date) -> Void)?
+    /// Closure that's called when the user presses done.
     @objc public var didSelectDateCallback: ((_ date: Date) -> Void)?
 
     init() {
@@ -50,7 +53,7 @@ class DMDatePickerViewController : UIViewController {
     
     /// Called when date changed.
     @objc private func dateChanged() {
-        didSelectDateCallback?(pickerView.date)
+        pickerDateChangedCallback?(pickerView.date)
     }
     
     // MARK: - Public
@@ -73,11 +76,18 @@ class DMDatePickerViewController : UIViewController {
             sheet.detents = [.medium()]
         }
         self.title = "Select Date"
-        controller.present(navController, animated: true, completion: nil)
+        presentingController = controller
+        presentingController?.present(navController, animated: true, completion: {
+            self.pickerDateChangedCallback?(self.pickerView.date)
+        })
     }
     
     /// Dismisses the presented picker, if visible.
     @objc public func dismissPicker() {
-        navController?.dismiss(animated: true)
+        presentingController?.dismiss(animated: true) {
+            self.didSelectDateCallback?(self.pickerView.date)
+            self.navController = nil
+            self.presentingController = nil
+        }
     }
 }
