@@ -25,7 +25,7 @@
 #import "DMUser.h"
 #import "NSString+Encode.h"
 
-@interface LoginViewController() <UITextFieldDelegate, MFMailComposeViewControllerDelegate, SyncDatabaseDelegate>
+@interface LoginViewController() <MFMailComposeViewControllerDelegate, SyncDatabaseDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;
@@ -38,8 +38,6 @@
 
 /// Completion block that should be called when login is complete.
 @property (nonatomic, copy) completionBlockWithError completionBlock;
-
-@property (nonatomic, assign) CGFloat animatedDistance;
 
 - (IBAction)emailUs:(id)sender;
 - (IBAction)termsOfService:(id)sender;
@@ -65,16 +63,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"changeDesign"]  isEqual: @"NewDesign"]) {
-        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"])
-            self.backgroundImgVw.image = [UIImage imageNamed:@"login-background-plus.png"];
-        else
-            self.backgroundImgVw.image = [UIImage imageNamed:@"login-background.png"];
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"]) {
+        self.backgroundImgVw.image = [UIImage imageNamed:@"login-background-plus"];
     } else {
-        self.appNameLabel.hidden = false;
-        self.imgtop.hidden = false;
+        self.backgroundImgVw.image = [UIImage imageNamed:@"login-background"];
     }
-    
+
+    self.appNameLabel.hidden = false;
+    self.imgtop.hidden = false;
+
     self.loginButton.backgroundColor=PrimaryColor
     self.loginButton.layer.cornerRadius=5;
     
@@ -104,6 +101,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [helpButton setBackgroundImage:[UIImage imageNamed:@"button_small"] forState:UIControlStateSelected];
     }
     
+    // Set text colors.
+    self.appNameLabel.textColor = [UIColor blackColor];
+    [self.loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.signUpBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.emailbtuuon setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+
     // Enable iCloud Password Autofill.
     self.usernameField.textContentType = UITextContentTypeUsername;
     self.passwordField.textContentType = UITextContentTypePassword;
@@ -142,46 +145,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
-    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
-    
-    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
-    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
-    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
-    CGFloat heightFraction = numerator / denominator;
-    
-    if (heightFraction < 0.0) {
-        heightFraction = 0.0;
-    } else if (heightFraction > 1.0) {
-        heightFraction = 1.0;
-    }
-    
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    
-    if (orientation == UIInterfaceOrientationPortrait ||
-        orientation == UIInterfaceOrientationPortraitUpsideDown) {
-        self.animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
-    } else {
-        self.animatedDistance = floor(LANDSCAPE_KEYBOARD_HEIGHT * heightFraction);
-    }
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y -= self.animatedDistance;
-       
-    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
-        [self.view setFrame:viewFrame];
-    }];
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y += self.animatedDistance;
-    
-    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
-        [self.view setFrame:viewFrame];
-    }];
-}
-
 #pragma mark - Actions
 
 - (void)loginFromUrl:(NSString *)authcode {
@@ -191,18 +154,21 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             self.passwordField.text = [items objectAtIndex:0];
             self.usernameField.text = [items objectAtIndex:1];
         }
-
         [self.loginButton sendActionsForControlEvents:UIControlEventTouchUpInside];
     }
 }
 
 - (void)presentLoginInController:(UIViewController *)controller
                   withCompletion:(completionBlockWithError)completionBlock {
-    self.completionBlock = completionBlock;
     UIViewController *rootController = [DMGUtilities rootViewController];
+    // If our login controller is already presented modally, exit this.
+    if ([rootController.presentedViewController isKindOfClass:[self class]]) {
+        return;
+    }
     if (controller) {
         rootController = controller;
     }
+    self.completionBlock = completionBlock;
     self.modalPresentationStyle = UIModalPresentationPageSheet;
     self.sheetPresentationController.detents = @[[UISheetPresentationControllerDetent largeDetent]];
     self.modalInPresentation = YES; // Prevent dismissal with swipe.
