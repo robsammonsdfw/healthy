@@ -191,7 +191,6 @@
         GetDataWebService *webService = [[GetDataWebService alloc] init];
         webService.getDataWSDelegate = self;
         [webService callWebservice:infoDict];
-        
     });
 }
 
