@@ -2541,13 +2541,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     DMLog(@"getAuthenticateUserFailed, value of response is %@", failedMessage);
 }
 
-#pragma mark My Moves Assigned RETREIVAL METHODS
-
-#warning TODO: I think this was never implemented (htk)
-- (void)saveMyMovesAssignedOnDateToDatabase:(NSMutableArray*)movesArr {
-
-}
-
 #pragma DATABASE HELPERS
 
 - (NSString *)databasePath {
