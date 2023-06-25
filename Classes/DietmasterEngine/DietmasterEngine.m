@@ -2510,7 +2510,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return @(gramWeight);
 }
 
-#pragma mark TIME CHECKS
+#pragma mark Date Helpers
+
 - (NSInteger)hoursAfterDate:(NSDate *)aDate {
     NSTimeInterval ti = [[NSDate date] timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_HOUR);
@@ -2524,10 +2525,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 - (void)getAuthenticateUserFinished:(NSMutableArray *)responseArray {
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:0]];
-    
-    for (id key in dict) {
-    }
-    
     if (![[dict valueForKey:@"Status"] isEqualToString:@"False"]) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs setValue:[dict valueForKey:@"MobileGraphic"] forKey:@"splashimage_filename"];
