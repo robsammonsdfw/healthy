@@ -353,6 +353,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 
     [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - USER SYNC METHODS

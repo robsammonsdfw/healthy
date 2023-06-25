@@ -370,7 +370,7 @@
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again.." inViewController:nil];
 }
 
-- (void)syncUPDatabaseFinished:(NSString *)responseMessage {    
+- (void)syncUPDatabaseFinished:(NSString *)responseMessage {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
@@ -447,6 +447,7 @@
     }
 
     [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark Custom Buttons for Tampa Rejuvination

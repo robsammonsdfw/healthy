@@ -657,6 +657,7 @@
     }
 
     [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)reloadData {
