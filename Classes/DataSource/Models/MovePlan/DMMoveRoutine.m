@@ -6,6 +6,7 @@
 //
 
 #import "DMMoveRoutine.h"
+#import "DMMoveDay.h"
 
 @interface DMMoveRoutine()
 @property (nonatomic, strong, readwrite) NSNumber *routineId;
@@ -16,6 +17,16 @@
 @end
 
 @implementation DMMoveRoutine
+
++ (instancetype)routineWithMove:(DMMove *)move forDay:(DMMoveDay *)moveDay {
+    DMMoveRoutine *routine = [[DMMoveRoutine alloc] init];
+    routine.moveId = move.moveId;
+    routine.move = move;
+    routine.sets = @[];
+    routine.dayId = moveDay.dayId;
+
+    return routine;
+}
 
 - (instancetype)init {
     return [self initWithDictionary:@{}];

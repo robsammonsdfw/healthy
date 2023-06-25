@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DMMoveSet.h"
+@class DMMoveDay;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// will not be populated unless you call -setRoutineSets: with
 /// data from the database.
 @property (nonatomic, strong, readonly) NSArray<DMMoveSet *> *sets;
+
+/// Creates a new routine with the given move. Used for creating
+/// new entries in the database.
++ (instancetype)routineWithMove:(DMMove *)move forDay:(DMMoveDay *)moveDay;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
