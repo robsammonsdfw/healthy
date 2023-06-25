@@ -848,264 +848,14 @@
     [db commit];
 }
 
--(void)addMovesToDb:(NSDictionary *)dict
-       SelectedDate:(NSDate*)planDate
-           planName:(NSString *)planName
-       categoryName:(NSString*)CatName
-         CategoryID:(int)categoryID
-           tagsName:(NSString*)tag
-             TagsId:(int)tagsId
-             status:(NSString*)status
-     PlanNameUnique:(NSString*)PlanNameUnique
-     DateListUnique:(NSString*)DateListUnique
-     MoveNameUnique:(NSString*)MoveNameUnique {
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    [db beginTransaction];
-    
-    int moveId = [dict[@"WorkoutID"] integerValue];
-    
-    NSString *notes = [[dict[@"Notes"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];;
-    NSString *moveName = [[dict[@"WorkoutName"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString *videoUrl = dict[@"Link"];
-    NSString *syncResult = @"";
-   
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSString * planDateStr = [dateFormatter stringFromDate:planDate];
-    NSArray *items = [planDateStr componentsSeparatedByString:@"T"];
-    planDateStr = [[items objectAtIndex:0] stringByAppendingString:@"T00:00:00"];
-       
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSDate *currentDate = [NSDate date];
-    NSString *lastUpdated = [formatter stringFromDate:currentDate];
-
-    
-    NSString *selectQuery = [NSString stringWithFormat:@"SELECT * from PlanDateUniqueID_Table WHERE PlanDate = '%@'",planDateStr];
-    FMResultSet *rs = [db executeQuery:selectQuery];
-
-    NSMutableArray *arr = [NSMutableArray new];
-
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-        NSString *uniqueIDs = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"UniqueID"]];
-        NSString *planDate = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"PlanDate"]];
-
-        [dict setObject: uniqueIDs  forKey: @"UniqueID"];
-        [dict setObject: planDate  forKey: @"PlanDate"];
-
-        [arr addObject:dict];
-    }
-    //DMLog(@"%@",arr);
-
-    if ([arr count] != 0)
-    {
-        if ([planDateStr isEqualToString:arr[0][@"PlanDate"]])
-        {
-
-            NSString *UpdateSQL = [NSString stringWithFormat:@"UPDATE PlanDateUniqueID_Table SET UniqueID = %@ Where PlanDate = %@",PlanNameUnique,planDateStr];
-            [db executeUpdate:UpdateSQL];
-
-            NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanList (PlanName,Notes,LastUpdated,UniqueID,syncResult) VALUES (\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",planName,notes,lastUpdated,arr[0][@"UniqueID"],syncResult];
-            [db executeUpdate:insertSQL];
-
-            NSMutableDictionary *setDict = [NSMutableDictionary dictionary];
-
-            [setDict setObject: planName  forKey: @"PlanName"];
-            [setDict setObject: notes  forKey: @"Notes"];
-            [setDict setObject: planDateStr  forKey: @"LastUpdated"];
-            [setDict setObject: arr[0][@"UniqueID"]  forKey: @"UniqueID"];
-            [setDict setObject: status  forKey: @"Status"];
-            [setDict setObject: syncResult forKey: @"syncResult"];
-            [setDict setObject: notes  forKey: @"notes"];
-            [setDict setObject: moveName  forKey: @"moveName"];
-            [setDict setObject: videoUrl  forKey: @"videoUrl"];
-            [setDict setObject: [NSNumber numberWithInt:moveId]  forKey: @"moveId"];
-            [setDict setObject: DateListUnique  forKey: @"DateListUnique"];
-            [setDict setObject: MoveNameUnique  forKey: @"MoveNameUnique"];
-            [db commit];
-            [self mobilePlanDateList:planDate DateUniqueID:DateListUnique Dict:setDict];
-        }
-        else
-        {
-            NSString * insertSQLite = [NSString stringWithFormat: @"REPLACE INTO PlanDateUniqueID_Table (PlanDate,UniqueID) VALUES (\"%@\",\"%@\")",planDateStr,PlanNameUnique];
-            [db executeUpdate:insertSQLite];
-
-            NSMutableDictionary *setDict = [NSMutableDictionary dictionary];
-
-            [setDict setObject: planName  forKey: @"PlanName"];
-            [setDict setObject: notes  forKey: @"Notes"];
-            [setDict setObject: planDateStr  forKey: @"LastUpdated"];
-            [setDict setObject: PlanNameUnique  forKey: @"UniqueID"];
-            [setDict setObject: status  forKey: @"Status"];
-            [setDict setObject: [NSString stringWithFormat:@"%@", syncResult]  forKey: @"syncResult"];
-            [setDict setObject: notes  forKey: @"notes"];
-            [setDict setObject: moveName  forKey: @"moveName"];
-            [setDict setObject: videoUrl  forKey: @"videoUrl"];
-            [setDict setObject: [NSNumber numberWithInt:moveId]  forKey: @"moveId"];
-            [setDict setObject: DateListUnique  forKey: @"DateListUnique"];
-            [setDict setObject: MoveNameUnique  forKey: @"MoveNameUnique"];
-
-            NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanList (PlanName,Notes,LastUpdated,UniqueID,Status,syncResult) VALUES (\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",planName,notes,lastUpdated,PlanNameUnique,status,syncResult];
-            [db executeUpdate:insertSQL];
-            [db commit];
-
-
-
-            [self mobilePlanDateList:planDate DateUniqueID:DateListUnique Dict:setDict];
-        }
-    }
-    else
-    {
-        NSString * insertSQLite = [NSString stringWithFormat: @"REPLACE INTO PlanDateUniqueID_Table (PlanDate,UniqueID) VALUES (\"%@\",\"%@\")",planDateStr,PlanNameUnique];
-        [db executeUpdate:insertSQLite];
-    
-        NSMutableDictionary *setDict = [NSMutableDictionary dictionary];
-        
-        [setDict setObject: planName  forKey: @"PlanName"];
-        [setDict setObject: notes  forKey: @"Notes"];
-        [setDict setObject: planDateStr  forKey: @"LastUpdated"];
-        [setDict setObject: PlanNameUnique  forKey: @"UniqueID"];
-        [setDict setObject: status  forKey: @"Status"];
-        [setDict setObject: [NSString stringWithFormat:@"%@", syncResult]  forKey: @"syncResult"];
-        [setDict setObject: notes  forKey: @"notes"];
-        [setDict setObject: moveName  forKey: @"moveName"];
-        [setDict setObject: videoUrl  forKey: @"videoUrl"];
-        [setDict setObject: [NSNumber numberWithInt:moveId]  forKey: @"moveId"];
-        [setDict setObject: DateListUnique  forKey: @"DateListUnique"];
-        [setDict setObject: MoveNameUnique  forKey: @"MoveNameUnique"];
-        
-        NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanList (PlanName,Notes,LastUpdated,UniqueID,Status,syncResult) VALUES (\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",planName,notes,lastUpdated,PlanNameUnique,status,syncResult];
-        [db executeUpdate:insertSQL];
-        [db commit];
-        
-        [self mobilePlanDateList:planDate DateUniqueID:DateListUnique Dict:setDict];
-    }
-    
-
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:MoveNameUnique forKey:@"MoveNameUnique"];
-}
-
--(void)mobilePlanDateList:(NSDate *)planDate
-             DateUniqueID:(NSString *)uniqueID
-                     Dict:(NSDictionary *)dict {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-   
-    NSString * parentUniqueId = dict[@"UniqueID"];
-    
-    NSString * moveName = [[dict[@"moveName"]stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString * videoUrl = dict[@"videoUrl"];
-    NSString * notes = [[dict[@"notes"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    int moveId = [dict[@"moveId"] integerValue];
-    NSString * DateListUnique = dict[@"DateListUnique"];
-    NSString * MoveNameUnique = dict[@"MoveNameUnique"];
-
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSDate *currentDate = [NSDate date];
-    NSString *lastUpdated = [formatter stringFromDate:currentDate];
-
-
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSString * planDateStr = [dateFormatter stringFromDate:planDate];
-    NSArray *items = [planDateStr componentsSeparatedByString:@"T"];
-    planDateStr = [[items objectAtIndex:0] stringByAppendingString:@"T00:00:00"];
-    
-    NSString *status = @"New";
-    NSString *syncResult = @"";
-
-    NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanDateList (PlanDate,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID) VALUES (\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",planDateStr,lastUpdated,uniqueID,status,syncResult,parentUniqueId];
-
-    [db executeUpdate:insertSQL];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-    [self mobilePlanMoveList:moveName VideoLink:videoUrl Notes:notes UniqueID:MoveNameUnique ParentUniqueID:DateListUnique MoveID:moveId PlanDateStr:planDateStr];
-}
-
-//new API
-- (void)mobilePlanMoveList:(NSString *)MoveName
-                 VideoLink:(NSString *)VideoLink
-                     Notes:(NSString *)Notes
-                  UniqueID:(NSString *)UniqueID
-            ParentUniqueID:(NSString *)ParentUniqueID
-                    MoveID:(int)MoveID
-               PlanDateStr:(NSString *)PlanDateStr
-{
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSDate *currentDate = [NSDate date];
-    NSString *lastUpdated = [formatter stringFromDate:currentDate];
-
-    
-    NSString *status = @"New";
-    NSString *syncResult = @"";
-    NSString *isCheckBoxClicked = @"no";
-    
-    NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO PlanDateTable (PlanDate) VALUES (\"%@\")",PlanDateStr];
-
-    [db executeUpdate:insertSQL];
-
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-
-        NSString * insertSQLite = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanMoveList (MoveID,MoveName,VideoLink,Notes,LastUpdated,UniqueID,Status,SyncResult,ParentUniqueID,isCheckBoxClicked) VALUES (\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",MoveID,MoveName,VideoLink,Notes,lastUpdated,UniqueID,status,syncResult,ParentUniqueID,isCheckBoxClicked];
-        [db executeUpdate:insertSQLite];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-    NSMutableDictionary *moveDict = [NSMutableDictionary dictionary];
-    [moveDict setObject: MoveName  forKey: @"MoveName"];
-    [moveDict setObject: VideoLink  forKey: @"VideoLink"];
-    [moveDict setObject: Notes  forKey: @"Notes"];
-    [moveDict setObject: lastUpdated  forKey: @"LastUpdated"];
-    [moveDict setObject: UniqueID  forKey: @"UniqueID"];
-    [moveDict setObject: [NSString stringWithFormat:@"%@", status]  forKey: @"Status"];
-    [moveDict setObject: [NSString stringWithFormat:@"%@", syncResult]  forKey: @"syncResult"];
-    [moveDict setObject: ParentUniqueID  forKey: @"ParentUniqueID"];
-}
-
-- (void)addMoveSet:(DMMoveSet *)moveSet toRoutine:(DMMoveRoutine *)routine {
+- (NSNumber *)addMoveSet:(DMMoveSet *)moveSet toRoutine:(DMMoveRoutine *)routine {
     if (!moveSet || !routine) {
-        return;
+        return nil;
     }
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        return;
+        return nil;
     }
 
     // Get the highest ID in the SetList table.
@@ -1125,15 +875,18 @@
     NSString *syncResult = @"";
     NSString *uniqueID = [NSUUID UUID].UUIDString;
     NSString *parentUniqueID = [NSString stringWithFormat:@"M-%@", routine.routineId];
+    NSNumber *setId = moveSet.setId ?: highestSetId;
     
     NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanMoveSetList (SetID, UserPlanMoveID, SetNumber, Unit1ID, Unit1Value, Unit2ID, Unit2Value, LastUpdated, UniqueID, Status, SyncResult, ParentUniqueID) VALUES "
                         "('%@', '%@', '%@', \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",
-                           highestSetId, routine.routineId, setNumber, moveSet.unitOneId, moveSet.unitOneValue, moveSet.unitTwoId, moveSet.unitTwoValue, lastUpdated, uniqueID, status, syncResult, parentUniqueID];
+                           setId, routine.routineId, setNumber, moveSet.unitOneId, moveSet.unitOneValue, moveSet.unitTwoId, moveSet.unitTwoValue, lastUpdated, uniqueID, status, syncResult, parentUniqueID];
     [db executeUpdate:insertSQL];
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
+    
+    return setId;
 }
                                         
 - (NSArray<DMMoveTag *> *)loadListOfTags {
@@ -1317,90 +1070,6 @@
     return maxValue;
 }
 
-
-#pragma mark - Monthly Exercise
-
-- (void)saveMonthlyExerciseToDb:(NSDictionary *)monthlyDict {
-    if (monthlyDict[@"UserWorkoutPlan"] != [NSNull null])
-        {
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-            if (![db open]) {
-            }
-            [db beginTransaction];
-            
-            NSMutableArray * monthlyArr = [[NSMutableArray alloc]init];
-            
-            [monthlyArr addObjectsFromArray:monthlyDict[@"UserWorkoutPlan"]];
-            
-            if ([monthlyArr count] != 0)
-            {
-                for (NSDictionary*dict in monthlyArr) {
-                    
-                    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                    
-                    int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
-                    int WorkoutUserID = [dict[@"WorkoutUserID"] integerValue];
-                    
-                    NSString * tempName = dict[@"TemplateName"];
-                    
-                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-                    NSArray *arr = [dict[@"WorkoutDate"] componentsSeparatedByString:@"T"];
-                    NSString *dateString = [NSString stringWithFormat:@"%@T00:00:00",[arr objectAtIndex:0]];
-                    NSDate *date = [dateFormatter dateFromString:dateString];
-                    NSString * workoutDate = [dateFormatter stringFromDate:date];
-                    
-                    int workoutTempId = [dict[@"WorkoutTemplateId"] integerValue];
-                    int workOutUserDateID = [dict[@"WorkoutUserDateID"] integerValue];
-                    
-                    int categoryId = [dict[@"CategoryID"] integerValue];
-                    NSString * categoryName = dict[@"CategoryName"];
-                    int workoutId = [dict[@"WorkoutID"] integerValue];
-                    NSString * exerciseName = dict[@"ExerciseName"];
-                    NSString * sessionNotes = dict[@"SessionNotes"];
-                    NSString * exerciseNotes = dict[@"ExerciseNotes"];
-                    NSString * videoUrl = dict[@"VideoURL"];
-                    NSString * currentDuration = dict[@"CurrentDuration"];
-                    NSString * workingStatus = dict[@"WorkingStatus"];
-                    NSString * comments = dict[@"Comments"];
-                    int processID = [dict[@"ProcessID"] integerValue];
-                    int tagsId = [dict[@"TagsId"] integerValue];
-                    NSString * tags = dict[@"Tags"];
-                    NSString * isEdited = @"no";
-                    NSString * ToBeAdded = @"no";
-                    NSString * isCommented = @"no";
-                    NSString * isStatusUpdated = @"no";
-                    
-                    NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO UserWorkoutPlan (UserID,TemplateName,WorkoutDate,WorkoutTemplateId,CategoryID,CategoryName,WorkoutID,ExerciseName,SessionNotes,ExerciseNotes,VideoURL,CurrentDuration,WorkingStatus,Comments,ProcessID,TagsId,Tags,isEdited,WorkoutUserID,ToBeAdded,isCommented,isStatusUpdated,WorkoutUserDateID) VALUES(\"%d\",\"%@\",\"%@\",\"%d\",\"%d\",\"%@\",\"%d\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%d\",\"%d\",\"%@\",\"%@\",\"%d\",\"%@\",\"%@\",\"%@\",\"%d\")",UserID,tempName,workoutDate,workoutTempId,categoryId,categoryName,workoutId,exerciseName,sessionNotes,exerciseNotes,videoUrl,currentDuration,workingStatus,comments,processID,tagsId,tags,isEdited,WorkoutUserID,ToBeAdded,isCommented,isStatusUpdated,workOutUserDateID];
-                    
-                    [db executeUpdate:insertSQL];
-                    
-                }
-            }
-            
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-            
-            NSOperationQueue *operationQueue = [NSOperationQueue new];
-            NSBlockOperation *blockCompletionOperation = [NSBlockOperation blockOperationWithBlock:^{
-                DMLog(@"The block operation ended, Do something such as show a successmessage etc");
-                //This the completion block operation
-            }];
-            NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
-                //This is the worker block operation
-                [self saveWorkoutDetailToDb:monthlyArr];
-            }];
-            [blockCompletionOperation addDependency:blockOperation];
-            [operationQueue addOperation:blockCompletionOperation];
-            [operationQueue addOperation:blockOperation];
-            
-        }
-
-}
-
 - (void)setFirstUnitId:(NSNumber *)unitId forMoveSet:(DMMoveSet *)moveSet {
     if (!unitId || !moveSet) {
         return;
@@ -1498,6 +1167,48 @@
     }
     
     [db commit];
+}
+
+- (NSNumber *)addMoveRoutine:(DMMoveRoutine *)moveRoutine toMoveDay:(DMMoveDay *)moveDay {
+    if (!moveRoutine || !moveDay) {
+        return nil;
+    }
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    if (![db open]) {
+        return nil;
+    }
+
+    // Get the highest ID in the MoveList table.
+    NSNumber *highestId = [self getMaxValueForColumn:@"UserPlanMoveID" inTable:@"ServerUserPlanMoveList"];
+    if (highestId) {
+        highestId = @(highestId.integerValue + 1);
+    }
+    [db beginTransaction];
+
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    NSDate *currentDate = [NSDate date];
+    NSString *lastUpdated = [self.dateFormatter stringFromDate:currentDate];
+    NSString *status = @"New";
+    NSString *syncResult = @"";
+    NSString *uniqueID = [NSUUID UUID].UUIDString;
+    NSString *parentUniqueID = [NSString stringWithFormat:@"M-%@", moveDay.dayId];
+    NSNumber *routineId = moveRoutine.routineId ?: highestId;
+    NSString *uniqueId = [NSString stringWithFormat:@"M-%@", routineId];
+
+    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanMoveList (UserPlanMoveID, UserPlanDateID, MoveID, "
+                                "LastUpdated, UniqueID, Status, SyncResult, ParentUniqueID, isCheckBoxClicked) VALUES "
+                                "(\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",
+                                routineId, moveDay.dayId, moveRoutine.moveId, lastUpdated, uniqueId, status,
+                                syncResult, parentUniqueID, @(NO)];
+
+    [db executeUpdate:insertSQL];
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [db commit];
+    
+    return routineId;
 }
 
 -(void)addExerciseToDb:(NSDictionary *)dict
@@ -1647,59 +1358,6 @@
     [db commit];
 }
 
--(void)saveDeletedExerciseToDb:(int)workoutTempId UserId:(int)userId WorkoutUserDateID:(int)workoutUserDateID {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    
-    NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO DeleteWorkoutTemplate (WorkoutTemplateId,UserId,WorkoutUserDateID) VALUES(\"%d\",\"%d\",\"%d\")",workoutTempId,userId,workoutUserDateID];
-    
-    [db executeUpdate:insertSQL];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    //DMLog(@"%@",[self loadDeletedExerciseFromDb]);
-}
-
--(NSMutableArray *)loadDeletedExerciseFromDb {
-    NSMutableArray *arr = [[NSMutableArray alloc]init];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM DeleteWorkoutTemplate"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutTemplateId = [rs intForColumn:@"WorkoutTemplateId"];
-        int UserId = [rs intForColumn:@"UserId"];
-        int WorkoutUserDateID = [rs intForColumn:@"WorkoutUserDateID"];
-
-        [dict setObject: [NSNumber numberWithInt:WorkoutTemplateId]  forKey: @"WorkoutTemplateId"];
-        [dict setObject: [NSNumber numberWithInt:UserId]  forKey: @"UserId"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutUserDateID]  forKey: @"WorkoutUserDateID"];
-
-        [arr addObject:dict];
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    return arr;
-}
-
 -(void)saveWorkoutDetailToDb:(NSArray *)dataArr {
     if ([dataArr count] != 0)
     {
@@ -1753,323 +1411,6 @@
     }
 }
 
-- (NSArray *)loadWorkoutFromDb {
-    NSMutableArray *arr = [[NSMutableArray alloc]init];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM workout"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-        int WorkoutUserDateID = [rs intForColumn:@"WorkoutUserDateID"];
-        int WorkoutMethodID = [rs intForColumn:@"WorkoutMethodID"];
-        int WorkoutMethodValueID = [rs intForColumn:@"WorkoutMethodValueID"];
-        int P1Number = [rs intForColumn:@"P1Number"];
-        int TableP2ID = [rs intForColumn:@"TableP2ID"];
-        int P2Value = [rs intForColumn:@"P2Value"];
-        int TableP3ID = [rs intForColumn:@"TableP3ID"];
-        int P3Value = [rs intForColumn:@"P3Value"];
-
-        NSString * TableP2Name = [NSString stringWithFormat:@"%d", [rs intForColumn:@"TableP2Name"]];
-        NSString * TableP3Name = [NSString stringWithFormat:@"%d", [rs intForColumn:@"TableP3Name"]];
-        NSString * isDeleted = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"isDeleted"]];
-        [dict setObject: isDeleted  forKey: @"isDeleted"];
-
-        [dict setObject: [NSNumber numberWithInt:WorkoutUserDateID]  forKey: @"WorkoutUserDateID"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutMethodID]  forKey: @"WorkoutMethodID"];
-        [dict setObject: [NSNumber numberWithInt:WorkoutMethodValueID]  forKey: @"WorkoutMethodValueID"];
-        [dict setObject: [NSNumber numberWithInt:P1Number]  forKey: @"P1Number"];
-        [dict setObject: [NSNumber numberWithInt:TableP2ID]  forKey: @"TableP2ID"];
-        [dict setObject: [NSNumber numberWithInt:P2Value]  forKey: @"P2Value"];
-        [dict setObject: [NSNumber numberWithInt:TableP3ID]  forKey: @"TableP3ID"];
-        [dict setObject: TableP2Name  forKey: @"TableP2Name"];
-        [dict setObject: TableP3Name  forKey: @"TableP3Name"];
-        [dict setObject: [NSNumber numberWithInt:P3Value]  forKey: @"P3Value"];
-
-        [arr addObject:dict];
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    
-    return [arr copy];
-}
-
-- (NSArray *)loadExerciseFromDb {
-    NSMutableArray *arr = [[NSMutableArray alloc]init];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-        
-         NSString *workoutSql = [NSString stringWithFormat:@"SELECT * FROM UserWorkoutPlan"];
-         FMResultSet *rs = [db executeQuery:workoutSql];
-    
-         while ([rs next]) {
-             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-             int UserID = [[[NSUserDefaults standardUserDefaults] valueForKey:@"userid_dietmastergo"] integerValue];
-             int WorkoutUserID = [rs intForColumn:@"WorkoutUserID"];
-             
-             NSString * strTempName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"TemplateName"]];
-             NSString * strWorkoutTempId = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkoutDate"]];
-             int WorkoutTemplateId =  [rs intForColumn:@"WorkoutTemplateId"];
-             int workoutDateId =  [rs intForColumn:@"WorkoutUserDateID"];
-             int CategoryID =  [rs intForColumn:@"CategoryID"];
-             NSString * CategoryName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"CategoryName"]];
-             int WorkoutID = [rs intForColumn:@"WorkoutID"];
-             NSString * ExerciseName = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"ExerciseName"]];
-             NSString * SessionNotes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"SessionNotes"]];
-             NSString * ExerciseNotes = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"ExerciseNotes"]];
-             NSString * VideoURL = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"VideoURL"]];
-             
-             NSString * currentDuration = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"CurrentDuration"]];
-             NSString * workingStatus = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"WorkingStatus"]];
-             NSString * comments = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Comments"]];
-             
-             NSString * ToBeAdded = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"ToBeAdded"]];
-
-             NSString * isCommented = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"isCommented"]];
-
-             NSString * isStatusUpdated = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"isStatusUpdated"]];
-             
-             
-             int processID = [rs intForColumn:@"ProcessID"];
-             int tagsId = [rs intForColumn:@"TagsId"];
-             NSString * tags = [NSString stringWithFormat:@"%@", [rs stringForColumn:@"Tags"]];
-
-             [dict setObject: isStatusUpdated  forKey: @"isStatusUpdated"];
-             [dict setObject: isCommented  forKey: @"isCommented"];
-             [dict setObject: ToBeAdded  forKey: @"ToBeAdded"];
-             [dict setObject: [NSNumber numberWithInt:WorkoutUserID]  forKey: @"WorkoutUserID"];
-             [dict setObject: [NSNumber numberWithInt:UserID]  forKey: @"UserID"];
-             [dict setObject: strTempName  forKey: @"TemplateName"];
-             [dict setObject: strWorkoutTempId  forKey: @"WorkoutDate"];
-             [dict setObject: [NSNumber numberWithInt:WorkoutTemplateId]  forKey: @"WorkoutTemplateId"];
-             [dict setObject: [NSNumber numberWithInt:workoutDateId]  forKey: @"WorkoutUserDateID"];
-             [dict setObject: [NSNumber numberWithInt:CategoryID]  forKey: @"CategoryID"];
-             [dict setObject: CategoryName  forKey: @"CategoryName"];
-             [dict setObject: [NSNumber numberWithInt:WorkoutID]  forKey: @"WorkoutID"];
-             [dict setObject: ExerciseName  forKey: @"ExerciseName"];
-             [dict setObject: SessionNotes  forKey: @"SessionNotes"];
-             [dict setObject: ExerciseNotes  forKey: @"ExerciseNotes"];
-             [dict setObject: VideoURL  forKey: @"VideoURL"];
-             [dict setObject: currentDuration  forKey: @"CurrentDuration"];
-             [dict setObject: workingStatus  forKey: @"WorkingStatus"];
-             [dict setObject: comments  forKey: @"Comments"];
-             [dict setObject: [NSNumber numberWithInt:processID]  forKey: @"ProcessID"];
-             [dict setObject: [NSNumber numberWithInt:tagsId]  forKey: @"TagsId"];
-             [dict setObject: tags  forKey: @"Tags"];
-             
-             
-             [arr addObject:dict];
-         }
-    
-         if ([db hadError]) {
-             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-         }
-    
-         [db commit];
-    
-    NSSet * setForArr = [[NSMutableSet alloc] initWithArray:arr];
-    NSMutableArray *exerArr = [[NSMutableArray alloc]initWithArray:[setForArr allObjects]];
-    
-    return [exerArr copy];
-}
-
-#pragma mark Sets for my moves
-
--(void)updateSetsForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict
-{
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    
-    int P2Value  = [dict[@"P2Value"] integerValue];
-    int P3Value  = [dict[@"P3Value"] integerValue];
-    int P1Number = [dict[@"P1Number"] integerValue];
-
-    int  WorkoutMethodValueID = [dict[@"WorkoutMethodValueID"] integerValue];
-    NSString * isEdited = @"yes";
-
-    NSString *updateComments = [NSString stringWithFormat: @"UPDATE workout SET P2Value = '%d',P3Value = '%d',isEdited = '%@' WHERE WorkoutMethodValueID = '%d' AND P1Number = '%d'",P2Value,P3Value,isEdited,WorkoutMethodValueID,P1Number];
-    
-    [db executeUpdate:updateComments];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-}
-
--(void)deleteSetsFromDB:(int)WorkoutMethodValueID
-{
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    
-    NSString *updateSQL = [NSString stringWithFormat: @"UPDATE workout SET isDeleted = 'yes' WHERE WorkoutMethodValueID = '%d'",WorkoutMethodValueID];
-    
-    [db executeUpdate:updateSQL];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-}
-
--(NSMutableArray *)loadSetsToBeDeletedFromDb {
-    NSMutableArray *arr = [[NSMutableArray alloc]init];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM workout WHERE isDeleted = 'yes'"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutMethodID = [rs intForColumn:@"WorkoutMethodValueID"];
-        
-        [dict setObject: [NSNumber numberWithInt:WorkoutMethodID]  forKey: @"WorkoutMethodValueID"];
-        
-        
-        if (WorkoutMethodID == 0)
-        {
-            
-        }
-        else
-        {
-            [arr addObject:dict];
-        }
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    return arr;
-}
-
--(NSMutableArray *)loadSetsToBeUpdatedFromDb
-{
-    NSMutableArray *arr = [[NSMutableArray alloc]init];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM workout WHERE isEdited = 'yes'"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutMethodID = [rs intForColumn:@"WorkoutMethodValueID"];
-        int P1Number = [rs intForColumn:@"P1Number"];
-        int P2Value = [rs intForColumn:@"P2Value"];
-        int P3Value = [rs intForColumn:@"P3Value"];
-        
-        [dict setObject: [NSNumber numberWithInt:WorkoutMethodID]  forKey: @"WorkoutMethodValueID"];
-        [dict setObject: [NSNumber numberWithInt:P1Number]  forKey: @"P1Number"];
-        [dict setObject: [NSNumber numberWithInt:P2Value]  forKey: @"P2Value"];
-        [dict setObject: [NSNumber numberWithInt:P3Value]  forKey: @"P3Value"];
-        
-        if (WorkoutMethodID == 0)
-        {
-            
-        }
-        else
-        {
-            [arr addObject:dict];
-        }
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    return arr;
-}
-
--(NSMutableArray *)loadSetsToBeAddedFromDb
-{
-    NSMutableArray *arr = [[NSMutableArray alloc]init];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT * FROM workout WHERE ToBeAdded = 'yes'"];
-    FMResultSet *rs = [db executeQuery:getWeightSQL];
-    
-    while ([rs next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        int WorkoutMethodID = [rs intForColumn:@"WorkoutMethodID"];
-        int P1Number = [rs intForColumn:@"P1Number"];
-        int P2Value = [rs intForColumn:@"P2Value"];
-        int P3Value = [rs intForColumn:@"P3Value"];
-       
-        
-        [dict setObject: [NSNumber numberWithInt:WorkoutMethodID]  forKey: @"WorkoutMethodID"];
-        [dict setObject: [NSNumber numberWithInt:P1Number]  forKey: @"P1Number"];
-        [dict setObject: [NSNumber numberWithInt:P2Value]  forKey: @"P2Value"];
-        [dict setObject: [NSNumber numberWithInt:P3Value]  forKey: @"P3Value"];
-        
-        if (WorkoutMethodID != 0) {
-            [arr addObject:dict];
-        }
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    return arr;
-}
-
 - (void)addExerciseSet:(DMMoveSet *)moveSet toRoutine:(DMMoveRoutine *)routine {
     if (!moveSet || !routine) {
         return;
@@ -2109,18 +1450,6 @@
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
-}
-
-- (NSMutableArray *)filterObjectsByKeys:(NSString *)key array:(NSArray *)array {
-    NSMutableSet *tempValues = [[NSMutableSet alloc] init];
-    NSMutableArray *ret = [NSMutableArray array];
-    for (id obj in array) {
-        if(![tempValues containsObject:obj[key]]) {
-            [tempValues addObject:obj[key]];
-            [ret addObject:obj];
-        }
-    }
-    return ret;
 }
 
 - (void)getMyMovesData {

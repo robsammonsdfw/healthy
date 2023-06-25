@@ -12,6 +12,7 @@
 #import "DMMove.h"
 #import "DMMoveCategory.h"
 #import "DMMoveTag.h"
+#import "DMMoveRoutine.h"
 
 /// Cell identifier for a move's cell.
 static NSString *DMMovesCellIdentifier = @"MovesCellIdentifier";
@@ -39,8 +40,6 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 /// Filters for searching for moves.
 @property (nonatomic, strong) DMMoveCategory *filterCategory;
 @property (nonatomic, strong) DMMoveTag *filterTag;
-/// Displays a picker to the user to select a filter.
-@property (nonatomic, strong) DMPickerViewController *pickerViewController;
 
 /// Search bar for text searches.
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
@@ -57,7 +56,6 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.pickerViewController = [[DMPickerViewController alloc] init];
     self.bodypartTxtFld.text = @"Body Focus...";
     self.filter1.text = @"Filter By...";
 
@@ -87,8 +85,9 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 - (IBAction)bodyPartAction:(id)sender {
     __weak typeof(self) weakSelf = self;
     NSArray *bodyPartArray = [self.soapWebService loadListOfBodyPart];
-    [self.pickerViewController setDataSourceWithDataArray:bodyPartArray showNoneRow:YES];
-    self.pickerViewController.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
+    DMPickerViewController *pickerViewController = [[DMPickerViewController alloc] init];
+    [pickerViewController setDataSourceWithDataArray:bodyPartArray showNoneRow:YES];
+    pickerViewController.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
         if ([(NSObject *)object isKindOfClass:[DMMoveCategory class]]) {
             weakSelf.filterCategory = (DMMoveCategory *)object;
             weakSelf.bodypartTxtFld.text = object.name;
@@ -101,15 +100,20 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                                                                   textSearch:weakSelf.searchBar.text];
         [weakSelf.tblView reloadData];
     };
-    [self.pickerViewController presentPickerIn:self];
+    NSInteger selectedIndex = 0;
+    if (self.filterCategory) {
+        selectedIndex = [bodyPartArray indexOfObject:self.filterCategory];
+    }
+    [pickerViewController presentPickerIn:self selectedIndex:selectedIndex];
 }
 
 /// Shows the tags to filter the list by in a picker.
 - (IBAction)filterOne:(id)sender {
     __weak typeof(self) weakSelf = self;
     NSArray *dataArray = [self.soapWebService loadListOfTags];
-    [self.pickerViewController setDataSourceWithDataArray:dataArray showNoneRow:YES];
-    self.pickerViewController.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
+    DMPickerViewController *pickerViewController = [[DMPickerViewController alloc] init];
+    [pickerViewController setDataSourceWithDataArray:dataArray showNoneRow:YES];
+    pickerViewController.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
         if ([(NSObject *)object isKindOfClass:[DMMoveTag class]]) {
             weakSelf.filterTag = (DMMoveTag *)object;
             weakSelf.filter1.text = object.name;
@@ -122,7 +126,11 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                                                                   textSearch:weakSelf.searchBar.text];
         [weakSelf.tblView reloadData];
     };
-    [self.pickerViewController presentPickerIn:self];
+    NSInteger selectedIndex = 0;
+    if (self.filterTag) {
+        selectedIndex = [dataArray indexOfObject:self.filterTag];
+    }
+    [pickerViewController presentPickerIn:self selectedIndex:selectedIndex];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -163,33 +171,24 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
     if (!self.tableData.count) {
         return;
     }
-    DMMove *selectedMove = [self.tableData copy][indexPath.row];
+    __block DMMove *selectedMove = [self.tableData copy][indexPath.row];
+    __block DMMoveDay *selectedDay = self.moveDay;
+    __weak typeof(self) weakSelf = self;
     
     [self.dateFormatter setDateFormat:@"LLLL d, yyyy"];
     NSString *msgInfo = [NSString stringWithFormat:@"New Move will be added to %@", [self.dateFormatter stringFromDate:_selectedDate]];
    
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Add My Moves" message:msgInfo preferredStyle:UIAlertControllerStyleAlert];
-    __block NSString *planNameUniqueID = [NSUUID UUID].UUIDString;
-    __block NSString *planDateListUniqueID  = [NSUUID UUID].UUIDString;
-    __block NSString *moveNameUniqueID  = [NSUUID UUID].UUIDString;
 
     UIAlertAction* yesButton = [UIAlertAction actionWithTitle:@"Add"
                                                         style:UIAlertActionStyleDefault
                                                       handler:^(UIAlertAction * action) {
         
-                                        NSString *planNameStr = @"Custom Plan";
-                                        [self.soapWebService addMovesToDb:nil
-                                                             SelectedDate:self.selectedDate
-                                                                 planName:planNameStr
-                                                             categoryName:nil
-                                                               CategoryID:0
-                                                                 tagsName:self.filter1.text
-                                                                   TagsId:0
-                                                                   status:@"New"
-                                                           PlanNameUnique:planNameUniqueID
-                                                           DateListUnique:planDateListUniqueID
-                                                           MoveNameUnique:moveNameUniqueID];
-                                    
+                                    // Create a routine with the user selected optoins.
+                                    DMMoveRoutine *newRoutine = [DMMoveRoutine routineWithMove:selectedMove forDay:selectedDay];
+                                    // the newRoutine ID will be nil, so need to save to database first.
+                                    [weakSelf.soapWebService addMoveRoutine:newRoutine toMoveDay:selectedDay];
+                                            
                                     [self.navigationController popViewControllerAnimated:YES];
                                 }];
     
@@ -201,21 +200,11 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                         
-                                        [self.soapWebService addMovesToDb:nil
-                                                             SelectedDate:self.selectedDate
-                                                                 planName:nil
-                                                             categoryName:nil
-                                                               CategoryID:nil
-                                                                 tagsName:self.filter1.text
-                                                                   TagsId:0
-                                                                   status:@"New"
-                                                           PlanNameUnique:planNameUniqueID
-                                                           DateListUnique:planDateListUniqueID
-                                                           MoveNameUnique:moveNameUniqueID];
-                                        
                                         MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc] init];
                                         moveDetailVc.selectedDate = self.selectedDate;
 
+        /// Save then push controller.
+        ///
                                         self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
                                         NSString *dateString = [self.dateFormatter stringFromDate:self.selectedDate];
                                         [self.soapWebService updateWorkoutToDb:dateString];

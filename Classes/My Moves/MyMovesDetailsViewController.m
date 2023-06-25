@@ -33,7 +33,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 /// Name of the exercise.
 @property (nonatomic, strong) IBOutlet UILabel *exerciseNameLbl;
-@property (nonatomic, strong) IBOutlet UITextView *exerciseNotesTxtView;
+@property (nonatomic, strong) IBOutlet UILabel *exerciseNotesLabel;
 
 /// Shows the sets and other details.
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
@@ -43,9 +43,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 @property (nonatomic, strong) IBOutlet UIView *thumbNailView;
 @property (nonatomic, strong) IBOutlet UIImageView *thumbNailImgV;
 @property (nonatomic, strong) IBOutlet UIButton *playVideoBtn;
-
-/// Picker for selecting different options.
-@property (nonatomic, strong) DMPickerViewController *pickerView;
 
 /// Names of the items in the headers, e.g. "Pounds, Reps, Miles".
 @property (nonatomic, strong) NSArray<DMMovePickerRow *> *headerNameArray;
@@ -88,6 +85,9 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
 
+    self.exerciseNotesLabel.numberOfLines = 0;
+    self.exerciseNotesLabel.textColor = [UIColor blackColor];
+    
     DMMove *move = self.routine.move;
     [self updateMoveView:move];
     [self loadHeaderNameArray];
@@ -95,9 +95,9 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     // Show the video thumbnails.
     if ([move.videoUrl containsString:@"you"]) {
         [self extractYoutubeIdFromLink:move.videoUrl];
-        NSString *idOfUrlLink = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/0.jpg",[self extractYoutubeIdFromLink:move.videoUrl]];
-        NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: idOfUrlLink]];
-        self.thumbNailImgV.image = [UIImage imageWithData: imageData];
+        NSString *urlString = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/0.jpg",[self extractYoutubeIdFromLink:move.videoUrl]];
+        // Fetch the Image in the background.
+        [self fetchImageForURLString:urlString saveToImageView:self.thumbNailImgV];
     }
     else if ([move.videoUrl containsString:@"vimeo"]) {
         NSString *videoId = [[move.videoUrl componentsSeparatedByString:@".com/"] objectAtIndex:1];
@@ -113,11 +113,26 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 
 /// Sets the move data onto the view.
 - (void)updateMoveView:(DMMove *)move {
-    self.exerciseNotesTxtView.text = move.notes;
+    self.exerciseNotesLabel.text = move.notes;
     self.exerciseNameLbl.text = move.name;
 }
 
 #pragma mark - Helpers
+
+/// Fetches the image for the given urlString and saves it to the imageView provided.
+- (void)fetchImageForURLString:(NSString *)urlString saveToImageView:(UIImageView *)imageView {
+    __block NSURL *url = [NSURL URLWithString:urlString];
+    if (url) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            NSData * imageData = [[NSData alloc] initWithContentsOfURL: url];
+            if (imageData) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    imageView.image = [UIImage imageWithData: imageData];
+                });
+            }
+        });
+    }
+}
 
 /// Extracts the YouTube ID from a provided URL.
 - (NSString *)extractYoutubeIdFromLink:(NSString *)link {
@@ -136,17 +151,20 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     NSString *reformatedVideoId = [videoId stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"video/"]];
     NSString *oembed = [NSString stringWithFormat:@"https://vimeo.com/api/oembed.json?url=https://vimeo.com/%@", reformatedVideoId];
     NSURL *url = [NSURL URLWithString:oembed];
+    __weak typeof(self) weakSelf = self;
     [[NSURLSession.sharedSession dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSError *err;
-        NSDictionary *thumbnailArr = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
-        
-        NSMutableString *thumbNail = [NSMutableString string];
-        thumbNail = thumbnailArr[@"thumbnail_url"];
+        __block NSDictionary *thumbnailArr = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
+        if (err) {
+            DMLog(@"Error fetching thumbnail: %@", error.localizedDescription);
+            return;
+        }
+        // Fetch the Image in the background.
+        NSString *urlString = thumbnailArr[@"thumbnail_url"];
+        if (urlString.length) {
+            [weakSelf fetchImageForURLString:urlString saveToImageView:self.thumbNailImgV];
+        }
 
-        NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: thumbNail]];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.thumbNailImgV.image = [UIImage imageWithData: imageData];
-        });
     }] resume];
 }
 
@@ -179,8 +197,9 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    MyMovesDetailCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyMovesDetailCellIdentifier
-                                                                                      forIndexPath:indexPath];
+    MyMovesDetailCollectionViewCell *cell =
+            [collectionView dequeueReusableCellWithReuseIdentifier:MyMovesDetailCellIdentifier
+                                                      forIndexPath:indexPath];
     
     cell.setNoLbl.text = [NSString stringWithFormat:@"%ld", indexPath.row + 1];
     
@@ -197,18 +216,11 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     cell.weightTxtFld.delegate = self;
     
     cell.deleteBtn.tag = indexPath.row;
+    [cell.deleteBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.deleteBtn addTarget:self action:@selector(deleteSetBtnAction:) forControlEvents:UIControlEventTouchDown];
-    [cell.repsTxtFld addTarget:self action:@selector(repsEditAction:) forControlEvents:UIControlEventEditingChanged];
-    [cell.weightTxtFld addTarget:self action:@selector(weightEditAction:) forControlEvents:UIControlEventEditingChanged];
     
     cell.deleteImgV.tintColor = [UIColor lightGrayColor];
-    
-    cell.editRepsImgView.image = [cell.editRepsImgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [cell.editRepsImgView setTintColor:[UIColor lightGrayColor]];
-    
-    cell.editWeightImgView.image = [cell.editWeightImgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [cell.editWeightImgView setTintColor:[UIColor lightGrayColor]];
-    
+        
     return cell;
 }
 
@@ -222,8 +234,10 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
                                                     withReuseIdentifier:MyMovesDetailHeaderIdentifier
                                                            forIndexPath:indexPath];
         
-        [header.repsHeadBtn addTarget:self action:@selector(repsHeadAction:) forControlEvents:UIControlEventAllEvents];
-        [header.weightHeadBtn addTarget:self action:@selector(weightHeadAction:) forControlEvents:UIControlEventAllEvents];
+        [header.repsHeadBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [header.repsHeadBtn addTarget:self action:@selector(repsHeadAction:) forControlEvents:UIControlEventTouchUpInside];
+        [header.weightHeadBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [header.weightHeadBtn addTarget:self action:@selector(weightHeadAction:) forControlEvents:UIControlEventTouchUpInside];
         
         // Set the tags so we know which button row was tapped.
         header.repsHeadBtn.tag = indexPath.row;
@@ -250,8 +264,13 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
                                                     withReuseIdentifier:MyMovesDetailFooterIdentifier
                                                            forIndexPath:indexPath];
         
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.tag = 0;
+        NSInteger buttonTag = 999;
+        UIButton *button = [footer viewWithTag:buttonTag];
+        if (button) {
+            [button removeFromSuperview];
+        }
+        button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.tag = buttonTag;
         [button addTarget:self action:@selector(addSet:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"" forState:UIControlStateNormal];
         button.frame = footer.bounds;
@@ -331,13 +350,17 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 
 /// First Header column.
 - (IBAction)repsHeadAction:(UIButton *)sender {
-    self.pickerView = [[DMPickerViewController alloc] init];
-    [self.pickerView setDataSourceWithDataArray:self.headerNameArray showNoneRow:NO];
+    if (!sender) {
+        return;
+    }
+    DMPickerViewController *pickerView = [[DMPickerViewController alloc] init];
+    [pickerView setDataSourceWithDataArray:self.headerNameArray showNoneRow:NO];
     __weak typeof(self) weakSelf = self;
     __block NSInteger selectedRow = sender.tag;
-    self.pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
+    pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
         DMMoveSet *set = [weakSelf.routine.sets copy][selectedRow];
         [weakSelf.soapWebService setFirstUnitId:@(row) forMoveSet:set];
+        weakSelf.routine = [self.soapWebService getUserPlanRoutineForRoutineId:weakSelf.routine.routineId];
         [weakSelf.collectionView reloadData];
     };
 
@@ -348,18 +371,24 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
-        [self.pickerView presentPickerIn:self];
+        DMMoveSet *set = [self.routine.sets copy][selectedRow];
+        [pickerView presentPickerIn:self selectedIndex:set.unitOneId.integerValue];
     }
 }
 
 /// Second Header column.
 - (IBAction)weightHeadAction:(UIButton *)sender {
-    [self.pickerView setDataSourceWithDataArray:self.headerNameArray showNoneRow:NO];
+    if (!sender) {
+        return;
+    }
+    DMPickerViewController *pickerView = [[DMPickerViewController alloc] init];
+    [pickerView setDataSourceWithDataArray:self.headerNameArray showNoneRow:NO];
     __weak typeof(self) weakSelf = self;
     __block NSInteger selectedRow = sender.tag;
-    self.pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
+    pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
         DMMoveSet *set = [weakSelf.routine.sets copy][selectedRow];
         [weakSelf.soapWebService setSecondUnitId:@(row) forMoveSet:set];
+        weakSelf.routine = [self.soapWebService getUserPlanRoutineForRoutineId:weakSelf.routine.routineId];
         [weakSelf.collectionView reloadData];
     };
 
@@ -370,7 +399,8 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
-        [self.pickerView presentPickerIn:self];
+        DMMoveSet *set = [self.routine.sets copy][selectedRow];
+        [pickerView presentPickerIn:self selectedIndex:set.unitTwoId.integerValue];
     }
 }
 
@@ -430,114 +460,12 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
     
-    if ([_exerciseNotesTxtView isFirstResponder] && [touch view] != _exerciseNotesTxtView) {
-        [_exerciseNotesTxtView resignFirstResponder];
-    }
-    
     if([[touch view] isKindOfClass:[UITextField class]])
     {
         UITextField * txt = (UITextField*)([touch view]);
         [txt resignFirstResponder];
     }
     [super touchesBegan:touches withEvent:event];
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView{
-    CGRect textFieldRect =
-    [self.view.window convertRect:textView.bounds fromView:textView];
-    CGRect viewRect =
-    [self.view.window convertRect:self.view.bounds fromView:self.view];
-    
-    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
-    CGFloat numerator =
-    midline - viewRect.origin.y
-    - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
-    CGFloat denominator =
-    (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION)
-    * viewRect.size.height;
-    CGFloat heightFraction = numerator / denominator;
-    
-    if (heightFraction < 0.0) {
-        heightFraction = 0.0;
-    }
-    else if (heightFraction > 1.0) {
-        heightFraction = 1.0;
-    }
-    
-    UIInterfaceOrientation orientation =
-    [[UIApplication sharedApplication] statusBarOrientation];
-    
-    if (orientation == UIInterfaceOrientationPortrait ||
-        orientation == UIInterfaceOrientationPortraitUpsideDown) {
-        animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
-    }
-    else {
-        animatedDistance = floor(LANDSCAPE_KEYBOARD_HEIGHT * heightFraction);
-    }
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y -= animatedDistance;
-    
-    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
-        [self.view setFrame:viewFrame];
-    }];
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView{
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y += animatedDistance;
-    
-    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
-        [self.view setFrame:viewFrame];
-    }];
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    CGRect textFieldRect =
-    [self.view.window convertRect:textField.bounds fromView:textField];
-    CGRect viewRect =
-    [self.view.window convertRect:self.view.bounds fromView:self.view];
-    
-    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
-    CGFloat numerator =
-    midline - viewRect.origin.y
-    - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
-    CGFloat denominator =
-    (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION)
-    * viewRect.size.height;
-    CGFloat heightFraction = numerator / denominator;
-    
-    if (heightFraction < 0.0) {
-        heightFraction = 0.0;
-    }
-    else if (heightFraction > 1.0) {
-        heightFraction = 1.0;
-    }
-    
-    UIInterfaceOrientation orientation =
-    [[UIApplication sharedApplication] statusBarOrientation];
-    
-    if (orientation == UIInterfaceOrientationPortrait ||
-        orientation == UIInterfaceOrientationPortraitUpsideDown) {
-        animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
-    }
-    else {
-        animatedDistance = floor(LANDSCAPE_KEYBOARD_HEIGHT * heightFraction);
-    }
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y -= animatedDistance;
-    
-    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
-        [self.view setFrame:viewFrame];
-    }];
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y += animatedDistance;
-    
-    [UIView animateWithDuration:KEYBOARD_ANIMATION_DURATION animations:^{
-        [self.view setFrame:viewFrame];
-    }];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {

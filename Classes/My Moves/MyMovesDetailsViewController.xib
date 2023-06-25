@@ -13,7 +13,7 @@
                 <outlet property="collectionView" destination="Fol-Dy-aHQ" id="5cJ-pq-BjH"/>
                 <outlet property="collectionViewHeightCons" destination="xrL-Dd-4ED" id="FUR-sG-BXa"/>
                 <outlet property="exerciseNameLbl" destination="eGE-Oh-Ix0" id="VFU-OZ-bJY"/>
-                <outlet property="exerciseNotesTxtView" destination="mHL-BI-1eX" id="X1d-ZK-qBx"/>
+                <outlet property="exerciseNotesLabel" destination="FtT-8K-kBM" id="bV7-pa-dwJ"/>
                 <outlet property="playVideoBtn" destination="9qR-FG-hr2" id="H36-k1-ma4"/>
                 <outlet property="thumbNailImgV" destination="SyW-oH-uXT" id="8XV-1k-GuH"/>
                 <outlet property="thumbNailView" destination="gkg-uR-w5f" id="EBu-Xb-A8Q"/>
@@ -31,18 +31,15 @@
                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Exercise notes..." textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mHL-BI-1eX" userLabel="ExerciseNotesTextView">
-                    <rect key="frame" x="20" y="125.5" width="335" height="100"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exercise notes..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FtT-8K-kBM" userLabel="ExerciseNotesLabel">
+                    <rect key="frame" x="20" y="125.5" width="335" height="50"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="100" id="eWQ-nX-aa3"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="Hcd-kW-COx"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    <connections>
-                        <outlet property="delegate" destination="-1" id="0KL-kJ-9Cd"/>
-                    </connections>
-                </textView>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Fol-Dy-aHQ">
                     <rect key="frame" x="15" y="230.5" width="345" height="226.5"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -61,13 +58,13 @@
                     </connections>
                 </collectionView>
                 <view contentMode="scaleAspectFit" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" translatesAutoresizingMaskIntoConstraints="NO" id="gkg-uR-w5f" userLabel="VideoView">
-                    <rect key="frame" x="20" y="407" width="335" height="160"/>
+                    <rect key="frame" x="20" y="367" width="335" height="200"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SyW-oH-uXT" userLabel="VideoThumbnalImage">
-                            <rect key="frame" x="0.0" y="0.0" width="335" height="160"/>
+                            <rect key="frame" x="0.0" y="0.0" width="335" height="200"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9qR-FG-hr2" userLabel="PlayVideoButton">
-                            <rect key="frame" x="0.0" y="0.0" width="335" height="160"/>
+                            <rect key="frame" x="0.0" y="0.0" width="335" height="200"/>
                             <state key="normal" image="play-button-inside-a-circle"/>
                             <connections>
                                 <action selector="showVideoInBrowserAction:" destination="-1" eventType="touchUpInside" id="soW-kV-t1d"/>
@@ -83,7 +80,7 @@
                         <constraint firstItem="SyW-oH-uXT" firstAttribute="trailing" secondItem="gkg-uR-w5f" secondAttribute="trailing" id="XpB-FW-xTj"/>
                         <constraint firstItem="SyW-oH-uXT" firstAttribute="bottom" secondItem="gkg-uR-w5f" secondAttribute="bottom" id="gf5-8u-JWQ"/>
                         <constraint firstItem="SyW-oH-uXT" firstAttribute="leading" secondItem="gkg-uR-w5f" secondAttribute="leading" id="ofK-yd-SfQ"/>
-                        <constraint firstAttribute="height" constant="160" id="oto-hd-QUq"/>
+                        <constraint firstAttribute="height" constant="200" id="oto-hd-QUq"/>
                         <constraint firstItem="9qR-FG-hr2" firstAttribute="leading" secondItem="gkg-uR-w5f" secondAttribute="leading" id="syG-mZ-mVT"/>
                     </constraints>
                 </view>
@@ -93,14 +90,14 @@
             <constraints>
                 <constraint firstItem="gkg-uR-w5f" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" constant="-20" id="AIk-Zd-SVU"/>
                 <constraint firstItem="eGE-Oh-Ix0" firstAttribute="trailing" secondItem="qrx-9w-QTE" secondAttribute="trailing" constant="-20" id="Gxw-Ub-ydk"/>
-                <constraint firstItem="Fol-Dy-aHQ" firstAttribute="top" secondItem="mHL-BI-1eX" secondAttribute="bottom" constant="20" id="QII-2h-TZS"/>
+                <constraint firstItem="Fol-Dy-aHQ" firstAttribute="top" secondItem="FtT-8K-kBM" secondAttribute="bottom" constant="20" id="QII-2h-TZS"/>
+                <constraint firstItem="FtT-8K-kBM" firstAttribute="top" secondItem="eGE-Oh-Ix0" secondAttribute="bottom" constant="15" id="Vip-za-qpt"/>
                 <constraint firstItem="gkg-uR-w5f" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Fol-Dy-aHQ" secondAttribute="bottom" constant="25" id="eVw-Pj-pFl"/>
-                <constraint firstItem="mHL-BI-1eX" firstAttribute="trailing" secondItem="qrx-9w-QTE" secondAttribute="trailing" constant="-20" id="hNP-Db-DJG"/>
                 <constraint firstItem="Fol-Dy-aHQ" firstAttribute="leading" secondItem="qrx-9w-QTE" secondAttribute="leading" constant="15" id="jhr-Sf-0rc"/>
                 <constraint firstItem="gkg-uR-w5f" firstAttribute="bottom" secondItem="qrx-9w-QTE" secondAttribute="bottom" constant="-100" id="kic-xP-ia7"/>
+                <constraint firstItem="FtT-8K-kBM" firstAttribute="trailing" secondItem="qrx-9w-QTE" secondAttribute="trailing" constant="-20" id="leF-6Q-5N4"/>
                 <constraint firstItem="eGE-Oh-Ix0" firstAttribute="leading" secondItem="qrx-9w-QTE" secondAttribute="leading" constant="20" id="mAt-nX-kAt"/>
-                <constraint firstItem="mHL-BI-1eX" firstAttribute="leading" secondItem="qrx-9w-QTE" secondAttribute="leading" constant="20" id="naA-nd-gJh"/>
-                <constraint firstItem="mHL-BI-1eX" firstAttribute="top" secondItem="eGE-Oh-Ix0" secondAttribute="bottom" constant="15" id="p2Y-eK-rjx"/>
+                <constraint firstItem="FtT-8K-kBM" firstAttribute="leading" secondItem="qrx-9w-QTE" secondAttribute="leading" constant="20" id="oZw-je-sR6"/>
                 <constraint firstItem="gkg-uR-w5f" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="tAt-h2-dE7"/>
                 <constraint firstItem="eGE-Oh-Ix0" firstAttribute="top" secondItem="qrx-9w-QTE" secondAttribute="top" constant="20" id="tDQ-Dz-5BU"/>
                 <constraint firstItem="Fol-Dy-aHQ" firstAttribute="trailing" secondItem="qrx-9w-QTE" secondAttribute="trailing" constant="-15" id="uSC-Wx-Ypl"/>

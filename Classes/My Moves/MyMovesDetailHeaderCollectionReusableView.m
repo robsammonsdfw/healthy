@@ -11,7 +11,18 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    [self clearActions];
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    [self clearActions];
+}
+
+// In reused cells, adding a target too many times will lead to duplicate events.
+- (void)clearActions {
+    [self.repsHeadBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.weightHeadBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
 }
 
 @end

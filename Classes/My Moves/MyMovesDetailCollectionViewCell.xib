@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyMovesDetailCollectionViewCell"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MyMovesDetailCollectionViewCell" id="gTV-IL-0wX" customClass="MyMovesDetailCollectionViewCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
@@ -50,28 +50,18 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p4p-ts-ugl">
-                                <rect key="frame" x="0.0" y="0.0" width="96" height="49.5"/>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="p4p-ts-ugl" secondAttribute="trailing" id="074-Xz-lNS"/>
                             <constraint firstAttribute="bottom" secondItem="gFy-Kg-gT8" secondAttribute="bottom" id="1c2-82-zHC"/>
                             <constraint firstItem="gFy-Kg-gT8" firstAttribute="leading" secondItem="2BP-KR-hXA" secondAttribute="leading" id="36s-Rk-ZNG"/>
                             <constraint firstItem="gFy-Kg-gT8" firstAttribute="top" secondItem="2BP-KR-hXA" secondAttribute="top" id="7Wn-g9-C7X"/>
-                            <constraint firstItem="p4p-ts-ugl" firstAttribute="top" secondItem="2BP-KR-hXA" secondAttribute="top" id="E0G-PH-gnL"/>
-                            <constraint firstItem="p4p-ts-ugl" firstAttribute="leading" secondItem="2BP-KR-hXA" secondAttribute="leading" id="UBa-Ty-Qzq"/>
-                            <constraint firstAttribute="bottom" secondItem="p4p-ts-ugl" secondAttribute="bottom" id="aIW-L7-XBt"/>
                             <constraint firstAttribute="trailing" secondItem="gFy-Kg-gT8" secondAttribute="trailing" id="kY6-6m-5yp"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HAH-dB-dNj">
                         <rect key="frame" x="126" y="0.0" width="96.5" height="49.5"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B46-Mh-cEc">
-                                <rect key="frame" x="0.0" y="0.0" width="96.5" height="49.5"/>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NaE-ek-Mk9">
                                 <rect key="frame" x="48" y="25" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -86,35 +76,19 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pencil-striped-symbol-for-interface-edit-buttons" translatesAutoresizingMaskIntoConstraints="NO" id="qve-9p-cej">
-                                <rect key="frame" x="71.5" y="17.5" width="15" height="15"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="15" id="9QW-We-Hjh"/>
-                                    <constraint firstAttribute="width" constant="15" id="Kbs-9Y-HTY"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="B46-Mh-cEc" firstAttribute="top" secondItem="HAH-dB-dNj" secondAttribute="top" id="122-tY-rnm"/>
-                            <constraint firstItem="B46-Mh-cEc" firstAttribute="leading" secondItem="HAH-dB-dNj" secondAttribute="leading" id="2T6-4u-6XA"/>
-                            <constraint firstAttribute="bottom" secondItem="B46-Mh-cEc" secondAttribute="bottom" id="9gu-lr-jwg"/>
                             <constraint firstItem="wCp-2N-5c3" firstAttribute="centerX" secondItem="HAH-dB-dNj" secondAttribute="centerX" id="CIK-lA-9wz"/>
                             <constraint firstItem="NaE-ek-Mk9" firstAttribute="centerX" secondItem="HAH-dB-dNj" secondAttribute="centerX" id="Gpb-Q8-YE8"/>
-                            <constraint firstAttribute="trailing" secondItem="B46-Mh-cEc" secondAttribute="trailing" id="JXK-Sm-0oU"/>
                             <constraint firstItem="NaE-ek-Mk9" firstAttribute="centerY" secondItem="HAH-dB-dNj" secondAttribute="centerY" id="Jh2-yZ-Ouu"/>
-                            <constraint firstAttribute="trailing" secondItem="qve-9p-cej" secondAttribute="trailing" constant="10" id="TFb-Im-5zj"/>
                             <constraint firstItem="wCp-2N-5c3" firstAttribute="width" secondItem="HAH-dB-dNj" secondAttribute="width" id="bZa-DM-qmf"/>
-                            <constraint firstItem="qve-9p-cej" firstAttribute="centerY" secondItem="NaE-ek-Mk9" secondAttribute="centerY" id="feB-P5-4bZ"/>
                             <constraint firstItem="wCp-2N-5c3" firstAttribute="centerY" secondItem="HAH-dB-dNj" secondAttribute="centerY" id="ic6-SQ-Vb8"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ClT-Qa-pvU">
                         <rect key="frame" x="223" y="0.0" width="96" height="49.5"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lnp-eA-nr2">
-                                <rect key="frame" x="0.0" y="0.0" width="96" height="49.5"/>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CM8-VJ-lE0">
                                 <rect key="frame" x="48" y="25" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -129,27 +103,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pencil-striped-symbol-for-interface-edit-buttons" translatesAutoresizingMaskIntoConstraints="NO" id="6Wt-KP-mKD">
-                                <rect key="frame" x="71" y="17.5" width="15" height="15"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="15" id="0kA-9w-yaB"/>
-                                    <constraint firstAttribute="height" constant="15" id="oBj-0H-APp"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="uyU-zM-Wgz" firstAttribute="centerX" secondItem="ClT-Qa-pvU" secondAttribute="centerX" id="1Fj-gS-ZhE"/>
-                            <constraint firstItem="Lnp-eA-nr2" firstAttribute="top" secondItem="ClT-Qa-pvU" secondAttribute="top" id="2dZ-Yl-aNM"/>
-                            <constraint firstItem="Lnp-eA-nr2" firstAttribute="leading" secondItem="ClT-Qa-pvU" secondAttribute="leading" id="5Cp-Tt-qdc"/>
                             <constraint firstItem="CM8-VJ-lE0" firstAttribute="centerY" secondItem="ClT-Qa-pvU" secondAttribute="centerY" id="EhZ-bZ-ntc"/>
                             <constraint firstItem="CM8-VJ-lE0" firstAttribute="centerX" secondItem="ClT-Qa-pvU" secondAttribute="centerX" id="IE8-LA-cat"/>
-                            <constraint firstItem="6Wt-KP-mKD" firstAttribute="centerY" secondItem="CM8-VJ-lE0" secondAttribute="centerY" id="NlM-f3-wRE"/>
-                            <constraint firstAttribute="trailing" secondItem="Lnp-eA-nr2" secondAttribute="trailing" id="OCR-cg-wOS"/>
-                            <constraint firstAttribute="bottom" secondItem="Lnp-eA-nr2" secondAttribute="bottom" id="aXA-WP-ZD6"/>
                             <constraint firstItem="uyU-zM-Wgz" firstAttribute="width" secondItem="ClT-Qa-pvU" secondAttribute="width" id="jaQ-v5-yMx"/>
                             <constraint firstItem="uyU-zM-Wgz" firstAttribute="centerY" secondItem="ClT-Qa-pvU" secondAttribute="centerY" id="rX6-at-IHl"/>
-                            <constraint firstAttribute="trailing" secondItem="6Wt-KP-mKD" secondAttribute="trailing" constant="10" id="yef-g5-32j"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -176,12 +137,8 @@
             <connections>
                 <outlet property="deleteBtn" destination="OxS-Pp-tVc" id="2KA-zQ-xyN"/>
                 <outlet property="deleteImgV" destination="6jO-fy-xPk" id="939-rt-4cr"/>
-                <outlet property="editRepsImgView" destination="qve-9p-cej" id="cmW-e5-Nci"/>
-                <outlet property="editWeightImgView" destination="6Wt-KP-mKD" id="2WD-PP-09P"/>
-                <outlet property="repsBtn" destination="B46-Mh-cEc" id="3Nt-XZ-hG8"/>
                 <outlet property="repsTxtFld" destination="wCp-2N-5c3" id="hJ0-RN-h6Y"/>
                 <outlet property="setNoLbl" destination="gFy-Kg-gT8" id="UmO-W2-kV2"/>
-                <outlet property="weightBtn" destination="Lnp-eA-nr2" id="vlV-OC-MCX"/>
                 <outlet property="weightTxtFld" destination="uyU-zM-Wgz" id="6rk-8C-eZ2"/>
             </connections>
             <point key="canvasLocation" x="-131" y="-41"/>
@@ -189,6 +146,5 @@
     </objects>
     <resources>
         <image name="TrashIcon" width="30" height="30"/>
-        <image name="pencil-striped-symbol-for-interface-edit-buttons" width="32" height="32"/>
     </resources>
 </document>
