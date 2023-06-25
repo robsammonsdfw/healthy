@@ -10,6 +10,7 @@
 #import "DMMove.h"
 #import "DMMoveCategory.h"
 #import "DMMoveTag.h"
+#import "DMPickerViewDataSource.h"
 
 #import "DietMasterGoViewController.h"
 #import "LoginViewController.h"

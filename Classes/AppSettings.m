@@ -13,6 +13,7 @@
 #import "StepData.h"
 #import "NSNull+NullCategoryExtension.h"
 #import "MyMovesViewController.h"
+#import "MyMovesWebServices.h"
 
 @interface AppSettings () <SFSafariViewControllerDelegate>
 
@@ -275,7 +276,7 @@
 -(IBAction)forceDBSync:(id)sender {
     [downSyncSpinner startAnimating];
     MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-    [soapWebService offlineSyncApi];
+    [soapWebService fetchAllUserPlanData];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = self;
@@ -299,63 +300,6 @@
 
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
     [self dismissViewControllerAnimated:true completion:nil];
-}
-
--(void)clearTableData
-{
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    [db beginTransaction];
-    
-    NSString * deleteServerUserPlanList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanList"];
-    [db executeUpdate:deleteServerUserPlanList];
-    
-    NSString * deleteServerUserPlanDateList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanDateList"];
-    [db executeUpdate:deleteServerUserPlanDateList];
-    
-    NSString * deleteServerUserPlanMoveList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanMoveList"];
-    [db executeUpdate:deleteServerUserPlanMoveList];
-    
-    NSString * deleteServerUserPlanMoveSetList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanMoveSetList"];
-    [db executeUpdate:deleteServerUserPlanMoveSetList];
-    
-    NSString * deletePlanDateUniqueID_Table = [NSString stringWithFormat: @"DELETE FROM PlanDateUniqueID_Table"];
-    [db executeUpdate:deletePlanDateUniqueID_Table];
-
-    NSString * deletePlanDateTable = [NSString stringWithFormat: @"DELETE FROM PlanDateTable"];
-    [db executeUpdate:deletePlanDateTable];
-
-    NSString *deleteWeightlog = [NSString stringWithFormat:@"DELETE FROM weightlog"];
-    [db executeUpdate:deleteWeightlog];
-
-    //get company moves
-    NSString *selectCompanyMoves = [NSString stringWithFormat:@"SELECT moveID From MoveDetails WHERE companyID > 0"];
-    
-    FMResultSet *rs = [db executeQuery:selectCompanyMoves];
-    NSMutableString *idString = [NSMutableString stringWithFormat:@""];
-    while ([rs next]) {
-        if ([idString isEqualToString:@""]) {
-            idString = [NSMutableString stringWithFormat:@"%@", [rs stringForColumn:@"moveID"]];
-        } else {
-            idString = [NSMutableString stringWithFormat:@"%@,%@", idString, [rs stringForColumn:@"moveID"]];
-        }
-    }
-    
-    NSString *deleteTitles = [NSString stringWithFormat:@"DELETE FROM ListOfTitle_Table WHERE WorkoutID IN (%@)", idString];
-    [db executeUpdate:deleteTitles];
-    
-    NSString *deleteCompanyMoves = [NSString stringWithFormat:@"DELETE FROM MoveDetails WHERE companyID > 0"];
-    [db executeUpdate:deleteCompanyMoves];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    
 }
 
 #pragma mark - Update and SyncFood
@@ -426,8 +370,7 @@
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again.." inViewController:nil];
 }
 
-- (void)syncUPDatabaseFinished:(NSString *)responseMessage {
-    
+- (void)syncUPDatabaseFinished:(NSString *)responseMessage {    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
@@ -454,7 +397,7 @@
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
 }
 
--(IBAction)logoutUser:(id)sender {
+- (IBAction)logoutUser:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
                                                                    message:@"Are you sure you want to log out?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -465,7 +408,8 @@
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
         // Wipe all NSUserDefaults.
         [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
-        [self clearTableData];
+        MyMovesWebServices *webService = [[MyMovesWebServices alloc] init];
+        [webService clearTableData];
         [AppDel checkUserLogin];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"

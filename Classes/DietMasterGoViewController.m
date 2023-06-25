@@ -659,8 +659,7 @@
     [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
 }
 
-#pragma mark DATA LOADING METHODS
--(void)reloadData {
+- (void)reloadData {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if ([prefs valueForKey:@"userid_dietmastergo"] > 0) {
         [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
@@ -669,14 +668,14 @@
     NSString *firstName = [prefs valueForKey:@"FirstName_dietmastergo"];
     NSString *name = [NSString stringWithFormat: @"Hi, %@!",firstName];
     self.nameLbl.text = name;
+    [self loadData];
 }
 
--(void)loadData {
+- (void)loadData {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
+        return;
     }
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];

@@ -26,7 +26,7 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 @property (nonatomic, strong) MyMovesWebServices *soapWebService;
 
 /// Array that holds data that's presented in the table.
-@property (nonatomic, strong) NSArray *tableData;
+@property (nonatomic, strong) NSArray<DMMove *> *tableData;
 
 /// I believe this is the name of the plan's template.
 @property (nonatomic, strong) IBOutlet UITextField *templateNameTxtFld;
@@ -77,32 +77,10 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 
 - (void)loadTable {
     self.soapWebService = [[MyMovesWebServices alloc] init];
-
-    if(_isExchange) {
-        [DMActivityIndicator showActivityIndicator];
-        NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[self.soapWebService getMovesFromDatabaseWithCategoryFilter:self.filterCategory tagFilter:self.filterTag textSearch:self.searchBar.text]];
-        if ([tempArr count] != 0) {
-            NSString *filter = @"%K == %@";
-            
-            NSPredicate *categoryPredicate = [[NSPredicate alloc]init];
-            if ([_moveDetailDictToDelete[@"WorkoutCategoryID"] length] != 0) {
-                categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutCategoryID",_moveDetailDictToDelete[@"WorkoutCategoryID"]];
-            }
-            else
-            {
-                categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutCategoryID",_moveDetailDictToDelete[@"CategoryID"]];
-            }
-            self.bodypartTxtFld.text = _moveDetailDictToDelete[@"CategoryName"];
-            [self.bodypartTxtFld setUserInteractionEnabled:NO];
-            [self.filter1 setUserInteractionEnabled:NO];
-        }
-    }
-    else {
-        self.tableData = [self.soapWebService getMovesFromDatabaseWithCategoryFilter:self.filterCategory
-                                                                           tagFilter:self.filterTag
-                                                                          textSearch:self.searchBar.text];
-        [self.tblView reloadData];
-    }
+    self.tableData = [self.soapWebService getMovesFromDatabaseWithCategoryFilter:self.filterCategory
+                                                                       tagFilter:self.filterTag
+                                                                      textSearch:self.searchBar.text];
+    [self.tblView reloadData];
 }
 
 /// Shows the body part filter.
@@ -185,221 +163,71 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
     if (!self.tableData.count) {
         return;
     }
+    DMMove *selectedMove = [self.tableData copy][indexPath.row];
     
     [self.dateFormatter setDateFormat:@"LLLL d, yyyy"];
     NSString *msgInfo = [NSString stringWithFormat:@"New Move will be added to %@", [self.dateFormatter stringFromDate:_selectedDate]];
-    NSString *msgInfoForExchange = [NSString stringWithFormat:@"Exchange move on %@", [self.dateFormatter stringFromDate:_selectedDate]];
    
-    if (_isExchange) {
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Exchange My Moves" message:msgInfoForExchange preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction* yesButton = [UIAlertAction actionWithTitle:@"Exchange"
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Add My Moves" message:msgInfo preferredStyle:UIAlertControllerStyleAlert];
+    __block NSString *planNameUniqueID = [NSUUID UUID].UUIDString;
+    __block NSString *planDateListUniqueID  = [NSUUID UUID].UUIDString;
+    __block NSString *moveNameUniqueID  = [NSUUID UUID].UUIDString;
+
+    UIAlertAction* yesButton = [UIAlertAction actionWithTitle:@"Add"
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction * action) {
+        
+                                        NSString *planNameStr = @"Custom Plan";
+                                        [self.soapWebService addMovesToDb:nil
+                                                             SelectedDate:self.selectedDate
+                                                                 planName:planNameStr
+                                                             categoryName:nil
+                                                               CategoryID:0
+                                                                 tagsName:self.filter1.text
+                                                                   TagsId:0
+                                                                   status:@"New"
+                                                           PlanNameUnique:planNameUniqueID
+                                                           DateListUnique:planDateListUniqueID
+                                                           MoveNameUnique:moveNameUniqueID];
+                                    
+                                    [self.navigationController popViewControllerAnimated:YES];
+                                }];
+    
+    UIAlertAction* noButton = [UIAlertAction actionWithTitle:@"Cancel"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:nil];
+    
+    UIAlertAction* addEditButton = [UIAlertAction actionWithTitle:@"Add & Edit"
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                         
-                                        MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
-                                        [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue] UserId:0 WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
-                                        DMLog(@"%@",self.moveDetailDictToDelete);
-                                        [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
-                                        [self.soapWebService addExerciseToDb:_tableData[indexPath.row] workoutDate:_selectedDate userId:0 categoryName:_bodypartTxtFld.text CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue] tagsName:self.filter1.text TagsId:0 templateName: _moveDetailDictToDelete[@"TemplateName"] WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
+                                        [self.soapWebService addMovesToDb:nil
+                                                             SelectedDate:self.selectedDate
+                                                                 planName:nil
+                                                             categoryName:nil
+                                                               CategoryID:nil
+                                                                 tagsName:self.filter1.text
+                                                                   TagsId:0
+                                                                   status:@"New"
+                                                           PlanNameUnique:planNameUniqueID
+                                                           DateListUnique:planDateListUniqueID
+                                                           MoveNameUnique:moveNameUniqueID];
                                         
+                                        MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc] init];
+                                        moveDetailVc.selectedDate = self.selectedDate;
+
                                         self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-                                        
-                                        NSArray *exerciseArray = [self.soapWebService loadExerciseFromDb];
-                                        NSArray *filteredExerciseArray = [exerciseArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [self.dateFormatter stringFromDate:_selectedDate]]];
-                                        NSMutableArray * tempArr = [filteredExerciseArray mutableCopy];
-                                        
-                                        DMLog(@"%@",tempArr[[tempArr count] - 1]);
-                                        [self.exchangeDel passDataOnExchange:tempArr[[tempArr count] - 1]];
-                                        
-                                        moveDetailVc.workoutMethodID = [tempArr[[tempArr count] - 1][@"WorkoutUserDateID"]intValue];
-                                        
-                                        moveDetailVc.currentDate = self.selectedDate;
                                         NSString *dateString = [self.dateFormatter stringFromDate:self.selectedDate];
                                         [self.soapWebService updateWorkoutToDb:dateString];
                                         
-                                        MyMovesViewController *mymoveVc = [[MyMovesViewController alloc]initWithNibName:@"MyMovesViewController" bundle:nil];
-                                        
-                                        [[self navigationController] pushViewController:mymoveVc animated:YES];
+                                        [self.navigationController pushViewController:moveDetailVc animated:YES];
                                     }];
-        
-        UIAlertAction* noButton = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:^(UIAlertAction * action) {
-                                                        }];
-        
-        UIAlertAction* addEditButton = [UIAlertAction actionWithTitle:@"Exchange & Edit"
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {
-                                            
-                                            MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
-                                            
-                                            [self.soapWebService saveDeletedExerciseToDb:[self.moveDetailDictToDelete[@"WorkoutTemplateId"] intValue]
-                                                                                  UserId:0
-                                                                       WorkoutUserDateID:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
-                                            DMLog(@"%@",self.moveDetailDictToDelete);
-                                            
-                                            [self.soapWebService deleteWorkoutFromDb:[self.moveDetailDictToDelete[@"WorkoutUserDateID"] intValue]];
-                                            
-                                            [self.soapWebService addExerciseToDb:_tableData[indexPath.row]
-                                                                     workoutDate:_selectedDate
-                                                                          userId:0
-                                                                    categoryName:_bodypartTxtFld.text
-                                                                      CategoryID:[_moveDetailDictToDelete[@"CategoryID"]integerValue]
-                                                                        tagsName:self.filter1.text
-                                                                          TagsId:0
-                                                                    templateName: _moveDetailDictToDelete[@"TemplateName"]
-                                                                   WorkoutDateID:[_moveDetailDictToDelete[@"WorkoutUserDateID"]integerValue]];
-                                            
-                                            self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-                                            
-                                            NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[[self.soapWebService loadExerciseFromDb] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(WorkoutDate contains[c] %@)", [self.dateFormatter stringFromDate:_selectedDate]]]];
-                                            
-                                            DMLog(@"%@",tempArr[[tempArr count] - 1]);
-                                            [self.exchangeDel passDataOnExchange:tempArr[[tempArr count] - 1]];
-                                          
-                                            moveDetailVc.workoutMethodID = [tempArr[[tempArr count] - 1][@"WorkoutUserDateID"]intValue];
-                                            
-                                            moveDetailVc.currentDate = self.selectedDate;
-                                            NSString *dateString = [self.dateFormatter stringFromDate:self.selectedDate];
-                                            [self.soapWebService updateWorkoutToDb:dateString];
-
-                                            [self.navigationController popViewControllerAnimated:YES];
-                                        }];
-        
-        [alert addAction:yesButton];
-        [alert addAction:addEditButton];
-        [alert addAction:noButton];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-    } else {
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Add My Moves" message:msgInfo preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* yesButton = [UIAlertAction actionWithTitle:@"Add"
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {
-                                        MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
-                                        moveDetailVc.moveDetailDict = self.tableData[indexPath.row];
-                                        
-                                        NSString *filter = @"%K == %@";
-                                        NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutCategoryID",_tableData[indexPath.row][@"WorkoutCategoryID"]];
-                                                                                
-                                        NSString *alphaNumaricStr = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                                        NSMutableString *planNameUniqueID = [NSMutableString stringWithCapacity: 10];
-                                        NSMutableString *planDateListUniqueID = [NSMutableString stringWithCapacity: 10];
-                                        NSMutableString *moveNameUniqueID = [NSMutableString stringWithCapacity: 10];
-
-                                        for (long i=0; i<10; i++) {
-                                            [planNameUniqueID appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-                                        }
-                                        
-                                        for (long i=0; i<10; i++) {
-                                            [planDateListUniqueID appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-                                        }
-                                        
-                                        for (long i=0; i<10; i++) {
-                                            [moveNameUniqueID appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-                                        }
-                                        
-                                        planNameUniqueID      = [@"M-" stringByAppendingString:planNameUniqueID];
-                                        planDateListUniqueID  = [@"M-" stringByAppendingString:planDateListUniqueID];
-                                        moveNameUniqueID      = [@"M-" stringByAppendingString:moveNameUniqueID];
-
-                                        
-                                        moveDetailVc.parentUniqueID = moveNameUniqueID;
-                                        
-                                        NSString *planNameStr = @"Custom Plan";
-
-                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row]
-                                                                 SelectedDate:_selectedDate
-                                                                     planName:planNameStr
-                                                                 categoryName:nil
-                                                                   CategoryID:0
-                                                                     tagsName:self.filter1.text
-                                                                       TagsId:0
-                                                                       status:@"New"
-                                                               PlanNameUnique:planNameUniqueID
-                                                               DateListUnique:planDateListUniqueID
-                                                               MoveNameUnique:moveNameUniqueID];
-                                        
-                                        moveDetailVc.workoutMethodID = [self.tableData[indexPath.row][@"WorkoutUserDateID"]intValue];
-                                        
-                                        [self.navigationController popViewControllerAnimated:YES];
-                                    }];
-        
-        UIAlertAction* noButton = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:nil];
-        
-        UIAlertAction* addEditButton = [UIAlertAction actionWithTitle:@"Add & Edit"
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {
-                                            
-                                            NSString *filter = @"%K == %@";
-                                            NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"WorkoutCategoryID",_tableData[indexPath.row][@"WorkoutCategoryID"]];
-                                                                                        
-                                            NSString *alphaNumaricStr = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                                            NSMutableString *planNameUniqueID = [NSMutableString stringWithCapacity: 10];
-                                            NSMutableString *planDateListUniqueID = [NSMutableString stringWithCapacity: 10];
-                                            NSMutableString *moveNameUniqueID = [NSMutableString stringWithCapacity: 10];
-                                            
-                                            for (long i=0; i<10; i++) {
-                                                [planNameUniqueID appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-                                            }
-                                            
-                                            for (long i=0; i<10; i++) {
-                                                [planDateListUniqueID appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-                                            }
-                                            
-                                            for (long i=0; i<10; i++) {
-                                                [moveNameUniqueID appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-                                            }
-                                            
-                                            planNameUniqueID        = [@"M-" stringByAppendingString:planNameUniqueID];
-                                            planDateListUniqueID    = [@"M-" stringByAppendingString:planDateListUniqueID];
-                                            moveNameUniqueID        = [@"M-" stringByAppendingString:moveNameUniqueID];
-                                            
-                                            NSString *planNameStr = @"Custom Plan";
-
-                                            [self.soapWebService addMovesToDb:_tableData[indexPath.row]
-                                                                 SelectedDate:_selectedDate
-                                                                     planName:planNameStr
-                                                                 categoryName:nil
-                                                                   CategoryID:nil
-                                                                     tagsName:self.filter1.text
-                                                                       TagsId:0
-                                                                       status:@"New"
-                                                               PlanNameUnique:planNameUniqueID
-                                                               DateListUnique:planDateListUniqueID
-                                                               MoveNameUnique:moveNameUniqueID];
-                                            
-                                            MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc]initWithNibName:@"MyMovesDetailsViewController" bundle:nil];
-                                            
-                                            moveDetailVc.moveDetailDict = _tableData[indexPath.row];
-                                            moveDetailVc.parentUniqueID = moveNameUniqueID;
-                
-                                            NSMutableArray *addMovesArr = [[NSMutableArray alloc]init];
-                                            NSMutableDictionary *dict = NSMutableDictionary.new;
-
-                                            [dict setObject: moveNameUniqueID  forKey: @"UniqueID"];
-                                            [dict setObject: planDateListUniqueID  forKey: @"ParentUniqueID"];
-
-                                            [addMovesArr addObject:dict];
-                                            moveDetailVc.addMovesArray = addMovesArr;
-                                            
-                                            moveDetailVc.currentDate = self.selectedDate;
-                                            self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-                                            NSString *dateString = [self.dateFormatter stringFromDate:self.selectedDate];
-                                            [self.soapWebService updateWorkoutToDb:dateString];
-                                            
-                                            [self.navigationController pushViewController:moveDetailVc animated:YES];
-                                        }];
-        
-        [alert addAction:yesButton];
-        [alert addAction:addEditButton];
-        [alert addAction:noButton];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-    }
+    
+    [alert addAction:yesButton];
+    [alert addAction:addEditButton];
+    [alert addAction:noButton];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

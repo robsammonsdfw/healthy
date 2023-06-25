@@ -957,7 +957,7 @@
     [self.dateFormatter setTimeZone:systemTimeZone];
     NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
     
-    NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO Favorite_Meal (Favorite_MealID, Favorite_Meal_Name, modified) VALUES (%i, '%@',DATETIME('%@'))", minIDvalue, favoriteMealName, date_string];
+    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Favorite_Meal (Favorite_MealID, Favorite_Meal_Name, modified) VALUES (%i, '%@',DATETIME('%@'))", minIDvalue, favoriteMealName, date_string];
     
     
     [db executeUpdate:insertSQL];
@@ -982,7 +982,7 @@
         [dateFormatter setTimeZone:systemTimeZone];
         NSString *date_string = [dateFormatter stringFromDate:sourceDate];
         
-        NSString *insertSQLItems = [NSString stringWithFormat: @"INSERT INTO Favorite_Meal_Items (FoodKey, Favorite_Meal_ID, FoodID, MeasureID, Servings, Last_Modified) VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))", [[dict valueForKey:@"FoodKey"] intValue], favoriteMealID, [[dict valueForKey:@"FoodID"] intValue], [[dict valueForKey:@"MeasureID"] intValue], [[dict valueForKey:@"Servings"] floatValue], date_string];
+        NSString *insertSQLItems = [NSString stringWithFormat: @"REPLACE INTO Favorite_Meal_Items (FoodKey, Favorite_Meal_ID, FoodID, MeasureID, Servings, Last_Modified) VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))", [[dict valueForKey:@"FoodKey"] intValue], favoriteMealID, [[dict valueForKey:@"FoodID"] intValue], [[dict valueForKey:@"MeasureID"] intValue], [[dict valueForKey:@"Servings"] floatValue], date_string];
         
         
         [db executeUpdate:insertSQLItems];

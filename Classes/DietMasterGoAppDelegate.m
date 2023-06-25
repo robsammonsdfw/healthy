@@ -16,6 +16,7 @@
 #import "PurchaseIAPHelper.h"
 
 #import "DietMasterGoPlus-Swift.h"
+#import "DMGUtilities.h"
 #import "DMUser.h"
 
 @import StoreKit;
@@ -174,9 +175,6 @@
         if ([fileManager fileExistsAtPath:pngFilePath]) {
             [self performSelector:@selector(removeSplashScreen) withObject:nil afterDelay:3.5];
         }
-        else {
-            
-        }
     }
     
     if ([prefs boolForKey:@"user_loggedin"] == YES) {
@@ -186,40 +184,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
-}
-
-- (void)clearTableData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
-    [db beginTransaction];
-    
-    NSString * deleteServerUserPlanList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanList"];
-    [db executeUpdate:deleteServerUserPlanList];
-    
-    NSString * deleteServerUserPlanDateList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanDateList"];
-    [db executeUpdate:deleteServerUserPlanDateList];
-    
-    NSString * deleteServerUserPlanMoveList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanMoveList"];
-    [db executeUpdate:deleteServerUserPlanMoveList];
-    
-    NSString * deleteServerUserPlanMoveSetList = [NSString stringWithFormat: @"DELETE FROM ServerUserPlanMoveSetList"];
-    [db executeUpdate:deleteServerUserPlanMoveSetList];
-    
-    NSString * deletePlanDateUniqueID_Table = [NSString stringWithFormat: @"DELETE FROM PlanDateUniqueID_Table"];
-    [db executeUpdate:deletePlanDateUniqueID_Table];
-    
-    NSString * deletePlanDateTable = [NSString stringWithFormat: @"DELETE FROM PlanDateTable"];
-    [db executeUpdate:deletePlanDateTable];
-    
-    NSString *deleteWeightlog = [NSString stringWithFormat:@"DELETE FROM weightlog"];
-    [db executeUpdate:deleteWeightlog];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
 }
 
 #pragma mark USER LOGIN
@@ -256,7 +220,7 @@
         [prefs setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
         
         [dietmasterEngine.mealPlanArray removeAllObjects];
-        [self.viewController loadData];
+        [self.viewController reloadData];
         
         #pragma mark DELETE ALL USER DATA
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
@@ -284,7 +248,7 @@
         [self getUserLogin];
 
     } else {
-        [self.viewController loadData];
+        [self.viewController reloadData];
     }
 }
 
@@ -294,65 +258,40 @@
     
     if (!self.loginViewController) {
         self.loginViewController = [[LoginViewController alloc] init];
-        self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-        self.loginViewController.view.tag = 40;
-        self.loginViewController.view.alpha = 0.0;
-        self.loginViewController.view.hidden = YES;
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
-    
-    if (self.loginViewController.view.hidden == YES) {
+    [self.loginViewController presentLoginInController:nil
+                                        withCompletion:^(BOOL completed, NSError *error) {
+        // Login successful!
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UserLoginFinished" object:nil];
         
-        self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-        self.loginViewController.view.tag = 40;
-        self.loginViewController.view.alpha = 0.0;
-        self.loginViewController.view.hidden = NO;
-        
-        [self.window insertSubview:[self.loginViewController view] atIndex:0];
-        [self.window bringSubviewToFront:self.loginViewController.view];
-        
-        [UIView animateWithDuration:0.75 animations:^{
-            self.loginViewController.view.alpha = 1.0;
-        }];
-        
-        UIView *v = [self.window viewWithTag:30];
-        v.alpha = 0.0;
-        v.hidden = YES;
-        
-        UIView *v1 = [self.window viewWithTag:35];
-        v1.alpha = 0.0;
-        v1.hidden = YES;
-    }
-}
+        //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
+        //                                                                   message:@"Do you want to make changes to optional settings?"
+        //                                                            preferredStyle:UIAlertControllerStyleAlert];
+        //    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        //        AppDel.isFromAlert = YES;
+        //        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
+        //    }]];
+        //    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        //        [alert dismissViewControllerAnimated:YES completion:nil];
+        //    }]];
+        //    [[DMGUtilities rootViewController] presentViewController:alert animated:YES completion:nil];
 
-- (void)userLoginFinished:(NSString *)statusMessage {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"user_loggedin"];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UserLoginFinished" object:nil];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setValue:[NSDate date] forKey:@"lastmodified"];
-    
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
-//                                                                   message:@"Do you want to make changes to optional settings?"
-//                                                            preferredStyle:UIAlertControllerStyleAlert];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-//        AppDel.isFromAlert = YES;
-//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
-//    }]];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-//        [alert dismissViewControllerAnimated:YES completion:nil];
-//    }]];
-//    [[DMGUtilities rootViewController] presentViewController:alert animated:YES completion:nil];
-
-    [self syncDatabase];
-    
-    [self.viewController loadData];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs setBool:YES forKey:@"user_loggedin"];
+        [prefs setValue:[NSDate date] forKey:@"lastmodified"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [self syncDatabase];
+        [self.viewController reloadData];
+        UINavigationController *rootController = (UINavigationController *)[DMGUtilities rootViewController];
+        [rootController popToRootViewControllerAnimated:YES];
+    }];
 }
 
 //DownSync
 #pragma mark SYNC DELEGATE METHODS
+
 - (void)syncDatabaseFinished:(NSString *)responseMessage {
     [DMActivityIndicator hideActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -383,13 +322,10 @@
 -(void)callSyncDatabase {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
-    
     dietmasterEngine.syncDatabaseDelegate = self;
     
     [dietmasterEngine syncDatabase];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-    
+        
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:[NSDate date] forKey:@"lastmodified"];
 }
@@ -402,7 +338,6 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:nil forKey:@"lastmodified"];
     [prefs setValue:nil forKey:@"lastsyncdate"];
-    [prefs synchronize];
     
     [DMActivityIndicator hideActivityIndicator];
 }
@@ -417,51 +352,22 @@
     return (NSInteger) (ti / D_MINUTE);
 }
 
-#pragma mark SYNC DATABASE
--(void)syncDatabase {
+- (void)syncDatabase {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if ([prefs boolForKey:@"user_loggedin"] == YES) {
         
         MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-        [soapWebService offlineSyncApi];
+        [soapWebService fetchAllUserPlanData];
         [soapWebService getMyMovesData];
         
-        if (![prefs valueForKey:@"lastmodified"]) {
-            AppDel.isSessionExp = NO;
+        NSInteger hourSinceDate = [self hoursAfterDate:[prefs valueForKey:@"lastmodified"]];
+        if (![prefs valueForKey:@"lastmodified"] || hourSinceDate >= 2) {
             DataFetcher *dataFetcher = [[DataFetcher alloc] init];
             [dataFetcher signInUserWithPassword:[prefs objectForKey:@"loginPwd"] completion:^(DMUser *user, NSString *status, NSString *message) {
-                if (AppDel.isSessionExp == NO) {
-                    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-                    dietmasterEngine.syncUPDatabaseDelegate = self;
-                    [dietmasterEngine uploadDatabase];
-                }
+                DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+                dietmasterEngine.syncUPDatabaseDelegate = self;
+                [dietmasterEngine uploadDatabase];
             }];
-        }
-        else {
-            NSInteger hourSinceDate = [self hoursAfterDate:[prefs valueForKey:@"lastmodified"]];
-            if (hourSinceDate >= 2) {
-                
-                AppDel.isSessionExp = NO;
-                DataFetcher *dataFetcher = [[DataFetcher alloc] init];
-                [dataFetcher signInUserWithPassword:[prefs objectForKey:@"loginPwd"] completion:^(DMUser *user, NSString *status, NSString *message) {
-                    if (AppDel.isSessionExp == NO) {
-                        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-                        dietmasterEngine.syncUPDatabaseDelegate = self;
-                        [dietmasterEngine uploadDatabase];
-                    }
-                }];
-            }
-            else {
-                AppDel.isSessionExp = NO;
-                DataFetcher *dataFetcher = [[DataFetcher alloc] init];
-                [dataFetcher signInUserWithPassword:[prefs objectForKey:@"loginPwd"] completion:^(DMUser *user, NSString *status, NSString *message) {
-                    if (AppDel.isSessionExp == NO) {
-                        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-                        dietmasterEngine.syncUPDatabaseDelegate = self;
-                        [dietmasterEngine uploadDatabase];
-                    }
-                }];
-            }
         }
     }
 }
@@ -706,7 +612,7 @@
         [db commit];
     }
 
-    NSString *upgradedMyMovesKey = @"MyMoves2023Update2";
+    NSString *upgradedMyMovesKey = @"MyMoves2023Update4";
     BOOL upgradedMyMoves = [[NSUserDefaults standardUserDefaults] boolForKey:upgradedMyMovesKey];
     if (upgradedMyMoves == NO) {
         // Cleanup unused, deprecated tables.
@@ -757,7 +663,7 @@
         dropTableSQL = [NSString stringWithFormat:@"DROP TABLE IF EXISTS ServerUserPlanMoveList"];
         [db executeUpdate:dropTableSQL];
         if (![db tableExists:@"ServerUserPlanMoveList"]) {
-            NSString *createTableSQL = @"CREATE TABLE 'ServerUserPlanList' (UserPlanMoveID INTEGER, UserPlanDateID INTEGER, "
+            NSString *createTableSQL = @"CREATE TABLE 'ServerUserPlanMoveList' (UserPlanMoveID INTEGER, UserPlanDateID INTEGER, "
                                         "MoveID INTEGER, MoveName TEXT, VideoLink TEXT, Notes TEXT, LastUpdated TEXT, "
                                         "UniqueID TEXT, Status TEXT, SyncResult TEXT, ParentUniqueID TEXT, UserPlanMoveSets TEXT, "
                                         "isCheckBoxClicked TEXT, "

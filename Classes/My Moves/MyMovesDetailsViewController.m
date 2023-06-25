@@ -6,6 +6,7 @@
 //
 
 #import "MyMovesDetailsViewController.h"
+
 #import "MyMovesDetailCollectionViewCell.h"
 #import "CustomImageFlowLayout.h"
 #import "MyMovesDetailHeaderCollectionReusableView.h"
@@ -13,6 +14,10 @@
 #import "MyMovesWebServices.h"
 #import "MyMovesVideoPlayerViewController.h"
 #import "DMMovePickerRow.h"
+#import "MyMovesListViewController.h"
+
+#import "DMMoveRoutine.h"
+#import "DMMove.h"
 
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
@@ -20,106 +25,102 @@ static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
 static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
-@interface MyMovesDetailsViewController () <UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, exchangeDelegate>
-{
+@interface MyMovesDetailsViewController () <UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate> {
     CGFloat animatedDistance;
-    MyMovesWebServices *soapWebService;
-    BOOL addSet;
-    IBOutlet UIImageView *thumbNailImgV;
 }
 
-@property (nonatomic, strong) NSString *repsTxt;
-@property (nonatomic, strong) NSString *weightTxt;
+@property (nonatomic, strong) MyMovesWebServices *soapWebService;
 
-@property (nonatomic, strong) NSMutableArray<NSDictionary *> *exerciseSetArr;
+/// Name of the exercise.
+@property (nonatomic, strong) IBOutlet UILabel *exerciseNameLbl;
+@property (nonatomic, strong) IBOutlet UITextView *exerciseNotesTxtView;
+
+/// Shows the sets and other details.
+@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *collectionViewHeightCons;
-@property (nonatomic, strong) IBOutlet UIImageView *deleteImgB;
 
-@property (nonatomic, strong) NSMutableArray *userPlanMoveSetListData;
-@property (nonatomic, strong) NSMutableArray *userPlanSetListArr;
+/// For video viewing.
+@property (nonatomic, strong) IBOutlet UIView *thumbNailView;
+@property (nonatomic, strong) IBOutlet UIImageView *thumbNailImgV;
+@property (nonatomic, strong) IBOutlet UIButton *playVideoBtn;
 
+/// Picker for selecting different options.
 @property (nonatomic, strong) DMPickerViewController *pickerView;
+
+/// Names of the items in the headers, e.g. "Pounds, Reps, Miles".
+@property (nonatomic, strong) NSArray<DMMovePickerRow *> *headerNameArray;
 
 @end
 
+/// Identifiers (Note: must match value in Nib file.)
+static NSString *MyMovesDetailCellIdentifier = @"MyMovesDetailCollectionViewCell";
+static NSString *MyMovesDetailHeaderIdentifier = @"MyMovesDetailHeaderCollectionReusableView";
+static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollectionReusableView";
+
 @implementation MyMovesDetailsViewController
+
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        _soapWebService = [[MyMovesWebServices alloc] init];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    _userPlanMoveSetListData = [[NSMutableArray alloc]init];
-    _userPlanSetListArr = [[NSMutableArray alloc]init];
-    self.exchangeImgView.hidden = YES;
-    self.exchangeBtnOutlet.userInteractionEnabled = NO; // disable exchange by sathish
-    _moveNameView.backgroundColor = PrimaryDarkColor;
-    self.exerciseSetArr = [[NSMutableArray alloc]init];
-    
-    soapWebService = [[MyMovesWebServices alloc] init];
-    
-    _deleteImgB.tintColor = [UIColor lightGrayColor];
-    //set title
-    self.navigationItem.title=@"My Moves Details";
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-        
-    _exerciseNotesTxtView.layer.borderColor = [UIColor grayColor].CGColor;
-    _exerciseNotesTxtView.layer.borderWidth = 1.0;
-    _exerciseNotesTxtView.layer.cornerRadius = 10.0;
-    
-    _collectionView.collectionViewLayout = [[CustomImageFlowLayout alloc] init];
-    
-    [_collectionView registerNib:[UINib nibWithNibName:@"MyMovesDetailCollectionViewCell" bundle:NSBundle.mainBundle] forCellWithReuseIdentifier:@"MyMovesDetailCollectionViewCell"];
-    
-    [_collectionView registerNib:[UINib nibWithNibName:@"MyMovesDetailHeaderCollectionReusableView" bundle:NSBundle.mainBundle] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"MyMovesDetailHeaderCollectionReusableView"];
-    
-    [_collectionView registerNib:[UINib nibWithNibName:@"MyMovesDetailFooterCollectionReusableView" bundle:NSBundle.mainBundle] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"MyMovesDetailFooterCollectionReusableView"];
 
-    _collectionView.delegate = self;
-    _collectionView.dataSource = self;
-        
-    [self setData:_moveDetailDict];
-    [self loadSetValues];
+    self.navigationItem.title = @"Move Details";
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+
+    UIBarButtonItem *rightButton =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                      target:self
+                                                      action:@selector(showDeleteExerciseConfirmation)];
+    rightButton.style = UIBarButtonItemStylePlain;
+    rightButton.tintColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem = rightButton;
+
+    self.collectionView.collectionViewLayout = [[CustomImageFlowLayout alloc] init];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"MyMovesDetailCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:MyMovesDetailCellIdentifier];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"MyMovesDetailHeaderCollectionReusableView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MyMovesDetailHeaderIdentifier];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"MyMovesDetailFooterCollectionReusableView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MyMovesDetailFooterIdentifier];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+
+    DMMove *move = self.routine.move;
+    [self updateMoveView:move];
+    [self loadHeaderNameArray];
     
-    if ([_moveDetailDict[@"VideoLink"] containsString:@"you"])
-    {
-        [_noVideoMsgLbl setHidden:YES];
-        [self extractYoutubeIdFromLink:_moveDetailDict[@"VideoLink"]];
-        NSString *idOfUrlLink = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/0.jpg",[self extractYoutubeIdFromLink:_moveDetailDict[@"VideoLink"]]];
+    // Show the video thumbnails.
+    if ([move.videoUrl containsString:@"you"]) {
+        [self extractYoutubeIdFromLink:move.videoUrl];
+        NSString *idOfUrlLink = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/0.jpg",[self extractYoutubeIdFromLink:move.videoUrl]];
         NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: idOfUrlLink]];
-        thumbNailImgV.image = [UIImage imageWithData: imageData];
+        self.thumbNailImgV.image = [UIImage imageWithData: imageData];
     }
-    else if ([_moveDetailDict[@"Link"] containsString:@"you"])
-    {
-        [_noVideoMsgLbl setHidden:YES];
-        [self extractYoutubeIdFromLink:_moveDetailDict[@"Link"]];
-        NSString *idOfUrlLink = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/0.jpg",[self extractYoutubeIdFromLink:_moveDetailDict[@"Link"]]];
-        NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: idOfUrlLink]];
-        thumbNailImgV.image = [UIImage imageWithData: imageData];
-    }
-    else if ([_moveDetailDict[@"VideoLink"] containsString:@"vimeo"])
-    {
-        [_noVideoMsgLbl setHidden:YES];
-        NSString *videoId = [[_moveDetailDict[@"VideoLink"] componentsSeparatedByString:@".com/"] objectAtIndex:1];
-        NSArray* words = [videoId componentsSeparatedByCharactersInSet :[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSString* nospacestring = [words componentsJoinedByString:@""];
+    else if ([move.videoUrl containsString:@"vimeo"]) {
+        NSString *videoId = [[move.videoUrl componentsSeparatedByString:@".com/"] objectAtIndex:1];
+        NSArray *words = [videoId componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSString *nospacestring = [words componentsJoinedByString:@""];
         [self loadVimeoThumbNail:nospacestring];
-    }
-    else if ([_moveDetailDict[@"Link"] containsString:@"vimeo"])
-    {
-        [_noVideoMsgLbl setHidden:YES];
-        NSString *videoId = [[_moveDetailDict[@"Link"] componentsSeparatedByString:@".com/"] objectAtIndex:1];
-        NSArray* words = [videoId componentsSeparatedByCharactersInSet :[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSString* nospacestring = [words componentsJoinedByString:@""];
-        [self loadVimeoThumbNail:nospacestring];
-    }
-    else
-    {
-        [thumbNailImgV setHidden:YES];
+    } else {
+        [self.thumbNailImgV setHidden:YES];
         [_playVideoBtn setHidden:YES];
-        [_playImg setHidden:YES];
         [_thumbNailView setHidden:YES];
     }
 }
--(NSString *)extractYoutubeIdFromLink:(NSString *)link {
+
+/// Sets the move data onto the view.
+- (void)updateMoveView:(DMMove *)move {
+    self.exerciseNotesTxtView.text = move.notes;
+    self.exerciseNameLbl.text = move.name;
+}
+
+#pragma mark - Helpers
+
+/// Extracts the YouTube ID from a provided URL.
+- (NSString *)extractYoutubeIdFromLink:(NSString *)link {
     NSString *regexString = @"((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&)v=)|(?<=embed/))([\\w-]++)";
     NSRegularExpression *regExp = [NSRegularExpression regularExpressionWithPattern:regexString options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray *array = [regExp matchesInString:link options:0 range:NSMakeRange(0,link.length)];
@@ -130,8 +131,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     return nil;
 }
 
--(void)loadVimeoThumbNail:(NSString *)videoId
-{
+/// Fetches the thumbnail for the videoID provided for Vimeo.
+- (void)loadVimeoThumbNail:(NSString *)videoId {
     NSString *reformatedVideoId = [videoId stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"video/"]];
     NSString *oembed = [NSString stringWithFormat:@"https://vimeo.com/api/oembed.json?url=https://vimeo.com/%@", reformatedVideoId];
     NSURL *url = [NSURL URLWithString:oembed];
@@ -141,181 +142,53 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         NSMutableString *thumbNail = [NSMutableString string];
         thumbNail = thumbnailArr[@"thumbnail_url"];
-        DMLog(@"%@", thumbNail);
-                
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: thumbNail]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                thumbNailImgV.image = [UIImage imageWithData: imageData];
-            });
+
+        NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: thumbNail]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.thumbNailImgV.image = [UIImage imageWithData: imageData];
         });
     }] resume];
-
 }
 
-- (void)loadSetValues {
-    [_userPlanSetListArr removeAllObjects];
-    _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[soapWebService loadUserPlanMoveSetListFromDb]];
-    NSArray *LoadSetsHeader = @[@"None", @"Feet", @"Kilograms", @"Kilometers", @"KilometerPerHour",@"Meters", @"Miles", @"MilesPerHour", @"Minutes", @"Pounds", @"Repetitions", @"RestSeconds", @"Seconds", @"Yards"];
-   
-    NSMutableSet* removeDuplicateSetInSection = [[NSMutableSet alloc] initWithArray:_userPlanMoveSetListData];
-    _userPlanMoveSetListData = [[NSMutableArray alloc]initWithArray:[removeDuplicateSetInSection allObjects]];
-    
-    if (_moveListDict != NULL)
-    {
-        NSMutableArray *moveDetailArr = [NSMutableArray arrayWithObject:_moveListDict];
-        for (int i =0 ; i<[moveDetailArr count]; i++)
-        {
-            NSMutableArray * tempArr = [[NSMutableArray alloc]initWithArray:[_userPlanMoveSetListData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(ParentUniqueID MATCHES[c] %@)", moveDetailArr[i][@"UniqueID"]]]];
-            [_userPlanSetListArr addObjectsFromArray:tempArr];
-        }
-    }
-    
-    if (_addMovesArray != NULL) {
-        for (int i =0 ; i<[_addMovesArray count]; i++)
-        {
-            NSMutableArray * predicatedArr = [[NSMutableArray alloc]initWithArray:[_userPlanMoveSetListData filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(ParentUniqueID MATCHES[c] %@)", _addMovesArray[i][@"UniqueID"]]]];
-            [_userPlanSetListArr addObjectsFromArray:predicatedArr];
-        }
-    }
+/// Loads the values that are displayed to the user.
+- (void)loadHeaderNameArray {
+    // NOTE: I think this should be updated from the server, but all of the names are null,
+    // despite double checking the server data. Thus, we'll just load the default values for now.
+    // TODO: Validate that the server should return values.
+    NSArray *defaultHeaders = @[@"None", @"Feet", @"Kilograms", @"Kilometers", @"KilometerPerHour",@"Meters", @"Miles", @"MilesPerHour", @"Minutes", @"Pounds", @"Repetitions", @"RestSeconds", @"Seconds", @"Yards"];
 
-    if ([_userPlanSetListArr count] != 0)
-    {
-        NSInteger unit1Id = [_userPlanSetListArr[0][@"Unit1ID"]integerValue];
-        NSInteger unit2Id = [_userPlanSetListArr[0][@"Unit2ID"]integerValue];
-        
-        self.repsTxt = LoadSetsHeader[unit1Id];
-        self.weightTxt = LoadSetsHeader[unit2Id];
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (NSInteger i = 0; i < defaultHeaders.count; i++) {
+        NSString *name = defaultHeaders[i];
+        DMMovePickerRow *row = [DMMovePickerRow newWithName:name rowId:@(i)];
+        [tempArray addObject:row];
     }
-    else
-    {
-        self.repsTxt = LoadSetsHeader[0];
-        self.weightTxt = LoadSetsHeader[0];
-    }
-    
-    if ([_userPlanSetListArr count] > 2)
-    {
-        _collectionViewHeightCons.constant = ([_userPlanSetListArr count] * 40) + 45;
-    }
-    else
-    {
-        _collectionViewHeightCons.constant = (2 * 30) + 45;
-    }
-    [_collectionView reloadData];
+    self.headerNameArray = [tempArray copy];
+    [self.collectionView reloadData];
 }
 
--(void)setData:(NSDictionary*)dict
-{
-    if ([dict objectForKey:@"MoveName"])
-    {
-        _exerciseNotesTxtView.text = dict[@"Notes"];
-        if ([dict[@"MoveName"] containsString:@"("]) {
-            NSArray *arr1 = [dict[@"MoveName"] componentsSeparatedByString:@"("];
-            _exerciseNameLbl.text = [NSString stringWithFormat:@"%@",[arr1 objectAtIndex:0]];
-        }
-        else
-        {
-            _exerciseNameLbl.text = dict[@"MoveName"];
-        }
-    }
-    else
-    {
-        _exerciseNotesTxtView.text = dict[@"Notes"];
-        if ([dict[@"WorkoutName"] containsString:@"("]) {
-            NSArray *arr1 = [dict[@"WorkoutName"] componentsSeparatedByString:@"("];
-            _exerciseNameLbl.text = [NSString stringWithFormat:@"%@",[arr1 objectAtIndex:0]];
-        }
-        else
-        {
-            _exerciseNameLbl.text = dict[@"WorkoutName"];
-        }
-    }
-}
-
-- (IBAction)exchangeBtnAction:(id)sender {
-    
-    UIAlertController * alert = [UIAlertController
-                                 alertControllerWithTitle:@"Exchange My Moves"
-                                 message:@"Are you sure you want to exchange?"
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction* yesButton = [UIAlertAction
-                                actionWithTitle:@"Yes"
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction * action) {
-                                    
-                                    
-                                    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                                    
-                                    MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc]initWithNibName:@"MyMovesListViewController" bundle:nil];
-                                    int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
-
-                                    moveListVc.selectedDate = self.currentDate;
-                                    // moveListVc.userId = UserID;
-                                    moveListVc.isExchange = "YES";
-                                    //moveListVc.moveDetailDictToDelete = _moveDetailDict;
-                                    moveListVc.exchangeDel = self;
-                                    
-                                    [self.navigationController pushViewController:moveListVc animated:YES];
-                                    
-                                }];
-    
-    UIAlertAction* noButton = [UIAlertAction
-                               actionWithTitle:@"No"
-                               style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction * action) {
-                                   //Handle no, thanks button
-                               }];
-
-    [alert addAction:noButton];
-    [alert addAction:yesButton];
-    [self presentViewController:alert animated:YES completion:nil];
-
-    
-}
-
-- (IBAction)showVideoInBrowserAction:(id)sender {
-    MyMovesVideoPlayerViewController *moveDetailVc = [[MyMovesVideoPlayerViewController alloc]initWithNibName:@"MyMovesVideoPlayerViewController" bundle:nil]; //within the app
-    if ([[_moveDetailDict allKeys] containsObject:@"VideoLink"]) ///To check whether the NSMutableDictionary contains key or kot. ***
-    {
-        moveDetailVc.videoUrlStr = _moveDetailDict[@"VideoLink"];
-    }
-    else
-    {
-        moveDetailVc.videoUrlStr = _moveDetailDict[@"Link"];
-    }
-    [self.navigationController pushViewController:moveDetailVc animated:YES];
-}
+#pragma mark - UICollectionView
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if ([_userPlanSetListArr count] != 0)
-    {
-        return [_userPlanSetListArr count];
-    }
-    else
-    {
-        return 0;
-    }
+    return self.routine.sets.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString *CellIdentifier = @"MyMovesDetailCollectionViewCell";
+    MyMovesDetailCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyMovesDetailCellIdentifier
+                                                                                      forIndexPath:indexPath];
     
-    MyMovesDetailCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+    cell.setNoLbl.text = [NSString stringWithFormat:@"%ld", indexPath.row + 1];
     
-    cell.setNoLbl.text = [NSString stringWithFormat:@"%ld",indexPath.row + 1];
-    
-    if ([_userPlanSetListArr count] != 0)
-    {
-        cell.repsTxtFld.text = [NSString stringWithFormat:@"%@", _userPlanSetListArr[indexPath.row][@"Unit1Value"]];
-        cell.weightTxtFld.text = [NSString stringWithFormat:@"%@", _userPlanSetListArr[indexPath.row][@"Unit2Value"]];
-    }
-    
+    DMMoveSet *set = [self.routine.sets copy][indexPath.row];
+    cell.repsTxtFld.text = set.unitOneValue.stringValue;
+    cell.weightTxtFld.text = set.unitTwoValue.stringValue;
+        
+    // Set the tags so we can retrieve the row the user selected later.
     cell.repsTxtFld.tag = indexPath.row;
     cell.weightTxtFld.tag = indexPath.row;
     cell.deleteBtn.tag = indexPath.row;
@@ -323,8 +196,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     cell.repsTxtFld.delegate = self;
     cell.weightTxtFld.delegate = self;
     
+    cell.deleteBtn.tag = indexPath.row;
     [cell.deleteBtn addTarget:self action:@selector(deleteSetBtnAction:) forControlEvents:UIControlEventTouchDown];
-    
     [cell.repsTxtFld addTarget:self action:@selector(repsEditAction:) forControlEvents:UIControlEventEditingChanged];
     [cell.weightTxtFld addTarget:self action:@selector(weightEditAction:) forControlEvents:UIControlEventEditingChanged];
     
@@ -339,23 +212,34 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     MyMovesDetailHeaderCollectionReusableView *header = nil;
-    
     MyMovesDetailFooterCollectionReusableView *footer = nil;
     
     if (kind == UICollectionElementKindSectionHeader) {
         // Header that lets you choose the type of reps or weight.
         header = [collectionView dequeueReusableSupplementaryViewOfKind:kind
-                                                    withReuseIdentifier:@"MyMovesDetailHeaderCollectionReusableView"
+                                                    withReuseIdentifier:MyMovesDetailHeaderIdentifier
                                                            forIndexPath:indexPath];
         
         [header.repsHeadBtn addTarget:self action:@selector(repsHeadAction:) forControlEvents:UIControlEventAllEvents];
         [header.weightHeadBtn addTarget:self action:@selector(weightHeadAction:) forControlEvents:UIControlEventAllEvents];
         
-        header.repsLbl.text = self.repsTxt;
-        header.weightLbl.text = self.weightTxt;
+        // Set the tags so we know which button row was tapped.
+        header.repsHeadBtn.tag = indexPath.row;
+        header.weightHeadBtn.tag = indexPath.row;
+        
+        NSInteger unitOneId = 0;
+        NSInteger unitTwoId = 0;
+        if (self.routine.sets.count) {
+            DMMoveSet *set = [self.routine.sets copy][indexPath.row];
+            unitOneId = set.unitOneId.integerValue;
+            unitTwoId = set.unitTwoId.integerValue;
+        }
+        DMMovePickerRow *rowOne = self.headerNameArray[unitOneId];
+        DMMovePickerRow *rowTwo = self.headerNameArray[unitTwoId];
+        header.repsLbl.text = rowOne.name;
+        header.weightLbl.text = rowTwo.name;
 
         return header;
     }
@@ -363,7 +247,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if (kind == UICollectionElementKindSectionFooter) {
         // View that lets you add sets.
         footer = [collectionView dequeueReusableSupplementaryViewOfKind:kind
-                                                    withReuseIdentifier:@"MyMovesDetailFooterCollectionReusableView"
+                                                    withReuseIdentifier:MyMovesDetailFooterIdentifier
                                                            forIndexPath:indexPath];
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -379,70 +263,36 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     return nil;
 }
 
--(IBAction)addSet:(UIButton*)sender{
-    
-    NSMutableDictionary *setDict = [NSMutableDictionary dictionary];
-    NSString *status = @"New";
-    NSString *alphaNumaricStr = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    NSMutableString *setUniqueID = [NSMutableString stringWithCapacity: 10];
-    
-    for (long i=0; i<10; i++) {
-        [setUniqueID appendFormat: @"%C", [alphaNumaricStr characterAtIndex: arc4random_uniform([alphaNumaricStr length])]];
-    }
-    setUniqueID = [@"M-" stringByAppendingString:setUniqueID];
-    
-    if([_userPlanSetListArr count] != 0)
-    {
-        long setNumberCount = [_userPlanSetListArr count] + 1;
-        long unit1id = [_userPlanSetListArr[0][@"Unit1ID"] integerValue];
-        long unit2id = [_userPlanSetListArr[0][@"Unit2ID"] integerValue];
+#pragma mark - Actions
 
-        [setDict setObject: [NSNumber numberWithLong:setNumberCount]  forKey: @"SetNumber"];
-        [setDict setObject: [NSNumber numberWithLong:unit1id]  forKey: @"Unit1ID"];
-        [setDict setObject: [NSNumber numberWithLong:unit2id]  forKey: @"Unit2ID"];
-        [setDict setObject: [NSNumber numberWithInt:0]  forKey: @"Unit1Value"];
-        [setDict setObject: [NSNumber numberWithInt:0]  forKey: @"Unit2Value"];
-        [setDict setObject: status  forKey: @"Status"];
-        [setDict setObject: setUniqueID forKey: @"UniqueID"];
-        [setDict setObject: _parentUniqueID forKey: @"ParentUniqueID"];
+- (IBAction)showVideoInBrowserAction:(id)sender {
+    MyMovesVideoPlayerViewController *moveDetailVc = [[MyMovesVideoPlayerViewController alloc] init];
+    moveDetailVc.videoUrlStr = self.routine.move.videoUrl;
+    [self.navigationController pushViewController:moveDetailVc animated:YES];
+}
 
-    }
-    else
-    {
-        [setDict setObject: [NSNumber numberWithInt:1]  forKey: @"SetNumber"];
-        [setDict setObject: [NSNumber numberWithInt:0]  forKey: @"Unit1ID"];
-        [setDict setObject: [NSNumber numberWithInt:0]  forKey: @"Unit2ID"];
-        [setDict setObject: [NSNumber numberWithInt:0]  forKey: @"Unit1Value"];
-        [setDict setObject: [NSNumber numberWithInt:0]  forKey: @"Unit2Value"];
-        [setDict setObject: status  forKey: @"Status"];
-        [setDict setObject: setUniqueID  forKey: @"UniqueID"];
-        [setDict setObject: _parentUniqueID forKey: @"ParentUniqueID"];
-
-    }
-   
-    [soapWebService mobilePlanMoveSetList:_parentUniqueID setDict:setDict];
-    [_userPlanSetListArr addObject:setDict];
-    [self loadSetValues];
-    _collectionViewHeightCons.constant = _collectionViewHeightCons.constant + 30;
-    
+- (IBAction)addSet:(UIButton*)sender {
+    DMMoveSet *set = [DMMoveSet setWithDefaultValues];
+    [self.soapWebService addMoveSet:set toRoutine:self.routine];
+    // Reload our routine.
+    self.routine = [self.soapWebService getUserPlanRoutineForRoutineId:self.routine.routineId];
     [self.view layoutIfNeeded];
+    [self.collectionView reloadData];
 }
 
-- (IBAction)deleteBtnAction:(id)sender {
-    [self showDeleteExerciseConfirmation];
-}
-
-- (void)showDeleteSetConfirmation {
+- (void)showDeleteSetConfirmationForSet:(DMMoveSet *)moveSet {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Set"
-                                                                   message:@"Are you sure, you want to delete?"
+                                                                   message:@"Are you sure you wish to delete?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
+    __weak typeof(self) weakSelf = self;
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [soapWebService deleteSetFromDb:_deleteSetUniqueID];
-        [soapWebService clearedDataFromWeb:_deleteSetUniqueID];
-        [soapWebService clearTableDataS];
-        [self loadSetValues];
+        [weakSelf.soapWebService deleteMoveSet:moveSet];
+        // Reload our routine.
+        self.routine = [self.soapWebService getUserPlanRoutineForRoutineId:self.routine.routineId];
+        [weakSelf.view layoutIfNeeded];
+        [weakSelf.collectionView reloadData];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
                                               style:UIAlertActionStyleCancel
@@ -459,14 +309,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        int UserID = [[prefs valueForKey:@"userid_dietmastergo"] integerValue];
-       
-        [soapWebService saveDeletedExerciseToDb:[self.moveDetailDict[@"WorkoutTemplateId"] intValue] UserId:UserID WorkoutUserDateID:[self.moveDetailDict[@"WorkoutUserDateID"] intValue]];
-        [soapWebService deleteWorkoutFromDb:[self.moveDetailDict[@"WorkoutUserDateID"] intValue]];
-        
-        [soapWebService deleteMoveFromDb:_moveListDict[@"UniqueID"]]; // send to server
-        [soapWebService clearedDataFromWeb:_moveListDict[@"UniqueID"]];
+        [self.soapWebService deleteMoveRoutine:self.routine];
         [self.navigationController popViewControllerAnimated:YES];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
@@ -477,32 +320,28 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(IBAction)weightEditAction:(UITextField*)sender{
-
-    int unit2Value = 0;
-    if ([sender.text length] != 0)
-    {
-        unit2Value = [sender.text integerValue];
+- (IBAction)deleteSetBtnAction:(UIButton *)sender {
+    if (!sender) {
+        return;
     }
-    [soapWebService updateSetInSecondColumn:unit2Value uniqueID:_userPlanSetListArr[sender.tag][@"UniqueID"]];
+    // Need to get the ID of the set to delete.
+    DMMoveSet *set = [self.routine.sets copy][sender.tag];
+    [self showDeleteSetConfirmationForSet:set];
 }
 
-- (IBAction)deleteSetBtnAction:(UIButton*)sender{
-    _deleteSetUniqueID = _userPlanSetListArr[sender.tag][@"UniqueID"];
-    [self showDeleteSetConfirmation];
-}
-
-- (IBAction)repsHeadAction:(UIButton*)sender {
+/// First Header column.
+- (IBAction)repsHeadAction:(UIButton *)sender {
     self.pickerView = [[DMPickerViewController alloc] init];
-    NSArray *pickerData = [soapWebService loadFirstHeaderTable];
-    [self.pickerView setDataSourceWithDataArray:pickerData showNoneRow:NO];
+    [self.pickerView setDataSourceWithDataArray:self.headerNameArray showNoneRow:NO];
     __weak typeof(self) weakSelf = self;
+    __block NSInteger selectedRow = sender.tag;
     self.pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
-        weakSelf.repsTxt = object.name;
+        DMMoveSet *set = [weakSelf.routine.sets copy][selectedRow];
+        [weakSelf.soapWebService setFirstUnitId:@(row) forMoveSet:set];
         [weakSelf.collectionView reloadData];
     };
 
-    if (_userPlanSetListArr.count == 0) {
+    if (self.routine.sets.count == 0) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Please Add Set!" message:@"Please add sets to select sets method." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {}];
@@ -513,16 +352,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 }
 
-- (IBAction)weightHeadAction:(UIButton*)sender {
-    NSArray *pickerData = [soapWebService loadSecondHeaderTable];
-    [self.pickerView setDataSourceWithDataArray:pickerData showNoneRow:NO];
+/// Second Header column.
+- (IBAction)weightHeadAction:(UIButton *)sender {
+    [self.pickerView setDataSourceWithDataArray:self.headerNameArray showNoneRow:NO];
     __weak typeof(self) weakSelf = self;
+    __block NSInteger selectedRow = sender.tag;
     self.pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
-        weakSelf.weightTxt = object.name;
+        DMMoveSet *set = [weakSelf.routine.sets copy][selectedRow];
+        [weakSelf.soapWebService setSecondUnitId:@(row) forMoveSet:set];
         [weakSelf.collectionView reloadData];
     };
 
-    if (_userPlanSetListArr.count == 0) {
+    if (self.routine.sets.count == 0) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Please Add Set!" message:@"Please add sets to select sets method." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {}];
@@ -533,28 +374,52 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
 }
 
--(IBAction)repsEditAction:(UITextField*)sender{
-    int unit1Value = 0;
-    if ([sender.text length] != 0)
-    {
-        unit1Value = [sender.text integerValue];
+- (IBAction)repsEditAction:(UITextField *)sender {
+    if (!sender) {
+        return;
     }
-    [soapWebService updateSetInFirstColumn:unit1Value uniqueID:_userPlanSetListArr[sender.tag][@"UniqueID"]];
+    NSNumber *unit1Value = @0;
+    if ([sender.text length] != 0) {
+        unit1Value = @([sender.text integerValue]);
+    }
+    NSInteger row = sender.tag;
+    if (row > self.routine.sets.count - 1) {
+        return;
+    }
+    DMMoveSet *set = [self.routine.sets copy][row];
+    [self.soapWebService setFirstUnitValue:unit1Value forMoveSet:set];
 }
+
+- (IBAction)weightEditAction:(UITextField *)sender {
+    if (!sender) {
+        return;
+    }
+    NSNumber *unit2Value = @0;
+    if ([sender.text length] != 0) {
+        unit2Value = @([sender.text integerValue]);
+    }
+    NSInteger row = sender.tag;
+    if (row > self.routine.sets.count - 1) {
+        return;
+    }
+    DMMoveSet *set = [self.routine.sets copy][row];
+    [self.soapWebService setSecondUnitValue:unit2Value forMoveSet:set];
+}
+
+#pragma mark - UITextViewDelegate
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    
     if([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
         return NO;
     }
-    
     return YES;
 }
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     // Prevent crashing undo bug – see note below.
-    if(range.length + range.location > textField.text.length)
-    {
+    // Update: I don't see a note below.
+    if(range.length + range.location > textField.text.length) {
         return NO;
     }
     
@@ -680,10 +545,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     return YES;
 }
 
-- (void)passDataOnExchange:(NSDictionary *)dict {
-    [self setData:dict];
-    self.workoutMethodID = [dict[@"WorkoutUserDateID"]intValue];
-    self.moveDetailDict = dict;
+#pragma mark - MyMovesListViewDelegate
+
+- (void)userDidSelectOption:(NSDictionary *)dict {
+   // [self setData:dict];
+    //self.workoutMethodID = [dict[@"WorkoutUserDateID"]intValue];
+    //self.moveDetailDict = dict;
     //[self loadSets];
 #warning THE ABOVE METHOD ISNT FOUND...WHY?
 }

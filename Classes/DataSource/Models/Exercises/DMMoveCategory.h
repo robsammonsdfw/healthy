@@ -1,5 +1,5 @@
 //
-//  DMMoveTag.h
+//  DMMoveCategory.h
 //  DietMasterGoPlus
 //
 //  Created by Henry T Kirk on 6/17/23.
@@ -10,17 +10,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DMMoveTag : NSObject <DMPickerViewDataSource>
-@property (nonatomic, strong, readonly) NSNumber *tagId;
+/// A category ("bodypart") for an exercise.
+/// NOTE: The table "MoveCategories" is hard coded.
+@interface DMMoveCategory : NSObject <DMPickerViewDataSource>
+@property (nonatomic, strong, readonly) NSNumber *categoryId;
 @property (nonatomic, copy, readonly) NSString *name;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
-/// Returns the Food object as a dictionary with the keys that match database and webservice fields.
+/// Returns the object as a dictionary with the keys that match database and webservice fields.
 - (NSDictionary *)dictionaryRepresentation;
-
-/// Returns a SQL statement string to replace into the database.
-- (NSString *)replaceIntoSQLString;
 
 @end
 

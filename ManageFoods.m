@@ -616,7 +616,7 @@ CGPoint svos;
         int companyID = [[prefs valueForKey:@"companyid_dietmastergo"] intValue];
         
         
-        NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO Food"
+        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food"
          "(ScannedFood, FoodKey, "
           "FoodID, CategoryID, "
           "CompanyID, UserID, "
@@ -707,7 +707,7 @@ CGPoint svos;
         }
         [db commit];
         
-        NSString *insertFMSQL = [NSString stringWithFormat: @"INSERT INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, 100)", minFoodID,[intMeasureID intValue]];
+        NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, 100)", minFoodID,[intMeasureID intValue]];
         
         [db beginTransaction];
         
@@ -718,7 +718,7 @@ CGPoint svos;
         }
         [db commit];
         
-        [self performSelectorOnMainThread:@selector(showCompleted) withObject:nil waitUntilDone:NO];
+        [DMActivityIndicator showCompletedIndicator];
         isSaved = YES;
         
         _savedFoodID = minFoodID;
@@ -865,7 +865,7 @@ CGPoint svos;
         }
         [db commit];
         
-        [self performSelectorOnMainThread:@selector(showCompleted) withObject:nil waitUntilDone:NO];
+        [DMActivityIndicator showCompletedIndicator];
         isSaved = YES;
         
         _savedFoodID = minFoodID;

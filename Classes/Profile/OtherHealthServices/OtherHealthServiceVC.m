@@ -32,13 +32,8 @@
 
 - (IBAction)btnNoClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults]setObject:@"False" forKey:@"Reserved"];
-    if(AppDel.loginViewController){
-        [AppDel.loginViewController syncUserInfo:nil];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }else{
-        AppDel.loginViewController = [[LoginViewController alloc] init];
-        [AppDel.loginViewController syncUserInfo:nil];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
+    [engine syncUserInfoWithCompletion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

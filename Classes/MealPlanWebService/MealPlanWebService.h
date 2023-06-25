@@ -25,7 +25,6 @@
     // Vars to Hold Data for Session
     int tempID;
 }
-@property (nonatomic, strong) NSTimer *timeOutTimer;
 
 // DOWN SYNC
 @property (nonatomic, weak) id<WSGetUserPlannedMealNames> wsGetUserPlannedMealNames;
@@ -39,7 +38,6 @@
 @property (nonatomic, weak) id<WSUpdateUserPlannedMealNames> wsUpdateUserPlannedMealNames;
 
 -(void)callWebservice:(NSDictionary *)requestDict;
--(void)timeOutWebservice:(NSTimer *)theTimer;
 
 @end
 

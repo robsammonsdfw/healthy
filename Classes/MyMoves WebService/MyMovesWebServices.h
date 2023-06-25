@@ -10,22 +10,25 @@
 @class DMMove;
 @class DMMoveCategory;
 @class DMMoveTag;
+@class DMMovePlan;
+@class DMMoveDay;
+@class DMMovePickerRow;
+@class DMMoveSet;
+@class DMMoveRoutine;
 
-@protocol WSGetUserWorkoutplanOffline;
+@protocol WSGetUserWorkoutPlansDelegate <NSObject>
+- (void)getUserWorkoutPlansFinished:(NSDictionary *)responseArray;
+- (void)getUserWorkoutPlansFailed:(NSError *)error;
+@end
 
 @interface MyMovesWebServices : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate, NSURLSessionDelegate> {
     BOOL recordResults;
-    BOOL SendAllServerData;
     // Vars to Hold Data for Session
     int tempID;
-    NSTimer *timeOutTimer;
     NSString * tempStr;
 }
 
-@property (nonatomic, weak) id<WSGetUserWorkoutplanOffline> WSGetUserWorkoutplanOfflineDelegate;
-
-- (NSArray *)loadExerciseFromDb;
--(NSMutableArray *)loadWorkoutFromDb;
+@property (nonatomic, weak) id<WSGetUserWorkoutPlansDelegate> delegate;
 
 /// Loads a list of the categories from the database. Also called "Bodyparts".
 - (NSArray<DMMoveCategory *> *)loadListOfBodyPart;
@@ -37,86 +40,94 @@
                                                     tagFilter:(DMMoveTag *)tagFilter
                                                    textSearch:(NSString *)textSearch;
 
--(NSMutableArray *)loadWorkoutSynParamFromDb;
+/// Gets all of the move plans for the current user.
+- (NSArray<DMMovePlan *> *)getUserMovePlans;
+/// Gets the plan for the given planId.
+- (DMMovePlan *)getUserMovePlanForPlanId:(NSNumber *)planId;
+/// Gets the move days for the given move plan.
+- (NSArray<DMMoveDay *> *)getUserPlanDaysForPlanId:(NSNumber *)planId;
+/// Gets the user plan date list from the local database. Returns ALL data.
+- (NSArray<DMMoveDay *> *)getUserPlanDays;
+/// Returns the array of move plans for the given date. Empty if none found.
+- (NSArray<DMMoveDay *> *)getUserPlanDaysForDate:(NSDate *)date;
+/// Gets all of the move routines for a given dayID.
+- (NSArray<DMMoveRoutine *> *)getUserPlanRoutinesForDayID:(NSNumber *)dayId;
+/// Gets the move routine for the given routine Id.
+- (DMMoveRoutine *)getUserPlanRoutineForRoutineId:(NSNumber *)routineId;
+/// Gets all sets for the current user.
+- (NSArray<DMMoveSet *> *)getUserPlanMoveSets;
+/// Gets all of the sets for a given routineID.
+- (NSArray<DMMoveSet *> *)getUserPlanMoveSetsForRoutineID:(NSNumber *)routineId;
+/// Gets a move object (exercise) for the given MoveID.
+- (DMMove *)getMoveForID:(NSNumber *)moveId;
+/// Sets the move completed for the routine specified.
+- (BOOL)setMoveCompleted:(BOOL)completed forRoutine:(DMMoveRoutine *)routine;
 
--(NSMutableArray *)loadAddWorkoutTemplate;
+/// Updates the option selected for the provided Set.
+- (void)setFirstUnitId:(NSNumber *)unitId forMoveSet:(DMMoveSet *)moveSet;
+- (void)setSecondUnitId:(NSNumber *)unitId forMoveSet:(DMMoveSet *)moveSet;
+/// Updates the value for the provided set.
+- (void)setFirstUnitValue:(NSNumber *)unitValue forMoveSet:(DMMoveSet *)moveSet;
+- (void)setSecondUnitValue:(NSNumber *)unitValue forMoveSet:(DMMoveSet *)moveSet;
 
--(void)offlineSyncApi;
--(void)clearTableData;
--(void)clearTableDataS;
--(void)clearedDataFromWeb:(NSString *)uniqueId;
+/// Ads a new move set to the given routine.
+- (void)addMoveSet:(DMMoveSet *)moveSet toRoutine:(DMMoveRoutine *)routine;
+/// Removes a set from the routine by marking the status to "Deleted".
+- (void)deleteMoveSet:(DMMoveSet *)moveSet;
+/// Sets a routine to be deleted by marking the status to "Deleted".
+- (void)deleteMoveRoutine:(DMMoveRoutine *)moveRoutine;
+
+#pragma mark - TO BE VERIFIED
+
+- (NSArray *)loadExerciseFromDb;
+- (NSArray *)loadWorkoutFromDb;
+
+/// Fetches from the server all of the user's plan data.
+- (void)fetchAllUserPlanData;
+/// Removes all data that is present in the local database.
+- (void)clearTableData;
+/// Deletes all rows from the tables where status = "Deleted".
+/// Should be called after a successful upsync.
+- (void)removeRowsWithDeletedStatus;
 
 -(void)addMovesToDb:(NSDictionary *)dict SelectedDate:(NSDate*)planDate planName:(NSString *)planName categoryName:(NSString*)CatName CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId status:(NSString*)status PlanNameUnique:(NSString*)PlanNameUnique DateListUnique:(NSString*)DateListUnique MoveNameUnique:(NSString*)MoveNameUnique;
 
 -(void)mobilePlanDateList:(NSDate *)planDate DateUniqueID:(NSString *)uniqueID Dict:(NSDictionary *)dict;
 -(void)mobilePlanMoveList:(NSString *)MoveName VideoLink:(NSString *)VideoLink Notes:(NSString *)Notes UniqueID:(NSString *)UniqueID ParentUniqueID:(NSString *)ParentUniqueID MoveID:(int)MoveID PlanDateStr:(NSString *)PlanDateStr;
--(void)mobilePlanMoveSetList:(NSString *)ParentUniqueID setDict:(NSDictionary *)dict;
-
--(void)deleteMoveFromDb:(NSString *)UniqueID;
--(void)deleteSetFromDb:(NSString *)UniqueID;
-
--(void)updateChangesFromWeb:(NSString *)uniqueID;
--(void)updateCheckBoxStatusToDb:(NSString *)UniqueID checkBoxStatus:(NSString *)checkBoxStatus;
-
--(void)updateFromNewToNormalToDb;
--(void)updateFromChangedToNormalToDb;
-
--(void)updateFirstHeaderValue:(int)unit1ID ParentUniqueID:(NSString *)ParentUniqueID;
--(void)updateSecondHeaderValue:(int)unit2ID ParentUniqueID:(NSString *)ParentUniqueID;
-
--(void)updateSetInFirstColumn:(int)unit1Value uniqueID:(NSString *)uniqueID;
--(void)updateSetInSecondColumn:(int)unit2Value uniqueID:(NSString *)uniqueID;
 
 -(void)addExerciseToDb:(NSDictionary *)dict workoutDate:(NSDate*)date userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutDateID:(int)WorkoutDateID;
 
 -(void)addExerciseToDb:(NSDictionary *)dict workoutDate:(NSDate*)date userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutTempId:(int)workoutTempId WorkoutDateID:(int)WorkoutDateID;
 
--(void)deleteWorkoutFromDb:(int)workoutTempId;
+/// Deletes an entry in the User Workout Plan database for the ID provided.
+- (void)deletePlanWorkoutFromDbWithUserDateID:(NSNumber *)userDateID;
 
 -(void)saveDeletedExerciseToDb:(int)workoutTempId UserId:(int)userId WorkoutUserDateID:(int)workoutUserDateID;
 
 -(NSMutableArray *)loadDeletedExerciseFromDb;
 
 -(void)updateTimeToDb:(NSString *)WorkingStatus timeToSet:(NSString *)CurrentDuration excerciseDict:(NSDictionary *)dict;
-
--(void)updateTimeForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict WorkoutTimer:(NSString*)WorkoutTime;
+/// This function is for doing something else.
+- (void)addExerciseSet:(DMMoveSet *)moveSet toRoutine:(DMMoveRoutine *)routine;
 -(void)updateWorkoutToDb:(NSString *)exerciseDate;
 -(void)updateSetsForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict;
--(void)addSetsForExercise:(int)WorkoutUserDateId Dict:(NSDictionary *)dict;
 -(void)deleteSetsFromDB:(int)WorkoutMethodValueID;
--(NSMutableArray *) filterObjectsByKeys:(NSString *) key array:(NSArray *)array;
 
--(NSMutableArray *)loadSetsToBeAddedFromDb;
--(NSMutableArray *)loadSetsToBeUpdatedFromDb;
--(NSMutableArray *)loadSetsToBeDeletedFromDb;
--(NSMutableArray *)loadTable1Header;
--(NSMutableArray *)loadTable2Header;
+/// (I believe this has to do with sync w/ remote server.)
+- (NSMutableArray *)loadSetsToBeAddedFromDb;
+- (NSMutableArray *)loadSetsToBeUpdatedFromDb;
+- (NSMutableArray *)loadSetsToBeDeletedFromDb;
 
-/// Loads the list of options for the MyMoves set list in first option.
--(NSArray<DMMovePickerRow *> *)loadFirstHeaderTable;
-/// Loads the list of options for the MyMoves set list in the second option.
--(NSArray<DMMovePickerRow *> *)loadSecondHeaderTable;
+- (void)serverUserPlans:(NSDictionary *)planListDict;
 
-//new API
--(NSMutableArray *)MobileUserPlanList;
-- (NSMutableArray *)MobileUserPlanDateList;
-- (NSMutableArray *)MobileUserPlanMoveList;
-- (NSMutableArray *)MobileUserPlanMoveSetList;
-- (NSArray *)loadUserPlanListFromDb;
-- (NSArray *)loadUserPlanDateListFromDb;
-- (NSMutableArray *)loadUserPlanMoveListFromDb;
-- (NSMutableArray *)loadUserPlanMoveSetListFromDb;
-- (NSMutableArray *)loadListOfMovesFromDb;
-
--(void)serverUserPlans:(NSDictionary *)planListDict;
+#pragma mark - MyMoves
 
 /// Fetches MyMoves data from the server and saves it locally.
 /// This includes Exercises (Moves) and Tags / Categories.
 - (void)getMyMovesData;
 
-@end
+#pragma mark - Helpers
 
-@protocol WSGetUserWorkoutplanOffline <NSObject>
-- (void)getUserWorkoutplanOfflineListFinished:(NSDictionary *)responseArray;
-- (void)getUserWorkoutplanOfflineListFailed:(NSString *)failedMessage;
+- (NSMutableArray *)filterObjectsByKeys:(NSString *) key array:(NSArray *)array;
+
 @end

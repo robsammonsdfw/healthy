@@ -7,10 +7,6 @@
 
 import UIKit
 
-@objc protocol DMPickerViewDataSource {
-    var name: String { get }
-}
-
 /// Empty row for the picker.
 class DMEmptyRow: NSObject, DMPickerViewDataSource {
     let name = ""

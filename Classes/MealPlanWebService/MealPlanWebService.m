@@ -26,12 +26,8 @@
 @synthesize wsUpdateUserPlannedMealItems;
 @synthesize wsUpdateUserPlannedMealNames;
 
-@synthesize timeOutTimer;
-
 - (void)callWebservice:(NSDictionary *)requestDict {
     DMLog(@"SOAP CALL ----BEGIN---- MealPlanWebService");
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
 
 	recordResults = FALSE;
     self.soapResults = [[NSMutableString alloc] init];
@@ -201,9 +197,10 @@
     //DMLog(@"%@", soapMessage);
 	
 	NSURL *url = [NSURL URLWithString:urlToWebservice];
-	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
-	NSString *msgLength = [NSString stringWithFormat:@"%d", [soapMessage length]];
-	
+	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url
+                                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                                          timeoutInterval:120];
+	NSString *msgLength = [NSString stringWithFormat:@"%li", [soapMessage length]];
 	[theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
 	[theRequest addValue: tempuriValue forHTTPHeaderField:@"SOAPAction"];
 	[theRequest addValue: msgLength forHTTPHeaderField:@"Content-Length"];
@@ -211,13 +208,7 @@
 	[theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-	
-    timeOutTimer = [NSTimer scheduledTimerWithTimeInterval:120.0
-                                                    target:self
-                                                  selector:@selector(timeOutWebservice:)
-                                                  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:theConnection, @"connection", nil]
-                                                   repeats:NO];
-    
+
 	if( theConnection )
 	{
 		self.webData = [NSMutableData data];
@@ -242,9 +233,6 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-
     if (self.webData.length) {
         self.xmlParser = [[NSXMLParser alloc] initWithData:self.webData];
         [self.xmlParser setDelegate: self];
@@ -394,9 +382,6 @@
 /// Processes an incoming error.
 - (void)processError:(NSError *)error {
     DM_LOG(@"Error: %@", error.localizedDescription);
-    
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
 
     if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]) {
         [wsGetUserPlannedMealNames getUserPlannedMealNamesFailed:error];
@@ -420,20 +405,6 @@
     if ([wsUpdateUserPlannedMealNames respondsToSelector:@selector(updateUserPlannedMealNamesFailed:)]) {
         [wsUpdateUserPlannedMealNames updateUserPlannedMealNamesFailed:[error localizedDescription]];
     }
-}
-
-- (void)timeOutWebservice:(NSTimer *)theTimer {
-    
-    NSURLConnection *connection = [[theTimer userInfo] objectForKey:@"connection"];
-    [connection cancel];
-    connection = nil;
-    
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    self.webData = nil;
-    
-    NSError *error = [DMGUtilities errorWithMessage:@"The network request timed out." code:300];
-    [self processError:error];
 }
 
 @end

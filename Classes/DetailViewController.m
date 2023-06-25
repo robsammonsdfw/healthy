@@ -810,12 +810,12 @@
         NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
 
 
-        NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_string];
+        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_string];
         [db executeUpdate:insertSQL];
         
         int mealID = minIDvalue;
         
-        NSString *strChkRecord = [NSString stringWithFormat:@"select count(*) from Food_Log_Items where FoodID = '%d' AND MealCode = '%d'AND MealID = '%d'",foodID,mealCode,mealID];
+        NSString *strChkRecord = [NSString stringWithFormat:@"SELECT count(*) FROM Food_Log_Items where FoodID = '%d' AND MealCode = '%d'AND MealID = '%d'",foodID,mealCode,mealID];
         FMResultSet *objChk = [db executeQuery:strChkRecord];
         while ([objChk next]) {
             if ([objChk intForColumn:@"count(*)"]>0) {
@@ -830,7 +830,7 @@
 //                [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
                 NSString *date_string1 = [dateFormatter stringFromDate:sourceDate];
                 
-                insertSQL = [NSString stringWithFormat: @"INSERT INTO Food_Log_Items "
+                insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
                              "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
                              " VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))",
                              mealID, foodID, mealCode, num_measureID, [servingAmount floatValue], date_string1];
@@ -993,7 +993,7 @@
     
 //    NSString *date_string = [dateFormatter stringFromDate:[NSDate date]];
 
-    NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO Favorite_Food (Favorite_FoodID, FoodID,modified,MeasureID) VALUES (%i, %i,DATETIME('%@'),%i)", minIDvalue, foodID, date_string, num_measureID];
+    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Favorite_Food (Favorite_FoodID, FoodID,modified,MeasureID) VALUES (%i, %i,DATETIME('%@'),%i)", minIDvalue, foodID, date_string, num_measureID];
     
     DMLog(@"Save insertSQL for DetailView is %@", insertSQL);
     
@@ -1009,7 +1009,7 @@
     [DMActivityIndicator showCompletedIndicator];
 }
 
--(void)deleteFromWSLog {
+- (void)deleteFromWSLog {
     [DMActivityIndicator showActivityIndicator];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -1027,12 +1027,15 @@
                                 [NSNumber numberWithInt:foodID], @"FoodID",
                                 nil];
     
-    for (id key in wsInfoDict) {
-    }
-    
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsDeleteMealItemDelegate = self;
-    [soapWebService callWebservice:wsInfoDict];
+    [soapWebService callWebservice:wsInfoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            [DMActivityIndicator hideActivityIndicator];
+            return;
+        }
+        [DMActivityIndicator hideActivityIndicator];
+        [self deleteFromLog];
+    }];
     
     
 }
@@ -1069,16 +1072,6 @@
 - (void)deleteUserPlannedMealItemsFailed:(NSString *)failedMessage {
     [DMActivityIndicator hideActivityIndicator];
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
-}
-
-#pragma mark WEBSERVICE DELETE MEAL ITEM DELEGATE
-- (void)deleteMealItemFinished:(NSMutableArray *)responseArray {
-    [DMActivityIndicator hideActivityIndicator];
-    [self deleteFromLog];
-}
-
-- (void)deleteMealItemFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
 }
 
 #pragma mark WEBSERVICE DELETE FAVORITE FOOD DELEGATE

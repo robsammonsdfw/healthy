@@ -7,5 +7,6 @@
 
 #import <UIKit/UIKit.h>
 
+/// Shows a user's exercise plan.
 @interface MyMovesViewController : UIViewController
 @end

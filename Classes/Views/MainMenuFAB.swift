@@ -122,6 +122,11 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
         actionButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
     }
     
+    /// Resets to Home.
+    @objc public func resetToHome() {
+        self.navigationController?.popToRootViewController(animated: false)
+    }
+    
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         // Hide on settings.
         if viewController == self.appSettingsViewController {

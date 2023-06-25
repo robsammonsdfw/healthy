@@ -21,9 +21,9 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _tagId = dictionary[@"tagID"];
+        _tagId = ValidNSNumber(dictionary[@"tagID"]);
         
-        NSString *name = dictionary[@"tag"];
+        NSString *name = ValidString(dictionary[@"tag"]);
         if (![name isEqualToString:@"(null)"]) {
             name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
             name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];

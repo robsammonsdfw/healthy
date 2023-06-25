@@ -190,7 +190,7 @@
         [dateFormatter setTimeZone:systemTimeZone1];
         NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
         
-        NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_string];
+        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_string];
         
         [db executeUpdate:insertSQL];
         
@@ -201,7 +201,7 @@
 //        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
         NSString *date_string1 = [dateFormatter stringFromDate:sourceDate];
         
-        insertSQL = [NSString stringWithFormat: @"INSERT INTO Food_Log_Items "
+        insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
                      "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
                      " VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))",
                      mealID, foodID, mealCode, num_measureID, servingAmount, date_string1];

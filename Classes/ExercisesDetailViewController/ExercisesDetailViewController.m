@@ -45,8 +45,8 @@
 
 @implementation ExercisesDetailViewController
 
--(instancetype)init {
-    self = [super initWithNibName:@"ExercisesDetailViewController" bundle:nil];
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     return self;
 }
 

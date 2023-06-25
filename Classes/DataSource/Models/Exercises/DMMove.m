@@ -25,18 +25,23 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _moveId = dictionary[@"moveID"];
-        _companyId = dictionary[@"companyID"];
+        _moveId = ValidNSNumber(dictionary[@"moveID"]);
+        _companyId = ValidNSNumber(dictionary[@"companyID"]);
         
-        NSString *name = dictionary[@"moveName"];
+        NSString *name = ValidString(dictionary[@"moveName"]);
         name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        // Not sure if this is needed or not.
+//        NSArray *nameSplit = [name componentsSeparatedByString:@"("];
+//        if ([name containsString:@"("]) {
+//            name = [NSString stringWithFormat:@"%@", nameSplit.firstObject];
+//        }
         _name = name;
-        
-        _videoUrl = dictionary[@"videoLink"];
 
-        NSString *notes = dictionary[@"notes"];
+        _videoUrl = ValidString(dictionary[@"videoLink"]);
+
+        NSString *notes = ValidString(dictionary[@"notes"]);
         notes = [notes stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         notes = [notes stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         notes = [notes stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

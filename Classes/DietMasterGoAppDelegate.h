@@ -28,15 +28,14 @@
 @property (nonatomic) BOOL isSessionExp;
 @property (nonatomic)BOOL isFromAlert;
 
--(void)checkUserLogin;
--(void)getUserLogin;
-- (void)userLoginFinished:(NSString *)statusMessage;
--(void)loginFromUrl:(NSString *)loginUrl;
+- (void)checkUserLogin;
+- (void)getUserLogin;
+- (void)loginFromUrl:(NSString *)loginUrl;
 
 // Sync
 - (NSInteger)hoursAfterDate:(NSDate *)aDate;
 - (NSInteger)minutesAfterDate:(NSDate *)aDate;
--(void)syncDatabase;
+- (void)syncDatabase;
 
 @end
 

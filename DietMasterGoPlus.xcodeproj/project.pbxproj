@@ -10,6 +10,7 @@
 		0E0D09F72A45CD1B0032162E /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
 		0E0D09F92A45DD8E0032162E /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DataProvider.swift */; };
 		0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FB2A4635940032162E /* DMMovePickerRow.m */; };
+		0E0D09FF2A4672790032162E /* DMMovePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FE2A4672790032162E /* DMMovePlan.m */; };
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
@@ -56,6 +57,9 @@
 		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
 		0E9F170E2A33BBE700217BF9 /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */; };
 		0E9F170F2A33BBE700217BF9 /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */; };
+		0EA18DBD2A4745040017D131 /* DMMoveDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBC2A4745040017D131 /* DMMoveDay.m */; };
+		0EA18DC02A4751690017D131 /* DMMoveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBF2A4751690017D131 /* DMMoveSet.m */; };
+		0EA18DC32A4757010017D131 /* DMMoveRoutine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DC22A4757010017D131 /* DMMoveRoutine.m */; };
 		0ECFE7F12A41DB3900DE631E /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
 		0EDAB6A72A3B3A1000DB351A /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
 		0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
@@ -160,7 +164,6 @@
 		403D88A921ECA95F00B2F232 /* MyMovesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88A721ECA95F00B2F232 /* MyMovesTableViewCell.m */; };
 		403D88AA21ECA95F00B2F232 /* MyMovesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88A821ECA95F00B2F232 /* MyMovesTableViewCell.xib */; };
 		403D88AE21ECA98700B2F232 /* MyMovesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88AC21ECA98600B2F232 /* MyMovesViewController.m */; };
-		403D88AF21ECA98700B2F232 /* MyMovesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88AD21ECA98700B2F232 /* MyMovesViewController.xib */; };
 		403D88B321ECD53200B2F232 /* MyMovesDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88B121ECD53200B2F232 /* MyMovesDetailsViewController.m */; };
 		403D88B421ECD53200B2F232 /* MyMovesDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88B221ECD53200B2F232 /* MyMovesDetailsViewController.xib */; };
 		4040282C224E2DDD0081FFD3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4318E2F38800FB97A7 /* SystemConfiguration.framework */; };
@@ -244,6 +247,8 @@
 		0E0D09F82A45DD8E0032162E /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		0E0D09FA2A4635940032162E /* DMMovePickerRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMovePickerRow.h; sourceTree = "<group>"; };
 		0E0D09FB2A4635940032162E /* DMMovePickerRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMovePickerRow.m; sourceTree = "<group>"; };
+		0E0D09FD2A4672790032162E /* DMMovePlan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMovePlan.h; sourceTree = "<group>"; };
+		0E0D09FE2A4672790032162E /* DMMovePlan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMovePlan.m; sourceTree = "<group>"; };
 		0E1A3B392A3B66AC004C6033 /* DMMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessage.h; sourceTree = "<group>"; };
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
 		0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMFood.h; sourceTree = "<group>"; };
@@ -349,6 +354,13 @@
 		0E9F17082A33BBE700217BF9 /* MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"; sourceTree = "<group>"; };
 		0E9F17092A33BBE700217BF9 /* MCUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCUtil.h; sourceTree = "<group>"; };
 		0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayeredView.m; sourceTree = "<group>"; };
+		0EA18DBB2A4745040017D131 /* DMMoveDay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveDay.h; sourceTree = "<group>"; };
+		0EA18DBC2A4745040017D131 /* DMMoveDay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveDay.m; sourceTree = "<group>"; };
+		0EA18DBE2A4751690017D131 /* DMMoveSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveSet.h; sourceTree = "<group>"; };
+		0EA18DBF2A4751690017D131 /* DMMoveSet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveSet.m; sourceTree = "<group>"; };
+		0EA18DC12A4757010017D131 /* DMMoveRoutine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveRoutine.h; sourceTree = "<group>"; };
+		0EA18DC22A4757010017D131 /* DMMoveRoutine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveRoutine.m; sourceTree = "<group>"; };
+		0EA18DC72A47BD670017D131 /* DMPickerViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMPickerViewDataSource.h; sourceTree = "<group>"; };
 		0EAD266D1578EAED008E77D7 /* MealPlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanViewController.h; sourceTree = "<group>"; };
 		0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanViewController.m; sourceTree = "<group>"; };
 		0EB5423014E2FBD60023BA4C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -459,7 +471,6 @@
 		403D88A821ECA95F00B2F232 /* MyMovesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMovesTableViewCell.xib; sourceTree = "<group>"; };
 		403D88AB21ECA98600B2F232 /* MyMovesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMovesViewController.h; sourceTree = "<group>"; };
 		403D88AC21ECA98600B2F232 /* MyMovesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMovesViewController.m; sourceTree = "<group>"; };
-		403D88AD21ECA98700B2F232 /* MyMovesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMovesViewController.xib; sourceTree = "<group>"; };
 		403D88B021ECD53200B2F232 /* MyMovesDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesDetailsViewController.h; sourceTree = "<group>"; };
 		403D88B121ECD53200B2F232 /* MyMovesDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesDetailsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		403D88B221ECD53200B2F232 /* MyMovesDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMovesDetailsViewController.xib; sourceTree = "<group>"; };
@@ -923,6 +934,36 @@
 			path = PNPieChartView;
 			sourceTree = "<group>";
 		};
+		0EA18DC42A475BA40017D131 /* MovePlan */ = {
+			isa = PBXGroup;
+			children = (
+				0E0D09FD2A4672790032162E /* DMMovePlan.h */,
+				0E0D09FE2A4672790032162E /* DMMovePlan.m */,
+				0EA18DBB2A4745040017D131 /* DMMoveDay.h */,
+				0EA18DBC2A4745040017D131 /* DMMoveDay.m */,
+				0EA18DBE2A4751690017D131 /* DMMoveSet.h */,
+				0EA18DBF2A4751690017D131 /* DMMoveSet.m */,
+				0EA18DC12A4757010017D131 /* DMMoveRoutine.h */,
+				0EA18DC22A4757010017D131 /* DMMoveRoutine.m */,
+			);
+			path = MovePlan;
+			sourceTree = "<group>";
+		};
+		0EA18DC62A475BC80017D131 /* Exercises */ = {
+			isa = PBXGroup;
+			children = (
+				0E8EC8E92A3DC4C70095BDEC /* DMMove.h */,
+				0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */,
+				0E8EC8EC2A3DE56F0095BDEC /* DMMoveCategory.h */,
+				0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */,
+				0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */,
+				0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */,
+				0E0D09FA2A4635940032162E /* DMMovePickerRow.h */,
+				0E0D09FB2A4635940032162E /* DMMovePickerRow.m */,
+			);
+			path = Exercises;
+			sourceTree = "<group>";
+		};
 		0EAD266B1578EABF008E77D7 /* MealPlanViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1143,6 +1184,8 @@
 		0EDAB6A92A3B4E9A00DB351A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0EA18DC62A475BC80017D131 /* Exercises */,
+				0EA18DC42A475BA40017D131 /* MovePlan */,
 				0EDAB6AA2A3B4EAA00DB351A /* DMUser.h */,
 				0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */,
 				0E1A3B392A3B66AC004C6033 /* DMMessage.h */,
@@ -1151,14 +1194,7 @@
 				0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */,
 				0E1A3B3F2A3B9E68004C6033 /* DMWeightLogEntry.h */,
 				0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */,
-				0E8EC8E92A3DC4C70095BDEC /* DMMove.h */,
-				0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */,
-				0E8EC8EC2A3DE56F0095BDEC /* DMMoveCategory.h */,
-				0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */,
-				0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */,
-				0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */,
-				0E0D09FA2A4635940032162E /* DMMovePickerRow.h */,
-				0E0D09FB2A4635940032162E /* DMMovePickerRow.m */,
+				0EA18DC72A47BD670017D131 /* DMPickerViewDataSource.h */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1309,7 +1345,6 @@
 				402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */,
 				403D88AB21ECA98600B2F232 /* MyMovesViewController.h */,
 				403D88AC21ECA98600B2F232 /* MyMovesViewController.m */,
-				403D88AD21ECA98700B2F232 /* MyMovesViewController.xib */,
 				40AFA92B21FA13CD009140D9 /* MyMovesListViewController.h */,
 				40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */,
 				40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */,
@@ -1673,7 +1708,6 @@
 				0E6F91262A4328A000956F1E /* Icon-76.png in Resources */,
 				652B915724B92A72007B08ED /* GoogleService-Info.plist in Resources */,
 				65462D2726BD1DAF004D1654 /* UserGoalVC.xib in Resources */,
-				403D88AF21ECA98700B2F232 /* MyMovesViewController.xib in Resources */,
 				650208B52500D34000F412B0 /* PopUpView.xib in Resources */,
 				401B63E920B3FC64004453E7 /* ManageFoods.xib in Resources */,
 				401B63EC20B3FC64004453E7 /* FoodCategoryPicker.xib in Resources */,
@@ -1825,6 +1859,7 @@
 				0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */,
 				403D88B321ECD53200B2F232 /* MyMovesDetailsViewController.m in Sources */,
 				401B648920B3FC64004453E7 /* ExercisesDetailViewController.m in Sources */,
+				0EA18DC02A4751690017D131 /* DMMoveSet.m in Sources */,
 				401B648A20B3FC64004453E7 /* DietmasterEngine.m in Sources */,
 				401B648B20B3FC64004453E7 /* FavoriteMealsViewController.m in Sources */,
 				0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */,
@@ -1838,6 +1873,7 @@
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
 				401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */,
 				65462D1226BD1D48004D1654 /* ProfileAlertVCViewController.m in Sources */,
+				0EA18DC32A4757010017D131 /* DMMoveRoutine.m in Sources */,
 				401B649D20B3FC64004453E7 /* MealPlanDetailViewController.m in Sources */,
 				401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */,
 				401B649F20B3FC64004453E7 /* GroceryListViewController.m in Sources */,
@@ -1863,6 +1899,7 @@
 				650208E0250153C300F412B0 /* headerVw.m in Sources */,
 				0E8EC8F32A3E08E00095BDEC /* DataFetcher.swift in Sources */,
 				650208E3250153C300F412B0 /* PlansTableViewCell.m in Sources */,
+				0E0D09FF2A4672790032162E /* DMMovePlan.m in Sources */,
 				82C45661233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m in Sources */,
 				65462D2626BD1DAF004D1654 /* UserGoalVC.m in Sources */,
 				0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */,
@@ -1882,6 +1919,7 @@
 				0E6F91382A432A4B00956F1E /* MainMenuFAB.swift in Sources */,
 				650208CE2501531B00F412B0 /* IAPHelper.m in Sources */,
 				401B654E20B3FC64004453E7 /* UIView+FrameControl.m in Sources */,
+				0EA18DBD2A4745040017D131 /* DMMoveDay.m in Sources */,
 				40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
 				0E6F913D2A43580A00956F1E /* UIViewController+Navigation.m in Sources */,
 				65462D2126BD1D99004D1654 /* DailyActivityTypeVC.m in Sources */,

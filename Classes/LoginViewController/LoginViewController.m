@@ -36,6 +36,9 @@
 @property (nonatomic, strong) IBOutlet UIButton *signUpBtn;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImgVw;
 
+/// Completion block that should be called when login is complete.
+@property (nonatomic, copy) completionBlockWithError completionBlock;
+
 @property (nonatomic, assign) CGFloat animatedDistance;
 
 - (IBAction)emailUs:(id)sender;
@@ -179,7 +182,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }];
 }
 
-#pragma mark - LOGIN FROM URL
+#pragma mark - Actions
 
 - (void)loginFromUrl:(NSString *)authcode {
     if (authcode.length) {
@@ -191,6 +194,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
         [self.loginButton sendActionsForControlEvents:UIControlEventTouchUpInside];
     }
+}
+
+- (void)presentLoginInController:(UIViewController *)controller
+                  withCompletion:(completionBlockWithError)completionBlock {
+    self.completionBlock = completionBlock;
+    UIViewController *rootController = [DMGUtilities rootViewController];
+    if (controller) {
+        rootController = controller;
+    }
+    self.modalPresentationStyle = UIModalPresentationPageSheet;
+    self.sheetPresentationController.detents = @[[UISheetPresentationControllerDetent largeDetent]];
+    [rootController presentViewController:self animated:YES completion:nil];
 }
 
 #pragma mark - Button Actions
@@ -208,9 +223,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     } else {
         self.loginButton.enabled = NO;
-
-        DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-        engine.sendAllServerData = true;
         
         NSString *tokenToSend = [[NSString stringWithString:self.passwordField.text] uppercaseString];
 
@@ -223,6 +235,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [fetcher signInUserWithPassword:tokenToSend
                              completion:^(DMUser *user, NSString *status, NSString *message) {
             [DMActivityIndicator hideActivityIndicator];
+            self.loginButton.enabled = YES;
 
             // Incorrect Password.
             if ([status isEqualToString:@"False"] && [message containsString:@"Username or Password is incorrect"]) {
@@ -346,25 +359,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)syncUserInfo:(id)sender {
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Loading..."];
-
+    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    DataFetcher *fetcher = [[DataFetcher alloc] init];
-    [fetcher getUserDetailsWithCompletion:^(DMUser *user, NSError *error) {
+    [dietmasterEngine syncUserInfoWithCompletion:^(BOOL completed, NSError *error) {
         self.loginButton.enabled = YES;
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
-            [DMGUtilities showError:error withTitle:@"Error" message:@"Error updating." inViewController:nil];
+            [DMGUtilities showError:error withTitle:@"Error" message:@"Error updating information." inViewController:nil];
             return;
         }
-        [dietmasterEngine updateUserInfo:user];
+        [dietmasterEngine.arrExerciseSyncNew removeAllObjects];
+        dietmasterEngine.syncDatabaseDelegate = self;
+        [dietmasterEngine syncDatabase];
     }];
-    
-#pragma mark TODO: Hook up the exercise sync.
-    //HHT new exercise sync
-    [dietmasterEngine.arrExerciseSyncNew removeAllObjects];
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"userid_dietmastergo"] != nil) {
-       [dietmasterEngine syncDatabase];
-   }
 
 }
 
@@ -379,16 +386,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [DMActivityIndicator hideActivityIndicator];
     _loginButton.enabled = YES;
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.completionBlock) {
+        self.completionBlock(YES, nil);
+    }
 }
 
 - (void)syncDatabaseFailed:(NSString *)failedMessage {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncDatabaseDelegate = nil;
     
+    NSError *error = [DMGUtilities errorWithMessage:@"An error occurred. Please try again.." code:200];
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
     
     [DMActivityIndicator hideActivityIndicator];
     _loginButton.enabled = YES;
+    
+    if (self.completionBlock) {
+        self.completionBlock(NO, error);
+    }
 }
 
 #pragma mark - TOS PRIVACY POLICY ACTIONS

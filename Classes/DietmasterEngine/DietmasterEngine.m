@@ -93,10 +93,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark MAIN SYNC METHOD
--(void)syncDatabase {
+
+- (void)syncDatabase {
     syncsCompleted = 0;
     syncsFailed = 0;
-    syncsToComplete = 3; // changed by henry
+    syncsToComplete = 4;
     
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     [dateComponents setDay:-90];
@@ -105,17 +106,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
         dateString = @"1970-01-01";
         [[NSUserDefaults standardUserDefaults]setObject:@"SecondTime" forKey:@"FirstTime"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-    }
-    else {
-        NSDate *currentDate;
-        if(![[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]){
+    } else {
+        NSDate *currentDate = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"];
+        if (!currentDate) {
             currentDate = [NSDate date];
         }
-        else{
-            currentDate = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"];
-        }
-        
         NSDate *oneDayAgo = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
                                                                      value:-8
                                                                     toDate:currentDate
@@ -138,13 +133,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }];
     
     [self syncFavoriteFoods:dateString];
-
     [self syncFavoriteMeals:dateString];
-    //[self syncExerciseLog:dateString];
     [self syncExerciseLogNew:dateString];
 }
 
--(void)syncDatabaseFinished {
+- (void)syncDatabaseFinished {
     if (syncsCompleted == syncsToComplete) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSDate *oneDayAgo = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
@@ -165,7 +158,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 - (void)uploadDatabase {
-    
     upsyncsCompleted = 0;
     upsyncsFailed = 0;
     upsyncsToComplete = 0;
@@ -186,7 +178,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [self performSelectorInBackground:@selector(saveAllCustomFoods) withObject:nil];
 }
 
--(void)uploadDatabaseFinished {
+- (void)uploadDatabaseFinished {
     if (upsyncsCompleted == (upsyncsToComplete + 6)) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSDate *oneDayAgo = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
@@ -201,34 +193,47 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         NSDate *date1 = [self.dateformatter dateFromString:dateString];
         
         [prefs setValue:date1 forKey:@"lastsyncdate"];
-        [syncUPDatabaseDelegate syncUPDatabaseFinished:@"success"];
+        if ([syncUPDatabaseDelegate respondsToSelector:@selector(syncUPDatabaseFinished:)]) {
+            [syncUPDatabaseDelegate syncUPDatabaseFinished:@"success"];
+            syncUPDatabaseDelegate = nil;
+        }
         [self syncFavoriteFoods:nil];
     }
 }
+
 -(void)syncDatabaseFailed {
     if (syncsFailed > 0) {
         if ([syncDatabaseDelegate respondsToSelector:@selector(syncDatabaseFailed:)]) {
             [syncDatabaseDelegate syncDatabaseFailed:@"error"];
+            syncDatabaseDelegate = nil;
         }
     }
 }
+
 -(void)uploadDatabaseFailed {
     if (upsyncsFailed > 0) {
         if ([syncUPDatabaseDelegate respondsToSelector:@selector(syncUPDatabaseFailed:)]) {
             [syncUPDatabaseDelegate syncUPDatabaseFailed:@"error"];
+            syncUPDatabaseDelegate = nil;
         }
     }
 }
 
 #pragma mark - Sync User Details
 
-- (void)syncUserInfo:(id)sender {
+- (void)syncUserInfoWithCompletion:(completionBlockWithError)completionBlock {
     DataFetcher *fetcher = [[DataFetcher alloc] init];
     [fetcher getUserDetailsWithCompletion:^(DMUser *user, NSError *error) {
         if (error) {
+            if (completionBlock) {
+                completionBlock(NO, error);
+            }
             return;
         }
         [self updateUserInfo:user];
+        if (completionBlock) {
+            completionBlock(YES, nil);
+        }
     }];
 }
 
@@ -278,6 +283,53 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 #pragma mark DOWN SYNC METHODS
 
+/// Processes food for both old and new APIs, so this is it's own method.
+- (void)saveFoodFinished:(NSArray *)responseArray {
+    NSInteger foodIDSaved = 0;
+    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+    if (![db open]) {
+    }
+    
+    [db beginTransaction];
+    for (int i=0; i < [responseArray count]; i++) {
+        
+        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+        
+        foodIDSaved = [[dict valueForKey:@"FoodID"] intValue];
+        
+        NSString *queryString = [NSString stringWithFormat:@"UPDATE Food "
+                                 " SET FoodKey = %i WHERE FoodKey = %i ",
+                                 ValidInt([dict valueForKey:@"FoodID"]),
+                                 ValidInt([dict valueForKey:@"GoID"])
+                                 ];
+        
+        [db executeUpdate:queryString];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            [self saveUPCFood:[[dict valueForKey:@"FoodID"] intValue]];
+        });
+    }
+    
+    for (int i=0; i < [responseArray count]; i++) {
+        
+        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+        NSString *queryString = [NSString stringWithFormat:@"UPDATE FoodMeasure "
+                                 " SET FoodID = %i WHERE FoodID = %i ",
+                                 [[dict valueForKey:@"FoodID"] intValue],
+                                 [[dict valueForKey:@"GoID"] intValue]
+                                 ];
+        
+        [db executeUpdate:queryString];
+    }
+    
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [db commit];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FoodWasSavedToCloud" object:nil userInfo:@{@"FoodID" : @(foodIDSaved), @"success" : @(YES)}];
+
+}
 -(void)syncFavoriteFoods:(NSString *)dateString {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -296,14 +348,48 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSyncFavoriteFoodsDelegate = self;
-    [soapWebService callWebservice:infoDict];
+    [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            syncsFailed++;
+            [self syncDatabaseFailed];
+            return;
+        }
+        NSArray *responseArray = (NSArray *)object;
+        FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+        if (![db open]) {
+        }
+        
+        [db beginTransaction];
+        for (int i=0; i < [responseArray count]; i++) {
+            
+            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+            
+            NSDate* sourceDate = [NSDate date];
+            [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            
+            NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Food "
+                                     "(FoodID, MeasureID, modified) VALUES "
+                                     "(%i, %i, '%@') ",
+                                     ValidInt([dict valueForKey:@"FoodId"]),
+                                     ValidInt([dict valueForKey:@"MeasureID"]),
+                                     sourceDate
+                                     ];
+            
+            [db executeUpdate:queryString];
+        }
+        
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        [db commit];
+        
+        syncsCompleted++;
+        [self syncDatabaseFinished];
+    }];
 }
 
 -(void)syncFavoriteMeals:(NSString *)dateString {
-    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"SyncFavoriteMeals", @"RequestType",
                               [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
@@ -311,8 +397,47 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSyncFavoriteMealsDelegate = self;
-    [soapWebService callWebservice:infoDict];
+    [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            syncsFailed++;
+            [self syncDatabaseFailed];
+            return;
+        }
+        NSArray *responseArray = (NSArray *)object;
+        FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+        if (![db open]) {
+        }
+        
+        [db beginTransaction];
+        
+        for (int i=0; i < [responseArray count]; i++) {
+            
+            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+            
+            NSString *mealName = ValidString([dict valueForKey:@"MealFavoriteName"]);
+            NSRange range = [mealName rangeOfString:@"\\s*$" options:NSRegularExpressionSearch];
+            NSString *favoriteMealName = [mealName stringByReplacingCharactersInRange:range withString:@""];
+            
+            NSDate *sourceDate = [NSDate date];
+            
+            NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Meal "
+                                     "(Favorite_MealID, Favorite_Meal_Name, modified) VALUES "
+                                     "(%i, '%@', '%@') ",
+                                     ValidInt([dict valueForKey:@"MealFavoriteID"]),
+                                     favoriteMealName,
+                                     sourceDate
+                                     ];
+            
+            
+            [db executeUpdate:queryString];
+        }
+        
+        [db commit];
+        
+        [self syncFavoriteMealItems:nil];
+        syncsCompleted++;
+        [self syncDatabaseFinished];
+    }];
 }
 
 -(void)syncFavoriteMealItems:(NSString *)dateString {
@@ -340,8 +465,12 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                   nil];
         
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        soapWebService.wsSyncFavoriteMealItemsDelegate = self;
-        [soapWebService callWebservice:infoDict];
+        [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+            if (error) {
+                return;
+            }
+            NSArray *responseArray = (NSArray *)object;
+        }];
         resultCounts++;
     }
     
@@ -355,29 +484,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
 }
 
--(void)syncExerciseLog:(NSString *)dateString {
-    if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
-        dateString = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
-    } else {
-        dateString = @"01-01-1970";
-    }
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"SyncExerciseLog", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
-                              dateString, @"LastSync",
-                              nil];
-    
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSyncExerciseLogDelegate = self;
-    [soapWebService callWebservice:infoDict];
-}
-
-//HHT new exercise sync
--(void)syncExerciseLogNew:(NSString *)dateString {
+- (void)syncExerciseLogNew:(NSString *)dateString {
     if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
         dateString = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
     } else {
@@ -398,8 +505,90 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     DMLog(@"SyncExerciseLogNew Dict is :: %@",infoDict);
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSyncExerciseLogNewDelegate = self;
-    [soapWebService callWebservice:infoDict];
+    [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            syncsFailed++;
+            [self syncDatabaseFailed];
+            return;
+        }
+        NSArray *responseArray = (NSArray *)object;
+        NSMutableArray *arrTemp = [[NSMutableArray alloc] init];
+        int totalCount = 0;
+        
+        FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+        if (![db open]) {
+            
+        }
+        
+        [db beginTransaction];
+
+        if ([responseArray count]>0){
+            NSDictionary *dictTemp = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:0]];
+            arrTemp = [dictTemp valueForKey:@"ExerciseLogs"];
+            
+            totalCount = [[dictTemp valueForKey:@"TotalCount"] intValue];
+            
+            for (int i=0; i < [arrTemp count]; i++) {
+                NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[arrTemp objectAtIndex:i]];
+                
+                [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+                [self.dateformatter setLocale:en_US];
+                NSDate *logTimeDate = [self.dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
+                
+                [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSString *logTimeString = [self.dateformatter stringFromDate:logTimeDate];
+                
+                [self.dateformatter setDateFormat:@"yyyyMMdd"];
+                NSString *keyDate = [self.dateformatter stringFromDate:logTimeDate];
+                
+                int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
+                NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
+                
+                NSDate* sourceDate = [NSDate date];
+                [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                
+                NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Exercise_Log "
+                                         "(Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Log_Date, Date_Modified) VALUES "
+                                         "('%@', %i, %i, '%@', '%@') ",
+                                         exerciseLogStrID,
+                                         exerciseID,
+                                         [[dict valueForKey:@"Duration"] intValue],
+                                         logTimeString,
+                                         sourceDate
+                                         ];
+            
+                [db executeUpdate:queryString];
+                
+                [_arrExerciseSyncNew addObject:dict];
+            }
+            
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+            
+            if (_arrExerciseSyncNew.count < totalCount){
+                NSString *dateString;
+                if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
+                    dateString = @"1970-01-01";
+                    [[NSUserDefaults standardUserDefaults]setObject:@"SecondTime" forKey:@"FirstTime"];
+                }
+                else {
+                    dateString = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
+                }
+                _pageNumber = _pageNumber + 1;
+                [self syncExerciseLogNew:dateString];
+            }
+            else {
+                _pageNumber = 1;
+                
+                syncsCompleted++;
+                [self syncDatabaseFinished];
+            }
+        }
+
+    }];
 }
 
 #pragma mark - MESSAGES
@@ -570,9 +759,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 #pragma mark UP SYNC METHODS
 -(void)saveMeals:(NSString *)dateString {
-    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
     if (![db open]) {
         
@@ -605,8 +792,58 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                   nil];
         
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        soapWebService.wsSaveMealDelegate = self;
-        [soapWebService callWebservice:infoDict];
+        [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+            if (error) {
+                upsyncsFailed++;
+                [self uploadDatabaseFailed];
+                return;
+            }
+            
+            NSArray *responseArray = (NSArray *)object;
+            FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+            if (![db open]) {
+            }
+            
+            for (int i=0; i < [responseArray count]; i++) {
+                
+                NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+                
+                NSString *queryString = [NSString stringWithFormat:@"UPDATE Food_Log "
+                                         " SET MealID = %i WHERE MealID = %i ",
+                                         [[dict valueForKey:@"MealID"] intValue],
+                                         [[dict valueForKey:@"goMealID"] intValue]
+                                         ];
+                
+                
+                [db executeUpdate:queryString];
+            }
+            
+            for (int i=0; i < [responseArray count]; i++) {
+                
+                NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+                
+                NSString *queryString = [NSString stringWithFormat:@"UPDATE Food_Log_Items "
+                                         " SET MealID = %i WHERE MealID = %i ",
+                                         [[dict valueForKey:@"MealID"] intValue],
+                                         [[dict valueForKey:@"goMealID"] intValue]
+                                         ];
+                
+                
+                [db executeUpdate:queryString];
+            }
+            
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+            
+            
+            [self saveMealItems:nil];
+            
+            upsyncsCompleted++;
+            [self uploadDatabaseFinished];
+
+        }];
         resultCounts++;
     }
     
@@ -671,8 +908,12 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSaveMealItemDelegate = self;
-    [soapWebService callWebservice:infoDict];
+    [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            return;
+        }
+        NSArray *responseArray = (NSArray *)object;
+    }];
 }
 
 - (void)saveExerciseLogs:(NSString *)dateString {
@@ -726,9 +967,16 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSaveExerciseLogsDelegate = self;
-    [soapWebService callWebservice:infoDict];
-    
+    [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            upsyncsFailed++;
+            [self uploadDatabaseFailed];
+            return;
+        }
+        upsyncsCompleted++;
+        [self uploadDatabaseFinished];
+    }];
+
     [rs close];
     
     if (resultCounts == 0) {
@@ -774,8 +1022,15 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                 [tempDataArray copy], @"WeightLog", nil];
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsSaveWeightLogDelegate = self;
-    [soapWebService callWebservice:infoDict];
+    [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+        if (error) {
+            upsyncsFailed++;
+            [self uploadDatabaseFailed];
+            return;
+        }
+        upsyncsCompleted++;
+        [self uploadDatabaseFinished];
+    }];
 
     [rs close];
     
@@ -817,8 +1072,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         [mutableDict addEntriesFromDictionary:[food dictionaryRepresentation]];
 
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        [soapWebService callWebservice:[mutableDict copy] withCompletion:^(id obj)
-         {
+        [soapWebService callFoodsWebservice:[mutableDict copy] withCompletion:^(id obj) {
              [self saveFoodFinished:obj];
          }];
         
@@ -898,14 +1152,21 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               food.measureId, @"MeasureID",
                               food.scannedFood, @"ScannedFood", nil];
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        soapWebService.wsSaveFoodDelegate = self;
-        [soapWebService callWebservice:dict];
+        [soapWebService callWebservice:dict withCompletion:^(NSObject *object, NSError *error) {
+            if (error) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FoodWasSavedToCloud" object:nil userInfo:@{@"success" : @(NO)}];
+                return;
+            }
+            NSArray *responseArray = (NSArray *)object;
+            [self saveFoodFinished:responseArray];
+        }];
         resultCounts++;
     }
     
     [rs close];
     
 }
+
 -(void)saveFavoriteFood:(NSString *)dateString {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -922,7 +1183,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     while ([rs next]) {
         
-        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
+        NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"SaveFavoriteFood", @"RequestType",
                               [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
                               [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
@@ -932,8 +1193,15 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
         
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        soapWebService.wsSaveFavoriteFoodDelegate = self;
-        [soapWebService callWebservice:dict];
+        [soapWebService callWebservice:infoDict withCompletion:^(NSObject *object, NSError *error) {
+            if (error) {
+                upsyncsFailed++;
+                [self uploadDatabaseFailed];
+                return;
+            }
+            upsyncsCompleted++;
+            [self uploadDatabaseFinished];
+        }];
         resultCounts++;
     }
     
@@ -956,7 +1224,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
     }
     
-    
     NSString *query = [NSString stringWithFormat:@"SELECT Favorite_MealID, Favorite_Meal_Name FROM Favorite_Meal WHERE Favorite_MealID <= %@", @"0"];
     
     FMResultSet *rs = [db executeQuery:query];
@@ -972,12 +1239,61 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               [rs stringForColumn:@"Favorite_MealID"], @"Favorite_MealID",
                               [rs stringForColumn:@"Favorite_Meal_Name"], @"Favorite_Meal_Name",
                               nil];
-        
-        
-        
+                
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        soapWebService.wsSaveFavoriteMealDelegate = self;
-        [soapWebService callWebservice:dict];
+        [soapWebService callWebservice:dict withCompletion:^(NSObject *object, NSError *error) {
+            if (error) {
+                upsyncsFailed++;
+                [self uploadDatabaseFailed];
+                return;
+            }
+            NSArray *responseArray = (NSArray *)object;
+            FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+            if (![db open]) {
+                
+            }
+            
+            [db beginTransaction];
+            for (int i=0; i < [responseArray count]; i++) {
+                
+                NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+                
+                NSString *queryString = [NSString stringWithFormat:@"UPDATE Favorite_Meal "
+                                         " SET Favorite_MealID = %i WHERE Favorite_MealID = %i ",
+                                         [[dict valueForKey:@"MealID"] intValue],
+                                         [[dict valueForKey:@"goMealID"] intValue]
+                                         ];
+                
+                [db executeUpdate:queryString];
+            }
+            
+            for (int i=0; i < [responseArray count]; i++) {
+                
+                NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+                
+                NSString *queryString = [NSString stringWithFormat:@"UPDATE Favorite_Meal_Items "
+                                         " SET Favorite_Meal_ID = %i WHERE Favorite_Meal_ID = %i ",
+                                         [[dict valueForKey:@"MealID"] intValue],
+                                         [[dict valueForKey:@"goMealID"] intValue]
+                                         ];
+                
+                [db executeUpdate:queryString];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.30 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+                               {
+                                   [self saveFavoriteMealItem:[[dict valueForKey:@"MealID"] intValue]];
+                               });
+            }
+            
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            [db commit];
+            
+            upsyncsCompleted++;
+            [self uploadDatabaseFinished];
+
+        }];
         resultCounts++;
         
     }
@@ -993,7 +1309,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 - (void)saveFavoriteMealItem:(int)mealID {
-    
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -1023,14 +1338,57 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
         
         SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-        soapWebService.wsSaveFavoriteMealItemDelegate = self;
-        [soapWebService callWebservice:dict];
+        [soapWebService callWebservice:dict withCompletion:^(NSObject *object, NSError *error) {
+            if (error) {
+                syncsFailed++;
+                [self syncDatabaseFailed];
+                return;
+            }
+            NSArray *responseArray = (NSArray *)object;
+            FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
+            if (![db open]) {
+            }
+            
+            [db beginTransaction];
+            
+            for (int i=0; i < [responseArray count]; i++) {
+                
+                NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
+                
+                NSString *favMealItemsStringID = [NSString stringWithFormat:@"%@-%@",[dict valueForKey:@"Favorite_Meal_ID"], [dict valueForKey:@"FoodID"]];
+                [db beginTransaction];
+                
+                NSDate* sourceDate = [NSDate date];
+                
+                NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Meal_Items "
+                                         "(Favorite_Meal_Items_strID, Favorite_Meal_ID, FoodKey, FoodID, MeasureID, Servings, Last_Modified) VALUES "
+                                         "('%@', %i, %i, %i,%i, %f, '%@') ",
+                                         favMealItemsStringID,
+                                         ValidInt([dict valueForKey:@"Favorite_Meal_ID"]),
+                                         ValidInt([dict valueForKey:@"FoodID"]),
+                                         ValidInt([dict valueForKey:@"FoodID"]),
+                                         ValidInt([dict valueForKey:@"MeasureID"]),
+                                         [[dict valueForKey:@"NumberOfServings"] floatValue],
+                                         sourceDate
+                                         ];
+                
+                [db executeUpdate:queryString];
+            }
+            
+            [db commit];
+            
+            if ([db hadError]) {
+                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+            }
+            
+            syncsCompleted++;
+            [self syncDatabaseFinished];
+        }];
         resultCounts++;
         
     }
     
     [rs close];
-    
     
     if (resultCounts == 0) {
         
@@ -1038,131 +1396,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark DOWN SYNC DELEGATE METHODS
-
-- (void)getSyncFavoriteFoodsFinished:(NSMutableArray *)responseArray {
-    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        NSDate* sourceDate = [NSDate date];
-        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        
-        NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Food "
-                                 "(FoodID, MeasureID, modified) VALUES "
-                                 "(%i, %i, '%@') ",
-                                 ValidInt([dict valueForKey:@"FoodId"]),
-                                 ValidInt([dict valueForKey:@"MeasureID"]),
-                                 sourceDate
-                                 ];
-        
-        [db executeUpdate:queryString];
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-    syncsCompleted++;
-    [self syncDatabaseFinished];
-}
-
-- (void)getSyncFavoriteFoodsFailed:(NSString *)failedMessage {
-    syncsFailed++;
-    [self syncDatabaseFailed];
-}
-
-- (void)getSyncFavoriteMealsFinished:(NSMutableArray *)responseArray {
-    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        NSString *mealName = ValidString([dict valueForKey:@"MealFavoriteName"]);
-        NSRange range = [mealName rangeOfString:@"\\s*$" options:NSRegularExpressionSearch];
-        NSString *favoriteMealName = [mealName stringByReplacingCharactersInRange:range withString:@""];
-        
-        NSDate *sourceDate = [NSDate date];
-        
-        NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Meal "
-                                 "(Favorite_MealID, Favorite_Meal_Name, modified) VALUES "
-                                 "(%i, '%@', '%@') ",
-                                 ValidInt([dict valueForKey:@"MealFavoriteID"]),
-                                 favoriteMealName,
-                                 sourceDate
-                                 ];
-        
-        
-        [db executeUpdate:queryString];
-    }
-    
-    [db commit];
-    
-    [self syncFavoriteMealItems:nil];
-    syncsCompleted++;
-    [self syncDatabaseFinished];
-    
-}
-- (void)getSyncFavoriteMealsFailed:(NSString *)failedMessage {
-    syncsFailed++;
-    [self syncDatabaseFailed];
-}
-
-- (void)getSyncFavoriteMealItemsFinished:(NSMutableArray *)responseArray {
-    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        NSString *favMealItemsStringID = [NSString stringWithFormat:@"%@-%@",[dict valueForKey:@"Favorite_Meal_ID"], [dict valueForKey:@"FoodID"]];
-        [db beginTransaction];
-        
-        NSDate* sourceDate = [NSDate date];
-        
-        NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Meal_Items "
-                                 "(Favorite_Meal_Items_strID, Favorite_Meal_ID, FoodKey, FoodID, MeasureID, Servings, Last_Modified) VALUES "
-                                 "('%@', %i, %i, %i,%i, %f, '%@') ",
-                                 favMealItemsStringID,
-                                 ValidInt([dict valueForKey:@"Favorite_Meal_ID"]),
-                                 ValidInt([dict valueForKey:@"FoodID"]),
-                                 ValidInt([dict valueForKey:@"FoodID"]),
-                                 ValidInt([dict valueForKey:@"MeasureID"]),
-                                 [[dict valueForKey:@"NumberOfServings"] floatValue],
-                                 sourceDate
-                                 ];
-        
-        [db executeUpdate:queryString];
-    }
-    
-    [db commit];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    syncsCompleted++;
-    [self syncDatabaseFinished];
-    
-}
-- (void)getSyncFavoriteMealItemsFailed:(NSString *)failedMessage {
-    syncsFailed++;
-    [self syncDatabaseFailed];
-}
 
 - (void)getSyncExerciseLogFinished:(NSMutableArray *)responseArray {
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
@@ -1216,93 +1449,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 - (void)getSyncExerciseLogFailed:(NSString *)failedMessage {
-    syncsFailed++;
-    [self syncDatabaseFailed];
-}
-
-//HHT new exercise sync
-#pragma mark - getSyncExerciseLogNewFinished
-- (void)getSyncExerciseLogNewFinished:(NSMutableArray *)responseArray {
-    
-    NSMutableArray *arrTemp = [[NSMutableArray alloc] init];
-    int totalCount = 0;
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![db open]) {
-        
-    }
-    
-    [db beginTransaction];
-
-    if ([responseArray count]>0){
-        NSDictionary *dictTemp = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:0]];
-        arrTemp = [dictTemp valueForKey:@"ExerciseLogs"];
-        
-        totalCount = [[dictTemp valueForKey:@"TotalCount"] intValue];
-        
-        for (int i=0; i < [arrTemp count]; i++) {
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[arrTemp objectAtIndex:i]];
-            
-            [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-            [self.dateformatter setLocale:en_US];
-            NSDate *logTimeDate = [self.dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
-            
-            [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            NSString *logTimeString = [self.dateformatter stringFromDate:logTimeDate];
-            
-            [self.dateformatter setDateFormat:@"yyyyMMdd"];
-            NSString *keyDate = [self.dateformatter stringFromDate:logTimeDate];
-            
-            int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
-            NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
-            
-            NSDate* sourceDate = [NSDate date];
-            [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            
-            NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Exercise_Log "
-                                     "(Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Log_Date, Date_Modified) VALUES "
-                                     "('%@', %i, %i, '%@', '%@') ",
-                                     exerciseLogStrID,
-                                     exerciseID,
-                                     [[dict valueForKey:@"Duration"] intValue],
-                                     logTimeString,
-                                     sourceDate
-                                     ];
-        
-            [db executeUpdate:queryString];
-            
-            [_arrExerciseSyncNew addObject:dict];
-        }
-        
-        if ([db hadError]) {
-            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        }
-        [db commit];
-        
-        if (_arrExerciseSyncNew.count < totalCount){
-            NSString *dateString;
-            if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
-                dateString = @"1970-01-01";
-                [[NSUserDefaults standardUserDefaults]setObject:@"SecondTime" forKey:@"FirstTime"];
-            }
-            else {
-                dateString = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
-            }
-            _pageNumber = _pageNumber + 1;
-            [self syncExerciseLogNew:dateString];
-        }
-        else {
-            _pageNumber = 1;
-            
-            syncsCompleted++;
-            [self syncDatabaseFinished];
-        }
-    }
-}
-
-//HHT new exercise sync
-- (void)getSyncExerciseLogNewFailed:(NSString *)failedMessage {
     syncsFailed++;
     [self syncDatabaseFailed];
 }
@@ -1491,74 +1637,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark UP SYNC DELEGATE METHODS
-- (void)saveMealFinished:(NSMutableArray *)responseArray {
-    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![db open]) {
-    }
-    
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        NSString *queryString = [NSString stringWithFormat:@"UPDATE Food_Log "
-                                 " SET MealID = %i WHERE MealID = %i ",
-                                 [[dict valueForKey:@"MealID"] intValue],
-                                 [[dict valueForKey:@"goMealID"] intValue]
-                                 ];
-        
-        
-        [db executeUpdate:queryString];
-    }
-    
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        NSString *queryString = [NSString stringWithFormat:@"UPDATE Food_Log_Items "
-                                 " SET MealID = %i WHERE MealID = %i ",
-                                 [[dict valueForKey:@"MealID"] intValue],
-                                 [[dict valueForKey:@"goMealID"] intValue]
-                                 ];
-        
-        
-        [db executeUpdate:queryString];
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-    
-    [self saveMealItems:nil];
-    
-    upsyncsCompleted++;
-    [self uploadDatabaseFinished];
-}
-
-- (void)saveMealFailed:(NSString *)failedMessage {
-    if (![failedMessage isEqualToString:@"error"]) {
-        if ([failedMessage intValue] < 0) {
-            //why were they deleting meals from the app if the same failed? that seems counter-intuitive
-//            FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-//            if (![db open]) {
-//            }
-//            int mealIDToDelete = [failedMessage intValue];
-//            [db beginTransaction];
-//            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log WHERE MealID = %i", mealIDToDelete];
-//            [db executeUpdate:updateSQL];
-//            updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE MealID = %i", mealIDToDelete];
-//            [db executeUpdate:updateSQL];
-//            if ([db hadError]) {
-//                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-//            }
-//            [db commit];
-        }
-    }
-    
-    upsyncsFailed++;
-    [self uploadDatabaseFailed];
-}
 
 - (void)saveMealItemFinished:(NSMutableArray *)responseArray {
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
@@ -1596,149 +1674,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [self uploadDatabaseFailed];
 }
 
-- (void)saveExerciseLogsFinished:(NSMutableArray *)responseArray {
-    upsyncsCompleted++;
-    [self uploadDatabaseFinished];
-}
-
-- (void)saveExerciseLogsFailed:(NSString *)failedMessage {
-    upsyncsFailed++;
-    [self uploadDatabaseFailed];
-}
-
-- (void)saveWeightLogFinished:(NSMutableArray *)responseArray {
-    upsyncsCompleted++;
-    [self uploadDatabaseFinished];
-}
-
-- (void)saveWeightLogFailed:(NSString *)failedMessage {
-    upsyncsFailed++;
-    [self uploadDatabaseFailed];
-}
-
-- (void)saveFoodFinished:(NSMutableArray *)responseArray {
-    NSInteger foodIDSaved = 0;
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![db open]) {
-    }
-    
-    [db beginTransaction];
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        foodIDSaved = [[dict valueForKey:@"FoodID"] intValue];
-        
-        NSString *queryString = [NSString stringWithFormat:@"UPDATE Food "
-                                 " SET FoodKey = %i WHERE FoodKey = %i ",
-                                 ValidInt([dict valueForKey:@"FoodID"]),
-                                 ValidInt([dict valueForKey:@"GoID"])
-                                 ];
-        
-        [db executeUpdate:queryString];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            [self saveUPCFood:[[dict valueForKey:@"FoodID"] intValue]];
-        });
-    }
-    
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        NSString *queryString = [NSString stringWithFormat:@"UPDATE FoodMeasure "
-                                 " SET FoodID = %i WHERE FoodID = %i ",
-                                 [[dict valueForKey:@"FoodID"] intValue],
-                                 [[dict valueForKey:@"GoID"] intValue]
-                                 ];
-        
-        [db executeUpdate:queryString];
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FoodWasSavedToCloud" object:nil userInfo:@{@"FoodID" : @(foodIDSaved), @"success" : @(YES)}];
-}
-
-- (void)saveFoodFailed:(NSString *)failedMessage {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FoodWasSavedToCloud" object:nil userInfo:@{@"success" : @(NO)}];
-}
-
-- (void)saveFavoriteFoodFinished:(NSMutableArray *)responseArray {
-    upsyncsCompleted++;
-    [self uploadDatabaseFinished];
-}
-
-- (void)saveFavoriteFoodFailed:(NSString *)failedMessage {
-    upsyncsFailed++;
-    [self uploadDatabaseFailed];
-}
-
-- (void)saveFavoriteMealFinished:(NSMutableArray *)responseArray {
-    FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
-    if (![db open]) {
-        
-    }
-    
-    [db beginTransaction];
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        NSString *queryString = [NSString stringWithFormat:@"UPDATE Favorite_Meal "
-                                 " SET Favorite_MealID = %i WHERE Favorite_MealID = %i ",
-                                 [[dict valueForKey:@"MealID"] intValue],
-                                 [[dict valueForKey:@"goMealID"] intValue]
-                                 ];
-        
-        [db executeUpdate:queryString];
-    }
-    
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
-        NSString *queryString = [NSString stringWithFormat:@"UPDATE Favorite_Meal_Items "
-                                 " SET Favorite_Meal_ID = %i WHERE Favorite_Meal_ID = %i ",
-                                 [[dict valueForKey:@"MealID"] intValue],
-                                 [[dict valueForKey:@"goMealID"] intValue]
-                                 ];
-        
-        [db executeUpdate:queryString];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.30 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
-                       {
-                           [self saveFavoriteMealItem:[[dict valueForKey:@"MealID"] intValue]];
-                       });
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-    upsyncsCompleted++;
-    [self uploadDatabaseFinished];
-}
-
-- (void)saveFavoriteMealFailed:(NSString *)failedMessage {
-    upsyncsFailed++;
-    [self uploadDatabaseFailed];
-}
-
-- (void)saveFavoriteMealItemFinished:(NSMutableArray *)responseArray {
-    
-}
-
-- (void)saveFavoriteMealItemFailed:(NSString *)failedMessage {
-    DMLog(@"saveFavoriteMealItemFailed, value of response is %@", failedMessage);
-}
-
 #pragma mark GET DATA METHODS (NEW)
--(void)getDataFrom:(NSString *)syncDate withBlock:(DMGBooleanResponseBlock)block {
+- (void)getDataFrom:(NSString *)syncDate withBlock:(completionBlockWithError)block {
     getDataComplete = NO;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -2079,49 +2016,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark SPLASH IMAGE
-- (void)downloadFileIfUpdatedInBackground {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if ([prefs boolForKey:@"user_loggedin"] == YES) {
-        
-        if (![prefs valueForKey:@"lastmodified_splash"]) {
-            
-            if ([[prefs valueForKey:@"splashimage_filename"] length] == 0) {
-                
-                NSString *tokenToSend = [NSString stringWithString:[prefs valueForKey:@"authkey_dietmastergo"]];
-                DataFetcher *dataFetcher = [[DataFetcher alloc] init];
-                [dataFetcher signInUserWithPassword:tokenToSend completion:^(DMUser *user, NSString *status, NSString *message) {
-                    [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
-                }];
-                               
-                return;
-            }
-            else {
-                [self performSelectorInBackground:@selector(downloadFileIfUpdated) withObject:nil];
-                return;
-            }
-        }
-        else {
-            NSInteger hourSinceDate = [self hoursAfterDate:[prefs valueForKey:@"lastmodified_splash"]];
-            if (hourSinceDate >= (24*3)) {
-                if ([[prefs valueForKey:@"splashimage_filename"] length] == 0) {
-                    
-                    NSString *tokenToSend = [NSString stringWithString:[prefs valueForKey:@"authkey_dietmastergo"]];
-                    DataFetcher *dataFetcher = [[DataFetcher alloc] init];
-                    [dataFetcher signInUserWithPassword:tokenToSend completion:^(DMUser *user, NSString *status, NSString *message) {
-                        [prefs setValue:[NSDate date] forKey:@"lastmodified_splash"];
-                    }];
-                    
-                    return;
-                }
-                else {
-                    [self performSelectorInBackground:@selector(downloadFileIfUpdated) withObject:nil];
-                    return;
-                }
-            }
-        }
-    }
-}
 
 - (void)downloadFileIfUpdated {
     NSString *pngFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];
@@ -2183,7 +2077,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         
         return;
     }
-    
     
     NSDate *lastModifiedLocal = nil;
     if ([fileManager fileExistsAtPath:cachedPath]) {
@@ -2303,8 +2196,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
 }
 
--(void)retrieveMissingFood:(int)foodKey {
-    
+- (void)retrieveMissingFood:(int)foodKey {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     //Send Data needed
@@ -2318,10 +2210,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
     
     SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    soapWebService.wsGetFoodDelegate = self;
-    
-    [soapWebService callWebserviceForFoodNew:infoDict withCompletion:^(id obj)
-     {
+    [soapWebService callWebserviceForFoodNew:infoDict withCompletion:^(id obj) {
          [self getFoodFinished:obj];
      }];
 }
@@ -2423,7 +2312,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     
     [db beginTransaction];
     
-    NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_Today];
+    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_Today];
     
     [db executeUpdate:insertSQL];
     
@@ -2432,7 +2321,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *date_string = [self.dateformatter stringFromDate:[NSDate date]];
     
-    insertSQL = [NSString stringWithFormat: @"INSERT INTO Food_Log_Items "
+    insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
                  "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
                  " VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))",
                  mealID, foodID, mealCode, num_measureID, servingAmount, date_string];
@@ -2632,23 +2521,19 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark LOGIN AUTH DELEGATE METHODS
+
 - (void)getAuthenticateUserFinished:(NSMutableArray *)responseArray {
-    
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:0]];
     
     for (id key in dict) {
     }
     
     if (![[dict valueForKey:@"Status"] isEqualToString:@"False"]) {
-        
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs setValue:[dict valueForKey:@"MobileGraphic"] forKey:@"splashimage_filename"];
-        
-        
         if ([[dict valueForKey:@"MobileGraphic"] length] > 0) {
             [self performSelectorInBackground:@selector(downloadFileIfUpdated) withObject:nil];
         }
-        
     }
 }
 
@@ -2751,7 +2636,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 SaveUPCDataWebService *webservice = [[SaveUPCDataWebService alloc] init];
                 webservice.delegate = self;
-//                [webservice callWebservice:scannerDict];
             });
         }
         resultCounts++;

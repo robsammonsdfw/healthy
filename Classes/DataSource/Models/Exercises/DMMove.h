@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
-/// Returns the Food object as a dictionary with the keys that match database and webservice fields.
+/// Returns the object as a dictionary with the keys that match database and webservice fields.
 - (NSDictionary *)dictionaryRepresentation;
 
 /// Returns a SQL statement string to replace into the database.

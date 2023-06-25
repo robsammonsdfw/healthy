@@ -41,12 +41,17 @@
 
 + (UIViewController *)rootViewController {
     UIViewController *rootViewController = nil;
+    return [self window].rootViewController;
+}
+
+/// Returns the UIWindow, taking into account iOS 13's scene delegate.
++ (UIWindow *)window {
     UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
     if([scene.delegate conformsToProtocol:@protocol(UIWindowSceneDelegate)]){
         UIWindow *window = [(id <UIWindowSceneDelegate>)scene.delegate window];
-        rootViewController = window.rootViewController;
+        return window;
     }
-    return rootViewController;
+    return nil;
 }
 
 #pragma mark - Alert Helpers

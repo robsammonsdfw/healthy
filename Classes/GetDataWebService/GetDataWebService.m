@@ -9,47 +9,46 @@
 #import "GetDataWebService.h"
 #import "NSNull+NullCategoryExtension.h"
 
+@interface GetDataWebService()
+@property (nonatomic, strong) NSDictionary *requestDict;
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSString *requestType;
+@end
+
 @implementation GetDataWebService
 
-@synthesize webData, soapResults, xmlParser;
-@synthesize getDataWSDelegate;
-@synthesize requestDict = _requestDict;
-
 - (void)callWebservice:(NSDictionary *)requestDict {
-    DMLog(@"SOAP CALL ----BEGIN---- GetDataWebService");
-    
     recordResults = FALSE;
     self.requestDict = nil;
     self.requestDict = [[NSDictionary alloc] initWithDictionary:requestDict];
-    
-    requestType = [requestDict valueForKey:@"RequestType"];
+    self.soapResults = [[NSMutableString alloc] init];
+    self.requestType = [requestDict valueForKey:@"RequestType"];
     NSMutableString *requestString = [NSMutableString new];
     
     [requestString appendFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
      "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
      "<soap:Body>"
-     "<%@ xmlns=\"http://webservice.dmwebpro.com/\">", requestType];
+     "<%@ xmlns=\"http://webservice.dmwebpro.com/\">", self.requestType];
     
     NSDictionary *parameterDict = [requestDict valueForKey:@"parameters"];
     for (id key in [parameterDict allKeys]) {
         [requestString appendFormat:@"<%@>%@</%@>", key, [parameterDict valueForKey:key], key];
     }
     
-    [requestString appendFormat:@"</%@>", requestType];
+    [requestString appendFormat:@"</%@>", self.requestType];
     [requestString appendString:@"</soap:Body></soap:Envelope>"];
-    
     [requestString replaceOccurrencesOfString:@"&" withString:@"and" options:NULL range:NSMakeRange(0, requestString.length)];
     
-    NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", requestType];
-    NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", requestType];
-    
-    DMLog(@"%@", requestString);
-    
+    NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", self.requestType];
+    NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", self.requestType];
+    //DMLog(@"%@", requestString);
     NSURL *url = [NSURL URLWithString:urlToWebservice];
-    
-    DMLog(@"%@", url);
-    
-    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
+    //DMLog(@"%@", url);
+    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url
+                                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                                          timeoutInterval:120];
     NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[requestString length]];
     
     [theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -58,56 +57,53 @@
     [theRequest setHTTPMethod:@"POST"];
     [theRequest setHTTPBody: [requestString dataUsingEncoding:NSUTF8StringEncoding]];
     
-    webData = [NSMutableData data];
+    self.webData = [NSMutableData data];
     
+    __weak typeof(self) weakSelf = self;
     [NSURLConnection sendAsynchronousRequest:theRequest queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                               [webData setLength: 0];
-                               [webData appendData:data];
+                                __strong typeof(weakSelf) strongSelf = weakSelf;
+                               [strongSelf.webData setLength: 0];
+                               [strongSelf.webData appendData:data];
                                
                                if (error) {
-                                   if ([getDataWSDelegate respondsToSelector:@selector(getDataFailed:)]) {
-                                       [getDataWSDelegate getDataFailed:[error localizedDescription]];
+                                   if ([strongSelf.getDataWSDelegate respondsToSelector:@selector(getDataFailed:)]) {
+                                       [strongSelf.getDataWSDelegate getDataFailed:[error localizedDescription]];
                                    }
                                }
                                else {
-                                   NSString *theXML = [[NSString alloc] initWithBytes:[webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-                                   
-                                   xmlParser = [[NSXMLParser alloc] initWithData: webData];
-                                   [xmlParser setDelegate: self];
-                                   [xmlParser setShouldResolveExternalEntities: YES];
-                                   [xmlParser parse];
+                                   NSString *theXML = [[NSString alloc] initWithBytes:[strongSelf.webData mutableBytes] length:[strongSelf.webData length] encoding:NSUTF8StringEncoding];
+                                   strongSelf.xmlParser = [[NSXMLParser alloc] initWithData: strongSelf.webData];
+                                   [strongSelf.xmlParser setDelegate: self];
+                                   [strongSelf.xmlParser setShouldResolveExternalEntities: YES];
+                                   [strongSelf.xmlParser parse];
                                }
                            }];
-    
 }
 
--(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName attributes: (NSDictionary *)attributeDict {
-	if( [elementName isEqualToString:[NSString stringWithFormat:@"%@Result",requestType]]) {
-		if(!soapResults) {
-			soapResults = [[NSMutableString alloc] init];
-		}
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName attributes: (NSDictionary *)attributeDict {
+	if( [elementName isEqualToString:[NSString stringWithFormat:@"%@Result", self.requestType]]) {
 		recordResults = TRUE;
 	}
     
     if( [elementName isEqualToString:@"faultstring"]) {
-        if ([getDataWSDelegate respondsToSelector:@selector(getDataFailed:)]) {
-            [getDataWSDelegate getDataFailed:@"error"];
+        if ([self.getDataWSDelegate respondsToSelector:@selector(getDataFailed:)]) {
+            [self.getDataWSDelegate getDataFailed:@"error"];
         }
 	}
 }
 
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-	if( recordResults) {
-		[soapResults appendString: string];
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+	if (recordResults) {
+		[self.soapResults appendString: string];
 	}
 }
 
--(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     recordResults = FALSE;
     
-	if([elementName isEqualToString:[NSString stringWithFormat:@"%@Result",requestType]]) {
-        NSData *data = [[soapResults copy] dataUsingEncoding:NSUTF8StringEncoding];
+	if([elementName isEqualToString:[NSString stringWithFormat:@"%@Result", self.requestType]]) {
+        NSData *data = [[self.soapResults copy] dataUsingEncoding:NSUTF8StringEncoding];
         
         NSError* error;
         NSDictionary *responseDict = [NSJSONSerialization
@@ -115,12 +111,10 @@
                                       options:0
                                       error:&error];
         
-        if ([getDataWSDelegate respondsToSelector:@selector(getDataFinished:)]) {
-			            [getDataWSDelegate getDataFinished:responseDict];
+        if ([self.getDataWSDelegate respondsToSelector:@selector(getDataFinished:)]) {
+            [self.getDataWSDelegate getDataFinished:responseDict];
         }
     }
-      
-    soapResults = nil;
 }
 
 @end

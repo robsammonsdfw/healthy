@@ -7,41 +7,23 @@
 //
 
 #import "SoapWebServiceEngine.h"
+#import "XMLReader.h"
+
+@interface SoapWebServiceEngine()
+/// Optional completion block called when a sync finishes.
+@property (nonatomic, copy) completionBlockWithObject completionBlock;
+
+@property (nonatomic, strong) NSMutableData *webData;
+@property (nonatomic, strong) NSMutableString *soapResults;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSDictionary *requestDict;
+
+@end
 
 @implementation SoapWebServiceEngine
 
-@synthesize webData, soapResults, xmlParser;
-// DOWN SYNC
-@synthesize wsSyncFoodLogDelegate;
-@synthesize wsSyncFavoriteFoodsDelegate;
-@synthesize wsSyncFavoriteMealsDelegate;
-@synthesize wsSyncWeightLogDelegate;
-@synthesize wsSyncFoodLogItemsDelegate;
-@synthesize wsSyncFavoriteMealItemsDelegate;
-@synthesize wsSyncExerciseLogDelegate;
-//HHT new exercise sync
-@synthesize wsSyncExerciseLogNewDelegate;
-@synthesize wsGetFoodDelegate;
-
-// UP SYNC
-@synthesize wsSaveMealDelegate;
-@synthesize wsSaveMealItemDelegate;
-@synthesize wsSaveExerciseLogsDelegate;
-@synthesize wsSaveWeightLogDelegate;
-@synthesize wsSaveFoodDelegate;
-@synthesize wsSaveFavoriteFoodDelegate;
-@synthesize wsSaveFavoriteMealDelegate;
-@synthesize wsSaveFavoriteMealItemDelegate;
-@synthesize wsDeleteMealItemDelegate;
-@synthesize wsDeleteFavoriteFoodDelegate;
-
-@synthesize timeOutTimer;
-
 @synthesize requestDict = _requestDict;
 - (void)callWebserviceForFoodNew:(NSDictionary *)requestDict withCompletion:(void (^)(id))completion {
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
     recordResults = FALSE;
     
     self.requestDict = nil;
@@ -93,16 +75,16 @@
             NSString *strJson=[NSString stringWithFormat:@"%@",dic[@"soap:Envelope"][@"soap:Body"][@"GetFoodNewResponse"][@"GetFoodNewResult"][@"text"]];
             id dicObj = [NSJSONSerialization JSONObjectWithData:[strJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             
-            if (completion) {
-                completion(dicObj);
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(dicObj);
+                }
+            });
         }
     }];
 }
 
--(void)callWebservice:(NSDictionary *)requestDict withCompletion:(void(^)(id obj))completion{
-    DMLog(@"CALL WEB SERVICE ----BEGIN---- SoapWebServiceEngine-withCompletion");
-    
+- (void)callFoodsWebservice:(NSDictionary *)requestDict withCompletion:(void(^)(id obj))completion {
     NSString *soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                               "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                               "<soap:Body>"
@@ -201,25 +183,24 @@
             NSString *theXML = [[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSUTF8StringEncoding];
             NSDictionary *dic= [XMLReader dictionaryForXMLString:theXML error:nil];
             NSString *strJson=[NSString stringWithFormat:@"%@",dic[@"soap:Envelope"][@"soap:Body"][@"SaveFoodNewResponse"][@"SaveFoodNewResult"][@"text"]];
-            id dicObj = [NSJSONSerialization JSONObjectWithData:[strJson dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONWritingPrettyPrinted error:nil];
-            
-            if (completion) {
-                completion(dicObj);
-            }
+            id dicObj = [NSJSONSerialization JSONObjectWithData:[strJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(dicObj);
+                }
+            });
         }
     }];
-    
-    
-    
+}
+
+- (void)callWebservice:(NSDictionary *)requestDict withCompletion:(completionBlockWithObject)completionBlock {
+    self.completionBlock = completionBlock;
+    [self callWebservice:requestDict];
 }
 
 - (void)callWebservice:(NSDictionary *)requestDict {
-    // Kill the timeout timer
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
     recordResults = FALSE;
-    soapResults = [[NSMutableString alloc] init];
+    self.soapResults = [[NSMutableString alloc] init];
 
     self.requestDict = nil;
     self.requestDict = [[NSDictionary alloc] initWithDictionary:requestDict];
@@ -481,9 +462,7 @@
         
         
         
-    } else if ([requestType isEqualToString:@"GetFood"])
-        {
-        //api change hrp GetFoodNew //<<GetFood
+    } else if ([requestType isEqualToString:@"GetFood"]) {
         //api change hrp GetFoodNew //<<GetFood
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -494,19 +473,10 @@
                         "<FoodKey>%i</FoodKey>"
                         "</GetFoodNew>"
                         "</soap:Body>"
-                        "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"], [[requestDict valueForKey:@"FoodKey"] intValue]];
-        //	  soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-        //					  "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
-        //					  "<soap:Body>"
-        //					  "<GetFoodNew xmlns=\"http://webservice.dmwebpro.com/\">"
-        //					  "<UserID>180380</UserID>"
-        //					  "<AuthKey>dmz5ege8</AuthKey>"
-        //					  "<FoodKey>456704</FoodKey>"
-        //					  "</GetFoodNew>"
-        //					  "</soap:Body>"
-        //					  "</soap:Envelope>"];
-        
-        //DMLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
+                        "</soap:Envelope>",[requestDict valueForKey:@"UserID"],
+                        [requestDict valueForKey:@"AuthKey"],
+                        [[requestDict valueForKey:@"FoodKey"] intValue]];
+
     } else if ([requestType isEqualToString:@"SaveWeightLogs"]) {
         
         NSString *jsonString = @"[]";
@@ -528,10 +498,7 @@
                         [requestDict valueForKey:@"UserID"],
                         jsonString,
                         [requestDict valueForKey:@"AuthKey"]];
-        
-        
-        
-        
+
     } else if ([requestType isEqualToString:@"SaveFoodNew"]) {
         
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -603,17 +570,10 @@
                         [NSString stringWithFormat:@"%.2f",[[requestDict valueForKey:@"E"] doubleValue]],
                         [NSString stringWithFormat:@"%.2f",[[requestDict valueForKey:@"ServingSize"] doubleValue]],
                         [NSString stringWithFormat:@"%i",[[requestDict valueForKey:@"MeasureID"] intValue]],
-                        //2.6 EZON
-                        //  [NSString stringWithFormat:@"%.2f",[[requestDict valueForKey:@"Folate"] doubleValue]],
-                        //  [NSString stringWithFormat:@"%.2f",[[requestDict valueForKey:@"Transfat"] doubleValue]],
                         [NSString stringWithFormat:@"%i",[[requestDict valueForKey:@"FoodKey"] intValue]],
                         [requestDict valueForKey:@"AuthKey"], [requestDict valueForKey:@"ScannedFood"]];
         
-        //DMLog(@"requestType: %@",requestType);
-        
-        
-    }
-    if ([requestType isEqualToString:@"SaveFavoriteFood"]) {
+    } else if ([requestType isEqualToString:@"SaveFavoriteFood"]) {
         
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -631,11 +591,7 @@
                         [requestDict valueForKey:@"MeasureID"],
                         [requestDict valueForKey:@"AuthKey"]];
         
-        
-        
-        
-    }
-    if ([requestType isEqualToString:@"SaveFavoriteMeal"]) {
+    } else if ([requestType isEqualToString:@"SaveFavoriteMeal"]) {
         
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -652,9 +608,6 @@
                         [requestDict valueForKey:@"Favorite_MealID"],
                         [requestDict valueForKey:@"Favorite_Meal_Name"],
                         [requestDict valueForKey:@"AuthKey"]];
-        
-        
-        
         
     } else if ([requestType isEqualToString:@"SaveFavoriteMealItem"]) {
         
@@ -680,11 +633,7 @@
                         [requestDict valueForKey:@"Servings"],
                         [requestDict valueForKey:@"AuthKey"]];
         
-        
-        
-        
-    } else if ([requestType isEqualToString:@"GetFoodNew"])
-    {
+    } else if ([requestType isEqualToString:@"GetFoodNew"]) {
         soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                         "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                         "<soap:Body>"
@@ -695,23 +644,18 @@
                         "</GetFoodNew>"
                         "</soap:Body>"
                         "</soap:Envelope>",[requestDict valueForKey:@"UserID"], [requestDict valueForKey:@"AuthKey"], [[requestDict valueForKey:@"FoodKey"] intValue]];
-        //DMLog(@"requestType: %@, soapMessage: %@",requestType, soapMessage);
     }
-    
     
     // Fix error causing string
     soapMessage = [soapMessage stringByReplacingOccurrencesOfString:@"&" withString:@"and"];
-    
-    //DMLog(@"%@", soapMessage);
-    
     NSString *urlToWebservice = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=%@", requestType];
     NSString *tempuriValue = [NSString stringWithFormat:@"http://webservice.dmwebpro.com/%@", requestType];
     
     NSURL *url = [NSURL URLWithString:urlToWebservice];
     
-    //DMLog(@"%@", url);
-    
-    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url
+                                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                                          timeoutInterval:120];
     NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[soapMessage length]];
     
     [theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -720,22 +664,12 @@
     [theRequest setHTTPMethod:@"POST"];
     [theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
     
-    //NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-    
     NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:NO];
     [theConnection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [theConnection start];
     
-    // Start Timer
-    timeOutTimer = [NSTimer scheduledTimerWithTimeInterval:120.0
-                                                    target:self
-                                                  selector:@selector(timeOutWebservice:)
-                                                  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:theConnection, @"connection", nil]
-                                                   repeats:NO];
-    
-    
-    if( theConnection ) {
-        webData = [NSMutableData data];
+    if (theConnection) {
+        self.webData = [NSMutableData data];
     } else {
         DMLog(@"theConnection is NULL");
     }
@@ -744,35 +678,27 @@
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     //DMLog(@"response is : %@", response);
-    [webData setLength: 0];
+    [self.webData setLength: 0];
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    [webData appendData:data];
+    [self.webData appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [self processError:error];
 }
 
--(void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    // Kill the timeout timer
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
-    NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-          
-    xmlParser = [[NSXMLParser alloc] initWithData: webData];
-    [xmlParser setDelegate: self];
-    [xmlParser setShouldResolveExternalEntities: YES];
-    [xmlParser parse];
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    self.xmlParser = [[NSXMLParser alloc] initWithData: self.webData];
+    [self.xmlParser setDelegate: self];
+    [self.xmlParser setShouldResolveExternalEntities: YES];
+    [self.xmlParser parse];
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *) namespaceURI qualifiedName:(NSString *)qName
-   attributes: (NSDictionary *)attributeDict
-{
+   attributes: (NSDictionary *)attributeDict {
     if( [elementName isEqualToString:@"SyncUserResult"] ||
        [elementName isEqualToString:@"SyncWeightLogResult"] ||
        [elementName isEqualToString:@"SyncFoodLogResult"] ||
@@ -798,108 +724,35 @@
         recordResults = TRUE;
     }
     
-    if( [elementName isEqualToString:@"faultstring"])
-    {
-        if ([wsSyncFoodLogDelegate respondsToSelector:@selector(getSyncFoodLogFailed:)]) {
-            [wsSyncFoodLogDelegate getSyncFoodLogFailed:@"error"];
-        }
-        
-        if ([wsSyncFoodLogItemsDelegate respondsToSelector:@selector(getSyncFoodLogItemsFailed:)]) {
-            [wsSyncFoodLogItemsDelegate getSyncFoodLogItemsFailed:@"error"];
-        }
-        
-        if ([wsSyncFavoriteFoodsDelegate respondsToSelector:@selector(getSyncFavoriteFoodsFailed:)]) {
-            [wsSyncFavoriteFoodsDelegate getSyncFavoriteFoodsFailed:@"error"];
-        }
-        
-        if ([wsSyncFavoriteMealsDelegate respondsToSelector:@selector(getSyncFavoriteMealsFailed:)]) {
-            [wsSyncFavoriteMealsDelegate getSyncFavoriteMealsFailed:@"error"];
-        }
-        
-        if ([wsSyncWeightLogDelegate respondsToSelector:@selector(getSyncWeightLogFailed:)]) {
-            [wsSyncWeightLogDelegate getSyncWeightLogFailed:@"error"];
-        }
-        
-        if ([wsSyncFavoriteMealItemsDelegate respondsToSelector:@selector(getSyncFavoriteMealItemsFailed:)]) {
-            [wsSyncFavoriteMealItemsDelegate getSyncFavoriteMealItemsFailed:@"error"];
-        }
-        
-        if ([wsSyncExerciseLogDelegate respondsToSelector:@selector(getSyncExerciseLogFailed:)]) {
-            [wsSyncExerciseLogDelegate getSyncExerciseLogFailed:@"error"];
-        }
-        
-        if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFailed:)]) {
-            [wsSaveMealDelegate saveMealFailed:@"error"];
-        }
-        
-        if ([wsSaveMealItemDelegate respondsToSelector:@selector(saveMealItemFailed:)]) {
-            [wsSaveMealItemDelegate saveMealItemFailed:@"error"];
-        }
-        
-        if ([wsSaveExerciseLogsDelegate respondsToSelector:@selector(saveExerciseLogsFailed:)]) {
-            [wsSaveExerciseLogsDelegate saveExerciseLogsFailed:@"error"];
-        }
-        
-        if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFailed:)]) {
-            [wsGetFoodDelegate getFoodFailed:@"error"];
-        }
-        
-        if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFailed:)]) {
-            [wsSaveWeightLogDelegate saveWeightLogFailed:@"error"];
-        }
-        
-        if ([wsSaveFoodDelegate respondsToSelector:@selector(saveFoodFailed:)]) {
-            [wsSaveFoodDelegate saveFoodFailed:@"error"];
-        }
-        
-        if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFailed:)]) {
-            [wsSaveFavoriteFoodDelegate saveFavoriteFoodFailed:@"error"];
-        }
-        
-        if ([wsSaveFavoriteMealDelegate respondsToSelector:@selector(saveFavoriteMealFailed:)]) {
-            [wsSaveFavoriteMealDelegate saveFavoriteMealFailed:@"error"];
-        }
-        
-        if ([wsSaveFavoriteMealItemDelegate respondsToSelector:@selector(saveFavoriteMealItemFailed:)]) {
-            [wsSaveFavoriteMealItemDelegate saveFavoriteMealItemFailed:@"error"];
-        }
-        
-        if ([wsDeleteMealItemDelegate respondsToSelector:@selector(deleteMealItemFailed:)]) {
-            [wsDeleteMealItemDelegate deleteMealItemFailed:@"error"];
-        }
-        
-        if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFailed:)]) {
-            [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFailed:@"error"];
+    if( [elementName isEqualToString:@"faultstring"]) {
+        NSError *error = [DMGUtilities errorWithMessage:@"Error. Fault during sync." code:444];
+        if (self.completionBlock) {
+            self.completionBlock(nil, error);
         }
     }
 }
 
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-    if( recordResults )
-    {
-        [soapResults appendString: string];
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+    if ( recordResults ) {
+        [self.soapResults appendString: string];
     }
 }
 
-- (void)parser:(NSXMLParser *)parser
- didEndElement:(NSString *)elementName
-  namespaceURI:(NSString *)namespaceURI
- qualifiedName:(NSString *)qName {
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     
     recordResults = FALSE;
     
     // Empty results?
-    if ([soapResults isEqualToString:@"\"Empty\""]) {
-        soapResults = [[NSMutableString alloc] init];
-        [soapResults appendFormat:@"%@",@"[]"];
+    if ([self.soapResults isEqualToString:@"\"Empty\""]) {
+        self.soapResults = [[NSMutableString alloc] init];
+        [self.soapResults appendFormat:@"%@",@"[]"];
     }
     
     // Create a dictionary from the JSON string
     NSArray *responseArray;
     @try {
         NSError *error;
-        NSData *data = [soapResults dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *data = [self.soapResults dataUsingEncoding:NSUTF8StringEncoding];
         if (data) {
             responseArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         }
@@ -914,63 +767,19 @@
         [self processError:error];
         return;
     }
-    
-    if([elementName isEqualToString:@"SyncWeightLogResult"])
-    {
-        
-        
-        if ([wsSyncWeightLogDelegate respondsToSelector:@selector(getSyncWeightLogFinished:)]) {
-            [wsSyncWeightLogDelegate getSyncWeightLogFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"SyncFoodLogResult"])
-    {
-        
-        if ([wsSyncFoodLogDelegate respondsToSelector:@selector(getSyncFoodLogFinished:)]) {
-            [wsSyncFoodLogDelegate getSyncFoodLogFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"GetMealItemsResult"])
-    {
+
+    if([elementName isEqualToString:@"GetMealItemsResult"]) {
         NSString *mealIDString = [NSString stringWithFormat:@"%i",tempID];
-        
         NSMutableArray *fixedArray = [NSMutableArray array];
         for (NSDictionary *dict in responseArray) {
             NSMutableDictionary *newDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
             [newDict setValue:mealIDString forKey:@"MealID"];
             [fixedArray addObject:newDict];
         }
-        
-        if ([wsSyncFoodLogItemsDelegate respondsToSelector:@selector(getSyncFoodLogItemsFinished:)]) {
-            [wsSyncFoodLogItemsDelegate getSyncFoodLogItemsFinished:responseArray];
-        }
-        
+        responseArray = fixedArray;
     }
     
-    if([elementName isEqualToString:@"SyncFavoriteFoodsResult"])
-    {
-        
-        if ([wsSyncFavoriteFoodsDelegate respondsToSelector:@selector(getSyncFavoriteFoodsFinished:)]) {
-            [wsSyncFavoriteFoodsDelegate getSyncFavoriteFoodsFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"SyncFavoriteMealsResult"])
-    {
-        
-        if ([wsSyncFavoriteMealsDelegate respondsToSelector:@selector(getSyncFavoriteMealsFinished:)]) {
-            [wsSyncFavoriteMealsDelegate getSyncFavoriteMealsFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"GetFavoriteMealItemsResult"])
-    {
+    if([elementName isEqualToString:@"GetFavoriteMealItemsResult"]) {
         NSString *mealIDString = [NSString stringWithFormat:@"%i",tempID];
         
         NSMutableArray *fixedArray = [NSMutableArray array];
@@ -980,288 +789,30 @@
             [newDict setValue:mealIDString forKey:@"Favorite_Meal_ID"];
             [fixedArray addObject:newDict];
         }
-        
-        if ([wsSyncFavoriteMealItemsDelegate respondsToSelector:@selector(getSyncFavoriteMealItemsFinished:)]) {
-            [wsSyncFavoriteMealItemsDelegate getSyncFavoriteMealItemsFinished:fixedArray];
-        }
-    }
-        
-    if([elementName isEqualToString:@"SyncExerciseLogResult"])
-    {
-        if ([wsSyncExerciseLogDelegate respondsToSelector:@selector(getSyncExerciseLogFinished:)]) {
-            [wsSyncExerciseLogDelegate getSyncExerciseLogFinished:responseArray];
-        }
+        responseArray = fixedArray;
     }
     
-    //HHT new exercise sync
-    if([elementName isEqualToString:@"SyncExerciseLogNewResult"])
-    {
-        if ([wsSyncExerciseLogNewDelegate respondsToSelector:@selector(getSyncExerciseLogNewFinished:)]) {
-            [wsSyncExerciseLogNewDelegate getSyncExerciseLogNewFinished:responseArray];
-        }
-    }
-    
-    if([elementName isEqualToString:@"SaveMealResult"])
-    {
-        
-        if ([soapResults rangeOfString:@"System.Data.SqlClient.SqlException"].location != NSNotFound) {
+    if([elementName isEqualToString:@"SaveMealResult"]) {
+        if ([self.soapResults rangeOfString:@"System.Data.SqlClient.SqlException"].location != NSNotFound) {
             DMLog(@"System.Data.SqlClient.SqlException!!!!!");
-            if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFailed:)]) {
-                [wsSaveMealDelegate saveMealFailed:[self.requestDict valueForKey:@"MealID"]];
-            }
-        } else {
-            if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFinished:)]) {
-                [wsSaveMealDelegate saveMealFinished:responseArray];
-            }
+            NSError *error = [DMGUtilities errorWithMessage:@"System.Data.SqlClient.SqlException" code:999];
+            [self processError:error];
+            return;
         }
-        
     }
     
-    if([elementName isEqualToString:@"SaveMealItemsResult"])
-    {
-        
-        if ([wsSaveMealItemDelegate respondsToSelector:@selector(saveMealItemFinished:)]) {
-            [wsSaveMealItemDelegate saveMealItemFinished:responseArray];
-        }
-        
+    // Success!
+    if (self.completionBlock) {
+        self.completionBlock(responseArray, nil);
     }
-    
-    if([elementName isEqualToString:@"SaveMealItem_OldResult"])
-    {
-        
-        
-        if ([wsSaveMealItemDelegate respondsToSelector:@selector(saveMealItemFinished:)]) {
-            [wsSaveMealItemDelegate saveMealItemFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"SaveExerciseLogsResult"])
-    {
-        if ([wsSaveExerciseLogsDelegate respondsToSelector:@selector(saveExerciseLogsFinished:)]) {
-            [wsSaveExerciseLogsDelegate saveExerciseLogsFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"GetFoodNewResult"])
-    {
-        //hirpara1
-        //      DMLog(@" hirpara1 GetFoodResult soapResults: %@",soapResults);
-        
-        /* if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFinished:)])
-         {
-         
-         [wsGetFoodDelegate getFoodFinished:responseArray];
-         }*/
-        
-    }
-    
-    if([elementName isEqualToString:@"SaveWeightLogsResult"])
-    {
-        if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFinished:)]) {
-            [wsSaveWeightLogDelegate saveWeightLogFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"SaveFoodNewResult"])    //   SaveFoodResult
-    {
-        //2.6 EZON
-        
-        
-        if ([wsSaveFoodDelegate respondsToSelector:@selector(saveFoodFinished:)]) {
-            [wsSaveFoodDelegate saveFoodFinished:responseArray];
-        }
-        
-    }
-    
-    if ([elementName isEqualToString:@"SaveFavoriteFoodResult"]) {
-        if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFinished:)]) {
-            [wsSaveFavoriteFoodDelegate saveFavoriteFoodFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"SaveFavoriteMealResult"])
-    {
-        
-        if ([wsSaveFavoriteMealDelegate respondsToSelector:@selector(saveFavoriteMealFinished:)]) {
-            [wsSaveFavoriteMealDelegate saveFavoriteMealFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"SaveFavoriteMealItemResult"])
-    {
-        
-        if ([wsSaveFavoriteMealItemDelegate respondsToSelector:@selector(saveFavoriteMealItemFinished:)]) {
-            [wsSaveFavoriteMealItemDelegate saveFavoriteMealItemFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"DeleteMealItemResult"])
-    {
-        
-        if ([wsDeleteMealItemDelegate respondsToSelector:@selector(deleteMealItemFinished:)]) {
-            [wsDeleteMealItemDelegate deleteMealItemFinished:responseArray];
-        }
-        
-    }
-    
-    if([elementName isEqualToString:@"DeleteFavoriteFoodResult"])
-    {
-        if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFinished:)]) {
-            [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFinished:responseArray];
-        }
-        
-    }    
 }
-
-//- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-//    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-//    [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-//}
 
 /// Processes an incoming error.
 - (void)processError:(NSError *)error {
     DM_LOG(@"Error: %@", error.localizedDescription);
     
-    // Kill the timeout timer
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
-    DMLog(@"ERROR with Connection");
-    
-    if ([wsSyncFoodLogDelegate respondsToSelector:@selector(getSyncFoodLogFailed:)]) {
-        [wsSyncFoodLogDelegate getSyncFoodLogFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFoodLogItemsDelegate respondsToSelector:@selector(getSyncFoodLogItemsFailed:)]) {
-        [wsSyncFoodLogItemsDelegate getSyncFoodLogItemsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFavoriteFoodsDelegate respondsToSelector:@selector(getSyncFavoriteFoodsFailed:)]) {
-        [wsSyncFavoriteFoodsDelegate getSyncFavoriteFoodsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFavoriteMealsDelegate respondsToSelector:@selector(getSyncFavoriteMealsFailed:)]) {
-        [wsSyncFavoriteMealsDelegate getSyncFavoriteMealsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncWeightLogDelegate respondsToSelector:@selector(getSyncWeightLogFailed:)]) {
-        [wsSyncWeightLogDelegate getSyncWeightLogFailed:[error localizedDescription]];
-    }
-    if ([wsSyncFavoriteMealItemsDelegate respondsToSelector:@selector(getSyncFavoriteMealItemsFailed:)]) {
-        [wsSyncFavoriteMealItemsDelegate getSyncFavoriteMealItemsFailed:[error localizedDescription]];
-    }
-    if ([wsSyncExerciseLogDelegate respondsToSelector:@selector(getSyncExerciseLogFailed:)]) {
-        [wsSyncExerciseLogDelegate getSyncExerciseLogFailed:[error localizedDescription]];
-    }
-    
-    //HHT new exercise sync
-    if ([wsSyncExerciseLogNewDelegate respondsToSelector:@selector(getSyncExerciseLogNewFailed:)]) {
-        [wsSyncExerciseLogNewDelegate getSyncExerciseLogNewFailed:[error localizedDescription]];
-    }
-    
-    if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFailed:)]) {
-        [wsSaveMealDelegate saveMealFailed:[error localizedDescription]];
-    }
-    if ([wsSaveMealItemDelegate respondsToSelector:@selector(saveMealItemFailed:)]) {
-        [wsSaveMealItemDelegate saveMealItemFailed:[error localizedDescription]];
-    }
-    if ([wsSaveExerciseLogsDelegate respondsToSelector:@selector(saveExerciseLogsFailed:)]) {
-        [wsSaveExerciseLogsDelegate saveExerciseLogsFailed:[error localizedDescription]];
-    }
-    if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFailed:)]) {
-        [wsGetFoodDelegate getFoodFailed:[error localizedDescription]];
-    }
-    if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFailed:)]) {
-        [wsSaveWeightLogDelegate saveWeightLogFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFoodDelegate respondsToSelector:@selector(saveFoodFailed:)]) {
-        [wsSaveFoodDelegate saveFoodFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFailed:)]) {
-        [wsSaveFavoriteFoodDelegate saveFavoriteFoodFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFavoriteMealDelegate respondsToSelector:@selector(saveFavoriteMealFailed:)]) {
-        [wsSaveFavoriteMealDelegate saveFavoriteMealFailed:[error localizedDescription]];
-    }
-    if ([wsSaveFavoriteMealItemDelegate respondsToSelector:@selector(saveFavoriteMealItemFailed:)]) {
-        [wsSaveFavoriteMealItemDelegate saveFavoriteMealItemFailed:[error localizedDescription]];
-    }
-    if ([wsDeleteMealItemDelegate respondsToSelector:@selector(deleteMealItemFailed:)]) {
-        [wsDeleteMealItemDelegate deleteMealItemFailed:[error localizedDescription]];
-    }
-    if ([wsDeleteFavoriteFoodDelegate respondsToSelector:@selector(deleteFavoriteFoodFailed:)]) {
-        [wsDeleteFavoriteFoodDelegate deleteFavoriteFoodFailed:[error localizedDescription]];
-    }
-}
-
-#pragma mark TIMEOUT METHOD
--(void)timeOutWebservice:(NSTimer *)theTimer {
-    
-    NSURLConnection *connection = [[theTimer userInfo] objectForKey:@"connection"];
-    [connection cancel];
-    connection = nil;
-    
-    // Kill the timeout timer
-    [timeOutTimer invalidate];
-    timeOutTimer = nil;
-    
-    webData = nil;
-    
-    if ([wsSyncFoodLogDelegate respondsToSelector:@selector(getSyncFoodLogFailed:)]) {
-        [wsSyncFoodLogDelegate getSyncFoodLogFailed:@"error"];
-    }
-    if ([wsSyncFoodLogItemsDelegate respondsToSelector:@selector(getSyncFoodLogItemsFailed:)]) {
-        [wsSyncFoodLogItemsDelegate getSyncFoodLogItemsFailed:@"error"];
-    }
-    if ([wsSyncFavoriteFoodsDelegate respondsToSelector:@selector(getSyncFavoriteFoodsFailed:)]) {
-        [wsSyncFavoriteFoodsDelegate getSyncFavoriteFoodsFailed:@"error"];
-    }
-    if ([wsSyncFavoriteMealsDelegate respondsToSelector:@selector(getSyncFavoriteMealsFailed:)]) {
-        [wsSyncFavoriteMealsDelegate getSyncFavoriteMealsFailed:@"error"];
-    }
-    if ([wsSyncWeightLogDelegate respondsToSelector:@selector(getSyncWeightLogFailed:)]) {
-        [wsSyncWeightLogDelegate getSyncWeightLogFailed:@"error"];
-    }
-    if ([wsSyncFavoriteMealItemsDelegate respondsToSelector:@selector(getSyncFavoriteMealItemsFailed:)]) {
-        [wsSyncFavoriteMealItemsDelegate getSyncFavoriteMealItemsFailed:@"error"];
-    }
-    if ([wsSyncExerciseLogDelegate respondsToSelector:@selector(getSyncExerciseLogFailed:)]) {
-        [wsSyncExerciseLogDelegate getSyncExerciseLogFailed:@"error"];
-    }
-    if ([wsSaveMealDelegate respondsToSelector:@selector(saveMealFailed:)]) {
-        [wsSaveMealDelegate saveMealFailed:@"error"];
-    }
-    if ([wsSaveMealItemDelegate respondsToSelector:@selector(saveMealItemFailed:)]) {
-        [wsSaveMealItemDelegate saveMealItemFailed:@"error"];
-    }
-    if ([wsSaveExerciseLogsDelegate respondsToSelector:@selector(saveExerciseLogsFailed:)]) {
-        [wsSaveExerciseLogsDelegate saveExerciseLogsFailed:@"error"];
-    }
-    if ([wsGetFoodDelegate respondsToSelector:@selector(getFoodFailed:)]) {
-        [wsGetFoodDelegate getFoodFailed:@"error"];
-    }
-    if ([wsSaveWeightLogDelegate respondsToSelector:@selector(saveWeightLogFailed:)]) {
-        [wsSaveWeightLogDelegate saveWeightLogFailed:@"error"];
-    }
-    if ([wsSaveFoodDelegate respondsToSelector:@selector(saveFoodFailed:)]) {
-        [wsSaveFoodDelegate saveFoodFailed:@"error"];
-    }
-    if ([wsSaveFavoriteFoodDelegate respondsToSelector:@selector(saveFavoriteFoodFailed:)]) {
-        [wsSaveFavoriteFoodDelegate saveFavoriteFoodFailed:@"error"];
-    }
-    if ([wsSaveFavoriteMealDelegate respondsToSelector:@selector(saveFavoriteMealFailed:)]) {
-        [wsSaveFavoriteMealDelegate saveFavoriteMealFailed:@"error"];
-    }
-    if ([wsSaveFavoriteMealItemDelegate respondsToSelector:@selector(saveFavoriteMealItemFailed:)]) {
-        [wsSaveFavoriteMealItemDelegate saveFavoriteMealItemFailed:@"error"];
-    }
-    if ([wsDeleteMealItemDelegate respondsToSelector:@selector(deleteMealItemFailed:)]) {
-        [wsDeleteMealItemDelegate deleteMealItemFailed:@"error"];
+    if (self.completionBlock) {
+        self.completionBlock(nil, error);
     }
 }
 

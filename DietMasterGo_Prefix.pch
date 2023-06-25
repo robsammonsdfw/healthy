@@ -12,6 +12,7 @@
     #import "DMActivityIndicator.h"
     #import "NSObject+Description.h"
     #import "UIViewController+Navigation.h"
+    #import "DMConstants.h"
 
     // Import all Swift files.
     #import "DietMasterGoPlus-Swift.h"

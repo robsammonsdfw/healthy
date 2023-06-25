@@ -44,7 +44,6 @@
         [_dateFormatter setDateFormat:@"yyyy-MM-dd"];
         NSDate *fullDate = [_dateFormatter dateFromString:dateTimeString];
         [_dateFormatter setDateFormat:@"M/dd/yyyy"];
-        NSString *logTimeString = [_dateFormatter stringFromDate:fullDate];
         // Re-attach the time as midnight. TBH, not sure why the system does this. Perhaps to standardize
         // time zones on the server?
         NSString *dateTimeStandardizedString = [NSString stringWithFormat:@"%@ 12:00:00 AM", dateString];

@@ -70,13 +70,22 @@ import FMDB
                 let currentWeight = 0.0
                 var totalCaloriesBurned = (caloriesPerHour / 60) * currentWeight * timeMinutes;
                 
-                // If Apple watch is enabled, add it.
-                // Apple watch 274 for step count. Apple watch (272) calories apple watch.
-                // Note, timeMinutes is actually "calories burned" when a tracking device is used.
+                // If a health tracking device is used, add those values.
+                // Note, timeMinutes is actually "calories burned" or "steps" when
+                // a tracking device is used.
+                
+                // Exercise IDs and their values:
+                // 257 = Override Calories Burned
+                // 259 = Override Steps Taken
+                // 272 = Apple Calories
+                // 274 = Apple Steps
+                // 267 = Fitbit Calories
+                // 268 = Movband Moves, 269 = Movband Steps
+                // 275 = Garmin Calories, 276 = Garmin Steps
                 if (exerciseID == 257 || exerciseID == 267 || exerciseID == 272 || exerciseID == 275) {
-                    totalCaloriesBurnedTracked += timeMinutes // aka calories.
+                    totalCaloriesBurnedTracked += timeMinutes
                     if (combineTrackingCalories) {
-                        totalCaloriesBurned += timeMinutes // aka calories.
+                        totalCaloriesBurned += timeMinutes
                     }
                 } else {
                     totalCaloriesBurned += totalCaloriesBurned
@@ -88,5 +97,4 @@ import FMDB
         }
         return 0
     }
-    
 }

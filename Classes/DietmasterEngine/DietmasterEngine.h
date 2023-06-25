@@ -12,6 +12,7 @@
 #import "SaveUPCDataWebService.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "DMConstants.h"
 
 @class DMMessage;
 @class DMUser;
@@ -20,13 +21,10 @@
 
 extern NSString * const UpdatingMessageNotification;
 
-typedef void (^DMGBooleanResponseBlock)(BOOL success, NSError *error);
-
 @protocol SyncDatabaseDelegate;
 @protocol UPSyncDatabaseDelegate;
 
-@interface DietmasterEngine : NSObject <WSSyncFavoriteFoodsDelegate, WSSyncFavoriteMealsDelegate,
-WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewDelegate, WSSaveMealDelegate, WSSaveMealItemDelegate, WSSaveExerciseLogsDelegate, WSGetFoodDelegate, WSSaveWeightLogDelegate, WSSaveFoodDelegate, WSSaveFavoriteFoodDelegate, WSSaveFavoriteMealDelegate, WSSaveFavoriteMealItemDelegate, SaveUPCDataWSDelegate, GetDataWSDelegate> {
+@interface DietmasterEngine : NSObject {
     
     NSMutableDictionary *exerciseSelectedDict;
     // Dict for Food Selected Detail
@@ -96,7 +94,6 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 // Meal Plan
 @property (nonatomic, strong) NSMutableArray *mealPlanArray;
 @property (nonatomic) BOOL isMealPlanItem;
-@property (nonatomic) BOOL sendAllServerData;
 @property (nonatomic, strong) NSMutableDictionary *mealPlanItemToExchangeDict;
 @property (nonatomic) int indexOfItemToExchange;
 @property (nonatomic) int selectedMealPlanID;
@@ -123,15 +120,13 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 -(void)SyncFood:(NSString *)syncDate;
 
 // New GetData Method
--(void)getDataFrom:(NSString *)syncDate withBlock:(DMGBooleanResponseBlock)block;
+-(void)getDataFrom:(NSString *)syncDate withBlock:(completionBlockWithError)block;
 
 // DOWN SYNC
 -(void)syncFavoriteFoods:(NSString *)dateString;
 -(void)syncFavoriteMeals:(NSString *)dateString;
 -(void)syncFavoriteMealItems:(NSString *)dateString;
 -(void)syncExerciseLog:(NSString *)dateString;
-
-//HHT new exercise sync
 -(void)syncExerciseLogNew:(NSString *)dateString;
 
 // UP SYNC
@@ -145,15 +140,14 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 -(void)saveFavoriteMeal:(NSString *)dateString;
 -(void)saveFavoriteMealItem:(int)mealID;
 
-/// Fetches any updates to a user, such as BMR, Goals, etc.
--(void)syncUserInfo:(id)sender;
+/// Performs a sync of the user's info, such as BMR, Height, Goals, etc.
+- (void)syncUserInfoWithCompletion:(completionBlockWithError)completionBlock;
 /// Updates user details in the database with the user object provided.
 /// This does NOT update the UserID, CompanyID, or name, only things like Height, BMR, Weight, etc.
 - (void)updateUserInfo:(DMUser *)user;
 
 // Splash Image
 - (void)downloadFileIfUpdated;
-- (void)downloadFileIfUpdatedInBackground;
 - (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;
 
 // Food Plan Methods
@@ -167,7 +161,7 @@ WSSyncFavoriteMealItemsDelegate, WSSyncExerciseLogDelegate,WSSyncExerciseLogNewD
 -(NSNumber *)getGramWeightForFoodID:(NSNumber *)foodID andMeasureID:(NSNumber *)measureID;
 
 // Database helper methods
--(NSString *)databasePath;
+- (NSString *)databasePath;
 
 // UPC food
 -(void)saveUPCFood:(int)foodKey;

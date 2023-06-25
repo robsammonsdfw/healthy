@@ -12,7 +12,7 @@
 @interface DietMasterGoViewController : UIViewController
 
 /// Loads the data for the view.
-- (void)loadData;
+- (void)reloadData;
 
 @end
 

@@ -7,6 +7,11 @@
 
 #import "DMMovePickerRow.h"
 
+@interface DMMovePickerRow()
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSNumber *rowId;
+@end
+
 @implementation DMMovePickerRow
 + (instancetype)newWithName:(NSString *)name rowId:(NSNumber *)rowId {
     DMMovePickerRow *object = [[DMMovePickerRow alloc] init];

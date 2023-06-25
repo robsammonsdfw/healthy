@@ -51,6 +51,9 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 /// Returns the RootViewController, taking into account iOS 13's scene delegate.
 + (UIViewController *)rootViewController;
 
+/// Returns the UIWindow, taking into account iOS 13's scene delegate.
++ (UIWindow *)window;
+
 #pragma mark - Alert Helpers
 
 /// Shows an alert error message to the user. Appends Error code and message to end of message.

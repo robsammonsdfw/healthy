@@ -16,6 +16,11 @@
 
 @implementation MyMovesVideoPlayerViewController
 
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
    

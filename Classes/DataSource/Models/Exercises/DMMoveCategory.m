@@ -21,9 +21,9 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _categoryId = dictionary[@"categoryID"];
+        _categoryId = ValidNSNumber(dictionary[@"categoryID"]);
         
-        NSString *name = dictionary[@"categoryName"];
+        NSString *name = ValidString(dictionary[@"categoryName"]);
         name = [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
         name = [name stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
