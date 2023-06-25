@@ -205,6 +205,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     self.modalPresentationStyle = UIModalPresentationPageSheet;
     self.sheetPresentationController.detents = @[[UISheetPresentationControllerDetent largeDetent]];
+    self.modalInPresentation = YES; // Prevent dismissal with swipe.
     [rootController presentViewController:self animated:YES completion:nil];
 }
 
