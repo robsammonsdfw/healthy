@@ -80,7 +80,7 @@ static NSString *CellIdentifier = @"Cell";
                                                           target:self
                                                           action:@selector(showActionSheet:)];
     self.aBarButtonItem.tintColor = [UIColor whiteColor];
-    [self.navigationItem setLeftBarButtonItem:self.aBarButtonItem];
+    [self.navigationItem setRightBarButtonItem:self.aBarButtonItem];
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
@@ -330,12 +330,18 @@ static NSString *CellIdentifier = @"Cell";
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     [dietmasterEngine.groceryArray removeAllObjects];
     
-    for (id obj in responseArray) {
-        NSMutableArray *foods = [obj valueForKey:@"CategoryItems"];
-        foods = [dietmasterEngine getGroceryFoodDetails:foods];
+    NSMutableArray *groceryItems = [NSMutableArray array];
+    for (NSDictionary *dict in responseArray) {
+        NSArray *foods = [dict valueForKey:@"CategoryItems"];
+        if (foods.count) {
+            foods = [dietmasterEngine getGroceryFoodDetails:[foods copy]];
+        }
+        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+        mutableDict[@"CategoryItems"] = [foods copy];
+        [groceryItems addObject:mutableDict];
     }
     
-    [dietmasterEngine.groceryArray addObjectsFromArray:responseArray];
+    [dietmasterEngine.groceryArray addObjectsFromArray:groceryItems];
     
     GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
     [self.navigationController pushViewController:groceryListVC animated:YES];

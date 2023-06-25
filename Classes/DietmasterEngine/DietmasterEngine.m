@@ -2749,38 +2749,36 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return bmrValue;
 }
 
--(NSMutableArray *)getGroceryFoodDetails:(NSMutableArray *) foods {
+- (NSArray *)getGroceryFoodDetails:(NSArray *)foods {
     FMDatabase* db = [FMDatabase databaseWithPath:[self databasePath]];
     if (![db open]) {
-        
+        return @[];
     }
     
-    for(NSMutableDictionary *food in foods) {
-        
+    NSMutableArray *results = [NSMutableArray array];
+    for (NSDictionary *food in foods) {
+        NSMutableDictionary *foodMutable = [NSMutableDictionary dictionaryWithDictionary:food];
         NSString *query = [NSString stringWithFormat: @"SELECT FoodKey, name, FoodURL, RecipeID, CategoryID FROM Food WHERE name = '%@' ORDER BY FoodURL DESC LIMIT 1", [food valueForKey:@"FoodName"]];
         FMResultSet *rs = [db executeQuery:query];
         while ([rs next]) {
             NSString *FoodURL = [rs stringForColumn:@"FoodURL"];
             if (FoodURL != nil && ![FoodURL isEqualToString:@""]) {
-                [food setObject:FoodURL forKey:@"FoodURL"];
+                [foodMutable setObject:FoodURL forKey:@"FoodURL"];
             }
-            
             int recipeID = [rs intForColumn:@"RecipeID"];
             if (recipeID > 0) {
-                [food setObject:[NSNumber numberWithInt:recipeID] forKey:@"RecipeID"];
+                [foodMutable setObject:@(recipeID) forKey:@"RecipeID"];
             }
-            
             int catID = [rs intForColumn:@"CategoryID"];
             if (catID > 0) {
-                [food setObject:[NSNumber numberWithInt:catID] forKey:@"CategoryID"];
+                [foodMutable setObject:@(catID) forKey:@"CategoryID"];
             }
+            [results addObject:[foodMutable copy]];
         }
-        
         [rs close];
-
     }
     
-    return foods;
+    return [results copy];
 }
 
 @end

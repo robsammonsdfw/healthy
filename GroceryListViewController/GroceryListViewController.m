@@ -30,6 +30,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UINib *nib = [UINib nibWithNibName:@"MealPlanDetailsTableViewCell" bundle:nil];
     [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+    tableView.contentInset = UIEdgeInsetsMake(5, 0, 50, 0);
     
     self.title = @"Grocery List";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -122,15 +123,15 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:section]];
+    NSDictionary *categoryDict = [[dietmasterEngine.groceryArray objectAtIndex:section] copy];
     
     UILabel *label = [[UILabel alloc] init];
-    label.frame = CGRectMake(10, 10, 295, 18);
+    label.frame = CGRectMake(10, 0, 295, 25);
     label.textColor = [UIColor blackColor];
     label.font = [UIFont boldSystemFontOfSize:17.0];
     label.text = [NSString stringWithString:[categoryDict valueForKey:@"CategoryName"]];
     label.backgroundColor = [UIColor clearColor];
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 28)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 25)];
     [view addSubview:label];
     
     return view;
@@ -145,31 +146,28 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 30;
+    return 33;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:section]];
-    NSArray *itemsArray = [[NSArray alloc] initWithArray:[categoryDict valueForKey:@"CategoryItems"]];
+    NSDictionary *categoryDict = [[dietmasterEngine.groceryArray objectAtIndex:section] copy];
+    NSArray *items = [categoryDict[@"CategoryItems"] copy];
     
-    return [itemsArray count];
+    return [items count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MealPlanDetailsTableViewCell *cell = (MealPlanDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-    cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver2.png"]];
-    cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"row_Silver_on2.png"]];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    cell.backgroundColor = [UIColor whiteColor];
     
-    //HHT Change (Temp)
-    if (dietmasterEngine.groceryArray.count >0){
-        NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:[indexPath section]]];
-        NSArray *itemsArray = [[NSArray alloc] initWithArray:[categoryDict valueForKey:@"CategoryItems"]];
-        NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[itemsArray objectAtIndex:[indexPath row]]];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    if (dietmasterEngine.groceryArray.count > 0){
+        
+        NSDictionary *categoryDict = [[dietmasterEngine.groceryArray objectAtIndex:indexPath.section] copy];
+        NSArray *items = [categoryDict[@"CategoryItems"] copy];
+        NSDictionary *tempDict = [items[indexPath.row] copy];
         
         NSString *foodName = [tempDict valueForKey:@"FoodName"];
         cell.lblMealName.text = foodName;
@@ -211,9 +209,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
         
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.lblMealName.lineBreakMode = NSLineBreakByTruncatingTail;
-        
-        cell.backgroundColor = [UIColor clearColor];
-        
+                
         UIImage *image = nil;
         if ([selectedRows containsObject:[tempDict valueForKey:@"FoodName"]]) {
             image = [UIImage imageNamed:@"checkmark"];
@@ -237,18 +233,19 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
 - (void)tableView:(UITableView *)myTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSDictionary *categoryDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.groceryArray objectAtIndex:[indexPath section]]];
-    NSArray *itemsArray = [[NSArray alloc] initWithArray:[categoryDict valueForKey:@"CategoryItems"]];
-    NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[itemsArray objectAtIndex:[indexPath row]]];
+    NSDictionary *categoryDict = [[dietmasterEngine.groceryArray objectAtIndex:indexPath.section] copy];
+    NSArray *items = [categoryDict[@"CategoryItems"] copy];
+    NSDictionary *tempDict = [items[indexPath.row] copy];
+    NSString *foodName = [tempDict valueForKey:@"FoodName"];
     
     UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
     UIImage *image = nil;
-    if ([selectedRows containsObject:[tempDict valueForKey:@"FoodName"]]) {
-        [selectedRows removeObject:[tempDict valueForKey:@"FoodName"]];
+    if ([selectedRows containsObject:foodName]) {
+        [selectedRows removeObject:foodName];
         image = [UIImage imageNamed:@"checkmark_off"];
     }
     else {
-        [selectedRows addObject:[tempDict valueForKey:@"FoodName"]];
+        [selectedRows addObject:foodName];
         image = [UIImage imageNamed:@"checkmark"];
     }
     
@@ -261,30 +258,6 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     button.backgroundColor = [UIColor clearColor];
     cell.accessoryView = button;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    if ([selectedRows containsObject:[tempDict valueForKey:@"FoodName"]]) {
-        [selectedRows removeObject:[tempDict valueForKey:@"FoodName"]];
-        [self.tableView beginUpdates];
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        NSDictionary *categoryDict = [dietmasterEngine.groceryArray objectAtIndex:[indexPath section]];
-        NSMutableArray *itemsArray = [categoryDict valueForKey:@"CategoryItems"];
-        
-        NSDictionary *tempItem = [[NSDictionary alloc] initWithDictionary:[itemsArray objectAtIndex:[indexPath row]]];
-        
-        [itemsArray removeObjectAtIndex:[indexPath row]];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        [itemsArray addObject:tempItem];
-        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:
-                                                [NSIndexPath indexPathForRow:([itemsArray count]-1) inSection:[indexPath section]]]
-                              withRowAnimation:UITableViewRowAnimationFade];
-        
-        [selectedRows addObject:[tempDict valueForKey:@"FoodName"]];
-        [self.tableView endUpdates];
-        [self.tableView reloadData];
-    }
-    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -296,12 +269,15 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
         [myTableView beginUpdates];
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        NSDictionary *categoryDict = [dietmasterEngine.groceryArray objectAtIndex:[indexPath section]];
-        NSMutableArray *itemsArray = [categoryDict valueForKey:@"CategoryItems"];
-        NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[itemsArray objectAtIndex:[indexPath row]]];
-        
-        [itemsArray removeObjectAtIndex:[indexPath row]];
-        [selectedRows removeObject:[tempDict valueForKey:@"FoodName"]];
+        NSMutableDictionary *categoryDict = [dietmasterEngine.groceryArray objectAtIndex:indexPath.section];
+        NSMutableArray *items = [categoryDict[@"CategoryItems"] mutableCopy];
+        NSDictionary *tempDict = items[indexPath.row];
+
+        [items removeObjectAtIndex:[indexPath row]];
+        categoryDict[@"CategoryItems"] = items;
+        if ([selectedRows containsObject:[tempDict valueForKey:@"FoodName"]]) {
+            [selectedRows removeObject:[tempDict valueForKey:@"FoodName"]];
+        }
         
         [myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
@@ -311,7 +287,6 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    //HHT change to remove BUG
     return NO;
 }
 
