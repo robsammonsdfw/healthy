@@ -18,7 +18,7 @@
 
 @implementation ManageFoods
 
-@synthesize mainDelegate, scrollView, intFoodID, intCategoryID, strCategoryName, intMeasureID, strMeasureName;
+@synthesize scrollView, intFoodID, intCategoryID, strCategoryName, intMeasureID, strMeasureName;
 @synthesize selectedFoodDict;
 @synthesize scannerDict, scanned_UPCA, scanned_factualID, scannerButton;
 
@@ -29,14 +29,22 @@ CGPoint svos;
 
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(barcodeWasScanned:)
+                                                     name:@"BarCodeScanned"
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(foodWasSavedToCloud:)
+                                                     name:@"FoodWasSavedToCloud" object:nil];
+    }
     return self;
 }
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
-    mainDelegate = (AppDelegate*)[[UIApplication sharedApplication]delegate];
-    
+        
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
     CGRect scrollViewFrame = scrollView.frame;
     self.view.frame = CGRectMake(0, applicationFrame.origin.y+64, self.view.frame.size.width, applicationFrame.size.height);
@@ -54,21 +62,10 @@ CGPoint svos;
     }
     
     reloadData = YES;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(barcodeWasScanned:)
-                                                 name:@"BarCodeScanned"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(foodWasSavedToCloud:)
-                                                 name:@"FoodWasSavedToCloud" object:nil];
-    
+        
     scannerDict = nil;
-    scanned_UPCA = nil;
-    scanned_UPCA = [[NSString alloc] initWithString:@"empty"];
-    scanned_factualID = nil;
-    scanned_factualID = [[NSString alloc] initWithString:@"empty"];
+    scanned_UPCA = @"empty";
+    scanned_factualID = @"empty";
     
     scannerButton.layer.cornerRadius = 22.0;
     scannerButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -93,7 +90,7 @@ CGPoint svos;
     
     isSaved = YES;
     _savedFoodID = 0;
-    _saveToLog = NO;
+    self.saveToLog = NO;
     
     [self.navigationController.navigationBar setTranslucent:NO];
 }
@@ -520,18 +517,15 @@ CGPoint svos;
     [DMActivityIndicator hideActivityIndicator];
 }
 
--(void) recordFood:(id) sender {
-    for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++)
-    {
+- (void)recordFood:(id) sender {
+    for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++) {
         UITextField *textField = (UITextField*)[self.view viewWithTag:i];
-        
         if ([textField isFirstResponder]) {
             [textField resignFirstResponder];
         }
     }
     
     if (([txtfieldFoodName.text length] > 0 || [txtfieldCalories.text length] > 0 || [txtfieldCarbs.text length] > 0 || [txtfieldProtein.text length] > 0 || [txtfieldTotalFat.text length] > 0 || [intMeasureID intValue] > 0) && [intCategoryID intValue] == 0) {
-        
         [DMGUtilities showAlertWithTitle:@"Error" message:@"Category is Required. Please try again." inViewController:nil];
         return;
     }
@@ -544,7 +538,6 @@ CGPoint svos;
     }
     else {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        
         FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
         if (![db open]) {
             
@@ -611,10 +604,10 @@ CGPoint svos;
         NSDate *currentDate = [NSDate date];
         NSString *LastUpdated = [formatter stringFromDate:currentDate];
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        int userID = [[prefs valueForKey:@"userid_dietmastergo"] intValue];
-        int companyID = [[prefs valueForKey:@"companyid_dietmastergo"] intValue];
-        
+        DMAuthManager *authManager = [DMAuthManager sharedInstance];
+        DMUser *currentUser = [authManager loggedInUser];
+        int userID = currentUser.userId.intValue;
+        int companyID = currentUser.companyId.intValue;
         
         NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food"
          "(ScannedFood, FoodKey, "
@@ -658,7 +651,6 @@ CGPoint svos;
           "'%@' , '%@') ",
           ScannedFoodis,
           minFoodID,
-         
           -100,
           [intCategoryID intValue],
          
@@ -723,9 +715,10 @@ CGPoint svos;
         
         _savedFoodID = minFoodID;
         
+        // Save to log AND cloud.
         [dietmasterEngine saveFood:minFoodID];
         
-        if (_saveToLog) {
+        if (self.saveToLog) {
             [DMActivityIndicator showActivityIndicator];
         }
         else {
@@ -872,7 +865,7 @@ CGPoint svos;
         
         [dietmasterEngine saveFood:minFoodID];
         
-        if (_saveToLog) {
+        if (self.saveToLog) {
             [DMActivityIndicator showActivityIndicator];
         }
         else {
@@ -994,55 +987,13 @@ CGPoint svos;
 -(void)nutritionixAPISuccess:(NSMutableDictionary *)dict {
     DMLog(@"%@",dict);
     
-    scannerDict = nil;
     scannerDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
-    
-    //save found dict start
-    NSDictionary *scannerDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                 dict, @"scannerDict",
-                                 @"SAVE", @"action",
-                                 nil];
-    SaveUPCDataWebService *webservice = [[SaveUPCDataWebService alloc] init];
-    webservice.delegate = self;
-    
-    //save found dict end
-    
-    scanned_factualID = nil;
     scanned_factualID = [[NSString alloc] initWithString:[dict valueForKey:@"nix_item_id"]];
-    
-    //OLD
-    
-    //    NSString *servingSizeFull = [dict valueForKey:@"serving_size"];
-    //    NSArray *servingSizeArray = [servingSizeFull componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    //    NSString *servingMeasure = nil;
-    //
-    //    if ([servingSizeArray count] > 0) {
-    //        NSString *serving_size = [servingSizeArray objectAtIndex:0];
-    //        if (serving_size != nil && ![serving_size isEqualToString:@""]) {
-    //            txtfieldServingSize.text = [NSString stringWithFormat:@"%.2f",[serving_size doubleValue]];
-    //        }
-    //        else {
-    //            txtfieldServingSize.text = [NSString stringWithFormat:@"%i",1];
-    //        }
-    //        if ([servingSizeArray count] > 1) {
-    //            servingMeasure = [servingSizeArray objectAtIndex:1];
-    //        }
-    //    }
-    //    else {
-    //        txtfieldServingSize.text = [NSString stringWithFormat:@"%i",1];
-    //    }
-    
-    //NEW
-    //NSString *servingMeasure = nil;
     
     NSString *serving_size = [dict valueForKey:@"serving_qty"];
     txtfieldServingSize.text = [NSString stringWithFormat:@"%.2f",[serving_size doubleValue]];
-    
-    //NSDictionary *dictTemp = [self findMeasureId:@"slice"];
     NSDictionary *dictTemp = [self findMeasureId:[dict valueForKey:@"serving_unit"]];
-    
-    DMLog(@"dictTemp for Query:: %@",dictTemp);
-    
+        
     if ([dictTemp count] == 0) {
         intMeasureID = [NSNumber numberWithInt:3];
         self.strMeasureName = @"each";
@@ -1053,7 +1004,6 @@ CGPoint svos;
         dietmasterEngine.selectedMeasureID = intMeasureID;
     }
     else {
-        DMLog(@"dictTemp after reault :: %@",dictTemp);
         NSString *measureValue = [dictTemp valueForKey:@"MeasureID"];
         intMeasureID = [NSNumber numberWithInt:[measureValue intValue]];
         self.strMeasureName = [dictTemp valueForKey:@"Description"];
@@ -1117,19 +1067,14 @@ CGPoint svos;
     [DMGUtilities showAlertWithTitle:@"Success" message:@"Nutritional information found! Please confirm values then select Category." inViewController:nil];
 
     ScannedFoodis=YES;
-    
 }
 
--(NSDictionary *)findMeasureId:(NSString *)serving_unit {
+- (NSDictionary *)findMeasureId:(NSString *)serving_unit {
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
-    
-    // First Query
     
     NSString *query = [NSString stringWithFormat:@"SELECT MeasureID,Description FROM Measure WHERE Description = '%@'", serving_unit];
     
@@ -1137,7 +1082,6 @@ CGPoint svos;
     FMResultSet *rs = [db executeQuery:query];
     
     NSDictionary *dict = [[NSDictionary alloc] init];
-    
     while ([rs next]) {
         dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                 [rs stringForColumn:@"Description"], @"Description",
@@ -1146,15 +1090,6 @@ CGPoint svos;
     }
     
     return dict;
-}
-
-#pragma mark SAVE UPC DATA DELEGATES
--(void)saveUPCDataWSFinished:(NSMutableDictionary *)responseDict {
-    
-}
-
--(void)saveUPCDataWSFailed:(NSString *)failedMessage {
-    DMLog(@"saveUPCDataWSFailed");
 }
 
 #pragma mark ACTIONSHEET METHODS
@@ -1198,11 +1133,11 @@ CGPoint svos;
                 [self alertServingSizeInvalid];
                 return;
             }
-            self->_saveToLog = NO;
+            self.saveToLog = NO;
             [self updateFood:nil];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:saveToLogName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            self->_saveToLog = YES;
+            self.saveToLog = YES;
             [self updateFood:nil];
         }]];
     }
@@ -1215,11 +1150,11 @@ CGPoint svos;
                 [self alertServingSizeInvalid];
                 return;
             }
-            self->_saveToLog = NO;
+            self.saveToLog = NO;
             [self recordFood:nil];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:saveToLogName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            self->_saveToLog = YES;
+            self.saveToLog = YES;
             [self recordFood:nil];
         }]];
     }
@@ -1285,7 +1220,7 @@ CGPoint svos;
 #pragma mark Save To Log Methods
 -(void)foodWasSavedToCloud:(NSNotification *)notification {
     [DMActivityIndicator hideActivityIndicator];
-    if (_saveToLog) {
+    if (self.saveToLog) {
         BOOL success = [[[notification userInfo] valueForKey:@"success"] boolValue];
         NSNumber *foodID = [[notification userInfo] valueForKey:@"FoodID"];
         

@@ -1,12 +1,11 @@
 //
-//  MyMovesWebServices.h
-//  MyMoves
+//  MyMovesDataProvider.h
 //
-//  Created by Samson  on 29/01/19.
+//  Created by Henry T. Kirk  on 6/26/2023.
 //
 
 #import <Foundation/Foundation.h>
-#import "DMMovePickerRow.h"
+#import "DMConstants.h"
 @class DMMove;
 @class DMMoveCategory;
 @class DMMoveTag;
@@ -16,19 +15,10 @@
 @class DMMoveSet;
 @class DMMoveRoutine;
 
-@protocol WSGetUserWorkoutPlansDelegate <NSObject>
-- (void)getUserWorkoutPlansFinished:(NSDictionary *)responseArray;
-- (void)getUserWorkoutPlansFailed:(NSError *)error;
-@end
+/// Data provider for MyMoves.
+@interface MyMovesDataProvider : NSObject
 
-@interface MyMovesWebServices : NSObject <NSURLConnectionDelegate, NSXMLParserDelegate, NSURLSessionDelegate> {
-    BOOL recordResults;
-    // Vars to Hold Data for Session
-    int tempID;
-    NSString * tempStr;
-}
-
-@property (nonatomic, weak) id<WSGetUserWorkoutPlansDelegate> delegate;
+#pragma mark - Local Data
 
 /// Loads a list of the categories from the database. Also called "Bodyparts".
 - (NSArray<DMMoveCategory *> *)loadListOfBodyPart;
@@ -85,32 +75,22 @@
 /// Returns the routineId that was saved.
 - (NSNumber *)addMoveRoutine:(DMMoveRoutine *)moveRoutine toMoveDay:(DMMoveDay *)moveDay;
 
-/// Fetches from the server all of the user's plan data.
-- (void)fetchAllUserPlanData;
 /// Removes all data that is present in the local database.
 - (void)clearTableData;
 /// Deletes all rows from the tables where status = "Deleted".
 /// Should be called after a successful upsync.
 - (void)removeRowsWithDeletedStatus;
 
+#pragma mark - Fetch
+
+/// Fetches from the server all of the user's plan data.
+- (void)fetchAllUserPlanDataWithCompletionBlock:(completionBlockWithError)completionBlock;
+
 /// Fetches MyMoves data from the server and saves it locally.
 /// This includes Exercises (Moves) and Tags / Categories.
-- (void)getMyMovesData;
-
-#pragma mark - TO BE VERIFIED
-
--(void)addExerciseToDb:(NSDictionary *)dict workoutDate:(NSDate*)date userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutDateID:(int)WorkoutDateID;
--(void)addExerciseToDb:(NSDictionary *)dict workoutDate:(NSDate*)date userId:(int)userID categoryName:(NSString*)name CategoryID:(int)categoryID tagsName:(NSString*)tag TagsId:(int)tagsId templateName:(NSString*)templateNameStr WorkoutTempId:(int)workoutTempId WorkoutDateID:(int)WorkoutDateID;
+- (void)getMyMovesDataWithCompletionBlock:(completionBlockWithError)completionBlock;
 
 /// Deletes an entry in the User Workout Plan database for the ID provided.
 - (void)deletePlanWorkoutFromDbWithUserDateID:(NSNumber *)userDateID;
-
-/// This function is for doing something else.
-- (void)addExerciseSet:(DMMoveSet *)moveSet toRoutine:(DMMoveRoutine *)routine;
-- (void)updateWorkoutToDb:(NSString *)exerciseDate;
-- (void)updateSetsForExercise:(int)WorkoutTemplateId Dict:(NSDictionary *)dict;
-- (void)deleteSetsFromDB:(int)WorkoutMethodValueID;
-
-- (void)serverUserPlans:(NSDictionary *)planListDict;
 
 @end

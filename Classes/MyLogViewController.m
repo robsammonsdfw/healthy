@@ -30,13 +30,15 @@
 @property (nonatomic) double calories;
 @end
 
+static NSString *CellIdentifier = @"MyLogTableViewCell";
+
 @implementation MyLogViewController {
     double currentWeight;
     double currentHeight;
     //HHT apple watch
 }
 
-@synthesize primaryKey, date_currentDate, tblSimpleTable,num_BMR,int_mealID,date_currentDate1;
+@synthesize primaryKey, date_currentDate, num_BMR, int_mealID, date_currentDate1;
 
 #pragma mark VIEW LIFECYCLE
 
@@ -57,7 +59,7 @@
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"My Log";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-    
+        
     lbl_dateHdr.textColor = AccentFontColor
     
     lbl_CaloriesRecommended.textColor = PrimaryFontColor;
@@ -80,18 +82,17 @@
     
     _imgbottom.backgroundColor=PrimaryColor
     _imgbottomline.backgroundColor=RGB(255, 255, 255, 0.5);
-    self.tbl.backgroundColor = [UIColor whiteColor];
-    self.tblSimpleTable.backgroundColor = [UIColor whiteColor];
-    self.tblSimpleTable.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
-    
-    _tbl.hidden=true;
+    self.tableView.backgroundColor = UIColorFromHex(0xF3F3F3);
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+    UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+
     dateToolBar.backgroundColor=AccentColor;
     dateToolBar.barTintColor = AccentColor;
     
     self.view.backgroundColor = PrimaryColor;
-    
+
     selectSectionArray = [[NSMutableArray alloc]init];
-    Arrcatgory=[[NSMutableArray alloc]init];
     
     //HHT apple watch
     _arrData = [NSMutableArray new];
@@ -139,17 +140,17 @@
     }
     
     [self.navigationController.navigationBar setTranslucent:NO];
-    tblSimpleTable.separatorColor = [UIColor lightGrayColor];
+    self.tableView.separatorColor = [UIColor lightGrayColor];
     
     UISwipeGestureRecognizer *swipe_Recognizer_Next = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe_Action:)];
     [swipe_Recognizer_Next setDelegate:self];
     [swipe_Recognizer_Next setDirection:UISwipeGestureRecognizerDirectionRight];
-    [tblSimpleTable addGestureRecognizer:swipe_Recognizer_Next];
+    [self.tableView addGestureRecognizer:swipe_Recognizer_Next];
     
     UISwipeGestureRecognizer *swipe_Recognizer_Previous = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe_Action:)];
     [swipe_Recognizer_Previous setDelegate:self];
     [swipe_Recognizer_Previous setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [tblSimpleTable addGestureRecognizer:swipe_Recognizer_Previous];
+    [self.tableView addGestureRecognizer:swipe_Recognizer_Previous];
     
     UISwipeGestureRecognizer *swipe_Recognizer_Next2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe_Action:)];
     [swipe_Recognizer_Next2 setDelegate:self];
@@ -160,18 +161,6 @@
     [swipe_Recognizer_Previous2 setDelegate:self];
     [swipe_Recognizer_Previous2 setDirection:UISwipeGestureRecognizerDirectionLeft];
     [dateToolBar addGestureRecognizer:swipe_Recognizer_Previous2];
-
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"XYZ"]) {
-        imgSwipeHint = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-        [imgSwipeHint setImage:[UIImage imageNamed:@"swipe_hint"]];
-        [imgSwipeHint setUserInteractionEnabled:YES];
-        [self.view addSubview:imgSwipeHint];
-        
-        UITapGestureRecognizer *tapImg = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(Tap_Action:)];
-        [tapImg setDelegate:self];
-        [imgSwipeHint addGestureRecognizer:tapImg];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"XYZ"];
-    }
     
     UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
 
@@ -183,15 +172,11 @@
     [self.logDaySummary.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
     [self.logDaySummary.bottomAnchor constraintEqualToAnchor:layoutGuide.bottomAnchor constant:0].active = YES;
     
-    self.tblSimpleTable.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.tblSimpleTable.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
-    [self.tblSimpleTable.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
-    [self.tblSimpleTable.topAnchor constraintEqualToAnchor:dateToolBar.bottomAnchor constant:0].active = YES;
-    [self.tblSimpleTable.bottomAnchor constraintEqualToAnchor:self.logDaySummary.topAnchor constant:0].active = YES;
-}
-
-- (IBAction)Tap_Action:(UITapGestureRecognizer *)sender {
-    [imgSwipeHint removeFromSuperview];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.tableView.topAnchor constraintEqualToAnchor:dateToolBar.bottomAnchor constant:0].active = YES;
+    [self.tableView.bottomAnchor constraintEqualToAnchor:self.logDaySummary.topAnchor constant:0].active = YES;
 }
 
 - (IBAction)swipe_Action:(UISwipeGestureRecognizer *)sender {
@@ -266,19 +251,7 @@
         return [foodResults count] + 1;
     }
     else {
-        if (foodResults.count==0) {
-            _tbl.hidden=true;
-        }
-        else {
-            _tbl.hidden=YES;
-        }
-        
-        if (tableView==_tbl) {
-            return [Arrcatgory count];
-        }
-        else {
-            return [foodResults count];
-        }
+        return [foodResults count];
     }
 }
 
@@ -287,215 +260,189 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
-    if (tableView==_tbl) {
+    NSString *sectionTitle;
+    NSString *calorieCount;
+    NSString *remainingCalorieCount;
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    double calRecommended = [dietmasterEngine getBMR];
+
+    BOOL okForFavorite = NO;
+    int selectedMealID = 0;
         
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 22)];
-        headerView.backgroundColor = [UIColor whiteColor];
-        UILabel *label            = [[UILabel alloc] initWithFrame:CGRectMake(40,9, tableView.bounds.size.width, 22)];
-        label.textColor            = [UIColor grayColor];
-        label.backgroundColor    = [UIColor clearColor];
-        [label setFont:[UIFont systemFontOfSize:16]];
-        [headerView addSubview:label];
+    if ([exerciseResults count] > 0 && ((section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0))) {
+        int totalFoodCal = breakfastCalories + snack1Calories + snack2Calories + snack3Calories + dinnerCalories + lunchCalories;
         
-        UIButton *buttonPls= [UIButton buttonWithType:UIButtonTypeCustom];
-        [buttonPls addTarget:self
-                      action:@selector(logFoodOrExercise:)
-            forControlEvents:UIControlEventTouchUpInside];
-        buttonPls.tag=section;
-        [buttonPls setBackgroundImage:[UIImage imageNamed:@"plusfinal"] forState:UIControlStateNormal];
-        buttonPls.frame = CGRectMake(10,7,22,22);
-        CGRect sepFrame = CGRectMake(0,39, 450, 1);
-        UIView* seperatorView = [[UIView alloc] initWithFrame:sepFrame];
-        seperatorView.backgroundColor = [UIColor colorWithWhite:224.0/255.0 alpha:1.0];
-        
-        [headerView addSubview:seperatorView];
-        [headerView addSubview:buttonPls];
-        return headerView;
-        
+        if (!isExerciseData) {
+            sectionTitle = @"Exercise";
+            calorieCount = [NSString stringWithFormat:@"0.0"];
+            remainingCalorieCount=[NSString stringWithFormat:@"%.0f",AppDel.caloriesremaning];
+            if (num_totalCaloriesBurned == 0)
+            {
+                lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[lbl_CaloriesRecommended.text intValue] - totalFoodCal];
+                [[NSUserDefaults standardUserDefaults] setInteger:[lbl_CaloriesRecommended.text intValue] - totalFoodCal forKey:@"remaining"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            else
+            {
+                remainingCalorieCount=[NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned/2];
+                lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
+            }
+        }
+        else {
+            sectionTitle = @"Exercise";
+            calorieCount = [NSString stringWithFormat:@"-%.0f Calories", num_totalCaloriesBurned];
+            remainingCalorieCount=[NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned];
+            lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
+        }
     }
     else {
-        NSString *sectionTitle;
-        NSString *calorieCount;
-        NSString *remainingCalorieCount;
-
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        okForFavorite = YES;
         
-        double calRecommended = [dietmasterEngine getBMR];
-
-        BOOL okForFavorite = NO;
-        int selectedMealID = 0;
+        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:section] objectAtIndex:0]];
         
-        CGRect calorieLabelFrame = CGRectMake(SCREEN_WIDTH - 150, 6, 100, 20);
-        
-        if ([exerciseResults count] > 0 && ((section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0)))
-        {
-            int totalFoodCal = breakfastCalories + snack1Calories + snack2Calories + snack3Calories + dinnerCalories + lunchCalories;
-            DMLog(@"%d",totalFoodCal);
+        if ([dict objectForKey:@"MealCode"]) {
             
-            if (!isExerciseData) {
-                sectionTitle = @"Exercise";
-                calorieCount = [NSString stringWithFormat:@"0.0"];
-                remainingCalorieCount=[NSString stringWithFormat:@"%.0f",AppDel.caloriesremaning];
-                DMLog(@"%@",remainingCalorieCount);
-                DMLog(@"%f",num_totalCaloriesBurned);
-                
-                if (num_totalCaloriesBurned == 0)
-                {
-                    lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[lbl_CaloriesRecommended.text intValue] - totalFoodCal];
-                    [[NSUserDefaults standardUserDefaults] setInteger:[lbl_CaloriesRecommended.text intValue] - totalFoodCal forKey:@"remaining"];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                }
-                else
-                {
-                    remainingCalorieCount=[NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned/2];
-                    lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
-                }
+            selectedMealID = [[dict valueForKey:@"MealCode"] intValue];
+            
+            if(selectedMealID == 0) {
+                sectionTitle = @"Breakfast";
+                calorieCount = [NSString stringWithFormat:@"%i Calories", breakfastCalories];
+            }
+            else if(selectedMealID == 1) {
+                sectionTitle = @"Snack 1";
+                calorieCount = [NSString stringWithFormat:@"%i Calories", snack1Calories];
+            }
+            else if(selectedMealID == 2) {
+                sectionTitle = @"Lunch";
+                calorieCount = [NSString stringWithFormat:@"%i Calories", lunchCalories];
+            }
+            else if(selectedMealID == 3) {
+                sectionTitle = @"Snack 2";
+                calorieCount = [NSString stringWithFormat:@"%i Calories", snack2Calories];
+            }
+            else if(selectedMealID == 4) {
+                sectionTitle = @"Dinner";
+                calorieCount = [NSString stringWithFormat:@"%i Calories", dinnerCalories];
+            }
+            else if(selectedMealID == 5) {
+                sectionTitle = @"Snack 3";
+                calorieCount = [NSString stringWithFormat:@"%i Calories", snack3Calories];
             }
             else {
-                sectionTitle = @"Exercise";
-                //50% exercise
-                calorieCount = [NSString stringWithFormat:@"-%.0f Calories", num_totalCaloriesBurned];
-                remainingCalorieCount=[NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned];
-                lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
-
-                calorieLabelFrame = CGRectMake(200, 6, 100, 20);
+                sectionTitle = @"NONE";
+                calorieCount = @" ";
             }
-        }
-        else
-        {
-            okForFavorite = YES;
             
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:section] objectAtIndex:0]];
-            
-            if ([dict objectForKey:@"MealCode"]) {
-                
-                selectedMealID = [[dict valueForKey:@"MealCode"] intValue];
-                
-                if(selectedMealID == 0) {
-                    sectionTitle = @"Breakfast";
-                    calorieCount = [NSString stringWithFormat:@"%i Calories", breakfastCalories];
-                }
-                else if(selectedMealID == 1) {
-                    sectionTitle = @"Snack 1";
-                    calorieCount = [NSString stringWithFormat:@"%i Calories", snack1Calories];
-                }
-                else if(selectedMealID == 2) {
-                    sectionTitle = @"Lunch";
-                    calorieCount = [NSString stringWithFormat:@"%i Calories", lunchCalories];
-                }
-                else if(selectedMealID == 3) {
-                    sectionTitle = @"Snack 2";
-                    calorieCount = [NSString stringWithFormat:@"%i Calories", snack2Calories];
-                }
-                else if(selectedMealID == 4) {
-                    sectionTitle = @"Dinner";
-                    calorieCount = [NSString stringWithFormat:@"%i Calories", dinnerCalories];
-                }
-                else if(selectedMealID == 5) {
-                    sectionTitle = @"Snack 3";
-                    calorieCount = [NSString stringWithFormat:@"%i Calories", snack3Calories];
-                }
-                else {
-                    sectionTitle = @"NONE";
-                    calorieCount = @" ";
-                }
-                
-            }
-            else {
-                sectionTitle = [NSString stringWithFormat:@"%@",[[[foodResults objectAtIndex:section] objectAtIndex:0] valueForKey:@"Testing1"]];
-                calorieCount = @"0.0";
-            }
         }
-                
-        UIButton *buttonPls= [UIButton buttonWithType:UIButtonTypeCustom];
-        [buttonPls addTarget:self
-                      action:@selector(logFoodOrExercise:)
-            forControlEvents:UIControlEventTouchUpInside];
-        [buttonPls setBackgroundImage:[UIImage imageNamed:@"plusfinal"] forState:UIControlStateNormal];
-        buttonPls.tag = section;
-        buttonPls.frame = CGRectMake(10,7,25,25);
-        
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 20)];
-        headerView.backgroundColor = [UIColor whiteColor];
-        UILabel *label            = [[UILabel alloc] initWithFrame:CGRectMake(40,9, tableView.bounds.size.width, 20)];
-        label.text                = sectionTitle;
-        label.textColor            = [UIColor grayColor];
-        label.backgroundColor    = [UIColor clearColor];
-        [label setFont:[UIFont systemFontOfSize:16]];
-        
-        UILabel *calorieLabel            = [[UILabel alloc] initWithFrame:calorieLabelFrame];
-        calorieLabel.frame=CGRectMake(SCREEN_WIDTH - 190, 7, 100, 25);
-        calorieLabel.text                = calorieCount;
-        calorieLabel.textColor            =[UIColor grayColor];
-        calorieLabel.font                = [UIFont boldSystemFontOfSize:13.0];
-        calorieLabel.backgroundColor    = [UIColor clearColor];
-        calorieLabel.textAlignment = NSTextAlignmentRight;
-        
-        if (okForFavorite) {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [button addTarget:self action:@selector(saveFavoriteMeal:) forControlEvents:UIControlEventTouchUpInside];
-            
-            //HHT to change heart image color run time
-            UIImage *image = [[UIImage imageNamed:@"03-heart.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [button setImage:image forState:UIControlStateNormal];
-            button.tintColor = PrimaryColor
-            button.frame = CGRectMake(SCREEN_WIDTH - 50, 0, 38, 38);
-            button.tag = section;
-            [headerView addSubview:button];
+        else {
+            sectionTitle = [NSString stringWithFormat:@"%@",[[[foodResults objectAtIndex:section] objectAtIndex:0] valueForKey:@"Testing1"]];
+            calorieCount = @"0.0";
         }
-        
-        [headerView addSubview:label];
-        [headerView addSubview:calorieLabel];
-        [headerView addSubview:buttonPls];
-        headerView.backgroundColor=[UIColor whiteColor];
-        
-        return headerView;
     }
+            
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectZero];
+    headerView.backgroundColor = UIColorFromHex(0xF3F3F3);
+
+    UIButton *plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    plusButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [plusButton addTarget:self
+                  action:@selector(logFoodOrExercise:)
+        forControlEvents:UIControlEventTouchUpInside];
+    [plusButton setBackgroundImage:[UIImage imageNamed:@"plusfinal"] forState:UIControlStateNormal];
+    plusButton.tag = section;
+    [headerView addSubview:plusButton];
+
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    titleLabel.text = sectionTitle;
+    titleLabel.textColor = [UIColor blackColor];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    [titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [headerView addSubview:titleLabel];
+
+    UILabel *calorieLabel = [[UILabel alloc] init];
+    calorieLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    calorieLabel.text = calorieCount;
+    calorieLabel.textColor = [UIColor darkGrayColor];
+    calorieLabel.font = [UIFont boldSystemFontOfSize:13.0];
+    calorieLabel.backgroundColor = [UIColor clearColor];
+    calorieLabel.textAlignment = NSTextAlignmentRight;
+    [headerView addSubview:calorieLabel];
+
+    UIButton *favoriteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    favoriteButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [favoriteButton addTarget:self action:@selector(saveFavoriteMeal:) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *image = [[UIImage imageNamed:@"03-heart.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [favoriteButton setImage:image forState:UIControlStateNormal];
+    favoriteButton.tintColor = PrimaryColor
+    favoriteButton.tag = section;
+    favoriteButton.hidden = YES;
+    [headerView addSubview:favoriteButton];
+    if (okForFavorite) {
+        favoriteButton.hidden = NO;
+    }
+    
+    [plusButton.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:12].active = YES;
+    [plusButton.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor constant:0].active = YES;
+    [plusButton.widthAnchor constraintEqualToConstant:25].active = YES;
+    [plusButton.heightAnchor constraintEqualToConstant:25].active = YES;
+
+    [titleLabel.leadingAnchor constraintEqualToAnchor:plusButton.trailingAnchor constant:14].active = YES;
+    [titleLabel.bottomAnchor constraintEqualToAnchor:headerView.bottomAnchor constant:0].active = YES;
+    [titleLabel.topAnchor constraintEqualToAnchor:headerView.topAnchor constant:0].active = YES;
+    [titleLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+
+    [calorieLabel.leadingAnchor constraintGreaterThanOrEqualToAnchor:titleLabel.trailingAnchor constant:10].active = YES;
+    [calorieLabel.topAnchor constraintEqualToAnchor:headerView.topAnchor constant:0].active = YES;
+    [calorieLabel.bottomAnchor constraintEqualToAnchor:headerView.bottomAnchor constant:0].active = YES;
+    [calorieLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+    [calorieLabel.trailingAnchor constraintEqualToAnchor:favoriteButton.leadingAnchor constant:-12].active = YES;
+    
+    [favoriteButton.trailingAnchor constraintLessThanOrEqualToAnchor:headerView.trailingAnchor constant:-12].active = YES;
+    [favoriteButton.widthAnchor constraintEqualToConstant:33].active = YES;
+    [favoriteButton.heightAnchor constraintEqualToConstant:33].active = YES;
+    [favoriteButton.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor constant:0].active = YES;
+
+    return headerView;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView==_tbl) {
-        return 0;
+    NSArray *exerciseResultsArray = [exerciseResults copy];
+    NSArray *foodResultsArray = [foodResults copy];
+
+    if ([exerciseResultsArray count] > 0 && ((section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0))) {
+        if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSDictionary class]]) {
+            if ([exerciseResultsArray objectAtIndex:0][@"Testing1"]) {
+                NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[exerciseResultsArray objectAtIndex:0] objectAtIndex:0]];
+                
+                if ([tmpDICT objectForKey:@"Testing1"])
+                {
+                    return 0;
+                }
+            }
+            else
+                DMLog(@"Does not exist");
+        }
+        else if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSArray class]]) {
+            return 0;
+        }
+        return [exerciseResultsArray count];
     }
     else {
-        NSArray *exerciseResultsArray = [exerciseResults copy];
-        NSArray *foodResultsArray = [foodResults copy];
-
-        if ([exerciseResultsArray count] > 0 && ((section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0))) {
-            if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSDictionary class]]) {
-                if ([exerciseResultsArray objectAtIndex:0][@"Testing1"]) {
-                    NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[exerciseResultsArray objectAtIndex:0] objectAtIndex:0]];
-                    
-                    if ([tmpDICT objectForKey:@"Testing1"])
-                    {
-                        return 0;
-                    }
-                }
-                else
-                    DMLog(@"Does not exist");
-            }
-            else if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSArray class]]) {
-                return 0;
-            }
-            return [exerciseResultsArray count];
+        NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:section] objectAtIndex:0]];
+        
+        if ([tmpDICT objectForKey:@"Testing1"]) {
+            return 0;
         }
-        else {
-            NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:section] objectAtIndex:0]];
-            
-            if ([tmpDICT objectForKey:@"Testing1"]) {
-                return 0;
-            }
-            
-            return [[foodResultsArray objectAtIndex:section] count];
-        }
+        
+        return [[foodResultsArray objectAtIndex:section] count];
     }
 }
 
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *exerciseResultsArray = [exerciseResults copy];
     NSArray *foodResultsArray = [foodResults copy];
-
     if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
         return indexPath;
     }
@@ -505,29 +452,17 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSArray *exerciseResultsArray = [exerciseResults copy];
     NSArray *foodResultsArray = [foodResults copy];
 
-    MyLogTableViewCell *cell = (MyLogTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    MyLogTableViewCell *cell = (MyLogTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-    if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MyLogTableViewCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-        cell.layoutMargins = UIEdgeInsetsZero;
-        cell.preservesSuperviewLayoutMargins = NO;
-    }
-
-    cell.lblFoodName.numberOfLines = 0;
-    cell.lblFoodName.lineBreakMode = NSLineBreakByWordWrapping;
-
-    cell.lblFoodName.textColor = [UIColor whiteColor];
-    cell.lblCalories.textColor = [UIColor whiteColor];
+    
+    NSString *foodNameText = nil;
+    NSString *calorieText = nil;
     
     if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
         if (isExerciseData) {
-            
             NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
             int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
             DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -539,161 +474,125 @@
             double totalCaloriesBurned;
             if (exerciseID == 257 || exerciseID == 267) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+                foodNameText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
             else if (exerciseID == 268) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Moves",totalCaloriesBurned];
+                foodNameText = [NSString stringWithFormat:@"-%.0f Moves",totalCaloriesBurned];
             }
             else if (exerciseID == 269 || exerciseID == 276) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text = [NSString stringWithFormat:@"%.0f Steps",totalCaloriesBurned];
+                calorieText = [NSString stringWithFormat:@"%.0f Steps",totalCaloriesBurned];
             }
             else if (exerciseID == 259) {
                 totalCaloriesBurned = 0.0;
-                cell.lblCalories.text = [NSString stringWithFormat:@"%i Steps", minutesExercised];
+                calorieText = [NSString stringWithFormat:@"%i Steps", minutesExercised];
             }
             else if (exerciseID == 272 || exerciseID == 275) {
                 totalCaloriesBurned = minutesExercised;
-                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+                calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
             else if (exerciseID == 274) {
                 totalCaloriesBurned = 0.0;
-                cell.lblCalories.text = [NSString stringWithFormat:@"%i Steps",minutesExercised];
+                calorieText = [NSString stringWithFormat:@"%i Steps",minutesExercised];
             }
             else {
                 totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
-                cell.lblCalories.text = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+                calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
-            cell.lblFoodName.text = [dict valueForKey:@"ActivityName"];
-            cell.lblFoodName.backgroundColor = [UIColor clearColor];
-            cell.lblFoodName.textColor = [UIColor whiteColor];
-            cell.lblCalories.backgroundColor = [UIColor clearColor];
-            cell.lblCalories.textColor = [UIColor whiteColor];
-            
-            cell.lblFoodName.font = [UIFont systemFontOfSize:12.0];
-            cell.lblCalories.font = [UIFont boldSystemFontOfSize:12.0];
-            cell.lblFoodName.adjustsFontSizeToFitWidth = NO;
+            foodNameText = [dict valueForKey:@"ActivityName"];
         }
         else {
-            cell.lblFoodName.text = nil;
-            cell.lblCalories.text = nil;
+            foodNameText = nil;
+            calorieText = nil;
         }
     }
     else {
-        NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:indexPath.section] objectAtIndex:0]];
+        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+        NSString *nameString = [dict valueForKey:@"Name"];
+        NSRange r = [nameString rangeOfString:nameString];
+        foodNameText = nameString;
         
-        if ([tmpDICT objectForKey:@"Testing1"]) {
-            return cell;
-        }
-        else {
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
-            NSString *nameString = [dict valueForKey:@"Name"];
-            if ([nameString length] > 25) {
-                NSRange stringRange = {0, MIN([nameString length], 25)};
-                stringRange = [nameString rangeOfComposedCharacterSequencesForRange:stringRange];
-                NSString *shortNameString = [nameString substringWithRange:stringRange];
-                nameString = [NSString stringWithFormat:@"%@...",shortNameString];
+        NSNumber *foodCategory = [dict valueForKey:@"CategoryID"];
+        if ([foodCategory intValue] == 66) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            NSString *hostname = [prefs stringForKey:@"HostName"];
+            NSNumber *recipeID = [dict valueForKey:@"RecipeID"];
+            if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
+                cell.lblFoodName.delegate = self;
+                NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
+                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:url] withRange:r];
             }
             
-            NSRange r = [nameString rangeOfString:nameString];
-            cell.lblFoodName.text = nameString;
-            
-            NSNumber *foodCategory = [dict valueForKey:@"CategoryID"];
-            
-            if ([foodCategory intValue] == 66) {
-                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                NSString *hostname = [prefs stringForKey:@"HostName"];
-                NSNumber *recipeID = [dict valueForKey:@"RecipeID"];
-                
-                if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
-                    cell.userInteractionEnabled = YES;
-                    cell.lblFoodName.delegate = self;
-                    NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-                    [cell.lblFoodName addLinkToURL:[NSURL URLWithString:url] withRange:r];
-                }
-                
+        } else {
+            NSString *foodURL = [dict valueForKey:@"FoodURL"];
+            if (foodURL != nil && ![foodURL isEqualToString:@""]) {
+                cell.lblFoodName.delegate = self;
+                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
             } else {
-                NSString *foodURL = [dict valueForKey:@"FoodURL"];
-                if (foodURL != nil && ![foodURL isEqualToString:@""]) {
-                    cell.userInteractionEnabled = YES;
-                    cell.lblFoodName.delegate = self;
-                    [cell.lblFoodName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-                } else {
-                    cell.lblFoodName.delegate = nil;
-                }
+                cell.lblFoodName.delegate = nil;
             }
-                        
-            cell.lblFoodName.backgroundColor = [UIColor clearColor];
-            cell.lblFoodName.textColor = [UIColor whiteColor];
-
-            cell.lblCalories.text = [NSString stringWithFormat:@"%i Calories",[[dict valueForKey:@"TotalCalories"] intValue]];
-            cell.lblCalories.backgroundColor = [UIColor clearColor];
-            cell.lblCalories.textColor = [UIColor whiteColor];
-            
-            cell.lblFoodName.font = [UIFont systemFontOfSize:12.0];
-            cell.lblCalories.font = [UIFont boldSystemFontOfSize:12.0];
-            cell.lblFoodName.adjustsFontSizeToFitWidth = NO;
-            
-            cell.userInteractionEnabled = YES;
         }
+        calorieText = [NSString stringWithFormat:@"%i Calories",[[dict valueForKey:@"TotalCalories"] intValue]];
     }
-    cell.lblFoodName.textColor = [UIColor whiteColor];
-    cell.lblCalories.textColor = [UIColor whiteColor];
-    cell.backgroundColor = PrimaryDarkColor
-    cell.layer.cornerRadius=5.0;
+        
+    cell.lblFoodName.numberOfLines = 1;
+    cell.lblFoodName.lineBreakMode = NSLineBreakByTruncatingTail;
+    cell.lblFoodName.textColor = [UIColor blackColor];
+    cell.lblCalories.textColor = [UIColor darkGrayColor];
+    cell.lblFoodName.font = [UIFont boldSystemFontOfSize:14];
+    cell.lblCalories.font = [UIFont systemFontOfSize:12];
     
+    cell.backgroundColor = [UIColor whiteColor];
     cell.separatorInset = UIEdgeInsetsZero;
-    [DMActivityIndicator hideActivityIndicator];
+
+    // We set the text last, because the TTAttributedLabel ignores properties set
+    // after text is set.
+    cell.lblCalories.text = calorieText;
+    cell.lblFoodName.text = foodNameText;
 
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSArray *exerciseResultsArray = [exerciseResults copy];
+    NSArray *foodResultsArray = [foodResults copy];
     
-    if (tableView==_tbl) {
+    [self.dateFormatter setDateFormat:@"MMMM d, yyyy"];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
         
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
+        [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
+        dietmasterEngine.taskMode = @"Edit";
+        dietmasterEngine.isMealPlanItem = NO;
+        
+        int mealCode = [[dict valueForKey:@"MealCode"] intValue];
+        dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode];
+        ExercisesDetailViewController *eDVController = [[ExercisesDetailViewController alloc] init];
+        [self.navigationController pushViewController:eDVController animated:YES];
     }
     else {
-        NSArray *exerciseResultsArray = [exerciseResults copy];
-        NSArray *foodResultsArray = [foodResults copy];
+        DetailViewController *dvController = [[DetailViewController alloc] init];
         
-        [self.dateFormatter setDateFormat:@"MMMM d, yyyy"];
-        [tblSimpleTable deselectRowAtIndexPath:indexPath animated:NO];
+        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        dietmasterEngine.taskMode = @"Edit";
+        dietmasterEngine.isMealPlanItem = NO;
+        [dietmasterEngine.foodSelectedDict setDictionary:dict];
+        dietmasterEngine.dateSelected = date_currentDate;
+        int mealCode = [[dict valueForKey:@"MealCode"] intValue];
         
-        if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
-            
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
-            [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
-            dietmasterEngine.taskMode = @"Edit";
-            dietmasterEngine.isMealPlanItem = NO;
-            
-            int mealCode = [[dict valueForKey:@"MealCode"] intValue];
-            dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode];
-            ExercisesDetailViewController *eDVController = [[ExercisesDetailViewController alloc] init];
-            [self.navigationController pushViewController:eDVController animated:YES];
-        }
-        else {
-            DetailViewController *dvController = [[DetailViewController alloc] init];
-            
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            dietmasterEngine.taskMode = @"Edit";
-            dietmasterEngine.isMealPlanItem = NO;
-            [dietmasterEngine.foodSelectedDict setDictionary:dict];
-            dietmasterEngine.dateSelected = date_currentDate;
-            int mealCode = [[dict valueForKey:@"MealCode"] intValue];
-            
-            dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode];
-            dvController.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:dvController animated:YES];
-        }
+        dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode];
+        dvController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:dvController animated:YES];
     }
 }
 
 #pragma mark - TTTAttributedLabel Delegate
-//HHT to redirct on link click
+
 - (void)attributedLabel:(__unused TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
     [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
@@ -724,9 +623,7 @@
         DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
     
-    [DMActivityIndicator showActivityIndicator];
-
-    [self performSelector:@selector(updateData:) withObject:date_Tomorrow afterDelay:0.25];
+    [self updateData:date_Tomorrow];
 }
 
 /// Shows the food list or exercise list to user, so they can select
@@ -850,7 +747,6 @@
 }
 
 -(IBAction)showprevDate:(id)sender {
-    [DMActivityIndicator showActivityIndicator];
     NSDateComponents *components = [[NSDateComponents alloc] init];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [components setDay:-1];
@@ -876,8 +772,7 @@
         DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
     
-    //HHT temp change
-    [self performSelector:@selector(updateData:) withObject:date_Yesterday afterDelay:0.25];
+    [self updateData:date_Yesterday];
 }
 
 #pragma mark SAVE FAVORITE MEAL METHODS
@@ -1166,7 +1061,7 @@
     
     [rs close];
     
-    [tblSimpleTable reloadData];
+    [self.tableView reloadData];
     
     [self updateCalorieTotal];
 }
@@ -1181,11 +1076,10 @@
     NSDate *date_Now = [dateFormat dateFromString:date_string];
     
     [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(updateData:) withObject:date_Now afterDelay:0.50];
+    [self updateData:date_Now];
 }
 
 - (void)updateData:(NSDate *)date {
-    
     if (foodResults) {
         [foodResults removeAllObjects];
         [selectSectionArray removeAllObjects];
@@ -1199,10 +1093,8 @@
     NSMutableArray *snack3Array6 = [[NSMutableArray alloc] init];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
     
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
@@ -1421,9 +1313,7 @@
         
         [foodResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
     }
-    
-    Arrcatgory = [foodResults mutableCopy];
-   
+       
     [rs close];
     
     double caloriesREmaining = ([dietmasterEngine getBMR] - (num_totalCaloriesBurned * -1))
@@ -1431,12 +1321,11 @@
     
     calorieslodded = num_totalCalories;//[NSString stringWithFormat:@"%.0f", num_totalCalories];
     
-    [self performSelector:@selector(loadExerciseData:) withObject:date afterDelay:1.0];
-    [self performSelector:@selector(getBMR) withObject:nil afterDelay:0.25];
+    [self loadExerciseData:date];
+    [self getBMR];
     
-    [DMActivityIndicator hideActivityIndicator];
-    [tblSimpleTable reloadData];
-    [tblSimpleTable reloadSectionIndexTitles];
+    [self.tableView reloadData];
+    [self.tableView reloadSectionIndexTitles];
     
     [self updateCalorieTotal];
 }

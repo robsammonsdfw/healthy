@@ -4,6 +4,7 @@
 #import "ProfileContactVC.h"
 #import "DietMasterGoViewController.h"
 #import "LoginViewController.h"
+#import "DMDatabaseProvider.h"
 
 @interface OtherHealthServiceVC ()
 
@@ -32,8 +33,9 @@
 
 - (IBAction)btnNoClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults]setObject:@"False" forKey:@"Reserved"];
-    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-    [engine syncUserInfoWithCompletion:nil];
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    [authManager updateUserInfoWithCompletion:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end

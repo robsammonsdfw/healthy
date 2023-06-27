@@ -40,6 +40,7 @@
 
 @property (nonatomic, strong, readwrite) NSNumber *userId;
 @property (nonatomic, strong, readwrite) NSString *userName;
+@property (nonatomic, strong, readwrite) NSString *authToken;
 @property (nonatomic, strong, readwrite) NSString *email1;
 @property (nonatomic, strong, readwrite) NSString *email2;
 
@@ -75,6 +76,88 @@
 
 @implementation DMUser
 
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:self.userId forKey:@"userId"];
+    [encoder encodeObject:self.userName forKey:@"userName"];
+    [encoder encodeObject:self.authToken forKey:@"authToken"];
+    [encoder encodeObject:self.email1 forKey:@"email1"];
+    [encoder encodeObject:self.email2 forKey:@"email2"];
+
+    [encoder encodeObject:self.companyId forKey:@"companyId"];
+    [encoder encodeObject:self.companyName forKey:@"companyName"];
+    [encoder encodeObject:self.mobileGraphicImageName forKey:@"mobileGraphicImageName"];
+
+    [encoder encodeObject:self.firstName forKey:@"firstName"];
+    [encoder encodeObject:self.lastName forKey:@"lastName"];
+
+    [encoder encodeObject:self.birthDate forKey:@"birthDate"];
+    [encoder encodeObject:self.gender forKey:@"gender"];
+    [encoder encodeObject:self.height forKey:@"height"];
+    [encoder encodeObject:self.lactating forKey:@"lactating"];
+
+    [encoder encodeObject:self.profession forKey:@"profession"];
+
+    [encoder encodeObject:self.bodyType forKey:@"bodyType"];
+    [encoder encodeObject:self.userBMR forKey:@"userBMR"];
+    [encoder encodeObject:self.proteinRequirements forKey:@"proteinRequirements"];
+
+    [encoder encodeObject:self.goals forKey:@"goals"];
+    [encoder encodeObject:self.goalStartDate forKey:@"goalStartDate"];
+    [encoder encodeObject:self.weightGoal forKey:@"weightGoal"];
+    [encoder encodeObject:self.goalRate forKey:@"goalRate"];
+
+    [encoder encodeObject:self.carbRatio forKey:@"carbRatio"];
+    [encoder encodeObject:self.proteinRatio forKey:@"proteinRatio"];
+    [encoder encodeObject:self.fatRatio forKey:@"fatRatio"];
+
+    [encoder encodeObject:self.hostName forKey:@"hostName"];
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+    self = [self init];
+    if (self) {
+        _userId = [decoder decodeObjectForKey:@"userId"];
+        _userName = [decoder decodeObjectForKey:@"userName"];
+        _authToken = [decoder decodeObjectForKey:@"authToken"];
+        _email1 = [decoder decodeObjectForKey:@"email1"];
+        _email2 = [decoder decodeObjectForKey:@"email2"];
+
+        _companyId = [decoder decodeObjectForKey:@"companyId"];
+        _companyName = [decoder decodeObjectForKey:@"companyName"];
+        _mobileGraphicImageName = [decoder decodeObjectForKey:@"mobileGraphicImageName"];
+
+        _firstName = [decoder decodeObjectForKey:@"firstName"];
+        _lastName = [decoder decodeObjectForKey:@"lastName"];
+
+        _birthDate = [decoder decodeObjectForKey:@"birthDate"];
+        _gender = [decoder decodeObjectForKey:@"gender"];
+        _height = [decoder decodeObjectForKey:@"height"];
+        _lactating = [decoder decodeObjectForKey:@"lactating"];
+
+        _profession = [decoder decodeObjectForKey:@"profession"];
+
+        _bodyType = [decoder decodeObjectForKey:@"bodyType"];
+        _userBMR = [decoder decodeObjectForKey:@"userBMR"];
+        _proteinRequirements = [decoder decodeObjectForKey:@"proteinRequirements"];
+
+        _goals = [decoder decodeObjectForKey:@"goals"];
+        _goalStartDate = [decoder decodeObjectForKey:@"goalStartDate"];
+        _weightGoal = [decoder decodeObjectForKey:@"weightGoal"];
+        _goalRate = [decoder decodeObjectForKey:@"goalRate"];
+
+        _carbRatio = [decoder decodeObjectForKey:@"carbRatio"];
+        _proteinRatio = [decoder decodeObjectForKey:@"proteinRatio"];
+        _fatRatio = [decoder decodeObjectForKey:@"fatRatio"];
+
+        _hostName = [decoder decodeObjectForKey:@"hostName"];
+    }
+    return self;
+}
+
 - (instancetype)init {
     return [self initWithDictionary:@{}];
 }
@@ -84,6 +167,7 @@
     if (self) {
         _userId = ValidNSNumber(userDict[@"UserID"]);
         _userName = ValidString(userDict[@"Username"]);
+        _authToken = ValidString(userDict[@"Token"]);
         _email1 = ValidString(userDict[@"Email1"]);
         _email2 = ValidString(userDict[@"Email2"]);
 
@@ -97,23 +181,6 @@
         _dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 
-        if (userDict[@"BirthDate"]) {
-            _birthDate = [_dateFormatter dateFromString:userDict[@"BirthDate"]];
-        }
-        if (userDict[@"GoalStartDate"]) {
-            _goalStartDate = [_dateFormatter dateFromString:userDict[@"GoalStartDate"]];
-        }
-        
-        _weightGoal = ValidNSNumber(userDict[@"WeightGoal"]);
-        _height = ValidNSNumber(userDict[@"Height"]);
-        _goals = ValidNSNumber(userDict[@"Goals"]);
-        _profession = ValidNSNumber(userDict[@"Profession"]);
-        _bodyType = ValidNSNumber(userDict[@"BodyType"]);
-        _proteinRequirements = ValidNSNumber(userDict[@"ProteinRequirements"]);
-        _gender = ValidNSNumber(userDict[@"Gender"]);
-        _lactating = ValidNSNumber(userDict[@"Lactation"]);
-        _goalRate = ValidNSNumber(userDict[@"GoalRate"]);
-        _userBMR = ValidNSNumber(userDict[@"BMR"]);
         
         _carbRatio = ValidNSNumber(userDict[@"CarbRatio"]);
         _proteinRatio = ValidNSNumber(userDict[@"ProteinRatio"]);
@@ -121,8 +188,34 @@
         
         _hostName = ValidString(userDict[@"HostName"]);
         
+        [self updateUserDetails:userDict];
     }
     return self;
+}
+
+- (void)updateUserDetails:(NSDictionary *)userDict {
+    if (!userDict) {
+        return;
+    }
+    _weightGoal = ValidNSNumber(userDict[@"WeightGoal"]);
+    _height = ValidNSNumber(userDict[@"Height"]);
+
+    _goals = ValidNSNumber(userDict[@"Goals"]);
+
+    if (userDict[@"BirthDate"]) {
+        _birthDate = [_dateFormatter dateFromString:userDict[@"BirthDate"]];
+    }
+    if (userDict[@"GoalStartDate"]) {
+        _goalStartDate = [_dateFormatter dateFromString:userDict[@"GoalStartDate"]];
+    }
+
+    _profession = ValidNSNumber(userDict[@"Profession"]);
+    _bodyType = ValidNSNumber(userDict[@"BodyType"]);
+    _proteinRequirements = ValidNSNumber(userDict[@"ProteinRequirements"]);
+    _gender = ValidNSNumber(userDict[@"Gender"]);
+    _lactating = ValidNSNumber(userDict[@"Lactation"]);
+    _goalRate = ValidNSNumber(userDict[@"GoalRate"]);
+    _userBMR = ValidNSNumber(userDict[@"BMR"]);
 }
 
 - (NSString *)birthDateString {

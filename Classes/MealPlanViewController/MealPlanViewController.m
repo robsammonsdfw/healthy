@@ -152,11 +152,8 @@ static NSString *CellIdentifier = @"Cell";
         [mealIDArray addObject:mealIDDict];
     }
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetGroceryList", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                               mealIDArray, @"GroceryItems",
                               nil];
     
@@ -168,11 +165,8 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark LOAD DATA METHODS
 
 - (void)loadData {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetUserPlannedMealNames", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                               nil];
     
     self.soapWebService = [[MealPlanWebService alloc] init];

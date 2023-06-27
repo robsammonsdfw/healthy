@@ -141,7 +141,7 @@
     [self.navigationController.navigationBar setTranslucent:NO];
 }
 
--(void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     //HHT apple watch start (to solve issue when user comes from background)
@@ -163,38 +163,7 @@
     [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
 }
 
-- (void)deleteExerciseAPICALL {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
-        self.navigationItem.title = @"Add to Log";
-    }
-    else {
-        self.navigationItem.title = @"Edit Log";
-    }
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSString *strLogDate =[NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
-    int ExerciseID= [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-    
-    NSString *stridex =[NSString stringWithFormat:@"%d",ExerciseID];
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"DeleteExerciseLog", @"RequestType",
-                              @{@"UserID" : [prefs valueForKey:@"userid_dietmastergo"],
-                                @"ExerciseID" :stridex,
-                                @"LogDate" :strLogDate,
-                                @"AuthKey" : [prefs valueForKey:@"authkey_dietmastergo"]
-                                }, @"parameters",
-                              nil];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        GetDataWebService *webService = [[GetDataWebService alloc] init];
-        webService.getDataWSDelegate = self;
-        [webService callWebservice:infoDict];
-    });
-}
-
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     //HHT apple watch

@@ -13,7 +13,7 @@
 #import "MyMovesTableViewCell.h"
 #import "MyMovesDetailsViewController.h"
 #import "MyMovesListViewController.h"
-#import "MyMovesWebServices.h"
+#import "MyMovesDataProvider.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "MyMovesListTableViewCell.h"
@@ -29,11 +29,9 @@
 static NSString *CellIdentifier = @"MyMovesTableViewCell";
 static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 
-@interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, WSGetUserWorkoutPlansDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic) int userId;
-
-@property (nonatomic, strong) MyMovesWebServices *soapWebService;
+@property (nonatomic, strong) MyMovesDataProvider *soapWebService;
 
 /// Table view that shows the moves.
 @property (nonatomic, strong) UITableView *tableView;
@@ -95,7 +93,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
         _dateFormatter.dateFormat = @"yyyy/MM/dd";
         _healthStore = [[HKHealthStore alloc] init];
         _sd = [[StepData alloc]init];
-        _soapWebService = [[MyMovesWebServices alloc] init];
+        _soapWebService = [[MyMovesDataProvider alloc] init];
         
         _allUserPlanDays = [NSMutableArray array];
         _selectedUserPlanDays = [NSMutableArray array];
@@ -266,19 +264,17 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     [self.allUserPlanDays addObjectsFromArray:[self.soapWebService getUserPlanDays]];
     [self.calendarView reloadData];
     [self loadMovePlanForDate:dateNow];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    self.userId = [[prefs valueForKey:@"userid_dietmastergo"] intValue];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.soapWebService.delegate = self;
-    [self.soapWebService fetchAllUserPlanData];
-    // Load local data.
-    [self.allUserPlanDays addObjectsFromArray:[self.soapWebService getUserPlanDays]];
-    [self loadMovePlanForDate:self.selectedDate];
+    __weak typeof(self) weakSelf = self;
+    [self.soapWebService fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
+        // Load local data.
+        [weakSelf.allUserPlanDays addObjectsFromArray:[weakSelf.soapWebService getUserPlanDays]];
+        [weakSelf loadMovePlanForDate:weakSelf.selectedDate];
+    }];
 
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
@@ -639,10 +635,12 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 
 #pragma mark - WSGetUserWorkoutPlansDelegate
 
+// TODO: Make sure this is connected.
 - (void)getUserWorkoutPlansFailed:(NSError *)error {
     [DMActivityIndicator hideActivityIndicator];
 }
 
+// TODO: Make sure this is connected.
 - (void)getUserWorkoutPlansFinished:(NSDictionary *)responseArray {
     [DMActivityIndicator hideActivityIndicator];
 

@@ -13,20 +13,13 @@
 #import "StepData.h"
 #import "NSNull+NullCategoryExtension.h"
 #import "MyMovesViewController.h"
-#import "MyMovesWebServices.h"
+#import "MyMovesDataProvider.h"
+#import "DMDatabaseProvider.h"
 
 @interface AppSettings () <SFSafariViewControllerDelegate>
 
 @property (nonatomic) IBOutlet UIButton *hcgBookletButton;
 @property (nonatomic) IBOutlet UIButton *mwlBookletButton;
-
-- (IBAction)showHCGBooklet:(id)sender;
-- (IBAction)showMWLBooklet:(id)sender;
-- (IBAction)myFoods:(id) sender;
-- (IBAction)addFoods:(id)sender;
-- (IBAction)forceDBSync:(id)sender;
-- (IBAction)forceUPDBSync:(id)sender;
-- (IBAction)CheckForFoodUpdateSync:(id)sender;
 
 @property (nonatomic, strong) IBOutlet UIButton *btnoptionsetting;
 @property (nonatomic, strong) IBOutlet UIButton *btnmycustomfood;
@@ -35,12 +28,15 @@
 @property (nonatomic, strong) IBOutlet UIButton *btnperfomupsync;
 @property (nonatomic, strong) IBOutlet UIButton *btnchekforfoodupdate;
 @property (nonatomic, strong) IBOutlet UIButton *btnsenddatabasetosupport;
+@property (nonatomic, strong) IBOutlet  UILabel *lastSyncLabel;
 
 //HHT apple watch
 @property (nonatomic,retain) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *arrData;
 @property (nonatomic, strong) NSSet *readDataTypes;
 @property (nonatomic, strong) StepData * sd;
+
+@property (nonatomic, strong) dispatch_queue_t syncQueue;
 
 @end
 
@@ -50,6 +46,9 @@
 
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        _syncQueue = dispatch_queue_create("com.dietmaster.settingsSyncQueue", DISPATCH_QUEUE_SERIAL);
+    }
     return self;
 }
 
@@ -112,7 +111,7 @@
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Settings_Screen"];
         versionLabel.textColor = [UIColor blackColor];
-        lastSyncLabel.textColor = [UIColor blackColor];
+        self.lastSyncLabel.textColor = [UIColor blackColor];
     }
     
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"trdietpro"]) {
@@ -125,6 +124,7 @@
 
 //HHT change 2018
 -(void)openOpetionalSetting {
+    // TODO: This is not a great implementation. Redo this.
     if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isFromAlert"] boolValue]){
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isFromAlert"];
         
@@ -175,7 +175,7 @@
     [self openOpetionalSetting];
     
     //HHT change 28-11
-    DMLog(@"LoggedExeTracking :: %d",[[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"]);
+    //DMLog(@"LoggedExeTracking :: %d",[[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"]);
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
         [btnLoggedExeTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
@@ -209,7 +209,7 @@
         dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
     }
     
-    lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
+    self.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
     
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -252,6 +252,8 @@
     [self btnClkCloseSetting:self];
 }
 
+#pragma mark - User Actions
+
 -(IBAction)myFoods:(id) sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"View";
@@ -266,28 +268,63 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"";
     
-    ManageFoods *mfController = [[ManageFoods alloc] initWithNibName:@"ManageFoods" bundle:nil];
+    ManageFoods *mfController = [[ManageFoods alloc] init];
     
     [self.navigationController pushViewController:mfController animated:YES];
     mfController.hideAddToLog = YES;
     mfController = nil;
 }
 
--(IBAction)forceDBSync:(id)sender {
-    [downSyncSpinner startAnimating];
-    MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-    [soapWebService fetchAllUserPlanData];
+- (IBAction)forceDBSync:(id)sender {
+    [DMActivityIndicator showActivityIndicator];
+    dispatch_group_t fetchGroup = dispatch_group_create();
+    __block NSError *syncError = nil;
+    
+    dispatch_group_enter(fetchGroup);
+    dispatch_async(self.syncQueue, ^{
+        DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+        [dataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+            dispatch_group_leave(fetchGroup);
+            if (error) {
+                syncError = error;
+                return;
+            }
+        }];
+    });
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncDatabaseDelegate = self;
+    dispatch_group_enter(fetchGroup);
+    dispatch_async(self.syncQueue, ^{
+        MyMovesDataProvider *provider = [[MyMovesDataProvider alloc] init];
+        [provider fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
+            dispatch_group_leave(fetchGroup);
+            if (error) {
+                syncError = error;
+                return;
+            }
+        }];
+    });
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+        [DMActivityIndicator hideActivityIndicator];
+        if (syncError) {
+            [DMGUtilities showError:syncError withTitle:@"Error" message:@"The database could not be updated. Please try again." inViewController:nil];
+            return;
+        }
+        [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
 
-    //HHT new exercise sync
-    [dietmasterEngine.arrExerciseSyncNew removeAllObjects];
-    [dietmasterEngine syncDatabase];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
+        [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
+        NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
+        
+        weakSelf.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
+    });
+
 }
 
 -(IBAction)forceUPDBSync:(id)sender {
-    [upSyncSpinner startAnimating];
+    [DMActivityIndicator showActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = self;
     [dietmasterEngine uploadDatabase];
@@ -298,14 +335,10 @@
     [self presentViewController:sfvc animated:YES completion:nil];
 }
 
-- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
-    [self dismissViewControllerAnimated:true completion:nil];
-}
-
 #pragma mark - Update and SyncFood
 
 -(IBAction)CheckForFoodUpdateSync:(id)sender {
-    [FoodUpdateSyncSpinner startAnimating];
+    [DMActivityIndicator showActivityIndicator];
     strSyncDate = [[NSUserDefaults standardUserDefaults] valueForKey:@"FoodUpdateLastsyncDate"];
     if (!strSyncDate) {
         [[NSUserDefaults standardUserDefaults] setValue:@"2015-01-01" forKey:@"FoodUpdateLastsyncDate"];
@@ -315,43 +348,39 @@
 }
 
 - (void)SyncFood {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"SyncFoodsNew", @"RequestType",
-                              @{@"UserID" : [prefs valueForKey:@"userid_dietmastergo"],
-                                @"AuthKey" : [prefs valueForKey:@"authkey_dietmastergo"],
-                                @"LastSync" : strSyncDate,
-                                @"PageSize" : [NSString stringWithFormat:@"%d", pageSize],
-                                @"PageNumber" : [NSString stringWithFormat:@"%d", pageNumberCounter],
+                              @{ @"UserID" : currentUser.userId,
+                                 @"AuthKey" : currentUser.authToken,
+                                 @"LastSync" : strSyncDate,
+                                 @"PageSize" : [NSString stringWithFormat:@"%d", pageSize],
+                                 @"PageNumber" : [NSString stringWithFormat:@"%d", pageNumberCounter],
                                 }, @"parameters",
                               nil];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        GetDataWebService *webService = [[GetDataWebService alloc] init];
-        webService.getDataWSDelegate = self;
-        [webService callWebservice:infoDict];
+        [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
+            // Do something if needed.
+        }];
     });
 }
 
 #pragma mark LOGIN AUTH DELEGATE METHODS
 - (void)getAuthenticateUserFinished:(NSMutableArray *)responseArray {
-    if (AppDel.isSessionExp == YES) {
-        
-    }
-    else {
-        [upSyncSpinner startAnimating];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.syncUPDatabaseDelegate = self;
-        [dietmasterEngine uploadDatabase];
-    }
+    [DMActivityIndicator showActivityIndicator];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    dietmasterEngine.syncUPDatabaseDelegate = self;
+    [dietmasterEngine uploadDatabase];
 }
 
 #pragma mark SYNC DELEGATE METHODS
-- (void)syncDatabaseFinished:(NSString *)responseMessage {
+
+- (void)syncUPDatabaseFinished:(NSString *)responseMessage {
+    [DMActivityIndicator hideActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncDatabaseDelegate = nil;
+    dietmasterEngine.syncUPDatabaseDelegate = nil;
     
-    [downSyncSpinner stopAnimating];
     [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
 
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -359,32 +388,7 @@
     [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
     NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
     
-    lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
-}
-
-- (void)syncDatabaseFailed:(NSString *)failedMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncDatabaseDelegate = nil;
-    
-    [downSyncSpinner stopAnimating];
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again.." inViewController:nil];
-}
-
-- (void)syncUPDatabaseFinished:(NSString *)responseMessage {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = nil;
-    
-    [upSyncSpinner stopAnimating];
-    if (!AppDel.isSessionExp) {
-        [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
-    }
-
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-    [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
-    NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-    
-    lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
+    self.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
 }
 
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage {
@@ -392,8 +396,8 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
 
-    [upSyncSpinner stopAnimating];
-   
+    [DMActivityIndicator hideActivityIndicator];
+
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
 }
 
@@ -404,13 +408,9 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"logout_dietmastergo"];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
-        // Wipe all NSUserDefaults.
-        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
-        MyMovesWebServices *webService = [[MyMovesWebServices alloc] init];
-        [webService clearTableData];
-        [AppDel checkUserLogin];
+        [[DMAuthManager sharedInstance] logoutCurrentUserWithCompletion:^(BOOL completed, NSError *error) {
+            [AppDel checkUserLogin];
+        }];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
                                               style:UIAlertActionStyleCancel
@@ -418,36 +418,6 @@
         [alert dismissViewControllerAnimated:YES completion:nil];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    NSString *title = nil;
-    NSString *message = nil;
-    switch (result) {
-        case MFMailComposeResultCancelled:
-            title = @"Cancelled";
-            message = @"Email was cancelled.";
-            break;
-        case MFMailComposeResultSaved:
-            title = @"Saved";
-            message = @"Email was saved as a draft.";
-            break;
-        case MFMailComposeResultSent:
-            title = @"Success!";
-            message = @"Email was sent successfully.";
-            break;
-        case MFMailComposeResultFailed:
-            title = @"Error";
-            message = @"Email was not sent.";
-            break;
-        default:
-            title = @"Error";
-            message = @"Email was not sent.";
-            break;
-    }
-
-    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
-    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark Custom Buttons for Tampa Rejuvination
@@ -673,7 +643,7 @@
     NSMutableDictionary *dictDataTemp = [(NSMutableArray *)responseDict objectAtIndex:0];
     if (![[dictDataTemp allKeys] containsObject:@"TotalCount"]) {
         pageNumberCounter = 1;
-        [FoodUpdateSyncSpinner stopAnimating];
+        [DMActivityIndicator hideActivityIndicator];
         [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:@"FoodUpdateLastsyncDate"];
         [DMGUtilities showAlertWithTitle:@"Success" message:@"The Food database was sync'd successfully." inViewController:nil];
         return;
@@ -835,14 +805,52 @@
         //in process of syncing foods
         //fail silently and continue processing
         DMLog(@"sync foods error: page %d failed.", pageNumberCounter);
-        
         pageNumberCounter++;
         [self SyncFood];
         return;
     }
-    [downSyncSpinner stopAnimating];
+    [DMActivityIndicator hideActivityIndicator];
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
 }
 
-@end
+#pragma mark - Delegates
 
+#pragma mark Safari
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
+    [self dismissViewControllerAnimated:true completion:nil];
+}
+
+#pragma mark MailComposer
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    NSString *title = nil;
+    NSString *message = nil;
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            title = @"Cancelled";
+            message = @"Email was cancelled.";
+            break;
+        case MFMailComposeResultSaved:
+            title = @"Saved";
+            message = @"Email was saved as a draft.";
+            break;
+        case MFMailComposeResultSent:
+            title = @"Success!";
+            message = @"Email was sent successfully.";
+            break;
+        case MFMailComposeResultFailed:
+            title = @"Error";
+            message = @"Email was not sent.";
+            break;
+        default:
+            title = @"Error";
+            message = @"Email was not sent.";
+            break;
+    }
+
+    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+@end

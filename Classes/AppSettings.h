@@ -9,14 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "DietmasterEngine.h"
 #import <MessageUI/MessageUI.h>
-#import "MyMovesWebServices.h"
+#import "MyMovesDataProvider.h"
 
-@interface AppSettings : UIViewController <UPSyncDatabaseDelegate, SyncDatabaseDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, GetDataWSDelegate, UIGestureRecognizerDelegate> {
+@interface AppSettings : UIViewController <UPSyncDatabaseDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate> {
 	
-    IBOutlet UIActivityIndicatorView *downSyncSpinner;
-    IBOutlet UIActivityIndicatorView *upSyncSpinner;
-    IBOutlet UIActivityIndicatorView *FoodUpdateSyncSpinner;
-    IBOutlet UILabel *lastSyncLabel;
     IBOutlet UILabel *versionLabel;
     IBOutlet UIView *viewSetting;
     IBOutlet UIButton *btnWkgs;

@@ -94,16 +94,12 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
 #pragma mark LOAD DATA METHODS
 
--(void)loadData {
+- (void)loadData {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetGroceryList", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
                               [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
                               @"false", @"Planned",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                               nil];
     
     MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];

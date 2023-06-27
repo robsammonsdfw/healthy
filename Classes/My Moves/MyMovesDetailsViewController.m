@@ -11,7 +11,7 @@
 #import "CustomImageFlowLayout.h"
 #import "MyMovesDetailHeaderCollectionReusableView.h"
 #import "MyMovesDetailFooterCollectionReusableView.h"
-#import "MyMovesWebServices.h"
+#import "MyMovesDataProvider.h"
 #import "MyMovesVideoPlayerViewController.h"
 #import "DMMovePickerRow.h"
 #import "MyMovesListViewController.h"
@@ -29,7 +29,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGFloat animatedDistance;
 }
 
-@property (nonatomic, strong) MyMovesWebServices *soapWebService;
+@property (nonatomic, strong) MyMovesDataProvider *soapWebService;
 
 /// Name of the exercise.
 @property (nonatomic, strong) IBOutlet UILabel *exerciseNameLbl;
@@ -59,7 +59,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
-        _soapWebService = [[MyMovesWebServices alloc] init];
+        _soapWebService = [[MyMovesDataProvider alloc] init];
     }
     return self;
 }

@@ -7,9 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SoapWebServiceEngine.h"
-#import "GetDataWebService.h"
-#import "SaveUPCDataWebService.h"
+#import "DMDataFetcher.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "DMConstants.h"
@@ -19,9 +17,10 @@
 
 @protocol WSGetFoodDelegate;
 
+/// Notification fired when messages are done updating. Used to update the
+/// app icon badge.
 extern NSString * const UpdatingMessageNotification;
 
-@protocol SyncDatabaseDelegate;
 @protocol UPSyncDatabaseDelegate;
 
 @interface DietmasterEngine : NSObject {
@@ -53,7 +52,6 @@ extern NSString * const UpdatingMessageNotification;
     
     // Meal Plan
     NSMutableArray *mealPlanArray;
-    NSMutableArray *myMovesAssignedArray;
 
     // For detail view
     BOOL isMealPlanItem;
@@ -67,12 +65,10 @@ extern NSString * const UpdatingMessageNotification;
     // Get Data
     __block BOOL getDataComplete;
     __block BOOL getDataDidFail;
-    dispatch_semaphore_t semaphore;
 }
 
 // delegate
 @property (nonatomic, weak) id<WSGetFoodDelegate> wsGetFoodDelegate;
-@property (nonatomic, weak) id<SyncDatabaseDelegate> syncDatabaseDelegate;
 @property (nonatomic, weak) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
 
 @property (nonatomic, strong) NSMutableDictionary *exerciseSelectedDict;
@@ -99,35 +95,18 @@ extern NSString * const UpdatingMessageNotification;
 @property (nonatomic) int selectedMealPlanID;
 @property (nonatomic) BOOL didInsertNewFood;
 
-//Assigned my moves
-@property (nonatomic, strong) NSMutableArray *myMovesAssignedArray;
-
 // Grocery List
 @property (nonatomic, strong) NSMutableArray *groceryArray;
 
-//HHT new exercise sync
-@property (nonatomic, strong) NSMutableArray *arrExerciseSyncNew;
-@property (nonatomic ,assign) int pageNumber;
+@property (nonatomic, strong, readonly) FMDatabase *database;
 
 + (instancetype)sharedInstance;
 
--(void)syncDatabase;
 -(void)uploadDatabase;
--(void)syncDatabaseFinished;
 -(void)uploadDatabaseFinished;
 -(void)syncDatabaseFailed;
 -(void)uploadDatabaseFailed;
 -(void)SyncFood:(NSString *)syncDate;
-
-// New GetData Method
--(void)getDataFrom:(NSString *)syncDate withBlock:(completionBlockWithError)block;
-
-// DOWN SYNC
--(void)syncFavoriteFoods:(NSString *)dateString;
--(void)syncFavoriteMeals:(NSString *)dateString;
--(void)syncFavoriteMealItems:(NSString *)dateString;
--(void)syncExerciseLog:(NSString *)dateString;
--(void)syncExerciseLogNew:(NSString *)dateString;
 
 // UP SYNC
 -(void)saveMeals:(NSString *)dateString;
@@ -138,17 +117,7 @@ extern NSString * const UpdatingMessageNotification;
 -(void)saveAllCustomFoods;
 -(void)saveFavoriteFood:(NSString *)dateString;
 -(void)saveFavoriteMeal:(NSString *)dateString;
--(void)saveFavoriteMealItem:(int)mealID;
-
-/// Performs a sync of the user's info, such as BMR, Height, Goals, etc.
-- (void)syncUserInfoWithCompletion:(completionBlockWithError)completionBlock;
-/// Updates user details in the database with the user object provided.
-/// This does NOT update the UserID, CompanyID, or name, only things like Height, BMR, Weight, etc.
-- (void)updateUserInfo:(DMUser *)user;
-
-// Splash Image
-- (void)downloadFileIfUpdated;
-- (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;
+- (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(completionBlockWithError)completionBlock;
 
 // Food Plan Methods
 -(NSDictionary *)getFoodDetails:(NSDictionary *)foodDict;
@@ -166,39 +135,17 @@ extern NSString * const UpdatingMessageNotification;
 // UPC food
 -(void)saveUPCFood:(int)foodKey;
 
-// tech support module
--(NSData *)createZipFileOfDatabase;
--(void)processIncomingDatabase:(NSDictionary *)dict;
-
-// Factual
--(void)searchFactualDatabase:(NSString *)upcString;
-
 // Helpers
 - (NSDictionary *)getUserRecommendedRatios;
 - (NSInteger)getBMR;
 
-- (NSArray<DMMessage *> *)unreadMessages;
-- (int)unreadMessageCount;
-- (void)setReadedMessageId:(NSNumber *)messageId;
-- (NSDictionary *)messageById:(NSString *)uid;
-/// Updates messages every few seconds.
-- (void)startUpdatingMessages;
-/// Stops updating messages.
-- (void)stopUpdatingMessages;
-/// Syncronizes messages now.
-- (void)syncMessages;
-
--(NSMutableArray *)getGroceryFoodDetails:(NSMutableArray *) foods;
+-(NSMutableArray *)getGroceryFoodDetails:(NSMutableArray *)foods;
 
 @end
 
 @protocol WSGetFoodDelegate <NSObject>
 - (void)getFoodFinished:(NSMutableArray *)responseArray;
 - (void)getFoodFailed:(NSString *)failedMessage;
-@end
-@protocol SyncDatabaseDelegate <NSObject>
-- (void)syncDatabaseFinished:(NSString *)responseMessage;
-- (void)syncDatabaseFailed:(NSString *)failedMessage;
 @end
 @protocol UPSyncDatabaseDelegate <NSObject>
 - (void)syncUPDatabaseFinished:(NSString *)responseMessage;

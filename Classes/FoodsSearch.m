@@ -220,11 +220,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 - (void)loadSearchData:(NSString *)searchTerm {
     [self.foodResults removeAllObjects];
 
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    DMUser *currentUser = [authManager loggedInUser];
+    int userID = currentUser.userId.intValue;
+    int companyID = currentUser.companyId.intValue;
+
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    int userID = [[prefs valueForKey:@"userid_dietmastergo"] intValue];
-    int companyID = [[prefs valueForKey:@"companyid_dietmastergo"] intValue];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
        

@@ -137,7 +137,7 @@
         _alcohol = ValidNSNumber(dictionary[@"Alcohol"]);
 
         NSString *foodTags = ValidString(dictionary[@"FoodTags"]);
-        if (foodTags.length) {
+        if (foodTags) {
             foodTags = [foodTags stringByReplacingOccurrencesOfString:@"\"" withString:@""];
             foodTags = [foodTags stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
             foodTags = [foodTags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -150,10 +150,13 @@
     return self;
 }
 
+// Note: For SaveFoodNew, GoID in request is populated by FoodID, so
+// we duplicate it.
 - (NSDictionary *)dictionaryRepresentation {
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                           self.foodKey, @"FoodKey",
                           self.foodId, @"FoodID",
+                          self.foodId, @"GoID",
                           self.name, @"Name",
                           self.categoryId, @"CategoryID",
                           self.calories, @"Calories",

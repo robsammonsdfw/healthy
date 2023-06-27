@@ -18,6 +18,7 @@
 #import "DietMasterGoPlus-Swift.h"
 #import "DMGUtilities.h"
 #import "DMUser.h"
+#import "DMDatabaseProvider.h"
 
 @import StoreKit;
 @import Firebase;
@@ -52,6 +53,8 @@
     UITableView.appearance.sectionHeaderTopPadding = 0;
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoginStateDidChangeNotification:) name:UserLoginStateDidChangeNotification object:nil];
+
     // Print out the location of the database
     DMLog(@"Database path: %@", [[DietmasterEngine sharedInstance] databasePath]);
 
@@ -65,94 +68,18 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
     DMLog(@"Open the URL: %@", url);
-    
-    BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    if (![authManager isUserLoggedIn]) {
         NSString *authString = [url absoluteString];
         authString = [authString stringByReplacingOccurrencesOfString:@"dietmastersoftware://" withString:@""];
-        
-        if (!self.loginViewController) {
-            self.loginViewController = [[LoginViewController alloc] init];
-            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            self.loginViewController.view.tag = 40;
-            self.loginViewController.view.alpha = 0.0;
-            self.loginViewController.view.hidden = YES;
+        self.loginViewController = [[LoginViewController alloc] init];
+        // Make sure the view is loaded so the string will populate.
+        if (self.loginViewController.view) {
+            [self.loginViewController loginFromUrl:authString];
         }
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
-        
-        if (self.loginViewController.view.hidden == YES) {
-            
-            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            self.loginViewController.view.tag = 40;
-            self.loginViewController.view.alpha = 0.0;
-            self.loginViewController.view.hidden = NO;
-            
-            [self.window insertSubview:[self.loginViewController view] atIndex:0];
-            [self.window bringSubviewToFront:self.loginViewController.view];
-            
-            [UIView animateWithDuration:0.75 animations:^{
-                self.loginViewController.view.alpha = 1.0;
-            }];
-
-            UIView *v = [self.window viewWithTag:30];
-            v.alpha = 0.0;
-            v.hidden = YES;
-            
-            UIView *v1 = [self.window viewWithTag:35];
-            v1.alpha = 0.0;
-            v1.hidden = YES;
-        }
-        
-        [self.loginViewController loginFromUrl:authString];
+        [self showLoginIfNeeded];
     }
     return YES;
-}
-
-- (void)loginFromUrl:(NSString *)loginUrl {
-    BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
-        if (!self.loginViewController) {
-            self.loginViewController = [[LoginViewController alloc] init];
-            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            self.loginViewController.view.tag = 40;
-            self.loginViewController.view.alpha = 0.0;
-            self.loginViewController.view.hidden = YES;
-        }
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
-        
-        if (self.loginViewController.view.hidden == YES) {
-            
-            self.loginViewController.view.frame = [[UIScreen mainScreen] applicationFrame];
-            self.loginViewController.view.tag = 40;
-            self.loginViewController.view.alpha = 0.0;
-            self.loginViewController.view.hidden = NO;
-            
-            [self.window insertSubview:[self.loginViewController view] atIndex:0];
-            [self.window bringSubviewToFront:self.loginViewController.view];
-                        
-            [UIView animateWithDuration:0.75 animations:^{
-                self.loginViewController.view.alpha = 1.0;
-            }];
-
-            UIView *v = [self.window viewWithTag:30];
-            v.alpha = 0.0;
-            v.hidden = YES;
-            
-            UIView *v1 = [self.window viewWithTag:35];
-            v1.alpha = 0.0;
-            v1.hidden = YES;
-        }
-        
-        [self.loginViewController loginFromUrl:loginUrl];
-    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -165,11 +92,14 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [self checkUserLogin];
     
-    if ([prefs boolForKey:@"user_loggedin"] == YES) {
-        [self syncDatabase];
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    if ([authManager isUserLoggedIn]) {
+        DMDatabaseProvider *databaseProvider = [[DMDatabaseProvider alloc] init];
+        [databaseProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+            // Do something.
+        }];
     }
 }
 
@@ -179,146 +109,56 @@
 
 #pragma mark USER LOGIN
 
-- (void)checkUserLogin {
-    BOOL userLogout = [[NSUserDefaults standardUserDefaults] boolForKey:@"logout_dietmastergo"];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if ([prefs boolForKey:@"user_loggedin"] == NO || userLogout == YES) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-                
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"userid_dietmastergo"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"companyemail1_dietmastergo"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"companyemail2_dietmastergo"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"companyname_dietmastergo"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"authkey_dietmastergo"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"lastmodified_splash"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"splashimage_filename"];
-        
-        // This rmoves ALL entries from NSUserDefaults.
-        NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
-        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
-        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        [prefs setBool:NO forKey:@"user_loggedin"];
-        
-        //keep these defaulted to app build hardcode. this effects CREATE USERS
-        [prefs setValue:@"3271" forKey:@"companyid_dietmastergo"];
-        [prefs setValue:@"p54118!" forKey:@"companyPassThru_dietmastergo"];
-        
-        // Set MyMOves and NewDesign again here because -removePersistentDomainForName: wipes
-        // NSUserDefaults out.
-        [prefs setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
-        [prefs setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
-        
-        [dietmasterEngine.mealPlanArray removeAllObjects];
-        [self.viewController reloadData];
-        
-        #pragma mark DELETE ALL USER DATA
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-        if ([db open]) {
-            [db beginTransaction];
-            [db executeUpdate:@"DELETE FROM Food_Log"];
-            [db executeUpdate:@"DELETE FROM Food_Log_Items"];
-            [db executeUpdate:@"DELETE FROM Food WHERE UserID <> 0 OR CompanyID <> 0"];
-            [db executeUpdate:@"DELETE FROM Favorite_Food"];
-            [db executeUpdate:@"DELETE FROM Favorite_Meal"];
-            [db executeUpdate:@"DELETE FROM Favorite_Meal_Items"];
-            [db executeUpdate:@"DELETE FROM weightlog"];
-            [db executeUpdate:@"DELETE FROM Messages"];
-            [db commit];
-        }
-
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *logoFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage.png"];
-        NSString *logoFilePath2x = [NSTemporaryDirectory() stringByAppendingPathComponent:@"SplashImage@2x.png"];
-        
-        if([[NSFileManager defaultManager] fileExistsAtPath: logoFilePath]) {
-            [fileManager removeItemAtPath:logoFilePath error:NULL];
-            [fileManager removeItemAtPath:logoFilePath2x error:NULL];
-        }
-        [self getUserLogin];
-
+- (void)userLoginStateDidChangeNotification:(NSNotification *)notification {
+    if ([NSThread isMainThread]) {
+        [self checkUserLogin];
     } else {
-        [self.viewController reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self userLoginStateDidChangeNotification:notification];
+        });
     }
 }
 
-- (void)getUserLogin {
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"logout_dietmastergo"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    if (!self.loginViewController) {
-        self.loginViewController = [[LoginViewController alloc] init];
+- (void)checkUserLogin {
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    if ([authManager isUserLoggedIn] == NO) {
+        [authManager migrateUserIfNeeded];
+        [self showLoginIfNeeded];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     }
-    
-    [self.loginViewController presentLoginInController:nil
-                                        withCompletion:^(BOOL completed, NSError *error) {
-        // Login successful!
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UserLoginFinished" object:nil];
-        
-        //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
-        //                                                                   message:@"Do you want to make changes to optional settings?"
-        //                                                            preferredStyle:UIAlertControllerStyleAlert];
-        //    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //        AppDel.isFromAlert = YES;
-        //        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFromAlert"];
-        //    }]];
-        //    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        //        [alert dismissViewControllerAnimated:YES completion:nil];
-        //    }]];
-        //    [[DMGUtilities rootViewController] presentViewController:alert animated:YES completion:nil];
-
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        [prefs setBool:YES forKey:@"user_loggedin"];
-        [prefs setValue:[NSDate date] forKey:@"lastmodified"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [self syncDatabase];
-        [self.viewController reloadData];
-        UINavigationController *rootController = (UINavigationController *)[DMGUtilities rootViewController];
-        [rootController popToRootViewControllerAnimated:YES];
-    }];
 }
 
-//DownSync
+- (void)showLoginIfNeeded {
+    if ([[DMAuthManager sharedInstance] isUserLoggedIn] == NO) {
+        if (self.loginViewController) {
+            self.loginViewController = [[LoginViewController alloc] init];
+        }
+        [self.loginViewController presentLoginInController:nil
+                                            withCompletion:^(BOOL completed, NSError *error) {
+            // Login successful!
+            
+            //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
+            //                                                                   message:@"Do you want to make changes to optional settings?"
+            //                                                            preferredStyle:UIAlertControllerStyleAlert];
+            //    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            //        AppDel.isFromAlert = YES;
+            //    }]];
+            //    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            //        [alert dismissViewControllerAnimated:YES completion:nil];
+            //    }]];
+            //    [[DMGUtilities rootViewController] presentViewController:alert animated:YES completion:nil];
+
+            UINavigationController *rootController = (UINavigationController *)[DMGUtilities rootViewController];
+            [rootController dismissViewControllerAnimated:YES completion:nil];
+            [rootController popToRootViewControllerAnimated:YES];
+        }];
+    }
+}
+
 #pragma mark SYNC DELEGATE METHODS
 
-- (void)syncDatabaseFinished:(NSString *)responseMessage {
-    [DMActivityIndicator hideActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncDatabaseDelegate = nil;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setValue:[NSDate date] forKey:@"lastmodified"];
-}
-
-- (void)syncDatabaseFailed:(NSString *)failedMessage {
-    DMLog(@"SYNC FAIL: %@", failedMessage);
-    [DMActivityIndicator hideActivityIndicator];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncDatabaseDelegate = nil;
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setValue:nil forKey:@"lastmodified"];
-    [prefs setValue:nil forKey:@"lastsyncdate"];
-}
-
 - (void)syncUPDatabaseFinished:(NSString *)responseMessage {
-    [self performSelector:@selector(callSyncDatabase) withObject:nil afterDelay:1.00];
-}
-
--(void)callSyncDatabase {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = nil;
-    dietmasterEngine.syncDatabaseDelegate = self;
-    
-    [dietmasterEngine syncDatabase];
-        
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setValue:[NSDate date] forKey:@"lastmodified"];
 }
 
 - (void)syncUPDatabaseFailed:(NSString *)failedMessage {
@@ -327,7 +167,7 @@
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setValue:nil forKey:@"lastmodified"];
+    // Sync failed, so ensure we try again soon.
     [prefs setValue:nil forKey:@"lastsyncdate"];
     
     [DMActivityIndicator hideActivityIndicator];
@@ -343,24 +183,12 @@
     return (NSInteger) (ti / D_MINUTE);
 }
 
-- (void)syncDatabase {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if ([prefs boolForKey:@"user_loggedin"] == YES) {
-        
-        MyMovesWebServices *soapWebService = [[MyMovesWebServices alloc] init];
-        [soapWebService fetchAllUserPlanData];
-        [soapWebService getMyMovesData];
-        
-        NSInteger hourSinceDate = [self hoursAfterDate:[prefs valueForKey:@"lastmodified"]];
-        if (![prefs valueForKey:@"lastmodified"] || hourSinceDate >= 2) {
-            DataFetcher *dataFetcher = [[DataFetcher alloc] init];
-            [dataFetcher signInUserWithPassword:[prefs objectForKey:@"loginPwd"] completion:^(DMUser *user, NSString *status, NSString *message) {
-                DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-                dietmasterEngine.syncUPDatabaseDelegate = self;
-                [dietmasterEngine uploadDatabase];
-            }];
-        }
-    }
+/// This starts an upsync.
+- (void)syncDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    dietmasterEngine.syncUPDatabaseDelegate = self;
+    [dietmasterEngine uploadDatabase];
 }
 
 #pragma mark - System Updates
@@ -368,7 +196,7 @@
 - (void)upgradeSystem {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [dietmasterEngine database];
     if (![db open]) {
         DMLog(@"Error: Could not open db to upgrade.");
         return;
@@ -688,7 +516,7 @@
 - (void)updateMeasureTable {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [dietmasterEngine database];
     if (![db open]) {
         DMLog(@"Could not open db.");
     }
@@ -726,66 +554,6 @@
         DMLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
     }
     return success;
-}
-
-- (void)openMailForApp {
-    if ([MFMailComposeViewController canSendMail]) {
-        NSString *path = [[NSBundle mainBundle] bundlePath];
-        NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-        
-        MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
-        [mailComposer setSubject:[NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]]];
-        NSString *emailTo = [[NSString alloc] initWithFormat:@""];
-        [mailComposer setMessageBody:emailTo isHTML:NO];
-        NSString *emailTo1 = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
-        NSArray *toArray = [NSArray arrayWithObjects:emailTo1, nil];
-        [mailComposer setToRecipients:toArray];
-        mailComposer.mailComposeDelegate = self;
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        NSData *zipData = dietmasterEngine.createZipFileOfDatabase;
-        [mailComposer addAttachmentData:zipData mimeType:@"application/zip" fileName:@"Document.Zip"];
-        [AppDel.window.rootViewController presentViewController:mailComposer animated:YES completion:^{
-
-        }];
-    } else {
-        [DMGUtilities showAlertWithTitle:APP_NAME
-                                 message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings"
-                        inViewController:nil];
-    }
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller
-          didFinishWithResult:(MFMailComposeResult)result
-                        error:(NSError*)error {
-    NSString *title = nil;
-    NSString *message = nil;
-    switch (result) {
-        case MFMailComposeResultCancelled:
-            title = @"Cancelled";
-            message = @"Email was cancelled.";
-            break;
-        case MFMailComposeResultSaved:
-            title = @"Saved";
-            message = @"Email was saved as a draft.";
-            break;
-        case MFMailComposeResultSent:
-            title = @"Success!";
-            message = @"Email was sent successfully.";
-            break;
-        case MFMailComposeResultFailed:
-            title = @"Error";
-            message = @"Email was not sent.";
-            break;
-        default:
-            title = @"Error";
-            message = @"Email was not sent.";
-            break;
-    }
-
-    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
-    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UISceneDelegate

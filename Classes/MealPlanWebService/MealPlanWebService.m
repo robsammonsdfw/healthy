@@ -283,7 +283,7 @@
             return;
         }
     } @catch (NSException *exception) {
-        NSLog(@"Exception: %@", exception);
+        DM_LOG(@"Fetch Exception: %@", exception);
         NSError *error = [DMGUtilities errorWithMessage:exception.reason code:999];
         [self processError:error];
         return;
@@ -381,7 +381,7 @@
 
 /// Processes an incoming error.
 - (void)processError:(NSError *)error {
-    DM_LOG(@"Error: %@", error.localizedDescription);
+    DM_LOG(@"Fetch Error: %@, Code: %li", error.localizedDescription, error.code);
 
     if ([wsGetUserPlannedMealNames respondsToSelector:@selector(getUserPlannedMealNamesFailed:)]) {
         [wsGetUserPlannedMealNames getUserPlannedMealNamesFailed:error];

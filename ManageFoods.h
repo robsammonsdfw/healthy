@@ -9,14 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FoodCategoryPicker.h"
 #import "MeasurePicker.h"
-#import "SaveUPCDataWebService.h"
 
-@class AppDelegate;
-
-@interface ManageFoods : UIViewController <UITextFieldDelegate, MeasurePickerDelegate, FoodCategoryDelegate, UIImagePickerControllerDelegate, SaveUPCDataWSDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate> {
-	
-	AppDelegate *mainDelegate;
-	
+@interface ManageFoods : UIViewController <UITextFieldDelegate, MeasurePickerDelegate, FoodCategoryDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate> {
+		
 	IBOutlet UIScrollView *scrollView;
 	NSDate *date_currentDate;
 	NSString *date_Today;
@@ -62,12 +57,10 @@
 	IBOutlet UITextField *txtfieldVitE;
 	IBOutlet UITextField *txtfieldServingSize;
     
-    // Henry mods
     IBOutlet UIButton *selectCategoryButton;
     IBOutlet UIButton *selectMeasureButton;
 	IBOutlet UIToolbar *keyboardToolBar;
     IBOutlet UIBarButtonItem *closeDoneButton;
-    
     
     NSMutableDictionary *selectedFoodDict;
     

@@ -3,33 +3,26 @@
 #import "UserMealType.h"
 #import "OtherHealthServiceVC.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "MBProgressHUD.h"
-#import "XMLReader.h"
 #import "SBPickerSelector.h"
-#import "DietMasterGoAppDelegate.h"
-#import "DietMasterGoViewController.h"
+#import "DMDataFetcher.h"
 
-@interface UserMealType ()<NSURLConnectionDelegate,UITextFieldDelegate,SBPickerSelectorDelegate>
-{
-    SBPickerSelector *picker;
-    
-    NSMutableData *webData;
-    NSMutableArray *soapResult;
-    NSArray *pickerData;
-    NSString *MealTypeID;
-}
+@interface UserMealType () <NSURLConnectionDelegate, UITextFieldDelegate, SBPickerSelectorDelegate>
+@property (nonatomic, strong) NSArray *pickerData;
+@property (nonatomic, strong) NSArray *fetchedArray;
+@property (nonatomic, strong) NSString *mealTypeID;
+
+@property (nonatomic, strong) SBPickerSelector *picker;
 @property (nonatomic, strong) IBOutlet UIButton *btnYes;
 @property (nonatomic, strong) IBOutlet UIButton *btnNo;
-
+@property (nonatomic, strong) IBOutlet UITextField *txtMealType;
 @end
 
 @implementation UserMealType
-@synthesize xmlParser;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.btnNo setSelected:YES];
-    picker = [SBPickerSelector picker];
+    self.picker = [SBPickerSelector picker];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -55,50 +48,45 @@
     self.txtMealType.leftViewMode = UITextFieldViewModeAlways;
 }
 
-#pragma mark - btn Action -
 - (IBAction)btnPreviousClicked:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)btnNextClicked:(id)sender {
-    if (self.txtMealType.text.length == 0)
-    {
+    if (self.txtMealType.text.length == 0) {
         [DMGUtilities showAlertWithTitle:@"Error" message:@"Please Select Meal type." inViewController:nil];
-    }
-    else{
+    } else {
         [self ProfileCompletion];
     }
 }
 
 - (IBAction)btnMedicalConditionClicked:(id)sender {
     UIButton *btn =(UIButton*)sender;
-    if (btn.tag == 20)
-    {
+    if (btn.tag == 20) {
         [self.btnYes setSelected:YES];
         [self.btnNo setSelected:NO];
         //reword the message. if they click YES to health condition, show the message, but allow them to continue.
         [DMGUtilities showAlertWithTitle:@"Notice" message:@"This program or products are not intended to replace the expert advice of a medical practitioner and are not designed to treat diseases of any kind. Users of this program or products assume all risk. The publishers of this application, its owners, distributors, licensors and any related parties, assume no liability or risk of any kind." inViewController:nil];
-    } else if (btn.tag == 21)
-    {
+    } else if (btn.tag == 21) {
         [self.btnYes setSelected:NO];
         [self.btnNo setSelected:YES];
     }
 }
 #pragma mark - hasKey Generation method -
--(NSString *)hashKeyCalculation
-{
+
+-(NSString *)hashKeyCalculation {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSString *userName = [defaults objectForKey:@"username_dietmastergo"];
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    DMUser *currentUser = [authManager loggedInUser];
+    NSString *userName = currentUser.userName;
     NSString *password = [defaults objectForKey:@"Password"];
     NSString *passThruKey = [defaults objectForKey:@"PassThruKey"];
     NSString *concatStr=[NSString stringWithFormat:@"%@%@%@",userName,password,passThruKey];
     
     const char * pointer = [concatStr UTF8String];
     unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
-    
     CC_MD5(pointer, (CC_LONG)strlen(pointer), md5Buffer);
-    
     NSMutableString * string = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
     for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++){
         [string appendFormat:@"%02x",md5Buffer[i]];
@@ -107,54 +95,40 @@
     return string;
 }
 
-#pragma mark - APi Call -
--(void)getMealType
-{
-    [DMActivityIndicator showProgressIndicator];
+- (void)getMealType {
+    [DMActivityIndicator showActivityIndicator];
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    DMUser *currentUser = [authManager loggedInUser];
+    NSString *companyID = currentUser.companyId.stringValue;
     
-    //http://webservice.dmwebpro.com/DMGoWS.asmx?op=GetMealTypeOptions
-    NSString *companyID= [[NSUserDefaults standardUserDefaults] objectForKey:@"companyid_dietmastergo"]; // @"3271";
-    NSString *ParentGroupID=@"1";
+    NSDictionary *params = @{ @"RequestType": @"GetMealTypeOptions",
+                              @"CompanyID": companyID,
+                              @"ParentGroupID": @"1"
+                            };
     
-    NSString *soapMessage =  [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-                              "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
-                              "<soap:Body>"
-                              "<GetMealTypeOptions xmlns=\"http://webservice.dmwebpro.com/\">"
-                              "<CompanyID>%@</CompanyID>"
-                              "<ParentGroupID>%@</ParentGroupID>"
-                              "</GetMealTypeOptions>"
-                              "</soap:Body>"
-                              "</soap:Envelope>",companyID,ParentGroupID];
-    
-    //DMLog(@"%@",soapMessage);
-    // [{"UserID":"110195","CompanyID":"1127"}]
-    NSURL *url = [NSURL URLWithString:@"http://webservice.dmwebpro.com/DMGoWS.asmx?op=GetMealTypeOptions"];
-    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url];
-    NSString *msgLength = [NSString stringWithFormat:@"%lu", (unsigned long)[soapMessage length]];
-    
-    [theRequest addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    [theRequest addValue: @"http://webservice.dmwebpro.com/GetMealTypeOptions" forHTTPHeaderField:@"SOAPAction"];
-    [theRequest addValue: msgLength forHTTPHeaderField:@"Content-Length"];
-    [theRequest setHTTPMethod:@"POST"];
-    [theRequest setHTTPBody: [soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+    [DMDataFetcher fetchDataWithRequestParams:params completion:^(NSObject *object, NSError *error) {
+        NSDictionary *resultDict = (NSDictionary *)object;
+        self.fetchedArray = [resultDict objectForKey:@"MealTypeCategories"];
+        self.pickerData = [resultDict valueForKey:@"Description"];
+
+        [DMActivityIndicator hideActivityIndicator];
+        DMLog(@"Error: %@",[error description]);
+    }];
 }
 
--(void)ProfileCompletion
-{
+- (void)ProfileCompletion {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSString *companyID= [[NSUserDefaults standardUserDefaults] objectForKey:@"companyid_dietmastergo"]; // @"3271";
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    DMUser *currentUser = [authManager loggedInUser];
+    NSString *companyID = currentUser.companyId.stringValue;
     NSString *passThruKey= [[NSUserDefaults standardUserDefaults] objectForKey:@"companyPassThru_dietmastergo"]; //p54118!
-    
     
     NSString *userName = [_userInfoDict objectForKey:@"Username"];
     NSString *password = [_userInfoDict objectForKey:@"Password"];
     NSString *firstName =[_userInfoDict objectForKey:@"FirstName"];
     NSString *lastName =[_userInfoDict objectForKey:@"LastName"];
     NSString *Email=[_userInfoDict objectForKey:@"Email"];
-//
+
     //format the birthday
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"dd/MM/yyyy"]; //yyyy-MM-dd
@@ -162,7 +136,7 @@
     [dateFormat setDateFormat:@"yyyy-MM-dd"];
     NSString*birthDate = [dateFormat stringFromDate:formattedDate];
     
-    [_userInfoDict setValue:MealTypeID forKey:@"MealTypeID"];
+    [_userInfoDict setValue:self.mealTypeID forKey:@"MealTypeID"];
     int Gender=[[_userInfoDict objectForKey:@"gender"] intValue];
     int Height=[[_userInfoDict objectForKey:@"userHeight"] intValue];
     int Weight=[[_userInfoDict objectForKey:@"userWeight"] intValue];
@@ -198,37 +172,13 @@
     {
         [dictParameter setObject:[NSNumber numberWithInt:goalWeight] forKey:@"GoalWeight"];
     }
-    [dictParameter setObject:MealTypeID forKey:@"MealTypeID"];
+    [dictParameter setObject:self.mealTypeID forKey:@"MealTypeID"];
     //bodyType 0/1/2
     [dictParameter setObject:[NSNumber numberWithInt:bodyType] forKey:@"BodyType"];
     //goalRate 0-2
     [dictParameter setObject:goalRate forKey:@"GoalRate"];
     [dictParameter setObject:companyID forKey:@"CompanyId"];
-//    [dictParameter setObject:@"0" forKey:@"GeneralUnits"];
-//    [dictParameter setObject:@"0" forKey:@"EnergyUnit"];
-//    [dictParameter setObject:@"0" forKey:@"DateFormat"];
 
-//    [dictParameter setObject:@"0" forKey:@"BMRCalcMethod"];
-//    [dictParameter setObject:@"0" forKey:@"HideTemplates"];
-//    [dictParameter setObject:@"0" forKey:@"HeartDisease"];
-//    [dictParameter setObject:@"0" forKey:@"LiverDisease"];
-//    [dictParameter setObject:@"0" forKey:@"PancreaticDisease"];
-//    [dictParameter setObject:@"0" forKey:@"Anemia"];
-//    [dictParameter setObject:@"0" forKey:@"KidneyDisease"];
-//    [dictParameter setObject:@"0" forKey:@"Hypoglycemia"];
-//    [dictParameter setObject:@"0" forKey:@"Diabetes"];
-//    [dictParameter setObject:@"0" forKey:@"Hypertension"];
-//    [dictParameter setObject:@"0" forKey:@"HistHeartDisease"];
-//    [dictParameter setObject:@"0" forKey:@"HistBreastCancer"];
-//    [dictParameter setObject:@"0" forKey:@"HistCancerOther"];
-//    [dictParameter setObject:@"0" forKey:@"HistLiverDisease"];
-//    [dictParameter setObject:@"0" forKey:@"HistStroke"];
-//    [dictParameter setObject:@"0" forKey:@"HistOsteoporosis"];
-//    [dictParameter setObject:@"0" forKey:@"HistHypoglycemia"];
-//    [dictParameter setObject:@"0" forKey:@"HistDiabetes"];
-//    [dictParameter setObject:@"0" forKey:@"HistHypertension"];
-//    [dictParameter setObject:@"1" forKey:@"returnUserID"];
-    
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictParameter
                                                        options:0
@@ -285,16 +235,12 @@
                         [DMGUtilities showAlertWithTitle:@"Error" message:errorMessage inViewController:nil];
 
                     } else {
-                        [defaults setValue:[profileResponse objectForKey:@"mobileToken"] forKey:@"authkey_dietmastergo"];
-                        [defaults setValue:[profileResponse objectForKey:@"userId"] forKey:@"userid_dietmastergo"];
-                        [defaults synchronize];
-
                         [DMActivityIndicator showCompletedIndicator];
                         
                         [self dismissViewControllerAnimated:YES completion:^() {
                             DietMasterGoAppDelegate *appDelegate = (DietMasterGoAppDelegate *)[[UIApplication sharedApplication] delegate];
-                            
-                            [appDelegate loginFromUrl:[NSString stringWithFormat:@"%@:%@", [defaults objectForKey:@"authkey_dietmastergo"], [_userInfoDict objectForKey:@"Username"]]];
+                            DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+                            [appDelegate loginFromUrl:[NSString stringWithFormat:@"%@:%@", currentUser.authToken, [_userInfoDict objectForKey:@"Username"]]];
                         }];
                     }
                 } else {
@@ -308,87 +254,39 @@
     }];
 }
 
-
-#pragma mark - textFiled Delegate method -
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
     [self.txtMealType resignFirstResponder];
     if (textField == self.txtMealType)
     {
-        NSArray *arr = pickerData;
+        NSArray *arr = self.pickerData;
         
-        if (arr.count >0)
-        {
-            picker.pickerData = arr ;
-            picker.pickerType = SBPickerSelectorTypeText;
-            picker.delegate = self;
-            picker.doneButtonTitle = @"Done";
-            picker.cancelButtonTitle = @"Cancel";
-            [picker showPickerOver:self];
-        }
-        else{
+        if (arr.count >0) {
+            self.picker.pickerData = [arr mutableCopy] ;
+            self.picker.pickerType = SBPickerSelectorTypeText;
+            self.picker.delegate = self;
+            self.picker.doneButtonTitle = @"Done";
+            self.picker.cancelButtonTitle = @"Cancel";
+            [self.picker showPickerOver:self];
+        } else{
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (arr.count > 0)
-                {
-                    picker.pickerData = arr ;
-                    picker.pickerType = SBPickerSelectorTypeText;
-                    picker.delegate = self;
-                    picker.doneButtonTitle = @"Done";
-                    picker.cancelButtonTitle = @"Cancel";
-                    [picker showPickerOver:self];
+                if (arr.count > 0) {
+                    self.picker.pickerData = [arr mutableCopy];
+                    self.picker.pickerType = SBPickerSelectorTypeText;
+                    self.picker.delegate = self;
+                    self.picker.doneButtonTitle = @"Done";
+                    self. picker.cancelButtonTitle = @"Cancel";
+                    [self.picker showPickerOver:self];
                 }
             });
         }
     }
 }
 
-#pragma mark - NSURLConnection delegate method -
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    [webData setLength: 0];
-}
+#pragma mark - Picker
 
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [webData appendData:data];
-}
-
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [DMActivityIndicator hideActivityIndicator];
-    DMLog(@"Error: %@",[error description]);
-}
-
--(void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [DMActivityIndicator hideActivityIndicator];
-
-    NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-    //DMLog(@"%@",theXML);
-    
-    NSError *error=nil;
-    NSDictionary *xmlDict = [XMLReader dictionaryForXMLString:theXML error:&error];
-    
-    NSString *resultString = [[[[[xmlDict objectForKey:@"soap:Envelope"] objectForKey:@"soap:Body"] objectForKey:@"GetMealTypeOptionsResponse"] objectForKey:@"GetMealTypeOptionsResult"] objectForKey:@"text"];
-    DMLog(@"%@", resultString);
-    
-    NSDictionary *jsonObject = @{};
-    if (resultString.length) {
-        jsonObject = [NSJSONSerialization JSONObjectWithData:[resultString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil][1];
-    }
-    
-    soapResult = [jsonObject objectForKey:@"MealTypeCategories"];
-    pickerData = [soapResult valueForKey:@"Description"];
-}
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-}
-
-#pragma mark - Picker -
 -(void)pickerSelector:(SBPickerSelector *)selector selectedValue:(NSString *)value index:(NSInteger)idx {
-    MealTypeID = [[soapResult objectAtIndex:idx] objectForKey:@"MealTypeID"];
-    self.txtMealType.text=value;
+    self.mealTypeID = [[self.fetchedArray objectAtIndex:idx] objectForKey:@"MealTypeID"];
+    self.txtMealType.text = value;
 }
 
 -(void)pickerSelector:(SBPickerSelector *)selector cancelPicker:(BOOL)cancel {

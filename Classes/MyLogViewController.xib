@@ -12,7 +12,6 @@
                 <outlet property="actualCarbLabel" destination="112" id="128"/>
                 <outlet property="actualFatLabel" destination="122" id="129"/>
                 <outlet property="actualProtLabel" destination="118" id="130"/>
-                <outlet property="cellSpinner" destination="104" id="105"/>
                 <outlet property="dateToolBar" destination="25" id="mel-LD-aRu"/>
                 <outlet property="imgbottom" destination="107" id="Vms-Cb-ZGB"/>
                 <outlet property="imgbottomline" destination="oSo-0s-ldr" id="e7n-n5-grP"/>
@@ -34,8 +33,7 @@
                 <outlet property="staticRecProtLbl" destination="119" id="58m-KJ-Gjm"/>
                 <outlet property="staticRecommendedLbl" destination="11" id="Goc-U0-oXU"/>
                 <outlet property="staticRemainingLbl" destination="10" id="Y5g-Jx-A0e"/>
-                <outlet property="tbl" destination="9Tc-9w-nJ7" id="ogQ-Wt-qui"/>
-                <outlet property="tblSimpleTable" destination="82" id="85"/>
+                <outlet property="tableView" destination="82" id="gk9-lj-Juh"/>
                 <outlet property="view" destination="1" id="54"/>
             </connections>
         </placeholder>
@@ -84,19 +82,6 @@
                         <outlet property="delegate" destination="-1" id="87"/>
                     </connections>
                 </tableView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Tc-9w-nJ7">
-                    <rect key="frame" x="-1" y="43" width="320" height="338"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="V9Q-JK-B6j"/>
-                        <outlet property="delegate" destination="-1" id="6uh-Fv-Cs1"/>
-                    </connections>
-                </tableView>
-                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="104">
-                    <rect key="frame" x="142" y="165" width="37" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                </activityIndicatorView>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="109" userLabel="DayDetail">
                     <rect key="frame" x="0.0" y="280" width="320" height="185"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>

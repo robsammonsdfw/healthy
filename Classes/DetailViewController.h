@@ -12,7 +12,7 @@
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
 #import "MealPlanWebService.h"
-#import "SoapWebServiceEngine.h"
+#import "DMDataFetcher.h"
 
 #define cSection1 0
 #define cSection2 1

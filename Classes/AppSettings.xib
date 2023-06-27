@@ -9,7 +9,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AppSettings">
             <connections>
-                <outlet property="FoodUpdateSyncSpinner" destination="buN-kd-5lm" id="RFq-RC-Dyr"/>
                 <outlet property="btnAppleWatchTracking" destination="A6b-hA-kib" id="cT2-lq-7pJ"/>
                 <outlet property="btnCalorieTracking" destination="l2W-av-eCa" id="hXM-ed-ERN"/>
                 <outlet property="btnDddmm" destination="0sf-1B-AlP" id="Vw3-xg-vgw"/>
@@ -27,13 +26,11 @@
                 <outlet property="btnperfomupsync" destination="24" id="YZI-EL-Ahs"/>
                 <outlet property="btnperformdownsync" destination="6" id="3x7-S0-1ZD"/>
                 <outlet property="btnsenddatabasetosupport" destination="33" id="cb3-d6-6BF"/>
-                <outlet property="downSyncSpinner" destination="27" id="29"/>
                 <outlet property="hcgBookletButton" destination="cjB-bA-PKC" id="pyJ-d5-MY4"/>
                 <outlet property="lastSyncLabel" destination="31" id="32"/>
                 <outlet property="lblStaticLoggedExe" destination="9TJ-x8-rE5" id="F94-bw-Kzr"/>
                 <outlet property="mwlBookletButton" destination="YYf-ps-TXd" id="0l0-46-y5C"/>
                 <outlet property="myScrollBG" destination="uOa-09-4bj" id="CRo-yL-fQv"/>
-                <outlet property="upSyncSpinner" destination="28" id="30"/>
                 <outlet property="versionLabel" destination="36" id="37"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewSetting" destination="DXW-R8-0X0" id="xaa-lV-WdQ"/>
@@ -125,10 +122,6 @@
                                 <action selector="forceDBSync:" destination="-1" eventType="touchUpInside" id="22"/>
                             </connections>
                         </button>
-                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="27">
-                            <rect key="frame" x="266" y="178" width="20" height="20"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        </activityIndicatorView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="24">
                             <rect key="frame" x="20" y="215" width="280" height="37"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -141,10 +134,6 @@
                                 <action selector="forceUPDBSync:" destination="-1" eventType="touchUpInside" id="26"/>
                             </connections>
                         </button>
-                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="28">
-                            <rect key="frame" x="266" y="223" width="20" height="20"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        </activityIndicatorView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lDk-yo-gNI">
                             <rect key="frame" x="20" y="260" width="280" height="37"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -157,10 +146,6 @@
                                 <action selector="CheckForFoodUpdateSync:" destination="-1" eventType="touchUpInside" id="ejw-5A-ZUz"/>
                             </connections>
                         </button>
-                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="buN-kd-5lm">
-                            <rect key="frame" x="266" y="268" width="20" height="20"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        </activityIndicatorView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Last Sync: Not Available" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="31">
                             <rect key="frame" x="20" y="302" width="280" height="18"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>

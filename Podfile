@@ -30,7 +30,6 @@ def core_pods
 
   # To be deprecated:
   pod 'ASIHTTPRequest' # https://cocoapods.org/pods/ASIHTTPRequest
-  pod 'ZipArchive' # https://github.com/mattconnolly/ZipArchive
 end
 
 target 'DietMasterGoPlus' do

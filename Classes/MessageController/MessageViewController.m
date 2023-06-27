@@ -8,7 +8,7 @@
 #import "SendView.h"
 #import "Common.h"
 
-#import "SoapWebServiceEngine.h"
+#import "DMDataFetcher.h"
 #import "DietmasterEngine.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
@@ -18,6 +18,7 @@
 #import "NSString+ConvertToDate.h"
 
 #import "DMMessage.h"
+#import "DMDatabaseProvider.h"
 
 static NSString *OpponentCellIdentifier = @"OpponentCellIdentifier";
 static NSString *OwnerCellIdentifier = @"OwnerCellIdentifier";
@@ -25,16 +26,14 @@ static NSString *OwnerCellIdentifier = @"OwnerCellIdentifier";
 int const ShowMessageCountStep = 10;
 int const MaximumStringLength = 300;
 
-@interface MessageViewController () <SendViewDelegate, UITableViewDataSource, UITableViewDelegate> {
-    NSString *userId;
-}
+@interface MessageViewController () <SendViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) SendView *sendView;
 /// Dictionary of messages, with the key = date, and value = array of messages.
 @property (nonatomic, strong) NSMutableDictionary *messagesDict;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic) int countShowedMessage;
-
+@property (nonatomic, strong) NSTimer *messageTimer;
 @end
 
 @implementation MessageViewController
@@ -47,6 +46,10 @@ int const MaximumStringLength = 300;
         _messagesDict = [[NSMutableDictionary alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reloadDataWithScroll)
+                                                     name:UpdatingMessageNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -109,8 +112,6 @@ int const MaximumStringLength = 300;
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     self.countShowedMessage = ShowMessageCountStep;
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    userId = [prefs valueForKey:@"userid_dietmastergo"];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
                                                                    style:UIBarButtonItemStylePlain
@@ -122,7 +123,7 @@ int const MaximumStringLength = 300;
                                                                                  target:self
                                                                                  action:@selector(syncMessages:)];
     syncButton.style = UIBarButtonItemStylePlain;
-    syncButton.tintColor = [UIColor whiteColor];
+    syncButton.tintColor = [UIColor blackColor];
     self.navigationItem.rightBarButtonItem = syncButton;
 
     [self.navigationController setNavigationBarHidden:NO];
@@ -130,17 +131,15 @@ int const MaximumStringLength = 300;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-        
-    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-    [engine startUpdatingMessages];
     
-    [self reloadDataWithScroll];
-    [self updateHeaderView];
+    [self syncMessages:nil];
+    if (!self.messageTimer) {
+        __weak typeof(self) weakSelf = self;
+        self.messageTimer = [NSTimer timerWithTimeInterval:10.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            [weakSelf syncMessages:nil];
+        }];
+    }
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadDataWithScroll)
-                                                 name:UpdatingMessageNotification
-                                               object:nil];
     [self setMessagesRead];
 }
 
@@ -151,8 +150,9 @@ int const MaximumStringLength = 300;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-    [engine stopUpdatingMessages];
+    
+    [self.messageTimer invalidate];
+    self.messageTimer = nil;
 }
 
 #pragma mark - Helpers
@@ -193,26 +193,38 @@ int const MaximumStringLength = 300;
 #pragma mark - Message Datasource
 
 - (void)syncMessages:(id)sender {
-    [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
-    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-    [engine syncMessages];
+    if (sender) {
+        [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
+    }
+    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [dataProvider syncMessagesWithCompletionBlock:^(BOOL completed, NSError *error) {
+        if (error || sender) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        [weakSelf reloadDataWithScroll];
+        [weakSelf updateHeaderView];
+    }];
 }
 
 - (void)setMessagesRead {
-    NSArray<DMMessage *> *messages = [[DietmasterEngine sharedInstance] unreadMessages];
+    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+    NSArray<DMMessage *> *messages = [dataProvider unreadMessages];
     if (!messages.count) {
         return; // No messages to process.
     }
     
-    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
     [fetcher setMessagesReadWithMessages:messages completion:^(NSArray<NSDictionary<NSString *, NSNumber *> *> *messageIds,
                                                                NSError *error) {
         if (error) {
             DMLog(@"Error: %@", error.localizedDescription);
             return;
         }
+        DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
         for (NSDictionary *dict in messageIds) {
-            [[DietmasterEngine sharedInstance] setReadedMessageId:dict[@"MessageID"]];
+            [dataProvider setReadedMessageId:dict[@"MessageID"]];
         }
     }];
 }
@@ -286,6 +298,9 @@ int const MaximumStringLength = 300;
 }
 
 - (void)scrollToBottom {
+    if (self.tableView.numberOfSections == 0) {
+        return;
+    }
     NSInteger lastSection = self.tableView.numberOfSections - 1;
     NSInteger numberOfRows = [self.tableView numberOfRowsInSection:lastSection];
     if (numberOfRows) {
@@ -307,7 +322,7 @@ int const MaximumStringLength = 300;
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Sending..."];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
     [fetcher saveMessageWithText:text completion:^(DMMessage *message, NSError *error) {
         if (error) {
             [DMGUtilities showError:error withTitle:@"Error" message:@"Please try again." inViewController:nil];
@@ -343,7 +358,8 @@ int const MaximumStringLength = 300;
 }
 
 - (DMMessageCellType)typeFromMessage:(DMMessage *)message {
-    if ([message.senderId isEqualToString:userId])
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    if ([message.senderId isEqualToString:currentUser.userId.stringValue])
         return DMMessageCellTypeMine;
     else
         return DMMessageCellTypeResponse;

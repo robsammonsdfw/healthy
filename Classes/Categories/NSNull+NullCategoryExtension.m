@@ -8,9 +8,10 @@
 #import "NSNull+NullCategoryExtension.h"
 
 @implementation NSNull (NullCategoryExtension)
-- (int)intValue
-{
+
+- (int)intValue {
     return 0;
 }
+
 @end
 

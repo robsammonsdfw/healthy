@@ -8,12 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		0E0D09F72A45CD1B0032162E /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
-		0E0D09F92A45DD8E0032162E /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DataProvider.swift */; };
+		0E0D09F92A45DD8E0032162E /* DayDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */; };
 		0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FB2A4635940032162E /* DMMovePickerRow.m */; };
 		0E0D09FF2A4672790032162E /* DMMovePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FE2A4672790032162E /* DMMovePlan.m */; };
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
+		0E4409732A49427400AF5BAD /* DMDatabaseProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMDatabaseProvider.m */; };
+		0E4409762A49A3FF00AF5BAD /* DMAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */; };
+		0E4409782A49EA6E00AF5BAD /* FetchUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */; };
+		0E44097B2A49EFCB00AF5BAD /* DMDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */; };
+		0E44097E2A4A0B5F00AF5BAD /* MyMovesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */; };
 		0E6F8FF42A43104200956F1E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F8FF32A43104200956F1E /* SceneDelegate.swift */; };
 		0E6F91142A4328A000956F1E /* DietMasterGoPlus-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* DietMasterGoPlus-Info.plist */; };
 		0E6F91192A4328A000956F1E /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
@@ -51,7 +56,7 @@
 		0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */; };
 		0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */; };
 		0E8EC8F12A3DE57D0095BDEC /* DMMoveTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */; };
-		0E8EC8F32A3E08E00095BDEC /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F22A3E08E00095BDEC /* DataFetcher.swift */; };
+		0E8EC8F32A3E08E00095BDEC /* UserDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */; };
 		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
 		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
 		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
@@ -105,7 +110,6 @@
 		401B648920B3FC64004453E7 /* ExercisesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79114DE157C008C9576 /* ExercisesDetailViewController.m */; };
 		401B648A20B3FC64004453E7 /* DietmasterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */; };
 		401B648B20B3FC64004453E7 /* FavoriteMealsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */; };
-		401B649420B3FC64004453E7 /* SoapWebServiceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B214EAC79700B8FFE3 /* SoapWebServiceEngine.m */; };
 		401B649520B3FC64004453E7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */; };
 		401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */; };
 		401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F44D315003DA6008413AB /* LearnMoreViewController.m */; };
@@ -130,14 +134,11 @@
 		401B656720B3FC64004453E7 /* YLProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 09AB77F71FBDABCE00924A51 /* YLProgressBar.m */; };
 		401B656B20B3FC64004453E7 /* StepData.m in Sources */ = {isa = PBXBuildFile; fileRef = 403FEB521FD149A5006D9B8F /* StepData.m */; };
 		401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28E187EDE28004A542C /* NSDate+ConvertToString.m */; };
-		401B658920B3FC64004453E7 /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 685DFA2A18E2E99600FB97A7 /* XMLReader.m */; };
 		401B658A20B3FC64004453E7 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E436E172ABB7B00C400D4 /* Base64.m */; };
 		401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4370172ABB7B00C400D4 /* NSData-AES.m */; };
 		401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4372172ABB7B00C400D4 /* NSFileManager-AES.m */; };
 		401B658E20B3FC64004453E7 /* rijndael.c in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4373172ABB7B00C400D4 /* rijndael.c */; };
-		401B658F20B3FC64004453E7 /* SaveUPCDataWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E43871731B09A00C400D4 /* SaveUPCDataWebService.m */; };
 		401B659020B3FC64004453E7 /* UIDevice+machine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0A29501744187D003AB90A /* UIDevice+machine.m */; };
-		401B659620B3FC64004453E7 /* GetDataWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECD681A17B9BD78006B3FED /* GetDataWebService.m */; };
 		401B659820B3FC64004453E7 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403FEB4E1FD1379C006D9B8F /* HealthKit.framework */; };
 		401B659920B3FC64004453E7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D254AD1D62F564008513A0 /* Security.framework */; };
 		401B659C20B3FC64004453E7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586641D59BB5F005354D2 /* WebKit.framework */; };
@@ -156,8 +157,6 @@
 		401B65B420B3FC64004453E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		402A3C1121F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 402A3C0F21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m */; };
 		402A3C1421F88697005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */; };
-		402A9061221AED1900568860 /* NSArray+HOFC.m in Sources */ = {isa = PBXBuildFile; fileRef = 402A905D221AED1800568860 /* NSArray+HOFC.m */; };
-		402A9062221AED1900568860 /* NSArray+HOF.m in Sources */ = {isa = PBXBuildFile; fileRef = 402A9060221AED1800568860 /* NSArray+HOF.m */; };
 		402C5061221577C600259359 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402C5060221577C600259359 /* AVKit.framework */; };
 		403D88A921ECA95F00B2F232 /* MyMovesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88A721ECA95F00B2F232 /* MyMovesTableViewCell.m */; };
 		403D88AA21ECA95F00B2F232 /* MyMovesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88A821ECA95F00B2F232 /* MyMovesTableViewCell.xib */; };
@@ -168,7 +167,6 @@
 		40402832224E414C0081FFD3 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40402831224E414C0081FFD3 /* sound.mp3 */; };
 		40AFA92E21FA13CD009140D9 /* MyMovesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */; };
 		40AFA92F21FA13CD009140D9 /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
-		40DD776F220082BA003EE6E9 /* MyMovesWebServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 40DD776E220082BA003EE6E9 /* MyMovesWebServices.m */; };
 		40E035C721F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035BF21F1F29E00968755 /* MyMovesDetailHeaderCollectionReusableView.xib */; };
 		40E035C821F1F2A100968755 /* MyMovesDetailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035C021F1F29F00968755 /* MyMovesDetailCollectionViewCell.xib */; };
 		40E035C921F1F2A100968755 /* MyMovesDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */; };
@@ -242,7 +240,7 @@
 		0E0A294F1744187D003AB90A /* UIDevice+machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+machine.h"; sourceTree = "<group>"; };
 		0E0A29501744187D003AB90A /* UIDevice+machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+machine.m"; sourceTree = "<group>"; };
 		0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingTextView.swift; sourceTree = "<group>"; };
-		0E0D09F82A45DD8E0032162E /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
+		0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataProvider.swift; sourceTree = "<group>"; };
 		0E0D09FA2A4635940032162E /* DMMovePickerRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMovePickerRow.h; sourceTree = "<group>"; };
 		0E0D09FB2A4635940032162E /* DMMovePickerRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMovePickerRow.m; sourceTree = "<group>"; };
 		0E0D09FD2A4672790032162E /* DMMovePlan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMovePlan.h; sourceTree = "<group>"; };
@@ -258,8 +256,15 @@
 		0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LearnMoreViewController.xib; sourceTree = "<group>"; };
 		0E3F44D815004364008413AB /* privacypolicy.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacypolicy.html; sourceTree = "<group>"; };
 		0E3F44D915004364008413AB /* termsofservice.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = termsofservice.html; sourceTree = "<group>"; };
-		0E4788B114EAC79700B8FFE3 /* SoapWebServiceEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoapWebServiceEngine.h; sourceTree = "<group>"; };
-		0E4788B214EAC79700B8FFE3 /* SoapWebServiceEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoapWebServiceEngine.m; sourceTree = "<group>"; };
+		0E4409712A49427400AF5BAD /* DMDatabaseProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMDatabaseProvider.h; sourceTree = "<group>"; };
+		0E4409722A49427400AF5BAD /* DMDatabaseProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMDatabaseProvider.m; sourceTree = "<group>"; };
+		0E4409742A49A3FF00AF5BAD /* DMAuthManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DMAuthManager.h; path = Classes/DataSource/DMAuthManager.h; sourceTree = SOURCE_ROOT; };
+		0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DMAuthManager.m; path = Classes/DataSource/DMAuthManager.m; sourceTree = SOURCE_ROOT; };
+		0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUtilities.swift; sourceTree = "<group>"; };
+		0E4409792A49EFCB00AF5BAD /* DMDataFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMDataFetcher.h; sourceTree = "<group>"; };
+		0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDataFetcher.m; sourceTree = "<group>"; };
+		0E44097C2A4A0B5F00AF5BAD /* MyMovesDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMovesDataProvider.h; sourceTree = "<group>"; };
+		0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMovesDataProvider.m; sourceTree = "<group>"; };
 		0E4788B514EACC0B00B8FFE3 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
@@ -274,8 +279,6 @@
 		0E4E4372172ABB7B00C400D4 /* NSFileManager-AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager-AES.m"; sourceTree = "<group>"; };
 		0E4E4373172ABB7B00C400D4 /* rijndael.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rijndael.c; sourceTree = "<group>"; };
 		0E4E4374172ABB7B00C400D4 /* rijndael.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rijndael.h; sourceTree = "<group>"; };
-		0E4E43861731B09A00C400D4 /* SaveUPCDataWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveUPCDataWebService.h; sourceTree = "<group>"; };
-		0E4E43871731B09A00C400D4 /* SaveUPCDataWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveUPCDataWebService.m; sourceTree = "<group>"; };
 		0E5ADC9917174DF100628F41 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		0E5ADC9B17174DF600628F41 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		0E5ADC9D17174DFB00628F41 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -339,7 +342,7 @@
 		0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveCategory.m; sourceTree = "<group>"; };
 		0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveTag.h; sourceTree = "<group>"; };
 		0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveTag.m; sourceTree = "<group>"; };
-		0E8EC8F22A3E08E00095BDEC /* DataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetcher.swift; sourceTree = "<group>"; };
+		0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataFetcher.swift; sourceTree = "<group>"; };
 		0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
 		0E9F17002A33BBE700217BF9 /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
 		0E9F17012A33BBE700217BF9 /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
@@ -370,8 +373,6 @@
 		0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSemiModalViewController.m; sourceTree = "<group>"; };
 		0EBFA6B815924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TDSemiModalExtension.h"; sourceTree = "<group>"; };
 		0EBFA6B915924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TDSemiModalExtension.m"; sourceTree = "<group>"; };
-		0ECD681917B9BD78006B3FED /* GetDataWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetDataWebService.h; sourceTree = "<group>"; };
-		0ECD681A17B9BD78006B3FED /* GetDataWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetDataWebService.m; sourceTree = "<group>"; };
 		0ECE6ED414BF3FC1004DEF36 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0ECE6F4614BF4A94004DEF36 /* TUTSimpleScatterPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUTSimpleScatterPlot.h; sourceTree = "<group>"; };
 		0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TUTSimpleScatterPlot.m; sourceTree = "<group>"; };
@@ -456,10 +457,6 @@
 		402A3C0E21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesDetailFooterCollectionReusableView.h; sourceTree = "<group>"; };
 		402A3C0F21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesDetailFooterCollectionReusableView.m; sourceTree = "<group>"; };
 		402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMovesDetailFooterCollectionReusableView.xib; sourceTree = "<group>"; };
-		402A905D221AED1800568860 /* NSArray+HOFC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+HOFC.m"; sourceTree = "<group>"; };
-		402A905E221AED1800568860 /* NSArray+HOF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+HOF.h"; sourceTree = "<group>"; };
-		402A905F221AED1800568860 /* NSArray+HOFC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+HOFC.h"; sourceTree = "<group>"; };
-		402A9060221AED1800568860 /* NSArray+HOF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+HOF.m"; sourceTree = "<group>"; };
 		402C5060221577C600259359 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		403D88A621ECA95F00B2F232 /* MyMovesTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesTableViewCell.h; sourceTree = "<group>"; };
 		403D88A721ECA95F00B2F232 /* MyMovesTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesTableViewCell.m; sourceTree = "<group>"; };
@@ -476,8 +473,6 @@
 		40AFA92B21FA13CD009140D9 /* MyMovesListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesListViewController.h; sourceTree = "<group>"; };
 		40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesListViewController.m; sourceTree = "<group>"; };
 		40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMovesListViewController.xib; sourceTree = "<group>"; };
-		40DD776D220082BA003EE6E9 /* MyMovesWebServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesWebServices.h; sourceTree = "<group>"; };
-		40DD776E220082BA003EE6E9 /* MyMovesWebServices.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesWebServices.m; sourceTree = "<group>"; };
 		40E035BF21F1F29E00968755 /* MyMovesDetailHeaderCollectionReusableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMovesDetailHeaderCollectionReusableView.xib; sourceTree = "<group>"; };
 		40E035C021F1F29F00968755 /* MyMovesDetailCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMovesDetailCollectionViewCell.xib; sourceTree = "<group>"; };
 		40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMovesDetailCollectionViewCell.m; sourceTree = "<group>"; };
@@ -546,8 +541,6 @@
 		65FF4382249885D100583000 /* MyLogTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLogTableViewCell.m; sourceTree = "<group>"; };
 		65FF4383249885D100583000 /* MyLogTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyLogTableViewCell.xib; sourceTree = "<group>"; };
 		65FF4384249885D100583000 /* MyLogTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLogTableViewCell.h; sourceTree = "<group>"; };
-		685DFA2918E2E99600FB97A7 /* XMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLReader.h; sourceTree = "<group>"; };
-		685DFA2A18E2E99600FB97A7 /* XMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLReader.m; sourceTree = "<group>"; };
 		685DFA3F18E2F37200FB97A7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		685DFA4118E2F37900FB97A7 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		685DFA4318E2F38800FB97A7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -619,17 +612,13 @@
 				650208EB250155EA00F412B0 /* Today_Old */,
 				650208D3250153C300F412B0 /* In-App Purchase */,
 				650208B12500D31400F412B0 /* Pop Up View */,
-				402A905C221AECF000568860 /* Higher Order Function */,
-				40DD776C2200826F003EE6E9 /* MyMoves WebService */,
 				403D889721EC7E2B00B2F232 /* My Moves */,
 				403FEB511FD149A5006D9B8F /* StepData */,
 				09AB77F51FBDABCE00924A51 /* YLProgressBar */,
 				09B3015E1FBC4ABC0018C016 /* MBCircularProgressBar */,
-				685DFA0118E2E99600FB97A7 /* XMLReader */,
 				0E0A2C6C174A5D8A003AB90A /* 1.2.1 New Files */,
 				0E002FF1153E19550094341F /* NSData+Blocks */,
 				0E4788BD14EACCCC00B8FFE3 /* SHA1PHPClass */,
-				0E4788AF14EAC78C00B8FFE3 /* SoapWebServiceEngine */,
 				0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */,
 				0E75DD8B1586532B003B1BB7 /* MealPlanWebService */,
 				0E71B79514DE1ABD008C9576 /* DietmasterEngine */,
@@ -641,7 +630,6 @@
 				59DA2AD31A1B625B008D749F /* Settings */,
 				0E3F44D115003DA6008413AB /* LearnMoreViewController */,
 				3568E29D187EDE40004A542C /* MessageController */,
-				0ECD681517B9BC4C006B3FED /* GetDataWebService */,
 				3568E28A187EDE28004A542C /* Model */,
 			);
 			path = Classes;
@@ -690,7 +678,6 @@
 			children = (
 				0E4E436C172ABB7B00C400D4 /* Base64Encoder */,
 				0E0A294E1744187D003AB90A /* UIDevice+machine */,
-				0E4E43851731B09A00C400D4 /* SaveUPCDataWebService */,
 				0E5ADF4D1718B3B800628F41 /* BarcodeScannerViewController */,
 			);
 			name = "1.2.1 New Files";
@@ -706,15 +693,6 @@
 				0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */,
 			);
 			path = LearnMoreViewController;
-			sourceTree = "<group>";
-		};
-		0E4788AF14EAC78C00B8FFE3 /* SoapWebServiceEngine */ = {
-			isa = PBXGroup;
-			children = (
-				0E4788B114EAC79700B8FFE3 /* SoapWebServiceEngine.h */,
-				0E4788B214EAC79700B8FFE3 /* SoapWebServiceEngine.m */,
-			);
-			path = SoapWebServiceEngine;
 			sourceTree = "<group>";
 		};
 		0E4788B414EACBFE00B8FFE3 /* LoginViewController */ = {
@@ -749,15 +727,6 @@
 				0E4E4374172ABB7B00C400D4 /* rijndael.h */,
 			);
 			path = Base64Encoder;
-			sourceTree = "<group>";
-		};
-		0E4E43851731B09A00C400D4 /* SaveUPCDataWebService */ = {
-			isa = PBXGroup;
-			children = (
-				0E4E43861731B09A00C400D4 /* SaveUPCDataWebService.h */,
-				0E4E43871731B09A00C400D4 /* SaveUPCDataWebService.m */,
-			);
-			path = SaveUPCDataWebService;
 			sourceTree = "<group>";
 		};
 		0E5ADF4D1718B3B800628F41 /* BarcodeScannerViewController */ = {
@@ -990,15 +959,6 @@
 			path = TDSemiModalViewController;
 			sourceTree = "<group>";
 		};
-		0ECD681517B9BC4C006B3FED /* GetDataWebService */ = {
-			isa = PBXGroup;
-			children = (
-				0ECD681917B9BD78006B3FED /* GetDataWebService.h */,
-				0ECD681A17B9BD78006B3FED /* GetDataWebService.m */,
-			);
-			path = GetDataWebService;
-			sourceTree = "<group>";
-		};
 		0ECE6ED814BF405A004DEF36 /* FoodCategoryPicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -1166,9 +1126,16 @@
 		0EDAB6A82A3B4E9100DB351A /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
+				0E44097C2A4A0B5F00AF5BAD /* MyMovesDataProvider.h */,
+				0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */,
+				0E4409792A49EFCB00AF5BAD /* DMDataFetcher.h */,
+				0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */,
 				0EDAB6A92A3B4E9A00DB351A /* Models */,
-				0E8EC8F22A3E08E00095BDEC /* DataFetcher.swift */,
-				0E0D09F82A45DD8E0032162E /* DataProvider.swift */,
+				0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */,
+				0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */,
+				0E4409712A49427400AF5BAD /* DMDatabaseProvider.h */,
+				0E4409722A49427400AF5BAD /* DMDatabaseProvider.m */,
+				0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -1187,6 +1154,8 @@
 				0E1A3B3F2A3B9E68004C6033 /* DMWeightLogEntry.h */,
 				0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */,
 				0EA18DC72A47BD670017D131 /* DMPickerViewDataSource.h */,
+				0E4409742A49A3FF00AF5BAD /* DMAuthManager.h */,
+				0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1309,17 +1278,6 @@
 			path = MessageController;
 			sourceTree = "<group>";
 		};
-		402A905C221AECF000568860 /* Higher Order Function */ = {
-			isa = PBXGroup;
-			children = (
-				402A905E221AED1800568860 /* NSArray+HOF.h */,
-				402A9060221AED1800568860 /* NSArray+HOF.m */,
-				402A905F221AED1800568860 /* NSArray+HOFC.h */,
-				402A905D221AED1800568860 /* NSArray+HOFC.m */,
-			);
-			path = "Higher Order Function";
-			sourceTree = "<group>";
-		};
 		403D889721EC7E2B00B2F232 /* My Moves */ = {
 			isa = PBXGroup;
 			children = (
@@ -1362,15 +1320,6 @@
 				403FEB521FD149A5006D9B8F /* StepData.m */,
 			);
 			path = StepData;
-			sourceTree = "<group>";
-		};
-		40DD776C2200826F003EE6E9 /* MyMoves WebService */ = {
-			isa = PBXGroup;
-			children = (
-				40DD776D220082BA003EE6E9 /* MyMovesWebServices.h */,
-				40DD776E220082BA003EE6E9 /* MyMovesWebServices.m */,
-			);
-			path = "MyMoves WebService";
 			sourceTree = "<group>";
 		};
 		431EEE471D82AA7D0022AFEA /* TTAttributeLable */ = {
@@ -1600,15 +1549,6 @@
 			path = OtherHealthServices;
 			sourceTree = "<group>";
 		};
-		685DFA0118E2E99600FB97A7 /* XMLReader */ = {
-			isa = PBXGroup;
-			children = (
-				685DFA2918E2E99600FB97A7 /* XMLReader.h */,
-				685DFA2A18E2E99600FB97A7 /* XMLReader.m */,
-			);
-			path = XMLReader;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1834,7 +1774,6 @@
 				401B647920B3FC64004453E7 /* RecordWeightView.m in Sources */,
 				0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */,
 				401B647A20B3FC64004453E7 /* FoodsHome.m in Sources */,
-				40DD776F220082BA003EE6E9 /* MyMovesWebServices.m in Sources */,
 				401B647B20B3FC64004453E7 /* FoodsSearch.m in Sources */,
 				401B647D20B3FC64004453E7 /* ManageFoods.m in Sources */,
 				401B647E20B3FC64004453E7 /* FoodCategoryPicker.m in Sources */,
@@ -1854,12 +1793,12 @@
 				401B648A20B3FC64004453E7 /* DietmasterEngine.m in Sources */,
 				401B648B20B3FC64004453E7 /* FavoriteMealsViewController.m in Sources */,
 				0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */,
-				401B649420B3FC64004453E7 /* SoapWebServiceEngine.m in Sources */,
 				401B649520B3FC64004453E7 /* LoginViewController.m in Sources */,
 				40AFA92E21FA13CD009140D9 /* MyMovesListViewController.m in Sources */,
 				401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */,
 				401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */,
 				401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */,
+				0E4409732A49427400AF5BAD /* DMDatabaseProvider.m in Sources */,
 				0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */,
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
 				401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */,
@@ -1876,28 +1815,29 @@
 				65462D1D26BD1D82004D1654 /* UserMealType.m in Sources */,
 				B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */,
 				0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */,
-				402A9062221AED1900568860 /* NSArray+HOF.m in Sources */,
 				401B64C220B3FC64004453E7 /* Common.m in Sources */,
 				401B64C420B3FC64004453E7 /* NSString+ConvertToDate.m in Sources */,
 				0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */,
 				650208DF250153C300F412B0 /* InAppPurchaseViewController.m in Sources */,
 				401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */,
+				0E4409762A49A3FF00AF5BAD /* DMAuthManager.m in Sources */,
 				401B64D420B3FC64004453E7 /* NSObject+Blocks.m in Sources */,
 				402A3C1121F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m in Sources */,
 				401B64DF20B3FC64004453E7 /* UIViewController+Keyboard.m in Sources */,
 				0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */,
 				650208E0250153C300F412B0 /* headerVw.m in Sources */,
-				0E8EC8F32A3E08E00095BDEC /* DataFetcher.swift in Sources */,
+				0E8EC8F32A3E08E00095BDEC /* UserDataFetcher.swift in Sources */,
 				650208E3250153C300F412B0 /* PlansTableViewCell.m in Sources */,
 				0E0D09FF2A4672790032162E /* DMMovePlan.m in Sources */,
+				0E44097E2A4A0B5F00AF5BAD /* MyMovesDataProvider.m in Sources */,
 				82C45661233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m in Sources */,
 				65462D2626BD1DAF004D1654 /* UserGoalVC.m in Sources */,
 				0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */,
 				0E8EC8F12A3DE57D0095BDEC /* DMMoveTag.m in Sources */,
-				402A9061221AED1900568860 /* NSArray+HOFC.m in Sources */,
 				0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */,
 				65462D0D26BD1D29004D1654 /* ProfileVC.m in Sources */,
 				65462D2B26BD1DC3004D1654 /* OtherHealthServiceVC.m in Sources */,
+				0E4409782A49EA6E00AF5BAD /* FetchUtilities.swift in Sources */,
 				401B652720B3FC64004453E7 /* SendView.m in Sources */,
 				403D88A921ECA95F00B2F232 /* MyMovesTableViewCell.m in Sources */,
 				0ECFE7F12A41DB3900DE631E /* DMPickerViewController.swift in Sources */,
@@ -1926,20 +1866,18 @@
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,
 				65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */,
 				401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */,
-				401B658920B3FC64004453E7 /* XMLReader.m in Sources */,
 				401B658A20B3FC64004453E7 /* Base64.m in Sources */,
 				0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */,
 				401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */,
-				0E0D09F92A45DD8E0032162E /* DataProvider.swift in Sources */,
+				0E0D09F92A45DD8E0032162E /* DayDataProvider.swift in Sources */,
+				0E44097B2A49EFCB00AF5BAD /* DMDataFetcher.m in Sources */,
 				650208FD25015A5700F412B0 /* MyGoalViewController.m in Sources */,
 				403D88AE21ECA98700B2F232 /* MyMovesViewController.m in Sources */,
 				401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */,
 				401B658E20B3FC64004453E7 /* rijndael.c in Sources */,
 				0E6F913F2A43C1F500956F1E /* LogDaySummary.swift in Sources */,
-				401B658F20B3FC64004453E7 /* SaveUPCDataWebService.m in Sources */,
 				401B659020B3FC64004453E7 /* UIDevice+machine.m in Sources */,
 				650208EA2501552500F412B0 /* KeychainItemWrapper.m in Sources */,
-				401B659620B3FC64004453E7 /* GetDataWebService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -151,12 +151,9 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
 #pragma mark LOAD DATA METHODS
 
--(void)loadData {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+- (void)loadData {
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetUserPlannedMealNames", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                               nil];
     
     MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
@@ -234,12 +231,10 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 }
 
 #pragma mark WEBSERVICE CALLS
+
 - (void)deleteMealPlanItem:(NSDictionary *)dict {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"DeleteUserPlannedMealItems", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                               dict, @"MealItems",
                               nil];
     

@@ -490,11 +490,8 @@
                                 [NSNumber numberWithInt:num_measureID], @"MeasureID",
                                 nil];
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"UpdateUserPlannedMealItems", @"RequestType",
-                                [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                                [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                                 updateDict, @"MealItems",
                                 nil];
     
@@ -505,8 +502,6 @@
 
 -(void)insertNewFood {
     [DMActivityIndicator showActivityIndicator];
-
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int num_measureID	= [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
@@ -534,8 +529,6 @@
     
     NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"InsertUserPlannedMealItems", @"RequestType",
-                                [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                                [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                                 insertDict, @"MealItems",
                                 nil];
     
@@ -563,8 +556,6 @@
     
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"DeleteUserPlannedMealItems", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                               newDict, @"MealItems",
                               nil];
     
@@ -893,15 +884,11 @@
     num_isFavorite = 0;
     
     [DMActivityIndicator showActivityIndicator];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"DeleteFavoriteFood", @"RequestType",
-                                [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                                [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                                 [NSNumber numberWithInt:foodID], @"FoodID",
                                 nil];
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    [soapWebService callWebservice:wsInfoDict withCompletion:^(NSObject *object, NSError *error) {
+    [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
         if (error) {
             DMLog(@"Error DeleteFavoriteFood: %@", error.localizedDescription);
         }
@@ -961,19 +948,15 @@
     
     int foodLogID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
     int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"DeleteMealItem", @"RequestType",
-                                [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                                [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                                 [NSNumber numberWithInt:foodLogID], @"MealID",
                                 dietmasterEngine.selectedMealID, @"MealCode",
                                 [NSNumber numberWithInt:foodID], @"FoodID",
                                 nil];
     
-    SoapWebServiceEngine *soapWebService = [[SoapWebServiceEngine alloc] init];
-    [soapWebService callWebservice:wsInfoDict withCompletion:^(NSObject *object, NSError *error) {
+    [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
         if (error) {
             [DMActivityIndicator hideActivityIndicator];
             return;

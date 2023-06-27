@@ -204,8 +204,6 @@
     [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
     
     [[NSUserDefaults standardUserDefaults] setObject:@"False" forKey:@"Reserved"];
-    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-    [engine syncUserInfoWithCompletion:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

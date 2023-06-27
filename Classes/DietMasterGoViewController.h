@@ -10,9 +10,5 @@
 
 /// The "tile layout" home screen for a user to move around the app.
 @interface DietMasterGoViewController : UIViewController
-
-/// Loads the data for the view.
-- (void)reloadData;
-
 @end
 

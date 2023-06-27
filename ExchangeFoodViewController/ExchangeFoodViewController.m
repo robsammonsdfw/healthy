@@ -3,9 +3,9 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
-#import "GetDataWebService.h"
+#import "DMDataFetcher.h"
 
-@interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems, GetDataWSDelegate>
+@interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems>
 
 @property (nonatomic, strong) NSDictionary *deleteDict;
 @property (nonatomic, strong) NSDictionary *insertDict;
@@ -29,11 +29,7 @@
 
 @synthesize CaloriesToMaintain, ExchangeOldDataDict;
 
--(id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle {
-    return [self init];
-}
-
--(id)init {
+- (instancetype)init {
     self = [super initWithNibName:@"ExchangeFoodViewController" bundle:nil];
     return self;
 }
@@ -413,11 +409,8 @@
 }
 
 - (void)deleteFood:(NSDictionary *)dict {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"DeleteUserPlannedMealItems", @"RequestType",
-                              [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                              [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                               dict, @"MealItems",
                               nil];
     
@@ -427,13 +420,8 @@
 }
 
 - (void)insertFood:(NSDictionary *)dict {
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
     NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"InsertUserPlannedMealItems", @"RequestType",
-                                [prefs valueForKey:@"userid_dietmastergo"], @"UserID",
-                                [prefs valueForKey:@"authkey_dietmastergo"], @"AuthKey",
                                 dict, @"MealItems",
                                 nil];
     
@@ -581,7 +569,6 @@
 
 - (void)insertUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
     _insertDict = nil;
-    
     if ([[[responseArray objectAtIndex:0] valueForKey:@"Status"] isEqualToString:@"Error"]) {
         [DMActivityIndicator hideActivityIndicator];
         [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
@@ -594,45 +581,37 @@
 - (void)insertUserPlannedMealItemsFailed:(NSString *)failedMessage {
     [DMActivityIndicator hideActivityIndicator];
     _insertDict = nil;
-    
     [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
-
 }
 
 #pragma mark Webservice
-- (void)loadData {
-    
-    [DMActivityIndicator showActivityIndicator];
 
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+- (void)loadData {
+    [DMActivityIndicator showActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetExchangeItemsForFood", @"RequestType",
-                              @{@"UserID" : [prefs valueForKey:@"userid_dietmastergo"],
-                                @"AuthKey" : [prefs valueForKey:@"authkey_dietmastergo"],
+                              @{@"UserID" : currentUser.userId,
+                                @"AuthKey" : currentUser.authToken,
                                 @"FoodID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"FoodID"],
                                 @"MealTypeID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"MealTypeID"],
                                 }, @"parameters",
                               nil];
     
-    GetDataWebService *webService = [[GetDataWebService alloc] init];
-    webService.getDataWSDelegate = self;
-    [webService callWebservice:infoDict];
-    
+    __weak typeof(self) weakSelf = self;
+    [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showError:error withTitle:@"Error Updating" message:@"An error occurred. Please try again." inViewController:nil];
+            return;
+        }
+        NSDictionary *responseDict = (NSDictionary *)object;
+        [weakSelf.foodResults removeAllObjects];
+        [weakSelf.foodResults addObjectsFromArray:responseDict[@"Foods"]];
+        [weakSelf.tableView reloadData];
+    }];
 }
 
-- (void)getDataFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
-}
-
-- (void)getDataFinished:(NSDictionary *)responseDict {
-    [DMActivityIndicator hideActivityIndicator];
-
-    [_foodResults removeAllObjects];
-    [_foodResults addObjectsFromArray:responseDict[@"Foods"]];
-    [self.tableView reloadData];
-}
 @end

@@ -31,9 +31,7 @@ typedef void(^completionBlockWithNameAndError)(NSString *name, NSError *error);
 typedef void(^actionBlock)(void);
 
 NS_ASSUME_NONNULL_BEGIN
-
 /// Houses the constants for use in the DMG app.
 @interface DMConstants : NSObject
 @end
-
 NS_ASSUME_NONNULL_END

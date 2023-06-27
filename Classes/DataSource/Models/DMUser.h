@@ -10,10 +10,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// Represents a "User" of DMG.
-@interface DMUser : NSObject
+@interface DMUser : NSObject <NSSecureCoding>
 
 @property (nonatomic, strong, readonly) NSNumber *userId;
 @property (nonatomic, strong, readonly) NSString *userName;
+@property (nonatomic, strong, readonly) NSString *authToken;
 @property (nonatomic, strong, readonly) NSString *email1;
 @property (nonatomic, strong, readonly) NSString *email2;
 
@@ -54,6 +55,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// User's goal start date as a string.
 - (NSString *)goalStartDateString;
+
+/// Updates the users details:
+/// WeightGoal, Height, Goals, BirthDate, Profession, BodyType, etc.
+- (void)updateUserDetails:(NSDictionary *)userDict;
 
 @end
 

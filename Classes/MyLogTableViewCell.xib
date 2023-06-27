@@ -11,24 +11,35 @@
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MyLogTableViewCell" id="KGk-i7-Jjw" customClass="MyLogTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okW-Kw-sFS" customClass="TTTAttributedLabel">
-                        <rect key="frame" x="16" y="0.0" width="243" height="44"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Food Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okW-Kw-sFS" customClass="TTTAttributedLabel">
+                        <rect key="frame" x="12" y="0.0" width="78" height="44"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cgf-VQ-EQB">
-                        <rect key="frame" x="233" y="12" width="78" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" text="1000 Calories" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cgf-VQ-EQB">
+                        <rect key="frame" x="222" y="0.0" width="90" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="90" id="OAJ-IC-gbp"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="Cgf-VQ-EQB" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailing" constant="-8" id="2TI-UC-n1Z"/>
+                    <constraint firstItem="okW-Kw-sFS" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Cgf-VQ-EQB" secondAttribute="leading" constant="-10" id="57b-OI-ZxW"/>
+                    <constraint firstItem="okW-Kw-sFS" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottom" id="CVI-hp-bKg"/>
+                    <constraint firstItem="okW-Kw-sFS" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="Hbt-Ug-M0X"/>
+                    <constraint firstItem="Cgf-VQ-EQB" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottom" id="L4A-er-Pik"/>
+                    <constraint firstItem="okW-Kw-sFS" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Q47-x7-hMf"/>
+                    <constraint firstItem="Cgf-VQ-EQB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="q38-JU-hcZ"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="lblCalories" destination="Cgf-VQ-EQB" id="cPK-TP-RrE"/>
@@ -38,6 +49,8 @@
         </tableViewCell>
     </objects>
     <designables>
-        <designable name="okW-Kw-sFS"/>
+        <designable name="okW-Kw-sFS">
+            <size key="intrinsicContentSize" width="78" height="17"/>
+        </designable>
     </designables>
 </document>

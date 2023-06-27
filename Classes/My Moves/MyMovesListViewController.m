@@ -8,7 +8,7 @@
 #import "MyMovesListViewController.h"
 
 #import "MyMovesDetailsViewController.h"
-#import "MyMovesWebServices.h"
+#import "MyMovesDataProvider.h"
 #import "DMMove.h"
 #import "DMMoveCategory.h"
 #import "DMMoveTag.h"
@@ -24,7 +24,7 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 @property (nonatomic, strong) NSDictionary *moveDetailDictToDelete;
 
 /// Data source for exercises.
-@property (nonatomic, strong) MyMovesWebServices *soapWebService;
+@property (nonatomic, strong) MyMovesDataProvider *soapWebService;
 
 /// Array that holds data that's presented in the table.
 @property (nonatomic, strong) NSArray<DMMove *> *tableData;
@@ -74,7 +74,7 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 }
 
 - (void)loadTable {
-    self.soapWebService = [[MyMovesWebServices alloc] init];
+    self.soapWebService = [[MyMovesDataProvider alloc] init];
     self.tableData = [self.soapWebService getMovesFromDatabaseWithCategoryFilter:self.filterCategory
                                                                        tagFilter:self.filterTag
                                                                       textSearch:self.searchBar.text];
@@ -207,7 +207,7 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
         ///
                                         self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
                                         NSString *dateString = [self.dateFormatter stringFromDate:self.selectedDate];
-                                        [self.soapWebService updateWorkoutToDb:dateString];
+                                        //[self.soapWebService updateWorkoutToDb:dateString];
                                         
                                         [self.navigationController pushViewController:moveDetailVc animated:YES];
                                     }];

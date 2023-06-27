@@ -1,5 +1,5 @@
 //
-//  DataProvider.swift
+//  DayDataProvider.swift
 //  DietMasterGoPlus
 //
 //  Created by Henry T Kirk on 6/23/23.
@@ -8,17 +8,16 @@
 import Foundation
 import FMDB
 
-/// Class that provides data from a local cache or
+/// Class that provides Current Day's data from a local cache or
 /// database.
-@objc @objcMembers final class DataProvider: NSObject {
+@objc @objcMembers final class DayDataProvider: NSObject {
     private var database: FMDatabase?
     
     // Singleton, main access point.
-    @objc static let sharedInstance = DataProvider()
+    @objc static let sharedInstance = DayDataProvider()
     
     /// Current user. Nil if logged out.
     public var currentUser: DMUser?
-    
     
     private override init() {
         super.init()
@@ -107,8 +106,7 @@ import FMDB
             print("Error: \(error.localizedDescription)")
             return (0, 0, 0, 0)
         }
-        return (minutesExercised, totalCaloriesBurned,
-                totalCaloriesBurnedViaTracker, stepsTaken)
+        return (minutesExercised, totalCaloriesBurned, totalCaloriesBurnedViaTracker, stepsTaken)
     }
     
     /// Previously was stored in UserDefaults "minutesExercised" key.

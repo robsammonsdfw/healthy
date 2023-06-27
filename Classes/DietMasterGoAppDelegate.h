@@ -7,14 +7,13 @@
 #import <UIKit/UIKit.h>
 #import "DietmasterEngine.h"
 #import <MessageUI/MessageUI.h>
-#import "MyMovesWebServices.h"
 #import "PurchaseIAPHelper.h"
 
 @class DietMasterGoViewController;
 @class DetailViewController;
 @class LoginViewController;
 
-@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, SyncDatabaseDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate> {
+@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate> {
 }
 
 @property (nonatomic, strong) IBOutlet DietMasterGoViewController *viewController;
@@ -25,7 +24,6 @@
 
 @property (nonatomic, strong) NSString *idStr;
 
-@property (nonatomic) BOOL isSessionExp;
 @property (nonatomic)BOOL isFromAlert;
 
 - (void)checkUserLogin;
@@ -35,7 +33,6 @@
 // Sync
 - (NSInteger)hoursAfterDate:(NSDate *)aDate;
 - (NSInteger)minutesAfterDate:(NSDate *)aDate;
-- (void)syncDatabase;
 
 @end
 

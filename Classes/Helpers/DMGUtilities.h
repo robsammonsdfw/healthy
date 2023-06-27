@@ -12,22 +12,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Returns object or empty string if nil.
 static NSString * __attribute__((unused)) ValidString(id object) {
-    return object ? object : @"";
+    return (object && object != [NSNull null]) ? object : @"";
 }
 
 /// Returns object or empty NSNumber with value of zero if nil.
 static NSNumber * __attribute__((unused)) ValidNSNumber(id object) {
-    return object ? object : @0;
+    return (object && object != [NSNull null]) ? object : @0;
 }
 
 /// Returns int or zero if nil.
 static int __attribute__((unused)) ValidInt(NSNumber * number) {
-    return number ? number.intValue : 0;
+    return (number && number != [NSNull null]) ? number.intValue : 0;
 }
 
 /// Returns double or zero if nil.
 static double __attribute__((unused)) ValidDouble(NSNumber * number) {
-    return number ? number.doubleValue : 0.0;
+    return (number && number != [NSNull null]) ? number.doubleValue : 0.0;
 }
 
 /// Returns the UIColor from Hex.

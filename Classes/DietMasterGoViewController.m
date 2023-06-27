@@ -15,15 +15,15 @@
 #import "MyGoalViewController.h"
 #import "MealPlanViewController.h"
 #import "MCNewCustomLayeredView+MCCustomLayeredViewSubclass.h"
-#import "MyMovesWebServices.h"
+#import "MyMovesDataProvider.h"
 #import "MyMovesViewController.h"
 #import "NSString+Encode.h"
 #import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
+#import "DMDatabaseProvider.h"
 
 @interface DietMasterGoViewController() <MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate>
 
-@property (nonatomic, strong) MyMovesWebServices *soapWebService;
+@property (nonatomic, strong) MyMovesDataProvider *soapWebService;
 
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 /// The view that's within the scrollView.
@@ -156,6 +156,11 @@
 
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoginStateDidChangeNotification:) name:UserLoginStateDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBadge) name:UpdatingMessageNotification object:nil];
+    }
     return self;
 }
 
@@ -200,9 +205,6 @@
                                             [NSNumber numberWithBool:YES], @"LoggedExeTracking",
                                             nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsValuesDict];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:@"ReloadData" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoginFinished:) name:@"UserLoginFinished" object:nil];
-      
     
     self.values = [[NSMutableArray alloc] init];
     self.cpf_Values = [[NSMutableArray alloc] init];
@@ -237,13 +239,11 @@
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     self.hidesBottomBarWhenPushed = true;
     
-    int stepsTaken = (int)[[DataProvider sharedInstance] getStepsTakenToday];
+    int stepsTaken = (int)[[DayDataProvider sharedInstance] getStepsTakenToday];
     self.lblStepsCount.text = [NSString stringWithFormat:@"%i", stepsTaken];
     
     [self.sendMsgBtnOutlet addSubview:self.numberBadge];
     [self reloadMessages];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBadge) name:UpdatingMessageNotification object:nil];
     
     [self.values addObject:[NSNumber numberWithInt:0]];
     [self.values addObject:[NSNumber numberWithInt:0]];
@@ -415,11 +415,14 @@
 }
 
 - (IBAction)sendMailBtn:(id)sender {
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    DMUser *currentUser = [authManager loggedInUser];
+
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
     NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]];
-    NSString *emailTo = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"LoginEmail"]];
+    NSString *emailTo = currentUser.email1;
 
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
@@ -578,14 +581,16 @@
 }
 
 - (void)updateBadge {
-    self.numberBadge.value = [[DietmasterEngine sharedInstance] unreadMessageCount];
+    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+    self.numberBadge.value = [dataProvider unreadMessageCount];
     [UIApplication sharedApplication].applicationIconBadgeNumber = self.numberBadge.value;
 }
 
 - (void)reloadMessages {
-    self.numberBadge.value = [[DietmasterEngine sharedInstance] unreadMessageCount];
+    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+    self.numberBadge.value = [dataProvider unreadMessageCount];
     
-    DataFetcher *fetcher = [[DataFetcher alloc] init];
+    UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
     [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
         if (!error) {
             [self updateBadge];
@@ -593,11 +598,14 @@
     }];
 }
 
-- (void)userLoginFinished:(NSString *)statusMessage {
-    //HHT change call function after 1.0 delay to solve login issue
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+- (void)userLoginStateDidChangeNotification:(NSNotification *)notification {
+    if ([NSThread isMainThread]) {
         [self reloadMessages];
-    });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self userLoginStateDidChangeNotification:notification];
+        });
+    }
 }
 
 - (void)getBMR {
@@ -661,13 +669,13 @@
 }
 
 - (void)reloadData {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if ([prefs valueForKey:@"userid_dietmastergo"] > 0) {
-        [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
-        [self performSelector:@selector(loadExerciseData) withObject:nil afterDelay:0.15];
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    if ([authManager isUserLoggedIn]) {
+        [self loadData];
+        [self loadExerciseData];
     }
-    NSString *firstName = [prefs valueForKey:@"FirstName_dietmastergo"];
-    NSString *name = [NSString stringWithFormat: @"Hi, %@!",firstName];
+    DMUser *currentUser = [authManager loggedInUser];
+    NSString *name = [NSString stringWithFormat: @"Hi, %@!", currentUser.firstName];
     self.nameLbl.text = name;
     [self loadData];
 }
@@ -864,8 +872,8 @@
 }
 
 -(void)loadExerciseData {
-    self.num_totalCaloriesBurnedTracked = (int)[[DataProvider sharedInstance] getCaloriesBurnedTodayViaTracker];
-    self.num_totalCaloriesBurned = (int)[[DataProvider sharedInstance] getCaloriesBurnedToday];
+    self.num_totalCaloriesBurnedTracked = (int)[[DayDataProvider sharedInstance] getCaloriesBurnedTodayViaTracker];
+    self.num_totalCaloriesBurned = (int)[[DayDataProvider sharedInstance] getCaloriesBurnedToday];
 
     [self updateCalorieTotal];
     [self calculateBMI];

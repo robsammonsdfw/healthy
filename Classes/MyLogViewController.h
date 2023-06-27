@@ -17,7 +17,7 @@
 
 #import <HealthKit/HealthKit.h>
 #import "StepData.h"
-#import "MyMovesWebServices.h"
+#import "MyMovesDataProvider.h"
 #import "TTTAttributedLabel.h"
 #import "DietMasterGoViewController.h"
 #import "MyLogViewController.h"
@@ -26,7 +26,6 @@
 
 @interface MyLogViewController : UIViewController <UIGestureRecognizerDelegate, TTTAttributedLabelDelegate> {
 	
-	IBOutlet UITableView *tblSimpleTable;
 	IBOutlet UILabel *lbl_dateHdr;
 	IBOutlet UILabel *lbl_CaloriesLogged;
 	IBOutlet UILabel *lbl_CaloriesRecommended;
@@ -39,9 +38,6 @@
 	
 	NSDate *date_currentDate;
 	NSNumber *int_mealID;
-	
-    IBOutlet UIActivityIndicatorView *cellSpinner;
-    
     
     NSMutableArray *exerciseResults;
     NSMutableArray *foodResults;
@@ -87,13 +83,9 @@
     CGFloat actualCarbCalories;
     CGFloat actualFatCalories;
     CGFloat actualProteinCalories;
-    
-    UIImageView *imgSwipeHint;
-    
+        
     IBOutlet UIToolbar *dateToolBar;
-	
-	NSMutableArray *Arrcatgory;
-	
+		
 	NSDate *date_currentDate1;
 
 	NSMutableArray *selectSectionArray;
@@ -101,17 +93,16 @@
     
     //HHT apple watch
     int exerciseLogID;
-    MyMovesWebServices *soapWebService;
+    MyMovesDataProvider *soapWebService;
 }
 
 @property (nonatomic, strong) IBOutlet UIImageView *imgbottom;
 @property (nonatomic, strong) NSDate *date_currentDate1;
 @property (nonatomic, strong) NSNumber *int_mealID;
-@property (nonatomic, strong) IBOutlet UITableView *tbl;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UIImageView *imgbottomline;
 @property (assign, nonatomic, readonly) NSInteger primaryKey;
 @property (nonatomic, strong) NSDate *date_currentDate;
-@property (nonatomic, strong) UITableView *tblSimpleTable;
 @property (nonatomic) int num_BMR;
 
 @property (nonatomic, strong) IBOutlet UILabel *staticRecommendedLbl;
