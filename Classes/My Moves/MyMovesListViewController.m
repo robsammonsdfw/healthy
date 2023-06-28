@@ -200,15 +200,15 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                         
+                                        // Create a routine with the user selected optoins.
+                                        DMMoveRoutine *newRoutine = [DMMoveRoutine routineWithMove:selectedMove forDay:selectedDay];
+                                        // the newRoutine ID will be nil, so need to save to database first.
+                                        NSNumber *routineID = [weakSelf.soapWebService addMoveRoutine:newRoutine toMoveDay:selectedDay];
+                                
                                         MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc] init];
                                         moveDetailVc.selectedDate = self.selectedDate;
+                                        moveDetailVc.routine = [weakSelf.soapWebService getUserPlanRoutineForRoutineId:routineID];
 
-        /// Save then push controller.
-        ///
-                                        self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-                                        NSString *dateString = [self.dateFormatter stringFromDate:self.selectedDate];
-                                        //[self.soapWebService updateWorkoutToDb:dateString];
-                                        
                                         [self.navigationController pushViewController:moveDetailVc animated:YES];
                                     }];
     
