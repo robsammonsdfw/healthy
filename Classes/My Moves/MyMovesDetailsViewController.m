@@ -71,7 +71,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
     UIBarButtonItem *rightButton =
-        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                       target:self
                                                       action:@selector(showDeleteExerciseConfirmation)];
     rightButton.style = UIBarButtonItemStylePlain;
@@ -211,7 +211,11 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     cell.repsTxtFld.tag = indexPath.row;
     cell.weightTxtFld.tag = indexPath.row;
     cell.deleteBtn.tag = indexPath.row;
-    
+
+    // Set the keyboard type.
+    cell.repsTxtFld.keyboardType = UIKeyboardTypeNumberPad;
+    cell.weightTxtFld.keyboardType = UIKeyboardTypeNumberPad;
+
     cell.repsTxtFld.delegate = self;
     cell.weightTxtFld.delegate = self;
     

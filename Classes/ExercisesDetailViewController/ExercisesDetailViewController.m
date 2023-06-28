@@ -386,7 +386,6 @@
 }
 
 - (void)showActionSheet:(id)sender {
-    [self.view endEditing:YES];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
