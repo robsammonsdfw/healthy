@@ -100,14 +100,13 @@ extern NSString * const UpdatingMessageNotification;
 -(void)uploadDatabaseFinished;
 -(void)syncDatabaseFailed;
 -(void)uploadDatabaseFailed;
--(void)SyncFood:(NSString *)syncDate;
 
 // UP SYNC
 -(void)saveMeals:(NSString *)dateString;
 -(void)saveMealItems:(NSString *)dateString;
 -(void)saveExerciseLogs:(NSString *)dateString;
 -(void)saveWeightLog:(NSString *)dateString;
--(void)saveFood:(int)foodKey;
+-(void)fetchFoodForKey:(int)foodKey;
 -(void)saveAllCustomFoods;
 -(void)saveFavoriteFood:(NSString *)dateString;
 -(void)saveFavoriteMeal:(NSString *)dateString;
@@ -120,9 +119,6 @@ extern NSString * const UpdatingMessageNotification;
 /// Gets the measure ID for a food against a meal plan item.
 - (NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey fromMealPlanItem:(NSDictionary *)mealPlanItemDict;
 - (NSNumber *)getGramWeightForFoodID:(NSNumber *)foodID andMeasureID:(NSNumber *)measureID;
-
-- (void)getMissingFoodsIfNeededForFoods:(NSArray *)foodsArray;
-- (void)fetchMissingFoodForKey:(int)foodKey;
 
 // Database helper methods
 - (NSString *)databasePath;

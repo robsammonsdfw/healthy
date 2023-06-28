@@ -124,6 +124,7 @@
         [fileManager removeItemAtPath:logoFilePath2x error:NULL];
     }
     
+    // This will also delete from saved preferences.
     self.currentUser = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginStateDidChangeNotification object:nil];
@@ -135,7 +136,7 @@
 
 /// Returns if a user is currently logged in or not.
 - (BOOL)isUserLoggedIn {
-    return self.currentUser;
+    return self.currentUser != nil;
 }
 
 /// The currently logged in user. Nil if not logged in.

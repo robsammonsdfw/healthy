@@ -8,6 +8,7 @@
 
 #import "DMMealPlanDataProvider.h"
 #import "DietmasterEngine.h"
+#import "DMDatabaseProvider.h"
 
 @interface DMMealPlanDataProvider()
 @end
@@ -192,7 +193,8 @@
                     }
                 }
                 // Get missing foods, if needed.
-                [dietmasterEngine getMissingFoodsIfNeededForFoods:[mealItemsTemp copy]];
+                DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+                [provider getMissingFoodsIfNeededForFoods:[mealItemsTemp copy]];
                 [newMealItemsArray addObject:mealItemsTemp];
             }
             newMealPlanDict[@"MealItems"] = newMealItemsArray;

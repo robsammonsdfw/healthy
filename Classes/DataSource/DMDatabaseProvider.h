@@ -10,6 +10,7 @@
 
 @class DMMessage;
 @class DMUser;
+@class DMFood;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,6 +33,14 @@ NS_ASSUME_NONNULL_BEGIN
              pageNumber:(NSInteger)pageNumber
            fetchedItems:(NSArray *)fetchedItems
     withCompletionBlock:(completionBlockWithError)completionBlock;
+
+/// Fetches foods.
+- (void)syncFoods:(NSString *)dateString pageNumber:(NSInteger)pageNumber fetchedItems:(NSArray *)fetchedItems withCompletionBlock:(completionBlockWithError)completionBlock;
+/// Fetches a food for the key provided.
+- (void)fetchFoodForKey:(int)foodKey;
+- (void)getMissingFoodsIfNeededForFoods:(NSArray *)foodsArray;
+/// Gets a food from the local database.
+- (DMFood *)getFoodForFoodKey:(NSNumber *)foodKey;
 
 - (NSArray<DMMessage *> *)unreadMessages;
 - (int)unreadMessageCount;

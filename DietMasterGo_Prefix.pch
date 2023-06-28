@@ -15,6 +15,7 @@
     
     #import "DMConstants.h"
     #import "DMAuthManager.h"
+    #import "DMDatabaseProvider.h"
 
     // Import all Swift files.
     #import "DietMasterGoPlus-Swift.h"

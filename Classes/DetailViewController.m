@@ -9,6 +9,7 @@
 #import "DetailViewController.h"
 #import "ExchangeFoodViewController.h"
 #import "DMMealPlanDataProvider.h"
+#import "DMDatabaseProvider.h"
 
 @interface DetailViewController()
 @property (nonatomic, strong) NSMutableArray *pickerColumn1Array;
@@ -25,6 +26,7 @@
 
 /// The food that is being displayed to the user.
 @property (nonatomic, strong) NSDictionary *foodDict;
+@property (nonatomic, strong) DMFood *food;
 @end
 
 @implementation DetailViewController
@@ -37,11 +39,17 @@
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
         _foodDict = foodDict;
+        [self loadFood];
     }
     return self;
 }
 
 #pragma mark DATA METHODS
+
+- (void)loadFood {
+    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+    self.food = [provider getFoodForFoodKey:self.foodDict[@"FoodKey"]];
+}
 
 - (void)loadData {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -49,7 +57,7 @@
     if (![db open]) {
     }
     
-    double gramWeight = [[self.foodDict valueForKey:@"GramWeight"] floatValue];
+    double gramWeight = [self.food.gramWeight floatValue];
     double foodProtein = [[self.foodDict valueForKey:@"Protein"] floatValue];
     double foodFat = [[self.foodDict valueForKey:@"Fat"] floatValue];
     double foodCarbs = [[self.foodDict valueForKey:@"Carbohydrates"] floatValue];
@@ -85,7 +93,7 @@
                               [rs stringForColumn:@"Description"], @"Description", nil];
         [pickerColumn3Array addObject:dict];
         
-        rowListArr = [[NSMutableArray alloc]initWithArray:[self filterObjectsByKeys:@"MeasureID" array:pickerColumn3Array]];
+        rowListArr = [[self filterObjectsByKeys:@"MeasureID" array:pickerColumn3Array] mutableCopy];
         pickerColumn3Array = rowListArr;
         
     }
@@ -129,7 +137,7 @@
                 [pickerView reloadAllComponents];
                 fractionButton.style = UIBarButtonItemStylePlain;
                 decimalButton.style = UIBarButtonItemStyleDone;
-                self.pickerRow2 = [NSNumber numberWithInt:i];
+                self.pickerRow2 = [NSNumber numberWithInteger:i];
                 break;
             }
         }
@@ -142,7 +150,7 @@
                 [pickerView reloadAllComponents];
                 decimalButton.style = UIBarButtonItemStylePlain;
                 fractionButton.style = UIBarButtonItemStyleDone;
-                self.pickerRow2 = [NSNumber numberWithInt:i];
+                self.pickerRow2 = [NSNumber numberWithInteger:i];
                 break;
             }
         }
@@ -251,7 +259,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self loadData];
+    [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
@@ -308,11 +316,7 @@
         self.navigationItem.title = @"Add to Plan";
     }
     
-            infoBtn.frame = CGRectMake(SCREEN_WIDTH - 25, lblProtein.frame.origin.y, infoBtn.frame.size.width, infoBtn.frame.size.height);
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+    infoBtn.frame = CGRectMake(SCREEN_WIDTH - 25, lblProtein.frame.origin.y, infoBtn.frame.size.width, infoBtn.frame.size.height);
 }
 
 #pragma mark ACTION SHEET METHODS
@@ -685,12 +689,11 @@
     [self updateCalorieCount];
 }
 
--(void)updateCalorieCount {
+- (void)updateCalorieCount {
     double gramWeight = 0.0;
     if (pickerColumn3Array.count) {
-        double gramWeight = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"GramWeight"] floatValue];
+        gramWeight = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"GramWeight"] floatValue];
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     double servingSize = [[self.foodDict valueForKey:@"ServingSize"] floatValue];
     double foodCalories = [[self.foodDict valueForKey:@"Calories"] floatValue];
     

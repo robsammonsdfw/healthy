@@ -5,6 +5,7 @@
 #import "DietmasterEngine.h"
 #import "DMDataFetcher.h"
 #import "DMMealPlanDataProvider.h"
+#import "DMDatabaseProvider.h"
 
 @interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -280,6 +281,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
                                 @"MealTypeID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"MealTypeID"] };
     
     __weak typeof(self) weakSelf = self;
+    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
     [DMDataFetcher fetchDataWithRequestParams:params completion:^(NSObject *object, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
@@ -289,7 +291,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
         NSDictionary *responseDict = (NSDictionary *)object;
         [weakSelf.foodResults removeAllObjects];
         [weakSelf.foodResults addObjectsFromArray:responseDict[@"Foods"]];
-        [dietmasterEngine getMissingFoodsIfNeededForFoods:[weakSelf.foodResults copy]];
+        [provider getMissingFoodsIfNeededForFoods:[weakSelf.foodResults copy]];
         [weakSelf.tableView reloadData];
     }];
 }

@@ -16,6 +16,7 @@
 @property (nonatomic) BOOL helperBubbleWasShown;
 /// The food that is being displayed to the user.
 @property (nonatomic, strong) NSMutableDictionary *foodDict;
+@property (nonatomic, strong) DMFood *food;
 @end
 
 @implementation ManageFoods
@@ -32,6 +33,7 @@ CGPoint svos;
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
         _foodDict = [foodDict mutableCopy];
+        [self loadFood];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(barcodeWasScanned:)
                                                      name:@"BarCodeScanned"
@@ -167,6 +169,11 @@ CGPoint svos;
 }
 
 #pragma mark - Setter/Getter
+
+- (void)loadFood {
+    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+    self.food = [provider getFoodForFoodKey:self.foodDict[@"FoodKey"]];
+}
 
 - (BOOL)helperBubbleWasShown {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -706,7 +713,7 @@ CGPoint svos;
         _savedFoodID = minFoodID;
         
         // Save to log AND cloud.
-        [dietmasterEngine saveFood:minFoodID];
+        [dietmasterEngine fetchFoodForKey:minFoodID];
         
         if (self.saveToLog) {
             [DMActivityIndicator showActivityIndicator];
@@ -852,7 +859,7 @@ CGPoint svos;
         
         _savedFoodID = minFoodID;
         
-        [dietmasterEngine saveFood:minFoodID];
+        [dietmasterEngine fetchFoodForKey:minFoodID];
         
         if (!self.saveToLog) {
             [self loadData];

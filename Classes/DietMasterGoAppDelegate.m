@@ -127,9 +127,7 @@
 
 - (void)showLoginIfNeeded {
     if ([[DMAuthManager sharedInstance] isUserLoggedIn] == NO) {
-        if (self.loginViewController) {
-            self.loginViewController = [[LoginViewController alloc] init];
-        }
+        self.loginViewController = [[LoginViewController alloc] init];
         [self.loginViewController presentLoginInController:nil
                                             withCompletion:^(BOOL completed, NSError *error) {
             // Login successful!
@@ -144,10 +142,20 @@
             //        [alert dismissViewControllerAnimated:YES completion:nil];
             //    }]];
             //    [[DMGUtilities rootViewController] presentViewController:alert animated:YES completion:nil];
+            
+            // Now do a big sync.
+            [DMActivityIndicator showActivityIndicator];
+            DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+            [provider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+                if (error) {
+                    [DMGUtilities showAlertWithTitle:@"Error!" message:error.localizedDescription inViewController:nil];
+                    return;
+                }
 
-            UINavigationController *rootController = (UINavigationController *)[DMGUtilities rootViewController];
-            [rootController dismissViewControllerAnimated:YES completion:nil];
-            [rootController popToRootViewControllerAnimated:YES];
+                UINavigationController *rootController = (UINavigationController *)[DMGUtilities rootViewController];
+                [rootController dismissViewControllerAnimated:YES completion:nil];
+                [rootController popToRootViewControllerAnimated:YES];
+            }];
         }];
     }
 }
