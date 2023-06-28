@@ -815,8 +815,8 @@
         }
         [db commit];
         [DMActivityIndicator showCompletedIndicator];
-        [self.navigationController popViewControllerAnimated:YES];
-        
+        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
+
     } else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
         
         [db beginTransaction];
@@ -837,7 +837,7 @@
         
         [DMActivityIndicator showCompletedIndicator];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
     }
 }
 
