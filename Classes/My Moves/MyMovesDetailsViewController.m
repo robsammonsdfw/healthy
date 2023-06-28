@@ -109,6 +109,11 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         [_playVideoBtn setHidden:YES];
         [_thumbNailView setHidden:YES];
     }
+    
+    // Add a tap recoginzer so that way our keyboard dismisses when we tap outside of the
+    // reps/sets fields.
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeFirstResponder)];
+    [self.view addGestureRecognizer:tapRecognizer];
 }
 
 /// Sets the move data onto the view.
@@ -287,6 +292,11 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 }
 
 #pragma mark - Actions
+
+/// Dismisses the keyboard by ending editing.
+- (void)makeFirstResponder {
+    [self.view endEditing:YES];
+}
 
 - (IBAction)showVideoInBrowserAction:(id)sender {
     MyMovesVideoPlayerViewController *moveDetailVc = [[MyMovesVideoPlayerViewController alloc] init];
