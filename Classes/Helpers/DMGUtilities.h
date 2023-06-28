@@ -49,7 +49,7 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 /// Sets the last sync date to the date provided, stores it ind efaults
 ///  and returns the string value. Passing nil will cause the date to be
 ///  -8 days ago for last sync.
-+ (NSString *)setLastSyncToDate:(nullable NSDate *)date;
++ (void)setLastSyncToDate:(nullable NSDate *)date;
 
 #pragma mark - Color
 
