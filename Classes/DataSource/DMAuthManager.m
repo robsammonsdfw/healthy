@@ -60,7 +60,7 @@
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         // Set a key regarding first time sync.
         [defaults setObject:@"FirstTime" forKey:@"FirstTime"];
-        [defaults setValue:nil forKey:@"lastsyncdate"];
+        [DMGUtilities setLastSyncToDate:nil];
 
         DMLog(@"User signed in: %@, Message: %@", user.firstName, message);
         
@@ -148,20 +148,21 @@
     UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
     __weak typeof(self) weakSelf = self;
     [fetcher getUserDetailsWithCompletion:^(NSDictionary *userDict, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
-                    completionBlock(weakSelf.currentUser, error);
+                    completionBlock(strongSelf.currentUser, error);
                 }
             });
             return;
         }
-        [self.currentUser updateUserDetails:userDict];
-        [self saveUserToDefaults:self.currentUser];
-        [self saveUserInfoToDatabase:weakSelf.currentUser];
+        [strongSelf.currentUser updateUserDetails:userDict];
+        [strongSelf saveUserToDefaults:strongSelf.currentUser];
+        [strongSelf saveUserInfoToDatabase:strongSelf.currentUser];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
-                completionBlock(weakSelf.currentUser, nil);
+                completionBlock(strongSelf.currentUser, nil);
             }
         });
     }];

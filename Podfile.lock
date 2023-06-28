@@ -137,7 +137,6 @@ PODS:
   - SBPickerSelector/Core (1.0.4)
   - ScrollableSegmentedControl (1.5.0)
   - SWXMLHash (7.0.2)
-  - ZipArchive (1.4.0)
 
 DEPENDENCIES:
   - AlamofireSoap
@@ -153,7 +152,6 @@ DEPENDENCIES:
   - SBPickerSelector (= 1.0.4)
   - ScrollableSegmentedControl
   - SWXMLHash
-  - ZipArchive
 
 SPEC REPOS:
   trunk:
@@ -184,7 +182,6 @@ SPEC REPOS:
     - SBPickerSelector
     - ScrollableSegmentedControl
     - SWXMLHash
-    - ZipArchive
 
 SPEC CHECKSUMS:
   Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
@@ -214,8 +211,7 @@ SPEC CHECKSUMS:
   SBPickerSelector: ea57fff3aae81a79b5db3d9559e54a5cbd3c706a
   ScrollableSegmentedControl: 2e64bbe8968a7fcd8aae5014434481464fcdfe60
   SWXMLHash: dd733a457e9c4fe93b1538654057aefae4acb382
-  ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: 4558dcb6d46714cf0376708fd596001911b53ede
+PODFILE CHECKSUM: 42f63ede229bd9e9accb8db4738d6efb1c93286a
 
 COCOAPODS: 1.12.1

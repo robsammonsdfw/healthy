@@ -10,7 +10,68 @@
 #import "NSString+Encode.h"
 @import MessageUI;
 
+@interface DMGUtilities()
+@end
+
 @implementation DMGUtilities
+
+- (instancetype)init {
+    self = [super init];
+    return self;
+}
+
+#pragma mark - Sync Helpers
+
+static NSString *DMLastSyncPrefsKey = @"lastsyncdate";
+static NSString *DMFirstLaunchKey = @"FirstTime";
+static NSString *DMServerDateFormat = @"yyyy-MM-dd HH:mm:ss";
+
+/// Returns the formatted string: "yyyy-MM-dd HH:mm:ss" when the last data sync ocurred.
+/// If a sync has not happened, will return a date in 1970.
++ (NSString *)lastSyncDateString {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *dateString = nil;
+    
+    if ([[defaults valueForKey:DMFirstLaunchKey] isEqualToString:@"FirstTime"]) {
+        dateString = @"1970-01-01";
+        [defaults setObject:@"SecondTime" forKey:DMFirstLaunchKey];
+    } else {
+        dateString = [defaults valueForKey:DMLastSyncPrefsKey];
+        // If current date is missing, let's assume the last sync as a week ago.
+        if (!dateString) {
+            NSDate *syncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
+                                                                        value:-8
+                                                                       toDate:[NSDate date]
+                                                                      options:0];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.timeZone = [NSTimeZone systemTimeZone];
+            [dateFormatter setDateFormat:DMServerDateFormat];
+            dateString = [dateFormatter stringFromDate:syncDate];
+        }
+    }
+    
+    return dateString;
+}
+
++ (NSString *)setLastSyncToDate:(NSDate *)date {
+    NSString *dateString = nil;
+    if (!date) {
+        dateString = [self lastSyncDateString];
+    } else {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.timeZone = [NSTimeZone systemTimeZone];
+        [dateFormatter setDateFormat:DMServerDateFormat];
+        dateString = [dateFormatter stringFromDate:date];
+    }
+    
+    // Save to defaults.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:dateString forKey:DMLastSyncPrefsKey];
+    
+    return dateString;
+}
+
+#pragma mark - Color
 
 + (UIImage *)imageWithColor:(UIColor *)color {
     CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);

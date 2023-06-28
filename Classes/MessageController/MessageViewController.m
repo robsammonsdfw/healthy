@@ -199,7 +199,7 @@ int const MaximumStringLength = 300;
     DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
     __weak typeof(self) weakSelf = self;
     [dataProvider syncMessagesWithCompletionBlock:^(BOOL completed, NSError *error) {
-        if (error || sender) {
+        if (error && sender) {
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
             return;
         }

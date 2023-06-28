@@ -29,15 +29,12 @@
     
     if (dietmasterEngine.isMealPlanItem) {
         self.title = @"Add To Plan";
-        
         arryMeals		= [[NSArray alloc] initWithObjects:@"Breakfast",@"Snack 1",@"Lunch",@"Snack 2",@"Dinner",@"Snack 3",nil];
-        
         arryExercise	= [[NSArray alloc] initWithObjects:nil];
     }
     else {
         self.title = @"Add To Log";
         arryMeals		= [[NSArray alloc] initWithObjects:@"Breakfast",@"Snack 1",@"Lunch",@"Snack 2",@"Dinner",@"Snack 3",nil];
-        
         if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"mobilefit"]) {
             arryExercise	= [[NSArray alloc] initWithObjects:nil];
         }

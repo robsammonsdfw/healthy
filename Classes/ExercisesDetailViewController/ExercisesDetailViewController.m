@@ -62,8 +62,6 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     self.exerciseNameLabel.text = [dietmasterEngine.exerciseSelectedDict valueForKey:@"ActivityName"];
     
-    [DMActivityIndicator hideActivityIndicator];
-
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseIDTemp == 257 || exerciseIDTemp == 267 || exerciseIDTemp == 268 || exerciseIDTemp == 269 || exerciseIDTemp == 275){
@@ -93,7 +91,7 @@
     
     [self.pickerView reloadAllComponents];
     
-    [self performSelector:@selector(updateCalorieLabel) withObject:nil afterDelay:0.50];
+    [self updateCalorieLabel];
         
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
@@ -159,8 +157,7 @@
                                              selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
     
     self.exerciseLogID = 0;
-    [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
+    [self loadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -36,8 +36,6 @@
 @property (nonatomic, strong) NSSet *readDataTypes;
 @property (nonatomic, strong) StepData * sd;
 
-@property (nonatomic, strong) dispatch_queue_t syncQueue;
-
 @end
 
 @implementation AppSettings
@@ -47,7 +45,6 @@
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
-        _syncQueue = dispatch_queue_create("com.dietmaster.settingsSyncQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -198,17 +195,7 @@
         [btnAppleWatchTracking setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
     }
         
-    NSString *dateString;
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if (![prefs valueForKey:@"lastsyncdate"]) {
-        dateString = @"Not Available";
-    }
-    else {
-        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-        [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
-        dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-    }
-    
+    NSString *dateString = [DMGUtilities lastSyncDateString];
     self.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
     
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -264,11 +251,11 @@
     [self.navigationController pushViewController:fsController animated:YES];
 }
 
--(IBAction)addFoods:(id)sender {
+- (IBAction)addFoods:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"";
     
-    ManageFoods *mfController = [[ManageFoods alloc] init];
+    ManageFoods *mfController = [[ManageFoods alloc] initWithFood:nil];
     
     [self.navigationController pushViewController:mfController animated:YES];
     mfController.hideAddToLog = YES;
@@ -277,50 +264,20 @@
 
 - (IBAction)forceDBSync:(id)sender {
     [DMActivityIndicator showActivityIndicator];
-    dispatch_group_t fetchGroup = dispatch_group_create();
-    __block NSError *syncError = nil;
-    
-    dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-        [dataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-                return;
-            }
-        }];
-    });
-
-    dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        MyMovesDataProvider *provider = [[MyMovesDataProvider alloc] init];
-        [provider fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-                return;
-            }
-        }];
-    });
-    
     __weak typeof(self) weakSelf = self;
-    dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+    [dataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         [DMActivityIndicator hideActivityIndicator];
-        if (syncError) {
-            [DMGUtilities showError:syncError withTitle:@"Error" message:@"The database could not be updated. Please try again." inViewController:nil];
+        if (error) {
+            [DMGUtilities showError:error withTitle:@"Error" message:@"The database could not be updated. Please try again." inViewController:nil];
             return;
         }
         [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
 
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-        [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
-        NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-        
-        weakSelf.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
-    });
-
+        NSString *dateString = [DMGUtilities lastSyncDateString];
+        strongSelf.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
+    }];
 }
 
 -(IBAction)forceUPDBSync:(id)sender {
@@ -383,11 +340,8 @@
     
     [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
 
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-    [outdateformatter setDateFormat:@"M-d-yyyy h:mm:ss a"];
-    NSString *dateString = [outdateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-    
+    NSString *dateString = [DMGUtilities lastSyncDateString];
+
     self.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
 }
 

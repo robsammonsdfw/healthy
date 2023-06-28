@@ -7,18 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
-#import "MealPlanWebService.h"
 
-@interface ExchangeFoodViewController : UIViewController {
-	
-    int indexToExchange;
-    BOOL isExchangeFood;
-}
+/// Presents foods to a user that they can exchange a food with.
+@interface ExchangeFoodViewController : UIViewController
 
-@property (nonatomic) double CaloriesToMaintain;
-@property (nonatomic, strong) NSMutableDictionary *ExchangeOldDataDict;
-@property (nonatomic, strong) NSNumber *foodID;
-@property (nonatomic, strong) NSNumber *mealTypeID;
+/// Main inititalizer. Pass in the food to be exchanged.
+- (instancetype)initWithExchangedFood:(NSDictionary *)exchangedDict NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 
 @end

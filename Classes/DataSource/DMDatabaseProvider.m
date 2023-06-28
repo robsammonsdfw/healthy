@@ -11,10 +11,7 @@
 
 @interface DMDatabaseProvider()
 @property (nonatomic, strong) NSDateFormatter *dateformatter;
-@property (nonatomic, strong) dispatch_queue_t syncQueue;
 @property (nonatomic, strong, readonly) FMDatabase *database;
-@property (nonatomic, strong) NSMutableArray *arrExerciseSyncNew;
-@property (nonatomic) NSInteger pageNumber;
 @end
 
 @implementation DMDatabaseProvider
@@ -22,10 +19,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _syncQueue = dispatch_queue_create("com.dietmaster.syncQueue", DISPATCH_QUEUE_SERIAL);
         _dateformatter = [[NSDateFormatter alloc] init];
-        _pageNumber = 1;
-        _arrExerciseSyncNew = [NSMutableArray array];
     }
     return self;
 }
@@ -50,119 +44,81 @@
     }
 
     dispatch_group_t fetchGroup = dispatch_group_create();
-    __weak typeof(self) weakSelf = self;
     __block NSError *syncError = nil;
 
     // First fetch all the user plan data.
     dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        MyMovesDataProvider *provider = [[MyMovesDataProvider alloc] init];
-        [provider fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-            }
-        }];
-    });
+    MyMovesDataProvider *provider = [[MyMovesDataProvider alloc] init];
+    [provider fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];
 
     // Next, fetch MyMoves data.
     dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        MyMovesDataProvider *provider = [[MyMovesDataProvider alloc] init];
-        [provider getMyMovesDataWithCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-            }
-        }];
-    });
-
-    dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        DMAuthManager *authMangager = [DMAuthManager sharedInstance];
-        [authMangager updateUserInfoWithCompletion:^(NSObject *object, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-            }
-        }];
-    });
-
-    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-    [dateComponents setDay:-90];
-        
-    NSString *dateString;
-    if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
-        dateString = @"1970-01-01";
-        [[NSUserDefaults standardUserDefaults]setObject:@"SecondTime" forKey:@"FirstTime"];
-    } else {
-        NSDate *currentDate = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"];
-        if (!currentDate) {
-            currentDate = [NSDate date];
+    MyMovesDataProvider *myMovesFetch = [[MyMovesDataProvider alloc] init];
+    [myMovesFetch getMyMovesDataWithCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
         }
-        NSDate *oneDayAgo = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
-                                                                     value:-8
-                                                                    toDate:currentDate
-                                                                   options:0];
+    }];
+
+    dispatch_group_enter(fetchGroup);
+    DMAuthManager *authMangager = [DMAuthManager sharedInstance];
+    [authMangager updateUserInfoWithCompletion:^(NSObject *object, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];
         
-        self.dateformatter.timeZone = [NSTimeZone systemTimeZone];
-        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        dateString = [self.dateformatter stringFromDate:oneDayAgo];
-    }
-    [self.arrExerciseSyncNew removeAllObjects];
+    NSString *dateString = [DMGUtilities lastSyncDateString];
 
     dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        [weakSelf getDataSinceLastSyncDate:dateString withCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-            }
-        }];
-    });
+    [self getDataSinceLastSyncDate:dateString withCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];
 
     dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        [weakSelf syncFavoriteFoods:dateString withCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-            }
-        }];
-    });
+    [self syncFavoriteFoods:dateString withCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];
 
     dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        [weakSelf syncFavoriteMealsWithCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-            }
-        }];
-    });
+    [self syncFavoriteMealsWithCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];
 
     dispatch_group_enter(fetchGroup);
-    dispatch_async(self.syncQueue, ^{
-        [weakSelf syncFavoriteMealItemsWithCompletionBlock:^(BOOL completed, NSError *error) {
-            dispatch_group_leave(fetchGroup);
-            if (error) {
-                syncError = error;
-            }
-        }];
-    });
+    [self syncFavoriteMealItemsWithCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];
 
-//    dispatch_group_enter(fetchGroup);
-//    dispatch_async(self.syncQueue, ^{
-//        [weakSelf syncExerciseLogNew:dateString withCompletionBlock:^(BOOL completed, NSError *error) {
-//            dispatch_group_leave(fetchGroup);
-//            if (error) {
-//                syncError = error;
-//            }
-//        }];;
-//    });
-    
-    // Finished!!
+    dispatch_group_enter(fetchGroup);
+    [self syncExerciseLog:dateString pageNumber:1 fetchedItems:@[] withCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];;
+
     dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+        // Finished!!
         [self syncDatabaseFinished];
         if (completionBlock) {
             completionBlock(syncError != nil, syncError);
@@ -171,17 +127,7 @@
 }
 
 - (void)syncDatabaseFinished {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSDate *oneDayAgo = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
-                                                                 value:0
-                                                                toDate:[NSDate date]
-                                                               options:0];
-    
-    self.dateformatter.timeZone = [NSTimeZone systemTimeZone];
-    [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSString *dateString = [self.dateformatter stringFromDate:oneDayAgo];
-    NSDate *date1 = [self.dateformatter dateFromString:dateString];
-    [prefs setValue:date1 forKey:@"lastsyncdate"];
+    [DMGUtilities setLastSyncToDate:[NSDate date]];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
 }
 
@@ -199,14 +145,9 @@
         return;
     }
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if([[prefs valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
-        dateString = [NSString stringWithFormat:@"%@",[prefs valueForKey:@"lastsyncdate"]];
+    if (!dateString) {
+        dateString = [DMGUtilities lastSyncDateString];
     }
-    else {
-        dateString = @"01-01-1970";
-    }
-    
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"SyncFavoriteFoods", @"RequestType",
                               dateString, @"LastSync",
@@ -273,7 +214,6 @@
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"SyncFavoriteMeals", @"RequestType",
                               nil];
-    __weak typeof(self) weakSelf = self;
     [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -346,24 +286,22 @@
                                           @"GetFavoriteMealItems", @"RequestType",
                                           [rs stringForColumn:@"Favorite_MealID"], @"MealID", nil];
         dispatch_group_enter(fetchGroup);
-        dispatch_async(self.syncQueue, ^{
-            [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
-                dispatch_group_leave(fetchGroup);
-                if (error) {
-                    return;
-                }
-                NSArray *responseArray = (NSArray *)object;
-                // Add the ID back to Favorite_MealID, or just fix the save statement.
-                NSMutableArray *fixedArray = [NSMutableArray array];
-                for (NSDictionary *dict in responseArray) {
-                    NSMutableDictionary *newDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
-                    [newDict setValue:mealId forKey:@"Favorite_Meal_ID"];
-                    [fixedArray addObject:newDict];
-                }
-                responseArray = fixedArray;
+        [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
+            dispatch_group_leave(fetchGroup);
+            if (error) {
+                return;
+            }
+            NSArray *responseArray = (NSArray *)object;
+            // Add the ID back to Favorite_MealID, or just fix the save statement.
+            NSMutableArray *fixedArray = [NSMutableArray array];
+            for (NSDictionary *dict in responseArray) {
+                NSMutableDictionary *newDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+                [newDict setValue:mealId forKey:@"Favorite_Meal_ID"];
+                [fixedArray addObject:newDict];
+            }
+            responseArray = fixedArray;
 
-            }];
-        });
+        }];
     }
     [rs close];
     
@@ -374,7 +312,10 @@
     });
 }
 
-- (void)syncExerciseLogNew:(NSString *)dateString withCompletionBlock:(completionBlockWithError)completionBlock {
+- (void)syncExerciseLog:(NSString *)dateString
+             pageNumber:(NSInteger)pageNumber
+           fetchedItems:(NSArray *)fetchedItems
+    withCompletionBlock:(completionBlockWithError)completionBlock {
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
     if (![authManager isUserLoggedIn]) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -386,17 +327,19 @@
         return;
     }
 
-    if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
-        dateString = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
-    } else {
-        dateString = @"01-01-1970";
+    if (!dateString) {
+        dateString = [DMGUtilities lastSyncDateString];
     }
-    
+    dateString = @"1980-01-01";
+    // Must start at one.
+    if (pageNumber == 0) {
+        pageNumber = 1;
+    }
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"SyncExerciseLogNew", @"RequestType",
                               dateString, @"LastSync",
-                              [NSString stringWithFormat:@"%d",20],@"PageSize",
-                              [NSString stringWithFormat:@"%li",self.pageNumber], @"PageNumber",
+                              @50, @"PageSize",
+                              @(pageNumber), @"PageNumber",
                               nil];
         
     __weak typeof(self) weakSelf = self;
@@ -411,81 +354,71 @@
             return;
         }
         
-        NSArray *responseArray = (NSArray *)object;
-        NSMutableArray *arrTemp = [[NSMutableArray alloc] init];
+        NSArray *responseArray = (NSArray *)object;        
+        // Process response with things.
+        NSArray *exerciseLogs = responseArray.firstObject[@"ExerciseLogs"];
+        exerciseLogs = [exerciseLogs arrayByAddingObjectsFromArray:fetchedItems];
+
         int totalCount = 0;
-        
-        FMDatabase* db = [self database];
-        if (![db open]) {
+        if (responseArray.count) {
+            totalCount = [responseArray.firstObject[@"TotalCount"] intValue];
+        }
+        if (exerciseLogs.count < totalCount) {
+            [strongSelf syncExerciseLog:dateString
+                             pageNumber:(pageNumber + 1)
+                           fetchedItems:[exerciseLogs copy]
+                    withCompletionBlock:completionBlock];
+            return;
         }
         
-        [db beginTransaction];
-        if ([responseArray count]>0){
-            NSDictionary *dictTemp = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:0]];
-            arrTemp = [dictTemp valueForKey:@"ExerciseLogs"];
-            
-            totalCount = [[dictTemp valueForKey:@"TotalCount"] intValue];
-            
-            for (int i=0; i < [arrTemp count]; i++) {
-                NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[arrTemp objectAtIndex:i]];
-                
-                [strongSelf.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-                [strongSelf.dateformatter setLocale:en_US];
-                NSDate *logTimeDate = [strongSelf.dateformatter dateFromString:[dict valueForKey:@"ExerciseDate"]];
-                
-                [strongSelf.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                NSString *logTimeString = [strongSelf.dateformatter stringFromDate:logTimeDate];
-                
-                [strongSelf.dateformatter setDateFormat:@"yyyyMMdd"];
-                NSString *keyDate = [strongSelf.dateformatter stringFromDate:logTimeDate];
-                
-                int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
-                NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
-                
-                NSDate* sourceDate = [NSDate date];
-                [strongSelf.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                
-                NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Exercise_Log "
-                                         "(Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Log_Date, Date_Modified) VALUES "
-                                         "('%@', %i, %i, '%@', '%@') ",
-                                         exerciseLogStrID,
-                                         exerciseID,
-                                         [[dict valueForKey:@"Duration"] intValue],
-                                         logTimeString,
-                                         sourceDate
-                                         ];
-            
-                [db executeUpdate:queryString];
-                [strongSelf.arrExerciseSyncNew addObject:dict];
+        [self saveExerciseLogs:exerciseLogs];
+        
+        // Done fetching everything!
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(YES, nil);
             }
-            if ([db hadError]) {
-                DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            }
-            [db commit];
-            
-            if (strongSelf.arrExerciseSyncNew.count < totalCount) {
-                NSString *dateString;
-                if ([[[NSUserDefaults standardUserDefaults]valueForKey:@"FirstTime"] isEqualToString:@"FirstTime"]) {
-                    dateString = @"1970-01-01";
-                    [[NSUserDefaults standardUserDefaults]setObject:@"SecondTime" forKey:@"FirstTime"];
-                } else {
-                    dateString = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
-                }
-                strongSelf.pageNumber = strongSelf.pageNumber + 1;
-                [strongSelf syncExerciseLogNew:dateString withCompletionBlock:completionBlock];
-            }
-            else {
-                strongSelf.pageNumber = 1;
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionBlock) {
-                        completionBlock(YES, nil);
-                    }
-                });
-            }
-        }
+        });
     }];
+}
+
+/// Saves an array of exercise logs to the local database.
+- (void)saveExerciseLogs:(NSArray *)exerciseLogs {
+    FMDatabase* db = [self database];
+    if (![db open]) {
+    }
+    
+    [db beginTransaction];
+    for (NSDictionary *exercise in exerciseLogs) {
+        
+        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [self.dateformatter setLocale:en_US];
+        NSDate *logTimeDate = [self.dateformatter dateFromString:[exercise valueForKey:@"ExerciseDate"]];
+        NSString *logTimeString = [self.dateformatter stringFromDate:logTimeDate];
+        
+        [self.dateformatter setDateFormat:@"yyyyMMdd"];
+        NSString *keyDate = [self.dateformatter stringFromDate:logTimeDate];
+        
+        int exerciseID = [[exercise valueForKey:@"ExerciseID"] intValue];
+        NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
+        NSDate *sourceDate = [NSDate date];
+        
+        NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Exercise_Log "
+                                 "(Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Log_Date, Date_Modified) VALUES "
+                                 "('%@', %i, %i, '%@', '%@') ",
+                                 exerciseLogStrID,
+                                 exerciseID,
+                                 [[exercise valueForKey:@"Duration"] intValue],
+                                 logTimeString,
+                                 sourceDate ];
+    
+        [db executeUpdate:queryString];
+    }
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [db commit];
 }
 
 #pragma mark - MESSAGES
@@ -858,14 +791,7 @@
                                          ];
                 [db executeUpdate:queryString];
                 
-                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                NSString *lastUpdate = [self.dateformatter stringFromDate:[[prefs valueForKey:@"lastsyncdate"] dateByAddingTimeInterval:-30]];
-                
-                if (lastUpdate == nil) {
-                    [self.dateformatter setTimeZone:[NSTimeZone systemTimeZone]];
-                    lastUpdate = [self.dateformatter stringFromDate:[NSDate date]];
-                }
+                NSString *lastUpdate = [DMGUtilities lastSyncDateString];
 
                 NSString *selectString = [NSString stringWithFormat:@"SELECT FoodID, MealCode, LastModified FROM Food_Log_Items WHERE MealID = %i", [[dict valueForKey:@"MealID"] intValue]];
                 

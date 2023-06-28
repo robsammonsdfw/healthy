@@ -24,7 +24,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)syncFavoriteFoods:(NSString *)dateString withCompletionBlock:(completionBlockWithError)completionBlock;
 - (void)syncFavoriteMealsWithCompletionBlock:(completionBlockWithError)completionBlock;
 - (void)syncFavoriteMealItemsWithCompletionBlock:(completionBlockWithError)completionBlock;
-- (void)syncExerciseLogNew:(NSString *)dateString withCompletionBlock:(completionBlockWithError)completionBlock;
+
+/// Performs a sync of the exercise log, with date of last sync, current page number,
+/// and fetched items if multiple pages. Pass 1 for page number and an empty array if
+/// the first time.
+- (void)syncExerciseLog:(NSString *)dateString
+             pageNumber:(NSInteger)pageNumber
+           fetchedItems:(NSArray *)fetchedItems
+    withCompletionBlock:(completionBlockWithError)completionBlock;
 
 - (NSArray<DMMessage *> *)unreadMessages;
 - (int)unreadMessageCount;

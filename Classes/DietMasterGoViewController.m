@@ -846,7 +846,7 @@
     
     dietmasterEngine.currentWeight = [NSNumber numberWithDouble:self.currentWeight];
     
-    [self performSelector:@selector(getBMR) withObject:nil afterDelay:0.25];
+    [self getBMR];
     
     double netCalories = self.num_BMR - self.num_totalCalories;
     

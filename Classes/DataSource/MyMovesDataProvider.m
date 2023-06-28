@@ -61,7 +61,7 @@
                                  nil];
     __weak typeof(self) weakSelf = self;
     NSURL *url = [NSURL URLWithString:@"https://dmwebpro.com/MobileAPI/SyncUser"];
-    [DMDataFetcher fetchDataWithJSONParams:params url:url completion:^(NSObject *object, NSError *error) {
+    [DMDataFetcher fetchDataWithJSONParams:params url:url method:@"POST" completion:^(NSObject *object, NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
@@ -89,16 +89,14 @@
 }
 
 - (void)getMyMovesDataWithCompletionBlock:(completionBlockWithError)completionBlock {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
     DMUser *currentUser = [authManager loggedInUser];
-    NSString *authString = [NSString stringWithFormat:@"%@:%@", currentUser.userName, currentUser.authToken];
    
     // Change FALSE to TRUE to include all moves.
     NSString *urlString = [NSString stringWithFormat:@"https://api.dmwebpro.com/MyMoves/GetMoves/%i/true", currentUser.companyId.intValue];
     NSURL *url = [NSURL URLWithString:urlString];
 
-    [DMDataFetcher fetchDataWithJSONParams:@{} url:url completion:^(NSObject *object, NSError *error) {
+    [DMDataFetcher fetchDataWithJSONParams:nil url:url method:@"GET" completion:^(NSObject *object, NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {

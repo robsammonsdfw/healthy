@@ -126,14 +126,12 @@ static NSString *CellIdentifier = @"Cell";
                 DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
                 dietmasterEngine.taskMode = @"Save";
                 
-                ManageFoods *mfController = [[ManageFoods alloc] init];
-                
+                ManageFoods *mfController = [[ManageFoods alloc] initWithFood:nil];
                 [self.navigationController pushViewController:mfController animated:YES];
-                mfController = nil;
                 return;
             }
             else {
-                fsController.searchType = [arryOptions objectAtIndex:indexPath.row];
+                fsController.searchType = (DMFoodSearchType)indexPath.row;
                 fsController.title = [arryOptions objectAtIndex:indexPath.row];
             }
         }

@@ -11,7 +11,6 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
-#import "MealPlanWebService.h"
 #import "DMDataFetcher.h"
 
 #define cSection1 0
@@ -42,50 +41,17 @@
     
     int num_isFavorite;
     
-    
     IBOutlet UIBarButtonItem *decimalButton;
     IBOutlet UIBarButtonItem *fractionButton;
     NSMutableArray *rowListArr;
-
 }
-@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
-
-- (IBAction)delLog:(id) sender;
-- (void) saveToLog:(id) sender;
-
-@property (nonatomic, strong) NSMutableArray *pickerColumn1Array;
-@property (nonatomic, strong) NSMutableArray *pickerColumn3Array;
-@property (nonatomic, strong) NSMutableArray *pickerFractionArray;
-@property (nonatomic, strong) NSMutableArray *pickerDecimalArray;
-@property (nonatomic, strong) NSNumber *pickerRow1;
-@property (nonatomic, strong) NSNumber *pickerRow2;
-@property (nonatomic, strong) NSNumber *pickerRow3;
-
--(void)loadData;
--(void)cleanUpView;
--(void)showActionSheet:(id)sender;
--(void) deleteFromFavorites;
--(void)saveToFavorites;
-
--(void)updateCalorieCount;
--(NSString *)superScriptOf:(NSString *)inputNumber;
--(NSString *)subScriptOf:(NSString *)inputNumber;
-
--(IBAction)changePickerView:(id)sender;
-
--(void)exchangeFood;
--(void)updateFoodServings;
--(void)insertNewFood;
--(void)deleteFromPlan;
-
--(void)deleteFromWSLog;
--(void)deleteFromLog;
--(IBAction) goToSafetyGuidelines:(id) sender;
-
-@property (nonatomic, strong) IBOutlet UILabel *staticCalLbl;
-@property (nonatomic, strong) IBOutlet UILabel *staticProtFatCarbLbl;
-@property (nonatomic, strong) IBOutlet UILabel *foodIdLbl;
 
 @property (nonatomic, weak) NSString *foodIdValue;
+
+/// Main inititalizer.
+- (instancetype)initWithFood:(NSDictionary *)foodDict NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 
 @end

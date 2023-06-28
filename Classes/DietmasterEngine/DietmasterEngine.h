@@ -26,8 +26,6 @@ extern NSString * const UpdatingMessageNotification;
 @interface DietmasterEngine : NSObject {
     
     NSMutableDictionary *exerciseSelectedDict;
-    // Dict for Food Selected Detail
-    NSMutableDictionary *foodSelectedDict;
     
     NSNumber *currentWeight;
     
@@ -72,7 +70,6 @@ extern NSString * const UpdatingMessageNotification;
 @property (nonatomic, weak) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
 
 @property (nonatomic, strong) NSMutableDictionary *exerciseSelectedDict;
-@property (nonatomic, strong) NSMutableDictionary *foodSelectedDict;
 @property (nonatomic, strong) NSNumber *currentWeight;
 
 //HHT apple watch
@@ -94,9 +91,6 @@ extern NSString * const UpdatingMessageNotification;
 @property (nonatomic) int indexOfItemToExchange;
 @property (nonatomic) int selectedMealPlanID;
 @property (nonatomic) BOOL didInsertNewFood;
-
-// Grocery List
-@property (nonatomic, strong) NSMutableArray *groceryArray;
 
 @property (nonatomic, strong, readonly) FMDatabase *database;
 
@@ -121,13 +115,14 @@ extern NSString * const UpdatingMessageNotification;
 
 // Food Plan Methods
 -(NSDictionary *)getFoodDetails:(NSDictionary *)foodDict;
--(void)getMissingFoods:(NSDictionary *)foodDict;
--(void)retrieveMissingFood:(int)foodKey;
 -(BOOL)insertMealPlanToLog:(NSDictionary *)dict;
--(NSNumber *)getMealCodeCalories:(NSArray *)array;
 -(NSNumber *)getRecommendedCalories;
--(NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey;
--(NSNumber *)getGramWeightForFoodID:(NSNumber *)foodID andMeasureID:(NSNumber *)measureID;
+/// Gets the measure ID for a food against a meal plan item.
+- (NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey fromMealPlanItem:(NSDictionary *)mealPlanItemDict;
+- (NSNumber *)getGramWeightForFoodID:(NSNumber *)foodID andMeasureID:(NSNumber *)measureID;
+
+- (void)getMissingFoodsIfNeededForFoods:(NSArray *)foodsArray;
+- (void)fetchMissingFoodForKey:(int)foodKey;
 
 // Database helper methods
 - (NSString *)databasePath;
@@ -138,8 +133,6 @@ extern NSString * const UpdatingMessageNotification;
 // Helpers
 - (NSDictionary *)getUserRecommendedRatios;
 - (NSInteger)getBMR;
-
--(NSMutableArray *)getGroceryFoodDetails:(NSMutableArray *)foods;
 
 @end
 

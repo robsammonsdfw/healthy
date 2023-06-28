@@ -461,34 +461,20 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (void)tableView:(UITableView *)myTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
-                                   initWithTitle: @"Search"
-                                   style: UIBarButtonItemStylePlain
-                                   target: nil action: nil];
-    
-    [self.navigationItem setBackBarButtonItem: backButton];
+    NSDictionary *foodDict = [[self.foodResults objectAtIndex:indexPath.row] copy];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[self.foodResults objectAtIndex:indexPath.row]];
-    [dietmasterEngine.foodSelectedDict setDictionary:dict];
     dietmasterEngine.dateSelected = date_currentDate;
     
     if ([dietmasterEngine.taskMode isEqualToString:@"View"]) {
-        
         [self.navigationController setNavigationBarHidden:NO animated:YES];
-        ManageFoods *mfController = [[ManageFoods alloc] init];
+        ManageFoods *mfController = [[ManageFoods alloc] initWithFood:foodDict];
         [self.navigationController pushViewController:mfController animated:YES];
         mfController.hideAddToLog = YES;
-    }
-    else {
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-        DetailViewController *dvController = [[DetailViewController alloc] init];
-        dvController.foodIdValue = [NSString stringWithFormat:@"%@",[dietmasterEngine.foodSelectedDict valueForKey:@"FoodID"]];
-        dvController.hidesBottomBarWhenPushed = YES;
+    } else {
+        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
         [self.navigationController pushViewController:dvController animated:YES];
     }
 }
@@ -516,7 +502,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.taskMode = @"Save";
     
-    ManageFoods *mfController = [[ManageFoods alloc] init];
+    ManageFoods *mfController = [[ManageFoods alloc] initWithFood:nil];
     
     [self.navigationController pushViewController:mfController animated:YES];
     mfController = nil;

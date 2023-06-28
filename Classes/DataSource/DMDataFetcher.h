@@ -12,26 +12,29 @@
 /// Class that handles a fetch to the server.
 /// It does not save any data, just fetches and returns a
 /// response from the server, be it an error or returned object.
+/// DietMaster APIs are mostly documented here:
+/// https://webservice.dmwebpro.com/DMGoWS.asmx
+/// NOTE: This Fetcher uses the "Soap 1.2" specs.
 @interface DMDataFetcher : NSObject
 
 /// Calls the fetch with params with optional completion block. If error is returned in block, the
 /// sync was not successful.
 /// The completion block returns on the main queue.
-+ (void)fetchDataWithRequestParams:(NSDictionary *)params completion:(completionBlockWithObject)completionBlock;
++ (void)fetchDataWithRequestParams:(nullable NSDictionary *)params completion:(nonnull completionBlockWithObject)completionBlock;
 
 /// Calls the fetch with params with optional completion block.
-/// If you need to send an array in strJSON field, provide the NSArray in the jsonArray argument.
+/// If you need to send an [array or dict] in strJSON field, provide the object in the jsonObject argument.
 /// If error is returned in block, the sync was not successful.
 /// The completion block returns on the main queue.
-+ (void)fetchDataWithRequestParams:(NSDictionary *)params
-                         jsonArray:(NSArray *)jsonArray
-                        completion:(completionBlockWithObject)completionBlock;
++ (void)fetchDataWithRequestParams:(nullable NSDictionary *)params
+                        jsonObject:(nonnull NSObject *)jsonObject
+                        completion:(nullable completionBlockWithObject)completionBlock;
 
 /// Calls a fetch to the JSON service with the params provided to the URL given.
 /// If error is returned, sync was not successful. Completion block returns on main queue.
-/// NOTE: This currently only calls the "/MobileAPI/SyncUser" API.
-+ (void)fetchDataWithJSONParams:(NSDictionary *)params
-                            url:(NSURL *)url
-                     completion:(completionBlockWithObject)completionBlock;
++ (void)fetchDataWithJSONParams:(nullable NSDictionary *)params
+                            url:(nonnull NSURL *)url
+                         method:(nonnull NSString *)method
+                     completion:(nullable completionBlockWithObject)completionBlock;
 
 @end

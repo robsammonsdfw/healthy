@@ -13,10 +13,9 @@
 #import "MealPlanDetailViewController.h"
 #import "GroceryListViewController.h"
 #import "MyMovesViewController.h"
-#import "MealPlanWebService.h"
+#import "DMMealPlanDataProvider.h"
 
-@interface MealPlanViewController() <SFSafariViewControllerDelegate, WSGetUserPlannedMealNames, WSGetGroceryList, UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) MealPlanWebService *soapWebService;
+@interface MealPlanViewController() <SFSafariViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *selectedRows;
 @property (nonatomic) BOOL isChoosingForGroceryList;
@@ -96,15 +95,7 @@ static NSString *CellIdentifier = @"Cell";
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     self.title = @"My Meals";
     [self.navigationItem setTitle:@"My Meals"];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if ([dietmasterEngine.mealPlanArray count] == 0) {
-        [self loadData];
-    }
+    [self loadData];
 }
 
 #pragma mark - Safari
@@ -122,13 +113,9 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)showGroceryList {
     if (self.isChoosingForGroceryList) {
-        self.isChoosingForGroceryList = NO;
         [self.navigationItem setRightBarButtonItem:self.aBarButtonItem];
         [self.navigationItem setLeftBarButtonItem:nil];
-    }
-    else {
-        self.isChoosingForGroceryList = YES;
-        
+    } else {
         UIBarButtonItem *aBarButtonItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(loadGroceryList)];
         [self.navigationItem setRightBarButtonItem:aBarButtonItem2];
         
@@ -136,48 +123,70 @@ static NSString *CellIdentifier = @"Cell";
         [self.navigationItem setLeftBarButtonItem:cancelButton];
     }
     
+    self.isChoosingForGroceryList = !self.isChoosingForGroceryList;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)loadGroceryList {
     [DMActivityIndicator showActivityIndicator];
 
+    // Create an array of MealIDs to send to fetcher.
     NSMutableArray *mealIDArray = [[NSMutableArray alloc] init];
     for (NSIndexPath *indexPath in [self.selectedRows copy]) {
-        
         NSMutableDictionary *mealIDDict = [[NSMutableDictionary alloc] init];
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.mealPlanArray objectAtIndex:[indexPath row]]];
         [mealIDDict setValue:[tempDict valueForKey:@"MealID"] forKey:@"MealID"];
         [mealIDArray addObject:mealIDDict];
     }
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"GetGroceryList", @"RequestType",
-                              mealIDArray, @"GroceryItems",
-                              nil];
-    
-    self.soapWebService = [[MealPlanWebService alloc] init];
-    self.soapWebService.wsGetGroceryList = self;
-    [self.soapWebService callWebservice:infoDict];
+        
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider fetchGroceryListForMealItems:mealIDArray withCompletionBlock:^(NSObject *object, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+
+        NSArray *responseArray = (NSArray *)object;
+        NSMutableArray *groceryItems = [NSMutableArray array];
+        for (NSDictionary *dict in responseArray) {
+            NSArray *foods = [dict valueForKey:@"CategoryItems"];
+            if (foods.count) {
+                foods = [provider getGroceryFoodDetailsForFoods:[foods copy]];
+            }
+            NSMutableDictionary *mutableDict = [dict mutableCopy];
+            mutableDict[@"CategoryItems"] = [foods copy];
+            [groceryItems addObject:[mutableDict copy]];
+        }
+        [provider saveGroceryList:[groceryItems copy]];
+        GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
+        [weakSelf.navigationController pushViewController:groceryListVC animated:YES];
+        [weakSelf showGroceryList];
+    }];
 }
 
-#pragma mark LOAD DATA METHODS
-
 - (void)loadData {
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"GetUserPlannedMealNames", @"RequestType",
-                              nil];
-    
-    self.soapWebService = [[MealPlanWebService alloc] init];
-    self.soapWebService.wsGetUserPlannedMealNames = self;
-    [self.soapWebService callWebservice:infoDict];
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider fetchUserPlannedMealsWithCompletionBlock:^(NSObject *object, NSError *error) {
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        [dietmasterEngine.mealPlanArray removeAllObjects];
+        
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        NSArray *results = (NSArray *)object;
+        [dietmasterEngine.mealPlanArray addObjectsFromArray:results];
+        [[weakSelf tableView] reloadData];
+    }];
 }
 
 #pragma mark TABLE VIEW METHODS
 - (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     if ([dietmasterEngine.mealPlanArray count] > 0) {
         return indexPath;
     }
@@ -218,13 +227,12 @@ static NSString *CellIdentifier = @"Cell";
         cell.textLabel.text = [tempDict valueForKey:@"MealName"];
         cell.textLabel.textColor = [UIColor whiteColor];
         
-        [cell textLabel].adjustsFontSizeToFitWidth = YES;
         cell.textLabel.font = [UIFont systemFontOfSize:16.0];
-        cell.textLabel.minimumScaleFactor = 12.0f;
         cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.textLabel.highlightedTextColor = [UIColor whiteColor];
         cell.backgroundColor = [UIColor clearColor];
+        cell.textLabel.numberOfLines = 0;
         
         if (self.isChoosingForGroceryList) {
             UIImage *image = nil;
@@ -250,9 +258,8 @@ static NSString *CellIdentifier = @"Cell";
         cell.textLabel.text = @"Contact your program provider regarding meal plans";
         cell.textLabel.textColor = [UIColor blackColor];
         
-        [cell textLabel].adjustsFontSizeToFitWidth = YES;
-        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
-        cell.textLabel.minimumScaleFactor = 10.0f;
+        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.font = [UIFont systemFontOfSize:16.0];
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.textLabel.highlightedTextColor = [UIColor blackColor];
         cell.backgroundColor = [UIColor clearColor];
@@ -319,28 +326,6 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark GROCERY LIST DELEGATES
 
 - (void)getGroceryListFinished:(NSMutableArray *)responseArray {
-    [DMActivityIndicator hideActivityIndicator];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine.groceryArray removeAllObjects];
-    
-    NSMutableArray *groceryItems = [NSMutableArray array];
-    for (NSDictionary *dict in responseArray) {
-        NSArray *foods = [dict valueForKey:@"CategoryItems"];
-        if (foods.count) {
-            foods = [dietmasterEngine getGroceryFoodDetails:[foods copy]];
-        }
-        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-        mutableDict[@"CategoryItems"] = [foods copy];
-        [groceryItems addObject:mutableDict];
-    }
-    
-    [dietmasterEngine.groceryArray addObjectsFromArray:groceryItems];
-    
-    GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
-    [self.navigationController pushViewController:groceryListVC animated:YES];
-    
-    [self showGroceryList];
 }
 
 - (void)getGroceryListFailed:(NSString *)failedMessage {
@@ -349,55 +334,33 @@ static NSString *CellIdentifier = @"Cell";
     [DMGUtilities showAlertWithTitle:@"Oops!" message:@"An error occurred! Please try again." inViewController:nil];
 }
 
-#pragma mark GET MEAL PLAN NAME DELEGATES
-
-- (void)getUserPlannedMealNamesFinished:(NSArray *)responseArray {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine.mealPlanArray removeAllObjects];
-    [dietmasterEngine.mealPlanArray addObjectsFromArray:responseArray];
-    
-    [[self tableView] reloadData];
-}
-
-- (void)getUserPlannedMealNamesFailed:(NSError *)error {
-    [[self tableView] reloadData];
-    
-    [DMGUtilities showError:error withTitle:@"Error" message:@"An error occurred! Please try again." inViewController:nil];
-}
-
 #pragma mark ACTION SHEET METHODS
 
 - (void)showActionSheet:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    if ([dietmasterEngine.mealPlanArray count] > 0) {
-        
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-        [alert addAction:[UIAlertAction actionWithTitle:@"New Grocery List"
+    [alert addAction:[UIAlertAction actionWithTitle:@"New Grocery List"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self showGroceryList];
+    }]];
+    
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    if ([provider getSavedGroceryList].count) {
+        NSString *buttonString = @"View Last Saved List";
+        [alert addAction:[UIAlertAction actionWithTitle:buttonString
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            [self showGroceryList];
+            GroceryListViewController *viewController = [[GroceryListViewController alloc] init];
+            [self.navigationController pushViewController:viewController animated:YES];
         }]];
-        if ([dietmasterEngine.groceryArray count] > 0) {
-            NSString *buttonString = @"View Saved List";
-            [alert addAction:[UIAlertAction actionWithTitle:buttonString
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:^(UIAlertAction * _Nonnull action) {
-                DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-                if ([dietmasterEngine.groceryArray count] > 0) {
-                    GroceryListViewController *groceryListVC = [[GroceryListViewController alloc] init];
-                    [self.navigationController pushViewController:groceryListVC animated:YES];
-                }
-            }]];
-        }
-
-        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            [alert dismissViewControllerAnimated:YES completion:nil];
-        }]];
-
-        [self presentViewController:alert animated:YES completion:nil];
     }
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

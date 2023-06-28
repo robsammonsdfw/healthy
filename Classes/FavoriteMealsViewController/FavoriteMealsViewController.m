@@ -255,7 +255,7 @@
     
     [db commit];
     
-    [self performSelector:@selector(loadSearchData:) withObject:nil afterDelay:0.10];
+    [self loadSearchData:nil];
 }
 
 #pragma mark ACTION SHEET METHODS

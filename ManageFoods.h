@@ -61,9 +61,7 @@
     IBOutlet UIButton *selectMeasureButton;
 	IBOutlet UIToolbar *keyboardToolBar;
     IBOutlet UIBarButtonItem *closeDoneButton;
-    
-    NSMutableDictionary *selectedFoodDict;
-    
+        
     BOOL reloadData;
     
     NSMutableDictionary *scannerDict;
@@ -87,38 +85,16 @@
 @property (nonatomic,retain) NSString *scanned_UPCA;
 @property (nonatomic,retain) NSString *scanned_factualID;
 @property (nonatomic,retain) IBOutlet UIButton *scannerButton;
-
-@property (nonatomic,retain) NSMutableDictionary *selectedFoodDict;
-
 @property (nonatomic) NSInteger savedFoodID;
 @property (nonatomic) BOOL saveToLog;
 @property (nonatomic) BOOL hideAddToLog;
-
-//HHT
 @property (nonatomic) int intTabId;
 
-- (IBAction) getCategory:(id) sender;
-- (IBAction) getMeasure:(id) sender;
-
--(void)loadData;
--(void)updateFood:(id)sender;
--(void) recordFood:(id) sender;
-
--(void)clearEnteredData;
--(IBAction)nextTextField:(id)sender;
--(IBAction)previousTextField:(id)sender;
--(IBAction)dismissKeyboard:(id)sender;
-
--(IBAction)loadBarcodeScanner:(id)sender;
--(void)barcodeWasScanned:(NSNotification *)notification;
-
--(void)factualAPISuccess:(NSNotification *)notification;
--(void)factualAPIDidFail:(NSNotification *)notification;
--(void)tappedScrollView:(id)sender;
-
--(void)customBackAction:(id)sender;
-
--(void)foodWasSavedToCloud:(NSNotification *)notification;
+/// Main inititalizer.
+- (instancetype)initWithFood:(NSDictionary *)foodDict NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 
 @end
 

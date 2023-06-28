@@ -14,12 +14,13 @@
 /// Determines if a user saw the scanner helper popup. Backed by
 /// NSUserDefaults value, so only shown once per user login.
 @property (nonatomic) BOOL helperBubbleWasShown;
+/// The food that is being displayed to the user.
+@property (nonatomic, strong) NSMutableDictionary *foodDict;
 @end
 
 @implementation ManageFoods
 
 @synthesize scrollView, intFoodID, intCategoryID, strCategoryName, intMeasureID, strMeasureName;
-@synthesize selectedFoodDict;
 @synthesize scannerDict, scanned_UPCA, scanned_factualID, scannerButton;
 
 static const int NUMBER_OF_TEXTFIELDS = 28;
@@ -27,9 +28,10 @@ CGPoint svos;
 
 #pragma mark VIEW LIFECYCLE
 
-- (instancetype)init {
+- (instancetype)initWithFood:(NSDictionary *)foodDict {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
+        _foodDict = [foodDict mutableCopy];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(barcodeWasScanned:)
                                                      name:@"BarCodeScanned"
@@ -42,7 +44,7 @@ CGPoint svos;
     return self;
 }
 
--(void)viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
         
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
@@ -56,10 +58,6 @@ CGPoint svos;
     
     intCategoryID = [NSNumber numberWithInt:0];
     intMeasureID = [NSNumber numberWithInt:0];
-    
-    if (!selectedFoodDict) {
-        selectedFoodDict = [[NSMutableDictionary alloc] init];
-    }
     
     reloadData = YES;
         
@@ -113,30 +111,28 @@ CGPoint svos;
         }
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
+    if (self.foodDict) {
         [self.navigationItem setTitle:@"Update Food"];
-    }
-    else {
+    } else {
         [self.navigationItem setTitle:@"Add New Food"];
     }
     
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                                 target:self
-                                                                                 action:@selector(showActionSheet:)];
+    UIBarButtonItem *rightButton =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                      target:self
+                                                      action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
     rightButton.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = rightButton;
 }
 
--(void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-    if([dietmasterEngine.taskMode isEqualToString:@"View"] && reloadData == YES) {
-        [DMActivityIndicator showActivityIndicator];
-        [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
+    if (self.foodDict) {
+        [self loadData];
     }
     
     if (!self.helperBubbleWasShown && ![dietmasterEngine.taskMode isEqualToString:@"View"]) {
@@ -180,6 +176,7 @@ CGPoint svos;
 - (void)setHelperBubbleWasShown:(BOOL)helperBubbleWasShown {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:helperBubbleWasShown forKey:@"HelperBubbleWasShown"];
+    [defaults synchronize];
 }
 
 #pragma mark - BACK METHODS
@@ -357,23 +354,23 @@ CGPoint svos;
     intMeasureID = [NSNumber numberWithInt:0];
     intCategoryID = [NSNumber numberWithInt:0];
     scanned_UPCA = nil;
-    scanned_UPCA = [[NSString alloc] initWithString:@"empty"];
+    scanned_UPCA = @"empty";
     scanned_factualID = nil;
-    scanned_factualID = [[NSString alloc] initWithString:@"empty"];
+    scanned_factualID = @"empty";
 }
 
--(void)loadData {
-    reloadData = YES;
-    if (selectedFoodDict) {
-        [selectedFoodDict removeAllObjects];
+- (void)loadData {
+    if (!self.foodDict) {
+        return;
     }
+    [DMActivityIndicator showActivityIndicator];
+
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         
     }
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     
     // First Query
     NSString *query = [NSString stringWithFormat:@"SELECT FoodKey,FoodID,Name,CategoryID, Calories, Fat, "
@@ -388,7 +385,6 @@ CGPoint svos;
     // Query Database
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
-        
         NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               [NSNumber numberWithInt:[rs intForColumn:@"FoodKey"]], @"FoodKey",
                               [NSNumber numberWithInt:[rs intForColumn:@"FoodID"]], @"FoodID",
@@ -428,93 +424,87 @@ CGPoint svos;
                               [rs stringForColumn:@"FactualID"], @"FactualID",
                               nil];
         
-        [selectedFoodDict setDictionary:dict];
+        self.foodDict = [dict mutableCopy];
     }
     
     NSString *query2 = [NSString stringWithFormat: @"SELECT m.MeasureID, m.Description, fm.GramWeight FROM Measure m INNER JOIN FoodMeasure fm ON fm.MeasureID = m.MeasureID WHERE fm.FoodID = %i ORDER BY m.Description", foodID];
     
     rs = [db executeQuery:query2];
     while ([rs next]) {
+        NSString *measureDesc =
+            [[rs stringForColumn:@"Description"] stringByReplacingCharactersInRange:NSMakeRange(0,1)
+                                                                         withString:[[[rs stringForColumn:@"Description"]  substringToIndex:1] capitalizedString]];
         
-        NSString *measureDesc = [[rs stringForColumn:@"Description"] stringByReplacingCharactersInRange:NSMakeRange(0,1)
-                                                                                             withString:[[[rs stringForColumn:@"Description"]  substringToIndex:1] capitalizedString]];
-        
-        [selectedFoodDict setValue:[NSNumber numberWithInt:[rs intForColumn:@"MeasureID"]] forKey:@"MeasureID"];
-        [selectedFoodDict setValue:[NSNumber numberWithDouble:[rs doubleForColumn:@"GramWeight"]] forKey:@"GramWeight"];
-        [selectedFoodDict setValue:measureDesc forKey:@"Measure_Description"];
-        
+        [self.foodDict setValue:[NSNumber numberWithInt:[rs intForColumn:@"MeasureID"]] forKey:@"MeasureID"];
+        [self.foodDict setValue:[NSNumber numberWithDouble:[rs doubleForColumn:@"GramWeight"]] forKey:@"GramWeight"];
+        [self.foodDict setValue:measureDesc forKey:@"Measure_Description"];
     }
     
-    NSString *query3 = [NSString stringWithFormat: @"SELECT CategoryID, Name FROM FoodCategory WHERE CategoryID = %i", [[selectedFoodDict valueForKey:@"CategoryID"] intValue]];
+    NSString *query3 = [NSString stringWithFormat: @"SELECT CategoryID, Name FROM FoodCategory WHERE CategoryID = %i", [[self.foodDict valueForKey:@"CategoryID"] intValue]];
     
     rs = [db executeQuery:query3];
     while ([rs next]) {
-        
-        
-        [selectedFoodDict setValue:[rs stringForColumn:@"Name"] forKey:@"Category_Description"];
-        
+        [self.foodDict setValue:[rs stringForColumn:@"Name"] forKey:@"Category_Description"];
     }
     [rs close];
     
-    txtfieldFoodName.text = [selectedFoodDict valueForKey:@"Name"];
-    txtfieldCalories.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Calories"] doubleValue]];
-    txtfieldTotalFat.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Fat"] doubleValue]];
-    txtfieldSatFat.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"SaturatedFat"] doubleValue]];
-    txtfieldSodium.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Sodium"] doubleValue]];
-    txtfieldCarbs.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Carbohydrates"] doubleValue]];
-    txtfieldCholesterol.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Cholesterol"] doubleValue]];
-    txtfieldProtein.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Protein"] doubleValue]];
-    txtfieldFiber.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Fiber"] doubleValue]];
-    txtfieldSugars.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Sugars"] doubleValue]];
-    txtfieldPot.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Pot"] doubleValue]];
-    txtfieldVitA.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"A"] doubleValue]];
-    txtfieldThiamin.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Thi"] doubleValue]];
-    txtfieldRib.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Rib"] doubleValue]];
-    txtfieldNiacin.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Nia"] doubleValue]];
-    txtfieldVitB6.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"B6"] doubleValue]];
-    txtfieldVitB12.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"B12"] doubleValue]];
-    txtfieldFolicAcid.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Fol"] doubleValue]];
-    txtfieldVitC.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"C"] doubleValue]];
-    txtfieldCalcium.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Calc"] doubleValue]];
-    txtfieldIron.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Iron"] doubleValue]];
-    txtfieldMag.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Mag"] doubleValue]];
-    txtfieldZinc.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Zn"] doubleValue]];
-    txtfieldFolate.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Folate"] doubleValue]];
-    txtfieldServingSize.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"ServingSize"] doubleValue]];
-    txtfieldTransFat.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"Transfat"] doubleValue]];
-    txtfieldVitE.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"E"] doubleValue]];
-    txtfieldVitD.text = [NSString stringWithFormat:@"%.2f",[[selectedFoodDict valueForKey:@"D"] doubleValue]];
+    txtfieldFoodName.text = [self.foodDict valueForKey:@"Name"];
+    txtfieldCalories.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Calories"] doubleValue]];
+    txtfieldTotalFat.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Fat"] doubleValue]];
+    txtfieldSatFat.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"SaturatedFat"] doubleValue]];
+    txtfieldSodium.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Sodium"] doubleValue]];
+    txtfieldCarbs.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Carbohydrates"] doubleValue]];
+    txtfieldCholesterol.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Cholesterol"] doubleValue]];
+    txtfieldProtein.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Protein"] doubleValue]];
+    txtfieldFiber.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Fiber"] doubleValue]];
+    txtfieldSugars.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Sugars"] doubleValue]];
+    txtfieldPot.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Pot"] doubleValue]];
+    txtfieldVitA.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"A"] doubleValue]];
+    txtfieldThiamin.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Thi"] doubleValue]];
+    txtfieldRib.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Rib"] doubleValue]];
+    txtfieldNiacin.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Nia"] doubleValue]];
+    txtfieldVitB6.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"B6"] doubleValue]];
+    txtfieldVitB12.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"B12"] doubleValue]];
+    txtfieldFolicAcid.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Fol"] doubleValue]];
+    txtfieldVitC.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"C"] doubleValue]];
+    txtfieldCalcium.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Calc"] doubleValue]];
+    txtfieldIron.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Iron"] doubleValue]];
+    txtfieldMag.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Mag"] doubleValue]];
+    txtfieldZinc.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Zn"] doubleValue]];
+    txtfieldFolate.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Folate"] doubleValue]];
+    txtfieldServingSize.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"ServingSize"] doubleValue]];
+    txtfieldTransFat.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Transfat"] doubleValue]];
+    txtfieldVitE.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"E"] doubleValue]];
+    txtfieldVitD.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"D"] doubleValue]];
     
-    if ([selectedFoodDict valueForKey:@"Category_Description"] == nil) {
+    if ([self.foodDict valueForKey:@"Category_Description"] == nil) {
         [selectCategoryButton setTitle:@"Select Category" forState: UIControlStateNormal];
         [selectCategoryButton setTitle:@"Select Category" forState: UIControlStateHighlighted];
         [selectCategoryButton setTitle:@"Select Category" forState: UIControlStateSelected];
     }
     else {
-        [selectCategoryButton setTitle: [selectedFoodDict valueForKey:@"Category_Description"] forState: UIControlStateNormal];
-        [selectCategoryButton setTitle: [selectedFoodDict valueForKey:@"Category_Description"] forState: UIControlStateHighlighted];
-        [selectCategoryButton setTitle: [selectedFoodDict valueForKey:@"Category_Description"] forState: UIControlStateSelected];
+        [selectCategoryButton setTitle: [self.foodDict valueForKey:@"Category_Description"] forState: UIControlStateNormal];
+        [selectCategoryButton setTitle: [self.foodDict valueForKey:@"Category_Description"] forState: UIControlStateHighlighted];
+        [selectCategoryButton setTitle: [self.foodDict valueForKey:@"Category_Description"] forState: UIControlStateSelected];
     }
-    [selectMeasureButton setTitle: [selectedFoodDict valueForKey:@"Measure_Description"] forState: UIControlStateNormal];
-    [selectMeasureButton setTitle: [selectedFoodDict valueForKey:@"Measure_Description"] forState: UIControlStateHighlighted];
-    [selectMeasureButton setTitle: [selectedFoodDict valueForKey:@"Measure_Description"] forState: UIControlStateSelected];
+    [selectMeasureButton setTitle: [self.foodDict valueForKey:@"Measure_Description"] forState: UIControlStateNormal];
+    [selectMeasureButton setTitle: [self.foodDict valueForKey:@"Measure_Description"] forState: UIControlStateHighlighted];
+    [selectMeasureButton setTitle: [self.foodDict valueForKey:@"Measure_Description"] forState: UIControlStateSelected];
     
-    if ([selectedFoodDict valueForKey:@"CategoryID"] == nil) {
+    if ([self.foodDict valueForKey:@"CategoryID"] == nil) {
         intCategoryID = [NSNumber numberWithInt:0];
     }
     else {
-        intCategoryID = [selectedFoodDict valueForKey:@"CategoryID"];
+        intCategoryID = [self.foodDict valueForKey:@"CategoryID"];
     }
-    intMeasureID = [selectedFoodDict valueForKey:@"MeasureID"];
+    intMeasureID = [self.foodDict valueForKey:@"MeasureID"];
     scanned_UPCA = nil;
-    scanned_UPCA = [[NSString alloc] initWithString:@"empty"];
+    scanned_UPCA = @"empty";
     scanned_factualID = nil;
-    scanned_factualID = [[NSString alloc] initWithString:@"empty"];
+    scanned_factualID = @"empty";
     
     dietmasterEngine.selectedMeasureID = intMeasureID;
     dietmasterEngine.selectedCategoryID = intCategoryID;
-    
-    [DMActivityIndicator hideActivityIndicator];
 }
 
 - (void)recordFood:(id) sender {
@@ -720,8 +710,7 @@ CGPoint svos;
         
         if (self.saveToLog) {
             [DMActivityIndicator showActivityIndicator];
-        }
-        else {
+        } else {
             [self clearEnteredData];
         }
         
@@ -790,7 +779,7 @@ CGPoint svos;
         NSNumber *vitE            = [NSNumber numberWithDouble: [txtfieldVitE.text doubleValue]];
         NSNumber *vitD            = [NSNumber numberWithDouble: [txtfieldVitD.text doubleValue]];
         
-        minFoodID = [[selectedFoodDict valueForKey:@"FoodKey"] intValue];
+        minFoodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
         
         NSString *updateSQL = [NSString stringWithFormat:@"UPDATE Food SET "
                                "Name = '%@', "
@@ -865,11 +854,8 @@ CGPoint svos;
         
         [dietmasterEngine saveFood:minFoodID];
         
-        if (self.saveToLog) {
-            [DMActivityIndicator showActivityIndicator];
-        }
-        else {
-            [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
+        if (!self.saveToLog) {
+            [self loadData];
         }
     }
 }
@@ -893,8 +879,7 @@ CGPoint svos;
     [self getApiCall:nil urlStr:strURL response:nil];
 }
 
-//HHT change 2018 Barcode scan
--(void)getApiCall:(NSMutableDictionary *)dic urlStr:(NSString *)urlStr response:(NSMutableArray *)response{
+- (void)getApiCall:(NSMutableDictionary *)dic urlStr:(NSString *)urlStr response:(NSMutableArray *)response{
     NSURL * serviceUrl = [NSURL URLWithString:urlStr];
     DMLog(@"REquest URL >> %@",serviceUrl);
     
@@ -912,14 +897,9 @@ CGPoint svos;
     if (responseData) {
         [self parsePostApiData:responseData responseP:response];
     }
-    else{
-        
-    }
 }
 
-//HHT change 2018 Barcode scan
--(void)parsePostApiData:(NSData *)response responseP:(NSMutableArray *)responseP{
-    
+- (void)parsePostApiData:(NSData *)response responseP:(NSMutableArray *)responseP{
     [DMActivityIndicator hideActivityIndicator];
 
     id jsonObject = Nil;
@@ -927,8 +907,7 @@ CGPoint svos;
     DMLog(@"ResponseString %@",charlieSendString);
     if (!response) {
         DMLog(@"No internet connection.");
-    }
-    else{
+    } else{
         NSError *error = Nil;
         jsonObject = [NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&error];
         
@@ -982,9 +961,9 @@ CGPoint svos;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark - Nutritionix -
-//HHT change 2018 barcode scan
--(void)nutritionixAPISuccess:(NSMutableDictionary *)dict {
+#pragma mark - Nutritionix
+
+- (void)nutritionixAPISuccess:(NSMutableDictionary *)dict {
     DMLog(@"%@",dict);
     
     scannerDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
@@ -1070,7 +1049,6 @@ CGPoint svos;
 }
 
 - (NSDictionary *)findMeasureId:(NSString *)serving_unit {
-    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
@@ -1218,7 +1196,8 @@ CGPoint svos;
 }
 
 #pragma mark Save To Log Methods
--(void)foodWasSavedToCloud:(NSNotification *)notification {
+
+- (void)foodWasSavedToCloud:(NSNotification *)notification {
     [DMActivityIndicator hideActivityIndicator];
     if (self.saveToLog) {
         BOOL success = [[[notification userInfo] valueForKey:@"success"] boolValue];
@@ -1226,38 +1205,27 @@ CGPoint svos;
         
         if (success) {
             DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-            
-            if (dietmasterEngine.isMealPlanItem)
-            {
+            if (dietmasterEngine.isMealPlanItem) {
                 dietmasterEngine.taskMode = @"AddMealPlanItem";
-            }
-            else
-            {
+            } else {
                 dietmasterEngine.taskMode = @"Save";
             }
             
-            NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:foodID, @"FoodID", intMeasureID, @"MeasureID", nil];
-            NSDictionary *foodDict = [[NSDictionary alloc] initWithDictionary:
-                                      [dietmasterEngine getFoodDetails:tempFoodDict]];
-            [dietmasterEngine.foodSelectedDict setDictionary:foodDict];
-            DetailViewController *dvController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
-            dvController.hidesBottomBarWhenPushed = YES;
+            NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                          foodID, @"FoodID", intMeasureID, @"MeasureID", nil];
+            NSDictionary *foodDict = [dietmasterEngine getFoodDetails:tempFoodDict];
+            DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
             [self.navigationController pushViewController:dvController animated:YES];
             
             [self clearEnteredData];
-        }
-        else {
+        } else {
             DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
             dietmasterEngine.taskMode = @"View";
-            
-            NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:@(_savedFoodID), @"FoodID", intMeasureID, @"MeasureID", nil];
-            NSDictionary *foodDict = [[NSDictionary alloc] initWithDictionary:
-                                      [dietmasterEngine getFoodDetails:tempFoodDict]];
-            [dietmasterEngine.foodSelectedDict setDictionary:foodDict];
-            
+            NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                          @(_savedFoodID), @"FoodID", intMeasureID, @"MeasureID", nil];
+            NSDictionary *foodDict = [dietmasterEngine getFoodDetails:tempFoodDict];
             [DMGUtilities showAlertWithTitle:@"Error" message:@"There was an error saving to log. Please try again." inViewController:nil];
-
-            [self performSelector:@selector(loadData) withObject:nil afterDelay:0.15];
+            [self loadData];
         }
     }
 }

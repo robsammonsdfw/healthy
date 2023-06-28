@@ -83,12 +83,8 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSString *lastUpdate = [formatter stringFromDate:[[NSUserDefaults standardUserDefaults] valueForKey:@"lastsyncdate"]];
-    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine saveMealItems:lastUpdate]; //should not be passing nil
+    [dietmasterEngine saveMealItems:[DMGUtilities lastSyncDateString]]; //should not be passing nil
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -166,9 +162,8 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.syncUPDatabaseDelegate = nil;
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     // Sync failed, so ensure we try again soon.
-    [prefs setValue:nil forKey:@"lastsyncdate"];
+    [DMGUtilities setLastSyncToDate:nil];
     
     [DMActivityIndicator hideActivityIndicator];
 }

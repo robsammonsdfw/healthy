@@ -39,6 +39,20 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 /// Utilities used across the project.
 @interface DMGUtilities : NSObject
 
+#pragma mark - Sync Helpers
+
+/// Returns the formatted string: "yyyy-MM-dd HH:mm:ss" when the last data sync ocurred.
+/// This value is stored in user defaults.
+/// If a sync has not happened, will return a date in 1970.
++ (NSString *)lastSyncDateString;
+
+/// Sets the last sync date to the date provided, stores it ind efaults
+///  and returns the string value. Passing nil will cause the date to be
+///  -8 days ago for last sync.
++ (NSString *)setLastSyncToDate:(nullable NSDate *)date;
+
+#pragma mark - Color
+
 /// Returns an image with the provided UIColor.
 + (UIImage *)imageWithColor:(UIColor *)color;
 

@@ -286,14 +286,14 @@ class UserDataFetcher : NSObject {
                                   soapmethod: method, soapparameters: params, namespace: namespace).responseString { response in
             
             guard let responseXML = response.value else {
-                let error = DMGUtilities.error(withMessage: "Response not valid.", code: 200) as NSError
+                let error = DMGUtilities.error(withMessage: "Response not valid: " + method, code: 200) as NSError
                 completion(nil, error)
                 return
             }
             
             // Parse the XML response.
             guard let data = FetchUtilities.processXMLToData(xmlString: responseXML, methodName: method) else {
-                let error = DMGUtilities.error(withMessage: "Cannot parse XML.", code: 300) as NSError
+                let error = DMGUtilities.error(withMessage: "Cannot parse XML: " + method, code: 300) as NSError
                 completion(nil, error)
                 return
             }

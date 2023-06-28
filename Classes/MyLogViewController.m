@@ -575,15 +575,14 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         [self.navigationController pushViewController:eDVController animated:YES];
     }
     else {
-        DetailViewController *dvController = [[DetailViewController alloc] init];
+        NSDictionary *foodDict = [[foodResults objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
         
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.taskMode = @"Edit";
         dietmasterEngine.isMealPlanItem = NO;
-        [dietmasterEngine.foodSelectedDict setDictionary:dict];
         dietmasterEngine.dateSelected = date_currentDate;
-        int mealCode = [[dict valueForKey:@"MealCode"] intValue];
+        int mealCode = [[foodDict valueForKey:@"MealCode"] intValue];
         
         dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode];
         dvController.hidesBottomBarWhenPushed = YES;
@@ -1374,23 +1373,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                     self.calories = caloriesBurned;
                     [self caloriesCount];
                 });
-            }
-            else {
+            } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    DMLog(@"Data not available");
-                    //[self performSelector:@selector(updateData:) withObject:self.date_currentDate afterDelay:0.25];
-                    
-                    [self performSelector:@selector(loadExerciseData:) withObject:self.date_currentDate afterDelay:1.0];
-                    
+                    [self loadExerciseData:self.date_currentDate];
                 });
-            }
-            
-            if(stop)
-            {
-                //HHT temp change
-                //                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                //                     [self performSelector:@selector(updateData:) withObject:self.date_currentDate afterDelay:0.25];
-                //                });
             }
         }];
     };
@@ -1545,7 +1531,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     }
     [db commit];
     
-    [self performSelector:@selector(loadExerciseData:) withObject:self.date_currentDate afterDelay:1.0];
+    [self loadExerciseData:self.date_currentDate];
     exerciseLogID = [db lastInsertRowId];
 }
 

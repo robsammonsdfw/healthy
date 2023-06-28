@@ -27,7 +27,7 @@ static NSString *CellIdentifier = @"FoodsTableCellIdentifer";
         
     }
     
-    NSString *query = @"SELECT FoodKey, Name FROM Food ORDER BY Name LIMIT 250";
+    NSString *query = @"SELECT FoodKey, Name FROM Food ORDER BY Name LIMIT 300";
     FMResultSet *rs = [db executeQuery:query];
     foodsIDList = [[NSMutableArray alloc] init];
     self.foodsNameList = [[NSMutableArray alloc] init];

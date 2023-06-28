@@ -90,7 +90,4 @@
 /// This includes Exercises (Moves) and Tags / Categories.
 - (void)getMyMovesDataWithCompletionBlock:(completionBlockWithError)completionBlock;
 
-/// Deletes an entry in the User Workout Plan database for the ID provided.
-- (void)deletePlanWorkoutFromDbWithUserDateID:(NSNumber *)userDateID;
-
 @end

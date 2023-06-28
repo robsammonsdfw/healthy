@@ -4,120 +4,101 @@
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
 #import "DMDataFetcher.h"
+#import "DMMealPlanDataProvider.h"
 
-@interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, WSDeleteUserPlannedMealItems, WSInsertUserPlannedMealItems>
+@interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) NSDictionary *deleteDict;
-@property (nonatomic, strong) NSDictionary *insertDict;
 @property (nonatomic, strong) NSMutableArray *foodResults;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UISearchBar *mySearchBar;
 @property (nonatomic) BOOL bSearchIsOn;
 
--(void) searchBar:(id) object;
--(void)loadSearchData:(NSString *)searchTerm;
--(void)confirmExchangeItem;
--(void)exchangeFood;
--(void)deleteFood:(NSDictionary *)dict;
--(void)insertFood:(NSDictionary *)dict;
--(void)loadData;
-
+/// The food being exchanged.
+@property (nonatomic, strong) NSDictionary *exchangedDict;
 @end
+
+static NSString *CellIdentifier = @"CellIdentifier";
 
 @implementation ExchangeFoodViewController
 
-@synthesize CaloriesToMaintain, ExchangeOldDataDict;
-
-- (instancetype)init {
-    self = [super initWithNibName:@"ExchangeFoodViewController" bundle:nil];
+- (instancetype)initWithExchangedFood:(NSDictionary *)exchangedDict {
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        _exchangedDict = exchangedDict;
+        _foodResults = [[NSMutableArray alloc] init];
+    }
     return self;
 }
 
-#pragma mark SEARCH BAR METHODS
-- (void)searchBar: (id) object {
-    if (_bSearchIsOn) {
-        _bSearchIsOn = NO;
-    }
-    else {
-        _bSearchIsOn = YES;
-    }
+- (void)loadView {
+    [super loadView];
+    self.view = [[UIView alloc] init];
+    self.title = @"Exchange Food";
     
-    if (_bSearchIsOn) {
-        self.tableView.tableHeaderView = _mySearchBar;
-        [_mySearchBar becomeFirstResponder];
-    }
-    else {
-        [UIView animateWithDuration:0.5 animations:^{
-            [self.tableView setContentOffset:CGPointMake(0,0)];
-        }];
-        [_mySearchBar resignFirstResponder];
-    }
-    [self.tableView scrollRectToVisible:[[self.tableView tableHeaderView] bounds] animated:YES];
+    self.tableView = [[UITableView alloc] init];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.tableHeaderView = self.mySearchBar;
+    self.tableView.estimatedRowHeight = 46;
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [self.view addSubview:self.tableView];
+
+    self.mySearchBar = [[UISearchBar alloc] init];
+    self.mySearchBar.placeholder = @"Search Foods";
+    self.mySearchBar.delegate = self;
+    self.mySearchBar.showsCancelButton = YES;
+    [self.mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [self.view addSubview:self.mySearchBar];
+    
+    // Constrain
+    [self.mySearchBar.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:0].active = YES;
+    [self.mySearchBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.mySearchBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+
+    [self.tableView.topAnchor constraintEqualToAnchor:self.mySearchBar.bottomAnchor constant:0].active = YES;
+    [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
 }
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
-    _bSearchIsOn = YES;
-    self.tableView.scrollEnabled = NO;
-    [self.tableView reloadData];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+        
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    [self.navigationController.navigationBar setTranslucent:NO];
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar*) theSearchBar  {
-    self.tableView.scrollEnabled = YES;
-    [_mySearchBar resignFirstResponder ];
-    [self loadSearchData];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self loadData];
+    [self.mySearchBar becomeFirstResponder];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar  {
+    [self.mySearchBar resignFirstResponder];
+    [self searchWithText:theSearchBar.text];
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    if (isExchangeFood == YES) {
-        isExchangeFood = NO;
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-    }
-    else {
-        [self.navigationController setNavigationBarHidden:YES animated:NO];
-    }
-    
-    _bSearchIsOn = YES;
-    [self.tableView reloadData];
     return YES;
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    [self.tableView reloadData];
     return YES;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
-    self.tableView.scrollEnabled = YES;
-    self.tableView.userInteractionEnabled = YES;
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.tableView setContentOffset:CGPointMake(0,0)];
-    }];
-    
-    _bSearchIsOn = NO;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
     searchBar.text = @"";
-    
-    [_foodResults removeAllObjects];
+    [self.foodResults removeAllObjects];
     [self.tableView reloadData];
 }
 
 - (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {
-    if([searchText length] > 0) {
-        _bSearchIsOn = YES;
-        self.tableView.scrollEnabled = NO;
-    }
-    else {
-        _bSearchIsOn = NO;
-        self.tableView.scrollEnabled = YES;
-    }
-    
-    [self.tableView reloadData];
+    [self searchWithText:searchText];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event  {
@@ -131,79 +112,9 @@
     [super touchesBegan:touches withEvent:event];
 }
 
-#pragma mark VIEW LIFECYCLE
-- (void)viewDidLoad {
-    UIBarButtonItem* bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSearch target:self action:@selector(searchBar:)];
-    bi.style = UIBarButtonItemStylePlain;
-    bi.tintColor = [UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem = bi;
-    
-    _mySearchBar = [[UISearchBar alloc] init];
-    _mySearchBar.placeholder = @"Search";
-    _mySearchBar.delegate = self;
-    [_mySearchBar sizeToFit];
-    self.bSearchIsOn = NO;
-    _mySearchBar.showsCancelButton = YES;
-    [_mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [_mySearchBar sizeToFit];
-    
-    self.tableView.tableHeaderView = _mySearchBar;
-    
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-        
-    if (!_foodResults) {
-        _foodResults = [[NSMutableArray alloc] init];
-    }
-    
-    indexToExchange = -1;
-    
-    [self.navigationController.navigationBar setTranslucent:NO];
-    
-    [super viewDidLoad];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
-    
-    if ([_mySearchBar.text length] == 0) {
-        [_mySearchBar becomeFirstResponder];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    if (_bSearchIsOn) {
-        [self.navigationController setNavigationBarHidden:YES animated:NO];
-        [self.tableView setContentOffset:CGPointMake(0,0)];
-    }
-    else {
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-        [self.tableView setContentOffset:CGPointMake(0,44)];
-    }
-}
-
-#pragma mark DATA METHODS
-- (void)loadSearchData {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"Name CONTAINS[cd] %@", self.mySearchBar.text];
-    
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"Name"
-                                                                 ascending:YES];
-    NSArray *results = [[_foodResults filteredArrayUsingPredicate:predicate]
-                        sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-    
-    [_foodResults removeAllObjects];
-    if (results.count > 0) {
-        [_foodResults addObjectsFromArray:results];
-    }
-    [self.tableView reloadData];
-}
-
 #pragma mark EXCHANGE METHODS
 
-- (void)confirmExchangeItem {
+- (void)confirmExchangeWithFood:(NSDictionary *)foodDict {
     NSString *message = @"Are you sure you wish to exchange with this food?";
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Exchange"
                                                                    message:message
@@ -211,7 +122,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self exchangeFood];
+        [self exchangeWithFood:foodDict];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
                                               style:UIAlertActionStyleCancel
@@ -221,387 +132,155 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(void)exchangeFood_Original {
-    isExchangeFood = YES;
+- (void)exchangeWithFood:(NSDictionary *)foodDict {
     [DMActivityIndicator showActivityIndicator];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSMutableDictionary *exchangeDict = dietmasterEngine.mealPlanItemToExchangeDict;
     
-    double totalCaloriesToExchange = 0;
+    double newCalories = [[foodDict valueForKey:@"Calories"] doubleValue];
+    double caloriesToMaintain = [self.exchangedDict[@"Calories"] doubleValue];
+    double gramWeight = [[self.exchangedDict valueForKey:@"GramWeight"] doubleValue];
     
-    double numberOfExchangedCalories = [[exchangeDict valueForKey:@"Calories"] doubleValue];
-    double exchangeGramWeight = [[exchangeDict valueForKey:@"GramWeight"] doubleValue] / 100;
-    double exchangeServingSize = [[exchangeDict valueForKey:@"ServingSize"] doubleValue];
-    double exchangeServings = [[exchangeDict valueForKey:@"Servings"] doubleValue];
-    
-    totalCaloriesToExchange = exchangeServings * ((numberOfExchangedCalories * exchangeGramWeight) / exchangeServingSize);
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexToExchange]];
-    
-    NSNumber *measureID = [dietmasterEngine getMeasureIDForFood:@([[dict valueForKey:@"FoodKey"] intValue])];
-    
-    NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:[dict valueForKey:@"FoodKey"], @"FoodID", measureID, @"MeasureID", nil];
-    NSDictionary *newDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine getFoodDetails:tempFoodDict]];
-    
-    double totalCalories = 0;
-    double numberOfCalories = [[dict valueForKey:@"Calories"] doubleValue];
-    double gramWeight = [[dict valueForKey:@"GramWeight"] doubleValue] / 100;
-    double servingSize = [[dict valueForKey:@"ServingSize"] doubleValue];
-    double servings = 0;
-    
-    servings = totalCaloriesToExchange / ((numberOfCalories * gramWeight) / servingSize);
-    servings = round(servings);
-    totalCalories = servings * ((numberOfCalories * gramWeight) / servingSize);
-    
-    NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID", dietmasterEngine.selectedMealID, @"MealCode", [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"FoodID"], @"FoodID", nil];
-    _deleteDict = nil;
-    
-    if (!_deleteDict) {
-        _deleteDict = [[NSDictionary alloc] initWithDictionary:deleteDictTemp];
-    }
-    
-    NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
-                                    dietmasterEngine.selectedMealID, @"MealCode",
-                                    [dict valueForKey:@"FoodKey"], @"FoodID",
-                                    measureID, @"MeasureID",
-                                    [NSNumber numberWithDouble:servingSize], @"ServingSize",
-                                    nil];
-    
-    _insertDict = nil;
-    if (!_insertDict) {
-        _insertDict = [[NSDictionary alloc] initWithDictionary:insertDictTemp];
-    }
-    
-    [self insertFood:_insertDict];
-}
-
--(void)exchangeFood_MyNew {
-    
-    isExchangeFood = YES;
-    [DMActivityIndicator showActivityIndicator];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSMutableDictionary *exchangeDict = dietmasterEngine.mealPlanItemToExchangeDict;
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexToExchange]];
-    double newCalories = [[dict valueForKey:@"Calories"] doubleValue];
-    double servings = CaloriesToMaintain/(newCalories/[[exchangeDict valueForKey:@"GramWeight"] doubleValue]);
-    
+    double servings = caloriesToMaintain / (newCalories / gramWeight);
     servings = [[NSString stringWithFormat:@"%.1f", servings] doubleValue];
     
-    NSNumber *measureID = [dietmasterEngine getMeasureIDForFood:@([[dict valueForKey:@"FoodKey"] intValue])];
+    NSNumber *measureID = [dietmasterEngine getMeasureIDForFood:[foodDict valueForKey:@"FoodKey"]
+                                               fromMealPlanItem:self.exchangedDict];
     
-    NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID", dietmasterEngine.selectedMealID, @"MealCode", [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"FoodID"], @"FoodID", nil];
-    _deleteDict = nil;
-    
-    if (!_deleteDict) {
-        _deleteDict = [[NSDictionary alloc] initWithDictionary:deleteDictTemp];
-    }
-    
-    NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
-                                    dietmasterEngine.selectedMealID, @"MealCode",
-                                    [dict valueForKey:@"FoodKey"], @"FoodID",
-                                    measureID, @"MeasureID",
-                                    [NSNumber numberWithDouble:servings], @"ServingSize",
+    NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    @(dietmasterEngine.selectedMealPlanID), @"MealID",
+                                    self.exchangedDict[@"MealCode"], @"MealCode",
+                                    self.exchangedDict[@"FoodID"], @"FoodID",
                                     nil];
     
-    _insertDict = nil;
-    if (!_insertDict) {
-        _insertDict = [[NSDictionary alloc] initWithDictionary:insertDictTemp];
-    }
+    NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    @(dietmasterEngine.selectedMealPlanID), @"MealID",
+                                    self.exchangedDict[@"MealCode"], @"MealCode",
+                                    [foodDict valueForKey:@"FoodKey"], @"FoodID",
+                                    measureID, @"MeasureID",
+                                    @(servings), @"ServingSize",
+                                    nil];
     
-    [self insertFood:_insertDict];
-}
-
--(void)exchangeFood {
-    isExchangeFood = YES;
-    [DMActivityIndicator showActivityIndicator];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSMutableDictionary *exchangeDict = dietmasterEngine.mealPlanItemToExchangeDict;
-    
-    double numberOfExchangedCalories = [[exchangeDict valueForKey:@"Calories"] doubleValue];
-    double exchangeGramWeight = [[exchangeDict valueForKey:@"GramWeight"] doubleValue] / 100;
-    double exchangeServingSize = [[exchangeDict valueForKey:@"ServingSize"] doubleValue];
-    double exchangeServings = [[exchangeDict valueForKey:@"Servings"] doubleValue];
-    
-    double totalCaloriesToExchange = exchangeServings * ((numberOfExchangedCalories * exchangeGramWeight) / exchangeServingSize);
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexToExchange]];
-    NSNumber *measureID = [dietmasterEngine getMeasureIDForFood:@([[dict valueForKey:@"FoodKey"] intValue])];
-    
-    double totalCalories = 0;
-    double numberOfCalories = [[dict valueForKey:@"Calories"] doubleValue];
-    double gramWeight = [[dietmasterEngine getGramWeightForFoodID:@([[dict valueForKey:@"FoodKey"] intValue]) andMeasureID:measureID] doubleValue];
-    
-    // If gramWeight = 0, and exchange food error will occur.
-    if (gramWeight == 0){
-        gramWeight = 100;
-    }
-    
-    double servingSize = [[dict valueForKey:@"ServingSize"] doubleValue];
-    double servings = 0;
-    
-    servings = totalCaloriesToExchange / ((numberOfCalories * gramWeight) / servingSize);
-    totalCalories = servings * ((numberOfCalories * gramWeight) / servingSize);
-    
-    double dblNewFoodCaloriesPerServing = numberOfCalories / servingSize;
-    double dblNewFoodNumberOfServings = ((totalCalories) * 100) / (dblNewFoodCaloriesPerServing * gramWeight);
-    
-    float totalServingAmount = dblNewFoodNumberOfServings;
-    double fraction = 0;
-    fraction = (totalServingAmount - (int) totalServingAmount);
-    
-    if (0 < fraction && fraction < 0.25) {
-        totalServingAmount = (int) totalServingAmount;
-    }
-    else if (0.25 < fraction && fraction < 0.75) {
-        totalServingAmount = (int) totalServingAmount + 0.5;
-    }
-    else if (fraction > 0.75) {
-        totalServingAmount = (int) totalServingAmount + 1;
-    }
-    if (totalServingAmount == 0) {
-        totalServingAmount = 0.5;
-    }
-    
-    NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID", dietmasterEngine.selectedMealID, @"MealCode", [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"FoodID"], @"FoodID", nil];
-    _deleteDict = nil;
-    if (!_deleteDict) {
-        _deleteDict = [[NSDictionary alloc] initWithDictionary:deleteDictTemp];
-    }
-    
-    if (isnan(totalServingAmount))
-    {
-        NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
-                                        dietmasterEngine.selectedMealID, @"MealCode",
-                                        [dict valueForKey:@"FoodKey"], @"FoodID",
-                                        measureID, @"MeasureID",
-                                        [NSNumber numberWithDouble:0.5], @"ServingSize",
-                                        nil];
-        _insertDict = nil;
-        if (!_insertDict) {
-            _insertDict = [[NSDictionary alloc] initWithDictionary:insertDictTemp];
-        }
-        
-        [self insertFood:_insertDict];
-    }
-    else
-    {
-        NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
-                                        dietmasterEngine.selectedMealID, @"MealCode",
-                                        [dict valueForKey:@"FoodKey"], @"FoodID",
-                                        measureID, @"MeasureID",
-                                        [NSNumber numberWithDouble:totalServingAmount], @"ServingSize",
-                                        nil];
-        _insertDict = nil;
-        if (!_insertDict) {
-            _insertDict = [[NSDictionary alloc] initWithDictionary:insertDictTemp];
-        }
-        
-        [self insertFood:_insertDict];
-    }
+    [self exchangeFood:deleteDictTemp withFood:insertDictTemp];
 }
 
 - (void)deleteFood:(NSDictionary *)dict {
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"DeleteUserPlannedMealItems", @"RequestType",
-                              dict, @"MealItems",
-                              nil];
-    
-    MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
-    soapWebService.wsDeleteUserPlannedMealItems = self;
-    [soapWebService callWebservice:infoDict];
+    if (!dict) {
+        return;
+    }
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider deleteUserPlannedMealItems:@[dict] withCompletionBlock:^(BOOL completed, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        dietmasterEngine.didInsertNewFood = YES;
+        [DMActivityIndicator showCompletedIndicator];
+        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+    }];
 }
 
 - (void)insertFood:(NSDictionary *)dict {
-    NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                @"InsertUserPlannedMealItems", @"RequestType",
-                                dict, @"MealItems",
-                                nil];
-    
-    MealPlanWebService *soapWebService2 = [[MealPlanWebService alloc] init];
-    soapWebService2.wsInsertUserPlannedMealItems = self;
-    [soapWebService2 callWebservice:wsInfoDict];
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider saveUserPlannedMealItems:@[dict] withCompletionBlock:^(BOOL completed, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+    }];
 }
 
-#pragma mark TABLE VIEW METHODS
-- (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath;
+- (void)exchangeFood:(NSDictionary *)food withFood:(NSDictionary *)newFood {
+    [DMActivityIndicator showActivityIndicator];
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider exchangeUserPlannedMealItem:food withItem:newFood withCompletionBlock:^(BOOL completed, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        [DMActivityIndicator showCompletedIndicator];
+        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+    }];
 }
+
+#pragma mark - TableView Delegate/Datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return Nil;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([_foodResults count] == 0) {
-        return 46;
-    }
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexPath.row]];
-    NSString *text = [dict valueForKey:@"Name"];
-    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
-    
-    CGRect textRect = [text boundingRectWithSize:constraintSize
-                                     options:NSStringDrawingUsesLineFragmentOrigin
-                                  attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0]}
-                                     context:nil];
-
-    CGSize labelSize = textRect.size;
-    
-    if (labelSize.height < 46) {
-        return 48;
-    } else {
-        return labelSize.height + 6;
-    }
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([_foodResults count] == 0) {
-        return 1;
-    } else {
-        return [_foodResults count];
-    }
+    return MAX(self.foodResults.count, 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    if ([_foodResults count] == 0) {
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        [cell textLabel].adjustsFontSizeToFitWidth = YES;
+    if ([self.foodResults count] == 0) {
         cell.textLabel.textColor = [UIColor lightGrayColor];
         [[cell textLabel] setText:@"No results found..."];
-        cell.textLabel.font = [UIFont systemFontOfSize:14.0];
+        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
         cell.selectionStyle =  UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.userInteractionEnabled = NO;
         cell.accessoryView = nil;
+        return cell;
     }
-    
-    if ([_foodResults count] > 0) {
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        if (_bSearchIsOn) {
-            cell.userInteractionEnabled = YES;
-        }
-        else {
-            cell.userInteractionEnabled = YES;
-        }
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[_foodResults objectAtIndex:indexPath.row]];
-        cell.textLabel.text			= [dict valueForKey:@"Name"];
-        cell.textLabel.textColor = [UIColor blackColor];
-                
-        cell.textLabel.font = [UIFont systemFontOfSize:14.0];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.selectionStyle =  UITableViewCellSelectionStyleGray;
-        [cell textLabel].adjustsFontSizeToFitWidth = NO;
-        cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        cell.textLabel.numberOfLines = 0;
-    }
-    
+
+    NSDictionary *dict = [self.foodResults objectAtIndex:indexPath.row];
+    cell.textLabel.text = [dict valueForKey:@"Name"];
+    cell.textLabel.textColor = [UIColor blackColor];
+    cell.textLabel.font = [UIFont systemFontOfSize:15.0];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle =  UITableViewCellSelectionStyleGray;
+    [cell textLabel].adjustsFontSizeToFitWidth = NO;
+    cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.textLabel.numberOfLines = 0;
+
     return cell;
 }
 
 - (void)tableView:(UITableView *)myTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
-    indexToExchange= (int)[indexPath row];
-    [self checkFoodAvailability:[[_foodResults objectAtIndex:indexPath.row] valueForKey:@"FoodKey"]];
-    [self confirmExchangeItem];
+    NSDictionary *dict = [self.foodResults objectAtIndex:indexPath.row];
+    [self confirmExchangeWithFood:dict];
 }
 
-- (void)checkFoodAvailability:(NSString *)strFoodKey {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    [db open];
-    NSString *query = @"SELECT FoodKey FROM Food";
-    FMResultSet *rs = [db executeQuery:query];
-    NSMutableArray *arrFoodKeys = [[NSMutableArray alloc] init];
-    while ([rs next]) {
-        [arrFoodKeys addObject:[NSString stringWithFormat:@"%d", [rs intForColumn:@"FoodKey"]]];
+#pragma mark - Data Loading
+
+- (void)searchWithText:(NSString *)text {
+    [self.foodResults removeAllObjects];
+    if (text.length) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat: @"Name CONTAINS[cd] %@", text];
+        NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"Name" ascending:YES];
+        NSArray *searchArray = [self.foodResults copy];
+        NSArray *results = [[searchArray filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[descriptor]];
+        [self.foodResults addObjectsFromArray:results];
     }
-    
-    [rs close];
-    if (![arrFoodKeys containsObject:strFoodKey]) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        [dietmasterEngine retrieveMissingFood:[strFoodKey intValue]];
-    }
+    [self.tableView reloadData];
 }
-
-#pragma mark MEAL PLAN ITEMS DELEGATE - This Delegate method is for Delete only.
-- (void)deleteUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    
-    [DMActivityIndicator hideActivityIndicator];
-
-    _deleteDict = nil;
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.didInsertNewFood = YES;
-    [DMActivityIndicator showCompletedIndicator];
-    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
-}
-
-- (void)deleteUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-    _deleteDict = nil;
-}
-
-- (void)insertUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    _insertDict = nil;
-    if ([[[responseArray objectAtIndex:0] valueForKey:@"Status"] isEqualToString:@"Error"]) {
-        [DMActivityIndicator hideActivityIndicator];
-        [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
-    }
-    else {
-        [self deleteFood:_deleteDict];
-    }
-}
-
-- (void)insertUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-    _insertDict = nil;
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again.." inViewController:nil];
-}
-
-#pragma mark Webservice
 
 - (void)loadData {
     [DMActivityIndicator showActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"GetExchangeItemsForFood", @"RequestType",
-                              @{@"UserID" : currentUser.userId,
+    NSDictionary *params = @{ @"RequestType" : @"GetExchangeItemsForFood",
+                                @"UserID" : currentUser.userId,
                                 @"AuthKey" : currentUser.authToken,
                                 @"FoodID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"FoodID"],
-                                @"MealTypeID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"MealTypeID"],
-                                }, @"parameters",
-                              nil];
+                                @"MealTypeID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"MealTypeID"] };
     
     __weak typeof(self) weakSelf = self;
-    [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
+    [DMDataFetcher fetchDataWithRequestParams:params completion:^(NSObject *object, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
             [DMGUtilities showError:error withTitle:@"Error Updating" message:@"An error occurred. Please try again." inViewController:nil];
@@ -610,6 +289,7 @@
         NSDictionary *responseDict = (NSDictionary *)object;
         [weakSelf.foodResults removeAllObjects];
         [weakSelf.foodResults addObjectsFromArray:responseDict[@"Foods"]];
+        [dietmasterEngine getMissingFoodsIfNeededForFoods:[weakSelf.foodResults copy]];
         [weakSelf.tableView reloadData];
     }];
 }

@@ -390,7 +390,7 @@
         DMLog(@"Could not open db.");
     }
     
-    float goalWeight;
+    float goalWeight = 0;
     FMResultSet *rs = [db executeQuery:@"SELECT weight_goal FROM user"];
     while ([rs next]) {
         goalWeight  = [rs intForColumn:@"weight_goal"];

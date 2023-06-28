@@ -14,9 +14,9 @@
 #import "Log_Add.h"
 #import "MealPlanDetailsTableViewCell.h"
 #import "TTTAttributedLabel.h"
-#import "MealPlanWebService.h"
+#import "DMMealPlanDataProvider.h"
 
-@interface MealPlanDetailViewController() <UITableViewDelegate, UITableViewDataSource, WSGetUserPlannedMealNames, WSDeleteUserPlannedMealItems, TTTAttributedLabelDelegate>
+@interface MealPlanDetailViewController() <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic) int addToPlanButtonIndex;
 @property (nonatomic, strong) IBOutlet UIImageView *imgbar;
@@ -152,13 +152,21 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 #pragma mark LOAD DATA METHODS
 
 - (void)loadData {
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"GetUserPlannedMealNames", @"RequestType",
-                              nil];
-    
-    MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
-    soapWebService.wsGetUserPlannedMealNames = self;
-    [soapWebService callWebservice:infoDict];
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider fetchUserPlannedMealsWithCompletionBlock:^(NSObject *object, NSError *error) {
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        [dietmasterEngine.mealPlanArray removeAllObjects];
+        if (error) {
+            [[weakSelf tableView] reloadData];
+            return;
+        }
+        NSArray *results = (NSArray *)object;
+        [dietmasterEngine.mealPlanArray addObjectsFromArray:results];
+        [weakSelf checkForMissingFoods];
+        [[weakSelf tableView] reloadData];
+        [weakSelf updateCalorieLabels];
+    }];
 }
 
 - (void)addPlanToLog {
@@ -188,7 +196,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [DMActivityIndicator showCompletedIndicator];
 }
 
--(void)addItemToMealPlan:(id)sender {
+- (void)addItemToMealPlan:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int planMealID = [[[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealID"] intValue];
     dietmasterEngine.selectedMealPlanID = planMealID;
@@ -215,7 +223,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [dateController presentPickerIn:self];
 }
 
--(void)selectAllMealDate:(id)sender {
+- (void)selectAllMealDate:(id)sender {
     self.addToPlanButtonIndex = 0;
     mealCodeToAdd = -1;
     
@@ -233,14 +241,14 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 #pragma mark WEBSERVICE CALLS
 
 - (void)deleteMealPlanItem:(NSDictionary *)dict {
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"DeleteUserPlannedMealItems", @"RequestType",
-                              dict, @"MealItems",
-                              nil];
-    
-    MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
-    soapWebService.wsDeleteUserPlannedMealItems = self;
-    [soapWebService callWebservice:infoDict];
+    if (!dict) {
+        return;
+    }
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider deleteUserPlannedMealItems:@[dict] withCompletionBlock:^(BOOL completed, NSError *error) {
+        [weakSelf updateCalorieLabels];
+    }];
 }
 
 #pragma mark TABLE VIEW METHODS
@@ -265,8 +273,9 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     view.backgroundColor = UIColorFromHex(0xbebebe);
     
+    DMMealPlanDataProvider *dataProvider = [[DMMealPlanDataProvider alloc] init];
     if (mealPlanArray.count != 0 ) {
-        NSNumber *totalCalories = [dietmasterEngine getMealCodeCalories: [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section]];
+        NSNumber *totalCalories = [dataProvider getCaloriesForMealCodes: [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section]];
         
         NSString *sectionTitle;
         
@@ -499,7 +508,6 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
         
         dietmasterEngine.taskMode = @"Save";
         dietmasterEngine.isMealPlanItem = YES;
-        [dietmasterEngine.foodSelectedDict setDictionary:foodDict];
         [dietmasterEngine.mealPlanItemToExchangeDict setDictionary:foodDict]; // For Exchanging!
         int mealCode = (int)[indexPath section];
         dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode]; // Meal to exchange with!
@@ -507,7 +515,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
         int planMealID = [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealID"] intValue];
         dietmasterEngine.selectedMealPlanID = planMealID;
         
-        DetailViewController *dvController = [[DetailViewController alloc] init];
+        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
         [self.navigationController pushViewController:dvController animated:YES];
 
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -643,30 +651,6 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [self.tableView reloadData];
 }
 
-#pragma mark GET MEAL PLAN NAME DELEGATES
-- (void)getUserPlannedMealNamesFinished:(NSArray *)responseArray {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine.mealPlanArray removeAllObjects];
-    [dietmasterEngine.mealPlanArray addObjectsFromArray:responseArray];
-    
-    [self checkForMissingFoods];
-    [[self tableView] reloadData];
-    [self updateCalorieLabels];
-}
-
-- (void)getUserPlannedMealNamesFailed:(NSError *)error {
-    [[self tableView] reloadData];
-}
-
-#pragma mark DELETE MEAL PLAN ITEMS DELEGATE
-- (void)deleteUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    [self updateCalorieLabels];
-}
-
-- (void)deleteUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [self updateCalorieLabels];
-}
-
 #pragma mark ACTION SHEET METHODS
 -(void)showActionSheet:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -750,16 +734,15 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
 -(void)updateCalorieLabels {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     NSNumber *recommendedCalories = [dietmasterEngine getRecommendedCalories];
     recommendedCaloriesLabel.text = [NSString stringWithFormat:@"%i", [recommendedCalories intValue]];
 
     double planCalories = 0;
     
+    DMMealPlanDataProvider *dataProvider = [[DMMealPlanDataProvider alloc] init];
     for (int i = 0; i <=5; i++) {
-        NSNumber *totalCalories = [dietmasterEngine getMealCodeCalories:
-                                   [[[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex]
-                                     valueForKey:@"MealItems"] objectAtIndex:i]];
+        NSDictionary *mealPlan = [dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex];
+        NSNumber *totalCalories = [dataProvider getCaloriesForMealCodes:[[mealPlan valueForKey:@"MealItems"] objectAtIndex:i]];
         planCalories = planCalories + [totalCalories doubleValue];
     }
     caloriesPlannedLabel.text = [NSString stringWithFormat:@"%.0f", planCalories];

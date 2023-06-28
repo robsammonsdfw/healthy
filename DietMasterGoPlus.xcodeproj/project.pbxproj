@@ -19,6 +19,7 @@
 		0E4409782A49EA6E00AF5BAD /* FetchUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */; };
 		0E44097B2A49EFCB00AF5BAD /* DMDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */; };
 		0E44097E2A4A0B5F00AF5BAD /* MyMovesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */; };
+		0E4409812A4B13E500AF5BAD /* DMMealPlanDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409802A4B13E500AF5BAD /* DMMealPlanDataProvider.m */; };
 		0E6F8FF42A43104200956F1E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F8FF32A43104200956F1E /* SceneDelegate.swift */; };
 		0E6F91142A4328A000956F1E /* DietMasterGoPlus-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* DietMasterGoPlus-Info.plist */; };
 		0E6F91192A4328A000956F1E /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
@@ -65,6 +66,7 @@
 		0EA18DBD2A4745040017D131 /* DMMoveDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBC2A4745040017D131 /* DMMoveDay.m */; };
 		0EA18DC02A4751690017D131 /* DMMoveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBF2A4751690017D131 /* DMMoveSet.m */; };
 		0EA18DC32A4757010017D131 /* DMMoveRoutine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DC22A4757010017D131 /* DMMoveRoutine.m */; };
+		0EA5C9752A4B57F000698BFE /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */; };
 		0ECFE7F12A41DB3900DE631E /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
 		0EDAB6A72A3B3A1000DB351A /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
 		0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
@@ -88,7 +90,6 @@
 		401B641020B3FC64004453E7 /* privacypolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D815004364008413AB /* privacypolicy.html */; };
 		401B641220B3FC64004453E7 /* termsofservice.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D915004364008413AB /* termsofservice.html */; };
 		401B642C20B3FC64004453E7 /* MealPlanDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */; };
-		401B643B20B3FC64004453E7 /* ExchangeFoodViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65811588CA5200CCE0AD /* ExchangeFoodViewController.xib */; };
 		401B643F20B3FC64004453E7 /* GroceryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65981589365800CCE0AD /* GroceryListViewController.xib */; };
 		401B646E20B3FC64004453E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		401B646F20B3FC64004453E7 /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
@@ -115,10 +116,8 @@
 		401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F44D315003DA6008413AB /* LearnMoreViewController.m */; };
 		401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E002FF3153E19560094341F /* NSData+Blocks.m */; };
 		401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */; };
-		401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DD8E15865347003B1BB7 /* MealPlanWebService.m */; };
 		401B649D20B3FC64004453E7 /* MealPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */; };
 		401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */; };
-		401B649F20B3FC64004453E7 /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65971589365800CCE0AD /* GroceryListViewController.m */; };
 		401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */; };
 		401B64A220B3FC64004453E7 /* UIViewController+TDSemiModalExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B915924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.m */; };
 		401B64C220B3FC64004453E7 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28C187EDE28004A542C /* Common.m */; };
@@ -265,6 +264,8 @@
 		0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMDataFetcher.m; sourceTree = "<group>"; };
 		0E44097C2A4A0B5F00AF5BAD /* MyMovesDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMovesDataProvider.h; sourceTree = "<group>"; };
 		0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMovesDataProvider.m; sourceTree = "<group>"; };
+		0E44097F2A4B13E500AF5BAD /* DMMealPlanDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMMealPlanDataProvider.h; sourceTree = "<group>"; };
+		0E4409802A4B13E500AF5BAD /* DMMealPlanDataProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMMealPlanDataProvider.m; sourceTree = "<group>"; };
 		0E4788B514EACC0B00B8FFE3 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
@@ -320,8 +321,6 @@
 		0E71B79214DE157C008C9576 /* ExercisesDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExercisesDetailViewController.xib; sourceTree = "<group>"; };
 		0E71B79614DE1AD6008C9576 /* DietmasterEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DietmasterEngine.h; sourceTree = "<group>"; };
 		0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DietmasterEngine.m; sourceTree = "<group>"; };
-		0E75DD8D15865347003B1BB7 /* MealPlanWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanWebService.h; sourceTree = "<group>"; };
-		0E75DD8E15865347003B1BB7 /* MealPlanWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanWebService.m; sourceTree = "<group>"; };
 		0E75DDA415867E50003B1BB7 /* MealPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanDetailViewController.h; sourceTree = "<group>"; };
 		0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanDetailViewController.m; sourceTree = "<group>"; };
 		0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MealPlanDetailViewController.xib; sourceTree = "<group>"; };
@@ -362,6 +361,8 @@
 		0EA18DC12A4757010017D131 /* DMMoveRoutine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveRoutine.h; sourceTree = "<group>"; };
 		0EA18DC22A4757010017D131 /* DMMoveRoutine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveRoutine.m; sourceTree = "<group>"; };
 		0EA18DC72A47BD670017D131 /* DMPickerViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMPickerViewDataSource.h; sourceTree = "<group>"; };
+		0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroceryListViewController.m; sourceTree = "<group>"; };
+		0EA5C9732A4B57D100698BFE /* GroceryListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroceryListViewController.h; sourceTree = "<group>"; };
 		0EAD266D1578EAED008E77D7 /* MealPlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanViewController.h; sourceTree = "<group>"; };
 		0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanViewController.m; sourceTree = "<group>"; };
 		0EB5423014E2FBD60023BA4C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -384,9 +385,6 @@
 		0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMUser.m; sourceTree = "<group>"; };
 		0EFF657F1588CA5200CCE0AD /* ExchangeFoodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangeFoodViewController.h; sourceTree = "<group>"; };
 		0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExchangeFoodViewController.m; sourceTree = "<group>"; };
-		0EFF65811588CA5200CCE0AD /* ExchangeFoodViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExchangeFoodViewController.xib; sourceTree = "<group>"; };
-		0EFF65961589365800CCE0AD /* GroceryListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroceryListViewController.h; sourceTree = "<group>"; };
-		0EFF65971589365800CCE0AD /* GroceryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroceryListViewController.m; sourceTree = "<group>"; };
 		0EFF65981589365800CCE0AD /* GroceryListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroceryListViewController.xib; sourceTree = "<group>"; };
 		1A8C6ACF81E45618A5A744BB /* Pods-DietMasterGoPlus.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DietMasterGoPlus.distribution.xcconfig"; path = "Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus.distribution.xcconfig"; sourceTree = "<group>"; };
 		1C3B54D914A2A72800D210CA /* FoodsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoodsList.h; sourceTree = "<group>"; };
@@ -620,7 +618,6 @@
 				0E002FF1153E19550094341F /* NSData+Blocks */,
 				0E4788BD14EACCCC00B8FFE3 /* SHA1PHPClass */,
 				0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */,
-				0E75DD8B1586532B003B1BB7 /* MealPlanWebService */,
 				0E71B79514DE1ABD008C9576 /* DietmasterEngine */,
 				0E4788B414EACBFE00B8FFE3 /* LoginViewController */,
 				59DA2ACF1A1B6228008D749F /* Today */,
@@ -817,15 +814,6 @@
 				4018F11D20DA437800FE1252 /* AppDefaults.plist */,
 			);
 			path = Settings_Plist;
-			sourceTree = "<group>";
-		};
-		0E75DD8B1586532B003B1BB7 /* MealPlanWebService */ = {
-			isa = PBXGroup;
-			children = (
-				0E75DD8D15865347003B1BB7 /* MealPlanWebService.h */,
-				0E75DD8E15865347003B1BB7 /* MealPlanWebService.m */,
-			);
-			path = MealPlanWebService;
 			sourceTree = "<group>";
 		};
 		0E75DD9E15867929003B1BB7 /* MealPlanDetailViewController */ = {
@@ -1126,6 +1114,8 @@
 		0EDAB6A82A3B4E9100DB351A /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
+				0E44097F2A4B13E500AF5BAD /* DMMealPlanDataProvider.h */,
+				0E4409802A4B13E500AF5BAD /* DMMealPlanDataProvider.m */,
 				0E44097C2A4A0B5F00AF5BAD /* MyMovesDataProvider.h */,
 				0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */,
 				0E4409792A49EFCB00AF5BAD /* DMDataFetcher.h */,
@@ -1165,7 +1155,6 @@
 			children = (
 				0EFF657F1588CA5200CCE0AD /* ExchangeFoodViewController.h */,
 				0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */,
-				0EFF65811588CA5200CCE0AD /* ExchangeFoodViewController.xib */,
 			);
 			path = ExchangeFoodViewController;
 			sourceTree = SOURCE_ROOT;
@@ -1173,8 +1162,8 @@
 		0EFF65951589364000CCE0AD /* GroceryListViewController */ = {
 			isa = PBXGroup;
 			children = (
-				0EFF65961589365800CCE0AD /* GroceryListViewController.h */,
-				0EFF65971589365800CCE0AD /* GroceryListViewController.m */,
+				0EA5C9732A4B57D100698BFE /* GroceryListViewController.h */,
+				0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */,
 				0EFF65981589365800CCE0AD /* GroceryListViewController.xib */,
 			);
 			path = GroceryListViewController;
@@ -1681,7 +1670,6 @@
 				403D88B421ECD53200B2F232 /* MyMovesDetailsViewController.xib in Resources */,
 				65462D1826BD1D6B004D1654 /* ProfileContactVC.xib in Resources */,
 				0E6F912B2A4328A000956F1E /* Icon-60@2x.png in Resources */,
-				401B643B20B3FC64004453E7 /* ExchangeFoodViewController.xib in Resources */,
 				0E6F91342A4328A000956F1E /* DietMasterGo-Info.plist in Resources */,
 				40E035C721F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */,
 				401B643F20B3FC64004453E7 /* GroceryListViewController.xib in Resources */,
@@ -1801,12 +1789,10 @@
 				0E4409732A49427400AF5BAD /* DMDatabaseProvider.m in Sources */,
 				0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */,
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
-				401B649B20B3FC64004453E7 /* MealPlanWebService.m in Sources */,
 				65462D1226BD1D48004D1654 /* ProfileAlertVCViewController.m in Sources */,
 				0EA18DC32A4757010017D131 /* DMMoveRoutine.m in Sources */,
 				401B649D20B3FC64004453E7 /* MealPlanDetailViewController.m in Sources */,
 				401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */,
-				401B649F20B3FC64004453E7 /* GroceryListViewController.m in Sources */,
 				40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */,
 				0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */,
 				401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */,
@@ -1866,11 +1852,13 @@
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,
 				65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */,
 				401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */,
+				0E4409812A4B13E500AF5BAD /* DMMealPlanDataProvider.m in Sources */,
 				401B658A20B3FC64004453E7 /* Base64.m in Sources */,
 				0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */,
 				401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */,
 				0E0D09F92A45DD8E0032162E /* DayDataProvider.swift in Sources */,
 				0E44097B2A49EFCB00AF5BAD /* DMDataFetcher.m in Sources */,
+				0EA5C9752A4B57F000698BFE /* GroceryListViewController.m in Sources */,
 				650208FD25015A5700F412B0 /* MyGoalViewController.m in Sources */,
 				403D88AE21ECA98700B2F232 /* MyMovesViewController.m in Sources */,
 				401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */,

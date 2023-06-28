@@ -8,8 +8,23 @@
 @import SafariServices;
 #import "DetailViewController.h"
 #import "ExchangeFoodViewController.h"
+#import "DMMealPlanDataProvider.h"
 
-@interface DetailViewController() <WSInsertUserPlannedMealItems>
+@interface DetailViewController()
+@property (nonatomic, strong) NSMutableArray *pickerColumn1Array;
+@property (nonatomic, strong) NSMutableArray *pickerColumn3Array;
+@property (nonatomic, strong) NSMutableArray *pickerFractionArray;
+@property (nonatomic, strong) NSMutableArray *pickerDecimalArray;
+@property (nonatomic, strong) NSNumber *pickerRow1;
+@property (nonatomic, strong) NSNumber *pickerRow2;
+@property (nonatomic, strong) NSNumber *pickerRow3;
+@property (nonatomic, strong) IBOutlet UIImageView *imgbar;
+@property (nonatomic, strong) IBOutlet UILabel *staticCalLbl;
+@property (nonatomic, strong) IBOutlet UILabel *staticProtFatCarbLbl;
+@property (nonatomic, strong) IBOutlet UILabel *foodIdLbl;
+
+/// The food that is being displayed to the user.
+@property (nonatomic, strong) NSDictionary *foodDict;
 @end
 
 @implementation DetailViewController
@@ -18,29 +33,31 @@
 @synthesize pickerRow1, pickerRow2, pickerRow3;
 @synthesize pickerDecimalArray, pickerFractionArray;
 
-#pragma mark DATA METHODS
-
-- (instancetype)init {
+- (instancetype)initWithFood:(NSDictionary *)foodDict {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        _foodDict = foodDict;
+    }
     return self;
 }
 
--(void)loadData {
+#pragma mark DATA METHODS
+
+- (void)loadData {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
     
-    double gramWeight = [[dietmasterEngine.foodSelectedDict valueForKey:@"GramWeight"] floatValue];
-    double foodProtein = [[dietmasterEngine.foodSelectedDict valueForKey:@"Protein"] floatValue];
-    double foodFat = [[dietmasterEngine.foodSelectedDict valueForKey:@"Fat"] floatValue];
-    double foodCarbs = [[dietmasterEngine.foodSelectedDict valueForKey:@"Carbohydrates"] floatValue];
-    double servingSize = [[dietmasterEngine.foodSelectedDict valueForKey:@"ServingSize"] floatValue];
-    double foodCalories = [[dietmasterEngine.foodSelectedDict valueForKey:@"Calories"] floatValue];
-    double selectedServing = [[dietmasterEngine.foodSelectedDict valueForKey:@"Servings"] floatValue];
+    double gramWeight = [[self.foodDict valueForKey:@"GramWeight"] floatValue];
+    double foodProtein = [[self.foodDict valueForKey:@"Protein"] floatValue];
+    double foodFat = [[self.foodDict valueForKey:@"Fat"] floatValue];
+    double foodCarbs = [[self.foodDict valueForKey:@"Carbohydrates"] floatValue];
+    double servingSize = [[self.foodDict valueForKey:@"ServingSize"] floatValue];
+    double foodCalories = [[self.foodDict valueForKey:@"Calories"] floatValue];
+    double selectedServing = [[self.foodDict valueForKey:@"Servings"] floatValue];
     
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     
     lblFat.text			= [NSString stringWithFormat:@"%.2f",foodFat * (gramWeight / 100)];
     lblCarbs.text		= [NSString stringWithFormat:@"%.2f",foodCarbs * (gramWeight / 100)];
@@ -88,7 +105,7 @@
     
     lblCalories.text = [NSString stringWithFormat:@"%.2f", totalCalories];
     
-    NSString *servingList		= [NSString stringWithFormat:@"%.2f", [[dietmasterEngine.foodSelectedDict valueForKey:@"Servings"] floatValue]];
+    NSString *servingList		= [NSString stringWithFormat:@"%.2f", [[self.foodDict valueForKey:@"Servings"] floatValue]];
     NSArray *servingItems	= [servingList componentsSeparatedByString:@"."];
     
     [pickerView reloadAllComponents];
@@ -133,11 +150,11 @@
         [pickerView selectRow:[pickerRow2 intValue] inComponent:1 animated:YES];
     }
     
-    int measureID = [[dietmasterEngine.foodSelectedDict valueForKey:@"MeasureID"] intValue];
+    int measureID = [[self.foodDict valueForKey:@"MeasureID"] intValue];
     for(NSInteger i = 0; i < [pickerColumn3Array count]; i++){
         int pickerID = [[[pickerColumn3Array objectAtIndex:i] valueForKey:@"MeasureID"] intValue];
         if(pickerID == measureID){
-            self.pickerRow3 = [NSNumber numberWithInt:i];
+            self.pickerRow3 = @(i);
             break;
         }
     }
@@ -145,8 +162,6 @@
     [pickerView selectRow:[pickerRow3 intValue] inComponent:2 animated:YES];
     
     [self updateCalorieCount];
-    
-    [DMActivityIndicator hideActivityIndicator];
 }
 
 #pragma mark VIEW LIFECYCLE
@@ -212,7 +227,7 @@
     [pickerColumn3Array removeAllObjects];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    lblText.text = [dietmasterEngine.foodSelectedDict valueForKey:@"Name"];
+    lblText.text = [self.foodDict valueForKey:@"Name"];
     
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                  target:self
@@ -236,9 +251,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [DMActivityIndicator showActivityIndicator];
-    [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
+    [self loadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
@@ -303,7 +316,7 @@
 }
 
 #pragma mark ACTION SHEET METHODS
--(void)showActionSheet:(id)sender {
+- (void)showActionSheet:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     NSString *favoriteOrNot = nil;
@@ -450,54 +463,49 @@
 
 #pragma mark MEAL PLAN METHODS
 
--(void)exchangeFood {
+- (void)exchangeFood {
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back" style: UIBarButtonItemStylePlain target: nil action: nil];
     [self.navigationItem setBackBarButtonItem: backButton];
     
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSMutableDictionary *exchangeDict = dietmasterEngine.foodSelectedDict;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    ExchangeFoodViewController *exchangeVC = [[ExchangeFoodViewController alloc] init];
-    exchangeVC.foodID = [exchangeDict valueForKey:@"FoodID"];
-    exchangeVC.mealTypeID = [exchangeDict valueForKey:@"MealTypeID"];
-    exchangeVC.CaloriesToMaintain = [lblCalories.text doubleValue];
-    exchangeVC.ExchangeOldDataDict = exchangeDict;
+    ExchangeFoodViewController *exchangeVC = [[ExchangeFoodViewController alloc] initWithExchangedFood:[self.foodDict copy]];
     [self.navigationController pushViewController:exchangeVC animated:YES];
 }
 
--(void)updateFoodServings {
+- (void)updateFoodServings {
     [DMActivityIndicator showActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-    int num_measureID	= [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
-    NSDecimalNumber *servingSize1	= [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
+    int num_measureID = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
+    NSDecimalNumber *servingSize1 = [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
     NSDecimalNumber *servingSize2;
     if (fractionPicker) {
-        servingSize2	= [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+        servingSize2 = [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+    } else {
+        servingSize2 = [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
     }
-    else {
-        servingSize2	= [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
-    }
-    NSDecimalNumber *servingAmount		= [servingSize1 decimalNumberByAdding:servingSize2];
+    NSDecimalNumber *servingAmount = [servingSize1 decimalNumberByAdding:servingSize2];
     
     NSDictionary *updateDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
-                                dietmasterEngine.selectedMealID, @"MealCode",
-                                [NSNumber numberWithInt:foodID], @"FoodID",
-                                servingAmount, @"ServingSize",
-                                [NSNumber numberWithInt:num_measureID], @"MeasureID",
+                                    @(dietmasterEngine.selectedMealPlanID), @"MealID",
+                                    dietmasterEngine.selectedMealID, @"MealCode",
+                                    @(foodID), @"FoodID",
+                                    servingAmount, @"ServingSize",
+                                    @(num_measureID), @"MeasureID",
                                 nil];
-    
-    NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                @"UpdateUserPlannedMealItems", @"RequestType",
-                                updateDict, @"MealItems",
-                                nil];
-    
-    MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
-    soapWebService.wsUpdateUserPlannedMealItems = self;
-    [soapWebService callWebservice:wsInfoDict];
+        
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    [provider updateUserPlannedMealItems:@[updateDict] withCompletionBlock:^(BOOL completed, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        
+        [DMActivityIndicator showCompletedIndicator];
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        dietmasterEngine.didInsertNewFood = YES;
+    }];
 }
 
 -(void)insertNewFood {
@@ -516,7 +524,7 @@
     }
     NSDecimalNumber *servingAmount		= [servingSize1 decimalNumberByAdding:servingSize2];
     
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     int mealCode = [dietmasterEngine.selectedMealID intValue];
     
     NSDictionary *insertDict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -527,55 +535,49 @@
                                 servingAmount, @"ServingSize",
                                 nil];
     
-    NSDictionary *wsInfoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                @"InsertUserPlannedMealItems", @"RequestType",
-                                insertDict, @"MealItems",
-                                nil];
-    
-    MealPlanWebService *soapWebService2 = [[MealPlanWebService alloc] init];
-    soapWebService2.wsInsertUserPlannedMealItems = self;
-    [soapWebService2 callWebservice:wsInfoDict];
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider saveUserPlannedMealItems:@[insertDict] withCompletionBlock:^(BOOL completed, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        dietmasterEngine.didInsertNewFood = YES;
+        [DMActivityIndicator showCompletedIndicator];
+        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+    }];
 }
 
--(void)deleteFromPlan {
+- (void)deleteFromPlan {
     [DMActivityIndicator showActivityIndicator];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     int mealCode = [dietmasterEngine.selectedMealID intValue];
     
-    
-    NSDictionary *newDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                             [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
-                             [NSNumber numberWithInt:mealCode], @"MealCode",
-                             [NSNumber numberWithInt:foodID], @"FoodID",
+    NSDictionary *mealItems = [[NSDictionary alloc] initWithObjectsAndKeys:
+                             @(dietmasterEngine.selectedMealPlanID), @"MealID",
+                             @(mealCode), @"MealCode",
+                             @(foodID), @"FoodID",
                              nil];
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"DeleteUserPlannedMealItems", @"RequestType",
-                              newDict, @"MealItems",
-                              nil];
-    
-    MealPlanWebService *soapWebService = [[MealPlanWebService alloc] init];
-    soapWebService.wsDeleteUserPlannedMealItems = self;
-    [soapWebService callWebservice:infoDict];
-}
-
-#pragma mark MEAL PLAN WEBSERVICE DELEGATES
-
-- (void)updateUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    [DMActivityIndicator hideActivityIndicator];
-    [DMActivityIndicator showCompletedIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.didInsertNewFood = YES;
-}
-
-- (void)updateUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider deleteUserPlannedMealItems:@[mealItems] withCompletionBlock:^(BOOL completed, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        
+        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+        dietmasterEngine.didInsertNewFood = YES;
+        [DMActivityIndicator showCompletedIndicator];
+        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+    }];
 }
 
 #pragma mark BUTTON ACTIONS
@@ -689,8 +691,8 @@
         double gramWeight = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"GramWeight"] floatValue];
     }
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    double servingSize = [[dietmasterEngine.foodSelectedDict valueForKey:@"ServingSize"] floatValue];
-    double foodCalories = [[dietmasterEngine.foodSelectedDict valueForKey:@"Calories"] floatValue];
+    double servingSize = [[self.foodDict valueForKey:@"ServingSize"] floatValue];
+    double foodCalories = [[self.foodDict valueForKey:@"Calories"] floatValue];
     
     NSDecimalNumber *servingSize1	= [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
     NSDecimalNumber *servingSize2;
@@ -709,9 +711,9 @@
     
     lblCalories.text = [NSString stringWithFormat:@"%.2f", flt_totalCalories];
     
-    double foodProtein = [[dietmasterEngine.foodSelectedDict valueForKey:@"Protein"] floatValue];
-    double foodFat = [[dietmasterEngine.foodSelectedDict valueForKey:@"Fat"] floatValue];
-    double foodCarbs = [[dietmasterEngine.foodSelectedDict valueForKey:@"Carbohydrates"] floatValue];
+    double foodProtein = [[self.foodDict valueForKey:@"Protein"] floatValue];
+    double foodFat = [[self.foodDict valueForKey:@"Fat"] floatValue];
+    double foodCarbs = [[self.foodDict valueForKey:@"Carbohydrates"] floatValue];
     
     lblFat.text			= [NSString stringWithFormat:@"%.2f",(foodFat * (gramWeight / 100)) / servingSize * [servingAmount floatValue]];
     lblCarbs.text		= [NSString stringWithFormat:@"%.2f",(foodCarbs * (gramWeight / 100))  / servingSize * [servingAmount floatValue]];
@@ -776,7 +778,7 @@
             minIDvalue = mealIDValue;
         }
         
-        int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+        int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
         int mealCode = [dietmasterEngine.selectedMealID intValue];
         
         [db beginTransaction];
@@ -822,8 +824,8 @@
         [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         NSString *date_string = [dateFormat stringFromDate:[NSDate date]];
         
-        int foodMealID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
-        int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+        int foodMealID = [[self.foodDict valueForKey:@"FoodLogMealID"] intValue];
+        int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
         int MealCode  = [dietmasterEngine.selectedMealID intValue];
         
         NSString *updateSQL = [NSString stringWithFormat: @"UPDATE Food_Log_Items SET MeasureID = %i, NumberOfServings = %f, LastModified = '%@' WHERE FoodID = %i AND MealID = %i AND MealCode = %i", num_measureID,[servingAmount floatValue], date_string, foodID,foodMealID ,MealCode];
@@ -851,8 +853,8 @@
     }
     
     [db beginTransaction];
-    int foodMealID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+    int foodMealID = [[self.foodDict valueForKey:@"FoodLogMealID"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealID = %i AND MealCode = %i", foodID, foodMealID, [dietmasterEngine.selectedMealID intValue]];
     [db executeUpdate:updateSQL];
     if ([db hadError]) {
@@ -872,7 +874,7 @@
         return;
     }
     
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     [db beginTransaction];
     NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Favorite_Food WHERE FoodID = %i", foodID];
     [db executeUpdate:updateSQL];
@@ -903,8 +905,8 @@
         return;
     }
     
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
-    int num_measureID = [[dietmasterEngine.foodSelectedDict valueForKey:@"MeasureID"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
+    int num_measureID = [[self.foodDict valueForKey:@"MeasureID"] intValue];
     
     int minIDvalue = 0;
     NSString *idQuery = @"SELECT min(Favorite_FoodID) as Favorite_FoodID FROM Favorite_Food";
@@ -946,8 +948,8 @@
     [DMActivityIndicator showActivityIndicator];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-    int foodLogID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodLogMealID"] intValue];
-    int foodID = [[dietmasterEngine.foodSelectedDict valueForKey:@"FoodKey"] intValue];
+    int foodLogID = [[self.foodDict valueForKey:@"FoodLogMealID"] intValue];
+    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"DeleteMealItem", @"RequestType",
@@ -964,37 +966,6 @@
         [DMActivityIndicator hideActivityIndicator];
         [self deleteFromLog];
     }];
-}
-
-#pragma mark WEBSERVICE INSERT MEAL ITEM DELEGATE
-
-- (void)insertUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    [DMActivityIndicator hideActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.didInsertNewFood = YES;
-    [DMActivityIndicator showCompletedIndicator];
-    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
-}
-
-- (void)insertUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
-}
-
-#pragma mark DELETE MEAL PLAN ITEMS DELEGATE
-
-- (void)deleteUserPlannedMealItemsFinished:(NSMutableArray *)responseArray {
-    [DMActivityIndicator hideActivityIndicator];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.didInsertNewFood = YES;
-    [DMActivityIndicator showCompletedIndicator];
-    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
-}
-
-- (void)deleteUserPlannedMealItemsFailed:(NSString *)failedMessage {
-    [DMActivityIndicator hideActivityIndicator];
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
 }
 
 #pragma mark CUSTOM SUPERSCRIPT NSSTRING METHOD

@@ -7,24 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MealPlanWebService.h"
-#import "TTTAttributedLabel.h"
 
-@interface GroceryListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, WSGetGroceryList, TTTAttributedLabelDelegate> {
-        
-    IBOutlet UILabel *titleLabel;
-    
-    int selectedIndex;
-    NSMutableArray *selectedRows;
-    IBOutlet UITableView *tableView;
-}
-
-@property (nonatomic) int selectedIndex;
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) IBOutlet UIImageView *imgBackground;
-
--(void)loadData;
--(void)checkButtonTapped:(id)sender event:(id)event;
--(void)editGroceryList;
-
+/// Shows the user's grocery list that they can check off.
+@interface GroceryListViewController : UIViewController
 @end

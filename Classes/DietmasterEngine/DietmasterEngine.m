@@ -11,7 +11,6 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSData+Blocks.h"
-#import "ZipArchive.h"
 #import "UIDevice+machine.h"
 #import "DietMasterGoAppDelegate.h"
 #import "NSString+ConvertToDate.h"
@@ -36,17 +35,15 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 @interface DietmasterEngine ()
 @property (nonatomic, strong) NSDateFormatter *dateformatter;
-@property (nonatomic, strong) dispatch_queue_t syncQueue;
 @property (nonatomic, strong, readwrite) FMDatabase *database;
 @end
 
 @implementation DietmasterEngine
 
 @synthesize wsGetFoodDelegate;
-@synthesize exerciseSelectedDict, foodSelectedDict, currentWeight, taskMode, dateSelected, dateSelectedFormatted,userHeight,userGender;
+@synthesize exerciseSelectedDict, currentWeight, taskMode, dateSelected, dateSelectedFormatted,userHeight,userGender;
 @synthesize selectedMealID, selectedMeasureID, selectedCategoryID, syncUPDatabaseDelegate;
 @synthesize mealPlanArray, isMealPlanItem, mealPlanItemToExchangeDict, indexOfItemToExchange, selectedMealPlanID, didInsertNewFood;
-@synthesize groceryArray;
 
 + (instancetype)sharedInstance {
     static DietmasterEngine *sharedInstance = nil;
@@ -62,10 +59,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     if (self) {
         _dateformatter = [[NSDateFormatter alloc] init];
         exerciseSelectedDict = [[NSMutableDictionary alloc] init];
-        foodSelectedDict = [[NSMutableDictionary alloc] init];
         
         mealPlanArray = [[NSMutableArray alloc] init];
-        groceryArray = [[NSMutableArray alloc] init];
         
         dateSelected = [[NSDate alloc] init];
         
@@ -96,13 +91,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     upsyncsFailed = 0;
     upsyncsToComplete = 0;
     
-    NSString *dateString = @"";
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
-    if ([prefs valueForKey:@"lastsyncdate"]) {
-        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        dateString = [self.dateformatter stringFromDate:[prefs valueForKey:@"lastsyncdate"]];
-    }
+    NSString *dateString = [DMGUtilities lastSyncDateString];
     
     [self saveMeals:dateString];
     [self saveExerciseLogs:dateString];
@@ -114,26 +103,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 - (void)uploadDatabaseFinished {
     if (upsyncsCompleted == (upsyncsToComplete + 6)) {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSDate *oneDayAgo = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
-                                                                     value:0
-                                                                    toDate:[NSDate date]
-                                                                   options:0];
-        
-        self.dateformatter.timeZone = [NSTimeZone systemTimeZone];
-        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSString *dateString = [self.dateformatter stringFromDate:oneDayAgo];
-        
-        NSDate *date1 = [self.dateformatter dateFromString:dateString];
-        
-        [prefs setValue:date1 forKey:@"lastsyncdate"];
+        [DMGUtilities setLastSyncToDate:[NSDate date]];
         if ([syncUPDatabaseDelegate respondsToSelector:@selector(syncUPDatabaseFinished:)]) {
             [syncUPDatabaseDelegate syncUPDatabaseFinished:@"success"];
             syncUPDatabaseDelegate = nil;
         }
-//        [self syncFavoriteFoods:nil withCompletionBlock:^(BOOL completed, NSError *error) {
-//            // Do something if needed.
-//        }];
     }
 }
 
@@ -344,7 +318,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               @"SaveMealItems", @"RequestType",
                               nil];    
     [DMDataFetcher fetchDataWithRequestParams:infoDict
-                                    jsonArray:[tempDataArray copy]
+                                   jsonObject:[tempDataArray copy]
                                    completion:^(NSObject *object, NSError *error) {
         if (error) {
             return;
@@ -400,7 +374,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               @"SaveExerciseLogs", @"RequestType",
                               nil];
     [DMDataFetcher fetchDataWithRequestParams:infoDict
-                                    jsonArray:[tempDataArray copy]
+                                   jsonObject:[tempDataArray copy]
                                    completion:^(NSObject *object, NSError *error) {
         if (error) {
             upsyncsFailed++;
@@ -454,7 +428,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                 nil];
     
     [DMDataFetcher fetchDataWithRequestParams:infoDict
-                                    jsonArray:[tempDataArray copy]
+                                   jsonObject:[tempDataArray copy]
                                    completion:^(NSObject *object, NSError *error) {
         if (error) {
             upsyncsFailed++;
@@ -736,8 +710,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         dispatch_group_enter(fetchGroup);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [DMDataFetcher fetchDataWithRequestParams:dict completion:^(NSObject *object, NSError *error) {
+                dispatch_group_leave(fetchGroup);
                 if (error) {
-                    dispatch_group_leave(fetchGroup);
                     return;
                 }
                 NSArray *responseArray = (NSArray *)object;
@@ -770,7 +744,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 if ([db hadError]) {
                     DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
                 }
-                dispatch_group_leave(fetchGroup);
             }];
         });
 
@@ -1134,48 +1107,39 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 
 #pragma mark Food Plan Methods
 
-- (void)getMissingFoods:(NSDictionary *)foodDict {
-    
-    int selectedFoodID = [[foodDict valueForKey:@"FoodID"] intValue];
-    int measureID = [[foodDict valueForKey:@"MeasureID"] intValue];
-    
+- (void)getMissingFoodsIfNeededForFoods:(NSArray *)foodsArray {
     FMDatabase* db = [self database];
     if (![db open]) {
-        
     }
     
-    NSString *query = [NSString stringWithFormat: @"SELECT Food.CategoryID, Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, FoodMeasure.GramWeight, Measure.MeasureID, Measure.Description FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE Food.FoodKey = %i AND Measure.MeasureID = %i LIMIT 1", selectedFoodID, measureID];
-    
-    FMResultSet *rs = [db executeQuery:query];
-    
-    int resultCount = 0;
-    
-    while ([rs next]) {
+    NSMutableArray *missingFoods = [NSMutableArray array];
+    for (NSDictionary *foodDict in foodsArray) {
+        int selectedFoodID = [[foodDict valueForKey:@"FoodID"] intValue];
+        int measureID = [[foodDict valueForKey:@"MeasureID"] intValue];
+        NSString *query = [NSString stringWithFormat: @"SELECT COUNT (Food.FoodID) as FoodCount FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE Food.FoodKey = %i AND Measure.MeasureID = %i LIMIT 1", selectedFoodID, measureID];
         
-        resultCount++;
+        FMResultSet *rs = [db executeQuery:query];
+        NSNumber  *resultCount = @0;
+        while ([rs next]) {
+            resultCount = @([rs intForColumn:@"FoodCount"]);
+        }
+        [rs close];
+        
+        if (resultCount.intValue == 0) {
+            [missingFoods addObject:foodDict];
+        }
     }
     
-    [rs close];
-    
-    if (resultCount == 0) {
-        NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                  @"GetFoodNew", @"RequestType",
-                                  [NSNumber numberWithInt:selectedFoodID], @"FoodKey",
-                                  nil];
-        
-        [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
-             [self getFoodFinished:(NSMutableArray *)object];
-         }];
+    for (NSDictionary *dict in missingFoods) {
+        int foodId = [[dict valueForKey:@"FoodID"] intValue];
+        [self fetchMissingFoodForKey:foodId];
     }
 }
 
-- (void)retrieveMissingFood:(int)foodKey {
-    //Send Data needed
-    //GetFood OLD one
-    //GetFoodNew //on 23-08-2016 by HHT
+- (void)fetchMissingFoodForKey:(int)foodKey {
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetFoodNew", @"RequestType",
-                              [NSNumber numberWithInt:foodKey], @"FoodKey",
+                              @(foodKey), @"FoodKey",
                               nil];
     
     [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
@@ -1183,18 +1147,15 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
      }];
 }
 
--(NSDictionary *)getFoodDetails:(NSDictionary *)foodDict {
+- (NSDictionary *)getFoodDetails:(NSDictionary *)foodDict {
     int selectedFoodID = [[foodDict valueForKey:@"FoodID"] intValue];
     int tempMeasureID = [[foodDict valueForKey:@"MeasureID"] intValue];
     
     FMDatabase* db = [self database];
-    if (![db open])
-    {
-        
+    if (![db open]) {
     }
     
     NSString *query = [NSString stringWithFormat: @"SELECT Food.CategoryID, Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, FoodMeasure.GramWeight, Measure.MeasureID, Measure.Description, Food.RecipeID, Food.CategoryID, Food.FoodURL FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE Food.FoodKey = %i AND Measure.MeasureID = %i LIMIT 1", selectedFoodID, tempMeasureID];
-    DMLog(@"query=%@",query);
     
     FMResultSet *rs = [db executeQuery:query];
     
@@ -1301,40 +1262,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return success;
 }
 
--(NSNumber *)getMealCodeCalories:(NSArray *)array {
-    FMDatabase* db = [self database];
-    if (![db open]) {
-        
-    }
-    
-    double num_totalCalories = 0;
-    
-    for (NSDictionary *dict in array) {
-        
-        int num_measureID = [[NSString stringWithFormat:@"%@",[dict valueForKey:@"MeasureID"]] intValue];
-        
-        NSString *query = [NSString stringWithFormat: @"SELECT Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, FoodMeasure.GramWeight, Measure.MeasureID, Measure.Description FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE FoodMeasure.MeasureID = %i AND Food.FoodKey = %i LIMIT 1", num_measureID, [[dict valueForKey:@"FoodID"] intValue]];
-        
-        FMResultSet *rs = [db executeQuery:query];
-        
-        double numberOfServings = [[dict valueForKey:@"NumberOfServings"] doubleValue];
-        
-        double totalCalories = 0;
-        
-        while ([rs next]) {
-            totalCalories = numberOfServings * (([rs doubleForColumn:@"Calories"] * ([rs doubleForColumn:@"GramWeight"] / 100)) / [rs doubleForColumn:@"ServingSize"]);
-            
-        }
-        
-        [rs close];
-        
-        num_totalCalories = num_totalCalories + totalCalories;
-        DMLog(@"%f", num_totalCalories);
-    }
-    
-    return [NSNumber numberWithDouble:num_totalCalories];
-}
-
 -(NSNumber *)getRecommendedCalories {
     
     FMDatabase* db = [self database];
@@ -1354,23 +1281,20 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return [NSNumber numberWithInt:num_BMR];
 }
 
--(NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey {
-    
+- (NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey fromMealPlanItem:(NSDictionary *)mealPlanItemDict {
     FMDatabase* db = [self database];
     if (![db open]) {
         
     }
-    
     NSNumber *exchangeID = 0;
     NSInteger measureID = 0;
     NSString *query = @"";
     int exchangeGramWeight = 0;
-    if (mealPlanItemToExchangeDict != nil) {
-        exchangeGramWeight = [[mealPlanItemToExchangeDict valueForKey:@"GramWeight"] intValue];
-        exchangeID = [mealPlanItemToExchangeDict valueForKey:@"MeasureID"];
+    if (mealPlanItemDict != nil) {
+        exchangeGramWeight = [[mealPlanItemDict valueForKey:@"GramWeight"] intValue];
+        exchangeID = [mealPlanItemDict valueForKey:@"MeasureID"];
         
         if (exchangeID != 0) {
-            
             query = [NSString stringWithFormat: @"SELECT Measure.MeasureID, Measure.Description, FoodMeasure.FoodID, FoodMeasure.GramWeight FROM Measure INNER JOIN FoodMeasure ON Measure.MeasureID=FoodMeasure.MeasureID WHERE FoodMeasure.FoodID = %li AND FoodMeasure.MeasureID = %li", (long)[foodKey integerValue], (long)[exchangeID integerValue]];
         
             FMResultSet *rs1 = [db executeQuery:query];
@@ -1643,36 +1567,5 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     return bmrValue;
 }
 
-- (NSArray *)getGroceryFoodDetails:(NSArray *)foods {
-    FMDatabase* db = [self database];
-    if (![db open]) {
-        return @[];
-    }
-    
-    NSMutableArray *results = [NSMutableArray array];
-    for (NSDictionary *food in foods) {
-        NSMutableDictionary *foodMutable = [NSMutableDictionary dictionaryWithDictionary:food];
-        NSString *query = [NSString stringWithFormat: @"SELECT FoodKey, name, FoodURL, RecipeID, CategoryID FROM Food WHERE name = '%@' ORDER BY FoodURL DESC LIMIT 1", [food valueForKey:@"FoodName"]];
-        FMResultSet *rs = [db executeQuery:query];
-        while ([rs next]) {
-            NSString *FoodURL = [rs stringForColumn:@"FoodURL"];
-            if (FoodURL != nil && ![FoodURL isEqualToString:@""]) {
-                [foodMutable setObject:FoodURL forKey:@"FoodURL"];
-            }
-            int recipeID = [rs intForColumn:@"RecipeID"];
-            if (recipeID > 0) {
-                [foodMutable setObject:@(recipeID) forKey:@"RecipeID"];
-            }
-            int catID = [rs intForColumn:@"CategoryID"];
-            if (catID > 0) {
-                [foodMutable setObject:@(catID) forKey:@"CategoryID"];
-            }
-            [results addObject:[foodMutable copy]];
-        }
-        [rs close];
-    }
-    
-    return [results copy];
-}
 
 @end
