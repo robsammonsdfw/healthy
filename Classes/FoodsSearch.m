@@ -106,7 +106,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [super viewDidLoad];
          
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnRight setFrame:CGRectMake(0, 0, 28, 28)];
+    [btnRight setFrame:CGRectMake(0, 0, 30, 30)];
     UIImage *plusImage = [UIImage imageNamed:@"05-plus"];
     plusImage = [plusImage imageWithTintColor:[UIColor whiteColor] renderingMode:UIImageRenderingModeAlwaysTemplate];
     [btnRight setImage:plusImage forState:UIControlStateNormal];
@@ -128,7 +128,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         [dateFormat setTimeZone:systemTimeZone];
         NSString *date_string = [dateFormat stringFromDate:sourceDate];
         NSDate *date_today = [dateFormat dateFromString:date_string];
-        
         self.date_currentDate = date_today;
     }
 }
@@ -407,17 +406,17 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     cell.lblFoodName.numberOfLines = 0;
     cell.lblFoodName.lineBreakMode = NSLineBreakByWordWrapping;
     cell.lblFoodName.textColor = [UIColor blackColor];
-    cell.lblFoodName.font = [UIFont systemFontOfSize:15.0];
+    cell.lblFoodName.font = [UIFont systemFontOfSize:16.0];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle =  UITableViewCellSelectionStyleGray;
     [cell lblFoodName].adjustsFontSizeToFitWidth = NO;
-    cell.lblCalories = nil;
+    cell.lblCalories.text = @"";
 
     if (self.foodResults.count == 0) {
         [cell lblFoodName].adjustsFontSizeToFitWidth = YES;
         cell.lblFoodName.textColor = [UIColor lightGrayColor];
         [[cell lblFoodName] setText:@"No results found..."];
-        cell.lblFoodName.font = [UIFont systemFontOfSize:15.0];
+        cell.lblFoodName.font = [UIFont systemFontOfSize:16.0];
         cell.selectionStyle =  UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.userInteractionEnabled = NO;
