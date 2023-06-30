@@ -159,6 +159,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
     self.logDaySummary = [[LogDaySummary alloc] initWithFrame:CGRectZero];
     self.logDaySummary.translatesAutoresizingMaskIntoConstraints = NO;
+    __weak typeof(self) weakSelf = self;
+    self.logDaySummary.didSelectInfoButtonCallback = ^{
+        [weakSelf goToSafetyGuidelines:nil];
+    };
     [self.view addSubview:self.logDaySummary];
     
     [self.logDaySummary.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;

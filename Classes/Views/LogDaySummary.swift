@@ -35,6 +35,9 @@ class LogDaySummary : UIView {
         return button
     }()
     
+    /// Closure that will be called when the user presses the info button.
+    @objc public var didSelectInfoButtonCallback: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -47,16 +50,6 @@ class LogDaySummary : UIView {
     private func setup() {
         backgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
         self.addSubview(lineView)
-        self.addSubview(infoButton)
-        infoButton.addTarget(self, action: #selector(infoButtonPressed), for: .touchUpInside)
-        
-        lineView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        lineView.widthAnchor.constraint(equalToConstant: 1).isActive = true
-        lineView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
-        lineView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
-
-        infoButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15).isActive = true
-        infoButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 15).isActive = true
 
         guard let recommendedView = recommendedView.getComposedStackView(),
                 let remainingView = remainingView.getComposedStackView() else { return }
@@ -75,10 +68,23 @@ class LogDaySummary : UIView {
         
         setRecommendedLabels(calorie: "0g", carbs: "0g", protein: "0g", fat: "0g")
         setRemainingLabels(calorie: "0g", carbs: "0g", protein: "0g", fat: "0g")
+
+        self.addSubview(infoButton)
+        infoButton.addTarget(self, action: #selector(infoButtonPressed), for: .touchUpInside)
+        
+        lineView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        lineView.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        lineView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
+        lineView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
+
+        infoButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15).isActive = true
+        infoButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 15).isActive = true
+        infoButton.heightAnchor.constraint(equalToConstant: 26).isActive = true
+        infoButton.widthAnchor.constraint(equalToConstant: 26).isActive = true
     }
     
     @objc private func infoButtonPressed() {
-        // Do something.
+        didSelectInfoButtonCallback?()
     }
     
     // MARK: - Public
