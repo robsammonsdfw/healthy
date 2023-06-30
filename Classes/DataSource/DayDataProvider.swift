@@ -8,13 +8,13 @@
 import Foundation
 import FMDB
 
-/// Class that provides Current Day's data from a local cache or
+/// Class that provides a Day's data from a local cache or
 /// database.
 @objc @objcMembers final class DayDataProvider: NSObject {
     private var database: FMDatabase?
     private let massFormatter = MassFormatter()
     private let numberFormatter = NumberFormatter()
-
+    
     // Singleton, main access point.
     @objc static let sharedInstance = DayDataProvider()
     
@@ -47,17 +47,18 @@ import FMDB
     }
     
     /// Gets the day's calorie data for use in other public functions.
-    private func getCalorieData() -> (totalCalories: Double,
-                                      fatCalories: Double,
-                                      carbCalories: Double,
-                                      proteinCalories: Double,
-                                      sugarCalories: Double,
-                                      sugarGrams: Double) {
+    /// Passing nil will use today's date.
+    private func getCalorieData(date: Date?) -> (totalCalories: Double,
+                                                fatCalories: Double,
+                                                carbCalories: Double,
+                                                proteinCalories: Double,
+                                                sugarCalories: Double,
+                                                sugarGrams: Double) {
         guard let database = database, database.open() == true else {
             return (0, 0, 0, 0, 0, 0)
         }
         
-        let sourceDate = Date()
+        let sourceDate = date ?? Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = TimeZone.current
@@ -109,14 +110,15 @@ import FMDB
     }
     
     /// Gets the day's exercise data for use in other public functions.
-    private func getExerciseData() -> (minutes: Double,
-                                       calories: Double,
-                                       trackerCalories: Double,
-                                       steps: Double) {
-        guard let database = database, database.open() == true else { return (0, 0, 0, 0) }
-        guard let currentUser = currentUser else { return (0, 0, 0, 0) }
+    private func getExerciseData(date: Date?) -> (minutes: Double,
+                                                  loggedCalories: Double,
+                                                  exerciseCalories: Double,
+                                                  trackerCalories: Double,
+                                                  steps: Double) {
+        guard let database = database, database.open() == true else { return (0, 0, 0, 0, 0) }
+        guard let currentUser = currentUser else { return (0, 0, 0, 0, 0) }
         
-        let sourceDate = Date()
+        let sourceDate = date ?? Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = TimeZone.current
@@ -124,9 +126,16 @@ import FMDB
         
         let query = String(format: "SELECT Exercise_Log.Exercise_Log_ID, Exercise_Log.ExerciseID, Exercise_Log.Exercise_Time_Minutes, Exercise_Log.Log_Date, Exercises.ActivityName, Exercises.CaloriesPerHour FROM Exercise_Log INNER JOIN Exercises ON Exercise_Log.ExerciseID = Exercises.ExerciseID WHERE (Exercise_Log.Log_Date BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) ORDER BY Log_Date", dateString, dateString)
         
+        // How many calories were burned that should be added into
+        // the day's budget of calories. (E.g. eat 200 more calories since I burned them).
         var totalCaloriesBurned = 0.0
+        // How many calories were burned during exercise.
+        var totalExerciseCalories = 0.0
+        // How many calories were burned using a tracking device.
         var totalCaloriesBurnedViaTracker = 0.0
+        // How many minutes were exercised in total.
         var minutesExercised = 0.0
+        // How many steps were taken.
         var stepsTaken = 0.0
 
         do {
@@ -136,8 +145,8 @@ import FMDB
                 let timeMinutes = rs.double(forColumn: "Exercise_Time_Minutes")
                 let caloriesPerHour = rs.double(forColumn: "CaloriesPerHour")
                 let currentWeight = 0.0
-                totalCaloriesBurned = (caloriesPerHour / 60) * currentWeight * timeMinutes;
-                
+                let burnedCalories = (caloriesPerHour / 60) * currentWeight * timeMinutes;
+
                 // If a health tracking device is used, add those values.
                 // Note, timeMinutes is actually "calories burned" or "steps" when
                 // a tracking device is used.
@@ -152,6 +161,7 @@ import FMDB
                 if (exerciseID == 257 || exerciseID == 267 ||
                     exerciseID == 272 || exerciseID == 275) {
                     totalCaloriesBurnedViaTracker += timeMinutes
+                    totalExerciseCalories += timeMinutes
                     if (currentUser.useCalorieTrackingDevice) {
                         totalCaloriesBurned += timeMinutes
                     }
@@ -164,40 +174,49 @@ import FMDB
                             exerciseID == 276 || exerciseID == 274 {
                     stepsTaken += timeMinutes
                 } else {
-                    totalCaloriesBurned += totalCaloriesBurned
+                    totalCaloriesBurned += burnedCalories
                     minutesExercised += timeMinutes
+                    totalExerciseCalories += burnedCalories
                 }
             }
         } catch let error {
             debugPrint("Error: \(error.localizedDescription)")
-            return (0, 0, 0, 0)
+            return (0, 0, 0, 0, 0)
         }
-        return (minutesExercised, totalCaloriesBurned, totalCaloriesBurnedViaTracker, stepsTaken)
+        return (minutesExercised, totalCaloriesBurned, totalExerciseCalories, totalCaloriesBurnedViaTracker, stepsTaken)
     }
     
     // MARK: - Exercise and Burned Calories
     
-    /// Previously was stored in UserDefaults "minutesExercised" key.
-    @objc public func getMinutesExercisedToday() -> Double {
-        return getExerciseData().minutes
+    /// Gets the number of minutes exercised for the given day.
+    @objc public func getMinutesExercised(date: Date?) -> Double {
+        return getExerciseData(date: date).minutes
     }
 
-    /// Today's values. NOTE: Takes into account the option to use
+    /// Selected day's values that should be included in a log.
+    /// NOTE: Takes into account the option to use
     /// a health tracker, so those tracked calories are already reflected
-    /// in the value. Defaults to zero.
-    @objc public func getCaloriesBurnedToday() -> Double {
-        return getExerciseData().calories
+    /// in the value if necessary. Defaults to zero if no exercise calories
+    /// should be added to daily intake.
+    @objc public func getCaloriesBurnedForLog(date: Date?) -> Double {
+        return getExerciseData(date: date).loggedCalories
     }
 
-    /// Today's values. Defaults to zero. This only includes
-    /// calories from a tracker.
-    @objc public func getCaloriesBurnedTodayViaTracker() -> Double {
-        return getExerciseData().trackerCalories
+    /// Selected day's values. How many calories were burned overall in
+    /// exercise. Includes any trackers.
+    @objc public func getCaloriesBurnedViaExercise(date: Date?) -> Double {
+        return getExerciseData(date: date).exerciseCalories
     }
     
-    /// Today's values. Defaults to zero.
-    @objc public func getStepsTakenToday() -> Double {
-        return getExerciseData().steps
+    /// Selected day's values. Defaults to zero. This only includes
+    /// calories from a tracker.
+    @objc public func getCaloriesBurnedViaTracker(date: Date?) -> Double {
+        return getExerciseData(date: date).trackerCalories
+    }
+    
+    /// Selected day's values. Defaults to zero.
+    @objc public func getStepsTaken(date: Date?) -> Double {
+        return getExerciseData(date: date).steps
     }
     
     // MARK: - Weight and Goals
@@ -358,38 +377,39 @@ import FMDB
         return massFormatter.string(fromValue: getRemainingWeight().doubleValue, unit: unit)
     }
     
-    // MARK: - Current Day's Calories
+    // MARK: - Selected Day's Calories
     
-    @objc public func getTotalCalories() -> NSNumber {
-        return NSNumber(floatLiteral: getCalorieData().totalCalories)
-    }
-    
-    @objc public func getTotalCarbCalories() -> NSNumber {
-        return NSNumber(floatLiteral: getCalorieData().carbCalories)
-    }
-    @objc public func getTotalFatCalories() -> NSNumber {
-        return NSNumber(floatLiteral: getCalorieData().fatCalories)
-    }
-    @objc public func getTotalProteinCalories() -> NSNumber {
-        return NSNumber(floatLiteral: getCalorieData().proteinCalories)
-    }
-    @objc public func getTotalSugarGrams() -> NSNumber {
-        return NSNumber(floatLiteral: getCalorieData().sugarGrams)
-    }
-    @objc public func getTotalSugarCalories() -> NSNumber {
-        return NSNumber(floatLiteral: getCalorieData().sugarCalories)
+    @objc public func getTotalCalories(date: Date?) -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData(date: date).totalCalories)
     }
     
-    /// Gets the total calories remaining, which is "net calories"
-    @objc public func getTotalCaloriesRemaining() -> NSNumber {
+    @objc public func getTotalCarbCalories(date: Date?) -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData(date: date).carbCalories)
+    }
+    @objc public func getTotalFatCalories(date: Date?) -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData(date: date).fatCalories)
+    }
+    @objc public func getTotalProteinCalories(date: Date?) -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData(date: date).proteinCalories)
+    }
+    @objc public func getTotalSugarGrams(date: Date?) -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData(date: date).sugarGrams)
+    }
+    @objc public func getTotalSugarCalories(date: Date?) -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData(date: date).sugarCalories)
+    }
+    
+    /// Gets the total calories remaining, which is "net calories".
+    /// This takes into account if the user opted to include logged calories or not.
+    @objc public func getTotalCaloriesRemaining(date: Date?) -> NSNumber {
         guard let currentUser = currentUser else { return NSNumber(floatLiteral: 0) }
-        let totalCaloriesBurned = getExerciseData().calories
+        let totalCaloriesBurnedViaExercise = getExerciseData(date: date).exerciseCalories
         let bmr = getCurrentBMR().doubleValue
-        let totalCaloriesToday = getTotalCalories().doubleValue
-        
+        let totalCaloriesToday = getTotalCalories(date: date).doubleValue
+
         var caloriesRemainingToday = bmr - totalCaloriesToday
         if currentUser.useBurnedCalories {
-            caloriesRemainingToday = bmr - (totalCaloriesBurned * -1) - totalCaloriesToday
+            caloriesRemainingToday = (bmr + totalCaloriesBurnedViaExercise) - totalCaloriesToday
         }
         
         return NSNumber(floatLiteral: caloriesRemainingToday)

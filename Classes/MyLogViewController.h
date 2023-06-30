@@ -32,19 +32,12 @@
     IBOutlet UIButton *infoBtn;
 
 	int int_foodID;
-	double num_totalCalories;
-    double num_totalCaloriesBurned;
-	int num_BMR;
 	
 	NSDate *date_currentDate;
 	NSNumber *int_mealID;
     
     NSMutableArray *exerciseResults;
     NSMutableArray *foodResults;
-	
-	double Remanig;
-	double calorieslodded;
-	double exerciseloged;
 	
     // Favorite Meals
     NSString *favoriteMealName;
@@ -78,7 +71,6 @@
 	NSMutableArray *selectSectionArray;
 	BOOL isExerciseData;
     
-    //HHT apple watch
     int exerciseLogID;
     MyMovesDataProvider *soapWebService;
 }
@@ -90,7 +82,6 @@
 @property (nonatomic, strong) IBOutlet UIImageView *imgbottomline;
 @property (assign, nonatomic, readonly) NSInteger primaryKey;
 @property (nonatomic, strong) NSDate *date_currentDate;
-@property (nonatomic) int num_BMR;
 
 @property (nonatomic, strong) IBOutlet UILabel *staticRecommendedLbl;
 @property (nonatomic, strong) IBOutlet UILabel *staticRemainingLbl;
@@ -104,23 +95,9 @@
 @property (nonatomic, strong) IBOutlet UILabel *staticProteinLbl;
 @property (nonatomic, strong) IBOutlet UILabel *staticFatLbl;
 
-//HHT apple watch
 @property (nonatomic,retain) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *arrData;
 @property (nonatomic, strong) NSSet *readDataTypes;
 @property (nonatomic, strong) StepData * sd;
-
--(void)getBMR;
-
--(IBAction)shownextDate:(id) sender;
--(IBAction)showprevDate:(id)sender;
--(IBAction)goToSafetyGuidelines:(id) sender;
-
--(void)updateData:(NSDate *)date;
--(void)loadExerciseData:(NSDate *)date;
--(void)updateCalorieTotal;
--(IBAction)saveFavoriteMeal:(id)sender;
--(void)saveFavoriteMealToDatabase:(id)sender;
--(void)reloadData;
 
 @end

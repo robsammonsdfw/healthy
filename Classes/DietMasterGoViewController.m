@@ -214,7 +214,7 @@
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     self.hidesBottomBarWhenPushed = true;
     
-    int stepsTaken = (int)[[DayDataProvider sharedInstance] getStepsTakenToday];
+    int stepsTaken = (int)[[DayDataProvider sharedInstance] getStepsTakenWithDate:nil];
     self.lblStepsCount.text = [NSString stringWithFormat:@"%i", stepsTaken];
     
     [self.sendMsgBtnOutlet addSubview:self.numberBadge];
@@ -653,9 +653,9 @@
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
 
-    double totalCalories = [dayProvider getTotalCalories].doubleValue;
-    double sugarGrams = [dayProvider getTotalSugarGrams].doubleValue;
-    double sugarCalories = [dayProvider getTotalSugarCalories].doubleValue;
+    double totalCalories = [dayProvider getTotalCaloriesWithDate:nil].doubleValue;
+    double sugarGrams = [dayProvider getTotalSugarGramsWithDate:nil].doubleValue;
+    double sugarCalories = [dayProvider getTotalSugarCaloriesWithDate:nil].doubleValue;
 
     NSString *sugarStr = [NSString stringWithFormat:@"%.1f", sugarGrams];
     self.lblSugar.text = [NSString stringWithFormat:@"%@g",sugarStr];
@@ -688,9 +688,9 @@
 - (void)updateCalorieTotal {
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-    double totalCalories = [dayProvider getTotalCalories].doubleValue;
-    double caloriesRemaining = [dayProvider getTotalCaloriesRemaining].doubleValue;
-    double exerciseCalories = [dayProvider getCaloriesBurnedToday];
+    double totalCalories = [dayProvider getTotalCaloriesWithDate:nil].doubleValue;
+    double caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:nil].doubleValue;
+    double exerciseCalories = [dayProvider getCaloriesBurnedViaExerciseWithDate:nil];
     int userBMR = dayProvider.getCurrentBMR.intValue;
     
     if (caloriesRemaining < 0) {
@@ -712,9 +712,9 @@
     self.lblBurned.text = [NSString stringWithFormat:@"%.0f", exerciseCalories];
     self.lblNetCalories.text = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
     
-    double fatCalories = [dayProvider getTotalFatCalories].doubleValue;
-    double proteinCalories = [dayProvider getTotalProteinCalories].doubleValue;
-    double carbCalories = [dayProvider getTotalCarbCalories].doubleValue;
+    double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
+    double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
+    double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
     double totalPercentage = fatCalories + proteinCalories + carbCalories;
     
     CGFloat carbRatioActual = carbCalories / 4;

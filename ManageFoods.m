@@ -720,11 +720,11 @@ CGPoint svos;
         }
         
         ScannedFoodis = NO;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     }
 }
 
--(void)updateFood:(id)sender {
-    
+- (void)updateFood:(id)sender {
     for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++) {
         UITextField *textField = (UITextField*)[self.view viewWithTag:i];
         
@@ -862,6 +862,7 @@ CGPoint svos;
         if (!self.saveToLog) {
             [self loadData];
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     }
 }
 
@@ -1077,7 +1078,7 @@ CGPoint svos;
 
 #pragma mark ACTIONSHEET METHODS
 
--(IBAction)showActionSheet:(id)sender {
+- (IBAction)showActionSheet:(id)sender {
     [self.view endEditing:YES];
     UIImageView *imageView = (UIImageView *)[self.view viewWithTag:5566];
     if (imageView != nil) {

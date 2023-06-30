@@ -31,14 +31,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27">
-                    <rect key="frame" x="0.0" y="199" width="320" height="65"/>
+                    <rect key="frame" x="0.0" y="277" width="320" height="65"/>
                     <color key="backgroundColor" systemColor="systemBlueColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="4uv-VK-ebY"/>
                     </constraints>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black_box" translatesAutoresizingMaskIntoConstraints="NO" id="28" userLabel="HeaderImageView">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="28" userLabel="HeaderImageView">
                     <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="XQq-wh-jXy"/>
                     </constraints>
@@ -75,10 +76,10 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </label>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IhG-mN-1FX" userLabel="TextEntryField">
-                    <rect key="frame" x="20" y="107" width="280" height="42"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IhG-mN-1FX" userLabel="TextEntryField">
+                    <rect key="frame" x="50" y="183" width="220" height="44"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="42" id="Fvi-MU-2uE"/>
+                        <constraint firstAttribute="height" constant="44" id="Fvi-MU-2uE"/>
                     </constraints>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="28"/>
@@ -137,8 +138,8 @@
                 <constraint firstItem="GcJ-IZ-5YU" firstAttribute="centerX" secondItem="4" secondAttribute="centerX" id="HFn-kI-Smw"/>
                 <constraint firstItem="27" firstAttribute="leading" secondItem="4" secondAttribute="leading" id="Kfz-EB-SJi"/>
                 <constraint firstItem="14" firstAttribute="bottom" secondItem="VBz-z1-4O9" secondAttribute="bottom" id="Mcm-0E-MCO"/>
-                <constraint firstItem="IhG-mN-1FX" firstAttribute="leading" secondItem="VBz-z1-4O9" secondAttribute="leading" constant="20" id="NyA-87-BAT"/>
-                <constraint firstItem="IhG-mN-1FX" firstAttribute="bottom" secondItem="27" secondAttribute="top" constant="-50" id="Pdk-mc-1A7"/>
+                <constraint firstItem="IhG-mN-1FX" firstAttribute="leading" secondItem="VBz-z1-4O9" secondAttribute="leading" constant="50" id="NyA-87-BAT"/>
+                <constraint firstItem="IhG-mN-1FX" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="27" secondAttribute="top" constant="-50" id="Pdk-mc-1A7"/>
                 <constraint firstItem="19" firstAttribute="top" secondItem="27" secondAttribute="top" constant="8" id="RdQ-ba-g61"/>
                 <constraint firstItem="11" firstAttribute="leading" secondItem="4" secondAttribute="leading" constant="15" id="SNs-Lt-5cr"/>
                 <constraint firstItem="GcJ-IZ-5YU" firstAttribute="leading" secondItem="4" secondAttribute="leading" constant="10" id="T6y-kE-1FQ"/>
@@ -149,8 +150,8 @@
                 <constraint firstItem="20" firstAttribute="leading" secondItem="4" secondAttribute="leading" id="a6A-3V-zzQ"/>
                 <constraint firstItem="25" firstAttribute="leading" secondItem="28" secondAttribute="leading" constant="10" id="bOW-VL-af1"/>
                 <constraint firstItem="27" firstAttribute="trailing" secondItem="4" secondAttribute="trailing" id="cC1-fB-iOc"/>
-                <constraint firstItem="IhG-mN-1FX" firstAttribute="top" relation="lessThanOrEqual" secondItem="11" secondAttribute="bottom" id="dWw-Ek-w61"/>
-                <constraint firstItem="IhG-mN-1FX" firstAttribute="trailing" secondItem="VBz-z1-4O9" secondAttribute="trailing" constant="-20" id="eiy-o5-awl"/>
+                <constraint firstItem="IhG-mN-1FX" firstAttribute="top" secondItem="11" secondAttribute="bottom" constant="50" id="dWw-Ek-w61"/>
+                <constraint firstItem="IhG-mN-1FX" firstAttribute="trailing" secondItem="VBz-z1-4O9" secondAttribute="trailing" constant="-50" id="eiy-o5-awl"/>
                 <constraint firstItem="19" firstAttribute="leading" secondItem="4" secondAttribute="leading" id="fOm-uQ-N4s"/>
                 <constraint firstItem="GcJ-IZ-5YU" firstAttribute="bottom" secondItem="VBz-z1-4O9" secondAttribute="bottom" constant="-100" id="h8w-vM-LMh"/>
                 <constraint firstItem="28" firstAttribute="top" secondItem="VBz-z1-4O9" secondAttribute="top" id="hZ7-rr-KDn"/>
@@ -164,7 +165,6 @@
         </view>
     </objects>
     <resources>
-        <image name="black_box" width="320" height="30"/>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

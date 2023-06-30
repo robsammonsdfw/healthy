@@ -234,7 +234,6 @@
     
     [pickerColumn3Array removeAllObjects];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     lblText.text = [self.foodDict valueForKey:@"Name"];
     
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
@@ -257,7 +256,7 @@
     [self.navigationController.navigationBar setTranslucent:NO];
 }
 
--(void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     // Due to how pickers load, need to load data after a moment.
     [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
@@ -285,7 +284,7 @@
     }
 }
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -806,6 +805,7 @@
         }
         [db commit];
         [DMActivityIndicator showCompletedIndicator];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
         [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 
     } else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
@@ -834,7 +834,6 @@
 
 - (IBAction)delLog:(id)sender {
     [self deleteFromWSLog];
-    [self deleteFromLog];
 }
 
 - (void)deleteFromLog {
@@ -855,6 +854,7 @@
     
     [DMActivityIndicator hideActivityIndicator];
     [DMActivityIndicator showCompletedIndicator];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -882,11 +882,15 @@
                                 [NSNumber numberWithInt:foodID], @"FoodID",
                                 nil];
     [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
         if (error) {
             DMLog(@"Error DeleteFavoriteFood: %@", error.localizedDescription);
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
         }
+        [DMActivityIndicator showCompletedIndicator];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     }];
-    [DMActivityIndicator showCompletedIndicator];
 }
 
 - (void)saveToFavorites {
@@ -932,6 +936,7 @@
     [db commit];
     
     num_isFavorite = 1;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     [DMActivityIndicator showCompletedIndicator];
 }
 
@@ -952,16 +957,16 @@
     [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
         if (error) {
             [DMActivityIndicator hideActivityIndicator];
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
             return;
         }
-        [DMActivityIndicator hideActivityIndicator];
         [self deleteFromLog];
     }];
 }
 
 #pragma mark CUSTOM SUPERSCRIPT NSSTRING METHOD
 
--(NSString *)superScriptOf:(NSString *)inputNumber {
+- (NSString *)superScriptOf:(NSString *)inputNumber {
     NSString *outp=@"";
     for (int i =0; i<[inputNumber length]; i++) {
         unichar chara=[inputNumber characterAtIndex:i] ;
@@ -1003,7 +1008,7 @@
     return outp;
 }
 
--(NSString *)subScriptOf:(NSString *)inputNumber {
+- (NSString *)subScriptOf:(NSString *)inputNumber {
     NSString *outp=@"";
     for (int i =0; i<[inputNumber length]; i++) {
         unichar chara=[inputNumber characterAtIndex:i] ;
@@ -1059,7 +1064,7 @@
 
 #pragma mark Safari
 
--(IBAction)goToSafetyGuidelines:(id)sender {
+- (IBAction)goToSafetyGuidelines:(id)sender {
     SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://advancedwebservicegroup.com/AWSGDocuments/GuidelinesAndSafety.html"]];
     [self presentViewController:sfvc animated:YES completion:nil];
 }

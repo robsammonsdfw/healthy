@@ -139,6 +139,7 @@
         [db commit];
         
         [DMActivityIndicator showCompletedIndicator];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
         [self.navigationController popViewControllerAnimated:YES];
 	}	
 }

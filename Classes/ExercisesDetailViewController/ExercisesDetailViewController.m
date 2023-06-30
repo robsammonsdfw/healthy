@@ -108,8 +108,12 @@
     self.tfCalories.placeholder = @"0";
     self.lblCaloriesBurnedTitle.textColor = PrimaryFontColor;
     self.caloriesBurnedLabel.textColor = PrimaryFontColor;
-    self.tfCalories.textColor = PrimaryFontColor;
+    self.tfCalories.textColor = [UIColor blackColor];
     self.exerciseNameLabel.textAlignment = NSTextAlignmentCenter;
+    
+    self.tfCalories.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    self.tfCalories.layer.borderWidth = 1.0f;
+    self.tfCalories.layer.cornerRadius = 8;
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
@@ -653,6 +657,7 @@
         [db commit];
         
         [DMActivityIndicator showCompletedIndicator];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -679,6 +684,7 @@
     [db commit];
     
     [DMActivityIndicator showCompletedIndicator];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
