@@ -11,6 +11,7 @@
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
 #import "ExercisesDetailViewController.h"
+#import "DMDetailTableViewCell.h"
 
 @interface ExercisesViewController() <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -50,7 +51,8 @@ static NSString *CellIdentifier = @"Cell";
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    self.tableView.estimatedRowHeight = 48;
+    [self.tableView registerClass:[DMDetailTableViewCell class] forCellReuseIdentifier:CellIdentifier];
     [self.view addSubview:self.tableView];
     
     // Constrain.
@@ -194,19 +196,19 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 46;
+    return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *results = [self.searchResults copy];
 
-    UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    DMDetailTableViewCell *cell = (DMDetailTableViewCell *)[myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 
     // Show empty cell if needed.
     if ([results count] == 0) {
         [cell textLabel].adjustsFontSizeToFitWidth = YES;
         cell.textLabel.textColor = [UIColor lightGrayColor];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
+        cell.textLabel.font = [UIFont systemFontOfSize:17.0];
         cell.detailTextLabel.text = @"";
         [[cell textLabel] setText:@"No results found..."];
         cell.selectionStyle =  UITableViewCellSelectionStyleNone;
@@ -216,16 +218,19 @@ static NSString *CellIdentifier = @"Cell";
         return cell;
     }
     
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[results objectAtIndex:indexPath.row]];
-    
+    NSDictionary *dict = [results objectAtIndex:indexPath.row];
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
     double totalCaloriesBurned = [[dict valueForKey:@"CaloriesPerHour"] floatValue] * [dayProvider getCurrentWeight].floatValue;
     
     cell.textLabel.text = [dict valueForKey:@"ActivityName"];
     cell.textLabel.textColor = [UIColor blackColor];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Calories Burned Per Hour: %.2f",totalCaloriesBurned];
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:15.0];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
+    if (totalCaloriesBurned != 0) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"Calories Burned Per Hour: %.2f",totalCaloriesBurned];
+    } else {
+        cell.detailTextLabel.text = @"";
+    }
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:15.0];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle =  UITableViewCellSelectionStyleGray;
     [cell textLabel].adjustsFontSizeToFitWidth = NO;

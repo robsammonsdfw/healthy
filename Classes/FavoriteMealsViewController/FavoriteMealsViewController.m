@@ -10,6 +10,9 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "DietmasterEngine.h"
+#import "DMDetailTableViewCell.h"
+
+static NSString *CellIdentifier = @"CellIdentifier";
 
 @implementation FavoriteMealsViewController
 
@@ -32,6 +35,8 @@
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationItem setTitle:@"Favorite Meals"];
     rowToSaveToLog = -1;
+    self.tableView.estimatedRowHeight = 46;
+    [self.tableView registerClass:[DMDetailTableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -40,14 +45,9 @@
     [self loadSearchData:nil];
 }
 
-#pragma mark DATA METHODS
--(void)loadSearchData:(NSString *)searchTerm {
-    if (searchResults) {
-        [searchResults removeAllObjects];
-    }
-    
+- (void)loadSearchData:(NSString *)searchTerm {
+    [searchResults removeAllObjects];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
         
@@ -133,10 +133,6 @@
                 NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
                 [dateFormat setTimeZone:systemTimeZone];
                 NSString *date_Today = [dateFormat stringFromDate:dietmasterEngine.dateSelected];
-//        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
-        
-//        NSString *date_Today = [dateFormat stringFromDate:[NSDate date]];
-        
 
         NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
         DMLog(@"mealIDQuery for DetailView is %@", mealIDQuery);
@@ -176,16 +172,8 @@
         
         [db beginTransaction];
         
-//        NSDate* sourceDate1 = dietmasterEngine.dateSelected;
-//        NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-//        [dateFormatter1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        NSTimeZone* systemTimeZone1 = [NSTimeZone systemTimeZone];
-//        [dateFormatter1 setTimeZone:systemTimeZone1];
-//        NSString *date_string1 = [dateFormatter1 stringFromDate:sourceDate1];
-        
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         NSTimeZone* systemTimeZone1 = [NSTimeZone systemTimeZone];
         [dateFormatter setTimeZone:systemTimeZone1];
         NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
@@ -198,7 +186,6 @@
         
         NSDate* sourceDate = [NSDate date];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
         NSString *date_string1 = [dateFormatter stringFromDate:sourceDate];
         
         insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
@@ -215,9 +202,8 @@
         [db commit];
     }
     
-    
     [DMActivityIndicator showCompletedIndicator];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 }
 
 -(void)deleteFromFavorites {
@@ -332,91 +318,15 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([searchResults count] == 0) {
-        return 46;
-    }
-    
-    if ([searchResults count] > 0) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:indexPath.row]];
-        
-        NSString *cellText = [dict valueForKey:@"Favorite_Meal_Name"];
-        
-        NSMutableString *foodItemsString = [NSMutableString stringWithString:@""];
-        
-        for (NSDictionary *dict2 in [dict valueForKey:@"Food_Items_Array"]) {
-            
-            NSString *nameString = [dict2 valueForKey:@"Name"];
-            NSRange range = [nameString rangeOfString:@"\\s*$" options:NSRegularExpressionSearch];
-            [nameString stringByReplacingCharactersInRange:range withString:@""];
-            
-            if ([nameString length] > 30) {
-                
-                NSRange stringRange = {0, MIN([nameString length], 30)};
-                
-                stringRange = [nameString rangeOfComposedCharacterSequencesForRange:stringRange];
-                
-                NSString *shortNameString = [nameString substringWithRange:stringRange];
-                
-                nameString = [NSString stringWithFormat:@"%@...",shortNameString];
-                
-            }
-            double servings = [[dict2 valueForKey:@"Servings"] floatValue];
-            if (servings == 0) {
-                servings = 1.0;
-            }
-            [foodItemsString appendFormat:@"%.1f - %@ \n",servings, nameString];
-            
-        }
-        
-        
-        NSString *cellDetailText = foodItemsString;
-        
-        CGSize constraintSize = CGSizeMake(self.tableView.frame.size.width - 20.0, CGFLOAT_MAX);
-//        CGSize labelSize = [cellText sizeWithFont:[UIFont systemFontOfSize:15.0] constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-//        CGSize detailSize = [cellDetailText sizeWithFont:[UIFont systemFontOfSize:13.0] constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-        
-        NSStringDrawingOptions options = NSStringDrawingTruncatesLastVisibleLine |
-                                         NSStringDrawingUsesLineFragmentOrigin;
-
-        NSDictionary *attr = @{NSFontAttributeName: [UIFont systemFontOfSize:13.0]};
-        CGRect detailSize = [cellDetailText boundingRectWithSize:constraintSize
-                                                  options:options
-                                               attributes:attr
-                                                  context:nil];
-        
-        NSDictionary *attr1 = @{NSFontAttributeName: [UIFont systemFontOfSize:15.0]};
-        CGRect labelSize = [cellText boundingRectWithSize:constraintSize
-                                                  options:options
-                                               attributes:attr1
-                                                  context:nil];
-        CGFloat result;
-        result = MAX(46.0, labelSize.size.height + detailSize.size.height + 15.0);
-//        result = MAX(46.0, labelSize.height + detailSize.height + 15.0);
-
-        return result;
-    }
-    
-    return 46;
+    return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    
+    DMDetailTableViewCell *cell = (DMDetailTableViewCell *)[myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+
     if ([searchResults count] == 0) {
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        [cell textLabel].adjustsFontSizeToFitWidth = YES;
         cell.textLabel.textColor = [UIColor lightGrayColor];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
+        cell.textLabel.font = [UIFont systemFontOfSize:16.0];
         cell.detailTextLabel.text = @"";
         [[cell textLabel] setText:@"No results found..."];
         cell.selectionStyle =  UITableViewCellSelectionStyleNone;
@@ -424,68 +334,54 @@
         cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         cell.userInteractionEnabled = NO;
         cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.numberOfLines = 0;
         cell.accessoryView = nil;
+        return cell;
     }
     
-    if ([searchResults count] > 0) {
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    NSDictionary *dict = [searchResults objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = [[dict valueForKey:@"Favorite_Meal_Name"] capitalizedString];
+    cell.textLabel.textColor = [UIColor blackColor];
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0];
+    cell.selectionStyle =  UITableViewCellSelectionStyleGray;
+    cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.detailTextLabel.numberOfLines = 0;
+    cell.textLabel.numberOfLines = 0;
+    cell.userInteractionEnabled = YES;
+    cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+    
+    NSMutableString *foodItemsString = [NSMutableString stringWithString:@""];
+    
+    for (NSDictionary *dict2 in [dict valueForKey:@"Food_Items_Array"]) {
+        
+        NSString *nameString = [dict2 valueForKey:@"Name"];
+        NSRange range = [nameString rangeOfString:@"\\s*$" options:NSRegularExpressionSearch];
+        [nameString stringByReplacingCharactersInRange:range withString:@""];
+        double servings = [[dict2 valueForKey:@"Servings"] floatValue];
+        if (servings == 0) {
+            servings = 1.0;
         }
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:indexPath.row]];
-        
-        cell.textLabel.text = [dict valueForKey:@"Favorite_Meal_Name"];
-        cell.textLabel.textColor = [UIColor blackColor];
-        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
-        cell.selectionStyle =  UITableViewCellSelectionStyleGray;
-        [cell textLabel].adjustsFontSizeToFitWidth = NO;
-        cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        cell.detailTextLabel.numberOfLines = 0;
-        cell.userInteractionEnabled = YES;
-        cell.textLabel.highlightedTextColor = [UIColor darkGrayColor];
-        
-        NSMutableString *foodItemsString = [NSMutableString stringWithString:@""];
-        
-        for (NSDictionary *dict2 in [dict valueForKey:@"Food_Items_Array"]) {
-            
-            NSString *nameString = [dict2 valueForKey:@"Name"];
-            NSRange range = [nameString rangeOfString:@"\\s*$" options:NSRegularExpressionSearch];
-            [nameString stringByReplacingCharactersInRange:range withString:@""];
-            
-            if ([nameString length] > 30) {
-                NSRange stringRange = {0, MIN([nameString length], 30)};
-                stringRange = [nameString rangeOfComposedCharacterSequencesForRange:stringRange];
-                NSString *shortNameString = [nameString substringWithRange:stringRange];
-                nameString = [NSString stringWithFormat:@"%@...",shortNameString];
-            }
-            
-            double servings = [[dict2 valueForKey:@"Servings"] floatValue];
-            
-            if (servings == 0) {
-                servings = 1.0;
-            }
-            [foodItemsString appendFormat:@"%.1f - %@ \n",servings, nameString];
-        }
-        
-        cell.detailTextLabel.text = foodItemsString;
-        UIImage *image = [UIImage imageNamed:@"05-plus.png"];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        CGRect frame = CGRectMake(0.0, 0.0, 13, 13);
-        button.frame = frame;
-        [button setBackgroundImage:image forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
-        button.backgroundColor = [UIColor clearColor];
-        cell.accessoryView = button;
-        
-        
+        [foodItemsString appendFormat:@"%.1f Servings: %@ \n",servings, nameString];
     }
+    
+    cell.detailTextLabel.text = foodItemsString;
+    
+    UIImage *image = [UIImage imageNamed:@"05-plus.png"];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    CGRect frame = CGRectMake(0.0, 0.0, 16, 16);
+    button.frame = frame;
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
+    button.backgroundColor = [UIColor clearColor];
+    cell.accessoryView = button;
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    rowToSaveToLog = [indexPath row];
+    rowToSaveToLog = (int)[indexPath row];
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self confirmAddToLog];
 }
