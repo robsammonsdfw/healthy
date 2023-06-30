@@ -270,8 +270,8 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-    view.backgroundColor = UIColorFromHex(0xbebebe);
-    
+    view.backgroundColor = UIColorFromHex(0xF3F3F3);
+
     DMMealPlanDataProvider *dataProvider = [[DMMealPlanDataProvider alloc] init];
     if (mealPlanArray.count != 0 ) {
         NSNumber *totalCalories = [dataProvider getCaloriesForMealCodes: [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section]];
@@ -391,7 +391,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
                 if(![[tempDict valueForKey:@"MealNote"] isEqualToString:@""]) {
                     if (indexPath.row == 0) {
                         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                        cell.backgroundColor = UIColorFromHex(0xbebebe);
+                        cell.backgroundColor = UIColorFromHex(0xF3F3F3);
                         cell.lblMealNote.font = [UIFont boldSystemFontOfSize:15.0];
                         cell.accessoryType = UITableViewCellAccessoryNone;
                         cell.lblMealNote.numberOfLines = 0;
