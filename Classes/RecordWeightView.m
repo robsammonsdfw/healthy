@@ -109,40 +109,43 @@
 
 - (IBAction)recordWeight:(id)sender {
 	NSNumber *newWeight = [NSNumber numberWithDouble:[self.txtfieldWeight.text doubleValue]];
-    
 	if (newWeight.intValue <= 0) {
         [DMGUtilities showAlertWithTitle:@"Input Error" message:@"Please enter a valid weight." inViewController:nil];
-	} else {
-        NSString *strBodyfat = @"0";
-        NSString *strEntryType = [NSString stringWithFormat:@"%d", WEIGHT_ENTRY];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-        if (![db open]) {
-            DMLog(@"Could not open db.");
-        }
+        return;
+	}
+    
+    NSString *strBodyfat = @"0";
+    NSString *strEntryType = [NSString stringWithFormat:@"%li", DMWeightLogEntryTypeWeight];
+    
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    if (![db open]) {
+        DMLog(@"Could not open db.");
+    }
 
-        [db beginTransaction];
-        
-        NSString *strQuery = [NSString stringWithFormat:@"SELECT entry_type, bodyfat FROM weightlog where logtime =\"%@\"", self.date_Today];
-        
-        FMResultSet *rs = [db executeQuery:strQuery];
-        while ([rs next]) {
-            strBodyfat = [NSString stringWithFormat:@"%f", [rs doubleForColumn:@"bodyfat"]];
-            strEntryType = [NSString stringWithFormat:@"%d", [rs intForColumn:@"entry_type"]];
+    [db beginTransaction];
+    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO weightlog "
+                           "(weight, logtime, deleted, entry_type, bodyfat) VALUES "
+                           "(%@,'%@', 1, %@, %@)",
+                           newWeight, self.date_Today, strEntryType, strBodyfat];
+    [db executeUpdate:insertSQL];
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [db commit];
+    
+    __weak typeof(self) weakSelf = self;
+    [dietmasterEngine saveWeightLogWithCompletionBlock:^(BOOL completed, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
         }
-
-        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO weightlog (weight,logtime, deleted, entry_type, bodyfat) VALUES (%f,'%@', 1, %@, %@)", [newWeight doubleValue], self.date_Today, strEntryType, strBodyfat];
-        [db executeUpdate:insertSQL];
-        if ([db hadError]) {
-            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        }
-        [db commit];
-        
-        [dietmasterEngine saveWeightLogWithCompletionBlock:nil];
         [DMActivityIndicator showCompletedIndicator];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [self.navigationController popViewControllerAnimated:YES];
-	}	
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }];
+
 }
 
 @end
