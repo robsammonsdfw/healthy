@@ -140,6 +140,7 @@
             [DMActivityIndicator showActivityIndicator];
             DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
             [provider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+                [DMActivityIndicator hideActivityIndicator];
                 if (error) {
                     [DMGUtilities showAlertWithTitle:@"Error!" message:error.localizedDescription inViewController:nil];
                     return;
