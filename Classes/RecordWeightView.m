@@ -138,6 +138,7 @@
         }
         [db commit];
         
+        [dietmasterEngine saveWeightLogWithCompletionBlock:nil];
         [DMActivityIndicator showCompletedIndicator];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
         [self.navigationController popViewControllerAnimated:YES];

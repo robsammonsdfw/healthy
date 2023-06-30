@@ -540,7 +540,8 @@
 }
 
 #pragma mark SAVE EDIT DB METHODS
--(void)saveToLog:(id)sender {
+
+- (void)saveToLog:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
@@ -572,7 +573,7 @@
         minutesExercised = minutesExercised + (hoursExercised * 60);
     }
     
-    if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
+    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         [db beginTransaction];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -580,10 +581,10 @@
         
         NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
         [keydateformatter setDateFormat:@"yyyyMMdd"];
-
+        
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [keydateformatter setTimeZone:[NSTimeZone systemTimeZone]];
-
+        
         NSString *logTimeString = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
         NSString *keyDate = [keydateformatter stringFromDate:dietmasterEngine.dateSelected];
         
@@ -626,19 +627,13 @@
         
         [db executeUpdate:insertQuery];
         
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
-        self.exerciseLogID = [db lastInsertRowId];
-        
-        [DMActivityIndicator showCompletedIndicator];
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        
-    }
-    else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
+        self.exerciseLogID = (int)[db lastInsertRowId];
+    } else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
         self.exerciseLogID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Log_ID"] intValue];
         
         [db beginTransaction];
@@ -656,10 +651,12 @@
         }
         [db commit];
         
-        [DMActivityIndicator showCompletedIndicator];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [self.navigationController popViewControllerAnimated:YES];
     }
+
+    [dietmasterEngine saveExerciseLogsWithCompletionBlock:nil];
+    [DMActivityIndicator showCompletedIndicator];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction) delLog:(id) sender {

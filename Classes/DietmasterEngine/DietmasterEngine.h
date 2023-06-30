@@ -69,6 +69,8 @@ extern NSString * const UpdatingMessageNotification;
 
 /// Performs a complete upload of all user data.
 - (void)uploadDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock;
+- (void)saveWeightLogWithCompletionBlock:(completionBlockWithError)completionBlock;
+- (void)saveExerciseLogsWithCompletionBlock:(completionBlockWithError)completionBlock;
 
 - (void)fetchFoodForKey:(int)foodKey;
 - (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(completionBlockWithError)completionBlock;
