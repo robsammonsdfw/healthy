@@ -93,7 +93,8 @@
         }
     }
     
-    _goalWeightLbl.text = [[NSUserDefaults standardUserDefaults] stringForKey:@"GoalWeight"];
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    _goalWeightLbl.text = [currentUser weightGoalLocalizedString];
     
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         switch ((int)[[UIScreen mainScreen] nativeBounds].size.height) {
@@ -174,7 +175,7 @@
 
 #pragma mark BUTTON ACTIONS
 
--(IBAction)changeGraphTime:(id) sender {
+- (IBAction)changeGraphTime:(id) sender {
     _graphHostingView.hidden = YES;
     
     int selectedIndex = segmentedControl.selectedSegmentIndex;

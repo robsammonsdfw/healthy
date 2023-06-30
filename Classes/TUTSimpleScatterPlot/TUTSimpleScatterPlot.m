@@ -7,7 +7,7 @@
 @synthesize graphData = _graphData;
 @synthesize graphDataValues = _graphDataValues;
 
--(id)initWithHostingView:(CPTGraphHostingView *)hostingView andData:(NSMutableArray *)data {
+- (id)initWithHostingView:(CPTGraphHostingView *)hostingView andData:(NSMutableArray *)data {
     self = [super init];
     
     if ( self != nil ) {
@@ -257,20 +257,9 @@
     return [NSNumber numberWithFloat:0];
 }
 
--(float)getGoalWeightFromDB {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-        DMLog(@"Could not open db.");
-    }
-    
-    float num_weightGoal;
-    FMResultSet *rs = [db executeQuery:@"SELECT weight_goal FROM user"];
-    while ([rs next]) {
-        num_weightGoal  = [rs intForColumn:@"weight_goal"];
-    }
-    [rs close];
-    return num_weightGoal;
+- (float)getGoalWeightFromDB {
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    return currentUser.weightGoal.floatValue;
 }
 
 #pragma mark ==== CPTScatterPlot delegate method ====
@@ -303,8 +292,7 @@
     [self.graph.plotAreaFrame.plotArea addAnnotation:symbolTextAnnotation];
 }
 
-#pragma mark CUSTOM METHODS
--(void)reloadGraphView {
+- (void)reloadGraphView {
     if (symbolTextAnnotation) {
         [self.graph.plotAreaFrame.plotArea removeAnnotation:symbolTextAnnotation];
         symbolTextAnnotation = nil;
