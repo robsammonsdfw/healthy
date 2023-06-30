@@ -7,26 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
 
 @interface FavoriteMealsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-	    
-	IBOutlet UITableView *tableView;
-	
     NSString *searchType;
-    NSMutableArray *searchResults;
-    int rowToSaveToLog;
-    
 }
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSString *searchType;
-
--(void)loadSearchData:(NSString *)searchTerm;
--(void)checkButtonTapped:(id)sender event:(id)event;
--(void)confirmAddToLog;
--(void)saveToLog:(id) sender;
--(void)confirmRemoveFromLog;
--(void)deleteFromFavorites;
 
 @end

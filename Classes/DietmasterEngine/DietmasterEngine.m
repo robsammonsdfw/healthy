@@ -138,12 +138,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     [db beginTransaction];
-    for (int i=0; i < [responseArray count]; i++) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
-        
+    for (NSDictionary *dict in responseArray) {
         foodIDSaved = [[dict valueForKey:@"FoodID"] intValue];
-        
         NSString *queryString = [NSString stringWithFormat:@"UPDATE Food "
                                  " SET FoodKey = %i WHERE FoodKey = %i ",
                                  ValidInt([dict valueForKey:@"FoodID"]),
@@ -367,7 +363,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     if (![db open]) {
     }
     
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM weightlog"];
+    NSString *query = [NSString stringWithFormat:@"SELECT * FROM weightlog WHERE entry_type = %li", DMWeightLogEntryTypeWeight];
     FMResultSet *rs = [db executeQuery:query];
     
     NSMutableArray *tempDataArray = [NSMutableArray array];
@@ -648,10 +644,9 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     });
 }
 
-- (void)fetchFoodForKey:(int)foodKey {
+- (void)saveFoodForKey:(NSNumber *)foodKey {
     FMDatabase* db = [self database];
     if (![db open]) {
-        
     }
     
     NSString *query = [NSString stringWithFormat:@"SELECT f.FoodKey,f.FoodID,f.Name,f.CategoryID, f.Calories, f.Fat, "
@@ -661,7 +656,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                        "f.B12,f.Fol,f.C, f.Calc, "
                        "f.Iron,f.Mag,f.Zn,f.ServingSize, "
                        "f.Transfat, f.E, f.D,f.Folate, "
-                       "f.Frequency, f.UserID, f.CompanyID, f.ScannedFood, fm.MeasureID, f.UPCA, f.FactualID FROM Food f INNER JOIN FoodMeasure fm ON fm.FoodID = f.FoodKey WHERE f.FoodKey = %i", foodKey];
+                       "f.Frequency, f.UserID, f.CompanyID, f.ScannedFood, fm.MeasureID, f.UPCA, f.FactualID FROM Food f INNER JOIN FoodMeasure fm ON fm.FoodID = f.FoodKey WHERE f.FoodKey = %@", foodKey];
     
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {

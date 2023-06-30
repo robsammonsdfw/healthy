@@ -14,17 +14,18 @@
 
 static NSString *CellIdentifier = @"CellIdentifier";
 
-@implementation FavoriteMealsViewController
+@interface FavoriteMealsViewController()
+@property (nonatomic, strong) NSMutableArray *searchResults;
+@end
 
-@synthesize tableView;
-@synthesize searchType;
+@implementation FavoriteMealsViewController
 
 #pragma mark VIEW LIFECYCLE
 
 - (instancetype)init {
     self = [super initWithNibName:@"FavoriteMealsViewController" bundle:nil];
     if (self) {
-        searchResults = [[NSMutableArray alloc] init];
+        _searchResults = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -34,7 +35,6 @@ static NSString *CellIdentifier = @"CellIdentifier";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationItem setTitle:@"Favorite Meals"];
-    rowToSaveToLog = -1;
     self.tableView.estimatedRowHeight = 46;
     [self.tableView registerClass:[DMDetailTableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
@@ -46,11 +46,10 @@ static NSString *CellIdentifier = @"CellIdentifier";
 }
 
 - (void)loadSearchData:(NSString *)searchTerm {
-    [searchResults removeAllObjects];
+    [self.searchResults removeAllObjects];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
     
     NSString *query = @"SELECT Favorite_Meal.Favorite_MealID, Favorite_Meal.Favorite_Meal_Name FROM Favorite_Meal";
@@ -99,7 +98,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
         [dict setValue:favFoodItemsArray forKey:@"Food_Items_Array"];
         
         if ([favFoodItemsArray count] > 0) {
-            [searchResults addObject:dict];
+            [self.searchResults addObject:dict];
         }
     }
     
@@ -109,22 +108,18 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [self.tableView reloadData];
 }
 
--(void) saveToLog:(id) sender {
+- (void)saveFavoriteMealToLog:(NSDictionary *)mealDict {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:rowToSaveToLog]];
-    
-    for (NSDictionary *dict2 in [dict valueForKey:@"Food_Items_Array"]) {
         
-        int num_measureID	= [[dict2 valueForKey:@"MeasureID"] intValue];
-        double servingAmount = [[dict2 valueForKey:@"Servings"] floatValue];
+    for (NSDictionary *dict in [mealDict valueForKey:@"Food_Items_Array"]) {
         
-        int foodID = [[dict2 valueForKey:@"FoodKey"] intValue];
+        int num_measureID	= [[dict valueForKey:@"MeasureID"] intValue];
+        double servingAmount = [[dict valueForKey:@"Servings"] floatValue];
+        
+        int foodID = [[dict valueForKey:@"FoodKey"] intValue];
         int mealCode = [dietmasterEngine.selectedMealID intValue];
       
         int mealIDValue = 0;
@@ -138,7 +133,6 @@ static NSString *CellIdentifier = @"CellIdentifier";
         DMLog(@"mealIDQuery for DetailView is %@", mealIDQuery);
         FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
         while ([rsMealID next]) {
-            
             mealIDValue = [rsMealID intForColumn:@"MealID"];
         }
         [rsMealID close];
@@ -206,39 +200,25 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 }
 
--(void)deleteFromFavorites {
+- (void)deleteMealFromFavorites:(NSDictionary *)mealDict {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
+    }
         
-    }
-    
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[searchResults objectAtIndex:rowToSaveToLog]];
-    
-    int favoriteMealID	= [[dict valueForKey:@"Favorite_MealID"] intValue];
+    int favoriteMealID	= [[mealDict valueForKey:@"Favorite_MealID"] intValue];
     
     [db beginTransaction];
-    
     NSString *deleteSQL = [NSString stringWithFormat: @"DELETE FROM Favorite_Meal WHERE Favorite_MealID = %i",favoriteMealID];
-    
     [db executeUpdate:deleteSQL];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
-    
-    [db commit];
-    
-    [db beginTransaction];
-    
     deleteSQL = [NSString stringWithFormat: @"DELETE FROM Favorite_Meal_Items WHERE Favorite_Meal_ID = %i",favoriteMealID];
-    
     [db executeUpdate:deleteSQL];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
-    
     [db commit];
     
     [self loadSearchData:nil];
@@ -246,39 +226,37 @@ static NSString *CellIdentifier = @"CellIdentifier";
 
 #pragma mark ACTION SHEET METHODS
 
--(void)confirmAddToLog {
+- (void)confirmAddMealToLog:(NSDictionary *)mealDict {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
     [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self saveToLog:nil];
+        [self saveFavoriteMealToLog:mealDict];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Remove Favorite Meal"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self confirmRemoveFromLog];
+        [self confirmRemoveMealFromLog:mealDict];
     }]];
 
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        rowToSaveToLog = -1;
         [alert dismissViewControllerAnimated:YES completion:nil];
     }]];
 
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(void)confirmRemoveFromLog {
+- (void)confirmRemoveMealFromLog:(NSDictionary *)mealDict {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove from Favorites?"
                                                                    message:@"Are you sure you wish to remove this?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Remove"
                                               style:UIAlertActionStyleDestructive
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self deleteFromFavorites];
+        [self deleteMealFromFavorites:mealDict];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Don't Remove" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        rowToSaveToLog = -1;
         [alert dismissViewControllerAnimated:YES completion:nil];
     }]];
 
@@ -309,12 +287,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([searchResults count] == 0) {
-        return 1;
-    }
-    else {
-        return [searchResults count];
-    }
+    return MAX([self.searchResults count], 1);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -324,7 +297,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
 - (UITableViewCell *)tableView:(UITableView *)myTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     DMDetailTableViewCell *cell = (DMDetailTableViewCell *)[myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 
-    if ([searchResults count] == 0) {
+    if ([self.searchResults count] == 0) {
         cell.textLabel.textColor = [UIColor lightGrayColor];
         cell.textLabel.font = [UIFont systemFontOfSize:16.0];
         cell.detailTextLabel.text = @"";
@@ -339,7 +312,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
         return cell;
     }
     
-    NSDictionary *dict = [searchResults objectAtIndex:indexPath.row];
+    NSDictionary *dict = [self.searchResults objectAtIndex:indexPath.row];
     
     cell.textLabel.text = [[dict valueForKey:@"Favorite_Meal_Name"] capitalizedString];
     cell.textLabel.textColor = [UIColor blackColor];
@@ -381,9 +354,12 @@ static NSString *CellIdentifier = @"CellIdentifier";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    rowToSaveToLog = (int)[indexPath row];
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    [self confirmAddToLog];
+    if (!self.searchResults.count) {
+        return;
+    }
+    NSDictionary *dict = [self.searchResults objectAtIndex:indexPath.row];
+    [self confirmAddMealToLog:dict];
 }
 
 @end
