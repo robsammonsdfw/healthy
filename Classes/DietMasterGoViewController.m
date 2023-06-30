@@ -703,67 +703,62 @@
     self.lblBurned.text = [NSString stringWithFormat:@"%.0f", exerciseCalories];
     self.lblNetCalories.text = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
     
+    // Get total calories consumed.
     double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
     double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
     double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
     double totalPercentage = fatCalories + proteinCalories + carbCalories;
     
-    CGFloat carbRatioActual = carbCalories / 4;
-    CGFloat proteinRatioActual = proteinCalories / 4;
-    CGFloat fatRatioActual = fatCalories / 9;
+    // Get grams consumed.
+    CGFloat carbGramsActual = carbCalories / 4;
+    CGFloat proteinGramsActual = proteinCalories / 4;
+    CGFloat fatGramsActual = fatCalories / 9;
 
+    // Percentages.
     CGFloat fatGramActualPrecent = ((fatCalories / totalPercentage) * 100);
     CGFloat proteinGramActualPrecent = ((proteinCalories / totalPercentage) * 100);
     CGFloat carbsGramActualPercent = ((carbCalories / totalPercentage) * 100);
   
-    NSString* c_percentageStr =  [[NSNumber numberWithInt:carbsGramActualPercent] stringValue];
-    NSString* p_percentageStr = [[NSNumber numberWithInt:proteinGramActualPrecent] stringValue];
-    NSString* f_percentageStr = [[NSNumber numberWithInt:fatGramActualPrecent] stringValue];
-    
-    NSString *seperatorStrLeft = @"/";
-    NSString *seperatorStrRight = @"/";
-    NSString *p_Str = [NSString stringWithFormat: @"%@%@%@",seperatorStrLeft,p_percentageStr,seperatorStrRight];
-    
-    if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
+    if (carbsGramActualPercent <= 0 || isnan(carbsGramActualPercent)) {
         carbsGramActualPercent = 0.0;
         self.c_PercentageLbl.text = @"0";
     } else {
-        self.c_PercentageLbl.text = c_percentageStr;
+        self.c_PercentageLbl.text = [@(round(carbsGramActualPercent)) stringValue];
     }
     
-    if (proteinGramActualPrecent < 0 || isnan(proteinGramActualPrecent)) {
+    if (proteinGramActualPrecent <= 0 || isnan(proteinGramActualPrecent)) {
         proteinGramActualPrecent = 0.0;
         self.p_PercentageLbl.text = @"/0/";
     } else {
-        self.p_PercentageLbl.text = p_Str;
+        self.p_PercentageLbl.text = [NSString stringWithFormat: @"/%@/", @(round(proteinGramActualPrecent))];
     }
 
-    if (fatGramActualPrecent < 0 || isnan(fatGramActualPrecent)) {
+    if (fatGramActualPrecent <= 0 || isnan(fatGramActualPrecent)) {
         fatGramActualPrecent = 0.0;
         self.f_PercentageLbl.text = @"0";
     } else {
-        self.f_PercentageLbl.text = f_percentageStr;
+        self.f_PercentageLbl.text = [@(round(fatGramActualPrecent)) stringValue];
     }
         
     [self.cpf_Values removeAllObjects];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:fatGramActualPrecent]];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:proteinGramActualPrecent]];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:carbsGramActualPercent]];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:100 - (carbsGramActualPercent + proteinGramActualPrecent + fatGramActualPrecent)]];
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:round(fatGramActualPrecent)]];
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:round(proteinGramActualPrecent)]];
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:round(carbsGramActualPercent)]];
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:100 - round(carbsGramActualPercent + proteinGramActualPrecent + fatGramActualPrecent)]];
     [self.cpf_Pie reloadData];
 
-    self.actualCarbLabel.text = [NSString stringWithFormat:@"%.1f",carbRatioActual];
-    self.actualProtLabel.text = [NSString stringWithFormat:@"%.1f",proteinRatioActual];
-    self.actualFatLabel.text = [NSString stringWithFormat:@"%.1f",fatRatioActual];
+    self.actualCarbLabel.text = [NSString stringWithFormat:@"%.1f",carbGramsActual];
+    self.actualProtLabel.text = [NSString stringWithFormat:@"%.1f",proteinGramsActual];
+    self.actualFatLabel.text = [NSString stringWithFormat:@"%.1f",fatGramsActual];
     
     CGFloat bmrValue = [dayProvider getCurrentBMR].floatValue;
-    CGFloat carbRatioRecommended = (currentUser.carbRatio.floatValue / 100) * bmrValue / 4;
-    CGFloat proteinRatioRecommended = (currentUser.proteinRatio.floatValue / 100) * bmrValue / 4;
-    CGFloat fatRatioRecommended = (currentUser.fatRatio.floatValue / 100) * bmrValue / 9;
+    CGFloat carbGramsRecommended = (currentUser.carbRatio.floatValue / 100) * bmrValue / 4;
+    CGFloat proteinGramsRecommended = (currentUser.proteinRatio.floatValue / 100) * bmrValue / 4;
+    CGFloat fatGramsRecommended = (currentUser.fatRatio.floatValue / 100) * bmrValue / 9;
     
-    self.actualCarbGramsLabel.text = [NSString stringWithFormat:@"%.1f", carbRatioRecommended];
-    self.actualProteinGramsLabel.text = [NSString stringWithFormat:@"%.1f", proteinRatioRecommended];
-    self.actualFatGramsLabel.text = [NSString stringWithFormat:@"%.1f", fatRatioRecommended];
+    self.actualCarbGramsLabel.text = [NSString stringWithFormat:@"%.1f", carbGramsRecommended];
+    self.actualProteinGramsLabel.text = [NSString stringWithFormat:@"%.1f", proteinGramsRecommended];
+    self.actualFatGramsLabel.text = [NSString stringWithFormat:@"%.1f", fatGramsRecommended];
 }
 
 @end

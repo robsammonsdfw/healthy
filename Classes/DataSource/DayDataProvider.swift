@@ -314,27 +314,27 @@ import FMDB
     /// Example: If my ratio of carbs is 10, 10% of my BMR 1000 calories should be carbs.
     @objc public func getRecommendedCarbRatio() -> NSNumber {
         guard let currentUser = currentUser else {
-            return NSNumber(integerLiteral: 0)
+            return NSNumber(floatLiteral: 0)
         }
-        let bmrValue = getCurrentBMI().intValue
-        let carbRatioRecommended = (currentUser.carbRatio.intValue / 100) * bmrValue / 4;
-        return NSNumber(integerLiteral: carbRatioRecommended)
+        let bmrValue = getCurrentBMI().doubleValue
+        let carbRatioRecommended = (currentUser.carbRatio.doubleValue / 100.0) * bmrValue / 4.0;
+        return NSNumber(floatLiteral: round(carbRatioRecommended))
     }
     @objc public func getRecommendedProteinRatio() -> NSNumber {
         guard let currentUser = currentUser else {
-            return NSNumber(integerLiteral: 0)
+            return NSNumber(floatLiteral: 0)
         }
-        let bmrValue = getCurrentBMI().intValue
-        let proteinRatioRecommended = (currentUser.proteinRatio.intValue / 100) * bmrValue / 4;
-        return NSNumber(integerLiteral: proteinRatioRecommended)
+        let bmrValue = getCurrentBMI().doubleValue
+        let proteinRatioRecommended = (currentUser.proteinRatio.doubleValue / 100.0) * bmrValue / 4.0;
+        return NSNumber(floatLiteral: round(proteinRatioRecommended))
     }
     @objc public func getRecommendedFatRatio() -> NSNumber {
         guard let currentUser = currentUser else {
-            return NSNumber(integerLiteral: 0)
+            return NSNumber(floatLiteral: 0)
         }
-        let bmrValue = getCurrentBMI().intValue
-        let fatRatioRecommended = (currentUser.fatRatio.intValue / 100) * bmrValue / 9;
-        return NSNumber(integerLiteral: fatRatioRecommended)
+        let bmrValue = getCurrentBMI().doubleValue
+        let fatRatioRecommended = (currentUser.fatRatio.doubleValue / 100.0) * bmrValue / 9.0;
+        return NSNumber(floatLiteral: round(fatRatioRecommended))
     }
 
     // MARK: - Localized Output

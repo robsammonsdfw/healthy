@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Fetches foods.
 - (void)syncFoods:(NSString *)dateString pageNumber:(NSInteger)pageNumber fetchedItems:(NSArray *)fetchedItems withCompletionBlock:(completionBlockWithError)completionBlock;
-/// Saves a food for the given key to the server.
+/// Gets a food for the given key from the server.
 - (void)fetchFoodForKey:(NSNumber *)foodKey;
 - (void)getMissingFoodsIfNeededForFoods:(NSArray *)foodsArray;
 /// Gets a food from the local database.

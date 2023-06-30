@@ -22,12 +22,12 @@ static NSNumber * __attribute__((unused)) ValidNSNumber(id object) {
 
 /// Returns int or zero if nil.
 static int __attribute__((unused)) ValidInt(NSNumber *number) {
-    return (number && [number isEqual:[NSNull null]]) ? number.intValue : 0;
+    return (number && ![number isEqual:[NSNull null]]) ? number.intValue : 0;
 }
 
 /// Returns double or zero if nil.
 static double __attribute__((unused)) ValidDouble(NSNumber *number) {
-    return (number && [number isEqual:[NSNull null]]) ? number.doubleValue : 0.0;
+    return (number && ![number isEqual:[NSNull null]]) ? number.doubleValue : 0.0;
 }
 
 /// Returns the UIColor from Hex.

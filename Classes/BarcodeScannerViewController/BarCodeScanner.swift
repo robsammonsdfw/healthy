@@ -9,26 +9,28 @@ import AVFoundation
 import Vision
 import UIKit
 
+/// Handles barcode scanning of UPCs.
 class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
-    var captureSession: AVCaptureSession!
-    var backCamera: AVCaptureDevice?
-    var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
-    var captureOutput: AVCapturePhotoOutput?
-    var shutterButton: UIButton!
-    var closeButton: UIButton!
+    private var captureSession: AVCaptureSession!
+    private var backCamera: AVCaptureDevice?
+    private var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
+    private var captureOutput: AVCapturePhotoOutput?
+    private var shutterButton: UIButton!
+    private var closeButton: UIButton!
 
-    lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
+    /// Closure that will be called when a user successfully scanns a UPC.
+    @objc public var didScanUPCCodeCallback: ((_ upcInfo: [String : Any]) -> Void)?
+
+    private lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
         return VNDetectBarcodesRequest(completionHandler: { (request, error) in
             guard error == nil else {
                 self.showAlert(withTitle: "Barcode Error", message: error!.localizedDescription)
                 return
             }
-
             self.processClassification(for: request)
         })
     }()
    
-    
     // MARK: - View controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +60,7 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
     }
 
     // MARK: - Camera
+    
     private func checkPermissions() {
         let mediaType = AVMediaType.video
         let status = AVCaptureDevice.authorizationStatus(for: mediaType)
@@ -86,9 +89,7 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
         captureSession.sessionPreset = .hd1280x720
 
         // Set up the video device.
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera],
-                                                                      mediaType: AVMediaType.video,
-                                                                      position: .back)
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
         let devices = deviceDiscoverySession.devices
         for device in devices {
             if device.position == AVCaptureDevice.Position.back {
@@ -125,10 +126,12 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
         self.view.layer.insertSublayer(cameraPreviewLayer!, at: 0)
 
         // Start the capture session.
-        captureSession.startRunning()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.startRunning()
+        }
     }
 
-    @objc func captureImage() {
+    @objc private func captureImage() {
         let settings = AVCapturePhotoSettings()
         captureOutput?.capturePhoto(with: settings, delegate: self)
     }
@@ -156,6 +159,7 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
     }
 
     // MARK: - User interface
+    
     private func displayNotAuthorizedUI() {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width * 0.8, height: 20))
         label.textAlignment = .center
@@ -205,7 +209,6 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
         shutterButton.contentVerticalAlignment = .center
         shutterButton.contentHorizontalAlignment = .center
 
-        shutterButton.showsTouchWhenHighlighted = true
         shutterButton.addTarget(self, action: #selector(captureImage), for: .touchUpInside)
     }
 
@@ -217,7 +220,6 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
 
         closeButton.layer.cornerRadius = width / 2
         closeButton.backgroundColor = UIColor.init(displayP3Red: 1, green: 1, blue: 1, alpha: 0.8)
-        closeButton.showsTouchWhenHighlighted = true
         closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         let image = UIImage(named: "cross-out")?.withRenderingMode(.alwaysTemplate)
         closeButton.setImage(image, for: .normal)
@@ -239,12 +241,12 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
             return
         }
         //print(payload)
-        //showAlert(withTitle: "Payload", message: payload)
         let upcDict = ["UPC" : payload ]
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "BarCodeScanned"), object: upcDict)
+        didScanUPCCodeCallback?(upcDict)
     }
 
     // MARK: - Vision
+    
     func processClassification(for request: VNRequest) {
         DispatchQueue.main.async {
             if let bestResult = request.results?.first as? VNBarcodeObservation,
@@ -258,6 +260,7 @@ class BarCodeScanner: UIViewController, AVCapturePhotoCaptureDelegate {
     }
 
     // MARK: - Helper functions
+    
     @objc private func openSettings() {
         let settingsURL = URL(string: UIApplication.openSettingsURLString)!
         UIApplication.shared.open(settingsURL) { _ in

@@ -131,7 +131,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 #pragma mark DOWN SYNC METHODS
 
 /// Processes food for both old and new APIs, so this is it's own method.
-- (void)saveFoodFinished:(NSArray *)responseArray {
+- (void)saveFoodFinished:(NSArray *)responseArray forFood:(DMFood *)food {
     NSInteger foodIDSaved = 0;
     FMDatabase* db = [self database];
     if (![db open]) {
@@ -141,16 +141,14 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     for (NSDictionary *dict in responseArray) {
         foodIDSaved = [[dict valueForKey:@"FoodID"] intValue];
         NSString *queryString = [NSString stringWithFormat:@"UPDATE Food "
-                                 " SET FoodKey = %i WHERE FoodKey = %i ",
+                                 " SET FoodPK = %i, FoodKey = %i, FoodID = %i WHERE FoodKey = %i ",
+                                 ValidInt([dict valueForKey:@"FoodID"]),
+                                 ValidInt([dict valueForKey:@"FoodID"]),
                                  ValidInt([dict valueForKey:@"FoodID"]),
                                  ValidInt([dict valueForKey:@"GoID"])
                                  ];
         
         [db executeUpdate:queryString];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            [self saveUPCFood:[[dict valueForKey:@"FoodID"] intValue]];
-        });
     }
     
     for (NSDictionary *dict in responseArray) {
@@ -166,8 +164,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FoodWasSavedToCloud" object:nil userInfo:@{@"FoodID" : @(foodIDSaved), @"success" : @(YES)}];
 }
 
 - (void)saveMealsWithCompletionBlock:(completionBlockWithError)completionBlock {
@@ -440,7 +436,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 return;
             }
             NSArray *results = (NSArray *)object;
-             [self saveFoodFinished:results];
+             [self saveFoodFinished:results forFood:food];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
@@ -644,7 +640,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     });
 }
 
-- (void)saveFoodForKey:(NSNumber *)foodKey {
+- (void)saveFoodForKey:(NSNumber *)foodKey withCompletionBlock:(completionBlockWithObject)completionBlock {
     FMDatabase* db = [self database];
     if (![db open]) {
     }
@@ -668,7 +664,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               @"SaveFoodNew", @"RequestType",
                               food.foodKey, @"FoodKey",
                               food.foodId, @"FoodID",
-                              food.foodId, @"GoID",
+                              food.foodKey, @"GoID",
                               food.name, @"Name",
                               food.categoryId, @"CategoryID",
                               food.calories, @"Calories",
@@ -708,11 +704,20 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               nil];
         [DMDataFetcher fetchDataWithRequestParams:dict completion:^(NSObject *object, NSError *error) {
             if (error) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"FoodWasSavedToCloud" object:nil userInfo:@{@"success" : @(NO)}];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(nil, error);
+                    }
+                });
                 return;
             }
             NSArray *responseArray = (NSArray *)object;
-            [self saveFoodFinished:responseArray];
+            [self saveFoodFinished:responseArray forFood:food];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(object, nil);
+                }
+            });
         }];
     }
     [rs close];
@@ -874,49 +879,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 #pragma mark Food Plan Methods
-
-- (NSDictionary *)getFoodDetails:(NSDictionary *)foodDict {
-    int selectedFoodID = [[foodDict valueForKey:@"FoodID"] intValue];
-    int tempMeasureID = [[foodDict valueForKey:@"MeasureID"] intValue];
-    
-    FMDatabase* db = [self database];
-    if (![db open]) {
-    }
-    
-    NSString *query = [NSString stringWithFormat: @"SELECT Food.CategoryID, Food.ServingSize,Food.FoodID,Food.Name,Food.Calories,Food.Fat,Food.Carbohydrates,Food.Protein,Food.FoodKey,Food.UserID,Food.FoodPK, FoodMeasure.GramWeight, Measure.MeasureID, Measure.Description, Food.RecipeID, Food.CategoryID, Food.FoodURL FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE Food.FoodKey = %i AND Measure.MeasureID = %i LIMIT 1", selectedFoodID, tempMeasureID];
-    
-    FMResultSet *rs = [db executeQuery:query];
-    
-    NSDictionary *dict = nil;
-    
-    while ([rs next]) {
-        
-        dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                [NSNumber numberWithInt:[rs intForColumn:@"FoodID"]], @"FoodID",
-                [NSNumber numberWithInt:[rs intForColumn:@"FoodKey"]], @"FoodKey",
-                [NSNumber numberWithInt:[rs intForColumn:@"CategoryID"]], @"CategoryID",
-                [rs stringForColumn:@"Name"], @"Name",
-                [NSNumber numberWithInt:[rs intForColumn:@"Calories"]], @"Calories",
-                [NSNumber numberWithDouble:[rs doubleForColumn:@"Fat"]], @"Fat",
-                [NSNumber numberWithDouble:[rs doubleForColumn:@"Carbohydrates"]], @"Carbohydrates",
-                [NSNumber numberWithDouble:[rs doubleForColumn:@"Protein"]], @"Protein",
-                [NSNumber numberWithDouble:[rs doubleForColumn:@"ServingSize"]], @"ServingSize",
-                [NSNumber numberWithDouble:[rs doubleForColumn:@"GramWeight"]], @"GramWeight",
-                [NSNumber numberWithInt:[rs intForColumn:@"MeasureID"]], @"MeasureID",
-                [rs stringForColumn:@"Description"], @"Description",
-                [NSNumber numberWithInt:[rs intForColumn:@"RecipeID"]], @"RecipeID",
-                [NSNumber numberWithInt:[rs intForColumn:@"CategoryID"]], @"CategoryID",
-                [rs stringForColumn:@"FoodURL"], @"FoodURL",
-                nil];
-    }
-    
-    [rs close];
-    
-    if (dict == nil) {
-        dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"Invalid Food, Contact Support", @"Name",nil];
-    }
-    return dict;
-}
 
 - (BOOL)insertMealPlanToLog:(NSDictionary *)dict {
     FMDatabase* db = [self database];
@@ -1177,80 +1139,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
     
     return fullPath;
-}
-
-#pragma mark SAVE FOOD W UPC METHODS
-
-- (void)saveUPCFood:(int)foodKey {
-    FMDatabase* db = [self database];
-    if (![db open]) {
-        
-    }
-    
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT f.FoodKey,f.FoodID,f.Name,f.CategoryID, f.Calories, f.Fat, "
-                       "f.Sodium, f.Carbohydrates, f.SaturatedFat, f.Cholesterol,f.Protein, "
-                       "f.Fiber,f.Sugars, f.Pot,f.A, "
-                       "f.Thi, f.Rib,f.Nia, f.B6, "
-                       "f.B12,f.Fol,f.C, f.Calc, "
-                       "f.Iron,f.Mag,f.Zn,f.ServingSize, "
-                       "f.Transfat, f.E, f.D,f.Folate, "
-                       "f.Frequency, f.UserID, f.CompanyID, fm.MeasureID, f.UPCA, f.FactualID FROM Food f INNER JOIN FoodMeasure fm ON fm.FoodID = f.FoodKey WHERE f.FoodKey = %i", foodKey];
-    
-    FMResultSet *rs = [db executeQuery:query];
-    int resultCounts = 0;
-    
-    while ([rs next]) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              [NSNumber numberWithInt:[rs intForColumn:@"FoodKey"]], @"FoodKey",
-                              [NSNumber numberWithInt:[rs intForColumn:@"FoodID"]], @"FoodID",
-                              [rs stringForColumn:@"Name"], @"Name",
-                              [NSNumber numberWithInt:[rs intForColumn:@"CategoryID"]], @"CategoryID",
-                              [NSNumber numberWithInt:[rs intForColumn:@"Calories"]], @"Calories",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Fat"]], @"Fat",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Sodium"]], @"Sodium",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Carbohydrates"]], @"Carbohydrates",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"SaturatedFat"]], @"SaturatedFat",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Cholesterol"]], @"Cholesterol",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Protein"]], @"Protein",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Fiber"]], @"Fiber",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Sugars"]], @"Sugars",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Pot"]], @"Pot",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"A"]], @"A",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Thi"]], @"Thi",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Rib"]], @"Rib",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Nia"]], @"Nia",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"B6"]], @"B6",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"B12"]], @"B12",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Fol"]], @"Fol",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"C"]], @"C",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Calc"]], @"Calc",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Iron"]], @"Iron",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Mag"]], @"Mag",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Zn"]], @"Zn",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"ServingSize"]], @"ServingSize",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Transfat"]], @"Transfat",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"E"]], @"E",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"D"]], @"D",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Folate"]], @"Folate",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"Frequency"]], @"Frequency",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"UserID"]], @"UserID",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"CompanyID"]], @"CompanyID",
-                              [rs stringForColumn:@"UPCA"], @"UPCA",
-                              [rs stringForColumn:@"FactualID"], @"FactualID",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"MeasureID"]], @"MeasureID", nil];
-        
-        if (![[rs stringForColumn:@"UPCA"] isEqualToString:@"empty"]) {
-            NSDictionary *scannerDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                         dict, @"scannerDict",
-                                         @"SAVE_FOOD", @"action",
-                                         nil];
-        }
-        resultCounts++;
-    }
-    
-    [rs close];
 }
 
 @end

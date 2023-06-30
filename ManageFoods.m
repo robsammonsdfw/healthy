@@ -34,14 +34,6 @@ CGPoint svos;
     if (self) {
         _foodDict = [foodDict mutableCopy];
         [self loadFood];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(barcodeWasScanned:)
-                                                     name:@"BarCodeScanned"
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(foodWasSavedToCloud:)
-                                                     name:@"FoodWasSavedToCloud" object:nil];
     }
     return self;
 }
@@ -88,7 +80,6 @@ CGPoint svos;
     
     isSaved = YES;
     _savedFoodID = 0;
-    self.saveToLog = NO;
     
     [self.navigationController.navigationBar setTranslucent:NO];
 }
@@ -512,7 +503,7 @@ CGPoint svos;
     dietmasterEngine.selectedCategoryID = intCategoryID;
 }
 
-- (void)recordFood:(id) sender {
+- (void)recordFoodAndSaveToLog:(BOOL)saveToLog {
     for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++) {
         UITextField *textField = (UITextField*)[self.view viewWithTag:i];
         if ([textField isFirstResponder]) {
@@ -686,20 +677,13 @@ CGPoint svos;
           LastUpdated];
         
         [db beginTransaction];
-        
         [db executeUpdate:insertSQL];
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
-        [db commit];
         
         NSString *insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, 100)", minFoodID,[intMeasureID intValue]];
-        
-        [db beginTransaction];
-        
         [db executeUpdate:insertFMSQL];
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
@@ -711,20 +695,13 @@ CGPoint svos;
         _savedFoodID = minFoodID;
         
         // Save to log AND cloud.
-        [dietmasterEngine saveFoodForKey:@(minFoodID)];
-        
-        if (self.saveToLog) {
-            [DMActivityIndicator showActivityIndicator];
-        } else {
-            [self clearEnteredData];
-        }
-        
+        [self saveFoodWithKey:@(minFoodID) saveToLog:saveToLog];
+
         ScannedFoodis = NO;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     }
 }
 
-- (void)updateFood:(id)sender {
+- (void)updateFoodAndSaveToLog:(BOOL)saveToLog {
     for (int i=1; i<= NUMBER_OF_TEXTFIELDS; i++) {
         UITextField *textField = (UITextField*)[self.view viewWithTag:i];
         
@@ -831,11 +808,9 @@ CGPoint svos;
         
         [db beginTransaction];
         [db executeUpdate:updateSQL];
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
-        [db commit];
         
         NSString *updateFMSQL = [NSString stringWithFormat: @"UPDATE FoodMeasure SET "
                                  "MeasureID = %i, "
@@ -843,106 +818,138 @@ CGPoint svos;
                                  "WHERE FoodID = %i ",
                                  [intMeasureID intValue], 100, minFoodID];
         
-        [db beginTransaction];
-        
         [db executeUpdate:updateFMSQL];
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
         
-        [DMActivityIndicator showCompletedIndicator];
         isSaved = YES;
-        
         _savedFoodID = minFoodID;
         
-        [dietmasterEngine saveFoodForKey:@(minFoodID)];
-
-        if (!self.saveToLog) {
-            [self loadData];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [self saveFoodWithKey:@(minFoodID) saveToLog:saveToLog];
     }
+}
+
+/// Saves the Food for the key provided to the server.
+/// NOTE: The key is likely temporary (-100 value), so don't rely on it for future operations.
+- (void)saveFoodWithKey:(NSNumber *)key saveToLog:(BOOL)saveToLog {
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    [dietmasterEngine saveFoodForKey:key withCompletionBlock:^(NSObject *object, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
+            dietmasterEngine.taskMode = @"View";
+            [self loadData];
+            return;
+        }
+        [DMActivityIndicator showCompletedIndicator];
+        NSArray *results = (NSArray *)object;
+        NSDictionary *foodValues = [results firstObject];
+        if (saveToLog) {
+            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
+            if (dietmasterEngine.isMealPlanItem) {
+                dietmasterEngine.taskMode = @"AddMealPlanItem";
+            } else {
+                dietmasterEngine.taskMode = @"Save";
+            }
+            DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+            DMFood *food = [provider getFoodForFoodKey:foodValues[@"FoodID"]];
+            DetailViewController *dvController = [[DetailViewController alloc] initWithFood:[food dictionaryRepresentation]];
+            [self.navigationController pushViewController:dvController animated:YES];
+            [self clearEnteredData];
+        }
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    }];
 }
 
 #pragma mark BARCODE SCANNER METHODS
 
 - (IBAction)loadBarcodeScanner:(id)sender {
     self.barcodeScanner = [[BarCodeScanner alloc] init];
+    __weak typeof(self) weakSelf = self;
+    self.barcodeScanner.didScanUPCCodeCallback = ^(NSDictionary *object) {
+        [weakSelf barcodeWasScanned:object];
+    };
     self.barcodeScanner.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:self.barcodeScanner animated:YES completion:Nil];
 }
 
-- (void)barcodeWasScanned:(NSNotification *)notification {
-    [self.barcodeScanner dismissViewControllerAnimated:YES completion:nil];
-    
-    NSDictionary *upcDict2 = (NSDictionary *)[notification object];
-    
+- (void)barcodeWasScanned:(NSDictionary *)upcDict {
     [DMActivityIndicator showActivityIndicator];
-    NSString *strURL = [NSString stringWithFormat:@"https://trackapi.nutritionix.com/v2/search/item?upc=%@",[upcDict2 valueForKey:@"UPC"]];
-    
-    [self getApiCall:nil urlStr:strURL response:nil];
-}
-
-- (void)getApiCall:(NSMutableDictionary *)dic urlStr:(NSString *)urlStr response:(NSMutableArray *)response{
-    NSURL * serviceUrl = [NSURL URLWithString:urlStr];
-    DMLog(@"REquest URL >> %@",serviceUrl);
-    
-    //Header
-    NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
-    [serviceRequest setValue:@"7a144547" forHTTPHeaderField:@"x-app-id"];
-    [serviceRequest setValue:@"c02e7975164bf7207601b2712ec56137" forHTTPHeaderField:@"x-app-key"];
-    
-    [serviceRequest setHTTPMethod:@"GET"];
-    
-    NSURLResponse *serviceResponse;
-    NSError *serviceError;
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:serviceRequest returningResponse:&serviceResponse error:&serviceError];
-    
-    if (responseData) {
-        [self parsePostApiData:responseData responseP:response];
-    }
-}
-
-- (void)parsePostApiData:(NSData *)response responseP:(NSMutableArray *)responseP{
-    [DMActivityIndicator hideActivityIndicator];
-
-    id jsonObject = Nil;
-    NSString *charlieSendString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
-    DMLog(@"ResponseString %@",charlieSendString);
-    if (!response) {
-        DMLog(@"No internet connection.");
-    } else{
-        NSError *error = Nil;
-        jsonObject = [NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&error];
-        
-        if ([jsonObject isKindOfClass:[NSArray class]]) {
-            DMLog(@"Probably An Array");
+    [self.barcodeScanner dismissViewControllerAnimated:YES completion:nil];
+    __weak typeof(self) weakSelf = self;
+    [self fetchDataFromNutritionixForUPC:[upcDict valueForKey:@"UPC"] withCompletionBlock:^(NSObject *object, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
+        if (error) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
         }
-        else
-        {
-            DMLog(@"Probably A Dictionary");
-            
-            NSDictionary *jsonDictionary=(NSDictionary *)jsonObject;
-            
-            DMLog(@"jsonDictionary %@",[jsonDictionary description]);
-            
-            //Error handling
-            if ([[jsonDictionary valueForKey:@"message"] isEqualToString:@"resource not found"]) {
-                [self showUPCNotFoundConfirmation];
-            }
-            else {
-                [responseP addObject:jsonDictionary];
-                NSMutableArray *arr = [jsonDictionary valueForKey:@"foods"];
-                
-                if (arr.count > 0){
-                    DMLog(@"%@",[arr objectAtIndex:0]);
-                    [self nutritionixAPISuccess:[arr objectAtIndex:0]];
+        NSDictionary *jsonDict = (NSDictionary *)object;
+        if ([[jsonDict valueForKey:@"message"] isEqualToString:@"resource not found"]) {
+            [weakSelf showUPCNotFoundConfirmation];
+        } else {
+            [DMGUtilities showAlertWithTitle:@"Success" message:@"Nutritional information found! Please confirm values then select Category." inViewController:nil];
+            NSMutableArray *foods = [jsonDict valueForKey:@"foods"];
+            [weakSelf nutritionixAPISuccess:foods.firstObject];
+        }
+    }];
+}
+
+- (void)fetchDataFromNutritionixForUPC:(NSString *)upcCode withCompletionBlock:(completionBlockWithObject)completionBlock {
+    NSString *urlString = [NSString stringWithFormat:@"https://trackapi.nutritionix.com/v2/search/item?upc=%@", upcCode];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url
+                                                           cachePolicy:0
+                                                       timeoutInterval:120];
+    [request setValue:@"7a144547" forHTTPHeaderField:@"x-app-id"];
+    [request setValue:@"c02e7975164bf7207601b2712ec56137" forHTTPHeaderField:@"x-app-key"];
+    [request setHTTPMethod:@"GET"];
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            id results = nil; // Should this be nil or empty?
+            @try {
+                NSError *jsonError = nil;
+                if (data) {
+                    results = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
                 }
+                // Handle error.
+                if (error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completionBlock) {
+                            completionBlock(nil, error);
+                        }
+                    });
+                    return;
+                }
+                if (!data) {
+                    NSError *error = [DMGUtilities errorWithMessage:@"Error: No data returned." code:777];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completionBlock) {
+                            completionBlock(nil, error);
+                        }
+                    });
+                    return;
+                }
+            } @catch (NSException *exception) {
+                DM_LOG(@"Fetch UPC JSON Exception: %@", exception);
+                NSError *error = [DMGUtilities errorWithMessage:exception.reason code:999];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(nil, error);
+                    }
+                });
+                return;
             }
-        }
-    }
+        
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(results, nil);
+                }
+            });
+      }] resume];
 }
 
 - (void)showUPCNotFoundConfirmation {
@@ -969,17 +976,15 @@ CGPoint svos;
 
 #pragma mark - Nutritionix
 
-- (void)nutritionixAPISuccess:(NSMutableDictionary *)dict {
-    DMLog(@"%@",dict);
-    
-    scannerDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+- (void)nutritionixAPISuccess:(NSDictionary *)dict {
+    scannerDict = [dict mutableCopy];
     scanned_factualID = [[NSString alloc] initWithString:[dict valueForKey:@"nix_item_id"]];
     
     NSString *serving_size = [dict valueForKey:@"serving_qty"];
     txtfieldServingSize.text = [NSString stringWithFormat:@"%.2f",[serving_size doubleValue]];
     NSDictionary *dictTemp = [self findMeasureId:[dict valueForKey:@"serving_unit"]];
         
-    if ([dictTemp count] == 0) {
+    if (!dictTemp) {
         intMeasureID = [NSNumber numberWithInt:3];
         self.strMeasureName = @"each";
         [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateNormal];
@@ -987,8 +992,7 @@ CGPoint svos;
         [selectMeasureButton setTitle: self.strMeasureName forState: UIControlStateSelected];
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMeasureID = intMeasureID;
-    }
-    else {
+    } else {
         NSString *measureValue = [dictTemp valueForKey:@"MeasureID"];
         intMeasureID = [NSNumber numberWithInt:[measureValue intValue]];
         self.strMeasureName = [dictTemp valueForKey:@"Description"];
@@ -1049,8 +1053,6 @@ CGPoint svos;
         txtfieldPot.text = [NSString stringWithFormat:@"%.2f",[[dict valueForKey:@"nf_potassium"] doubleValue]];
     }
     
-    [DMGUtilities showAlertWithTitle:@"Success" message:@"Nutritional information found! Please confirm values then select Category." inViewController:nil];
-
     ScannedFoodis=YES;
 }
 
@@ -1060,17 +1062,14 @@ CGPoint svos;
     if (![db open]) {
     }
     
-    NSString *query = [NSString stringWithFormat:@"SELECT MeasureID,Description FROM Measure WHERE Description = '%@'", serving_unit];
-    
-    // Query Database
+    NSString *query = [NSString stringWithFormat:@"SELECT MeasureID, Description FROM Measure WHERE Description = '%@'", serving_unit];
     FMResultSet *rs = [db executeQuery:query];
-    
-    NSDictionary *dict = [[NSDictionary alloc] init];
+    NSDictionary *dict = nil;
     while ([rs next]) {
         dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                [rs stringForColumn:@"Description"], @"Description",
-                [NSNumber numberWithInt:[rs intForColumn:@"MeasureID"]],@"MeasureID",
-                nil];
+                    [rs stringForColumn:@"Description"], @"Description",
+                    [NSNumber numberWithInt:[rs intForColumn:@"MeasureID"]],@"MeasureID",
+                    nil];
     }
     
     return dict;
@@ -1117,12 +1116,10 @@ CGPoint svos;
                 [self alertServingSizeInvalid];
                 return;
             }
-            self.saveToLog = NO;
-            [self updateFood:nil];
+            [self updateFoodAndSaveToLog:NO];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:saveToLogName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            self.saveToLog = YES;
-            [self updateFood:nil];
+            [self updateFoodAndSaveToLog:YES];
         }]];
     }
     else {
@@ -1134,12 +1131,10 @@ CGPoint svos;
                 [self alertServingSizeInvalid];
                 return;
             }
-            self.saveToLog = NO;
-            [self recordFood:nil];
+            [self recordFoodAndSaveToLog:NO];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:saveToLogName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            self.saveToLog = YES;
-            [self recordFood:nil];
+            [self recordFoodAndSaveToLog:YES];
         }]];
     }
     
@@ -1204,36 +1199,6 @@ CGPoint svos;
 #pragma mark Save To Log Methods
 
 - (void)foodWasSavedToCloud:(NSNotification *)notification {
-    [DMActivityIndicator hideActivityIndicator];
-    if (self.saveToLog) {
-        BOOL success = [[[notification userInfo] valueForKey:@"success"] boolValue];
-        NSNumber *foodID = [[notification userInfo] valueForKey:@"FoodID"];
-        
-        if (success) {
-            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-            if (dietmasterEngine.isMealPlanItem) {
-                dietmasterEngine.taskMode = @"AddMealPlanItem";
-            } else {
-                dietmasterEngine.taskMode = @"Save";
-            }
-            
-            NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                          foodID, @"FoodID", intMeasureID, @"MeasureID", nil];
-            NSDictionary *foodDict = [dietmasterEngine getFoodDetails:tempFoodDict];
-            DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
-            [self.navigationController pushViewController:dvController animated:YES];
-            
-            [self clearEnteredData];
-        } else {
-            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-            dietmasterEngine.taskMode = @"View";
-            NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                          @(_savedFoodID), @"FoodID", intMeasureID, @"MeasureID", nil];
-            NSDictionary *foodDict = [dietmasterEngine getFoodDetails:tempFoodDict];
-            [DMGUtilities showAlertWithTitle:@"Error" message:@"There was an error saving to log. Please try again." inViewController:nil];
-            [self loadData];
-        }
-    }
 }
 
 @end

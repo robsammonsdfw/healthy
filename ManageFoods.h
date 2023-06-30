@@ -86,7 +86,6 @@
 @property (nonatomic,retain) NSString *scanned_factualID;
 @property (nonatomic,retain) IBOutlet UIButton *scannerButton;
 @property (nonatomic) NSInteger savedFoodID;
-@property (nonatomic) BOOL saveToLog;
 @property (nonatomic) BOOL hideAddToLog;
 @property (nonatomic) int intTabId;
 

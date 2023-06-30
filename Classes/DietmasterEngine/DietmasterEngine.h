@@ -73,7 +73,7 @@ extern NSString * const UpdatingMessageNotification;
 - (void)saveExerciseLogsWithCompletionBlock:(completionBlockWithError)completionBlock;
 
 /// Saves the food with the key provided to the server.
-- (void)saveFoodForKey:(NSNumber *)foodKey;
+- (void)saveFoodForKey:(NSNumber *)foodKey withCompletionBlock:(completionBlockWithObject)completionBlock;
 - (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(completionBlockWithError)completionBlock;
 
 // Food Plan Methods
