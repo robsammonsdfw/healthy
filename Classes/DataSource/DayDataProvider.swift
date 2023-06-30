@@ -154,7 +154,7 @@ import FMDB
                 // Exercise IDs and their values:
                 // 257 = Override Calories Burned
                 // 267 = Fitbit Calories
-                // 268 = Movband Moves
+                // 268 = Movband Movesf
                 // 272 = Apple Calories
                 // 275 = Garmin Calories
                 // Check if the exercise was a calorie override.
@@ -278,7 +278,7 @@ import FMDB
         let defaultValue = NSNumber(floatLiteral: 0.0)
         guard let database = database, database.open() == true else { return defaultValue }
         
-        let query = "SELECT bodyfat FROM weightlog where logtime in (select max(logtime) from weightlog WHERE deleted = 1)"
+        let query = "SELECT bodyfat FROM weightlog WHERE logtime IN (select max(logtime) FROM weightlog WHERE deleted = 1 AND entry_type = 1)"
         
         var value = 0.0
 
