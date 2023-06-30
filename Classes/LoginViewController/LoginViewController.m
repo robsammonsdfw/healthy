@@ -81,6 +81,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     self.signUpBtn.backgroundColor=PrimaryColor
     self.signUpBtn.layer.cornerRadius=5;
+    self.signUpBtn.hidden = YES;
+    if (self.signUpBtn.hidden) {
+        [self.loginButton.leadingAnchor constraintEqualToAnchor:self.passwordField.leadingAnchor constant:0].active = YES;
+    }
     
     self.imgtop.backgroundColor=PrimaryColor
         
