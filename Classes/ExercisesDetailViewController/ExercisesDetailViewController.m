@@ -694,6 +694,8 @@
 
 -(void)updateCalorieLabel {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    
     int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 267 || exerciseID == 275) {
@@ -725,7 +727,7 @@
         minutesExercised = [[self.pickerComponentTwoArray objectAtIndex:[self.pickerView selectedRowInComponent:1]] intValue];
         minutesExercised = minutesExercised + (hoursExercised * 60);
         
-        double totalCaloriesBurned = (caloriesPerHour / 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
+        double totalCaloriesBurned = (caloriesPerHour / 60) * [dayProvider getCurrentWeight].floatValue * minutesExercised;
         
         self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.2f", totalCaloriesBurned];
     }

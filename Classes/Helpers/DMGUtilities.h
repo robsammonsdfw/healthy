@@ -21,13 +21,13 @@ static NSNumber * __attribute__((unused)) ValidNSNumber(id object) {
 }
 
 /// Returns int or zero if nil.
-static int __attribute__((unused)) ValidInt(NSNumber * number) {
-    return (number && number != [NSNull null]) ? number.intValue : 0;
+static int __attribute__((unused)) ValidInt(NSNumber *number) {
+    return (number && [number isEqual:[NSNull null]]) ? number.intValue : 0;
 }
 
 /// Returns double or zero if nil.
-static double __attribute__((unused)) ValidDouble(NSNumber * number) {
-    return (number && number != [NSNull null]) ? number.doubleValue : 0.0;
+static double __attribute__((unused)) ValidDouble(NSNumber *number) {
+    return (number && [number isEqual:[NSNull null]]) ? number.doubleValue : 0.0;
 }
 
 /// Returns the UIColor from Hex.
@@ -38,6 +38,10 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 
 /// Utilities used across the project.
 @interface DMGUtilities : NSObject
+
+#pragma mark - App Configuration
+
++ (NSString *)configValueForKey:(NSString *)key;
 
 #pragma mark - Sync Helpers
 
@@ -50,6 +54,14 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 ///  and returns the string value. Passing nil will cause the date to be
 ///  -8 days ago for last sync.
 + (void)setLastSyncToDate:(nullable NSDate *)date;
+
+/// Returns the date string for a Food database sync.
+/// If it's never been set before, the value returned is 2015.
+/// If it was set, but an error happened, it'll be 90 days ago.
++ (NSString *)lastFoodSyncDateString;
+
+/// Sets the last Food database sync date.
++ (void)setLastFoodSyncDate:(NSDate *)date;
 
 #pragma mark - Color
 

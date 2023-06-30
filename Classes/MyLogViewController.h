@@ -43,22 +43,9 @@
     NSMutableArray *foodResults;
 	
 	double Remanig;
-	double Recommendded;
 	double calorieslodded;
 	double exerciseloged;
 	
-	double actualCarb;
-	double recCarb;
-	double ansactualCarb;
-	
-	double recprofitn;
-	double actual;
-	double ansis; 
-
-	double recFat;
-	double actualfat;
-	double actans;
-    
     // Favorite Meals
     NSString *favoriteMealName;
     int favoriteMealSectionID;

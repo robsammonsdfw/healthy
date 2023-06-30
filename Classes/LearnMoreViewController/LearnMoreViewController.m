@@ -13,16 +13,13 @@
 
 @synthesize learnMoreTitle, myNavBar;
 
--(id)init {
-    self = [super initWithNibName:@"LearnMoreViewController" bundle:nil];
+- (instancetype)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     return self;
 }
 
--(id)initWithNibName:(NSString *)nibName bundle:(NSBundle *)bundle {
-    return [self init];
-}
+#pragma mark - Actions
 
-#pragma mark - Action Methods
 - (IBAction)myBackAction:(id)sender {
     if ([learnMoreTitle isEqualToString:@"termsofservice"] || [learnMoreTitle isEqualToString:@"privacypolicy"]) {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -44,76 +41,28 @@
         myNavBar.topItem.title = @"Terms of Service";
         myNavBar.hidden = NO;
     }
-    else if ([learnMoreTitle isEqualToString:@"mwlbooklet"]) {
-        myNavBar.topItem.title = @"MWL Booklet";
-        myNavBar.hidden = NO;
-    }
-    else if ([learnMoreTitle isEqualToString:@"hcgbooklet"]) {
-        myNavBar.topItem.title = @"HCG Booklet";
-        myNavBar.hidden = NO;
-    }
 }
 
 - (void)loadWebView {
     NSString* escapedUrlString = [learnMoreTitle stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     if ([learnMoreTitle isEqualToString:@"privacypolicy"] || [learnMoreTitle isEqualToString:@"termsofservice"]) {
-        NSString *path = [[NSBundle mainBundle] bundlePath];
-        NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-        NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
+        NSString *appNameShort = [DMGUtilities configValueForKey:@"app_name_short"];
+        NSString *supportEmail = [DMGUtilities configValueForKey:@"support_email"];
         
         NSString *htmlFile = [[NSBundle mainBundle] pathForResource:escapedUrlString ofType:@"html"];
         NSString* htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSASCIIStringEncoding error:nil];
-        
-        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"#APPNAME#" withString:[appDefaults valueForKey:@"app_name_short"]];
-        
-        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"#SUPPORTEMAIL#" withString:[appDefaults valueForKey:@"support_email"]];
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"#APPNAME#" withString:appNameShort];
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"#SUPPORTEMAIL#" withString:supportEmail];
         
         [_webView loadHTMLString:htmlString baseURL:nil];
     }
-    else if ([learnMoreTitle isEqualToString:@"mwlbooklet"]) {
-        
-//        NSURL *websiteUrl = [NSURL URLWithString:@"http://www.Lifestylestech.com/TampaRejuv/mwl_manual_june_2013_mobile.pdf"];
-//        NSURLRequest *request = [NSURLRequest requestWithURL:websiteUrl];
-//
-//        _webView = [[WKWebView alloc] initWithFrame:self.view.frame];
-//        [_webView loadRequest:request];
-//        _webView.frame = CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
-//        [self.view addSubview:_webView];
-
-        
-        
-        NSURL *websiteUrl = [NSURL URLWithString:@"http://www.Lifestylestech.com/TampaRejuv/mwl_manual_june_2013_mobile.pdf"];
-        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:websiteUrl];
-        [_webView loadRequest:urlRequest];
-    }
-    else if ([learnMoreTitle isEqualToString:@"hcgbooklet"]) {
-        
-//        NSURL *websiteUrl = [NSURL URLWithString:@"http://www.Lifestylestech.com/TampaRejuv/hcg_manual_june_2013_mobile.pdf"];
-//        NSURLRequest *request = [NSURLRequest requestWithURL:websiteUrl];
-//
-//        _webView = [[WKWebView alloc] initWithFrame:self.view.frame];
-//        [_webView loadRequest:request];
-//        _webView.frame = CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
-//        [self.view addSubview:_webView];
-        
-        
-        NSURL *websiteUrl = [NSURL URLWithString:@"http://www.Lifestylestech.com/TampaRejuv/hcg_manual_june_2013_mobile.pdf"];
-        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:websiteUrl];
-        [_webView loadRequest:urlRequest];
-        
-    }
-    
-    activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    activityIndicator.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
-    activityIndicator.center = self.view.center;
-    [self.view addSubview: activityIndicator];
 }
 
--(IBAction)cancelLearnMore:(id)sender {
+- (IBAction)cancelLearnMore:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     if ([learnMoreTitle isEqualToString:@"termsofservice"] || [learnMoreTitle isEqualToString:@"privacypolicy"]) {        

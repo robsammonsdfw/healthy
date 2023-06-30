@@ -231,8 +231,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 - (void)updateAppleWatchData {
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+        if (currentUser.enableAppleHealthSync){
             [self readData];
         }
         else {
@@ -264,8 +265,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSString *calorieCount;
     NSString *remainingCalorieCount;
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    double calRecommended = [dietmasterEngine getBMR];
+    DayDataProvider* dayProvider = [DayDataProvider sharedInstance];
+    double calRecommended = [dayProvider getCurrentBMR].doubleValue;
+    double caloriesRemaining = [dayProvider getTotalCaloriesRemaining].doubleValue;
 
     BOOL okForFavorite = NO;
     int selectedMealID = 0;
@@ -276,27 +278,20 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         if (!isExerciseData) {
             sectionTitle = @"Exercise";
             calorieCount = [NSString stringWithFormat:@"0.0"];
-            remainingCalorieCount=[NSString stringWithFormat:@"%.0f",AppDel.caloriesremaning];
-            if (num_totalCaloriesBurned == 0)
-            {
-                lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[lbl_CaloriesRecommended.text intValue] - totalFoodCal];
-                [[NSUserDefaults standardUserDefaults] setInteger:[lbl_CaloriesRecommended.text intValue] - totalFoodCal forKey:@"remaining"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
+            remainingCalorieCount = [NSString stringWithFormat:@"%.0f",caloriesRemaining];
+            if (num_totalCaloriesBurned == 0) {
+                lbl_CaloriesLogged.text = [NSString stringWithFormat:@"%d",[lbl_CaloriesRecommended.text intValue] - totalFoodCal];
+            } else {
+                remainingCalorieCount = [NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned/2];
+                lbl_CaloriesLogged.text = [NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
             }
-            else
-            {
-                remainingCalorieCount=[NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned/2];
-                lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
-            }
-        }
-        else {
+        } else {
             sectionTitle = @"Exercise";
             calorieCount = [NSString stringWithFormat:@"-%.0f Calories", num_totalCaloriesBurned];
             remainingCalorieCount=[NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned];
             lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
         }
-    }
-    else {
+    } else {
         okForFavorite = YES;
         
         NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:section] objectAtIndex:0]];
@@ -452,6 +447,11 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+
+    double currentUserWeight = [dayProvider getCurrentWeight].doubleValue;
+    
     NSArray *exerciseResultsArray = [exerciseResults copy];
     NSArray *foodResultsArray = [foodResults copy];
 
@@ -463,13 +463,13 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
         if (isExerciseData) {
-            NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
-            int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
-            DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-            NSNumber *caloriesPerHour = [dict valueForKey:@"CaloriesPerHour"];
+            NSDictionary *dict = exerciseResultsArray[indexPath.row];
             
+            int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
+            NSNumber *caloriesPerHour = [dict valueForKey:@"CaloriesPerHour"];
             int minutesExercised = [[dict valueForKey:@"Exercise_Time_Minutes"] intValue];
-            Remanig = (Recommendded - (calorieslodded + minutesExercised));
+            
+            Remanig = ([dayProvider getCurrentBMR].intValue - (calorieslodded + minutesExercised));
             
             double totalCaloriesBurned;
             if (exerciseID == 257 || exerciseID == 267) {
@@ -497,7 +497,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                 calorieText = [NSString stringWithFormat:@"%i Steps",minutesExercised];
             }
             else {
-                totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
+                totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * currentUserWeight * minutesExercised;
                 calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
             }
             foodNameText = [dict valueForKey:@"ActivityName"];
@@ -508,7 +508,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         }
     }
     else {
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+        NSDictionary *dict = foodResultsArray[indexPath.section][indexPath.row];
         NSString *nameString = [dict valueForKey:@"Name"];
         NSRange r = [nameString rangeOfString:nameString];
         foodNameText = nameString;
@@ -610,8 +610,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+        if (currentUser.enableAppleHealthSync){
             [self readData];
         }
         else {
@@ -759,8 +761,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+        if (currentUser.enableAppleHealthSync){
             [self readData];
         }
         else {
@@ -888,107 +892,67 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 #pragma mark DATA METHODS
 
--(void)updateCalorieTotal {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    double caloriesREmaining = ([dietmasterEngine getBMR] - (num_totalCaloriesBurned * -1))- num_totalCalories;
-    AppDel.caloriesremaning = [[NSString stringWithFormat:@"%.0f", caloriesREmaining] doubleValue];
-    
-    NSDictionary *ratioDict = [dietmasterEngine getUserRecommendedRatios];
-    
+- (void)updateCalorieTotal {
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    CGFloat bmrValue = [dayProvider getCurrentBMR].floatValue;
+    double caloriesREmaining = (bmrValue - (num_totalCaloriesBurned * -1))- num_totalCalories;
+        
     CGFloat carbRatioActual = actualCarbCalories / 4;
     CGFloat proteinRatioActual = actualProteinCalories / 4;
     CGFloat fatRatioActual = actualFatCalories / 9;
     
     actualCarbLabel.text = [NSString stringWithFormat:@"%.1fg",carbRatioActual];
-    actualCarb = carbRatioActual;
-    
     actualProtLabel.text = [NSString stringWithFormat:@"%.1fg",proteinRatioActual];
-    
-    actual = proteinRatioActual;
-    
-    ansis = recprofitn - actual;
-    
-    actualProtLabel.text=[NSString stringWithFormat:@"%.1fg",ansis];
-    
     actualFatLabel.text = [NSString stringWithFormat:@"%.1fg",fatRatioActual];
-    actualfat = fatRatioActual;
     
-    CGFloat bmrValue = [dietmasterEngine getBMR];
-    
-    CGFloat carbRatioRecommended = [[ratioDict valueForKey:@"CarbRatio"] doubleValue] * bmrValue / 4;
-    CGFloat proteinRatioRecommended = [[ratioDict valueForKey:@"ProteinRatio"] doubleValue] * bmrValue / 4;
-    CGFloat fatRatioRecommended = [[ratioDict valueForKey:@"FatRatio"] doubleValue] * bmrValue / 9;
+    CGFloat carbRatioRecommended = [dayProvider getRecommendedCarbRatio].floatValue;
+    CGFloat proteinRatioRecommended = [dayProvider getRecommendedProteinRatio].floatValue;
+    CGFloat fatRatioRecommended = [dayProvider getRecommendedFatRatio].floatValue;
     
     recCarbLabel.text = [NSString stringWithFormat:@"%.1fg",carbRatioRecommended];
-    recCarb = carbRatioRecommended;
-    
-    ansactualCarb=recCarb-actualCarb;
-    
-    actualCarbLabel.text = [NSString stringWithFormat:@"%.1fg",ansactualCarb];
-    
     recProtLabel.text = [NSString stringWithFormat:@"%.1fg",proteinRatioRecommended];
-    
-    recprofitn=proteinRatioRecommended;
-    
     recFatLabel.text = [NSString stringWithFormat:@"%.1fg",fatRatioRecommended];
-    recFat=fatRatioRecommended;
     
-    actans =recFat-actualfat;
-    
-    actualFatLabel.text =[NSString stringWithFormat:@"%.1fg",actans];
-    
-    [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%.1f",ansactualCarb] forKey:@"ansactualCarb"];
-    [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%.1f",ansis] forKey:@"recprofitn"];
-    [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%.1f",actans] forKey:@"actans"];
-    
-    NSString *caloriesRecommended = [NSString stringWithFormat:@"%li", [dietmasterEngine getBMR]];
+    NSString *caloriesRecommended = [NSString stringWithFormat:@"%li", [dayProvider getCurrentBMR].integerValue];
     NSString *caloriesRemaining = [NSString stringWithFormat:@"%.0f", caloriesREmaining];
     [self.logDaySummary setRemainingLabelsWithCalorie:caloriesRemaining carbs:actualCarbLabel.text protein:actualProtLabel.text fat:actualFatLabel.text];
     [self.logDaySummary setRecommendedLabelsWithCalorie:caloriesRecommended carbs:recCarbLabel.text protein:recProtLabel.text fat:recFatLabel.text];
 }
 
-- (void)getBMR {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    lbl_CaloriesRecommended.text = [NSString stringWithFormat:@"%i", [dietmasterEngine getBMR]];
-    Recommendded =  [dietmasterEngine getBMR];
-    NSString *remainingCalorieCount;
-    double calRecommended = [dietmasterEngine getBMR];
+- (void)updateBMRLabel {
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    int bmrCalories = [dayProvider getCurrentBMR].intValue;
+
+    lbl_CaloriesRecommended.text = [NSString stringWithFormat:@"%i", (int)bmrCalories];
+
     int totalFoodCal = breakfastCalories + snack1Calories + snack2Calories + snack3Calories + dinnerCalories + lunchCalories;
-    DMLog(@"%d",totalFoodCal);
-    if (num_totalCaloriesBurned == 0)
-    {
-        lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[lbl_CaloriesRecommended.text intValue] - totalFoodCal];
-    }
-    else
-    {
-        remainingCalorieCount=[NSString stringWithFormat:@"%.0f",calRecommended + num_totalCaloriesBurned/2];
-        lbl_CaloriesLogged.text=[NSString stringWithFormat:@"%d",[remainingCalorieCount intValue] - totalFoodCal];
+
+    if (num_totalCaloriesBurned == 0) {
+        lbl_CaloriesLogged.text = [NSString stringWithFormat:@"%d",bmrCalories - totalFoodCal];
+    } else {
+        int remainingCalorieCount = (bmrCalories + num_totalCaloriesBurned / 2);
+        lbl_CaloriesLogged.text = [NSString stringWithFormat:@"%d", remainingCalorieCount - totalFoodCal];
     }
 }
 
 -(void)loadExerciseData:(NSDate *)date {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+
     if (exerciseResults) {
         [exerciseResults removeAllObjects];
     }
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    
     NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
     [dateFormat_display setDateFormat:@"MMMM d, yyyy"];
     NSString *date_Today = [dateFormat stringFromDate:date];
     
-    NSString *query;
-    
-    query = [NSString stringWithFormat:@"SELECT Exercise_Log.Exercise_Log_ID, Exercise_Log.ExerciseID, Exercise_Log.Exercise_Time_Minutes, Exercise_Log.Log_Date, Exercises.ActivityName, Exercises.CaloriesPerHour FROM Exercise_Log INNER JOIN Exercises ON Exercise_Log.ExerciseID = Exercises.ExerciseID WHERE (Exercise_Log.Log_Date BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) ORDER BY Log_Date", date_Today, date_Today];
+    NSString *query = [NSString stringWithFormat:@"SELECT Exercise_Log.Exercise_Log_ID, Exercise_Log.ExerciseID, Exercise_Log.Exercise_Time_Minutes, Exercise_Log.Log_Date, Exercises.ActivityName, Exercises.CaloriesPerHour FROM Exercise_Log INNER JOIN Exercises ON Exercise_Log.ExerciseID = Exercises.ExerciseID WHERE (Exercise_Log.Log_Date BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) ORDER BY Log_Date", date_Today, date_Today];
     
     num_totalCaloriesBurned = 0;
     
@@ -1021,51 +985,32 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         }
         //HHT apple watch calories
         else if (exerciseIDTemp == 257 || exerciseIDTemp == 267 || exerciseIDTemp == 272 || exerciseIDTemp == 275) {
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"]) {
+            if (currentUser.useCalorieTrackingDevice) {
                 int caloriesBurned = [exerciseTimeMinutes intValue];
                 num_totalCaloriesBurned = num_totalCaloriesBurned + caloriesBurned;
             }
         }
-        else {
-            //HHT change 28-11
-            //YES means add LoggedExeTracking and no means not add
-//            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == YES) {
-//                int minutesExercised = [exerciseTimeMinutes intValue];
-//                double totalCaloriesBurned = ([caloriesPerHour floatValue] / 60) * [dietmasterEngine.currentWeight floatValue] * minutesExercised;
-//                num_totalCaloriesBurned = num_totalCaloriesBurned + totalCaloriesBurned;
-//            }
-//            else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
-//                
-//            }
-        }
     }
     
-    if (exerciseResults.count>0) {
+    if (exerciseResults.count > 0) {
         isExerciseData = YES;
         if (![selectSectionArray containsObject:@"Exercise"]) {
             [selectSectionArray addObject:@"Exercise"];
         }
-    }
-    else {
+    } else {
         isExerciseData = NO;
-        
         [selectSectionArray addObject:@"Exercise"];
-        
         NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
-        
         [tmpDict setObject:@"Exercise" forKey:@"Testing1"];
-        
         [exerciseResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
     }
     
     [rs close];
-    
     [self.tableView reloadData];
-    
     [self updateCalorieTotal];
 }
 
--(void)reloadData {
+- (void)reloadData {
     NSDate* sourceDate = [NSDate date];
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -1074,7 +1019,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSString *date_string = [dateFormat stringFromDate:sourceDate];
     NSDate *date_Now = [dateFormat dateFromString:date_string];
     
-    [DMActivityIndicator showActivityIndicator];
     [self updateData:date_Now];
 }
 
@@ -1101,14 +1045,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self.dateFormatter setTimeZone:systemTimeZone];
     NSString *date_Today = [self.dateFormatter stringFromDate:date];
 
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isddmm"] boolValue]) {
-        [self.dateFormatter setDateFormat:@"MMMM d, yyyy"];
-        [self.dateFormatter setTimeZone:systemTimeZone];
-    }
-    else{
-        [self.dateFormatter setDateFormat:@"d MMMM, yyyy"];
-        [self.dateFormatter setTimeZone:systemTimeZone];
-    }
+    [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
     NSString *date_Display = [self.dateFormatter stringFromDate:date];
     
     lbl_dateHdr.text = date_Display;
@@ -1315,13 +1252,15 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
        
     [rs close];
     
-    double caloriesREmaining = ([dietmasterEngine getBMR] - (num_totalCaloriesBurned * -1))
+    
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    int caloriesREmaining = ([dayProvider getCurrentBMR].intValue - (num_totalCaloriesBurned * -1))
     - num_totalCalories;
     
-    calorieslodded = num_totalCalories;//[NSString stringWithFormat:@"%.0f", num_totalCalories];
+    calorieslodded = num_totalCalories;
     
     [self loadExerciseData:date];
-    [self getBMR];
+    [self updateBMRLabel];
     
     [self.tableView reloadData];
     [self.tableView reloadSectionIndexTitles];

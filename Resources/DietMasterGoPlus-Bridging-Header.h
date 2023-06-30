@@ -24,3 +24,9 @@
 #import "MealPlanDetailViewController.h"
 
 #import "DMAuthManager.h"
+#import "ManageFoods.h"
+#import "FoodsSearch.h"
+#import "DMActivityIndicator.h"
+#import "DMDatabaseProvider.h"
+#import "DMConstants.h"
+

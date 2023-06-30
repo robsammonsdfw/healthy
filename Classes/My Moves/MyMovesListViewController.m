@@ -175,7 +175,7 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
     __block DMMoveDay *selectedDay = self.moveDay;
     __weak typeof(self) weakSelf = self;
     
-    [self.dateFormatter setDateFormat:@"LLLL d, yyyy"];
+    [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
     NSString *msgInfo = [NSString stringWithFormat:@"New Move will be added to %@", [self.dateFormatter stringFromDate:_selectedDate]];
    
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Add My Moves" message:msgInfo preferredStyle:UIAlertControllerStyleAlert];
@@ -196,24 +196,7 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
                                                        style:UIAlertActionStyleDefault
                                                      handler:nil];
     
-    UIAlertAction* addEditButton = [UIAlertAction actionWithTitle:@"Add & Edit"
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {
-                                        
-                                        // Create a routine with the user selected optoins.
-                                        DMMoveRoutine *newRoutine = [DMMoveRoutine routineWithMove:selectedMove forDay:selectedDay];
-                                        // the newRoutine ID will be nil, so need to save to database first.
-                                        NSNumber *routineID = [weakSelf.soapWebService addMoveRoutine:newRoutine toMoveDay:selectedDay];
-                                
-                                        MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc] init];
-                                        moveDetailVc.selectedDate = self.selectedDate;
-                                        moveDetailVc.routine = [weakSelf.soapWebService getUserPlanRoutineForRoutineId:routineID];
-
-                                        [self.navigationController pushViewController:moveDetailVc animated:YES];
-                                    }];
-    
     [alert addAction:yesButton];
-    [alert addAction:addEditButton];
     [alert addAction:noButton];
     
     [self presentViewController:alert animated:YES completion:nil];

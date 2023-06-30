@@ -1,50 +1,30 @@
-@import SafariServices;
 #import "AppSettings.h"
-#import "DietMasterGoAppDelegate.h"
-#import "DetailViewController.h"
-#import "ManageFoods.h"
-#import "FoodsSearch.h"
-#import "LoginViewController.h"
-#import "UIDevice+machine.h"
-#import "LearnMoreViewController.h"
-#import "DietMasterGoAppDelegate.h"
-#import "MBProgressHUD.h"
+
 #import <HealthKit/HealthKit.h>
-#import "StepData.h"
-#import "NSNull+NullCategoryExtension.h"
-#import "MyMovesViewController.h"
-#import "MyMovesDataProvider.h"
-#import "DMDatabaseProvider.h"
+#import "DietmasterEngine.h"
 
-@interface AppSettings () <SFSafariViewControllerDelegate>
+/// Enables user to select options such as enabling Apple Health sync.
+@interface AppSettings ()
 
-@property (nonatomic) IBOutlet UIButton *hcgBookletButton;
-@property (nonatomic) IBOutlet UIButton *mwlBookletButton;
+/// If the user wants to sync with Apple Health or not.
+@property (nonatomic, strong) IBOutlet UISwitch *appleHealthSwitch;
+/// If the user wants to add tracked calories (e.g. Apple Watch) into
+/// their calorie intake budget.
+@property (nonatomic, strong) IBOutlet UISwitch *addTrackedCaloriesSwitch;
+/// If the user wants to add exercise calories into their calorie intake
+/// budget for the day.
+@property (nonatomic, strong) IBOutlet UISwitch *addExerciseCaloriesSwitch;
 
-@property (nonatomic, strong) IBOutlet UIButton *btnoptionsetting;
-@property (nonatomic, strong) IBOutlet UIButton *btnmycustomfood;
-@property (nonatomic, strong) IBOutlet UIButton *btnaddcustomfood;
-@property (nonatomic, strong) IBOutlet UIButton *btnperformdownsync;
-@property (nonatomic, strong) IBOutlet UIButton *btnperfomupsync;
-@property (nonatomic, strong) IBOutlet UIButton *btnchekforfoodupdate;
-@property (nonatomic, strong) IBOutlet UIButton *btnsenddatabasetosupport;
-@property (nonatomic, strong) IBOutlet  UILabel *lastSyncLabel;
-
-//HHT apple watch
 @property (nonatomic,retain) HKHealthStore *healthStore;
-@property (nonatomic, strong) NSMutableArray *arrData;
-@property (nonatomic, strong) NSSet *readDataTypes;
-@property (nonatomic, strong) StepData * sd;
 
 @end
 
 @implementation AppSettings
 
-@synthesize myScrollBG;
-
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
+        _healthStore = [[HKHealthStore alloc] init];
     }
     return self;
 }
@@ -52,519 +32,83 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     pageSize = 1000;
     pageNumberCounter = 1;
-    viewSetting.hidden=TRUE;
-    
-    self.arrData = [NSMutableArray new];
-    self.healthStore = [[HKHealthStore alloc] init];
-    self.sd = [[StepData alloc]init];
-    
-    if (!IS_IPHONE_5) {
-        //HHT change 2018 to solve issue in ipad setting lbl cut
-        [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, versionLabel.frame.origin.y + versionLabel.frame.size.height + 20)];
-    }
-    else{
-        //HHT change 2018 to solve issue in ipad setting lbl cut
-        [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, versionLabel.frame.origin.y + versionLabel.frame.size.height + 20)];
-    }
-    
-    self.btnoptionsetting.backgroundColor = PrimaryColor
-    _btnoptionsetting.layer.cornerRadius = 5;
-    
-    self.btnmycustomfood.backgroundColor = PrimaryColor
-    _btnmycustomfood.layer.cornerRadius = 5;
-    
-    self.btnaddcustomfood.backgroundColor =PrimaryColor
-    _btnaddcustomfood.layer.cornerRadius =5;
-    
-    self.btnperformdownsync.backgroundColor = PrimaryDarkColor
-    _btnperformdownsync.layer.cornerRadius =5;
-    
-    self.btnperfomupsync.backgroundColor = PrimaryDarkColor
-    _btnperfomupsync.layer.cornerRadius=5;
-    
-    self.btnchekforfoodupdate.backgroundColor = PrimaryDarkColor
-    _btnchekforfoodupdate.layer.cornerRadius = 5;
-    
-    self.btnsenddatabasetosupport.backgroundColor = AccentColor
-    _btnsenddatabasetosupport.layer.cornerRadius = 5;
-    
-    self.hcgBookletButton.hidden = YES;
-    self.mwlBookletButton.hidden = YES;
-    
-    self.navigationItem.title = @"Settings";
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back" style: UIBarButtonItemStylePlain target: nil action: nil];
-    [self.navigationItem setBackBarButtonItem: backButton];
-    
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
-    UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
-        backgroundImage.image = [UIImage imageNamed:@"Settings_Screen"];
-        versionLabel.textColor = [UIColor blackColor];
-        self.lastSyncLabel.textColor = [UIColor blackColor];
-    }
-    
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"trdietpro"]) {
-        self.hcgBookletButton.hidden = NO;
-        self.mwlBookletButton.hidden = NO;
-    }
-    
-    [self.navigationController.navigationBar setTranslucent:NO];
-}
-
-//HHT change 2018
--(void)openOpetionalSetting {
-    // TODO: This is not a great implementation. Redo this.
-    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isFromAlert"] boolValue]){
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isFromAlert"];
-        
-        //HHT change 2018 to open default setting screen after login
-        [self btnClkOpenSetting:self];
-    }
-    else {
-        viewSetting.frame = CGRectMake(0, myScrollBG.contentSize.height, viewSetting.frame.size.width, viewSetting.frame.size.height);
-        
-        {
-            [btnWkgs.layer setCornerRadius:btnWkgs.frame.size.height/2];
-            [btnWlbs.layer setCornerRadius:btnWlbs.frame.size.height/2];
-            [btnHcm.layer setCornerRadius:btnHcm.frame.size.height/2];
-            [btnHinches.layer setCornerRadius:btnHinches.frame.size.height/2];
-            [btnDddmm.layer setCornerRadius:btnDddmm.frame.size.height/2];
-            [btnDmmdd.layer setCornerRadius:btnDmmdd.frame.size.height/2];
-            [btnCalorieTracking.layer setCornerRadius:btnCalorieTracking.frame.size.height/2];
-            [btnLoggedExeTracking.layer setCornerRadius:btnLoggedExeTracking.frame.size.height/2];
-            [btnAppleWatchTracking.layer setCornerRadius:btnLoggedExeTracking.frame.size.height/2];
-            
-            [btnWkgs.layer setBorderWidth:0.5];
-            [btnWlbs.layer setBorderWidth:0.5];
-            [btnHcm.layer setBorderWidth:0.5];
-            [btnHinches.layer setBorderWidth:0.5];
-            [btnDddmm.layer setBorderWidth:0.5];
-            [btnDmmdd.layer setBorderWidth:0.5];
-            [btnCalorieTracking.layer setBorderWidth:0.5];
-            [btnLoggedExeTracking.layer setBorderWidth:0.5];
-            [btnAppleWatchTracking.layer setBorderWidth:0.5];
-        }
-    }
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if (![_viewtoptobottom isKindOfClass:[UIControl class]]) {
-        [self btnClkCloseSetting:self];
-        return YES;
-    }
-    else {
-        return NO;
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    //HHT change 2018
-    [self openOpetionalSetting];
-    
-    //HHT change 28-11
-    //DMLog(@"LoggedExeTracking :: %d",[[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"]);
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == NO){
-        [btnLoggedExeTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [btnLoggedExeTracking setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"] == NO){
-        [btnCalorieTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [btnCalorieTracking setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
-        [btnAppleWatchTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [btnAppleWatchTracking setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-        
-    NSString *dateString = [DMGUtilities lastSyncDateString];
-    self.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
-    
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    NSString *appVersion = [NSString stringWithFormat:@"Version: %@ Build %@", version, build];
-    versionLabel.text = appVersion;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"isKgs"]) {
-        [btnWlbs setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-        [btnWkgs setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [btnWlbs setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-        [btnWkgs setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-    
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"isCm"]) {
-        [btnHinches setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-        [btnHcm setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [btnHinches setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-        [btnHcm setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-    
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isddmm"] boolValue]) {
-        [btnDmmdd setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-        [btnDddmm setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [btnDmmdd setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-        [btnDddmm setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-}
 
-//HHT change 2018 to solve setting issue solve
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self btnClkCloseSetting:self];
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    [self.addTrackedCaloriesSwitch setOn:currentUser.useCalorieTrackingDevice];
+    [self.addExerciseCaloriesSwitch setOn:currentUser.useBurnedCalories];
+    [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
+    
+    [self checkForPremission];
 }
 
 #pragma mark - User Actions
 
--(IBAction)myFoods:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.taskMode = @"View";
-    
-    FoodsSearch *fsController = [[FoodsSearch alloc] init];
-    fsController.searchType = DMFoodSearchTypeMyFoods;
-    fsController.title = @"My Foods";
-    [self.navigationController pushViewController:fsController animated:YES];
-}
-
-- (IBAction)addFoods:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.taskMode = @"";
-    
-    ManageFoods *mfController = [[ManageFoods alloc] initWithFood:nil];
-    
-    [self.navigationController pushViewController:mfController animated:YES];
-    mfController.hideAddToLog = YES;
-    mfController = nil;
-}
-
-- (IBAction)forceDBSync:(id)sender {
+- (IBAction)forceUPDBSync:(id)sender {
     [DMActivityIndicator showActivityIndicator];
-    __weak typeof(self) weakSelf = self;
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-    [dataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    [dietmasterEngine uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
-        if (error) {
-            [DMGUtilities showError:error withTitle:@"Error" message:@"The database could not be updated. Please try again." inViewController:nil];
-            return;
-        }
-        [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
-
-        NSString *dateString = [DMGUtilities lastSyncDateString];
-        strongSelf.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
     }];
 }
 
--(IBAction)forceUPDBSync:(id)sender {
-    [DMActivityIndicator showActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = self;
-    [dietmasterEngine uploadDatabase];
+#pragma mark - Switch Actions
+
+- (IBAction)useCalorieTrackingDeviceSwitched:(UISwitch *)sender {
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    currentUser.useCalorieTrackingDevice = sender.isOn;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
 }
 
--(IBAction)goToSafetyGuidelines:(id)sender {
-    SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://advancedwebservicegroup.com/AWSGDocuments/GuidelinesAndSafety.html"]];
-    [self presentViewController:sfvc animated:YES completion:nil];
+- (IBAction)useExerciseCaloriesSwitched:(UISwitch *)sender {
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    currentUser.useBurnedCalories = sender.isOn;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
 }
 
-#pragma mark - Update and SyncFood
-
--(IBAction)CheckForFoodUpdateSync:(id)sender {
-    strSyncDate = [[NSUserDefaults standardUserDefaults] valueForKey:@"FoodUpdateLastsyncDate"];
-    if (!strSyncDate) {
-        [[NSUserDefaults standardUserDefaults] setValue:@"2015-01-01" forKey:@"FoodUpdateLastsyncDate"];
-        strSyncDate = [[NSUserDefaults standardUserDefaults] valueForKey:@"FoodUpdateLastsyncDate"];
-    }
-    [self syncFood];
-}
-
-- (void)syncFood {
-    [DMActivityIndicator showActivityIndicator];
-    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
-    [provider syncFoods:strSyncDate pageNumber:1 fetchedItems:@[] withCompletionBlock:^(BOOL completed, NSError *error) {
-        [DMActivityIndicator hideActivityIndicator];
-        if (error) {
-            [DMGUtilities showAlertWithTitle:@"Error!" message:error.localizedDescription inViewController:nil];
-            return;
-        }
-        [DMActivityIndicator showCompletedIndicator];
-    }];
-}
-
-#pragma mark LOGIN AUTH DELEGATE METHODS
-- (void)getAuthenticateUserFinished:(NSMutableArray *)responseArray {
-    [DMActivityIndicator showActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = self;
-    [dietmasterEngine uploadDatabase];
-}
-
-#pragma mark SYNC DELEGATE METHODS
-
-- (void)syncUPDatabaseFinished:(NSString *)responseMessage {
-    [DMActivityIndicator hideActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = nil;
-    
-    [DMGUtilities showAlertWithTitle:@"Success" message:@"The database was sync'd successfully." inViewController:nil];
-
-    NSString *dateString = [DMGUtilities lastSyncDateString];
-
-    self.lastSyncLabel.text = [NSString stringWithFormat:@"Last Sync: %@", dateString];
-}
-
-- (void)syncUPDatabaseFailed:(NSString *)failedMessage {
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = nil;
-
-    [DMActivityIndicator hideActivityIndicator];
-
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
-}
-
-- (IBAction)logoutUser:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
-                                                                   message:@"Are you sure you want to log out?"
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
-                                              style:UIAlertActionStyleDefault
-                                            handler:^(UIAlertAction * _Nonnull action) {
-        [[DMAuthManager sharedInstance] logoutCurrentUserWithCompletion:^(BOOL completed, NSError *error) {
-            [AppDel checkUserLogin];
-        }];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"No"
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction * _Nonnull action) {
-        [alert dismissViewControllerAnimated:YES completion:nil];
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-#pragma mark Custom Buttons for Tampa Rejuvination
--(IBAction)showMWLBooklet:(id)sender {
-    LearnMoreViewController *learnMoreViewController = [[LearnMoreViewController alloc] init];
-    learnMoreViewController.learnMoreTitle = @"mwlbooklet";
-    learnMoreViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:learnMoreViewController animated:YES];
-}
-
--(IBAction)showHCGBooklet:(id)sender {
-    LearnMoreViewController *learnMoreViewController = [[LearnMoreViewController alloc] init];
-    learnMoreViewController.learnMoreTitle = @"hcgbooklet";
-    learnMoreViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:learnMoreViewController animated:YES];
-}
-
-#pragma mark SettingView
--(IBAction)btnClkOpenSetting:(id)sender{
-    self.navigationItem.title=@"Optional Settings";
-    viewSetting.hidden=FALSE;
-    btnSafetyGuidelines.hidden = TRUE;
-    if (IS_IPHONE_5) {
-        [UIView animateWithDuration:0.5 animations:^{
-            viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height+44);
-            //HHT change 2018 to solve issue of large scroll in main screen
-            [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, lblStaticLoggedExe.frame.origin.y + lblStaticLoggedExe.frame.size.height + 20)];
-        }];
-    }
-    else {
-        [UIView animateWithDuration:0.5 animations:^{
-            viewSetting.frame = CGRectMake(0, 0, viewSetting.frame.size.width, viewSetting.frame.size.height + 44);
-            //HHT change 2018 to solve issue of large scroll in main screen
-            [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, lblStaticLoggedExe.frame.origin.y + lblStaticLoggedExe.frame.size.height + 20)];
-        }];
-    }
-}
-
--(IBAction)btnClkCloseSetting:(id)sender{
-    btnSafetyGuidelines.hidden = FALSE;
-    self.navigationItem.title=@"Settings";
-    if (AppDel.isFromAlert) {
-        AppDel.isFromAlert = NO;
-        [self.tabBarController setSelectedIndex:0];
-    }
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        viewSetting.frame = CGRectMake(0, myScrollBG.contentSize.height, viewSetting.frame.size.width, viewSetting.frame.size.height);
-        
-        //HHT change 2018 to solve issue in ipad setting lbl cut
-        [myScrollBG setContentSize:CGSizeMake(self.view.frame.size.width, versionLabel.frame.origin.y + versionLabel.frame.size.height + 20)];
-    }];
-    viewSetting.hidden=TRUE;
-}
-
--(IBAction)btnClkWeightSelection:(id)sender{
-    UIButton *btn = (UIButton *)sender;
-    if (btn.tag == 1) {
-        if (btnWkgs.currentImage == [UIImage imageNamed:@"radio_btn_act.png"]) {
-            [btnWkgs setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [btnWlbs setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isKgs"];
-        }
-        else{
-            [btnWkgs setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [btnWlbs setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isKgs"];
-        }
-    }
-    else {
-        if (btnWlbs.currentImage == [UIImage imageNamed:@"radio_btn_act.png"]) {
-            [btnWlbs setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [btnWkgs setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isKgs"];
-        }
-        else{
-            [btnWlbs setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [btnWkgs setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isKgs"];
-        }
-    }
-}
-
-//HHT change solve CM setting issue
--(IBAction)btnClkHeightSelection:(id)sender{
-    UIButton *btn = (UIButton *)sender;
-    if (btn.tag == 1) {
-        if (btnHinches.currentImage == [UIImage imageNamed:@"radio_btn_act.png"]) {
-            [btnHinches setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [btnHcm setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isCm"];
-        }
-        else {
-            [btnHinches setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [btnHcm setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isCm"];
-        }
-    }
-    else {
-        if (btnHcm.currentImage == [UIImage imageNamed:@"radio_btn_act.png"]) {
-            [btnHcm setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [btnHinches  setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isCm"];
-        }
-        else {
-            [btnHcm setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [btnHinches setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isCm"];
-        }
-    }
-}
-
--(IBAction)btnClkDateSelection:(id)sender{
-    UIButton *btn = (UIButton *)sender;
-    if (btn.tag == 1) {
-        if (btnDmmdd.currentImage == [UIImage imageNamed:@"radio_btn_act.png"]) {
-            [btnDmmdd setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [btnDddmm setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isddmm"];
-        }
-        else {
-            [btnDmmdd setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [btnDddmm setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isddmm"];
-        }
-    }
-    else {
-        if (btnDddmm.currentImage == [UIImage imageNamed:@"radio_btn_act.png"]) {
-            [btnDddmm setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [btnDmmdd  setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isddmm"];
-        }
-        else {
-            [btnDddmm setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-            [btnDmmdd setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isddmm"];
-        }
-    }
-}
-
--(IBAction)btnClkCalorieTracking:(id)sender {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"CalorieTrackingDevice"];
-        [btnCalorieTracking setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"CalorieTrackingDevice"];
-        [btnCalorieTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-}
-
-//HHT change
--(IBAction)btnClkLoggedExeTracking:(id)sender {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"LoggedExeTracking"];
-        [btnLoggedExeTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LoggedExeTracking"];
-        [btnLoggedExeTracking setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-}
-
-//HHT change
--(IBAction)btnClkAppleWatchExeTracking:(id)sender {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"LoggedAppleWatchTracking"];
-        [btnAppleWatchTracking setImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LoggedAppleWatchTracking"];
-        [btnAppleWatchTracking setImage:[UIImage imageNamed:@"radio_btn_act.png"] forState:UIControlStateNormal];
-    }
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+- (IBAction)enableAppleHealthSyncSwitched:(UISwitch *)sender {
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    currentUser.enableAppleHealthSync = sender.isOn;
+    if (currentUser.enableAppleHealthSync) {
         [self askForPermission];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
 }
 
-//HHT apple watch
-#pragma mark IBAction
--(void)checkForPremission {
-    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
+#pragma mark - Apple Health
+
+- (void)checkForPremission {
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     
+    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        
+        currentUser.enableAppleHealthSync = YES;
+        [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
     }
     else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
         DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
+        currentUser.enableAppleHealthSync = NO;
+        [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
     }
 }
 
--(void)askForPermission {
+- (void)askForPermission {
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    
     //check HKHealthStore available or not
     if ([HKHealthStore isHealthDataAvailable] == NO) {
         DMLog(@"** HKHealthStore NotAvailable **");
+        currentUser.enableAppleHealthSync = NO;
+        [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
         return;
     }
-    
-    //self.healthStore = [[HKHealthStore alloc] init];
     
     NSArray *shareTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     NSArray *readTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
@@ -573,213 +117,16 @@
     
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
         DMLog(@"HKAuthorizationStatusSharingAuthorized");
-    }
-    else {
+        currentUser.enableAppleHealthSync = YES;
+    } else {
         [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:shareTypes] readTypes:[NSSet setWithArray:readTypes] completion:^(BOOL success, NSError * _Nullable error) {
-            if (success){
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HKHealthStoreAllow"];
-            }
-            else {
-                DMLog(@"Error");
+            currentUser.enableAppleHealthSync = success;
+            if (error) {
+                [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+                return;
             }
         }];
     }
-}
-
--(void)saveFoods:(NSArray *)foodsArray {
-    //responseDict = [dictDataTemp valueForKey:@"Foods"];
-    FMDatabase* db = [FMDatabase databaseWithPath:[[DietmasterEngine sharedInstance] databasePath]];
-    if (![db open]) {
-    }
-        
-    [db beginTransaction];
-    for (NSDictionary *dict in foodsArray) {
-        NSString *foodName = [[dict valueForKey:@"Name"] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-        
-        double servingSize = [[dict valueForKey:@"ServingSize"] doubleValue];
-        if (servingSize == 0) { servingSize = 1; }
-        
-        NSString *foodTags = [dict valueForKey:@"FoodTags"];
-        if (![foodTags isEqual:[NSNull null]] && [foodTags length] > 0) {
-            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-            foodTags = [foodTags stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-            foodTags = [foodTags stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        }
-
-        NSString *insertSQL = [NSString stringWithFormat:@"REPLACE INTO Food "
-        "(ScannedFood, "
-         "FoodPK, FoodKey, "
-         "FoodID, CategoryID, "
-         "CompanyID, UserID, "
-         "Name, Calories, "
-         "Fat, Sodium, "
-         "Carbohydrates, SaturatedFat, "
-         "Cholesterol, Protein, "
-         "Fiber, Sugars, "
-         "Pot, A, "
-         "Thi, Rib, "
-         "Nia, B6, "
-         "B12, Fol, "
-         "C, Calc, "
-         "Iron, Mag, "
-         "Zn, ServingSize, "
-         "FoodTags, Frequency, "
-         "Alcohol, Folate, "
-         "Transfat, E, "
-         "D, UPCA, "
-         "FactualID, ParentGroupID,"
-         "RegionCode, LastUpdateDate,"
-         "RecipeID, FoodURL)"
-         "VALUES"
-         "(%d, "
-         "%i, %i, "
-         "%i, %i, "
-         "%i, %i, "
-         "\"%@\", %f, " //Name, Calories
-         "%f, %f, "
-         "%f, %f, "
-         "%f, %f, "
-         "%f, %f, "
-         "%f, %f, " //Pot, A
-         "%f, %f, "
-         "%f, %f, "
-         "%f, %f, "
-         "%f, %f, "
-         "%f, %f, "
-         "%f, %f, "
-         "\"%@\", %i, " //FoodTags, Frequency
-         "%f, %f, "
-         "%f, %f, "
-         "%f, \"%@\", "
-         "%i , %i, "
-         "%i, \"%@\", "
-         "%i, \"%@\") ",
-         [[dict valueForKey:@"ScannedFood"] boolValue],
-        
-         [[dict valueForKey:@"FoodPK"] intValue],
-         [[dict valueForKey:@"FoodKey"] intValue],
-        
-         [[dict valueForKey:@"FoodID"] intValue],
-         [[dict valueForKey:@"CategoryID"] intValue],
-        
-         [[dict valueForKey:@"CompanyID"] intValue],
-         [[dict valueForKey:@"UserID"] intValue],
-         foodName,
-        
-         [[dict valueForKey:@"Calories"] doubleValue],
-         [[dict valueForKey:@"Fat"] doubleValue],
-         [[dict valueForKey:@"Sodium"] doubleValue],
-         [[dict valueForKey:@"Carbohydrates"] doubleValue],
-         [[dict valueForKey:@"SaturatedFat"] doubleValue],
-         [[dict valueForKey:@"Cholesterol"] doubleValue],
-         [[dict valueForKey:@"Protein"] doubleValue],
-         [[dict valueForKey:@"Fiber"] doubleValue],
-         [[dict valueForKey:@"Sugars"] doubleValue],
-         [[dict valueForKey:@"Pot"] doubleValue],
-         [[dict valueForKey:@"A"] doubleValue],
-         [[dict valueForKey:@"Thi"] doubleValue],
-         [[dict valueForKey:@"Rib"] doubleValue],
-         [[dict valueForKey:@"Nia"] doubleValue],
-         [[dict valueForKey:@"B6"] doubleValue],
-         [[dict valueForKey:@"B12"] doubleValue],
-         [[dict valueForKey:@"Fol"] doubleValue],
-         [[dict valueForKey:@"C"] doubleValue],
-         [[dict valueForKey:@"Calc"] doubleValue],
-         [[dict valueForKey:@"Iron"] doubleValue],
-         [[dict valueForKey:@"Mag"] doubleValue],
-         [[dict valueForKey:@"Zn"] doubleValue],
-         servingSize,
-         foodTags,
-         [[dict valueForKey:@"Frequency"] intValue],
-         [[dict valueForKey:@"Alcohol"] doubleValue],
-         [[dict valueForKey:@"Folate"] doubleValue],
-         [[dict valueForKey:@"Transfat"] doubleValue],
-         [[dict valueForKey:@"E"] doubleValue],
-         [[dict valueForKey:@"D"] doubleValue],
-         [dict valueForKey:@"UPCA"] ? [dict valueForKey:@"UPCA"] : @"",
-         [[dict valueForKey:@"FactualID"] intValue],
-         [[dict valueForKey:@"ParentGroupID"] intValue],
-         [[dict valueForKey:@"RegionCode"] intValue],
-         [dict valueForKey:@"LastUpdateDate"],
-         [[dict valueForKey:@"RecipeID"] intValue],
-         [dict valueForKey:@"FoodURL"]];
-        
-        
-        if ([dict valueForKey:@"FoodKey"]==0) {
-            
-        }
-        [db executeUpdate:insertSQL];
-        
-        NSMutableArray *arrIDs = (NSMutableArray *)[[[dict valueForKey:@"MeasureIDs"] stringByReplacingOccurrencesOfString:@" " withString:@""] componentsSeparatedByString:@","];
-        NSString *insertFMSQL;
-        
-        for (NSString *strID in arrIDs) {
-            int measureID = [strID intValue];
-            insertFMSQL = [NSString stringWithFormat: @"REPLACE INTO FoodMeasure (FoodID, MeasureID, GramWeight) VALUES (%i, %i, %i)", [[dict valueForKey:@"FoodKey"] intValue], measureID, [[dict valueForKey:@"GramWeights"] intValue]];
-        }
-        
-        [db executeUpdate:insertFMSQL];
-    }
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-
-}
-
--(void)getDataFailed:(NSString *)failedMessage {
-    DMLog(@"Err: %@", failedMessage);
-    if (pageNumberCounter > 1) {
-        //in process of syncing foods
-        //fail silently and continue processing
-        DMLog(@"sync foods error: page %d failed.", pageNumberCounter);
-        pageNumberCounter++;
-        [self syncFood];
-        return;
-    }
-    [DMActivityIndicator hideActivityIndicator];
-    [DMGUtilities showAlertWithTitle:@"Error" message:@"An error occurred while processing. Please try again." inViewController:nil];
-}
-
-#pragma mark - Delegates
-
-#pragma mark Safari
-
-- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
-    [self dismissViewControllerAnimated:true completion:nil];
-}
-
-#pragma mark MailComposer
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    NSString *title = nil;
-    NSString *message = nil;
-    switch (result) {
-        case MFMailComposeResultCancelled:
-            title = @"Cancelled";
-            message = @"Email was cancelled.";
-            break;
-        case MFMailComposeResultSaved:
-            title = @"Saved";
-            message = @"Email was saved as a draft.";
-            break;
-        case MFMailComposeResultSent:
-            title = @"Success!";
-            message = @"Email was sent successfully.";
-            break;
-        case MFMailComposeResultFailed:
-            title = @"Error";
-            message = @"Email was not sent.";
-            break;
-        default:
-            title = @"Error";
-            message = @"Email was not sent.";
-            break;
-    }
-
-    [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
-    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

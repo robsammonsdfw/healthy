@@ -10,7 +10,6 @@
 #import <WebKit/WebKit.h>
 
 @interface LearnMoreViewController : UIViewController <UINavigationBarDelegate> {
-	UIActivityIndicatorView *activityIndicator;
     NSString *learnMoreTitle;
     IBOutlet UINavigationBar *myNavBar;
 }
@@ -18,14 +17,6 @@
 @property (nonatomic,copy) NSString *learnMoreTitle;
 @property (nonatomic,retain) IBOutlet UINavigationBar *myNavBar;
 @property (nonatomic, strong) IBOutlet WKWebView *webView;
-
--(IBAction)cancelLearnMore:(id)sender;
--(void)loadWebView;
--(IBAction)forwardWebView;
--(IBAction)backWebView;
--(IBAction)stopWebView;
--(IBAction)refreshWebView;
--(IBAction)myBackAction:(id)sender;
 
 @end
 

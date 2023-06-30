@@ -14,50 +14,29 @@
     
 - (instancetype)init {
     self = [super init];
-    if (self) {
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        
-        self.weight = [dietmasterEngine.currentWeight doubleValue];
-        
-        //DMLog(@"%ld",(long)self.weight);
-        
-        //double height = [dietmasterEngine.userHeight doubleValue];
-        //int inch = 12;
-        //double sum = height * inch;
-        
-        self.heightInches = [dietmasterEngine.userHeight doubleValue];
-        //DMLog(@"%ld",(long)self.heightInches);
-    }
-    
     return self;
 }
     
--(double) stepsToCalories: (NSInteger) steps{
-    return [self stepsToMiles: steps] * ([self weight] * 0.57);
+- (double)stepsToCalories:(NSInteger)steps {
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    return [self stepsToMiles: steps] * ([dayProvider getCurrentWeight].doubleValue * 0.57);
 }
     
-- (double) stepsToMiles: (NSInteger) steps {
+- (double)stepsToMiles:(NSInteger)steps {
     return steps / [self stepsPerMile: steps];
 }
     
-- (double) stepsPerMile: (NSInteger ) steps {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+- (double)stepsPerMile:(NSInteger)steps {
+    DMUser* currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     
-    int userGender = dietmasterEngine.userGender;
+    int userGender = currentUser.gender.intValue;
     
     if (userGender == 0){
-        return MILES_INCHES / (0.413 * [self heightInches]);
+        return MILES_INCHES / (0.413 * currentUser.height.doubleValue);
+    } else if (userGender == 1){
+        return MILES_INCHES / (0.415 * currentUser.height.doubleValue);
     }
-    else if (userGender == 1){
-        return MILES_INCHES / (0.415 * [self heightInches]);
-    }
-    
-//    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"Male"]) // male
-//    return MILES_INCHES / (0.415 * [self heightInches]);
-//    else  // Female
-//    return MILES_INCHES / (0.413 * [self heightInches]);
-    
+
     return 0.0;
 }
     

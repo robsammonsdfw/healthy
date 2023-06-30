@@ -435,9 +435,9 @@
     }
 
     if (!dateString) {
-        dateString = [DMGUtilities lastSyncDateString];
+        dateString = [DMGUtilities lastFoodSyncDateString];
     }
-    dateString = @"1980-01-01";
+    dateString = @"2015-01-01";
     // Must start at one.
     if (pageNumber == 0) {
         pageNumber = 1;
@@ -884,7 +884,7 @@
         }
         
         NSDictionary *responseDict = (NSDictionary *)object;
-        [strongSelf getDataFinished:responseDict];
+        [strongSelf saveUserData:responseDict];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
                 completionBlock(YES, nil);
@@ -894,7 +894,7 @@
 }
 
 /// Processes the data from the DMDataFetcher.
-- (void)getDataFinished:(NSDictionary *)responseDict {
+- (void)saveUserData:(NSDictionary *)responseDict {
     if (!responseDict) {
         return;
     }

@@ -309,9 +309,11 @@
             return NO;
         } else if ([statusDict[@"Status"] isEqualToString:@"Error"]) {
             DMLog(@"Fetch Status: %@", statusDict);
-            NSError *error = [DMGUtilities errorWithMessage:statusDict[@"Message"] code:333];
-            [self processError:error];
-            return YES;
+            if (statusDict[@"Message"] != nil) {
+                NSError *error = [DMGUtilities errorWithMessage:statusDict[@"Message"] code:333];
+                [self processError:error];
+                return YES;
+            }
         }
     }
     return NO;

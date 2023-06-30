@@ -610,7 +610,32 @@
     return [results copy];
 }
 
--(NSArray<DMMoveDay *> *)getUserPlanDaysForDate:(NSDate *)date {
+- (DMMoveDay *)getUserPlanDayForDayId:(NSNumber *)dayId {
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase* db = [dietmasterEngine database];
+    if (![db open]) {
+    }
+        
+    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanDateList WHERE UserPlanDateID = %@", dayId];
+    FMResultSet *rs = [db executeQuery:sql];
+
+    DMMoveDay *object = nil;
+    while ([rs next]) {
+        NSDictionary *tempDict = [rs resultDictionary];
+        object = [[DMMoveDay alloc] initWithDictionary:tempDict];
+        
+        // Get Routines for the day.
+        NSArray *routines = [self getUserPlanRoutinesForDayID:object.dayId];
+        [object setDayRoutines:routines];
+    }
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+        
+    return object;
+}
+
+- (NSArray<DMMoveDay *> *)getUserPlanDaysForDate:(NSDate *)date {
     if (!date) {
         return @[];
     }
@@ -1065,6 +1090,47 @@
     return [movesArray copy];
 }
 
+
+- (NSNumber *)addMoveDayToDate:(NSDate *)date toMovePlan:(DMMovePlan *)movePlan {
+    if (!date || !movePlan) {
+        return nil;
+    }
+    
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase* db = [dietmasterEngine database];
+    if (![db open]) {
+        return nil;
+    }
+
+    // Get the highest ID in the MoveList table.
+    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+    NSNumber *highestId = [dataProvider getMaxValueForColumn:@"UserPlanDateID" inTable:@"ServerUserPlanDateList"];
+    if (highestId) {
+        highestId = @(highestId.integerValue + 1);
+    }
+    [db beginTransaction];
+    
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    NSString *lastUpdated = [self.dateFormatter stringFromDate:[NSDate date]];
+    NSString *planDate = [self.dateFormatter stringFromDate:date];
+    NSString *uniqueId = [NSString stringWithFormat:@"D-%@", highestId];
+    NSString *status = @"New";
+    
+    NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanDateList "
+                            "(UserPlanDateID, PlanID, PlanDate, LastUpdated, UniqueID, Status, ParentUniqueID) VALUES "
+                            "(\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",
+                            highestId, movePlan.planId, planDate, lastUpdated, uniqueId, status, movePlan.uniqueId];
+    
+    [db executeUpdate:insertSQL];
+
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [db commit];
+    
+    return highestId;
+}
+
 - (void)deleteMoveSet:(DMMoveSet *)moveSet {
     if (!moveSet) {
         return;
@@ -1160,7 +1226,6 @@
     NSString *lastUpdated = [self.dateFormatter stringFromDate:currentDate];
     NSString *status = @"New";
     NSString *syncResult = @"";
-    NSString *uniqueID = [NSUUID UUID].UUIDString;
     NSString *parentUniqueID = [NSString stringWithFormat:@"M-%@", moveDay.dayId];
     NSNumber *routineId = moveRoutine.routineId ?: highestId;
     NSString *uniqueId = [NSString stringWithFormat:@"M-%@", routineId];

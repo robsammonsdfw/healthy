@@ -218,8 +218,8 @@ static NSString *CellIdentifier = @"Cell";
     
     NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[results objectAtIndex:indexPath.row]];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    double totalCaloriesBurned = [[dict valueForKey:@"CaloriesPerHour"] floatValue] * [dietmasterEngine.currentWeight floatValue];
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    double totalCaloriesBurned = [[dict valueForKey:@"CaloriesPerHour"] floatValue] * [dayProvider getCurrentWeight].floatValue;
     
     cell.textLabel.text = [dict valueForKey:@"ActivityName"];
     cell.textLabel.textColor = [UIColor blackColor];

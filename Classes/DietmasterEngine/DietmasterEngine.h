@@ -15,20 +15,13 @@
 @class DMMessage;
 @class DMUser;
 
-@protocol WSGetFoodDelegate;
-
 /// Notification fired when messages are done updating. Used to update the
 /// app icon badge.
 extern NSString * const UpdatingMessageNotification;
 
-@protocol UPSyncDatabaseDelegate;
-
 @interface DietmasterEngine : NSObject {
     
     NSMutableDictionary *exerciseSelectedDict;
-    
-    NSNumber *currentWeight;
-    
     // For Food Log - "Edit" or "Save" functionality
     NSString *taskMode;
     
@@ -36,18 +29,9 @@ extern NSString * const UpdatingMessageNotification;
     NSString *dateSelectedFormatted;
     
     NSNumber *selectedMealID; // selected ID of meal working on.
-    
     NSNumber *selectedCategoryID; // for editing My Foods.
     NSNumber *selectedMeasureID; // for editing My Foods.
-    
-    // delegates
-    int syncsCompleted;
-    int upsyncsCompleted;
-    int syncsToComplete;
-    int upsyncsToComplete;
-    int syncsFailed;
-    int upsyncsFailed;
-    
+        
     // Meal Plan
     NSMutableArray *mealPlanArray;
 
@@ -59,22 +43,9 @@ extern NSString * const UpdatingMessageNotification;
     BOOL didInsertNewFood;
     // Grocery List
     NSMutableArray *groceryArray;
-    
-    // Get Data
-    __block BOOL getDataComplete;
-    __block BOOL getDataDidFail;
 }
 
-// delegate
-@property (nonatomic, weak) id<WSGetFoodDelegate> wsGetFoodDelegate;
-@property (nonatomic, weak) id<UPSyncDatabaseDelegate> syncUPDatabaseDelegate;
-
 @property (nonatomic, strong) NSMutableDictionary *exerciseSelectedDict;
-@property (nonatomic, strong) NSNumber *currentWeight;
-
-//HHT apple watch
-@property (nonatomic,retain) NSNumber *userHeight;
-@property (nonatomic) int userGender;
 
 @property (nonatomic, strong) NSString *taskMode;
 @property (nonatomic, strong) NSDate *dateSelected;
@@ -96,20 +67,10 @@ extern NSString * const UpdatingMessageNotification;
 
 + (instancetype)sharedInstance;
 
--(void)uploadDatabase;
--(void)uploadDatabaseFinished;
--(void)syncDatabaseFailed;
--(void)uploadDatabaseFailed;
+/// Performs a complete upload of all user data.
+- (void)uploadDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock;
 
-// UP SYNC
--(void)saveMeals:(NSString *)dateString;
--(void)saveMealItems:(NSString *)dateString;
--(void)saveExerciseLogs:(NSString *)dateString;
--(void)saveWeightLog:(NSString *)dateString;
--(void)fetchFoodForKey:(int)foodKey;
--(void)saveAllCustomFoods;
--(void)saveFavoriteFood:(NSString *)dateString;
--(void)saveFavoriteMeal:(NSString *)dateString;
+- (void)fetchFoodForKey:(int)foodKey;
 - (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(completionBlockWithError)completionBlock;
 
 // Food Plan Methods
@@ -123,21 +84,4 @@ extern NSString * const UpdatingMessageNotification;
 // Database helper methods
 - (NSString *)databasePath;
 
-// UPC food
--(void)saveUPCFood:(int)foodKey;
-
-// Helpers
-- (NSDictionary *)getUserRecommendedRatios;
-- (NSInteger)getBMR;
-
-@end
-
-@protocol WSGetFoodDelegate <NSObject>
-- (void)getFoodFinished:(NSMutableArray *)responseArray;
-- (void)getFoodFailed:(NSString *)failedMessage;
-@end
-@protocol UPSyncDatabaseDelegate <NSObject>
-- (void)syncUPDatabaseFinished:(NSString *)responseMessage;
-- (void)syncUPDatabaseFailed:(NSString *)failedMessage;
--(void)callSyncDatabase;
 @end

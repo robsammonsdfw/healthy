@@ -259,6 +259,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    // Due to how pickers load, need to load data after a moment.
     [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -266,42 +267,29 @@
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     if ([dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
-        lblMealName.text	= @"Add item to Plan";
-    }
-    else {
-        if (![[[NSUserDefaults standardUserDefaults]objectForKey:@"isddmm"] boolValue]) {
-            lblMealName.text	= [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
+        lblMealName.text = @"Add item to Plan";
+    } else {
+        NSString *strDate = dietmasterEngine.dateSelectedFormatted;
+        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
+        NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
+        [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
+        [dateFormat_display setTimeZone:systemTimeZone];
+        NSDate *date = [dateFormat_display dateFromString:strDate];
+        if (date) {
+            NSString *strFinal = [dateFormat_display stringFromDate:date];
+            lblMealName.text    = [NSString stringWithFormat: @"Log Date: %@", strFinal];
         }
         else{
-            NSString *strDate = dietmasterEngine.dateSelectedFormatted;
-            NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-            NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
-            [dateFormat_display setDateFormat:@"MMMM d, yyyy"];
-            [dateFormat_display setTimeZone:systemTimeZone];
-            NSDate *date = [dateFormat_display dateFromString:strDate];
-            
-            if (date) {
-                [dateFormat_display setDateFormat:@"d MMMM, yyyy"];
-                NSString *strFinal = [dateFormat_display stringFromDate:date];
-                lblMealName.text	= [NSString stringWithFormat: @"Log Date: %@", strFinal];
-            }
-            else{
-                lblMealName.text	= [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
-            }
+            lblMealName.text    = [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
         }
     }
-}
-
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CleanUpView" object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
+    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
         if (dietmasterEngine.isMealPlanItem) {
             self.navigationItem.title = @"Plan Item Detail";
         }

@@ -5,7 +5,6 @@
 //  Copyright 2010 AE Studios. All rights reserved.
 
 #import <UIKit/UIKit.h>
-#import "DietmasterEngine.h"
 #import <MessageUI/MessageUI.h>
 #import "PurchaseIAPHelper.h"
 
@@ -13,26 +12,11 @@
 @class DetailViewController;
 @class LoginViewController;
 
-@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, UPSyncDatabaseDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate> {
-}
-
-@property (nonatomic, strong) IBOutlet DietMasterGoViewController *viewController;
-@property (nonatomic) double caloriesremaning;
-@property (nonatomic, strong) IBOutlet DetailViewController *navigationController;
-@property (nonatomic, strong) LoginViewController *loginViewController;
-@property (nonatomic, strong) UIImageView *splashView;
+@interface DietMasterGoAppDelegate : NSObject <UIApplicationDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate>;
 
 @property (nonatomic, strong) NSString *idStr;
 
-@property (nonatomic)BOOL isFromAlert;
-
-- (void)checkUserLogin;
-- (void)getUserLogin;
 - (void)loginFromUrl:(NSString *)loginUrl;
-
-// Sync
-- (NSInteger)hoursAfterDate:(NSDate *)aDate;
-- (NSInteger)minutesAfterDate:(NSDate *)aDate;
 
 @end
 

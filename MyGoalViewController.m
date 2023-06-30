@@ -78,16 +78,12 @@
     self.scatterPlot = [[TUTSimpleScatterPlot alloc] initWithHostingView:_graphHostingView];
     [self getDataForDays:30];
     
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Weight_Chart"];
     }
-    
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"gymmatrix"]) {
+    if ([accountCode isEqualToString:@"gymmatrix"]) {
         for (id view in self.view.subviews) {
             if ([view isKindOfClass:[UILabel class]]) {
                 UILabel *label = (UILabel *)view;
@@ -160,47 +156,14 @@
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-       
-    }
     
-    FMResultSet *rs = [db executeQuery:@"SELECT weight_goal FROM user"];
-    while ([rs next]) {
-        num_weightGoal  = [rs intForColumn:@"weight_goal"];
-    }
-    [rs close];
-    
-    if (num_weightGoal == 0) {
-        UIFont * font = [UIFont fontWithName:@"Helvetica-Bold" size:22];
-        lbl_weightGoal.font = font;
-        lbl_weightGoal.text = [NSString stringWithFormat:@"%@", @"Weight Loss"];
-        
-    }
-    else if (num_weightGoal == 1) {
-        UIFont * font = [UIFont fontWithName:@"Helvetica-Bold" size:22];
-        lbl_weightGoal.font = font;
-        lbl_weightGoal.text = [NSString stringWithFormat:@"%@", @"Maintain Weight"];
-        
-    }
-    else if (num_weightGoal == 2) {
-        UIFont * font = [UIFont fontWithName:@"Helvetica-Bold" size:22];
-        lbl_weightGoal.font = font;
-        lbl_weightGoal.text = [NSString stringWithFormat:@"%@", @"Weight Gain"];
-        
-    }
-    else {
-        UIFont * font = [UIFont fontWithName:@"Helvetica-Bold" size:36];
-        lbl_weightGoal.font = font;
-
-        if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isKgs"] boolValue]) {
-            lbl_weightGoal.text = [NSString stringWithFormat:@"%i", num_weightGoal];
-        }
-        else{
-            lbl_weightGoal.text = [NSString stringWithFormat:@"%i", num_weightGoal];
-        }
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    UIFont * font = [UIFont fontWithName:@"Helvetica-Bold" size:22];
+    lbl_weightGoal.font = font;
+    if (currentUser.weightGoalType <= DMUserWeightGoalTypeGain) {
+        lbl_weightGoal.text = [currentUser weightGoalTypeAsString];
+    } else {
+        lbl_weightGoal.text = [currentUser weightGoalLocalizedString];
     }
     
     if (self.scatterPlot) {

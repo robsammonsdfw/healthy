@@ -38,6 +38,8 @@
 - (NSArray<DMMoveDay *> *)getUserPlanDaysForPlanId:(NSNumber *)planId;
 /// Gets the user plan date list from the local database. Returns ALL data.
 - (NSArray<DMMoveDay *> *)getUserPlanDays;
+/// Gets the move day for the ID provided.
+- (DMMoveDay *)getUserPlanDayForDayId:(NSNumber *)dayId;
 /// Returns the array of move plans for the given date. Empty if none found.
 - (NSArray<DMMoveDay *> *)getUserPlanDaysForDate:(NSDate *)date;
 /// Gets all of the move routines for a given dayID.
@@ -59,6 +61,9 @@
 /// Updates the value for the provided set.
 - (void)setFirstUnitValue:(NSNumber *)unitValue forMoveSet:(DMMoveSet *)moveSet;
 - (void)setSecondUnitValue:(NSNumber *)unitValue forMoveSet:(DMMoveSet *)moveSet;
+
+/// Ads a new move day to the date provided and plan.
+- (NSNumber *)addMoveDayToDate:(NSDate *)date toMovePlan:(DMMovePlan *)movePlan;
 
 /// Adds a new move set to the given routine.
 /// NOTE: If the DMMoveSet passed does have a setId set, it will

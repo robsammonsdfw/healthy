@@ -113,20 +113,9 @@
 
 @property (nonatomic, strong) NSDate *date_currentDate;
 @property (nonatomic, strong) NSArray *items;
-@property (nonatomic) int num_BMR;
 @property (nonatomic, strong) NSMutableArray *values;
 @property (nonatomic, strong) NSMutableArray *cpf_Values;
 @property (nonatomic, strong) NSMutableArray *colors;
-
-@property (nonatomic) double num_Calories;
-@property (nonatomic) double num_totalCalories;
-@property (nonatomic) double num_totalCaloriesBurned;
-@property (nonatomic) double num_totalCaloriesBurnedTracked;
-@property (nonatomic) double num_totalCaloriesRemaining;
-
-@property (nonatomic) double actualCarb;
-@property (nonatomic) double recCarb;
-@property (nonatomic) double ansactualCarb;
 
 @property (nonatomic) double recprofitn;
 @property (nonatomic) double actual;
@@ -135,15 +124,6 @@
 @property (nonatomic) double recFat;
 @property (nonatomic) double actualfat;
 @property (nonatomic) double actans;
-
-@property (nonatomic) double totalSugar;
-@property (nonatomic) double totalSugarValue;
-@property (nonatomic) double totalFat;
-@property (nonatomic) double totalProtein;
-@property (nonatomic) double totalCarbs;
-@property (nonatomic) double currentWeight;
-@property (nonatomic) double startWeight;
-@property (nonatomic) double currentHeight;
     
 @property (nonatomic, strong) NSString *strWeightStatus;
 @property (nonatomic, strong) NSString *status;
@@ -200,11 +180,6 @@
         self.weightSeperatorLbl.text = @"";
         self.thirdExpVwHeightConst.constant = 115;
     }];
-    
-    NSDictionary* userDefaultsValuesDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [NSNumber numberWithBool:YES], @"LoggedExeTracking",
-                                            nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsValuesDict];
     
     self.values = [[NSMutableArray alloc] init];
     self.cpf_Values = [[NSMutableArray alloc] init];
@@ -608,14 +583,6 @@
     }
 }
 
-- (void)getBMR {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSInteger bmrValue = [dietmasterEngine getBMR];
-    self.num_BMR = (int)bmrValue;
-    
-    [self updateCalorieTotal];
-}
-
 - (IBAction)showGroceryList:(id) sender {
     FoodsList *flController = [[FoodsList alloc] init];
     [self.navigationController pushViewController:flController animated:YES];
@@ -670,10 +637,6 @@
 
 - (void)reloadData {
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
-    if ([authManager isUserLoggedIn]) {
-        [self loadData];
-        [self loadExerciseData];
-    }
     DMUser *currentUser = [authManager loggedInUser];
     NSString *name = [NSString stringWithFormat: @"Hi, %@!", currentUser.firstName];
     self.nameLbl.text = name;
@@ -687,268 +650,80 @@
         return;
     }
     
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    
-    NSDate* date_homeDate = [NSDate date];
-    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-    [dateFormat setTimeZone:systemTimeZone];
-    NSString *date_Today = [dateFormat stringFromDate:date_homeDate];
-    
-    self.num_totalCalories = 0;
-    self.totalFat = 0.0;
-    self.totalCarbs = 0.0;
-    self.totalProtein = 0.0;
-    double difference = 0.0;
-        
-    NSString *query = [NSString stringWithFormat: @"SELECT Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food_Log_Items.NumberOfServings, Food.FoodKey, Food.Name, Food.Calories, Food.Fat, Food.Carbohydrates, Food.Protein,Food.Sugars, FoodMeasure.GramWeight, Food.ServingSize FROM Food_Log INNER JOIN Food_Log_Items ON Food_Log.MealID = Food_Log_Items.MealID INNER JOIN Food ON Food.FoodKey = Food_Log_Items.FoodID INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey WHERE (Food_Log.MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) AND Food_Log_Items.MeasureID = FoodMeasure.MeasureID ORDER BY Food_Log_Items.MealCode ASC", date_Today, date_Today];
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
 
-    FMResultSet *rs = [db executeQuery:query];
-    self.totalSugarValue = 0;
-    double totalSugarCalories = 0;
-    while ([rs next]) {
-        int fatGrams = [rs doubleForColumn:@"Fat"];
-        double sugar = [rs doubleForColumn:@"Sugars"];
-        double sugarValue = sugar * [rs doubleForColumn:@"NumberOfServings"] * ([rs doubleForColumn:@"GramWeight"] / 100 / [rs doubleForColumn:@"ServingSize"]);
-        totalSugarCalories += (sugarValue * 3.8);
-        self.totalSugarValue += sugarValue;
-        
-        int totalFatCalories = [rs doubleForColumn:@"NumberOfServings"] * ((fatGrams * 9.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]);
-        self.totalFat = self.totalFat + totalFatCalories;
-        
-        int carbGrams = [rs doubleForColumn:@"Carbohydrates"];
-        int totalCarbCalories = [rs doubleForColumn:@"NumberOfServings"] * ((carbGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]);
-        self.totalCarbs = self.totalCarbs + totalCarbCalories;
-        
-        int proteinGrams = [rs doubleForColumn:@"Protein"];
-        
-        int totalProteinCalories = [rs doubleForColumn:@"NumberOfServings"] * ((proteinGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]);
-        self.totalProtein = self.totalProtein + totalProteinCalories;
-        
-        int totalCalories = [rs doubleForColumn:@"NumberOfServings"] * (([rs doubleForColumn:@"Calories"] * ([rs doubleForColumn:@"GramWeight"] / 100)) / [rs doubleForColumn:@"ServingSize"]);
-        
-        self.num_totalCalories += totalCalories;
-    }
-   
-    NSString *sugarStr = [NSString stringWithFormat:@"%.1f", self.totalSugarValue];
+    double totalCalories = [dayProvider getTotalCalories].doubleValue;
+    double sugarGrams = [dayProvider getTotalSugarGrams].doubleValue;
+    double sugarCalories = [dayProvider getTotalSugarCalories].doubleValue;
+
+    NSString *sugarStr = [NSString stringWithFormat:@"%.1f", sugarGrams];
     self.lblSugar.text = [NSString stringWithFormat:@"%@g",sugarStr];
     
-    if (totalSugarCalories / self.num_totalCalories > .1) //if sugar radio is > 10%
-    {
+    // If sugar radio is > 10%, color it red.
+    if ((sugarCalories / totalCalories) > .1) {
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_suagrGraphImageVw setTintColor:[UIColor redColor]];
-    }
-    else
-    {
+    } else {
         UIColor *accentColor = PrimaryColor
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_suagrGraphImageVw setTintColor:accentColor];
     }
-    
-    [rs close];
-    
-    NSString *getGoalSQL = @"SELECT weight_goal, Goals ,Height, gender, GoalStartDate FROM User";
-    
-    int intGoalWeight = 0;
-    int intWeightGoal = 0;
-    int gender = -1;
-    NSString *goalStartDate;
-    
-    rs = [db executeQuery:getGoalSQL];
-    while ([rs next]) {
-        gender = [rs doubleForColumn:@"Gender"];
-        intGoalWeight = [rs intForColumn:@"Goals"];
-        intWeightGoal = [rs intForColumn:@"weight_goal"];
-        self.currentHeight = [rs doubleForColumn:@"Height"];
-        goalStartDate = [[rs stringForColumn:@"GoalStartDate"] componentsSeparatedByString:@" "][0];
-    }
-    
-    dietmasterEngine.userHeight = [NSNumber numberWithDouble:self.currentHeight];
-    dietmasterEngine.userGender = gender;
-    
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isKgs"] boolValue]) {
-        self.lblGoal_lbs.text = [NSString stringWithFormat:@"%.1d lbs",intWeightGoal];
-        self.lblToGo_lbs.text = [NSString stringWithFormat:@"%g lbs",(self.currentWeight - intWeightGoal)];
-    }
-    else {
-        self.lblGoal_lbs.text = [NSString stringWithFormat:@"%d Kgs",intWeightGoal];
-    }
-    
-    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d.00",intWeightGoal] forKey:@"GoalWeight"];
-    
-    if (intGoalWeight == 0) {
-        self.strWeightStatus = @"Lost: ";
-    }
-    else if (intGoalWeight == 1) {
-        self.strWeightStatus = @"Maintained: ";
-    }
-    else if (intGoalWeight == 2) {
-        self.strWeightStatus = @"Gained: ";
-    }
-    else {
-    }
-    
-    [rs close];
-    
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    [dateFormat setTimeZone:systemTimeZone];
-    [dateFormat setLenient:YES];
-    NSString *StrCurrentDate = [dateFormat stringFromDate:[NSDate date]];
-    
-    NSString *getWeightSQL = [NSString stringWithFormat:@"SELECT weight FROM weightlog where logtime in (select logtime from weightlog WHERE logtime = '%@') AND deleted = 1", StrCurrentDate];
-    
-    rs = [db executeQuery:getWeightSQL];
-    while ([rs next]) {
-        self.currentWeight = [rs doubleForColumn:@"weight"];
-    }
-    
-    if (self.currentWeight == 0) {
-        NSString *getWeightSQL = @"SELECT weight FROM weightlog where logtime in (select max(logtime) from weightlog WHERE deleted = 1) AND deleted = 1";
-        rs = [db executeQuery:getWeightSQL];
-        while ([rs next]) {
-            self.currentWeight = [rs doubleForColumn:@"weight"];
-        }
-    }
-    
-    NSString *getStartWeight = [NSString stringWithFormat:@"SELECT weight FROM weightlog where logtime like '%%%@%%' AND deleted = 1", goalStartDate];
-    rs = [db executeQuery:getStartWeight];
-    while ([rs next]) {
-        self.startWeight = [rs doubleForColumn:@"weight"];
-    }
-    
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isKgs"] boolValue]) {
-        self.lblStart_lbs.text = [NSString stringWithFormat:@"%g lbs", self.startWeight];
-    }
-    else {
-        self.lblStart_lbs.text = [NSString stringWithFormat:@"%g Kgs", self.startWeight];
-    }
-    
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isKgs"] boolValue]) {
-        self.lblProgressBarCurrentWeight.text = [NSString stringWithFormat:@"%g lbs.", self.currentWeight];
-    }
-    else {
-        self.lblProgressBarCurrentWeight.text = [NSString stringWithFormat:@"%g Kgs", self.currentWeight];
-    }
-    
-    double progressValue = 0.0;
-    
-    if (self.startWeight < intWeightGoal) {
-        //weight gain
-        difference = (int) (intWeightGoal - self.startWeight);
-    } else if (self.startWeight > intWeightGoal) {
-        //weight loss
-        difference = (int) (self.startWeight - intWeightGoal);
-    } else if (self.startWeight == intWeightGoal) {
-        difference = (int) (self.startWeight - 0);
-    }
-    
-    progressValue = ((self.startWeight - self.currentWeight) / difference);
-    
-    dietmasterEngine.currentWeight = [NSNumber numberWithDouble:self.currentWeight];
-    
-    [self getBMR];
-    
-    double netCalories = self.num_BMR - self.num_totalCalories;
-    
+            
+    self.lblGoal_lbs.text = [currentUser weightGoalLocalizedString];
+    self.lblToGo_lbs.text = [dayProvider getLocalizedRemainingWeightString];
+    self.lblStart_lbs.text = [dayProvider getLocalizedStartingWeightString];
+    self.lblProgressBarCurrentWeight.text = [dayProvider getLocalizedCurrentWeightString];
+        
+    double netCalories = [dayProvider getCurrentBMR].doubleValue - totalCalories;
     self.lblGoal.text = [NSString stringWithFormat:@"%.0f", netCalories];
+
+    double bodyFatPercentage = [dayProvider getCurrentBodyFatPercentage].doubleValue;
+    self.lblBody_Fat.text = [NSString stringWithFormat:@"Body Fat: %.1f%%", bodyFatPercentage];
+    self.lblCurrent_BMI.text = [NSString stringWithFormat:@"BMI: %.1f", [dayProvider getCurrentBMI].doubleValue];
+
     [self updateCalorieTotal];
-    [self calculateBMI];
+}
+
+- (void)updateCalorieTotal {
+    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    double totalCalories = [dayProvider getTotalCalories].doubleValue;
+    double caloriesRemaining = [dayProvider getTotalCaloriesRemaining].doubleValue;
+    double exerciseCalories = [dayProvider getCaloriesBurnedToday];
+    int userBMR = dayProvider.getCurrentBMR.intValue;
     
-    NSString *getBodyFatSQL = @"SELECT bodyfat FROM weightlog where logtime in (select max(logtime) from weightlog WHERE deleted = 1)";
-    CGFloat bodyFat = 0.0;
-    rs = [db executeQuery:getBodyFatSQL];
-    while ([rs next]) {
-        bodyFat = [rs doubleForColumn:@"bodyfat"];
-    }
-    self.lblBody_Fat.text = [NSString stringWithFormat:@"Body Fat: %.1f%%", bodyFat];
-    [rs close];
-    [DMActivityIndicator hideActivityIndicator];
-}
-
-- (void)caloriesRemainUpdate {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    double calRecommended = [dietmasterEngine getBMR];
-    NSString *remainingCalorieCount = [NSString stringWithFormat:@"%.0f",calRecommended + self.num_totalCaloriesBurned];
-}
-
--(void)loadExerciseData {
-    self.num_totalCaloriesBurnedTracked = (int)[[DayDataProvider sharedInstance] getCaloriesBurnedTodayViaTracker];
-    self.num_totalCaloriesBurned = (int)[[DayDataProvider sharedInstance] getCaloriesBurnedToday];
-
-    [self updateCalorieTotal];
-    [self calculateBMI];
-}
-
--(void)updateCalorieTotal {
-    bool useCaloriesBurned = [[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedExeTracking"] == YES;
-    bool useCaloriesBurnedTracked =[[NSUserDefaults standardUserDefaults] boolForKey:@"CalorieTrackingDevice"] == YES;    //if setting is not checked, add tracked callories into burned total to be included in net calculation
-    double netCalories = 0;
-    CGFloat caloriesREmaining = 0;
-
-    if (useCaloriesBurned) {
-        netCalories = self.num_BMR - self.num_totalCalories + self.num_totalCaloriesBurned;
-        caloriesREmaining = (self.num_BMR - (self.num_totalCaloriesBurned * -1)) - self.num_totalCalories;
-        self.num_totalCaloriesRemaining = self.num_BMR - (self.num_totalCaloriesBurned * -1) - self.num_totalCalories;
-    } else {
-        if (useCaloriesBurnedTracked) {
-            netCalories = self.num_BMR - self.num_totalCalories + self.num_totalCaloriesBurnedTracked;
-            caloriesREmaining = (self.num_BMR - (self.num_totalCaloriesBurnedTracked * -1)) - self.num_totalCalories;
-            self.num_totalCaloriesRemaining = self.num_BMR - (self.num_totalCaloriesBurnedTracked * -1) - self.num_totalCalories;
-        } else {
-            netCalories = self.num_BMR - self.num_totalCalories;
-            caloriesREmaining = self.num_BMR - self.num_totalCalories;
-            self.num_totalCaloriesRemaining = self.num_BMR - self.num_totalCalories;
-        }
-    }
-
-    if (caloriesREmaining < 0) {
+    if (caloriesRemaining < 0) {
         [self.values removeAllObjects];
         [self.values addObject:[NSNumber numberWithInt:1]];
-        [self.values addObject:[NSNumber numberWithInt:(self.num_BMR - 1)]];
+        [self.values addObject:[NSNumber numberWithInt:(userBMR - 1)]];
         [_remaining_Pie reloadData];
-    }
-    else {
+    } else {
         [self.values removeAllObjects];
-        [self.values addObject:[NSNumber numberWithInt:caloriesREmaining]];
-        [self.values addObject:[NSNumber numberWithInt:(self.num_BMR - caloriesREmaining)]];
+        [self.values addObject:[NSNumber numberWithInt:caloriesRemaining]];
+        [self.values addObject:[NSNumber numberWithInt:(userBMR - caloriesRemaining)]];
         [_remaining_Pie reloadData];
     }
+        
+    self.lblGoal.text = [NSString stringWithFormat:@"%i", userBMR];
+    self.lblfoodCalories.text = [NSString stringWithFormat:@"+%.0f", totalCalories];
+    self.lblConsumed.text = [NSString stringWithFormat:@"%.0f", totalCalories];
+    self.lblExerciseCalories.text = [NSString stringWithFormat:@"-%.0f", exerciseCalories];
+    self.lblBurned.text = [NSString stringWithFormat:@"%.0f", exerciseCalories];
+    self.lblNetCalories.text = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
     
-    AppDel.caloriesremaning = [[NSString stringWithFormat:@"%.0f", caloriesREmaining] doubleValue];
-    [self caloriesRemainUpdate];
+    double fatCalories = [dayProvider getTotalFatCalories].doubleValue;
+    double proteinCalories = [dayProvider getTotalProteinCalories].doubleValue;
+    double carbCalories = [dayProvider getTotalCarbCalories].doubleValue;
+    double totalPercentage = fatCalories + proteinCalories + carbCalories;
     
-    self.lblGoal.text = [NSString stringWithFormat:@"%i", self.num_BMR];
-    self.lblfoodCalories.text = [NSString stringWithFormat:@"+%.0f", self.num_totalCalories];
-    self.lblConsumed.text = [NSString stringWithFormat:@"%.0f", self.num_totalCalories];
-    
-    if (useCaloriesBurned) {
-        self.lblExerciseCalories.text = [NSString stringWithFormat:@"-%.0f", self.num_totalCaloriesBurned];
-    } else {
-        if (useCaloriesBurnedTracked) {
-            self.lblExerciseCalories.text = [NSString stringWithFormat:@"-%.0f", self.num_totalCaloriesBurnedTracked];
-        } else {
-            self.lblExerciseCalories.text = @"-0";
-        }
-    }
-    
-    if (!useCaloriesBurnedTracked) {
-        self.lblBurned.text = [NSString stringWithFormat:@"%.0f", self.num_totalCaloriesBurned + self.num_totalCaloriesBurnedTracked];
-    } else {
-        self.lblBurned.text = [NSString stringWithFormat:@"%.0f", self.num_totalCaloriesBurned];
-    }
+    CGFloat carbRatioActual = carbCalories / 4;
+    CGFloat proteinRatioActual = proteinCalories / 4;
+    CGFloat fatRatioActual = fatCalories / 9;
 
-    self.lblNetCalories.text = [NSString stringWithFormat:@"%.0f", netCalories];
-    
-    double totalPercentage = self.totalFat + self.totalProtein + self.totalCarbs;
-    
-    CGFloat carbGramActual = self.totalCarbs / 4;
-    CGFloat proteinGramActual = self.totalProtein / 4;
-    CGFloat fatGramActual = self.totalFat / 9;
-    
-    //HHT cange start
-    CGFloat fatGramActualPrecent = ((self.totalFat / totalPercentage) * 100);
-    CGFloat proteinGramActualPrecent = ((self.totalProtein / totalPercentage) * 100);
-    CGFloat carbsGramActualPercent = ((self.totalCarbs / totalPercentage) * 100);
+    CGFloat fatGramActualPrecent = ((fatCalories / totalPercentage) * 100);
+    CGFloat proteinGramActualPrecent = ((proteinCalories / totalPercentage) * 100);
+    CGFloat carbsGramActualPercent = ((carbCalories / totalPercentage) * 100);
   
     NSString* c_percentageStr =  [[NSNumber numberWithInt:carbsGramActualPercent] stringValue];
     NSString* p_percentageStr = [[NSNumber numberWithInt:proteinGramActualPrecent] stringValue];
@@ -1006,45 +781,19 @@
         }
     }
     [self.cpf_Pie reloadData];
-        
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSDictionary *ratioDict = [dietmasterEngine getUserRecommendedRatios];
 
-    CGFloat carbRatioActual = self.totalCarbs / 4;
-    CGFloat proteinRatioActual = self.totalProtein / 4;
-    CGFloat fatRatioActual = self.totalFat / 9;
-
-    if (([[NSUserDefaults standardUserDefaults] valueForKey:@"ansactualCarb"] == nil) || ([[NSUserDefaults standardUserDefaults] valueForKey:@"recprofitn"] == nil) || ([[NSUserDefaults standardUserDefaults] valueForKey:@"actans"] == nil))
-    {
-        self.actualCarbLabel.text = [NSString stringWithFormat:@"%.1f",carbRatioActual];
-        self.actualProtLabel.text = [NSString stringWithFormat:@"%.1f",proteinRatioActual];
-        self.actualFatLabel.text = [NSString stringWithFormat:@"%.1f",fatRatioActual];
-    }
-    else
-    {
-        self.actualCarbLabel.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"ansactualCarb"];
-        self.actualProtLabel.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"recprofitn"];
-        self.actualFatLabel.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"actans"];
-    }
+    self.actualCarbLabel.text = [NSString stringWithFormat:@"%.1f",carbRatioActual];
+    self.actualProtLabel.text = [NSString stringWithFormat:@"%.1f",proteinRatioActual];
+    self.actualFatLabel.text = [NSString stringWithFormat:@"%.1f",fatRatioActual];
     
-    CGFloat bmrValue = [dietmasterEngine getBMR];
-    
-    CGFloat carbRatioRecommended = [[ratioDict valueForKey:@"CarbRatio"] doubleValue] * bmrValue / 4;
-    CGFloat proteinRatioRecommended = [[ratioDict valueForKey:@"ProteinRatio"] doubleValue] * bmrValue / 4;
-    CGFloat fatRatioRecommended = [[ratioDict valueForKey:@"FatRatio"] doubleValue] * bmrValue / 9;
+    CGFloat bmrValue = [dayProvider getCurrentBMR].floatValue;
+    CGFloat carbRatioRecommended = (currentUser.carbRatio.floatValue / 100) * bmrValue / 4;
+    CGFloat proteinRatioRecommended = (currentUser.proteinRatio.floatValue / 100) * bmrValue / 4;
+    CGFloat fatRatioRecommended = (currentUser.fatRatio.floatValue / 100) * bmrValue / 9;
     
     self.actualCarbGramsLabel.text = [NSString stringWithFormat:@"%.1f", carbRatioRecommended];
     self.actualProteinGramsLabel.text = [NSString stringWithFormat:@"%.1f", proteinRatioRecommended];
     self.actualFatGramsLabel.text = [NSString stringWithFormat:@"%.1f", fatRatioRecommended];
-    
-    self.recCarb=carbRatioRecommended;
-    self.recprofitn=proteinRatioRecommended;
-    self.recFat=fatRatioRecommended;
-}
-
-- (void)calculateBMI {
-    double bodyMassIndex = self.currentWeight / (self.currentHeight * self.currentHeight) * 703;
-    self.lblCurrent_BMI.text = [NSString stringWithFormat:@"BMI: %.1f", bodyMassIndex];
 }
 
 @end

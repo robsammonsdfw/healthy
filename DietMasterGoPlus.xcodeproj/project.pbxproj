@@ -20,6 +20,7 @@
 		0E44097B2A49EFCB00AF5BAD /* DMDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */; };
 		0E44097E2A4A0B5F00AF5BAD /* MyMovesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */; };
 		0E4409812A4B13E500AF5BAD /* DMMealPlanDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409802A4B13E500AF5BAD /* DMMealPlanDataProvider.m */; };
+		0E4E013E2A4DA936005597A5 /* DMSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */; };
 		0E6F8FF42A43104200956F1E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F8FF32A43104200956F1E /* SceneDelegate.swift */; };
 		0E6F91142A4328A000956F1E /* DietMasterGoPlus-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* DietMasterGoPlus-Info.plist */; };
 		0E6F91192A4328A000956F1E /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
@@ -171,8 +172,6 @@
 		40E035C921F1F2A100968755 /* MyMovesDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */; };
 		40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */; };
 		40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */; };
-		650208B52500D34000F412B0 /* PopUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208B32500D34000F412B0 /* PopUpView.xib */; };
-		650208B62500D34000F412B0 /* PopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208B42500D34000F412B0 /* PopUpView.m */; };
 		650208CB250152FA00F412B0 /* PurchaseIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */; };
 		650208CE2501531B00F412B0 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CD2501531A00F412B0 /* IAPHelper.m */; };
 		650208DF250153C300F412B0 /* InAppPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D4250153C300F412B0 /* InAppPurchaseViewController.m */; };
@@ -272,6 +271,7 @@
 		0E4788BE14EACCCC00B8FFE3 /* SHA1PHPClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1PHPClass.h; sourceTree = "<group>"; };
 		0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHA1PHPClass.m; sourceTree = "<group>"; };
 		0E4788C514EAD8FA00B8FFE3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMSettingsViewController.swift; sourceTree = "<group>"; };
 		0E4E436D172ABB7B00C400D4 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		0E4E436E172ABB7B00C400D4 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		0E4E436F172ABB7B00C400D4 /* NSData-AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData-AES.h"; sourceTree = "<group>"; };
@@ -484,9 +484,6 @@
 		43D254AD1D62F564008513A0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		43D586621D59BB53005354D2 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		43D586641D59BB5F005354D2 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		650208B22500D34000F412B0 /* PopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopUpView.h; sourceTree = "<group>"; };
-		650208B32500D34000F412B0 /* PopUpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopUpView.xib; sourceTree = "<group>"; };
-		650208B42500D34000F412B0 /* PopUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopUpView.m; sourceTree = "<group>"; };
 		650208C9250152FA00F412B0 /* PurchaseIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseIAPHelper.h; sourceTree = "<group>"; };
 		650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseIAPHelper.m; sourceTree = "<group>"; };
 		650208CC2501531A00F412B0 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
@@ -609,7 +606,6 @@
 				65301CB4269E50A600CA2CAA /* Profile */,
 				650208EB250155EA00F412B0 /* Today_Old */,
 				650208D3250153C300F412B0 /* In-App Purchase */,
-				650208B12500D31400F412B0 /* Pop Up View */,
 				403D889721EC7E2B00B2F232 /* My Moves */,
 				403FEB511FD149A5006D9B8F /* StepData */,
 				09AB77F51FBDABCE00924A51 /* YLProgressBar */,
@@ -1060,16 +1056,6 @@
 			name = ExchangeFood;
 			sourceTree = "<group>";
 		};
-		0ECE6EE614BF41BC004DEF36 /* AppSettings */ = {
-			isa = PBXGroup;
-			children = (
-				245506D6129B928400A84340 /* AppSettings.h */,
-				245506D7129B928400A84340 /* AppSettings.m */,
-				245506D8129B928400A84340 /* AppSettings.xib */,
-			);
-			name = AppSettings;
-			sourceTree = "<group>";
-		};
 		0ECE6EE714BF41D6004DEF36 /* ManageFoods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1369,7 +1355,10 @@
 		59DA2AD31A1B625B008D749F /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				0ECE6EE614BF41BC004DEF36 /* AppSettings */,
+				245506D6129B928400A84340 /* AppSettings.h */,
+				245506D7129B928400A84340 /* AppSettings.m */,
+				245506D8129B928400A84340 /* AppSettings.xib */,
+				0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1398,16 +1387,6 @@
 				0ECE6ED914BF4068004DEF36 /* MeasurePicker */,
 			);
 			name = Scaning_Food_Screen;
-			sourceTree = "<group>";
-		};
-		650208B12500D31400F412B0 /* Pop Up View */ = {
-			isa = PBXGroup;
-			children = (
-				650208B22500D34000F412B0 /* PopUpView.h */,
-				650208B42500D34000F412B0 /* PopUpView.m */,
-				650208B32500D34000F412B0 /* PopUpView.xib */,
-			);
-			name = "Pop Up View";
 			sourceTree = "<group>";
 		};
 		650208D3250153C300F412B0 /* In-App Purchase */ = {
@@ -1629,7 +1608,6 @@
 				0E6F91262A4328A000956F1E /* Icon-76.png in Resources */,
 				652B915724B92A72007B08ED /* GoogleService-Info.plist in Resources */,
 				65462D2726BD1DAF004D1654 /* UserGoalVC.xib in Resources */,
-				650208B52500D34000F412B0 /* PopUpView.xib in Resources */,
 				401B63E920B3FC64004453E7 /* ManageFoods.xib in Resources */,
 				401B63EC20B3FC64004453E7 /* FoodCategoryPicker.xib in Resources */,
 				401B63ED20B3FC64004453E7 /* MeasurePicker.xib in Resources */,
@@ -1821,6 +1799,7 @@
 				0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */,
 				0E8EC8F12A3DE57D0095BDEC /* DMMoveTag.m in Sources */,
 				0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */,
+				0E4E013E2A4DA936005597A5 /* DMSettingsViewController.swift in Sources */,
 				65462D0D26BD1D29004D1654 /* ProfileVC.m in Sources */,
 				65462D2B26BD1DC3004D1654 /* OtherHealthServiceVC.m in Sources */,
 				0E4409782A49EA6E00AF5BAD /* FetchUtilities.swift in Sources */,
@@ -1848,7 +1827,6 @@
 				401B656B20B3FC64004453E7 /* StepData.m in Sources */,
 				0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */,
 				0E6F8FF42A43104200956F1E /* SceneDelegate.swift in Sources */,
-				650208B62500D34000F412B0 /* PopUpView.m in Sources */,
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,
 				65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */,
 				401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */,
@@ -1928,7 +1906,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 12;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -1996,7 +1974,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 12;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -2062,7 +2040,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 12;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;

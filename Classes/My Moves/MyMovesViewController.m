@@ -294,36 +294,20 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 
 /// Sets the UI to reflect the date the user selected.
 - (void)setDateHeaderLabelForDate:(NSDate *)date {
-    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     [self.dateFormatter setTimeZone:systemTimeZone];
+    [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
     
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isddmm"] boolValue]) {
-        [self.dateFormatter setDateFormat:@"MMMM d, yyyy"];
-    } else{
-        [self.dateFormatter setDateFormat:@"d MMMM, yyyy"];
-    }
     NSString *dateToDisplay = [self.dateFormatter stringFromDate:date];
     self.lblDateHeader.text = dateToDisplay;
+    
     [self.dateFormatter setDateFormat:@"MMMM"];
     self.displayedMonthLbl.text = [self.dateFormatter stringFromDate:date];
 }
 
--(void)loadCalendarOnMonthChange:(NSDate*)dateToSet {
+- (void)loadCalendarOnMonthChange:(NSDate*)dateToSet {
     [self.dateFormatter setDateFormat:@"MMMM"];
     _displayedMonthLbl.text = [self.dateFormatter stringFromDate:dateToSet];
-    
-    [self.dateFormatter setDateFormat:@"yyyy-MM"];
-    
-    NSString *filter = @"%K CONTAINS %@";
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:filter,@"LastUpdated", [self.dateFormatter stringFromDate:dateToSet]];
-    NSArray *tempExDb = nil;
-    //tempExDb = [self.soapWebService loadUserPlanListFromDb];
-    //tempExDb = [self.soapWebService getUserPlanDateList];
-
-    //_exerciseData = [[tempExDb filteredArrayUsingPredicate:categoryPredicate] mutableCopy];
-    
-    [DMActivityIndicator hideActivityIndicator];
 }
 
 - (void)showNextDate:(id)sender {
@@ -340,8 +324,9 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+        if (currentUser.enableAppleHealthSync){
         //    [self readData];
         }
         else {
@@ -367,8 +352,9 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LoggedAppleWatchTracking"] == YES){
+        if (currentUser.enableAppleHealthSync){
         //    [self readData];
         }
         else {
@@ -476,12 +462,10 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     if (!self.selectedUserPlanDays.count) {
         // Show empty cell.
-        UITableViewCell *emptyCell = [tableView dequeueReusableCellWithIdentifier:EmptyCellIdentifier forIndexPath:indexPath];
-        emptyCell.textLabel.text = @"No moves found...";
-        emptyCell.backgroundColor = [UIColor whiteColor];
-        emptyCell.textLabel.textColor = [UIColor blackColor];
+        UITableViewCell *emptyCell = [self getEmptyCellForTableView:tableView atIndexPath:indexPath];
         return emptyCell;
     }
     
@@ -495,6 +479,10 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     DMMoveDay *day = self.selectedUserPlanDays[indexPath.section];
+    if (!day.routines.count) {
+        UITableViewCell *emptyCell = [self getEmptyCellForTableView:tableView atIndexPath:indexPath];
+        return emptyCell;
+    }
     DMMoveRoutine *routine = day.routines[indexPath.row];
     
     cell.bgView.backgroundColor = [UIColor whiteColor];
@@ -576,6 +564,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     [button setTitle:@"" forState:UIControlStateNormal];
     button.frame = cell.contentView.bounds;
     [cell.contentView addSubview:button];
+    cell.userInteractionEnabled = YES;
     
     return [cell contentView];
 }
@@ -596,6 +585,16 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     return 35;
 }
 
+/// Returns an empty cell.
+- (UITableViewCell *)getEmptyCellForTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *emptyCell = [tableView dequeueReusableCellWithIdentifier:EmptyCellIdentifier forIndexPath:indexPath];
+    emptyCell.textLabel.text = @"No moves found...";
+    emptyCell.backgroundColor = [UIColor whiteColor];
+    emptyCell.textLabel.textColor = [UIColor blackColor];
+    emptyCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return emptyCell;
+}
+
 #pragma mark - User Actions
 
 /// Shows the my moves list view controller for a user to select an exercise.
@@ -604,10 +603,21 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     moveListVc.selectedDate = self.selectedDate;
     NSArray *planData = [self.soapWebService getUserPlanDaysForDate:self.selectedDate];
     if (!planData.count) {
-        return;
+        // Add a date to the plan.
+        NSArray *movePlans = [self.soapWebService getUserMovePlans];
+        if (!movePlans.count) {
+            [DMGUtilities showAlertWithTitle:@"Error" message:@"There are no available plans to add a Move to." inViewController:nil];
+            return; // No plans to add to!
+        }
+        DMMovePlan *plan = movePlans.firstObject;
+        NSNumber *newDayId = [self.soapWebService addMoveDayToDate:self.selectedDate toMovePlan:plan];
+        DMMoveDay *moveDay = [self.soapWebService getUserPlanDayForDayId:newDayId];
+        moveListVc.moveDay = moveDay;
+        [self loadMovePlanForDate:self.selectedDate];
+    } else {
+        NSUInteger section = [sender tag];
+        moveListVc.moveDay = planData[section];
     }
-    NSUInteger section = [sender tag];
-    moveListVc.moveDay = planData[section];
     [self.navigationController pushViewController:moveListVc animated:YES];
 }
 

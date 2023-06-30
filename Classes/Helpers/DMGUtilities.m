@@ -20,6 +20,15 @@
     return self;
 }
 
+#pragma mark - App Config
+
++ (NSString *)configValueForKey:(NSString *)key {
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
+    return appDefaults[key];
+}
+
 #pragma mark - Sync Helpers
 
 static NSString *DMLastSyncPrefsKey = @"lastsyncdate";
@@ -56,6 +65,37 @@ static NSString *DMServerDateFormat = @"yyyy-MM-dd HH:mm:ss";
 + (void)setLastSyncToDate:(NSDate *)date {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:date forKey:DMLastSyncPrefsKey];
+}
+
+static NSString *DMLastFoodSyncPrefsKey = @"FoodUpdateLastsyncDate";
+
++ (NSString *)lastFoodSyncDateString {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *dateString = nil;
+    
+    if ([defaults objectForKey:DMLastFoodSyncPrefsKey] == nil) {
+        dateString = @"2015-01-01";
+    } else {
+        NSDate *lastSyncDate = [defaults valueForKey:DMLastFoodSyncPrefsKey];
+        // If current date is missing, let's assume the last sync as 90 days ago.
+        if (!lastSyncDate) {
+            lastSyncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
+                                                                    value:-90
+                                                                   toDate:[NSDate date]
+                                                                  options:0];
+        }
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.timeZone = [NSTimeZone systemTimeZone];
+        [dateFormatter setDateFormat:DMServerDateFormat];
+        dateString = [dateFormatter stringFromDate:lastSyncDate];
+    }
+    
+    return dateString;
+}
+
++ (void)setLastFoodSyncDate:(NSDate *)date {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:date forKey:DMLastFoodSyncPrefsKey];
 }
 
 #pragma mark - Color

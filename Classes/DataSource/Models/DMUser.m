@@ -36,6 +36,8 @@
  }
  */
 @interface DMUser()
+@property (nonatomic, strong) NSNumberFormatter *numberFormatter;
+@property (nonatomic, strong) NSMassFormatter *massFormatter;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @property (nonatomic, strong, readwrite) NSNumber *userId;
@@ -178,16 +180,18 @@
         _firstName = ValidString(userDict[@"FirstName"]);
         _lastName = ValidString(userDict[@"LastName"]);
 
-        _dateFormatter = [[NSDateFormatter alloc] init];
-        [_dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-
-        
         _carbRatio = ValidNSNumber(userDict[@"CarbRatio"]);
         _proteinRatio = ValidNSNumber(userDict[@"ProteinRatio"]);
         _fatRatio = ValidNSNumber(userDict[@"FatRatio"]);
         
         _hostName = ValidString(userDict[@"HostName"]);
-        
+
+        // Formatters.
+        _massFormatter = [[NSMassFormatter alloc] init];
+        _numberFormatter = [[NSNumberFormatter alloc] init];
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+
         [self updateUserDetails:userDict];
     }
     return self;
@@ -230,6 +234,65 @@
         return @"";
     }
     return [self.dateFormatter stringFromDate:self.goalStartDate];
+}
+
+- (DMUserWeightGoalType)weightGoalType {
+    return (DMUserWeightGoalType)self.goals;
+}
+
+- (NSString *)weightGoalLocalizedString {
+    [self.massFormatter setForPersonMassUse:YES];
+    NSMassFormatterUnit unit = NSMassFormatterUnitPound;
+    if (self.numberFormatter.locale.usesMetricSystem) {
+        unit = NSMassFormatterUnitKilogram;
+    }
+    return [self.massFormatter stringFromValue:self.weightGoal.doubleValue
+                                          unit:unit];
+}
+
+- (NSString *)weightGoalTypeAsString {
+    switch (self.weightGoalType) {
+        case DMUserWeightGoalTypeLoss:
+            return @"Lost";
+        case DMUserWeightGoalTypeMaintain:
+            return @"Maintained";
+        case DMUserWeightGoalTypeGain:
+            return @"Gained";
+    }
+    return @"";
+}
+
+static NSString *UseCalorieTrackingDeviceKey = @"CalorieTrackingDevice";
+- (BOOL)useCalorieTrackingDevice {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:UseCalorieTrackingDeviceKey];
+}
+
+- (void)setUseCalorieTrackingDevice:(BOOL)useCalorieTrackingDevice {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:useCalorieTrackingDevice forKey:UseCalorieTrackingDeviceKey];
+}
+
+static NSString *UseBurnedCaloriesKey = @"LoggedExeTracking";
+- (BOOL)useBurnedCalories {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:UseBurnedCaloriesKey];
+}
+
+- (void)setUseBurnedCalories:(BOOL)useBurnedCalories {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:useBurnedCalories forKey:UseBurnedCaloriesKey];
+}
+
+static NSString *AppleHealthTrackingKey = @"LoggedAppleWatchTracking";
+- (BOOL)enableAppleHealthSync {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:AppleHealthTrackingKey];
+}
+
+- (void)setEnableAppleHealthSync:(BOOL)enableAppleHealthSync {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:enableAppleHealthSync forKey:AppleHealthTrackingKey];
 }
 
 - (NSString *)description {

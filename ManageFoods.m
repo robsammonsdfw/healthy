@@ -74,9 +74,7 @@ CGPoint svos;
     scannerButton.frame = CGRectMake(20,  SCREEN_HEIGHT-180,
                                      scannerButton.frame.size.width, scannerButton.frame.size.height);
     scannerButton.alpha = 0.80;
-    
-    self.helperBubbleWasShown = NO;
-    
+        
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedScrollView:)];
     tapGesture.numberOfTapsRequired = 1.0;
     tapGesture.numberOfTouchesRequired = 1.0;

@@ -12,12 +12,16 @@ import FMDB
 /// database.
 @objc @objcMembers final class DayDataProvider: NSObject {
     private var database: FMDatabase?
-    
+    private let massFormatter = MassFormatter()
+    private let numberFormatter = NumberFormatter()
+
     // Singleton, main access point.
     @objc static let sharedInstance = DayDataProvider()
     
     /// Current user. Nil if logged out.
-    public var currentUser: DMUser?
+    public var currentUser: DMUser? {
+        return DMAuthManager.sharedInstance().loggedInUser()
+    }
     
     private override init() {
         super.init()
@@ -42,13 +46,75 @@ import FMDB
         return fullURL.absoluteString
     }
     
+    /// Gets the day's calorie data for use in other public functions.
+    private func getCalorieData() -> (totalCalories: Double,
+                                      fatCalories: Double,
+                                      carbCalories: Double,
+                                      proteinCalories: Double,
+                                      sugarCalories: Double,
+                                      sugarGrams: Double) {
+        guard let database = database, database.open() == true else {
+            return (0, 0, 0, 0, 0, 0)
+        }
+        
+        let sourceDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone.current
+        let dateString = dateFormatter.string(from: sourceDate)
+        
+        let query = String(format: "SELECT Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food_Log_Items.NumberOfServings, Food.FoodKey, Food.Name, Food.Calories, Food.Fat, Food.Carbohydrates, Food.Protein, Food.Sugars, FoodMeasure.GramWeight, Food.ServingSize FROM Food_Log INNER JOIN Food_Log_Items ON Food_Log.MealID = Food_Log_Items.MealID INNER JOIN Food ON Food.FoodKey = Food_Log_Items.FoodID INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey WHERE (Food_Log.MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) AND Food_Log_Items.MeasureID = FoodMeasure.MeasureID ORDER BY Food_Log_Items.MealCode ASC", dateString, dateString)
+        
+        var totalCalories = 0.0
+        var fatCalories = 0.0
+        var carbCalories = 0.0
+        var proteinCalories = 0.0
+        var sugarCalories = 0.0
+        var gramSugars = 0.0
+        
+        do {
+            let rs = try database.executeQuery(query, values: nil)
+            while rs.next() {
+                let numberOfServings = rs.double(forColumn: "NumberOfServings")
+                let gramWeight = rs.double(forColumn: "GramWeight")
+                let servingSize = rs.double(forColumn: "ServingSize")
+                let calories = rs.double(forColumn: "Calories")
+                let protein = rs.double(forColumn: "Protein")
+                let carbs = rs.double(forColumn: "Carbohydrates")
+                let sugar = rs.double(forColumn:"Sugars")
+                let fat = rs.double(forColumn:"Fat")
+                
+                let sugarGrams = sugar * numberOfServings * (gramWeight / 100 / servingSize)
+                sugarCalories += (sugarGrams * 3.8)
+                gramSugars += sugarGrams
+                
+                let totalFatCalories = numberOfServings * ((fat * 9.0) * (gramWeight / 100) / servingSize)
+                fatCalories += totalFatCalories
+                
+                let totalCarbCalories = numberOfServings * ((carbs * 4.0) * (gramWeight / 100) / servingSize)
+                carbCalories += totalCarbCalories
+                                
+                let totalProteinCalories = numberOfServings * ((protein * 4.0) * (gramWeight / 100) / servingSize)
+                proteinCalories += totalProteinCalories
+                                
+                totalCalories += numberOfServings * ((calories * (gramWeight / 100)) / servingSize)
+            }
+        } catch let error {
+            debugPrint("Error: \(error.localizedDescription)")
+            return (0, 0, 0, 0, 0, 0)
+        }
+
+        return (totalCalories, fatCalories, carbCalories,
+                proteinCalories, sugarCalories, gramSugars)
+    }
+    
+    /// Gets the day's exercise data for use in other public functions.
     private func getExerciseData() -> (minutes: Double,
                                        calories: Double,
                                        trackerCalories: Double,
                                        steps: Double) {
         guard let database = database, database.open() == true else { return (0, 0, 0, 0) }
-        // If the user desires to combine the calories from a tracking device or not.
-        let combineTrackingCalories = UserDefaults.standard.bool(forKey: "CalorieTrackingDevice")
+        guard let currentUser = currentUser else { return (0, 0, 0, 0) }
         
         let sourceDate = Date()
         let dateFormatter = DateFormatter()
@@ -86,7 +152,7 @@ import FMDB
                 if (exerciseID == 257 || exerciseID == 267 ||
                     exerciseID == 272 || exerciseID == 275) {
                     totalCaloriesBurnedViaTracker += timeMinutes
-                    if (combineTrackingCalories) {
+                    if (currentUser.useCalorieTrackingDevice) {
                         totalCaloriesBurned += timeMinutes
                     }
                 // Handle step trackers.
@@ -103,30 +169,229 @@ import FMDB
                 }
             }
         } catch let error {
-            print("Error: \(error.localizedDescription)")
+            debugPrint("Error: \(error.localizedDescription)")
             return (0, 0, 0, 0)
         }
         return (minutesExercised, totalCaloriesBurned, totalCaloriesBurnedViaTracker, stepsTaken)
     }
     
+    // MARK: - Exercise and Burned Calories
+    
     /// Previously was stored in UserDefaults "minutesExercised" key.
     @objc public func getMinutesExercisedToday() -> Double {
-        return self.getExerciseData().minutes
+        return getExerciseData().minutes
     }
 
-    /// Today's values. Defaults to zero.
+    /// Today's values. NOTE: Takes into account the option to use
+    /// a health tracker, so those tracked calories are already reflected
+    /// in the value. Defaults to zero.
     @objc public func getCaloriesBurnedToday() -> Double {
-        return self.getExerciseData().calories
+        return getExerciseData().calories
     }
 
-    /// Today's values. Defaults to zero.
+    /// Today's values. Defaults to zero. This only includes
+    /// calories from a tracker.
     @objc public func getCaloriesBurnedTodayViaTracker() -> Double {
-        return self.getExerciseData().trackerCalories
+        return getExerciseData().trackerCalories
     }
     
     /// Today's values. Defaults to zero.
     @objc public func getStepsTakenToday() -> Double {
-        return self.getExerciseData().steps
+        return getExerciseData().steps
+    }
+    
+    // MARK: - Weight and Goals
+    
+    /// Gets the current weight of the user, or returns zero.
+    @objc public func getCurrentWeight() -> NSNumber {
+        let defaultValue = NSNumber(floatLiteral: 0.0)
+        guard let database = database, database.open() == true else { return defaultValue }
+        
+        let query = "SELECT weight FROM weightlog where logtime in (select max(logtime) from weightlog WHERE deleted = 1) AND deleted = 1"
+        
+        var currentWeight = 0.0
+
+        do {
+            let rs = try database.executeQuery(query, values: nil)
+            while rs.next() {
+                currentWeight = rs.double(forColumn: "weight")
+            }
+        } catch let error {
+            debugPrint("Error: \(error.localizedDescription)")
+            return defaultValue
+        }
+        return NSNumber(floatLiteral: currentWeight)
     }
 
+    /// Returns the starting weight of the user for their goal.
+    @objc public func getStartingWeight() -> NSNumber {
+        let defaultValue = NSNumber(floatLiteral: 0.0)
+        guard let database = database, database.open() == true else { return defaultValue }
+        
+        let query = "SELECT weight FROM weightlog where logtime like '%%%@%%' AND deleted = 1"
+        
+        var startingWeight = 0.0
+
+        do {
+            let rs = try database.executeQuery(query, values: nil)
+            while rs.next() {
+                startingWeight = rs.double(forColumn: "weight")
+            }
+        } catch let error {
+            debugPrint("Error: \(error.localizedDescription)")
+            return defaultValue
+        }
+        return NSNumber(floatLiteral: startingWeight)
+    }
+    
+    /// Returns the remaining weight a user needs to lose.
+    @objc public func getRemainingWeight() -> NSNumber {
+        let currentWeight = self.getCurrentWeight().doubleValue
+        let weightGoal = currentUser?.weightGoal.doubleValue ?? 0.0
+        
+        let remainingWeight = NSNumber(floatLiteral: currentWeight - weightGoal)
+        
+        return remainingWeight
+    }
+    
+    /// Returns the current body fat percentage of the user.
+    @objc public func getCurrentBodyFatPercentage() -> NSNumber {
+        let defaultValue = NSNumber(floatLiteral: 0.0)
+        guard let database = database, database.open() == true else { return defaultValue }
+        
+        let query = "SELECT bodyfat FROM weightlog where logtime in (select max(logtime) from weightlog WHERE deleted = 1)"
+        
+        var value = 0.0
+
+        do {
+            let rs = try database.executeQuery(query, values: nil)
+            while rs.next() {
+                value = rs.double(forColumn: "bodyfat")
+            }
+        } catch let error {
+            debugPrint("Error: \(error.localizedDescription)")
+            return defaultValue
+        }
+        return NSNumber(floatLiteral: value)
+    }
+
+    // MARK: - BMR / BMI
+    
+    /// Returns the current BMR of the user.
+    @objc public func getCurrentBMR() -> NSNumber {
+        return currentUser?.userBMR ?? NSNumber(integerLiteral: 0)
+    }
+
+    /// Returns the current BMI of the user.
+    @objc public func getCurrentBMI() -> NSNumber {
+        guard let currentUser = currentUser else {
+            return NSNumber(integerLiteral: 0)
+        }
+        let bodyMassIndex = getCurrentWeight().doubleValue / (currentUser.height.doubleValue * currentUser.height.doubleValue) * 703
+        return NSNumber(integerLiteral: Int(bodyMassIndex))
+    }
+    
+    /// Ratios based on a user's BMR.
+    /// Example: If my ratio of carbs is 10, 10% of my BMR 1000 calories should be carbs.
+    @objc public func getRecommendedCarbRatio() -> NSNumber {
+        guard let currentUser = currentUser else {
+            return NSNumber(integerLiteral: 0)
+        }
+        let bmrValue = getCurrentBMI().intValue
+        let carbRatioRecommended = (currentUser.carbRatio.intValue / 100) * bmrValue / 4;
+        return NSNumber(integerLiteral: carbRatioRecommended)
+    }
+    @objc public func getRecommendedProteinRatio() -> NSNumber {
+        guard let currentUser = currentUser else {
+            return NSNumber(integerLiteral: 0)
+        }
+        let bmrValue = getCurrentBMI().intValue
+        let proteinRatioRecommended = (currentUser.proteinRatio.intValue / 100) * bmrValue / 4;
+        return NSNumber(integerLiteral: proteinRatioRecommended)
+    }
+    @objc public func getRecommendedFatRatio() -> NSNumber {
+        guard let currentUser = currentUser else {
+            return NSNumber(integerLiteral: 0)
+        }
+        let bmrValue = getCurrentBMI().intValue
+        let fatRatioRecommended = (currentUser.fatRatio.intValue / 100) * bmrValue / 9;
+        return NSNumber(integerLiteral: fatRatioRecommended)
+    }
+
+    // MARK: - Localized Output
+    
+    /// Goal the localized weight goal for the current user.
+    @objc public func getLocalizedUserWeightGoalString() -> String {
+        return currentUser?.weightGoalLocalizedString() ?? "0.0"
+    }
+
+    /// Returns the localized starting weight string, e.g. "100 lbs."
+    @objc public func getLocalizedStartingWeightString() -> String {
+        massFormatter.isForPersonMassUse = true
+        var unit = MassFormatter.Unit.pound
+        if (numberFormatter.locale.usesMetricSystem) {
+            unit = MassFormatter.Unit.kilogram;
+        }
+        
+        return massFormatter.string(fromValue: getStartingWeight().doubleValue, unit: unit)
+    }
+    
+    /// Returns the localized current weight string, e.g. "100 lbs."
+    @objc public func getLocalizedCurrentWeightString() -> String {
+        massFormatter.isForPersonMassUse = true
+        var unit = MassFormatter.Unit.pound
+        if (numberFormatter.locale.usesMetricSystem) {
+            unit = MassFormatter.Unit.kilogram;
+        }
+        
+        return massFormatter.string(fromValue: getCurrentWeight().doubleValue, unit: unit)
+    }
+    
+    /// Returns the localized remaining weight string, e.g. "100 lbs."
+    @objc public func getLocalizedRemainingWeightString() -> String {
+        massFormatter.isForPersonMassUse = true
+        var unit = MassFormatter.Unit.pound
+        if (numberFormatter.locale.usesMetricSystem) {
+            unit = MassFormatter.Unit.kilogram;
+        }
+        
+        return massFormatter.string(fromValue: getRemainingWeight().doubleValue, unit: unit)
+    }
+    
+    // MARK: - Current Day's Calories
+    
+    @objc public func getTotalCalories() -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData().totalCalories)
+    }
+    
+    @objc public func getTotalCarbCalories() -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData().carbCalories)
+    }
+    @objc public func getTotalFatCalories() -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData().fatCalories)
+    }
+    @objc public func getTotalProteinCalories() -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData().proteinCalories)
+    }
+    @objc public func getTotalSugarGrams() -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData().sugarGrams)
+    }
+    @objc public func getTotalSugarCalories() -> NSNumber {
+        return NSNumber(floatLiteral: getCalorieData().sugarCalories)
+    }
+    
+    /// Gets the total calories remaining, which is "net calories"
+    @objc public func getTotalCaloriesRemaining() -> NSNumber {
+        guard let currentUser = currentUser else { return NSNumber(floatLiteral: 0) }
+        let totalCaloriesBurned = getExerciseData().calories
+        let bmr = getCurrentBMR().doubleValue
+        let totalCaloriesToday = getTotalCalories().doubleValue
+        
+        var caloriesRemainingToday = bmr - totalCaloriesToday
+        if currentUser.useBurnedCalories {
+            caloriesRemainingToday = bmr - (totalCaloriesBurned * -1) - totalCaloriesToday
+        }
+        
+        return NSNumber(floatLiteral: caloriesRemainingToday)
+    }
 }

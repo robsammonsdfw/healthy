@@ -29,6 +29,12 @@
 #define D_WEEK		604800
 #define D_YEAR		31556926
 
+@interface DietMasterGoAppDelegate()
+@property (nonatomic, strong) IBOutlet DietMasterGoViewController *viewController;
+@property (nonatomic, strong) IBOutlet DetailViewController *navigationController;
+@property (nonatomic, strong) LoginViewController *loginViewController;
+@end
+
 @implementation DietMasterGoAppDelegate
 
 #pragma mark -
@@ -82,9 +88,9 @@
     return YES;
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
+- (void)applicationWillResignActive:(UIApplication *)application {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine saveMealItems:[DMGUtilities lastSyncDateString]]; //should not be passing nil
+    [dietmasterEngine uploadDatabaseWithCompletionBlock:nil];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -129,20 +135,7 @@
     if ([[DMAuthManager sharedInstance] isUserLoggedIn] == NO) {
         self.loginViewController = [[LoginViewController alloc] init];
         [self.loginViewController presentLoginInController:nil
-                                            withCompletion:^(BOOL completed, NSError *error) {
-            // Login successful!
-            
-            //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:APP_NAME
-            //                                                                   message:@"Do you want to make changes to optional settings?"
-            //                                                            preferredStyle:UIAlertControllerStyleAlert];
-            //    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            //        AppDel.isFromAlert = YES;
-            //    }]];
-            //    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            //        [alert dismissViewControllerAnimated:YES completion:nil];
-            //    }]];
-            //    [[DMGUtilities rootViewController] presentViewController:alert animated:YES completion:nil];
-            
+                                            withCompletion:^(BOOL completed, NSError *error) {            
             // Now do a big sync.
             [DMActivityIndicator showActivityIndicator];
             DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
@@ -160,22 +153,6 @@
     }
 }
 
-#pragma mark SYNC DELEGATE METHODS
-
-- (void)syncUPDatabaseFinished:(NSString *)responseMessage {
-}
-
-- (void)syncUPDatabaseFailed:(NSString *)failedMessage {
-    DMLog(@"SYNC FAIL: %@", failedMessage);
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = nil;
-    
-    // Sync failed, so ensure we try again soon.
-    [DMGUtilities setLastSyncToDate:nil];
-    
-    [DMActivityIndicator hideActivityIndicator];
-}
-
 - (NSInteger)hoursAfterDate:(NSDate *)aDate {
     NSTimeInterval ti = [[NSDate date] timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_HOUR);
@@ -184,14 +161,6 @@
 - (NSInteger)minutesAfterDate:(NSDate *)aDate {
     NSTimeInterval ti = [[NSDate date] timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_MINUTE);
-}
-
-/// This starts an upsync.
-- (void)syncDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.syncUPDatabaseDelegate = self;
-    [dietmasterEngine uploadDatabase];
 }
 
 #pragma mark - System Updates

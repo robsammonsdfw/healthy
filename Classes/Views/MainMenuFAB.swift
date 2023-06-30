@@ -33,7 +33,7 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
         return MealPlanViewController()
     }()
     private lazy var appSettingsViewController = {
-        return AppSettings()
+        return DMSettingsViewController()
     }()
     private lazy var myMovesViewController = {
         return MyMovesViewController()

@@ -13,14 +13,9 @@
  */
 @interface StepData : NSObject
 
-@property NSInteger heightInches;
-@property NSInteger weight;
 // Steps is the standardize measurement
-
-- (double) stepsToMiles: (NSInteger) steps;
-
-- (double) stepsToCalories:(NSInteger) steps;
-
-- (double) stepsPerMile:(NSInteger) steps;
+- (double)stepsToMiles:(NSInteger)steps;
+- (double)stepsToCalories:(NSInteger)steps;
+- (double)stepsPerMile:(NSInteger)steps;
 
 @end

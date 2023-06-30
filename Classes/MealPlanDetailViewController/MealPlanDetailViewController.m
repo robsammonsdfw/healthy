@@ -110,11 +110,10 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
         
         dietmasterEngine.dateSelected = date;
         NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
-        [dateFormat_display setDateFormat:@"MMMM d, yyyy"];
+        [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
         [dateFormat_display setTimeZone:systemTimeZone];
         NSString *date_Display		= [dateFormat_display stringFromDate:date];
         dietmasterEngine.dateSelectedFormatted = date_Display;
-        
     }
     
     [self updateCalorieLabels];
