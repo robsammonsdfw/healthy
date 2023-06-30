@@ -237,34 +237,29 @@
 }
 
 - (NSInteger)numberOfSlicesInPieChartView:(MCPieChartView *)pieChartView {
-    if (pieChartView == _remaining_Pie)
-    {
+    if (pieChartView == _remaining_Pie) {
         return self.values.count;
-    }
-    else if (pieChartView == _cpf_Pie)
-    {
+    } else if (pieChartView == _cpf_Pie) {
         return self.cpf_Values.count;
     }
     
     return 0;
 }
 
-- (UIImage*)pieChartView:(MCPieChartView *)pieChartView imageForSliceAtIndex:(NSInteger)index
-{
+- (UIImage*)pieChartView:(MCPieChartView *)pieChartView imageForSliceAtIndex:(NSInteger)index {
     return nil;
 }
 
-- (UIColor *)pieChartView:(MCPieChartView *)pieChartView colorForSliceAtIndex:(NSInteger)index
-{
+- (UIColor *)pieChartView:(MCPieChartView *)pieChartView colorForSliceAtIndex:(NSInteger)index {
     if (pieChartView == _remaining_Pie)
     {
         if (index == 0)
         {
-            return AccentColor
+            return [UIColor blackColor]; // Used up fill.
         }
         else
         {
-            return UIColorFromHex(0xE8E8E8);
+            return UIColorFromHex(0x64BB60); // Green remaining fill.
         }
     }
     else if (pieChartView == _cpf_Pie)
@@ -290,8 +285,7 @@
     return [UIColor whiteColor];
 }
 
-- (UIColor*)pieChartView:(MCPieChartView *)pieChartView colorForTextAtIndex:(NSInteger)index
-{
+- (UIColor*)pieChartView:(MCPieChartView *)pieChartView colorForTextAtIndex:(NSInteger)index {
     return [UIColor clearColor];
 }
 
@@ -308,7 +302,7 @@
     return 0;
 }
 
--(void)buttonStyle:(UIButton *)sender imageToSet:(UIImage *)image {
+- (void)buttonStyle:(UIButton *)sender imageToSet:(UIImage *)image {
     UIColor *borderColor = PrimaryDarkColor
     sender.layer.cornerRadius = 15.0f;
     sender.layer.borderColor = borderColor.CGColor;
@@ -319,7 +313,7 @@
     sender.tintColor = PrimaryDarkColor;
 }
 
--(void)plusBtnColor {
+- (void)plusBtnColor {
     [self buttonStyle:_consumedPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self buttonStyle:_weightPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self buttonStyle:_plannedArroewBtn imageToSet:[[UIImage imageNamed:@"up_arrow_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -692,19 +686,16 @@
     double caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:nil].doubleValue;
     double exerciseCalories = [dayProvider getCaloriesBurnedViaExerciseWithDate:nil];
     int userBMR = dayProvider.getCurrentBMR.intValue;
-    
-    if (caloriesRemaining < 0) {
-        [self.values removeAllObjects];
+
+    [self.values removeAllObjects];
+    if (caloriesRemaining <= 0) {
         [self.values addObject:[NSNumber numberWithInt:1]];
-        [self.values addObject:[NSNumber numberWithInt:(userBMR - 1)]];
-        [_remaining_Pie reloadData];
     } else {
-        [self.values removeAllObjects];
-        [self.values addObject:[NSNumber numberWithInt:caloriesRemaining]];
         [self.values addObject:[NSNumber numberWithInt:(userBMR - caloriesRemaining)]];
-        [_remaining_Pie reloadData];
+        [self.values addObject:[NSNumber numberWithInt:caloriesRemaining]];
     }
-        
+    [_remaining_Pie reloadData];
+
     self.lblGoal.text = [NSString stringWithFormat:@"%i", userBMR];
     self.lblfoodCalories.text = [NSString stringWithFormat:@"+%.0f", totalCalories];
     self.lblConsumed.text = [NSString stringWithFormat:@"%.0f", totalCalories];
@@ -734,52 +725,31 @@
     NSString *p_Str = [NSString stringWithFormat: @"%@%@%@",seperatorStrLeft,p_percentageStr,seperatorStrRight];
     
     if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
+        carbsGramActualPercent = 0.0;
         self.c_PercentageLbl.text = @"0";
     } else {
         self.c_PercentageLbl.text = c_percentageStr;
     }
     
     if (proteinGramActualPrecent < 0 || isnan(proteinGramActualPrecent)) {
+        proteinGramActualPrecent = 0.0;
         self.p_PercentageLbl.text = @"/0/";
     } else {
         self.p_PercentageLbl.text = p_Str;
     }
 
     if (fatGramActualPrecent < 0 || isnan(fatGramActualPrecent)) {
+        fatGramActualPrecent = 0.0;
         self.f_PercentageLbl.text = @"0";
     } else {
         self.f_PercentageLbl.text = f_percentageStr;
     }
         
     [self.cpf_Values removeAllObjects];
-    if isnan(carbsGramActualPercent)
-    {
-        if isnan(proteinGramActualPrecent)
-        {
-            if isnan(fatGramActualPrecent)
-            {
-                [self.cpf_Values addObject:[NSNumber numberWithFloat:0]];
-                [self.cpf_Values addObject:[NSNumber numberWithFloat:0]];
-                [self.cpf_Values addObject:[NSNumber numberWithFloat:0]];
-                [self.cpf_Values addObject:[NSNumber numberWithFloat:100]];
-            }
-        }
-    }
-    else
-    {
-        if (fatGramActualPrecent < 0 && proteinGramActualPrecent < 0 && carbsGramActualPercent < 0) {
-                   [self.cpf_Values addObject:[NSNumber numberWithFloat:0]];
-                   [self.cpf_Values addObject:[NSNumber numberWithFloat:0]];
-                   [self.cpf_Values addObject:[NSNumber numberWithFloat:0]];
-                   [self.cpf_Values addObject:[NSNumber numberWithFloat:100]];
-
-       } else {
-            [self.cpf_Values addObject:[NSNumber numberWithFloat:fatGramActualPrecent]];
-            [self.cpf_Values addObject:[NSNumber numberWithFloat:proteinGramActualPrecent]];
-            [self.cpf_Values addObject:[NSNumber numberWithFloat:carbsGramActualPercent]];
-            [self.cpf_Values addObject:[NSNumber numberWithFloat:100 - (carbsGramActualPercent + proteinGramActualPrecent + fatGramActualPrecent)]];
-        }
-    }
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:fatGramActualPrecent]];
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:proteinGramActualPrecent]];
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:carbsGramActualPercent]];
+    [self.cpf_Values addObject:[NSNumber numberWithFloat:100 - (carbsGramActualPercent + proteinGramActualPrecent + fatGramActualPrecent)]];
     [self.cpf_Pie reloadData];
 
     self.actualCarbLabel.text = [NSString stringWithFormat:@"%.1f",carbRatioActual];
