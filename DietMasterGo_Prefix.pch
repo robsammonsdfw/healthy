@@ -30,9 +30,6 @@
 // Logs to Crashlytics.
 #define DM_LOG(__FORMAT__, ...) [[FIRCrashlytics crashlytics] logWithFormat:__FORMAT__, ##__VA_ARGS__];
 
-#define WEIGHT_ENTRY 0
-#define BODYFAT_ENTRY 1
-
 // Hardware Info
 #define   SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 

@@ -711,7 +711,7 @@ CGPoint svos;
         _savedFoodID = minFoodID;
         
         // Save to log AND cloud.
-        [dietmasterEngine fetchFoodForKey:minFoodID];
+        [dietmasterEngine saveFoodForKey:@(minFoodID)];
         
         if (self.saveToLog) {
             [DMActivityIndicator showActivityIndicator];
@@ -857,8 +857,8 @@ CGPoint svos;
         
         _savedFoodID = minFoodID;
         
-        [dietmasterEngine fetchFoodForKey:minFoodID];
-        
+        [dietmasterEngine saveFoodForKey:@(minFoodID)];
+
         if (!self.saveToLog) {
             [self loadData];
         }
