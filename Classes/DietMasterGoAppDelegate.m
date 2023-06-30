@@ -184,12 +184,12 @@
         [self addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:fullPath]];
     }
     
-    BOOL upgraded11 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1"];
+    BOOL upgraded11 = [prefs boolForKey:@"1.1"];
     if (upgraded11 == NO) {
         [self updateMeasureTable];
     }
             
-    BOOL upgraded102 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.2"];
+    BOOL upgraded102 = [prefs boolForKey:@"1.0.2"];
     if (upgraded102 == NO) {
         NSString *updateSQL = @"DELETE FROM Food WHERE Name LIKE '%infant%'";
         [db beginTransaction];
@@ -218,16 +218,16 @@
         [prefs setBool:YES forKey:@"1.0.2"];
     }
     
-    BOOL upgraded111 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.1.11.1"];
+    BOOL upgraded111 = [prefs boolForKey:@"1.1.11.1"];
     if (upgraded111 == NO) {
-        BOOL upgraded103 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.0.3"];
+        BOOL upgraded103 = [prefs boolForKey:@"1.0.3"];
         if (upgraded103 == NO) {
             [prefs setBool:YES forKey:@"1.0.3"];
         }
         [prefs setBool:YES forKey:@"1.1.11.1"];
     }
     
-    BOOL upgraded121 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.2.1.1"];
+    BOOL upgraded121 = [prefs boolForKey:@"1.2.1.1"];
     upgraded121 = NO;
     if (upgraded121 == NO) {
         if (![db columnExists:@"FactualID" inTableWithName:@"Food"]) {
@@ -243,7 +243,7 @@
         [prefs setBool:YES forKey:@"1.2.1.1"];
     }
     
-    BOOL upgraded14 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.4"];
+    BOOL upgraded14 = [prefs boolForKey:@"1.4"];
     if (upgraded14 == NO) {
         if (![db columnExists:@"ProteinRatio" inTableWithName:@"user"]) {
             [db beginTransaction];
@@ -308,7 +308,7 @@
         [prefs setBool:YES forKey:@"1.4"];
     }
     
-    BOOL upgraded15 = [[NSUserDefaults standardUserDefaults] boolForKey:@"1.5"];
+    BOOL upgraded15 = [prefs boolForKey:@"1.5"];
     if (upgraded15 == NO) {
         if (![db tableExists:@"Messages"]) {
             [db beginTransaction];
@@ -320,6 +320,14 @@
             [db commit];
         }
         [prefs setBool:YES forKey:@"1.5"];
+    }
+    
+    
+    BOOL upgrade6302023 = [prefs boolForKey:@"Upgrade6302023"];
+    if (upgrade6302023 == NO) {
+        [DMGUtilities setLastSyncToDate:nil];
+        [DMGUtilities setLastFoodSyncDate:nil];
+        [prefs setBool:YES forKey:@"Upgrade6302023"];
     }
     
     // Add optimized MyMoves Tags and Categories Tables.
@@ -405,7 +413,7 @@
     }
 
     NSString *upgradedMyMovesKey = @"MyMoves2023Update4";
-    BOOL upgradedMyMoves = [[NSUserDefaults standardUserDefaults] boolForKey:upgradedMyMovesKey];
+    BOOL upgradedMyMoves = [prefs boolForKey:upgradedMyMovesKey];
     if (upgradedMyMoves == NO) {
         // Cleanup unused, deprecated tables.
         NSString *dropTableSQL = nil;

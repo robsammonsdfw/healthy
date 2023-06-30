@@ -213,6 +213,10 @@
         _goalStartDate = [_dateFormatter dateFromString:userDict[@"GoalStartDate"]];
     }
 
+    _carbRatio = ValidNSNumber(userDict[@"CarbRatio"]);
+    _proteinRatio = ValidNSNumber(userDict[@"ProteinRatio"]);
+    _fatRatio = ValidNSNumber(userDict[@"FatRatio"]);
+
     _profession = ValidNSNumber(userDict[@"Profession"]);
     _bodyType = ValidNSNumber(userDict[@"BodyType"]);
     _proteinRequirements = ValidNSNumber(userDict[@"ProteinRequirements"]);
@@ -220,6 +224,8 @@
     _lactating = ValidNSNumber(userDict[@"Lactation"]);
     _goalRate = ValidNSNumber(userDict[@"GoalRate"]);
     _userBMR = ValidNSNumber(userDict[@"BMR"]);
+    
+    _hostName = ValidString(userDict[@"HostName"]);
 }
 
 - (NSString *)birthDateString {

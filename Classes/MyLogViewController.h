@@ -35,22 +35,8 @@
 	
 	NSDate *date_currentDate;
 	NSNumber *int_mealID;
-    
-    NSMutableArray *exerciseResults;
-    NSMutableArray *foodResults;
-	
-    // Favorite Meals
-    NSString *favoriteMealName;
-    int favoriteMealSectionID;
 	
 	NSString *selectedFood;
-    
-    int breakfastCalories;
-    int snack1Calories;
-    int lunchCalories;
-    int snack2Calories;
-    int dinnerCalories;
-    int snack3Calories;
     
     // labels
     IBOutlet UILabel *recCarbLabel;
@@ -67,9 +53,6 @@
     IBOutlet UIToolbar *dateToolBar;
 		
 	NSDate *date_currentDate1;
-
-	NSMutableArray *selectSectionArray;
-	BOOL isExerciseData;
     
     int exerciseLogID;
     MyMovesDataProvider *soapWebService;

@@ -11,7 +11,7 @@
 #import "DMFood.h"
 
 @interface DMDatabaseProvider()
-@property (nonatomic, strong) NSDateFormatter *dateformatter;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong, readonly) FMDatabase *database;
 @end
 
@@ -20,7 +20,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _dateformatter = [[NSDateFormatter alloc] init];
+        _dateFormatter = [[NSDateFormatter alloc] init];
     }
     return self;
 }
@@ -175,7 +175,7 @@
             NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[responseArray objectAtIndex:i]];
             
             NSDate* sourceDate = [NSDate date];
-            [weakSelf.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            [weakSelf.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             
             NSString *queryString = [NSString stringWithFormat:@"REPLACE INTO Favorite_Food "
                                      "(FoodID, MeasureID, modified) VALUES "
@@ -392,14 +392,14 @@
     [db beginTransaction];
     for (NSDictionary *exercise in exerciseLogs) {
         
-        [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSLocale *en_US = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-        [self.dateformatter setLocale:en_US];
-        NSDate *logTimeDate = [self.dateformatter dateFromString:[exercise valueForKey:@"ExerciseDate"]];
-        NSString *logTimeString = [self.dateformatter stringFromDate:logTimeDate];
+        [self.dateFormatter setLocale:en_US];
+        NSDate *logTimeDate = [self.dateFormatter dateFromString:[exercise valueForKey:@"ExerciseDate"]];
+        NSString *logTimeString = [self.dateFormatter stringFromDate:logTimeDate];
         
-        [self.dateformatter setDateFormat:@"yyyyMMdd"];
-        NSString *keyDate = [self.dateformatter stringFromDate:logTimeDate];
+        [self.dateFormatter setDateFormat:@"yyyyMMdd"];
+        NSString *keyDate = [self.dateFormatter stringFromDate:logTimeDate];
         
         int exerciseID = [[exercise valueForKey:@"ExerciseID"] intValue];
         NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
@@ -862,7 +862,7 @@
 
 - (void)getDataSinceLastSyncDate:(NSString *)syncDate withCompletionBlock:(completionBlockWithError)completionBlock {
     if (!syncDate.length) {
-        syncDate = @"";
+        syncDate = @"01-01-1970";
     }
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     [[FIRCrashlytics crashlytics] logWithFormat:@"GetUserData-UserId: %@", currentUser.userId];
@@ -907,13 +907,11 @@
     
     NSDictionary *dict = [responseDict copy];
     
-    // Get the model.
-    NSArray *userArray = [dict valueForKey:@"User"];
     NSDictionary *userDict = dict[@"User"][0];
-    
     // Update User Info
     if (userDict) {
-        DMUser *user = [[DMUser alloc] initWithDictionary:userDict];
+        DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+        [currentUser updateUserDetails:userDict];
         
         // Log values to Firebase.
         [[FIRCrashlytics crashlytics] log:@"GetUserData completed."];
@@ -943,22 +941,22 @@
                                
                                "WHERE id = 1",
                                
-                               user.weightGoal.intValue,
-                               user.height.intValue,
-                               user.goals.intValue,
-                               [user birthDateString],
-                               user.profession.intValue,
-                               user.bodyType.intValue,
-                               [user goalStartDateString],
-                               user.proteinRequirements.intValue,
-                               user.gender.intValue,
-                               user.lactating.intValue,
-                               user.goalRate.intValue,
-                               user.userBMR.intValue,
-                               user.carbRatio.intValue,
-                               user.proteinRatio.intValue,
-                               user.fatRatio.intValue,
-                               user.hostName];
+                               currentUser.weightGoal.intValue,
+                               currentUser.height.intValue,
+                               currentUser.goals.intValue,
+                               [currentUser birthDateString],
+                               currentUser.profession.intValue,
+                               currentUser.bodyType.intValue,
+                               [currentUser goalStartDateString],
+                               currentUser.proteinRequirements.intValue,
+                               currentUser.gender.intValue,
+                               currentUser.lactating.intValue,
+                               currentUser.goalRate.intValue,
+                               currentUser.userBMR.intValue,
+                               currentUser.carbRatio.intValue,
+                               currentUser.proteinRatio.intValue,
+                               currentUser.fatRatio.intValue,
+                               currentUser.hostName];
         
         [db executeUpdate:updateSQL];
         if ([db hadError]) {
@@ -966,7 +964,7 @@
         }
         [db commit];
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        [prefs setValue:user.hostName forKey:@"HostName"];
+        [prefs setValue:currentUser.hostName forKey:@"HostName"];
     }
     
     NSArray *weightArray = [dict valueForKey:@"Weight"];
@@ -1148,8 +1146,8 @@
                 }
                 
                 for(NSDictionary *itemToDelete in existingLogItems) {
-                    NSDate *date1 = [self.dateformatter dateFromString:lastUpdate];
-                    NSDate *date2 = [self.dateformatter dateFromString:[[itemToDelete valueForKey:@"LastModified"] stringValue]];
+                    NSDate *date1 = [self.dateFormatter dateFromString:lastUpdate];
+                    NSDate *date2 = [self.dateFormatter dateFromString:[[itemToDelete valueForKey:@"LastModified"] stringValue]];
 
                     // if lastUpdate is more recent than LastModified, this item has been deleted
                     NSTimeInterval timeInterval = [date2 timeIntervalSinceDate:date1];
@@ -1197,6 +1195,77 @@
     [db commit];
     
     return maxValue;
+}
+
+#pragma mark - Meals
+
+- (void)saveFavoriteMeal:(NSDictionary *)mealDict withName:(NSString *)mealName {
+    [DMActivityIndicator showActivityIndicator];
+
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    if (![db open]) {
+    }
+    
+    int minIDvalue = 0;
+    NSString *idQuery = @"SELECT min(Favorite_MealID) as Favorite_MealID FROM Favorite_Meal";
+    FMResultSet *rsID = [db executeQuery:idQuery];
+    while ([rsID next]) {
+        minIDvalue = [rsID intForColumn:@"Favorite_MealID"];
+    }
+    [rsID close];
+    minIDvalue = minIDvalue - 1;
+    if (minIDvalue >=0) {
+        int maxValue = minIDvalue;
+        for (int i=0; i<maxValue; i++) {
+            if (minIDvalue < 0){
+                break;
+            }
+            minIDvalue--;
+        }
+    }
+    
+    [db beginTransaction];
+    
+    NSDate *sourceDate = [NSDate date];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
+    [self.dateFormatter setTimeZone:systemTimeZone];
+    NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
+    
+    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Favorite_Meal (Favorite_MealID, Favorite_Meal_Name, modified) VALUES (%i, '%@',DATETIME('%@'))", minIDvalue, mealName, date_string];
+    [db executeUpdate:insertSQL];
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [db commit];
+    
+    int favoriteMealID = (int)[db lastInsertRowId];
+
+    for (NSDictionary *dict in mealDict[@"Foods"]) {
+        
+        [db beginTransaction];
+        
+        NSDate* sourceDate = [NSDate date];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
+        [dateFormatter setTimeZone:systemTimeZone];
+        NSString *date_string = [dateFormatter stringFromDate:sourceDate];
+        
+        NSString *insertSQLItems = [NSString stringWithFormat: @"REPLACE INTO Favorite_Meal_Items (FoodKey, Favorite_Meal_ID, FoodID, MeasureID, Servings, Last_Modified) VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))", [[dict valueForKey:@"FoodKey"] intValue], favoriteMealID, [[dict valueForKey:@"FoodID"] intValue], [[dict valueForKey:@"MeasureID"] intValue], [[dict valueForKey:@"Servings"] floatValue], date_string];
+        
+        [db executeUpdate:insertSQLItems];
+        
+        if ([db hadError]) {
+            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        }
+        
+        [db commit];
+    }
+    
+    [DMActivityIndicator hideActivityIndicator];
+    [DMActivityIndicator showCompletedIndicator];
 }
 
 @end

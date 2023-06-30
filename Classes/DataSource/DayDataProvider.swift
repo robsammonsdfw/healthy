@@ -144,7 +144,7 @@ import FMDB
                 let exerciseID = rs.object(forColumn: "ExerciseID") as? NSNumber
                 let timeMinutes = rs.double(forColumn: "Exercise_Time_Minutes")
                 let caloriesPerHour = rs.double(forColumn: "CaloriesPerHour")
-                let currentWeight = 0.0
+                let currentWeight = getCurrentWeight().doubleValue
                 let burnedCalories = (caloriesPerHour / 60) * currentWeight * timeMinutes;
 
                 // If a health tracking device is used, add those values.

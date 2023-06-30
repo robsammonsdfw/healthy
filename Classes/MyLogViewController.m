@@ -28,6 +28,13 @@
 @property (nonatomic, strong) LogDaySummary *logDaySummary;
 @property (nonatomic) double stepCount;
 @property (nonatomic) double calories;
+/// Array of titles for the sections of the log.
+@property (nonatomic, strong) NSArray *sectionTitleArray;
+/// Dictionary of foods per meal. Key = Section title, eg. "Breakfast"
+/// Value = Dictionary of foods, where "Calories" = total calorie count, and "Foods" = array of foods.
+@property (nonatomic, strong) NSMutableDictionary *sectionFoodsDict;
+/// Exercises logged for the day.
+@property (nonatomic, strong) NSMutableArray *exerciseResults;
 @end
 
 static NSString *CellIdentifier = @"MyLogTableViewCell";
@@ -42,13 +49,16 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
         _dateFormatter = [[NSDateFormatter alloc] init];
+        _exerciseResults = [NSMutableArray array];
+        _sectionFoodsDict = [NSMutableDictionary dictionary];
+        _sectionTitleArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3", @"Exercise"];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
+
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
@@ -83,12 +93,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
 
-    dateToolBar.backgroundColor=AccentColor;
+    dateToolBar.backgroundColor = AccentColor;
     dateToolBar.barTintColor = AccentColor;
-    
     self.view.backgroundColor = PrimaryColor;
-
-    selectSectionArray = [[NSMutableArray alloc]init];
     
     //HHT apple watch
     _arrData = [NSMutableArray new];
@@ -120,10 +127,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.rightBarButtonItem=nil;
-    
-    exerciseResults = [[NSMutableArray alloc] init];
-    foodResults = [[NSMutableArray alloc] init];
-    
+        
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
     NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
@@ -199,17 +203,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"My Log";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if (self.isMovingFromParentViewController) {
-        [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     
     [self updateCalorieTotal];
     
@@ -218,6 +211,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self updateAppleWatchData];
     
     [self updateData:self.date_currentDate];
+
 }
 
 - (void)updateAppleWatchData {
@@ -240,12 +234,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 #pragma mark TABLE VIEW METHODS
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if ([exerciseResults count] > 0) {
-        return [foodResults count] + 1;
-    }
-    else {
-        return [foodResults count];
-    }
+    return self.sectionTitleArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -253,64 +242,17 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    NSString *sectionTitle;
-    NSString *calorieCount;
+    NSString *sectionTitle = self.sectionTitleArray[section];
 
     DayDataProvider* dayProvider = [DayDataProvider sharedInstance];
     double exerciseCalories = [dayProvider getCaloriesBurnedViaExerciseWithDate:self.date_currentDate];
 
-    BOOL okForFavorite = NO;
-    int selectedMealID = 0;
-        
-    if ([exerciseResults count] > 0 && ((section > [foodResults count]-1) || ([foodResults count] == 0 && [exerciseResults count] > 0))) {
-        if (!isExerciseData) {
-            sectionTitle = @"Exercise";
-            calorieCount = [NSString stringWithFormat:@"-0 Calories"];
-        } else {
-            sectionTitle = @"Exercise";
-            calorieCount = [NSString stringWithFormat:@"-%.0f Calories", exerciseCalories];
-        }
+    NSString *calorieCount = @"";
+    if ([sectionTitle isEqualToString:@"Exercise"]) {
+        calorieCount = [NSString stringWithFormat:@"-%.0f Calories", exerciseCalories];
     } else {
-        okForFavorite = YES;
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[[foodResults objectAtIndex:section] objectAtIndex:0]];
-        
-        if ([dict objectForKey:@"MealCode"]) {
-            
-            selectedMealID = [[dict valueForKey:@"MealCode"] intValue];
-            
-            if(selectedMealID == 0) {
-                sectionTitle = @"Breakfast";
-                calorieCount = [NSString stringWithFormat:@"%i Calories", breakfastCalories];
-            }
-            else if(selectedMealID == 1) {
-                sectionTitle = @"Snack 1";
-                calorieCount = [NSString stringWithFormat:@"%i Calories", snack1Calories];
-            }
-            else if(selectedMealID == 2) {
-                sectionTitle = @"Lunch";
-                calorieCount = [NSString stringWithFormat:@"%i Calories", lunchCalories];
-            }
-            else if(selectedMealID == 3) {
-                sectionTitle = @"Snack 2";
-                calorieCount = [NSString stringWithFormat:@"%i Calories", snack2Calories];
-            }
-            else if(selectedMealID == 4) {
-                sectionTitle = @"Dinner";
-                calorieCount = [NSString stringWithFormat:@"%i Calories", dinnerCalories];
-            }
-            else if(selectedMealID == 5) {
-                sectionTitle = @"Snack 3";
-                calorieCount = [NSString stringWithFormat:@"%i Calories", snack3Calories];
-            }
-            else {
-                sectionTitle = @"NONE";
-                calorieCount = @" ";
-            }
-        } else {
-            sectionTitle = [NSString stringWithFormat:@"%@",[[[foodResults objectAtIndex:section] objectAtIndex:0] valueForKey:@"Testing1"]];
-            calorieCount = @"0.0";
-        }
+        NSDictionary *foodsDict = self.sectionFoodsDict[sectionTitle];
+        calorieCount = [NSString stringWithFormat:@"%i Calories", [foodsDict[@"Calories"] intValue]];
     }
             
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -351,8 +293,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     favoriteButton.tag = section;
     favoriteButton.hidden = YES;
     [headerView addSubview:favoriteButton];
-    if (okForFavorite) {
-        favoriteButton.hidden = NO;
+    if ([sectionTitle isEqualToString:@"Exercise"]) {
+        favoriteButton.hidden = YES;
     }
     
     [plusButton.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:12].active = YES;
@@ -380,50 +322,18 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSArray *exerciseResultsArray = [exerciseResults copy];
-    NSArray *foodResultsArray = [foodResults copy];
-
-    if ([exerciseResultsArray count] > 0 && ((section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0))) {
-        if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSDictionary class]]) {
-            if ([exerciseResultsArray objectAtIndex:0][@"Testing1"]) {
-                NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[exerciseResultsArray objectAtIndex:0] objectAtIndex:0]];
-                if ([tmpDICT objectForKey:@"Testing1"])
-                {
-                    return 0;
-                }
-            }
-        }
-        else if ([[exerciseResultsArray objectAtIndex:0] isKindOfClass:[NSArray class]]) {
-            return 0;
-        }
-        return [exerciseResultsArray count];
+    NSString *sectionTitle = self.sectionTitleArray[section];
+    if ([sectionTitle isEqualToString:@"Exercise"]) {
+        return self.exerciseResults.count;
     } else {
-        NSDictionary *tmpDICT = [[NSDictionary alloc] initWithDictionary:[[foodResultsArray objectAtIndex:section] objectAtIndex:0]];
-        
-        if ([tmpDICT objectForKey:@"Testing1"]) {
-            return 0;
-        }
-        
-        return [[foodResultsArray objectAtIndex:section] count];
-    }
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *exerciseResultsArray = [exerciseResults copy];
-    NSArray *foodResultsArray = [foodResults copy];
-    if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
-        return indexPath;
-    }
-    else {
-        return indexPath;
+        return [self.sectionFoodsDict[sectionTitle][@"Foods"] count];
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
     double currentUserWeight = [dayProvider getCurrentWeight].doubleValue;
-    NSArray *exerciseResultsArray = [exerciseResults copy];
-    NSArray *foodResultsArray = [foodResults copy];
+    NSString *sectionTitle = self.sectionTitleArray[indexPath.section];
 
     MyLogTableViewCell *cell = (MyLogTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -431,51 +341,45 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSString *foodNameText = nil;
     NSString *calorieText = nil;
     
-    if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
-        if (isExerciseData) {
-            NSDictionary *dict = exerciseResultsArray[indexPath.row];
-            
-            int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
-            NSNumber *caloriesPerHour = [dict valueForKey:@"CaloriesPerHour"];
-            int minutesExercised = [[dict valueForKey:@"Exercise_Time_Minutes"] intValue];
-                        
-            double totalCaloriesBurned;
-            if (exerciseID == 257 || exerciseID == 267) {
-                totalCaloriesBurned = minutesExercised;
-                calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
-            }
-            else if (exerciseID == 268) {
-                totalCaloriesBurned = minutesExercised;
-                calorieText = [NSString stringWithFormat:@"-%.0f Moves",totalCaloriesBurned];
-            }
-            else if (exerciseID == 269 || exerciseID == 276) {
-                totalCaloriesBurned = minutesExercised;
-                calorieText = [NSString stringWithFormat:@"%.0f Steps",totalCaloriesBurned];
-            }
-            else if (exerciseID == 259) {
-                totalCaloriesBurned = 0.0;
-                calorieText = [NSString stringWithFormat:@"%i Steps", minutesExercised];
-            }
-            else if (exerciseID == 272 || exerciseID == 275) {
-                totalCaloriesBurned = minutesExercised;
-                calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
-            }
-            else if (exerciseID == 274) {
-                totalCaloriesBurned = 0.0;
-                calorieText = [NSString stringWithFormat:@"%i Steps",minutesExercised];
-            }
-            else {
-                totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * currentUserWeight * minutesExercised;
-                calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
-            }
-            foodNameText = [dict valueForKey:@"ActivityName"];
+    if ([sectionTitle isEqualToString:@"Exercise"]) {
+        NSArray *exerciseResultsArray = [self.exerciseResults copy];
+        NSDictionary *dict = exerciseResultsArray[indexPath.row];
+        int exerciseID = [[dict valueForKey:@"ExerciseID"] intValue];
+        NSNumber *caloriesPerHour = [dict valueForKey:@"CaloriesPerHour"];
+        int minutesExercised = [[dict valueForKey:@"Exercise_Time_Minutes"] intValue];
+                    
+        double totalCaloriesBurned;
+        if (exerciseID == 257 || exerciseID == 267) {
+            totalCaloriesBurned = minutesExercised;
+            calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+        }
+        else if (exerciseID == 268) {
+            totalCaloriesBurned = minutesExercised;
+            calorieText = [NSString stringWithFormat:@"-%.0f Moves",totalCaloriesBurned];
+        }
+        else if (exerciseID == 269 || exerciseID == 276) {
+            totalCaloriesBurned = minutesExercised;
+            calorieText = [NSString stringWithFormat:@"%.0f Steps",totalCaloriesBurned];
+        }
+        else if (exerciseID == 259) {
+            totalCaloriesBurned = 0.0;
+            calorieText = [NSString stringWithFormat:@"%i Steps", minutesExercised];
+        }
+        else if (exerciseID == 272 || exerciseID == 275) {
+            totalCaloriesBurned = minutesExercised;
+            calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
+        }
+        else if (exerciseID == 274) {
+            totalCaloriesBurned = 0.0;
+            calorieText = [NSString stringWithFormat:@"%i Steps",minutesExercised];
         }
         else {
-            foodNameText = nil;
-            calorieText = nil;
+            totalCaloriesBurned = ([caloriesPerHour floatValue]/ 60) * currentUserWeight * minutesExercised;
+            calorieText = [NSString stringWithFormat:@"-%.0f Calories",totalCaloriesBurned];
         }
+        foodNameText = [dict valueForKey:@"ActivityName"];
     } else {
-        NSDictionary *dict = foodResultsArray[indexPath.section][indexPath.row];
+        NSDictionary *dict = self.sectionFoodsDict[sectionTitle][@"Foods"][indexPath.row];
         NSString *nameString = [dict valueForKey:@"Name"];
         NSRange r = [nameString rangeOfString:nameString];
         foodNameText = nameString;
@@ -522,27 +426,24 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *exerciseResultsArray = [exerciseResults copy];
-    NSArray *foodResultsArray = [foodResults copy];
-    
+    NSString *sectionTitle = self.sectionTitleArray[indexPath.section];
     [self.dateFormatter setDateFormat:@"MMMM d, yyyy"];
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    if ((indexPath.section > [foodResultsArray count]-1) || ([foodResultsArray count] == 0 && [exerciseResultsArray count] > 0)) {
-        
+    if ([sectionTitle isEqualToString:@"Exercise"]) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[exerciseResultsArray objectAtIndex:indexPath.row]];
+        NSDictionary *dict = self.exerciseResults[indexPath.row];
         [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
         dietmasterEngine.taskMode = @"Edit";
         dietmasterEngine.isMealPlanItem = NO;
         
-        int mealCode = [[dict valueForKey:@"MealCode"] intValue];
-        dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode];
+        NSInteger mealCode = indexPath.section;
+        dietmasterEngine.selectedMealID = @(mealCode);
         ExercisesDetailViewController *eDVController = [[ExercisesDetailViewController alloc] init];
         [self.navigationController pushViewController:eDVController animated:YES];
     }
     else {
-        NSDictionary *foodDict = [[foodResults objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        NSDictionary *foodDict = self.sectionFoodsDict[sectionTitle][@"Foods"][indexPath.row];
         DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -563,7 +464,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
--(IBAction)shownextDate:(id)sender {
+- (IBAction)shownextDate:(id)sender {
     NSDateComponents *components = [[NSDateComponents alloc] init];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [components setDay:+1];
@@ -597,117 +498,30 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 /// Shows the food list or exercise list to user, so they can select
 /// a food or exercise for that time of day selected.
 - (IBAction)logFoodOrExercise:(id)sender {
-    NSArray *foodResultsArray = [foodResults copy];
-    NSArray *sectionArray = [selectSectionArray copy];
-    
     UIButton *button = (UIButton *)sender;
     NSInteger section = button.tag;
-    
-    if (foodResultsArray.count <= section && sectionArray.count <= section) {
-        return; // Array not updated yet, return or we'll crash w/ index out of bounds.
+    if (section > self.sectionTitleArray.count-1) {
+        return;
     }
-
-    NSString *MealsName;
-    if (foodResultsArray.count == 0) {
-        MealsName = [foodResultsArray objectAtIndex:section];
-    } else {
-        MealsName = [sectionArray objectAtIndex:section];
-    }
-    
-    if ([MealsName isEqualToString:@"Breakfast"]) {
-        int_mealID = [NSNumber numberWithInt:0];
-    }
-    else if ([MealsName isEqualToString:@"Snack 1"]) {
-        int_mealID = [NSNumber numberWithInt:1];
-    }
-    else if ([MealsName isEqualToString:@"Lunch"]) {
-        int_mealID = [NSNumber numberWithInt:2];
-    }
-    else if ([MealsName isEqualToString:@"Snack 2"]) {
-        int_mealID = [NSNumber numberWithInt:3];
-    }
-    else if ([MealsName isEqualToString:@"Dinner"]) {
-        int_mealID = [NSNumber numberWithInt:4];
-    }
-    else if ([MealsName isEqualToString:@"Snack 3"]) {
-        int_mealID = [NSNumber numberWithInt:5];
-    }
-    
+    NSString *sectionName = self.sectionTitleArray[section];
+        
+    int_mealID = @([self.sectionTitleArray indexOfObject:sectionName]);
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     dietmasterEngine.isMealPlanItem = NO;
     
-    if (section == 0) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.selectedMealID = int_mealID;
-        
-        dietmasterEngine.taskMode = @"Save";
-
-        FoodsSearch *fhController1 = [[FoodsSearch alloc] init];
-        fhController1.date_currentDate    = date_currentDate;
-        fhController1.title = MealsName;
-        [self.navigationController pushViewController:fhController1 animated:YES];
-        
-    }
-    else if (section == 1) {
+    if (section < self.sectionTitleArray.count-1) {
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         dietmasterEngine.selectedMealID = int_mealID;
         dietmasterEngine.taskMode = @"Save";
         FoodsSearch *fhController1 = [[FoodsSearch alloc] init];
         fhController1.date_currentDate = date_currentDate;
-        fhController1.title = MealsName;
+        fhController1.title = sectionName;
         [self.navigationController pushViewController:fhController1 animated:YES];
         
-    }
-    else if (section == 2) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.selectedMealID = int_mealID;
-        dietmasterEngine.taskMode = @"Save";
-
-        
-        FoodsSearch *fhController1 = [[FoodsSearch alloc] init];
-        fhController1.date_currentDate    = date_currentDate;
-        fhController1.title = MealsName;
-        [self.navigationController pushViewController:fhController1 animated:YES];
-        
-    }
-    else if (section == 3) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.selectedMealID = int_mealID;
-        dietmasterEngine.taskMode = @"Save";
-
-        FoodsSearch *fhController1 = [[FoodsSearch alloc] init];
-        fhController1.date_currentDate    = date_currentDate;
-        fhController1.title = MealsName;
-        [self.navigationController pushViewController:fhController1 animated:YES];
-        
-    }
-    else if (section == 4) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.selectedMealID = int_mealID;
-        dietmasterEngine.taskMode = @"Save";
-
-        FoodsSearch *fhController1 = [[FoodsSearch alloc] init];
-        fhController1.date_currentDate    = date_currentDate;
-        fhController1.title = MealsName;
-        [self.navigationController pushViewController:fhController1 animated:YES];
-        
-    }
-    else if (section == 5) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.selectedMealID = int_mealID;
-        dietmasterEngine.taskMode = @"Save";
-
-        FoodsSearch *fhController1 = [[FoodsSearch alloc] init];
-        fhController1.date_currentDate    = date_currentDate;
-        fhController1.title = MealsName;
-        [self.navigationController pushViewController:fhController1 animated:YES];
-        
-    }
-    else if (section == 6) {
+    } else if (section == self.sectionTitleArray.count-1) {
         ExercisesViewController *exercisesViewController = [[ExercisesViewController alloc] init];
         [self.navigationController pushViewController:exercisesViewController animated:YES];
-    }
-    else {
+    } else {
         Log_Add *dvController = [[Log_Add alloc] init];
         dvController.date_currentDate = date_currentDate;
         [self.navigationController pushViewController:dvController animated:YES];
@@ -747,8 +561,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 #pragma mark SAVE FAVORITE MEAL METHODS
 -(IBAction)saveFavoriteMeal:(id)sender {
-    favoriteMealName = @"";
-    favoriteMealSectionID = [sender tag];
+    NSInteger section = [sender tag];
+    NSString *sectionTitle = self.sectionTitleArray[section];
+    NSDictionary *mealDict = self.sectionFoodsDict[sectionTitle];
+    if (!mealDict) {
+        return;
+    }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Save as Favorite Meal"
                                                                    message:@"Enter short name or description."
@@ -759,102 +577,29 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [alert addAction:[UIAlertAction actionWithTitle:@"Save"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        favoriteMealName = alert.textFields.firstObject.text;
-        if ([favoriteMealName length] == 0) {
+        NSString *mealName = [alert.textFields.firstObject.text capitalizedString];
+        if ([mealName length] == 0) {
             [DMGUtilities showAlertWithTitle:@"Error" message:@"Favorite Meal Name is required. Please try again." inViewController:nil];
         } else {
-            [self saveFavoriteMealToDatabase:nil];
+            [self saveFavoriteMeal:mealDict withName:mealName];
         }
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel"
                                               style:UIAlertActionStyleCancel
                                             handler:^(UIAlertAction * _Nonnull action) {
-        favoriteMealName = @"";
-        favoriteMealSectionID = 0;
         [alert dismissViewControllerAnimated:YES completion:nil];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-// Save Fav Meal
-- (void)saveFavoriteMealToDatabase:(id)sender {
-    
+- (void)saveFavoriteMeal:(NSDictionary *)mealDict withName:(NSString *)mealName {
     [DMActivityIndicator showActivityIndicator];
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-        
-    }
-    
-    int minIDvalue = 0;
-    NSString *idQuery = @"SELECT min(Favorite_MealID) as Favorite_MealID FROM Favorite_Meal";
-    FMResultSet *rsID = [db executeQuery:idQuery];
-    while ([rsID next]) {
-        minIDvalue = [rsID intForColumn:@"Favorite_MealID"];
-    }
-    [rsID close];
-    minIDvalue = minIDvalue - 1;
-    if (minIDvalue >=0) {
-        int maxValue = minIDvalue;
-        for (int i=0; i<maxValue; i++) {
-            if (minIDvalue < 0){
-                break;
-            }
-            minIDvalue--;
-        }
-    }
-    
-    [db beginTransaction];
-    
-    NSDate* sourceDate = [NSDate date];
-    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-    [self.dateFormatter setTimeZone:systemTimeZone];
-    NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
-    
-    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Favorite_Meal (Favorite_MealID, Favorite_Meal_Name, modified) VALUES (%i, '%@',DATETIME('%@'))", minIDvalue, favoriteMealName, date_string];
-    
-    
-    [db executeUpdate:insertSQL];
-    
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    
-    [db commit];
-    
-    int favoriteMealID = (int)[db lastInsertRowId];
-    
-    for (NSDictionary *dict in [foodResults objectAtIndex:favoriteMealSectionID]) {
-        
-        
-        [db beginTransaction];
-        
-        NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormatter setTimeZone:systemTimeZone];
-        NSString *date_string = [dateFormatter stringFromDate:sourceDate];
-        
-        NSString *insertSQLItems = [NSString stringWithFormat: @"REPLACE INTO Favorite_Meal_Items (FoodKey, Favorite_Meal_ID, FoodID, MeasureID, Servings, Last_Modified) VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))", [[dict valueForKey:@"FoodKey"] intValue], favoriteMealID, [[dict valueForKey:@"FoodID"] intValue], [[dict valueForKey:@"MeasureID"] intValue], [[dict valueForKey:@"Servings"] floatValue], date_string];
-        
-        
-        [db executeUpdate:insertSQLItems];
-        
-        if ([db hadError]) {
-            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        }
-        
-        [db commit];
-    }
+    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+    [provider saveFavoriteMeal:mealDict withName:mealName];
     
     [DMActivityIndicator hideActivityIndicator];
     [DMActivityIndicator showCompletedIndicator];
-
-    favoriteMealID = 0;
 }
 
 #pragma mark DATA METHODS
@@ -897,8 +642,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (void)loadExerciseData:(NSDate *)date {
+    [self.exerciseResults removeAllObjects];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [exerciseResults removeAllObjects];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
@@ -927,20 +672,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                               activityName, @"ActivityName",
                               caloriesPerHour, @"CaloriesPerHour",
                               nil];
-        [exerciseResults addObject:dict];
-        
-        if (exerciseResults.count > 0) {
-            isExerciseData = YES;
-            if (![selectSectionArray containsObject:@"Exercise"]) {
-                [selectSectionArray addObject:@"Exercise"];
-            }
-        } else {
-            isExerciseData = NO;
-            [selectSectionArray addObject:@"Exercise"];
-            NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
-            [tmpDict setObject:@"Exercise" forKey:@"Testing1"];
-            [exerciseResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
-        }
+        [self.exerciseResults addObject:dict];
     }
     
     [rs close];
@@ -961,28 +693,24 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (void)updateData:(NSDate *)date {
-    if (foodResults) {
-        [foodResults removeAllObjects];
-        [selectSectionArray removeAllObjects];
-    }
+    [self.sectionFoodsDict removeAllObjects];
     
-    NSMutableArray *breakfastArray1 = [[NSMutableArray alloc] init];
-    NSMutableArray *snack1Array2 = [[NSMutableArray alloc] init];
-    NSMutableArray *lunchArray3 = [[NSMutableArray alloc] init];
-    NSMutableArray *snack2Array4 = [[NSMutableArray alloc] init];
-    NSMutableArray *dinnerArray5 = [[NSMutableArray alloc] init];
-    NSMutableArray *snack3Array6 = [[NSMutableArray alloc] init];
+    NSMutableArray *breakfastArray = [NSMutableArray array];
+    NSMutableArray *snack1Array = [NSMutableArray array];
+    NSMutableArray *lunchArray = [NSMutableArray array];
+    NSMutableArray *snack2Array = [NSMutableArray array];
+    NSMutableArray *dinnerArray = [NSMutableArray array];
+    NSMutableArray *snack3Array = [NSMutableArray array];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
     }
     
-    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
+    NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
     [self.dateFormatter setTimeZone:systemTimeZone];
     NSString *date_Today = [self.dateFormatter stringFromDate:date];
-
     [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
     NSString *date_Display = [self.dateFormatter stringFromDate:date];
     
@@ -991,15 +719,15 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     dietmasterEngine.dateSelected = date;
     dietmasterEngine.dateSelectedFormatted = date_Display;
-        
+    
     NSString *query = [NSString stringWithFormat: @"SELECT Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food_Log_Items.NumberOfServings, Food.FoodKey, Food.Name, Food.Calories, Food.Fat, Food.Carbohydrates, Food.Protein, FoodMeasure.GramWeight, Food.ServingSize, Food.CategoryID, Food.RecipeID, Food.FoodURL, count(1) FROM Food_Log INNER JOIN Food_Log_Items ON Food_Log.MealID = Food_Log_Items.MealID INNER JOIN Food ON Food.FoodKey = Food_Log_Items.FoodID INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey WHERE (Food_Log.MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) AND Food_Log_Items.MeasureID = FoodMeasure.MeasureID group by Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food.FoodKey ORDER BY Food_Log_Items.MealCode ASC", date_Today, date_Today];
-        
-    breakfastCalories = 0;
-    snack1Calories = 0;
-    lunchCalories = 0;
-    snack2Calories = 0;
-    dinnerCalories = 0;
-    snack3Calories = 0;
+    
+    NSInteger breakfastCalories = 0;
+    NSInteger snack1Calories = 0;
+    NSInteger lunchCalories = 0;
+    NSInteger snack2Calories = 0;
+    NSInteger dinnerCalories = 0;
+    NSInteger snack3Calories = 0;
     
     actualCarbCalories = 0.0;
     actualFatCalories = 0.0;
@@ -1009,8 +737,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     while ([rs next]) {
         
         NSInteger mealID = [rs intForColumn:@"MealCode"];
-        
-        double totalCalories = [rs doubleForColumn:@"NumberOfServings"] * (([rs doubleForColumn:@"Calories"] * ([rs doubleForColumn:@"GramWeight"] / 100)) / [rs doubleForColumn:@"ServingSize"]);
+        double calories = [rs doubleForColumn:@"NumberOfServings"] * (([rs doubleForColumn:@"Calories"] * ([rs doubleForColumn:@"GramWeight"] / 100)) / [rs doubleForColumn:@"ServingSize"]);
         
         NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               [NSNumber numberWithInt:[rs intForColumn:@"FoodID"]], @"FoodID",
@@ -1028,7 +755,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                               [NSNumber numberWithDouble:[rs doubleForColumn:@"ServingSize"]], @"ServingSize",
                               
                               [NSNumber numberWithInt:[rs intForColumn:@"MealID"]], @"FoodLogMealID",
-                              [NSNumber numberWithInt:totalCalories], @"TotalCalories",
+                              [NSNumber numberWithInt:calories], @"TotalCalories",
                               [NSNumber numberWithInt:[rs intForColumn:@"RecipeID"]], @"RecipeID",
                               [rs stringForColumn:@"FoodURL"], @"FoodURL",
                               [NSNumber numberWithInt:[rs intForColumn:@"CategoryID"]], @"CategoryID",
@@ -1045,141 +772,47 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         
         switch (mealID) {
             case 0:
-                [breakfastArray1 addObject:dict];
-                breakfastCalories = breakfastCalories + totalCalories;
+                [breakfastArray addObject:dict];
+                breakfastCalories += calories;
                 break;
             case 1:
-                [snack1Array2 addObject:dict];
-                snack1Calories = snack1Calories + totalCalories;
+                [snack1Array addObject:dict];
+                snack1Calories += calories;
                 break;
             case 2:
-                [lunchArray3 addObject:dict];
-                lunchCalories = lunchCalories + totalCalories;
+                [lunchArray addObject:dict];
+                lunchCalories += calories;
                 break;
             case 3:
-                [snack2Array4 addObject:dict];
-                snack2Calories = snack2Calories + totalCalories;
+                [snack2Array addObject:dict];
+                snack2Calories += calories;
                 break;
             case 4:
-                [dinnerArray5 addObject:dict];
-                dinnerCalories = dinnerCalories + totalCalories;
+                [dinnerArray addObject:dict];
+                dinnerCalories += calories;
                 break;
             case 5:
-                [snack3Array6 addObject:dict];
-                snack3Calories = snack3Calories + totalCalories;
+                [snack3Array addObject:dict];
+                snack3Calories += calories;
                 break;
         }
     }
-    
-    if ([breakfastArray1 count] > 0) {
-        [foodResults addObject:breakfastArray1];
-        
-        if (![selectSectionArray containsObject:@"Breakfast"]) {
-            [selectSectionArray addObject:@"Breakfast"];
-        }
-    }
-    
-    if (![selectSectionArray containsObject:@"Breakfast"]) {
-        [selectSectionArray addObject:@"Breakfast"];
-        
-        NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc]init];
-        [tmpDict setObject:@"Breakfast" forKey:@"Testing1"];
-        [foodResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
-    }
-    
-    if ([snack1Array2 count] > 0) {
-        [foodResults addObject:snack1Array2];
-        if (![selectSectionArray containsObject:@"Snack 1"]) {
-            [selectSectionArray addObject:@"Snack 1"];
-        }
-    }
-    
-    if (![selectSectionArray containsObject:@"Snack 1"]) {
-        [selectSectionArray addObject:@"Snack 1"];
-        
-        NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc]init];
-        
-        [tmpDict setObject:@"Snack 1" forKey:@"Testing1"];
-        
-        [foodResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
-    }
-    
-    if ([lunchArray3 count] > 0) {
-        [foodResults addObject:lunchArray3];
-        
-        if (![selectSectionArray containsObject:@"Lunch"]) {
-            [selectSectionArray addObject:@"Lunch"];
-        }
-    }
-    
-    if (![selectSectionArray containsObject:@"Lunch"]) {
-        [selectSectionArray addObject:@"Lunch"];
-        
-        NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc]init];
-        
-        [tmpDict setObject:@"Lunch" forKey:@"Testing1"];
-        
-        [foodResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
-    }
-    
-    if ([snack2Array4 count] > 0) {
-        [foodResults addObject:snack2Array4];
-        if (![selectSectionArray containsObject:@"Snack 2"]) {
-            [selectSectionArray addObject:@"Snack 2"];
-        }
-    }
-    
-    if (![selectSectionArray containsObject:@"Snack 2"]) {
-        [selectSectionArray addObject:@"Snack 2"];
-        
-        
-        NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc]init];
-        
-        [tmpDict setObject:@"Snack 2" forKey:@"Testing1"];
-        
-        [foodResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
-    }
-    
-    if ([dinnerArray5 count] > 0) {
-        [foodResults addObject:dinnerArray5];
-        
-        if (![selectSectionArray containsObject:@"Dinner"])
-        {
-            [selectSectionArray addObject:@"Dinner"];
-        }
-        
-    }
-    
-    if (![selectSectionArray containsObject:@"Dinner"]) {
-        [selectSectionArray addObject:@"Dinner"];
-        
-        
-        NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc]init];
-        
-        [tmpDict setObject:@"Dinner" forKey:@"Testing1"];
-        
-        [foodResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
-    }
-    
-    if ([snack3Array6 count] > 0) {
-        [foodResults addObject:snack3Array6];
-        
-        if (![selectSectionArray containsObject:@"Snack 3"]) {
-            [selectSectionArray addObject:@"Snack 3"];
-        }
-    }
-    
-    if (![selectSectionArray containsObject:@"Snack 3"]) {
-        [selectSectionArray addObject:@"Snack 3"];
-        
-        NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc]init];
-        
-        [tmpDict setObject:@"Snack 3" forKey:@"Testing1"];
-        
-        [foodResults addObject:[NSMutableArray arrayWithObject:tmpDict]];
-    }
-       
     [rs close];
+    
+    // Add the values to the food dictionary.
+    NSDictionary *breakfastDict = @{ @"Calories" : @(breakfastCalories), @"Foods" : breakfastArray };
+    NSDictionary *snack1Dict = @{ @"Calories" : @(snack1Calories), @"Foods" : snack1Array };
+    NSDictionary *lunchDict = @{ @"Calories" : @(lunchCalories), @"Foods" : lunchArray };
+    NSDictionary *snack2Dict = @{ @"Calories" : @(snack2Calories), @"Foods" : snack2Array };
+    NSDictionary *dinnerDict = @{ @"Calories" : @(dinnerCalories), @"Foods" : dinnerArray };
+    NSDictionary *snack3Dict = @{ @"Calories" : @(snack3Calories), @"Foods" : snack3Array };
+
+    self.sectionFoodsDict[@"Breakfast"] = breakfastDict;
+    self.sectionFoodsDict[@"Snack 1"] = snack1Dict;
+    self.sectionFoodsDict[@"Lunch"] = lunchDict;
+    self.sectionFoodsDict[@"Snack 2"] = snack2Dict;
+    self.sectionFoodsDict[@"Dinner"] = dinnerDict;
+    self.sectionFoodsDict[@"Snack 3"] = snack3Dict;
             
     [self loadExerciseData:date];
     [self updateBMRLabel];

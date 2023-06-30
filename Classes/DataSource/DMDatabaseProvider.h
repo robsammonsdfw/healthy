@@ -55,6 +55,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// Used to help get ID values since most tables aren't auto incremented.
 - (NSNumber *)getMaxValueForColumn:(NSString *)columnName inTable:(NSString *)tableName;
 
+#pragma mark - Meals
+
+/// Saves a favorite meal to the database.
+- (void)saveFavoriteMeal:(NSDictionary *)mealDict withName:(NSString *)mealName;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -60,6 +60,30 @@ class UserDataFetcher : NSObject {
     
     /// Fetches the current user's details, such as BMR, Height, Weight, etc.
     /// This is very similar to -signInUser, except it doesn't give UserID, CompanyID, or name info.
+    /// {
+    //    "User": [{
+    //        "CompanyID": 3271,
+    //        "Weight": 1,
+    //        "WeightGoal": 165,
+    //        "Height": 60,
+    //        "Goals": 0,
+    //        "BirthDate": "1981-01-01 12:00:00",
+    //        "Profession": 0,
+    //        "BodyType": 1,
+    //        "GoalStartDate": "2023-06-07 07:40:11",
+    //        "ProteinRequirements": 30,
+    //        "ProteinRatio": 30,
+    //        "CarbRatio": 50,
+    //        "FatRatio": 20,
+    //        "Gender": 0,
+    //        "Lactation": false,
+    //        "GoalRate": 1,
+    //        "BMR": 1629,
+    //        "GeneralUnits": 0,
+    //        "EnergyUnit": 0,
+    //        "HostName": "http://dietmastersoftware.dmwebpro.com"
+    //    }]
+    //}
     @objc func getUserDetails(completion : @escaping (_ dict: [AnyHashable : Any]?, _ error: NSError?) -> Void) {
         guard let userId = userId, let authKey = authKey else {
             let error = DMGUtilities.error(withMessage: "User not authenticated.", code: 100) as NSError

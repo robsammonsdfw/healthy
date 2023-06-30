@@ -656,7 +656,7 @@
     [dietmasterEngine saveExerciseLogsWithCompletionBlock:nil];
     [DMActivityIndicator showCompletedIndicator];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 }
 
 -(IBAction) delLog:(id) sender {
