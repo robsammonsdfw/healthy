@@ -52,6 +52,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         _exerciseResults = [NSMutableArray array];
         _sectionFoodsDict = [NSMutableDictionary dictionary];
         _sectionTitleArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3", @"Exercise"];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:@"ReloadData" object:nil];
     }
     return self;
 }
@@ -291,11 +292,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [favoriteButton setImage:image forState:UIControlStateNormal];
     favoriteButton.tintColor = PrimaryColor
     favoriteButton.tag = section;
-    favoriteButton.hidden = YES;
+    favoriteButton.hidden = [sectionTitle isEqualToString:@"Exercise"];
     [headerView addSubview:favoriteButton];
-    if ([sectionTitle isEqualToString:@"Exercise"]) {
-        favoriteButton.hidden = YES;
-    }
     
     [plusButton.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:12].active = YES;
     [plusButton.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor constant:0].active = YES;
