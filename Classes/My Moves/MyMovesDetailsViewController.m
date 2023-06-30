@@ -29,7 +29,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGFloat animatedDistance;
 }
 
-@property (nonatomic, strong) MyMovesDataProvider *soapWebService;
+@property (nonatomic, strong) MyMovesDataProvider *movesDataProvider;
 
 /// Name of the exercise.
 @property (nonatomic, strong) IBOutlet UILabel *exerciseNameLbl;
@@ -59,7 +59,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
-        _soapWebService = [[MyMovesDataProvider alloc] init];
+        _movesDataProvider = [[MyMovesDataProvider alloc] init];
     }
     return self;
 }
@@ -212,21 +212,21 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     cell.repsTxtFld.text = set.unitOneValue.stringValue;
     cell.weightTxtFld.text = set.unitTwoValue.stringValue;
         
-    // Set the tags so we can retrieve the row the user selected later.
     cell.repsTxtFld.tag = indexPath.row;
-    cell.weightTxtFld.tag = indexPath.row;
-    cell.deleteBtn.tag = indexPath.row;
-
-    // Set the keyboard type.
+    [cell.repsTxtFld removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.repsTxtFld addTarget:self action:@selector(repsEditAction:) forControlEvents:UIControlEventEditingChanged];
+    cell.repsTxtFld.delegate = self;
     cell.repsTxtFld.keyboardType = UIKeyboardTypeNumberPad;
+
+    cell.weightTxtFld.tag = indexPath.row;
+    [cell.weightTxtFld removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.weightTxtFld addTarget:self action:@selector(weightEditAction:) forControlEvents:UIControlEventEditingChanged];
+    cell.weightTxtFld.delegate = self;
     cell.weightTxtFld.keyboardType = UIKeyboardTypeNumberPad;
 
-    cell.repsTxtFld.delegate = self;
-    cell.weightTxtFld.delegate = self;
-    
     cell.deleteBtn.tag = indexPath.row;
     [cell.deleteBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.deleteBtn addTarget:self action:@selector(deleteSetBtnAction:) forControlEvents:UIControlEventTouchDown];
+    [cell.deleteBtn addTarget:self action:@selector(deleteSetBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     
     cell.deleteImgV.tintColor = [UIColor lightGrayColor];
         
@@ -306,9 +306,9 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 
 - (IBAction)addSet:(UIButton*)sender {
     DMMoveSet *set = [DMMoveSet setWithDefaultValues];
-    [self.soapWebService addMoveSet:set toRoutine:self.routine];
+    [self.movesDataProvider addMoveSet:set toRoutine:self.routine];
     // Reload our routine.
-    self.routine = [self.soapWebService getUserPlanRoutineForRoutineId:self.routine.routineId];
+    self.routine = [self.movesDataProvider getUserPlanRoutineForRoutineId:self.routine.routineId];
     [self.view layoutIfNeeded];
     [self.collectionView reloadData];
 }
@@ -321,9 +321,9 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf.soapWebService deleteMoveSet:moveSet];
+        [weakSelf.movesDataProvider deleteMoveSet:moveSet];
         // Reload our routine.
-        self.routine = [self.soapWebService getUserPlanRoutineForRoutineId:self.routine.routineId];
+        self.routine = [self.movesDataProvider getUserPlanRoutineForRoutineId:self.routine.routineId];
         [weakSelf.view layoutIfNeeded];
         [weakSelf.collectionView reloadData];
     }]];
@@ -342,7 +342,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self.soapWebService deleteMoveRoutine:self.routine];
+        [self.movesDataProvider deleteMoveRoutine:self.routine];
         [self.navigationController popViewControllerAnimated:YES];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
@@ -373,8 +373,8 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     __block NSInteger selectedRow = sender.tag;
     pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
         DMMoveSet *set = [weakSelf.routine.sets copy][selectedRow];
-        [weakSelf.soapWebService setFirstUnitId:@(row) forMoveSet:set];
-        weakSelf.routine = [self.soapWebService getUserPlanRoutineForRoutineId:weakSelf.routine.routineId];
+        [weakSelf.movesDataProvider setFirstUnitId:@(row) forMoveSet:set];
+        weakSelf.routine = [self.movesDataProvider getUserPlanRoutineForRoutineId:weakSelf.routine.routineId];
         [weakSelf.collectionView reloadData];
     };
 
@@ -401,8 +401,8 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     __block NSInteger selectedRow = sender.tag;
     pickerView.didSelectOptionCallback = ^(id<DMPickerViewDataSource> object, NSInteger row) {
         DMMoveSet *set = [weakSelf.routine.sets copy][selectedRow];
-        [weakSelf.soapWebService setSecondUnitId:@(row) forMoveSet:set];
-        weakSelf.routine = [self.soapWebService getUserPlanRoutineForRoutineId:weakSelf.routine.routineId];
+        [weakSelf.movesDataProvider setSecondUnitId:@(row) forMoveSet:set];
+        weakSelf.routine = [self.movesDataProvider getUserPlanRoutineForRoutineId:weakSelf.routine.routineId];
         [weakSelf.collectionView reloadData];
     };
 
@@ -431,7 +431,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         return;
     }
     DMMoveSet *set = [self.routine.sets copy][row];
-    [self.soapWebService setFirstUnitValue:unit1Value forMoveSet:set];
+    [self.movesDataProvider setFirstUnitValue:unit1Value forMoveSet:set];
 }
 
 - (IBAction)weightEditAction:(UITextField *)sender {
@@ -447,18 +447,10 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         return;
     }
     DMMoveSet *set = [self.routine.sets copy][row];
-    [self.soapWebService setSecondUnitValue:unit2Value forMoveSet:set];
+    [self.movesDataProvider setSecondUnitValue:unit2Value forMoveSet:set];
 }
 
 #pragma mark - UITextViewDelegate
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    if([text isEqualToString:@"\n"]) {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
-}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     // Prevent crashing undo bug – see note below.
@@ -482,7 +474,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
     [super touchesBegan:touches withEvent:event];
 }
 
--(BOOL)textFieldShouldReturn:(UITextField*)textField {
+- (BOOL)textFieldShouldReturn:(UITextField*)textField {
     [textField resignFirstResponder];
     return YES;
 }
