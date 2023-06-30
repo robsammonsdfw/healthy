@@ -189,7 +189,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [DMGUtilities showAlertWithTitle:@"Oops!" message:@"Username or Mobile Password field is empty. Please try again." inViewController:nil];
         self.loginButton.enabled = YES;
         [DMActivityIndicator hideActivityIndicator];
-
     } else {
         self.loginButton.enabled = NO;
         
@@ -276,52 +275,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     [DMGUtilities showAlertWithTitle:title message:message inViewController:nil];
     [controller dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark - USER SYNC METHODS
-
-- (void)syncDatabaseAfterLogin:(id)sender {
-    [DMActivityIndicator showActivityIndicatorWithMessage:@"Loading..."];
-
-//    DMDatabaseProvider *databaseProvider = [[DMDatabaseProvider alloc] init];
-//    [databaseProvider syncUserInfoWithCompletion:^(BOOL completed, NSError *error) {
-//        if (error) {
-//            [self syncDatabaseFailedWithError:error];
-//            return;
-//        }
-//        [databaseProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-//            if (error) {
-//                [self syncDatabaseFailedWithError:error];
-//                return;
-//            }
-//            [self syncDatabaseFinished];
-//        }];
-//    }];
-}
-
-#pragma mark - SYNC DELEGATE METHODS
-
-- (void)syncDatabaseFinished {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-    
-    [DMActivityIndicator hideActivityIndicator];
-    self.loginButton.enabled = YES;
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-    if (self.completionBlock) {
-        self.completionBlock(YES, nil);
-    }
-}
-
-- (void)syncDatabaseFailedWithError:(NSError *)error {
-    [DMGUtilities showError:error withTitle:@"Error" message:@"An error occurred. Please try again." inViewController:nil];
-    
-    [DMActivityIndicator hideActivityIndicator];
-    self.loginButton.enabled = YES;
-    
-    if (self.completionBlock) {
-        self.completionBlock(NO, error);
-    }
 }
 
 #pragma mark - TOS PRIVACY POLICY ACTIONS

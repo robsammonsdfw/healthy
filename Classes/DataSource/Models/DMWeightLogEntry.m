@@ -30,10 +30,16 @@
         
         _entryType = entryType;
         
-        _value = ValidNSNumber(dictionary[@"Value"]);
-        
+        // Check if value came from server.
+        if (dictionary[@"Value"]) {
+            _value = ValidNSNumber(dictionary[@"Value"]);
+        } else {
+            // Came from local database.
+            _value = ValidNSNumber(dictionary[@"weight"] ?: dictionary[@"bodyfat"]);
+        }
+
         // Format for device.
-        NSString *dateTimeString = ValidString(dictionary[@"LogDate"]);
+        NSString *dateTimeString = ValidString(dictionary[@"LogDate"] ?: dictionary[@"logtime"]);
         NSArray *dateArray = [dateTimeString componentsSeparatedByString:@" "];
         NSString *dateString = @"";
         if (dateArray.count) {
@@ -42,8 +48,6 @@
         
         // Format date for server.
         [_dateFormatter setDateFormat:@"yyyy-MM-dd"];
-        NSDate *fullDate = [_dateFormatter dateFromString:dateTimeString];
-        [_dateFormatter setDateFormat:@"M/dd/yyyy"];
         // Re-attach the time as midnight. TBH, not sure why the system does this. Perhaps to standardize
         // time zones on the server?
         NSString *dateTimeStandardizedString = [NSString stringWithFormat:@"%@ 12:00:00 AM", dateString];

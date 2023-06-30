@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, DMWeightLogEntryType) {
 /// E.g. M/dd/yyyy 12:00:00 AM.
 /// This is used for sending data to the server.
 @property (nonatomic, strong, readonly) NSString *logDateTimeString;
-// The amount of weight logged.
+// The amount of weight or bodyfat logged.
 @property (nonatomic, strong, readonly) NSNumber *value;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary

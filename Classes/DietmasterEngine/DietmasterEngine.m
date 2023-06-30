@@ -367,7 +367,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     if (![db open]) {
     }
     
-    NSString *query = [NSString stringWithFormat:@"SELECT weight, logtime FROM weightlog"];
+    NSString *query = [NSString stringWithFormat:@"SELECT * FROM weightlog"];
     FMResultSet *rs = [db executeQuery:query];
     
     NSMutableArray *tempDataArray = [NSMutableArray array];
