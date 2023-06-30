@@ -184,35 +184,41 @@
     [db beginTransaction];
     NSString *updateSQL = [NSString stringWithFormat: @"UPDATE user SET "
                            
-                           "weight_goal = %i, "
-                           "Height = %i, "
-                           "Goals = %i, "
+                           "weight_goal = %@, "
+                           "Height = %@, "
+                           "Goals = %@, "
                            "BirthDate = '%@', "
-                           "Profession = %i, "
-                           "BodyType = %i, "
+                           "Profession = %@, "
+                           "BodyType = %@, "
                            "GoalStartDate = '%@', "
-                           "ProteinRequirements = %i, "
-                           "gender = %i, "
-                           "lactating = %i, "
-                           "goalrate = %i, "
-                           "BMR = %i "
+                           "ProteinRequirements = %@, "
+                           "gender = %@, "
+                           "lactating = %@, "
+                           "goalrate = %@, "
+                           "BMR = %@, "
+                           "CarbRatio = %@, "
+                           "ProteinRatio = %@, "
+                           "FatRatio = %@, "
+                           "HostName = '%@' "
                            "WHERE id = 1",
-                           
-                           user.weightGoal.intValue,
-                           user.height.intValue,
-                           user.goals.intValue,
+                           user.weightGoal,
+                           user.height,
+                           user.goals,
                            [user birthDateString],
-                           user.profession.intValue,
-                           user.bodyType.intValue,
+                           user.profession,
+                           user.bodyType,
                            [user goalStartDateString],
-                           user.proteinRequirements.intValue,
-                           user.gender.intValue,
-                           user.lactating.intValue,
-                           user.goalRate.intValue,
-                           user.userBMR.intValue];
+                           user.proteinRequirements,
+                           user.gender,
+                           user.lactating,
+                           user.goalRate,
+                           user.userBMR,
+                           user.carbRatio,
+                           user.proteinRatio,
+                           user.fatRatio,
+                           user.hostName];
     
     [db executeUpdate:updateSQL];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
@@ -264,6 +270,11 @@
             }
         }];
     }
+}
+
+- (void)saveCurrentUserToDefaultsAndDatabase {
+    [self saveUserToDefaults:self.currentUser];
+    [self saveUserInfoToDatabase:self.currentUser];
 }
 
 static NSString *DMCurrentUserDefaultsKey = @"DMCurrentUser";

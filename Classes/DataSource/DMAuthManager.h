@@ -41,6 +41,11 @@ static NSString *UserLoginStateDidChangeNotification = @"UserLoginStateDidChange
 /// Old values were saved in "userid_dietmastergo" and "authkey_dietmastergo".
 - (void)migrateUserIfNeeded;
 
+#pragma mark - Update State
+
+/// Saves the current logged in user to defaults and the database.
+- (void)saveCurrentUserToDefaultsAndDatabase;
+
 @end
 
 NS_ASSUME_NONNULL_END

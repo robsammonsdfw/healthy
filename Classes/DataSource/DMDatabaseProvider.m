@@ -489,10 +489,13 @@
     }];
 }
 
-- (void)fetchFoodForKey:(int)foodKey {
+- (void)fetchFoodForKey:(NSNumber *)foodKey {
+    if (!foodKey) {
+        return;
+    }
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"GetFoodNew", @"RequestType",
-                              @(foodKey), @"FoodKey",
+                              foodKey, @"FoodKey",
                               nil];
     
     [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
@@ -524,8 +527,7 @@
     }
     
     for (NSDictionary *dict in missingFoods) {
-        int foodId = [[dict valueForKey:@"FoodID"] intValue];
-        [self fetchFoodForKey:foodId];
+        [self fetchFoodForKey:[dict valueForKey:@"FoodID"]];
     }
 }
 
@@ -912,6 +914,7 @@
     if (userDict) {
         DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
         [currentUser updateUserDetails:userDict];
+        [[DMAuthManager sharedInstance] saveCurrentUserToDefaultsAndDatabase];
         
         // Log values to Firebase.
         [[FIRCrashlytics crashlytics] log:@"GetUserData completed."];
@@ -919,50 +922,6 @@
             [[FIRCrashlytics crashlytics] setCustomValue:[userDict valueForKey:key] forKey:key];
         }
         
-        [db beginTransaction];
-        NSString *updateSQL = [NSString stringWithFormat: @"UPDATE user SET "
-                               
-                               "weight_goal = %i, "
-                               "Height = %i, "
-                               "Goals = %i, "
-                               "BirthDate = '%@', "
-                               "Profession = %i, "
-                               "BodyType = %i, "
-                               "GoalStartDate = '%@', "
-                               "ProteinRequirements = %i, "
-                               "gender = %i, "
-                               "lactating = %i, "
-                               "goalrate = %i, "
-                               "BMR = %i, "
-                               "CarbRatio = %i, "
-                               "ProteinRatio = %i, "
-                               "FatRatio = %i, "
-                               "HostName = '%@'"
-                               
-                               "WHERE id = 1",
-                               
-                               currentUser.weightGoal.intValue,
-                               currentUser.height.intValue,
-                               currentUser.goals.intValue,
-                               [currentUser birthDateString],
-                               currentUser.profession.intValue,
-                               currentUser.bodyType.intValue,
-                               [currentUser goalStartDateString],
-                               currentUser.proteinRequirements.intValue,
-                               currentUser.gender.intValue,
-                               currentUser.lactating.intValue,
-                               currentUser.goalRate.intValue,
-                               currentUser.userBMR.intValue,
-                               currentUser.carbRatio.intValue,
-                               currentUser.proteinRatio.intValue,
-                               currentUser.fatRatio.intValue,
-                               currentUser.hostName];
-        
-        [db executeUpdate:updateSQL];
-        if ([db hadError]) {
-            DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        }
-        [db commit];
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs setValue:currentUser.hostName forKey:@"HostName"];
     }
