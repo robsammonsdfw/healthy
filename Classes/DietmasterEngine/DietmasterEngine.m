@@ -82,6 +82,13 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 - (void)uploadDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock {
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    if (!currentUser) {
+        if (completionBlock) {
+            completionBlock(YES, nil);
+        }
+        return;
+    }
     dispatch_group_t fetchGroup = dispatch_group_create();
     __block NSError *syncError = nil;
     
@@ -175,6 +182,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     FMResultSet *rs = [db executeQuery:query];
 
     NSInteger resultCount = 0;
+    dispatch_group_t fetchGroup = dispatch_group_create();
+    __block NSError *syncError = nil;
     while ([rs next]) {
         [self.dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate *log_Date = [self.dateformatter dateFromString:[rs stringForColumn:@"MealDate"]];
@@ -192,13 +201,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                   logTimeString, @"LogDate",
                                   [rs stringForColumn:@"MealID"], @"goMealID",
                                   nil];
+        dispatch_group_enter(fetchGroup);
         [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionBlock) {
-                        completionBlock(NO, error);
-                    }
-                });
+                dispatch_group_leave(fetchGroup);
+                syncError = error;
                 return;
             }
             
@@ -225,15 +232,19 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                 DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
             }
             [db commit];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(YES, nil);
-                }
-            });
+            dispatch_group_leave(fetchGroup);
         }];
         resultCount++;
     }
+    [rs close];
+
+    dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+        if (completionBlock) {
+            completionBlock(syncError != nil, syncError);
+        }
+        return;
+    });
+
     // Incase we had no results.
     if (resultCount == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -242,7 +253,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             }
         });
     }
-    [rs close];
 }
 
 - (void)saveMealItemsWithCompletionBlock:(completionBlockWithError)completionBlock {
@@ -286,7 +296,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
-                    completionBlock(error != nil, error);
+                    BOOL success = (error != nil);
+                    completionBlock(success, error);
                 }
             });
             return;
@@ -328,7 +339,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                   nil];
         [tempDataArray addObject:tempDict];
     }
-    
+    [rs close];
+
     if (!tempDataArray.count) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
@@ -346,12 +358,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                    completion:^(NSObject *object, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
-                completionBlock(error != nil, error);
+                BOOL success = (error != nil);
+                completionBlock(success, error);
             }
         });
     }];
-
-    [rs close];
 }
 
 - (void)saveWeightLogWithCompletionBlock:(completionBlockWithError)completionBlock {
@@ -394,7 +405,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                                    completion:^(NSObject *object, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
-                completionBlock(error != nil, error);
+                BOOL success = (error != nil);
+                completionBlock(success, error);
             }
         });
     }];
@@ -417,6 +429,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     FMResultSet *rs = [db executeQuery:query];
     
     NSInteger resultCount = 0;
+    dispatch_group_t fetchGroup = dispatch_group_create();
+    __block NSError *fetchError = nil;
     while ([rs next]) {
         NSDictionary *resultDict = [rs resultDictionary];
         DMFood *food = [[DMFood alloc] initWithDictionary:resultDict];
@@ -426,26 +440,28 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         NSDictionary *foodDict = [food dictionaryRepresentation];
         [mutableDict addEntriesFromDictionary:foodDict];
         
+        dispatch_group_enter(fetchGroup);
         [DMDataFetcher fetchDataWithRequestParams:foodDict completion:^(NSObject *object, NSError *error) {
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionBlock) {
-                        completionBlock(NO, error);
-                    }
-                });
+                fetchError = error;
+                dispatch_group_leave(fetchGroup);
                 return;
             }
             NSArray *results = (NSArray *)object;
              [self saveFoodFinished:results forFood:food];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(YES, nil);
-                }
-            });
+            dispatch_group_leave(fetchGroup);
          }];
         resultCount++;
     }
+    [rs close];
+
+    dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+        if (completionBlock) {
+            completionBlock(fetchError != nil, fetchError);
+        }
+        return;
+    });
+
     // If we had no results, return.
     if (resultCount == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -454,7 +470,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             }
         });
     }
-    [rs close];
 }
 
 - (void)saveFavoriteFoodsWithCompletion:(completionBlockWithError)completionBlock {
@@ -465,6 +480,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     NSString *query = @"SELECT Favorite_FoodID, FoodID, MeasureID, modified FROM Favorite_Food WHERE Favorite_FoodID < 0";
     FMResultSet *rs = [db executeQuery:query];
     NSInteger resultCount = 0;
+    dispatch_group_t fetchGroup = dispatch_group_create();
+    __block NSError *syncError = nil;
     while ([rs next]) {
         
         NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -474,23 +491,26 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               [rs stringForColumn:@"MeasureID"], @"MeasureID",
                               nil];
         
+        dispatch_group_enter(fetchGroup);
         [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionBlock) {
-                        completionBlock(NO, error);
-                    }
-                });
+                dispatch_group_leave(fetchGroup);
+                syncError = error;
                 return;
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(YES, nil);
-                }
-            });
+            dispatch_group_leave(fetchGroup);
         }];
         resultCount++;
     }
+    [rs close];
+
+    dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+        if (completionBlock) {
+            completionBlock(syncError != nil, syncError);
+        }
+        return;
+    });
+
     // If we had no results, return.
     if (resultCount == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -499,7 +519,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             }
         });
     }
-    [rs close];
 }
 
 - (void)saveFavoriteMealsWithCompletionBlock:(completionBlockWithError)completionBlock {
@@ -510,6 +529,8 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     NSString *query = [NSString stringWithFormat:@"SELECT Favorite_MealID, Favorite_Meal_Name FROM Favorite_Meal WHERE Favorite_MealID <= %@", @"0"];
     FMResultSet *rs = [db executeQuery:query];
     NSInteger resultCount = 0;
+    dispatch_group_t fetchGroup = dispatch_group_create();
+    __block NSError *syncError = nil;
     while ([rs next]) {
         // goMealID is Favorite_MealID in database.
         // MealName is Favorite_Meal_Name in database
@@ -518,13 +539,11 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
                               [rs stringForColumn:@"Favorite_MealID"], @"goMealID",
                               [rs stringForColumn:@"Favorite_Meal_Name"], @"MealName",
                               nil];
+        dispatch_group_enter(fetchGroup);
         [DMDataFetcher fetchDataWithRequestParams:dict completion:^(NSObject *object, NSError *error) {
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionBlock) {
-                        completionBlock(NO, error);
-                    }
-                });
+                syncError = error;
+                dispatch_group_leave(fetchGroup);
                 return;
             }
             NSArray *responseArray = (NSArray *)object;
@@ -553,14 +572,19 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             }
             [db commit];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(YES, nil);
-                }
-            });
+            dispatch_group_leave(fetchGroup);
         }];
         resultCount++;
     }
+    [rs close];
+
+    dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+        if (completionBlock) {
+            completionBlock(syncError != nil, syncError);
+        }
+        return;
+    });
+
     // If we had no results, return.
     if (resultCount == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -569,7 +593,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             }
         });
     }
-    [rs close];
 }
 
 - (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(completionBlockWithError)completionBlock {

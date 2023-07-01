@@ -90,7 +90,9 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine uploadDatabaseWithCompletionBlock:nil];
+    [dietmasterEngine uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+        // Do something.
+    }];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
