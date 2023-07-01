@@ -171,11 +171,10 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 - (void)addPlanToLog {
     DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     NSArray *tempArray = [[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"];
-    
-    for (int i = 0; i <=5; i++) {
-        for (NSDictionary *mealItemDict in [tempArray objectAtIndex:i]) {
-            [dietmasterEngine insertMealPlanToLog:mealItemDict];
-        }
+
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+    for (NSDictionary *dict in [tempArray copy]) {
+        [provider insertMealPlanToLog:dict toDate:dietmasterEngine.dateSelected];
     }
     [DMActivityIndicator showCompletedIndicator];
 }
@@ -183,10 +182,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 /// Adds the meal to log with the code provided.
 - (void)addMealToLogWithCode:(NSNumber *)mealCode {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealItems = [[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"];
+    NSArray *mealItems = [[[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] copy];
     
+    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
     for (NSDictionary *mealItemDict in [mealItems objectAtIndex:mealCode.integerValue]) {
-        BOOL success = [dietmasterEngine insertMealPlanToLog:mealItemDict];
+        BOOL success = [provider insertMealPlanToLog:mealItemDict toDate:dietmasterEngine.dateSelected];
         if (!success) {
             DMLog(@"Food was not added successfully!");
         }
@@ -431,23 +431,22 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
     if (mealPlanArray.count != 0) {
         NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary: [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:[indexPath section]] objectAtIndex:indexpathRow]];
+                
+        DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+        DMFood *food = [provider getFoodForFoodKey:[tempDict valueForKey:@"FoodID"]];
         
-        NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:[tempDict valueForKey:@"FoodID"], @"FoodID", [tempDict valueForKey:@"MeasureID"], @"MeasureID", nil];
-        
-        NSDictionary *foodDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine getFoodDetails:tempFoodDict]];
-        
-        cell.lblServingSize.text = [NSString stringWithFormat:@"Serving: %.2f - %@", [[tempDict valueForKey:@"NumberOfServings"] doubleValue], [foodDict valueForKey:@"Description"]];
+        cell.lblServingSize.text = [NSString stringWithFormat:@"Serving: %.2f - %@", [[tempDict valueForKey:@"NumberOfServings"] doubleValue], food.description];
 
-        NSString *foodName = [foodDict valueForKey:@"Name"];
+        NSString *foodName = food.name;
         cell.lblMealName.text = foodName;
         
-        NSNumber *foodCategory = [foodDict valueForKey:@"CategoryID"];
+        NSNumber *foodCategory = food.categoryId;
         NSRange r = [foodName rangeOfString:foodName];
         
         if ([foodCategory intValue] == 66) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             NSString *hostname = [prefs stringForKey:@"HostName"];
-            NSNumber *recipeID = [foodDict valueForKey:@"RecipeID"];
+            NSNumber *recipeID = food.recipeId;
             
             if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
                 cell.userInteractionEnabled = YES;
@@ -457,7 +456,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
             }
             
         } else {
-            NSString *foodURL = [foodDict valueForKey:@"FoodURL"];
+            NSString *foodURL = food.foodURL;
             if (foodURL != nil && ![foodURL isEqualToString:@""]) {
                 cell.userInteractionEnabled = YES;
                 cell.lblMealName.delegate = self;
@@ -494,27 +493,20 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     if (mealPlanArray.count > 0){
         
         NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:[indexPath section]] objectAtIndex:indexpathRow]];
-        
-        NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:[tempDict valueForKey:@"FoodID"], @"FoodID", [tempDict valueForKey:@"MeasureID"], @"MeasureID", nil];
-        
-        NSMutableDictionary *foodDict = [[NSMutableDictionary alloc] initWithDictionary:[dietmasterEngine getFoodDetails:tempFoodDict]];
-        
-        [foodDict setObject:[tempDict valueForKey:@"FoodID"] forKey:@"FoodID"];
-        [foodDict setObject:[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealTypeID"] forKey:@"MealTypeID"];
-        [foodDict setObject:[tempDict valueForKey:@"MealCode"] forKey:@"MealCode"];
-        [foodDict setObject:[tempDict valueForKey:@"MeasureID"] forKey:@"MeasureID"];
-        [foodDict setObject:[tempDict valueForKey:@"NumberOfServings"] forKey:@"Servings"];
+                
+        DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+        DMFood *food = [provider getFoodForFoodKey:[tempDict valueForKey:@"FoodID"]];
         
         dietmasterEngine.taskMode = @"Save";
         dietmasterEngine.isMealPlanItem = YES;
-        [dietmasterEngine.mealPlanItemToExchangeDict setDictionary:foodDict]; // For Exchanging!
+        [dietmasterEngine.mealPlanItemToExchangeDict setDictionary:[food dictionaryRepresentation]]; // For Exchanging!
         int mealCode = (int)[indexPath section];
         dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode]; // Meal to exchange with!
         dietmasterEngine.indexOfItemToExchange = (int)[indexPath row]; // index to exchange, making it easier.
         int planMealID = [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealID"] intValue];
         dietmasterEngine.selectedMealPlanID = planMealID;
         
-        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
+        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:[food dictionaryRepresentation]];
         [self.navigationController pushViewController:dvController animated:YES];
 
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -593,22 +585,14 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
             NSMutableArray *indexPathArray = [[NSMutableArray alloc] init];
             
             for (NSDictionary *mealItems in mealArray) {
+                                
+                DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+                DMFood *food = [provider getFoodForFoodKey:[mealItems valueForKey:@"FoodID"]];
+
+                NSRange range = [food.name rangeOfString:@"Invalid"];
                 
-                NSDictionary *tempFoodDict = [[NSDictionary alloc] initWithObjectsAndKeys:[mealItems valueForKey:@"FoodID"], @"FoodID", [mealItems valueForKey:@"MeasureID"], @"MeasureID", nil];
-                
-                NSDictionary *foodDict = [[NSDictionary alloc] initWithDictionary:
-                                          [dietmasterEngine getFoodDetails:
-                                           tempFoodDict]];
-                
-                NSRange range = [[foodDict valueForKey:@"Name"] rangeOfString:@"Invalid"];
-                
-                if ([[foodDict valueForKey:@"Name"] isEqualToString:@"Invalid Food, Contact Support"] || range.location != NSNotFound) {
+                if ([food.name isEqualToString:@"Invalid Food, Contact Support"] || range.location != NSNotFound) {
                     [indexPathArray addObject:mealItems];
-                    
-                    NSDictionary *tempDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                              [NSNumber numberWithInt:[[mealItems valueForKey:@"FoodID"] intValue]], @"FoodID",
-                                              [NSNumber numberWithInt:[[mealItems valueForKey:@"MeasureID"] intValue]], @"MeasureID", nil];
-                    
                     
                     NSMutableArray *arrMInvalidFoodRemoveOperation = [[NSMutableArray alloc] init];
                     
@@ -732,13 +716,13 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 #pragma mark LABEL UPDATE METHODS
 
 -(void)updateCalorieLabels {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSNumber *recommendedCalories = [dietmasterEngine getRecommendedCalories];
-    recommendedCaloriesLabel.text = [NSString stringWithFormat:@"%i", [recommendedCalories intValue]];
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    recommendedCaloriesLabel.text = [NSString stringWithFormat:@"%i", [currentUser.userBMR intValue]];
 
     double planCalories = 0;
     
     DMMealPlanDataProvider *dataProvider = [[DMMealPlanDataProvider alloc] init];
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     for (int i = 0; i <=5; i++) {
         NSDictionary *mealPlan = [dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex];
         NSNumber *totalCalories = [dataProvider getCaloriesForMealCodes:[[mealPlan valueForKey:@"MealItems"] objectAtIndex:i]];

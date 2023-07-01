@@ -209,9 +209,7 @@
 }
 
 -(void)getDataForDays:(int)days {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
        
     }
@@ -347,9 +345,8 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(float)getGoalWeightFromDB {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+- (float)getGoalWeightFromDB {
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         DMLog(@"Could not open db.");
     }

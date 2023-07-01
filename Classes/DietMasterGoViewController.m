@@ -19,7 +19,7 @@
 #import "MyMovesViewController.h"
 #import "NSString+Encode.h"
 #import "FMDatabase.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 @interface DietMasterGoViewController() <MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate>
 
@@ -550,14 +550,14 @@
 }
 
 - (void)updateBadge {
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-    self.numberBadge.value = [dataProvider unreadMessageCount];
+    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
+    self.numberBadge.value = [provider unreadMessageCount];
     [UIApplication sharedApplication].applicationIconBadgeNumber = self.numberBadge.value;
 }
 
 - (void)reloadMessages {
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-    self.numberBadge.value = [dataProvider unreadMessageCount];
+    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
+    self.numberBadge.value = [provider unreadMessageCount];
     
     UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
     [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
@@ -638,8 +638,7 @@
 }
 
 - (void)loadData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }

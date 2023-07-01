@@ -21,10 +21,8 @@ static NSString *CellIdentifier = @"FoodsTableCellIdentifer";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase *db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        
     }
     
     NSString *query = @"SELECT FoodKey, Name FROM Food ORDER BY Name LIMIT 300";

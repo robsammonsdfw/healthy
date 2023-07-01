@@ -8,16 +8,24 @@
 
 #import "DMMealPlanDataProvider.h"
 #import "DietmasterEngine.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 @interface DMMealPlanDataProvider()
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation DMMealPlanDataProvider
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+    }
+    return self;
+}
+
 - (FMDatabase *)database {
-    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-    return [FMDatabase databaseWithPath:[engine databasePath]];
+    return [DMDatabaseUtilities database];
 }
 
 #pragma mark - Meal Fetched
@@ -79,7 +87,9 @@
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:
                               @"InsertUserPlannedMealItems", @"RequestType",
                               nil];
-    [DMDataFetcher fetchDataWithRequestParams:params jsonObject:mealItems completion:^(NSObject *object, NSError *error) {
+    [DMDataFetcher fetchDataWithRequestParams:params
+                                   jsonObject:mealItems
+                                   completion:^(NSObject *object, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
                 completionBlock(error == nil, error);
@@ -193,7 +203,7 @@
                     }
                 }
                 // Get missing foods, if needed.
-                DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+                DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
                 [provider getMissingFoodsIfNeededForFoods:[mealItemsTemp copy]];
                 [newMealItemsArray addObject:mealItemsTemp];
             }
@@ -248,6 +258,78 @@
     }
     
     return @(num_totalCalories);
+}
+
+- (BOOL)insertMealPlanToLog:(NSDictionary *)dict toDate:(NSDate *)date {
+    FMDatabase* db = [self database];
+    if (![db open]) {
+        return NO;
+    }
+    
+    int mealIDValue = 0;
+   
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    self.dateFormatter.timeZone = [NSTimeZone systemTimeZone];
+    NSString *date_Today = [self.dateFormatter stringFromDate:date];
+    [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]]; // Prevent adjustment to user's local time zone.
+    
+    NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
+    FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
+    while ([rsMealID next]) {
+        mealIDValue = [rsMealID intForColumn:@"MealID"];
+    }
+    [rsMealID close];
+    int minIDvalue = 0;
+    if (mealIDValue == 0) {
+        NSString *idQuery = @"SELECT MIN(MealID) as MealID FROM Food_Log";
+        FMResultSet *rsID = [db executeQuery:idQuery];
+        while ([rsID next]) {
+            minIDvalue = [rsID intForColumn:@"MealID"];
+        }
+        [rsID close];
+        minIDvalue = minIDvalue - 1;
+        if (minIDvalue >=0) {
+            int maxValue = minIDvalue;
+            for (int i=0; i<=maxValue; i++) {
+                if (minIDvalue < 0){
+                    break;
+                }
+                minIDvalue--;
+            }
+        }
+    }
+    
+    if (mealIDValue > 0 || mealIDValue < 0) {
+        minIDvalue = mealIDValue;
+    }
+    
+    int foodID = [[NSString stringWithFormat:@"%@",[dict valueForKey:@"FoodID"]] intValue];
+    int mealCode = [[NSString stringWithFormat:@"%@",[dict valueForKey:@"MealCode"]] intValue];
+    int num_measureID = [[NSString stringWithFormat:@"%@",[dict valueForKey:@"MeasureID"]] intValue];
+    double servingAmount = [[NSString stringWithFormat:@"%@",[dict valueForKey:@"NumberOfServings"]] doubleValue];
+    
+    [db beginTransaction];
+    NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_Today];
+    [db executeUpdate:insertSQL];
+    
+    int mealID = minIDvalue;
+    
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *date_string = [self.dateFormatter stringFromDate:[NSDate date]];
+    
+    insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
+                 "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
+                 " VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))",
+                 mealID, foodID, mealCode, num_measureID, servingAmount, date_string];
+    [db executeUpdate:insertSQL];
+
+    BOOL success = YES;
+    if ([db hadError]) {
+        success = NO;
+    }
+    [db commit];
+    
+    return success;
 }
 
 #pragma mark - Grocery Fetched

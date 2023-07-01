@@ -27,6 +27,6 @@
 #import "ManageFoods.h"
 #import "FoodsSearch.h"
 #import "DMActivityIndicator.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 #import "DMConstants.h"
 #import "StepData.h"

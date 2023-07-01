@@ -117,8 +117,7 @@
     NSString *strBodyfat = @"0";
     NSString *strEntryType = [NSString stringWithFormat:@"%li", DMWeightLogEntryTypeWeight];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         DMLog(@"Could not open db.");
     }
@@ -135,7 +134,8 @@
     [db commit];
     
     __weak typeof(self) weakSelf = self;
-    [dietmasterEngine saveWeightLogWithCompletionBlock:^(BOOL completed, NSError *error) {
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    [provider saveWeightLogWithCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];

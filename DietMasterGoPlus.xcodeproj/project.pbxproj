@@ -14,7 +14,9 @@
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
-		0E4409732A49427400AF5BAD /* DMDatabaseProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMDatabaseProvider.m */; };
+		0E29C9D52A503C8600D9884F /* DMMessagesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */; };
+		0E29C9DB2A503DCE00D9884F /* DMDatabaseUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */; };
+		0E4409732A49427400AF5BAD /* DMMyLogDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */; };
 		0E4409762A49A3FF00AF5BAD /* DMAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */; };
 		0E4409782A49EA6E00AF5BAD /* FetchUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */; };
 		0E44097B2A49EFCB00AF5BAD /* DMDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */; };
@@ -125,7 +127,6 @@
 		401B64C220B3FC64004453E7 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28C187EDE28004A542C /* Common.m */; };
 		401B64C420B3FC64004453E7 /* NSString+ConvertToDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E292187EDE28004A542C /* NSString+ConvertToDate.m */; };
 		401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B301661FBC4AE90018C016 /* MBCircularProgressBarLayer.m */; };
-		401B64D420B3FC64004453E7 /* NSObject+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E290187EDE28004A542C /* NSObject+Blocks.m */; };
 		401B64DF20B3FC64004453E7 /* UIViewController+Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E296187EDE28004A542C /* UIViewController+Keyboard.m */; };
 		401B652720B3FC64004453E7 /* SendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2B6187EDE40004A542C /* SendView.m */; };
 		401B653720B3FC64004453E7 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A9187EDE40004A542C /* MessageViewController.m */; };
@@ -250,13 +251,17 @@
 		0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMFood.m; sourceTree = "<group>"; };
 		0E1A3B3F2A3B9E68004C6033 /* DMWeightLogEntry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMWeightLogEntry.h; sourceTree = "<group>"; };
 		0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMWeightLogEntry.m; sourceTree = "<group>"; };
+		0E29C9D32A503C8600D9884F /* DMMessagesDataProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessagesDataProvider.h; sourceTree = "<group>"; };
+		0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessagesDataProvider.m; sourceTree = "<group>"; };
+		0E29C9D92A503DCE00D9884F /* DMDatabaseUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMDatabaseUtilities.h; sourceTree = "<group>"; };
+		0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMDatabaseUtilities.m; sourceTree = "<group>"; };
 		0E3F44D215003DA6008413AB /* LearnMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LearnMoreViewController.h; sourceTree = "<group>"; };
 		0E3F44D315003DA6008413AB /* LearnMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LearnMoreViewController.m; sourceTree = "<group>"; };
 		0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LearnMoreViewController.xib; sourceTree = "<group>"; };
 		0E3F44D815004364008413AB /* privacypolicy.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacypolicy.html; sourceTree = "<group>"; };
 		0E3F44D915004364008413AB /* termsofservice.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = termsofservice.html; sourceTree = "<group>"; };
-		0E4409712A49427400AF5BAD /* DMDatabaseProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMDatabaseProvider.h; sourceTree = "<group>"; };
-		0E4409722A49427400AF5BAD /* DMDatabaseProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMDatabaseProvider.m; sourceTree = "<group>"; };
+		0E4409712A49427400AF5BAD /* DMMyLogDataProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMyLogDataProvider.h; sourceTree = "<group>"; };
+		0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMyLogDataProvider.m; sourceTree = "<group>"; };
 		0E4409742A49A3FF00AF5BAD /* DMAuthManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DMAuthManager.h; path = Classes/DataSource/DMAuthManager.h; sourceTree = SOURCE_ROOT; };
 		0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DMAuthManager.m; path = Classes/DataSource/DMAuthManager.m; sourceTree = SOURCE_ROOT; };
 		0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUtilities.swift; sourceTree = "<group>"; };
@@ -436,8 +441,6 @@
 		3568E28C187EDE28004A542C /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
 		3568E28D187EDE28004A542C /* NSDate+ConvertToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+ConvertToString.h"; sourceTree = "<group>"; };
 		3568E28E187EDE28004A542C /* NSDate+ConvertToString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+ConvertToString.m"; sourceTree = "<group>"; };
-		3568E28F187EDE28004A542C /* NSObject+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Blocks.h"; sourceTree = "<group>"; };
-		3568E290187EDE28004A542C /* NSObject+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Blocks.m"; sourceTree = "<group>"; };
 		3568E291187EDE28004A542C /* NSString+ConvertToDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ConvertToDate.h"; sourceTree = "<group>"; };
 		3568E292187EDE28004A542C /* NSString+ConvertToDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ConvertToDate.m"; sourceTree = "<group>"; };
 		3568E293187EDE28004A542C /* UIView+FrameControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameControl.h"; sourceTree = "<group>"; };
@@ -1111,11 +1114,15 @@
 				0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */,
 				0E4409792A49EFCB00AF5BAD /* DMDataFetcher.h */,
 				0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */,
+				0E4409712A49427400AF5BAD /* DMMyLogDataProvider.h */,
+				0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */,
+				0E29C9D32A503C8600D9884F /* DMMessagesDataProvider.h */,
+				0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */,
+				0E29C9D92A503DCE00D9884F /* DMDatabaseUtilities.h */,
+				0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */,
 				0EDAB6A92A3B4E9A00DB351A /* Models */,
 				0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */,
 				0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */,
-				0E4409712A49427400AF5BAD /* DMDatabaseProvider.h */,
-				0E4409722A49427400AF5BAD /* DMDatabaseProvider.m */,
 				0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */,
 			);
 			path = DataSource;
@@ -1232,8 +1239,6 @@
 				3568E28C187EDE28004A542C /* Common.m */,
 				3568E28D187EDE28004A542C /* NSDate+ConvertToString.h */,
 				3568E28E187EDE28004A542C /* NSDate+ConvertToString.m */,
-				3568E28F187EDE28004A542C /* NSObject+Blocks.h */,
-				3568E290187EDE28004A542C /* NSObject+Blocks.m */,
 				3568E291187EDE28004A542C /* NSString+ConvertToDate.h */,
 				3568E292187EDE28004A542C /* NSString+ConvertToDate.m */,
 				3568E293187EDE28004A542C /* UIView+FrameControl.h */,
@@ -1737,6 +1742,7 @@
 				0E83C4AC2A4F1EFE001DC6BD /* DMDetailTableViewCell.m in Sources */,
 				401B646F20B3FC64004453E7 /* DietMasterGoAppDelegate.m in Sources */,
 				401B647020B3FC64004453E7 /* TTTAttributedLabel.m in Sources */,
+				0E29C9D52A503C8600D9884F /* DMMessagesDataProvider.m in Sources */,
 				401B647420B3FC64004453E7 /* AppSettings.m in Sources */,
 				401B647520B3FC64004453E7 /* ExchangeFood.m in Sources */,
 				40E035C921F1F2A100968755 /* MyMovesDetailCollectionViewCell.m in Sources */,
@@ -1770,7 +1776,7 @@
 				401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */,
 				401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */,
 				401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */,
-				0E4409732A49427400AF5BAD /* DMDatabaseProvider.m in Sources */,
+				0E4409732A49427400AF5BAD /* DMMyLogDataProvider.m in Sources */,
 				0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */,
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
 				65462D1226BD1D48004D1654 /* ProfileAlertVCViewController.m in Sources */,
@@ -1791,8 +1797,8 @@
 				650208DF250153C300F412B0 /* InAppPurchaseViewController.m in Sources */,
 				401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */,
 				0E4409762A49A3FF00AF5BAD /* DMAuthManager.m in Sources */,
-				401B64D420B3FC64004453E7 /* NSObject+Blocks.m in Sources */,
 				402A3C1121F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m in Sources */,
+				0E29C9DB2A503DCE00D9884F /* DMDatabaseUtilities.m in Sources */,
 				401B64DF20B3FC64004453E7 /* UIViewController+Keyboard.m in Sources */,
 				0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */,
 				650208E0250153C300F412B0 /* headerVw.m in Sources */,
@@ -1912,7 +1918,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -1980,7 +1986,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -2046,7 +2052,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;

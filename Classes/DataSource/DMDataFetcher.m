@@ -79,16 +79,15 @@
 
         NSURLSession *session = [NSURLSession sharedSession];
         [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                if (error) {
+                    [fetcher processError:error];
+                    return;
+                }
                 id results = nil; // Should this be nil or empty?
                 @try {
                     NSError *jsonError = nil;
                     if (data) {
                         results = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-                    }
-                    // Handle error.
-                    if (error) {
-                        [fetcher processError:error];
-                        return;
                     }
                     if (!data) {
                         NSError *error = [DMGUtilities errorWithMessage:@"Error: No data returned." code:777];
@@ -128,8 +127,8 @@
 + (void)fetchDataWithRequestParams:(NSDictionary *)params
                         completion:(completionBlockWithObject)completionBlock {
     DMDataFetcher *fetcher = [[DMDataFetcher alloc] init];
+    fetcher.completionBlock = completionBlock;
     dispatch_async(fetcher.fetchQueue, ^{
-        fetcher.completionBlock = completionBlock;
         DMAuthManager *authManager = [DMAuthManager sharedInstance];
         DMUser *currentUser = [authManager loggedInUser];
         if (!currentUser && [authManager isUserLoggedIn] == NO) {
@@ -138,7 +137,8 @@
             return;
         }
         NSString *requestType = params[@"RequestType"];
-
+        NSAssert(requestType != nil, @"Request Type must be non-nil!");
+        
         // Build the request.
         NSMutableString *soapMessage = [NSMutableString string];
         // Base format.
@@ -178,6 +178,10 @@
         
         NSURLSession *session = [NSURLSession sharedSession];
         [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                if (error) {
+                    [fetcher processError:error];
+                    return;
+                }
                 NSString *xmlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSData *jsonData = [FetchUtilities processXMLToDataWithXmlString:xmlString methodName:requestType];
                 id results = nil; // Should this be nil or empty?
@@ -185,11 +189,6 @@
                     NSError *jsonError = nil;
                     if (jsonData) {
                         results = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&jsonError];
-                    }
-                    // Handle errors.
-                    if (error) {
-                        [fetcher processError:error];
-                        return;
                     }
                     if (!jsonData) {
                         NSError *error = [DMGUtilities errorWithMessage:@"Error: No data returned." code:777];

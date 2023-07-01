@@ -49,8 +49,7 @@
 
 - (IBAction)forceUPDBSync:(id)sender {
     [DMActivityIndicator showActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+    [DMMyLogDataProvider uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
     }];
 }

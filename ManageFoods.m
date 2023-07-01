@@ -160,7 +160,7 @@ CGPoint svos;
 #pragma mark - Setter/Getter
 
 - (void)loadFood {
-    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     self.food = [provider getFoodForFoodKey:self.foodDict[@"FoodKey"]];
 }
 
@@ -362,9 +362,8 @@ CGPoint svos;
     [DMActivityIndicator showActivityIndicator];
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        
     }
     int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     
@@ -523,10 +522,8 @@ CGPoint svos;
         return;
     }
     else {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+        FMDatabase* db = [DMDatabaseUtilities database];
         if (![db open]) {
-            
         }
         
         int minFoodID = 0;
@@ -724,10 +721,8 @@ CGPoint svos;
         return;
     }
     else {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+        FMDatabase* db = [DMDatabaseUtilities database];
         if (![db open]) {
-            
         }
         
         int minFoodID = 0;
@@ -834,8 +829,8 @@ CGPoint svos;
 /// Saves the Food for the key provided to the server.
 /// NOTE: The key is likely temporary (-100 value), so don't rely on it for future operations.
 - (void)saveFoodWithKey:(NSNumber *)key saveToLog:(BOOL)saveToLog {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine saveFoodForKey:key withCompletionBlock:^(NSObject *object, NSError *error) {
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    [provider saveFoodForKey:key withCompletionBlock:^(NSObject *object, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
@@ -854,7 +849,7 @@ CGPoint svos;
             } else {
                 dietmasterEngine.taskMode = @"Save";
             }
-            DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+            DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
             DMFood *food = [provider getFoodForFoodKey:foodValues[@"FoodID"]];
             DetailViewController *dvController = [[DetailViewController alloc] initWithFood:[food dictionaryRepresentation]];
             [self.navigationController pushViewController:dvController animated:YES];
@@ -1057,8 +1052,7 @@ CGPoint svos;
 }
 
 - (NSDictionary *)findMeasureId:(NSString *)serving_unit {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     

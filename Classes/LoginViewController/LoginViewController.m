@@ -24,7 +24,7 @@
 #import "DMUser.h"
 #import "NSString+Encode.h"
 
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 @interface LoginViewController() <MFMailComposeViewControllerDelegate>
 

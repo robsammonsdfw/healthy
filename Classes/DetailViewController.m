@@ -9,7 +9,7 @@
 #import "DetailViewController.h"
 #import "ExchangeFoodViewController.h"
 #import "DMMealPlanDataProvider.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 @interface DetailViewController()
 @property (nonatomic, strong) NSMutableArray *pickerColumn1Array;
@@ -47,13 +47,12 @@
 #pragma mark DATA METHODS
 
 - (void)loadFood {
-    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     self.food = [provider getFoodForFoodKey:self.foodDict[@"FoodKey"]];
 }
 
 - (void)loadData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -714,7 +713,7 @@
  
 - (void)saveToLog:(id) sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
@@ -838,7 +837,7 @@
 
 - (void)deleteFromLog {
     DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -859,8 +858,7 @@
 }
 
 - (void)deleteFromFavorites {
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
@@ -895,7 +893,7 @@
 
 - (void)saveToFavorites {
     DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }

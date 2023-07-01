@@ -7,7 +7,7 @@
 
 #import "DMAuthManager.h"
 #import "MyMovesDataProvider.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 #import "FMDatabase.h"
 
 @interface DMAuthManager()
@@ -102,7 +102,7 @@
     [dietmasterEngine.mealPlanArray removeAllObjects];
     
     #pragma mark DELETE ALL USER DATA
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if ([db open]) {
         [db beginTransaction];
         [db executeUpdate:@"DELETE FROM Food_Log"];
@@ -172,8 +172,7 @@
 #pragma mark - Helpers
 
 - (FMDatabase *)database {
-    DietmasterEngine *engine = [DietmasterEngine sharedInstance];
-    return [FMDatabase databaseWithPath:[engine databasePath]];
+    return [DMDatabaseUtilities database];
 }
 
 - (void)saveUserInfoToDatabase:(DMUser *)user {

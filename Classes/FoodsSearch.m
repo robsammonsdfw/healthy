@@ -225,9 +225,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     int companyID = currentUser.companyId.intValue;
 
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-       
+    FMDatabase* db = [DMDatabaseUtilities database];
+    if (![db open]) {       
     }
     
     NSString *query = nil;

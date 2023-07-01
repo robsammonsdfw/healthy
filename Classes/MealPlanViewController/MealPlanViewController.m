@@ -170,7 +170,9 @@ static NSString *CellIdentifier = @"Cell";
 - (void)loadData {
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
     __weak typeof(self) weakSelf = self;
+    [DMActivityIndicator showActivityIndicator];
     [provider fetchUserPlannedMealsWithCompletionBlock:^(NSObject *object, NSError *error) {
+        [DMActivityIndicator hideActivityIndicator];
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         [dietmasterEngine.mealPlanArray removeAllObjects];
         

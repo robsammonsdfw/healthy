@@ -247,8 +247,7 @@ import SafariServices
 
     @objc private func performDownSync() {
         DMActivityIndicator.show()
-        let dataProvider = DMDatabaseProvider()
-        dataProvider.syncDatabase { completed, error in
+        DMMyLogDataProvider.syncDatabase { completed, error in
             DMActivityIndicator.hide()
             if error != nil {
                 DMGUtilities.showAlert(withTitle: "Error", message: error!.localizedDescription, in: nil)
@@ -262,8 +261,7 @@ import SafariServices
 
     @objc private func performUpSync() {
         DMActivityIndicator.show()
-        let engine = DietmasterEngine.sharedInstance()
-        engine?.uploadDatabase(completionBlock: { completed, error in
+        DMMyLogDataProvider.uploadDatabase(completionBlock: { completed, error in
             DMActivityIndicator.hide()
             if error != nil {
                 DMGUtilities.showAlert(withTitle: "Error", message: error!.localizedDescription, in: nil)
@@ -275,7 +273,7 @@ import SafariServices
 
     @objc private func updateFoodDatabase() {
         DMActivityIndicator.show()
-        let dataProvider = DMDatabaseProvider()
+        let dataProvider = DMMyLogDataProvider()
         let dateString = DMGUtilities.lastFoodSyncDateString()
         dataProvider.syncFoods(dateString, pageNumber: 1, fetchedItems: []) { completed, error in
             DMActivityIndicator.hide()

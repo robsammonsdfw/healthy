@@ -573,7 +573,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 - (void)saveFavoriteMeal:(NSDictionary *)mealDict withName:(NSString *)mealName {
     [DMActivityIndicator showActivityIndicator];
 
-    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     [provider saveFavoriteMeal:mealDict withName:mealName];
     
     [DMActivityIndicator hideActivityIndicator];
@@ -616,8 +616,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 - (void)loadExerciseData:(NSDate *)date {
     [self.exerciseResults removeAllObjects];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -676,7 +675,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSMutableArray *snack3Array = [NSMutableArray array];
     
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -847,7 +846,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 - (void)stepCountSave {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -863,7 +862,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [outdateformatter setTimeZone:systemTimeZone];
     NSString *logTimeString = [outdateformatter stringFromDate:dietmasterEngine.dateSelected];
-    
     
     NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
     [keydateformatter setDateFormat:@"yyyyMMdd"];
@@ -919,7 +917,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 - (void)caloriesCount {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     

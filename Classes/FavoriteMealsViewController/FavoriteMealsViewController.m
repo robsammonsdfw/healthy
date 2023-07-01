@@ -47,8 +47,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
 
 - (void)loadSearchData:(NSString *)searchTerm {
     [self.searchResults removeAllObjects];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -110,7 +109,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
 
 - (void)saveFavoriteMealToLog:(NSDictionary *)mealDict {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
         
@@ -201,8 +200,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
 }
 
 - (void)deleteMealFromFavorites:(NSDictionary *)mealDict {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
         

@@ -18,7 +18,7 @@
 #import "DietMasterGoPlus-Swift.h"
 #import "DMGUtilities.h"
 #import "DMUser.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 @import StoreKit;
 @import Firebase;
@@ -62,7 +62,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoginStateDidChangeNotification:) name:UserLoginStateDidChangeNotification object:nil];
 
     // Print out the location of the database
-    DMLog(@"Database path: %@", [[DietmasterEngine sharedInstance] databasePath]);
+    DMLog(@"Database path: %@", [[DMDatabaseUtilities database] databasePath]);
 
     // Perform updates.
     [self upgradeSystem];
@@ -89,9 +89,8 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-        // Do something.
+    [DMMyLogDataProvider uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+        DM_LOG(@"ResignActiveSync: %@, %@", completed ? @"Success":@"Fail", error);
     }];
 }
 
@@ -100,9 +99,8 @@
     
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
     if ([authManager isUserLoggedIn]) {
-        DMDatabaseProvider *databaseProvider = [[DMDatabaseProvider alloc] init];
-        [databaseProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-            // Do something.
+        [DMMyLogDataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+            DM_LOG(@"BecomeActiveFetch: %@, %@", completed ? @"Success":@"Fail", error);
         }];
     }
 }
@@ -140,8 +138,7 @@
                                             withCompletion:^(BOOL completed, NSError *error) {            
             // Now do a big sync.
             [DMActivityIndicator showActivityIndicator];
-            DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
-            [provider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+            [DMMyLogDataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
                 [DMActivityIndicator hideActivityIndicator];
                 if (error) {
                     [DMGUtilities showAlertWithTitle:@"Error!" message:error.localizedDescription inViewController:nil];
@@ -170,8 +167,7 @@
 
 - (void)upgradeSystem {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         DMLog(@"Error: Could not open db to upgrade.");
         return;
@@ -498,8 +494,7 @@
 
 - (void)updateMeasureTable {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         DMLog(@"Could not open db.");
     }

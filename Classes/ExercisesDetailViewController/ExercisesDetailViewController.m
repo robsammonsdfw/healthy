@@ -474,10 +474,8 @@
 
 - (void)saveToLog:(id)sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        
     }
     
     int hoursExercised = 0;
@@ -584,18 +582,17 @@
         
     }
 
-    [dietmasterEngine saveExerciseLogsWithCompletionBlock:nil];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    [provider saveExerciseLogsWithCompletionBlock:nil];
     [DMActivityIndicator showCompletedIndicator];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 }
 
--(IBAction) delLog:(id) sender {
+- (IBAction)delLog:(id) sender {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        
     }
     
     [db beginTransaction];

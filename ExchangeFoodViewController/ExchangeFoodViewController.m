@@ -5,7 +5,7 @@
 #import "DietmasterEngine.h"
 #import "DMDataFetcher.h"
 #import "DMMealPlanDataProvider.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 @interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -145,7 +145,8 @@ static NSString *CellIdentifier = @"CellIdentifier";
     double servings = caloriesToMaintain / (newCalories / gramWeight);
     servings = [[NSString stringWithFormat:@"%.1f", servings] doubleValue];
     
-    NSNumber *measureID = [dietmasterEngine getMeasureIDForFood:[foodDict valueForKey:@"FoodKey"]
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    NSNumber *measureID = [provider getMeasureIDForFood:[foodDict valueForKey:@"FoodKey"]
                                                fromMealPlanItem:self.exchangedDict];
     
     NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -281,7 +282,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
                                 @"MealTypeID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"MealTypeID"] };
     
     __weak typeof(self) weakSelf = self;
-    DMDatabaseProvider *provider = [[DMDatabaseProvider alloc] init];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     [DMDataFetcher fetchDataWithRequestParams:params completion:^(NSObject *object, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {

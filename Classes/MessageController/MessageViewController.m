@@ -18,7 +18,7 @@
 #import "NSString+ConvertToDate.h"
 
 #import "DMMessage.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 static NSString *OpponentCellIdentifier = @"OpponentCellIdentifier";
 static NSString *OwnerCellIdentifier = @"OwnerCellIdentifier";
@@ -158,10 +158,7 @@ int const MaximumStringLength = 300;
 #pragma mark - Helpers
 
 - (FMDatabase *)database {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
-    if (![db open]) {
-    }
+    FMDatabase* db = [DMDatabaseUtilities database];
     return db;
 }
 
@@ -196,9 +193,9 @@ int const MaximumStringLength = 300;
     if (sender) {
         [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
     }
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
+    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
     __weak typeof(self) weakSelf = self;
-    [dataProvider syncMessagesWithCompletionBlock:^(BOOL completed, NSError *error) {
+    [provider syncMessagesWithCompletionBlock:^(BOOL completed, NSError *error) {
         if (error && sender) {
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
             return;
@@ -209,8 +206,8 @@ int const MaximumStringLength = 300;
 }
 
 - (void)setMessagesRead {
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-    NSArray<DMMessage *> *messages = [dataProvider unreadMessages];
+    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
+    NSArray<DMMessage *> *messages = [provider unreadMessages];
     if (!messages.count) {
         return; // No messages to process.
     }
@@ -222,9 +219,8 @@ int const MaximumStringLength = 300;
             DMLog(@"Error: %@", error.localizedDescription);
             return;
         }
-        DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
         for (NSDictionary *dict in messageIds) {
-            [dataProvider setReadedMessageId:dict[@"MessageID"]];
+            [provider setReadedMessageId:dict[@"MessageID"]];
         }
     }];
 }
@@ -329,7 +325,7 @@ int const MaximumStringLength = 300;
             return;
         }
         // Save message that was created.
-        FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+        FMDatabase* db = [DMDatabaseUtilities database];
         if (![db open]) {
         }
 

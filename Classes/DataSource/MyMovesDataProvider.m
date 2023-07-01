@@ -11,7 +11,7 @@
 #import "DMMoveCategory.h"
 #import "DMMovePickerRow.h"
 #import "DMMovePlan.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 #import "DMDataFetcher.h"
 #import "DMMovePickerRow.h"
 
@@ -121,8 +121,7 @@
 
 /// Gets all rows that were New, Deleted, or Updated.
 - (NSArray<NSDictionary *> *)getUserPlanListUpdates {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return @[];
     }
@@ -146,8 +145,7 @@
 
 /// Gets all rows that were New, Deleted, or Updated.
 - (NSArray<NSDictionary *> *)getUserPlanDateListUpdates {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return @[];
     }
@@ -171,8 +169,7 @@
 /// Gets all rows that were New, Deleted, or Updated.
 - (NSArray<NSDictionary *> *)getUserPlanMoveListUpdates {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return @[];
     }
@@ -194,8 +191,7 @@
 
 /// Gets all rows that were New, Deleted, or Updated.
 - (NSArray<NSDictionary *> *)getUserPlanMoveSetListUpdates {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return @[];
     }
@@ -224,8 +220,7 @@
 }
 
 - (void)clearTableData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
@@ -264,11 +259,11 @@
 
 /// Saves MyMoves data for the user. E.g. MoveTags, MoveCategories, etc.
 - (void)saveMyMovesData:(NSDictionary *)responseDict {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
+        return;
     }
-    
+
     [db beginTransaction];
     for (NSDictionary *dict in responseDict) {
         DMMove *move = [[DMMove alloc] initWithDictionary:dict];
@@ -317,8 +312,7 @@
 }
 /// Saves User Plan data to the database. This is from a FULL Sync for MyMoves.
 - (void)saveUserPlanListData:(NSDictionary *)planListDict {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
@@ -528,11 +522,11 @@
 }
 
 - (NSArray<DMMovePlan *> *)getUserMovePlans {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
+        return @[];
     }
-        
+
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanList WHERE Status != 'Deleted'"];
     FMResultSet *rs = [db executeQuery:sql];
 
@@ -558,9 +552,7 @@
     if (!planId) {
         return nil;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
-    if (![db open]) {
+FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     }
         
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanList WHERE "
@@ -584,11 +576,11 @@
 }
 
 - (NSArray<DMMoveDay *> *)getUserPlanDays {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
+        return @[];
     }
-        
+
     NSString *workoutSql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanDateList WHERE Status != 'Deleted'"];
     FMResultSet *rs = [db executeQuery:workoutSql];
 
@@ -611,11 +603,11 @@
 }
 
 - (DMMoveDay *)getUserPlanDayForDayId:(NSNumber *)dayId {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
+        return nil;
     }
-        
+
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanDateList WHERE UserPlanDateID = %@", dayId];
     FMResultSet *rs = [db executeQuery:sql];
 
@@ -639,9 +631,9 @@
     if (!date) {
         return @[];
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
+        return @[];
     }
 
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
@@ -672,11 +664,11 @@
 }
 
 - (NSArray<DMMoveRoutine *> *)getUserMoveRoutines {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
+        return @[];
     }
-        
+
     NSString *workoutSql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanMoveList WHERE Status != 'Deleted'"];
     FMResultSet *rs = [db executeQuery:workoutSql];
     
@@ -703,9 +695,9 @@
 }
 
 - (NSArray<DMMoveSet *> *)getUserPlanMoveSets {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
+        return @[];
     }
 
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanMoveSetList WHERE Status != 'Deleted'"];
@@ -728,8 +720,7 @@
     if (!routineId) {
         return @[];
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
 
@@ -754,8 +745,7 @@
     if (!moveId) {
         return nil;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -778,11 +768,10 @@
     if (!planId) {
         return @[];
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
-        
+    
     NSString *workoutSql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanDateList WHERE "
                                                         "PlanID = '%@' AND Status != 'Deleted'", planId];
     FMResultSet *rs = [db executeQuery:workoutSql];
@@ -809,8 +798,7 @@
     if (!dayId) {
         return @[];
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
         
@@ -844,11 +832,10 @@
     if (!routineId) {
         return nil;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
-        
+    
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanMoveList WHERE "
                                                 "UserPlanMoveID = '%@' AND Status != 'Deleted'", routineId];
     FMResultSet *rs = [db executeQuery:sql];
@@ -874,12 +861,10 @@
 }
 
 - (BOOL)setMoveCompleted:(BOOL)completed forRoutine:(DMMoveRoutine *)routine {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return NO;
     }
-    [db beginTransaction];
+        [db beginTransaction];
     NSString *sql = [NSString stringWithFormat:@"UPDATE ServerUserPlanMoveList SET "
                         "isCheckBoxClicked = '%@' Where UserPlanMoveID = '%@'",
                         @(completed), routine.routineId];
@@ -896,10 +881,8 @@
 /// Deletes the rows that are marked deleted. This should be called after
 /// performing a successful sync that sends the data to the server.
 - (void)removeRowsWithDeletedStatus {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return;
     }
     
     [db beginTransaction];
@@ -924,10 +907,8 @@
 /// Updates all of the tables status, e.g. from "New" to "Normal" or "Changed" to "Normal".
 /// (I believe this has to do with remote server sync.)
 - (void)updateDBStatusFrom:(NSString *)fromStatus toStatus:(NSString *)toStatus {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return;
     }
     [db beginTransaction];
     
@@ -953,15 +934,12 @@
     if (!moveSet || !routine) {
         return nil;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return nil;
     }
-
+    
     // Get the highest ID in the SetList table.
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-    NSNumber *highestSetId = [dataProvider getMaxValueForColumn:@"SetID" inTable:@"ServerUserPlanMoveSetList"];
+    NSNumber *highestSetId = [DMDatabaseUtilities getMaxValueForColumn:@"SetID" inTable:@"ServerUserPlanMoveSetList"];
     if (highestSetId) {
         highestSetId = @(highestSetId.integerValue + 1);
     }
@@ -992,8 +970,7 @@
 }
                                         
 - (NSArray<DMMoveTag *> *)loadListOfTags {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -1018,8 +995,7 @@
 }
 
 - (NSArray<DMMoveCategory *> *)loadListOfBodyPart {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -1043,8 +1019,7 @@
 - (NSArray<DMMove *> *)getMovesFromDatabaseWithCategoryFilter:(DMMoveCategory *)categoryFilter
                                                     tagFilter:(DMMoveTag *)tagFilter
                                                    textSearch:(NSString *)textSearch {
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase *db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -1096,15 +1071,12 @@
         return nil;
     }
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return nil;
     }
-
+    
     // Get the highest ID in the MoveList table.
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-    NSNumber *highestId = [dataProvider getMaxValueForColumn:@"UserPlanDateID" inTable:@"ServerUserPlanDateList"];
+    NSNumber *highestId = [DMDatabaseUtilities getMaxValueForColumn:@"UserPlanDateID" inTable:@"ServerUserPlanDateList"];
     if (highestId) {
         highestId = @(highestId.integerValue + 1);
     }
@@ -1135,10 +1107,8 @@
     if (!moveSet) {
         return;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return;
     }
     
     [db beginTransaction];
@@ -1159,8 +1129,7 @@
 /// deleted and updated it accordingly.
 /// NOTE: This must be called before beginning a database transaction or the DB will be locked.
 - (NSArray<NSNumber *> *)getDeletedIdsForColumn:(NSString *)column inTable:(NSString *)tableName {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
@@ -1184,10 +1153,8 @@
     if (!moveRoutine) {
         return;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return;
     }
     
     [db beginTransaction];
@@ -1207,15 +1174,12 @@
     if (!moveRoutine || !moveDay) {
         return nil;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
-        return nil;
     }
-
+    
     // Get the highest ID in the MoveList table.
-    DMDatabaseProvider *dataProvider = [[DMDatabaseProvider alloc] init];
-    NSNumber *highestId = [dataProvider getMaxValueForColumn:@"UserPlanMoveID" inTable:@"ServerUserPlanMoveList"];
+    NSNumber *highestId = [DMDatabaseUtilities getMaxValueForColumn:@"UserPlanMoveID" inTable:@"ServerUserPlanMoveList"];
     if (highestId) {
         highestId = @(highestId.integerValue + 1);
     }
@@ -1249,8 +1213,7 @@
     if (!unitId || !moveSet) {
         return;
     }
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
@@ -1268,8 +1231,7 @@
     if (!unitId || !moveSet) {
         return;
     }
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
@@ -1287,11 +1249,11 @@
     if (!unitValue || !moveSet) {
         return;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
+    
     [db beginTransaction];
     NSString *sql = [NSString stringWithFormat:@"UPDATE ServerUserPlanMoveSetList SET Unit1Value = '%@', "
                                             "Status = 'Changed' Where SetID = '%@'", unitValue, moveSet.setId];
@@ -1306,8 +1268,7 @@
     if (!unitValue || !moveSet) {
         return;
     }
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase* db = [dietmasterEngine database];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }

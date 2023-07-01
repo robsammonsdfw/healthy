@@ -4,7 +4,7 @@
 #import "ProfileContactVC.h"
 #import "DietMasterGoViewController.h"
 #import "LoginViewController.h"
-#import "DMDatabaseProvider.h"
+#import "DMMyLogDataProvider.h"
 
 @interface OtherHealthServiceVC ()
 

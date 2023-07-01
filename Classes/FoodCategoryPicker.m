@@ -28,7 +28,7 @@
     [super viewWillAppear:animated];
     
     DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    FMDatabase *db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
+    FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         DMLog(@"Could not open db.");
     }

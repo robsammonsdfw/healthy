@@ -14,26 +14,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-// DMMyLogDataProvider
-/// Manages fetching data and saving to the local database.
+/// Manages fetching, saving of items related to the user's Log.
 @interface DMMyLogDataProvider : NSObject
 
 #pragma mark - Sync Everything
 
 /// Performs a complete upload of all user data.
-- (void)uploadDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock;
++ (void)uploadDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock;
 
 /// Performs a complete sync of the database with completion block since the
 /// last time a sync was performend.
 /// Fetches all sorts of data from the server. Foods, Meals, Exercies, etc.
-- (void)syncDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock;
++ (void)syncDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock;
 
 #pragma mark - Meals
 
 - (void)syncFavoriteMealsWithCompletionBlock:(completionBlockWithError)completionBlock;
 - (void)syncFavoriteMealItemsWithCompletionBlock:(completionBlockWithError)completionBlock;
 
-- (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(completionBlockWithError)completionBlock;
+- (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(nullable completionBlockWithError)completionBlock;
 
 /// Gets the measure ID for a food against a meal plan item.
 - (NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey

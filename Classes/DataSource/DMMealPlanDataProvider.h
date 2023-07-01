@@ -35,6 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Gets the total calories for the array of meal codes provided.
 - (NSNumber *)getCaloriesForMealCodes:(NSArray *)array;
 
+/// Inserts a meal plan to the local database.
+- (BOOL)insertMealPlanToLog:(NSDictionary *)dict toDate:(NSDate *)date;
+
 #pragma mark - Grocery
 
 /// Fetches the grocery list for meal items provided.

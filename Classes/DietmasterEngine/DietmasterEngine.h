@@ -15,10 +15,6 @@
 @class DMMessage;
 @class DMUser;
 
-/// Notification fired when messages are done updating. Used to update the
-/// app icon badge.
-extern NSString * const UpdatingMessageNotification;
-
 @interface DietmasterEngine : NSObject {
     
     NSMutableDictionary *exerciseSelectedDict;
@@ -63,28 +59,6 @@ extern NSString * const UpdatingMessageNotification;
 @property (nonatomic) int selectedMealPlanID;
 @property (nonatomic) BOOL didInsertNewFood;
 
-@property (nonatomic, strong, readonly) FMDatabase *database;
-
 + (instancetype)sharedInstance;
-
-/// Performs a complete upload of all user data.
-- (void)uploadDatabaseWithCompletionBlock:(completionBlockWithError)completionBlock;
-- (void)saveWeightLogWithCompletionBlock:(completionBlockWithError)completionBlock;
-- (void)saveExerciseLogsWithCompletionBlock:(completionBlockWithError)completionBlock;
-
-/// Saves the food with the key provided to the server.
-- (void)saveFoodForKey:(NSNumber *)foodKey withCompletionBlock:(completionBlockWithObject)completionBlock;
-- (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(completionBlockWithError)completionBlock;
-
-// Food Plan Methods
--(NSDictionary *)getFoodDetails:(NSDictionary *)foodDict;
--(BOOL)insertMealPlanToLog:(NSDictionary *)dict;
--(NSNumber *)getRecommendedCalories;
-/// Gets the measure ID for a food against a meal plan item.
-- (NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey fromMealPlanItem:(NSDictionary *)mealPlanItemDict;
-- (NSNumber *)getGramWeightForFoodID:(NSNumber *)foodID andMeasureID:(NSNumber *)measureID;
-
-// Database helper methods
-- (NSString *)databasePath;
 
 @end
