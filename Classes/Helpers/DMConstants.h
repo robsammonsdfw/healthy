@@ -18,6 +18,11 @@ typedef void(^completionBlock)(BOOL completed);
 typedef void(^completionBlockWithError)(BOOL completed, NSError *error);
 
 /**
+ * Completion block with BOOL and Error.
+ */
+typedef void(^completionBlockWithStatus)(BOOL authorized, NSError *error);
+
+/**
  * Completion block with Object and Error.
  */
 typedef void(^completionBlockWithObject)(NSObject *object, NSError *error);

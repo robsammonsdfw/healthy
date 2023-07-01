@@ -9,6 +9,7 @@
 #import "ExercisesDetailViewController.h"
 #import <HealthKit/HealthKit.h>
 #import "StepData.h"
+#import "DietmasterEngine.h"
 
 @interface ExercisesDetailViewController() <UITextFieldDelegate>
 @property (nonatomic) double stepCount;
@@ -19,7 +20,7 @@
 @property (nonatomic, strong) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *arrData;
 @property (nonatomic, strong) NSSet *readDataTypes;
-@property (nonatomic, strong) StepData * sd;
+@property (nonatomic, strong) StepData *stepData;
 
 @property (nonatomic, strong) IBOutlet UIPickerView *pickerView;
 @property (nonatomic, strong) NSMutableArray *pickerComponentOneArray;
@@ -29,12 +30,6 @@
 @property (nonatomic, strong) IBOutlet UILabel *exerciseNameLabel;
 @property (nonatomic, strong) IBOutlet UILabel *dateLabel;
 @property (nonatomic, strong) IBOutlet UITextField *tfCalories;//09-02-2016
-
-//HHT apple watch
-@property (nonatomic, strong) IBOutlet UIButton *btnAllowHealthAccess;
-@property (nonatomic, strong) IBOutlet UIView *viewAllowHealthAccess;
-@property (nonatomic, strong) IBOutlet UILabel *permissionTagLbl;
-@property (nonatomic, strong) IBOutlet UIButton *permissionBtn;
 
 @property (nonatomic, strong) IBOutlet UIImageView *imgbar;
 
@@ -52,13 +47,6 @@
 
 #pragma mark DATA METHODS
 -(void)loadData {
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
-    NSString *appName = [appDefaults valueForKey:@"app_name_long"];
-    [self.permissionBtn setTitle:[NSString stringWithFormat:@"Allow %@ to access Apple Heath data.", appName] forState:UIControlStateNormal];
-    
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     self.exerciseNameLabel.text = [dietmasterEngine.exerciseSelectedDict valueForKey:@"ActivityName"];
     
@@ -93,8 +81,9 @@
     
     [self updateCalorieLabel];
         
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Food_Detail_Screen"];
         self.pickerView.backgroundColor = [UIColor whiteColor];
     }
@@ -118,12 +107,11 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
     
-    if (exerciseIDTemp == 272 || exerciseIDTemp == 274){
+    if (exerciseIDTemp == 272 || exerciseIDTemp == 274) {
         self.arrData = [NSMutableArray new];
         self.healthStore = [[HKHealthStore alloc] init];
-        self.sd = [[StepData alloc]init];
-        
-        [self checkForPremission];
+        self.stepData = [[StepData alloc]init];
+        [self checkForPermission];
     }
     
     self.imgbar.backgroundColor = PrimaryColor;
@@ -153,8 +141,8 @@
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274 || exerciseIDTemp == 275){
         self.arrData = [NSMutableArray new];
         self.healthStore = [[HKHealthStore alloc] init];
-        self.sd = [[StepData alloc]init];
-        [self checkForPremission];
+        self.stepData = [[StepData alloc]init];
+        [self checkForPermission];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -166,11 +154,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    //HHT apple watch
-    self.btnAllowHealthAccess.hidden = YES;
-    self.permissionBtn.hidden = YES;
-    self.viewAllowHealthAccess.hidden = YES;
     
     [[UITextField appearance] setTintColor:[UIColor whiteColor]];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
@@ -218,9 +201,6 @@
             [self.pickerComponentOneArray addObject:hourString];
         }
     } else if (exerciseID == 272 || exerciseID == 274 || exerciseID == 275  || exerciseID == 276){
-        self.btnAllowHealthAccess.hidden = NO;
-        self.permissionBtn.hidden = NO;
-        self.viewAllowHealthAccess.hidden = NO;
         self.pickerView.hidden = YES;
         self.caloriesBurnedLabel.hidden = YES;
         self.tfCalories.hidden = YES;
@@ -256,52 +236,20 @@
 
 //HHT apple watch
 #pragma mark IBAction
--(void)checkForPremission {
-    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    
-    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        self.btnAllowHealthAccess.hidden = YES;
-        self.permissionBtn.hidden = YES;
-        self.viewAllowHealthAccess.hidden = YES;
+- (void)checkForPermission {
+    [self.stepData checkHealthKitAuthorizationWithCompletionBlock:^(BOOL authorized, NSError *error) {
+        if (authorized) {
+            [self readAppleHealthData];
+            return;
+        }
         
-        [self readData];
-    }
-    else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
-    }
+        NSString *appName = [DMGUtilities configValueForKey:@"app_name_long"];
+        NSString *message = [NSString stringWithFormat:@"Apple HealthKit permission is needed. Please open the Apple Health app and grant access for %@.", appName];
+        [DMGUtilities showAlertWithTitle:@"Permission Needed" message:message inViewController:nil];
+    }];
 }
 
-- (IBAction)btnAllowAccessClick:(id)sender {
-    //check HKHealthStore available or not
-    if ([HKHealthStore isHealthDataAvailable] == NO) {
-        DMLog(@"** HKHealthStore NotAvailable **");
-        return;
-    }
-    
-    //self.healthStore = [[HKHealthStore alloc] init];
-    
-    NSArray *shareTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    NSArray *readTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-
-    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    
-    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        [self readData];
-    }
-    else {
-        [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:shareTypes] readTypes:[NSSet setWithArray:readTypes] completion:^(BOOL success, NSError * _Nullable error) {
-            if (success){
-                [self readData];
-            }
-            else {
-                DMLog(@"Error");
-            }
-        }];
-    }
-}
-
-//HHT apple watch
-- (void)readData {
+- (void)readAppleHealthData {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
@@ -313,80 +261,63 @@
     HKQuantityType *quantityType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     
     // Create the query
-    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:quantityType
-                                                                           quantitySamplePredicate:nil
-                                                                                           options:HKStatisticsOptionCumulativeSum
-                                                                                        anchorDate:anchorDate
-                                                                                intervalComponents:interval];
+    HKStatisticsCollectionQuery *query =
+            [[HKStatisticsCollectionQuery alloc] initWithQuantityType:quantityType
+                                              quantitySamplePredicate:nil
+                                                              options:HKStatisticsOptionCumulativeSum
+                                                           anchorDate:anchorDate
+                                                   intervalComponents:interval];
     
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery* query, HKStatisticsCollection* results, NSError *error) {
         if (error) {
-            // Perform proper error handling here
-            DMLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
+            return;
         }
         
         DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        
         NSDate *endDate = dietmasterEngine.dateSelected;
         NSDate *startDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:0 toDate:endDate options:0];
-        
         [results enumerateStatisticsFromDate:startDate toDate:endDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
-            HKQuantity *quantity = result.sumQuantity;
-            if (quantity) {
-                NSDate *date = result.endDate;
-                
-                self.stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
-                //DMLog(@"%@: %.0f", date, self.stepCount);
-                [self showStepData];
-            }
-            else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.lblCaloriesBurnedTitle.text = @"Data not available";
-                    
-                    self.btnAllowHealthAccess.hidden = YES;
-                    self.permissionBtn.hidden = YES;
-                    self.viewAllowHealthAccess.hidden = YES;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                HKQuantity *quantity = result.sumQuantity;
+                if (quantity) {
+                    self.stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
+                    [self showStepData];
+                }
+                else {
+                    self.lblCaloriesBurnedTitle.text = @"Data not available.";
                     self.pickerView.hidden = YES;
                     self.caloriesBurnedLabel.hidden = NO;
                     self.tfCalories.hidden = YES;
                     self.lblCaloriesBurnedTitle.hidden = NO;
-                });
-            }
+                }
+            });
         }];
     };
     
     [self.healthStore executeQuery:query];
 }
 
+- (void)showStepData {
+    [self.rightButton setEnabled:YES];
+    self.pickerView.hidden = YES;
+    self.caloriesBurnedLabel.hidden = NO;
+    self.tfCalories.hidden = YES;
+    self.lblCaloriesBurnedTitle.hidden = NO;
 
-//HHT apple watch
--(void)showStepData {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.rightButton setEnabled:YES];
-        self.btnAllowHealthAccess.hidden = YES;
-        self.permissionBtn.hidden = YES;
-        self.viewAllowHealthAccess.hidden = YES;
-        
-        self.pickerView.hidden = YES;
-        self.caloriesBurnedLabel.hidden = NO;
-        self.tfCalories.hidden = YES;
-        self.lblCaloriesBurnedTitle.hidden = NO;
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        
-        int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-        
-        if (exerciseIDTemp == 272 || exerciseIDTemp == 275){
-            self.lblCaloriesBurnedTitle.text = @"Calories Burned";
-            double caloriesBurned = [self.sd stepsToCalories:self.stepCount];
-            self.calories = caloriesBurned;
-            self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",caloriesBurned];
-        }
-        else if (exerciseIDTemp == 274 || exerciseIDTemp == 276) {
-            self.lblCaloriesBurnedTitle.text = @"Step Count";
-            self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",self.stepCount];
-        }
-    });
+    int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+    
+    if (exerciseIDTemp == 272 || exerciseIDTemp == 275){
+        self.lblCaloriesBurnedTitle.text = @"Calories Burned";
+        double caloriesBurned = [self.stepData stepsToCaloriesForSteps:self.stepCount];
+        self.calories = caloriesBurned;
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",caloriesBurned];
+    }
+    else if (exerciseIDTemp == 274 || exerciseIDTemp == 276) {
+        self.lblCaloriesBurnedTitle.text = @"Step Count";
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.0f",self.stepCount];
+    }
 }
 
 - (void)showActionSheet:(id)sender {

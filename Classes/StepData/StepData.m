@@ -7,26 +7,34 @@
 //
 
 #import "StepData.h"
+#import <HealthKit/HealthKit.h>
 
 #define MILES_INCHES 63360
+
+@interface StepData()
+@property (nonatomic, strong) HKHealthStore *healthStore;
+@end
 
 @implementation StepData
     
 - (instancetype)init {
     self = [super init];
+    if (self) {
+        _healthStore = [[HKHealthStore alloc] init];
+    }
     return self;
 }
     
-- (double)stepsToCalories:(NSInteger)steps {
+- (double)stepsToCaloriesForSteps:(NSInteger)steps {
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
-    return [self stepsToMiles: steps] * ([dayProvider getCurrentWeight].doubleValue * 0.57);
+    return [self stepsToMilesForSteps: steps] * ([dayProvider getCurrentWeight].doubleValue * 0.57);
 }
     
-- (double)stepsToMiles:(NSInteger)steps {
-    return steps / [self stepsPerMile: steps];
+- (double)stepsToMilesForSteps:(NSInteger)steps {
+    return steps / [self stepsPerMileForSteps: steps];
 }
     
-- (double)stepsPerMile:(NSInteger)steps {
+- (double)stepsPerMileForSteps:(NSInteger)steps {
     DMUser* currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     
     int userGender = currentUser.gender.intValue;
@@ -39,5 +47,45 @@
 
     return 0.0;
 }
+
+#pragma mark - Apple Health
     
+- (void)checkHealthKitAuthorizationWithCompletionBlock:(completionBlockWithStatus)completionBlock {
+    if ([HKHealthStore isHealthDataAvailable] == NO) {
+        if (completionBlock) {
+            NSError *error = [DMGUtilities errorWithMessage:@"Apple Health data not available." code:777];
+            completionBlock(NO, error);
+        }
+        return;
+    }
+
+    HKObjectType *type = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+    [self.healthStore getRequestStatusForAuthorizationToShareTypes:[NSSet setWithObject:type]
+                                                         readTypes:[NSSet setWithObject:type]
+                                                        completion:^(HKAuthorizationRequestStatus requestStatus, NSError *error) {
+        if (requestStatus == HKAuthorizationRequestStatusShouldRequest) {
+            [self requestPermissionWithCompletionBlock:completionBlock];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(requestStatus == HKAuthorizationRequestStatusUnnecessary, error);
+                }
+            });
+        }
+    }];
+}
+
+- (void)requestPermissionWithCompletionBlock:(completionBlockWithStatus)completionBlock {
+    HKObjectType *type = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+    [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithObject:type]
+                                             readTypes:[NSSet setWithObject:type]
+                                            completion:^(BOOL success, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(success, error);
+            }
+        });
+    }];
+}
+
 @end

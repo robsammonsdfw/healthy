@@ -158,7 +158,12 @@ import FMDB
                 // 272 = Apple Calories
                 // 275 = Garmin Calories
                 // Check if the exercise was a calorie override.
-                if (exerciseID == 257 || exerciseID == 267 ||
+                if (exerciseID == 257) {
+                    totalExerciseCalories += timeMinutes
+                    if (currentUser.useBurnedCalories) {
+                        totalCaloriesBurned += timeMinutes
+                    }
+                } else if (exerciseID == 267 ||
                     exerciseID == 272 || exerciseID == 275) {
                     totalCaloriesBurnedViaTracker += timeMinutes
                     totalExerciseCalories += timeMinutes
@@ -174,7 +179,9 @@ import FMDB
                             exerciseID == 276 || exerciseID == 274 {
                     stepsTaken += timeMinutes
                 } else {
-                    totalCaloriesBurned += burnedCalories
+                    if (currentUser.useBurnedCalories) {
+                        totalCaloriesBurned += burnedCalories
+                    }
                     minutesExercised += timeMinutes
                     totalExerciseCalories += burnedCalories
                 }
@@ -247,7 +254,7 @@ import FMDB
         let defaultValue = NSNumber(floatLiteral: 0.0)
         guard let database = database, database.open() == true else { return defaultValue }
         
-        let query = "SELECT weight FROM weightlog where logtime like '%%%@%%' AND deleted = 1"
+        let query = "SELECT weight FROM weightlog WHERE logtime LIKE '%%%@%%' AND deleted = 1"
         
         var startingWeight = 0.0
 
@@ -278,7 +285,7 @@ import FMDB
         let defaultValue = NSNumber(floatLiteral: 0.0)
         guard let database = database, database.open() == true else { return defaultValue }
         
-        let query = "SELECT bodyfat FROM weightlog WHERE logtime IN (select max(logtime) FROM weightlog WHERE deleted = 1 AND entry_type = 1)"
+        let query = "SELECT bodyfat FROM weightlog WHERE logtime IN (SELECT MAX(logtime) FROM weightlog WHERE deleted = 1 AND entry_type = 1)"
         
         var value = 0.0
 

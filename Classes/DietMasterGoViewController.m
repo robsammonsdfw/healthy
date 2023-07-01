@@ -747,10 +747,13 @@
     [self.cpf_Values addObject:[NSNumber numberWithFloat:100 - round(carbsGramActualPercent + proteinGramActualPrecent + fatGramActualPrecent)]];
     [self.cpf_Pie reloadData];
 
+    // Display the consumed grams for the day.
     self.actualCarbLabel.text = [NSString stringWithFormat:@"%.1f",carbGramsActual];
     self.actualProtLabel.text = [NSString stringWithFormat:@"%.1f",proteinGramsActual];
     self.actualFatLabel.text = [NSString stringWithFormat:@"%.1f",fatGramsActual];
     
+    // Note, ACTUAL here means "Recommended" for the labels below.
+    // The variable names are incorrect.
     CGFloat bmrValue = [dayProvider getCurrentBMR].floatValue;
     CGFloat carbGramsRecommended = (currentUser.carbRatio.floatValue / 100) * bmrValue / 4;
     CGFloat proteinGramsRecommended = (currentUser.proteinRatio.floatValue / 100) * bmrValue / 4;

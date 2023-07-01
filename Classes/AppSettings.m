@@ -1,6 +1,5 @@
 #import "AppSettings.h"
 
-#import <HealthKit/HealthKit.h>
 #import "DietmasterEngine.h"
 
 /// Enables user to select options such as enabling Apple Health sync.
@@ -15,17 +14,12 @@
 /// budget for the day.
 @property (nonatomic, strong) IBOutlet UISwitch *addExerciseCaloriesSwitch;
 
-@property (nonatomic,retain) HKHealthStore *healthStore;
-
 @end
 
 @implementation AppSettings
 
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
-    if (self) {
-        _healthStore = [[HKHealthStore alloc] init];
-    }
     return self;
 }
 
@@ -45,10 +39,12 @@
     [self.addTrackedCaloriesSwitch setOn:currentUser.useCalorieTrackingDevice];
     [self.addExerciseCaloriesSwitch setOn:currentUser.useBurnedCalories];
     [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
-    
-    [self checkForPremission];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self checkAppleHealth];
+}
 #pragma mark - User Actions
 
 - (IBAction)forceUPDBSync:(id)sender {
@@ -77,56 +73,29 @@
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     currentUser.enableAppleHealthSync = sender.isOn;
     if (currentUser.enableAppleHealthSync) {
-        [self askForPermission];
+        [self checkAppleHealth];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
 }
 
 #pragma mark - Apple Health
 
-- (void)checkForPremission {
-    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-    
-    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        currentUser.enableAppleHealthSync = YES;
-        [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
-    }
-    else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
-        currentUser.enableAppleHealthSync = NO;
-        [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
-    }
-}
-
-- (void)askForPermission {
-    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-    
-    //check HKHealthStore available or not
-    if ([HKHealthStore isHealthDataAvailable] == NO) {
-        DMLog(@"** HKHealthStore NotAvailable **");
-        currentUser.enableAppleHealthSync = NO;
-        [self.appleHealthSwitch setOn:currentUser.enableAppleHealthSync];
-        return;
-    }
-    
-    NSArray *shareTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    NSArray *readTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    
-    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    
-    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        DMLog(@"HKAuthorizationStatusSharingAuthorized");
-        currentUser.enableAppleHealthSync = YES;
-    } else {
-        [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:shareTypes] readTypes:[NSSet setWithArray:readTypes] completion:^(BOOL success, NSError * _Nullable error) {
-            currentUser.enableAppleHealthSync = success;
-            if (error) {
-                [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
-                return;
-            }
-        }];
-    }
+- (void)checkAppleHealth {
+    StepData *stepData = [[StepData alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [stepData checkHealthKitAuthorizationWithCompletionBlock:^(BOOL authorized, NSError *error) {
+        if (error) {
+            DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+            currentUser.enableAppleHealthSync = NO;
+            [weakSelf.appleHealthSwitch setOn:NO];
+            [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        
+        DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+        currentUser.enableAppleHealthSync = authorized;
+        [weakSelf.appleHealthSwitch setOn:authorized];
+    }];
 }
 
 @end

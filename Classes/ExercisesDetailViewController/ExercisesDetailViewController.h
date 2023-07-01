@@ -7,26 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
-#import "DietmasterEngine.h"
 // FMDB
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
-@interface ExercisesDetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
-    
-}
+@interface ExercisesDetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>
+
 @property (nonatomic) int exerciseLogID;
-
-
-- (IBAction) delLog:(id) sender;
--(void) saveToLog:(id) sender;
-
--(void)loadData;
--(void)cleanUpView;
--(void)showActionSheet:(id)sender;
--(void) deleteFromFavorites;
--(void)saveToFavorites;
--(void)updateCalorieLabel;
 
 @end

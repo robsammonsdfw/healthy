@@ -35,6 +35,17 @@
 @property (nonatomic, strong) NSMutableDictionary *sectionFoodsDict;
 /// Exercises logged for the day.
 @property (nonatomic, strong) NSMutableArray *exerciseResults;
+
+@property (nonatomic, strong) NSDate *date_currentDate1;
+@property (nonatomic, strong) NSNumber *int_mealID;
+@property (assign, nonatomic, readonly) NSInteger primaryKey;
+@property (nonatomic, strong) NSDate *date_currentDate;
+@property (nonatomic,retain) HKHealthStore *healthStore;
+@property (nonatomic, strong) StepData *stepData;
+
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UIToolbar *dateToolBar;
+@property (nonatomic, strong) IBOutlet UILabel *lbl_dateHdr;
 @end
 
 static NSString *CellIdentifier = @"MyLogTableViewCell";
@@ -52,6 +63,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         _exerciseResults = [NSMutableArray array];
         _sectionFoodsDict = [NSMutableDictionary dictionary];
         _sectionTitleArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3", @"Exercise"];
+        _healthStore = [[HKHealthStore alloc] init];
+        _stepData = [[StepData alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:@"ReloadData" object:nil];
     }
     return self;
@@ -67,41 +80,18 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.navigationItem.title = @"My Log";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
         
-    lbl_dateHdr.textColor = AccentFontColor
+    self.lbl_dateHdr.textColor = AccentFontColor
+    self.lbl_dateHdr.backgroundColor = [UIColor clearColor];
     
-    lbl_CaloriesRecommended.textColor = PrimaryFontColor;
-    lbl_CaloriesLogged.textColor = PrimaryFontColor;
-    recCarbLabel.textColor = PrimaryFontColor
-    actualCarbLabel.textColor = PrimaryFontColor
-    actualFatLabel.textColor = PrimaryFontColor
-    recFatLabel.textColor = PrimaryFontColor
-    actualProtLabel.textColor = PrimaryFontColor
-    recProtLabel.textColor = PrimaryFontColor
+    self.dateToolBar.backgroundColor = AccentColor;
+    self.dateToolBar.barTintColor = AccentColor;
     
-    _staticRecommendedLbl.textColor = PrimaryFontColor;
-    _staticRemainingLbl.textColor = PrimaryFontColor;
-    _staticRecCarbLbl.textColor = PrimaryFontColor
-    _staticActualCarbLbl.textColor = PrimaryFontColor
-    _staticActualProtLbl.textColor = PrimaryFontColor
-    _staticRecFatLbl.textColor = PrimaryFontColor
-    _staticActualFatLbl.textColor = PrimaryFontColor
-    _staticRecProtLbl.textColor = PrimaryFontColor
-    
-    _imgbottom.backgroundColor=PrimaryColor
-    _imgbottomline.backgroundColor=RGB(255, 255, 255, 0.5);
     self.tableView.backgroundColor = UIColorFromHex(0xF3F3F3);
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
     UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
 
-    dateToolBar.backgroundColor = AccentColor;
-    dateToolBar.barTintColor = AccentColor;
     self.view.backgroundColor = PrimaryColor;
-    
-    //HHT apple watch
-    _arrData = [NSMutableArray new];
-    _healthStore = [[HKHealthStore alloc] init];
-    _sd = [[StepData alloc]init];
     
     if (!self.date_currentDate) {
         NSDate *sourceDate = [NSDate date];
@@ -150,16 +140,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [swipe_Recognizer_Previous setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.tableView addGestureRecognizer:swipe_Recognizer_Previous];
     
-    UISwipeGestureRecognizer *swipe_Recognizer_Next2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe_Action:)];
-    [swipe_Recognizer_Next2 setDelegate:self];
-    [swipe_Recognizer_Next2 setDirection:UISwipeGestureRecognizerDirectionRight];
-    [dateToolBar addGestureRecognizer:swipe_Recognizer_Next2];
-    
-    UISwipeGestureRecognizer *swipe_Recognizer_Previous2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe_Action:)];
-    [swipe_Recognizer_Previous2 setDelegate:self];
-    [swipe_Recognizer_Previous2 setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [dateToolBar addGestureRecognizer:swipe_Recognizer_Previous2];
-    
     UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
 
     self.logDaySummary = [[LogDaySummary alloc] initWithFrame:CGRectZero];
@@ -177,7 +157,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
     [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
-    [self.tableView.topAnchor constraintEqualToAnchor:dateToolBar.bottomAnchor constant:0].active = YES;
+    [self.tableView.topAnchor constraintEqualToAnchor:self.dateToolBar.bottomAnchor constant:0].active = YES;
     [self.tableView.bottomAnchor constraintEqualToAnchor:self.logDaySummary.topAnchor constant:0].active = YES;
 }
 
@@ -606,37 +586,32 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     DayDataProvider* dayProvider = [DayDataProvider sharedInstance];
     double caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:self.date_currentDate].doubleValue;
 
-    lbl_CaloriesLogged.text = [NSString stringWithFormat:@"%.0f",caloriesRemaining];
-
-    CGFloat carbRatioActual = actualCarbCalories / 4;
-    CGFloat proteinRatioActual = actualProteinCalories / 4;
-    CGFloat fatRatioActual = actualFatCalories / 9;
-    
-    actualCarbLabel.text = [NSString stringWithFormat:@"%.1fg",carbRatioActual];
-    actualProtLabel.text = [NSString stringWithFormat:@"%.1fg",proteinRatioActual];
-    actualFatLabel.text = [NSString stringWithFormat:@"%.1fg",fatRatioActual];
-    
-    CGFloat carbRatioRecommended = [dayProvider getRecommendedCarbRatio].floatValue;
-    CGFloat proteinRatioRecommended = [dayProvider getRecommendedProteinRatio].floatValue;
-    CGFloat fatRatioRecommended = [dayProvider getRecommendedFatRatio].floatValue;
-    
-    recCarbLabel.text = [NSString stringWithFormat:@"%.1fg",carbRatioRecommended];
-    recProtLabel.text = [NSString stringWithFormat:@"%.1fg",proteinRatioRecommended];
-    recFatLabel.text = [NSString stringWithFormat:@"%.1fg",fatRatioRecommended];
-    
-    NSString *caloriesRecommended = [NSString stringWithFormat:@"%li", [dayProvider getCurrentBMR].integerValue];
+    /// What we've consumed.
     NSString *remainingCalories = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
-    [self.logDaySummary setRemainingLabelsWithCalorie:remainingCalories carbs:actualCarbLabel.text protein:actualProtLabel.text fat:actualFatLabel.text];
-    [self.logDaySummary setRecommendedLabelsWithCalorie:caloriesRecommended carbs:recCarbLabel.text protein:recProtLabel.text fat:recFatLabel.text];
-}
+    NSString *carbGramsActual = [NSString stringWithFormat:@"%.1fg", round(actualCarbCalories / 4)];
+    NSString *fatGramsActual = [NSString stringWithFormat:@"%.1fg", round(actualFatCalories / 9)];
+    NSString *proteinGramsActual = [NSString stringWithFormat:@"%.1fg", round(actualProteinCalories / 4)];
 
-- (void)updateBMRLabel {
-    DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
-    int bmrCalories = [dayProvider getCurrentBMR].intValue;
-    int remainingCalories = [dayProvider getTotalCaloriesRemainingWithDate:self.date_currentDate].intValue;
+    [self.logDaySummary setRemainingLabelsWithCalorie:remainingCalories
+                                                carbs:carbGramsActual
+                                              protein:proteinGramsActual
+                                                  fat:fatGramsActual];
+
+    // What's recommended.
+    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+    CGFloat bmrValue = [dayProvider getCurrentBMR].floatValue;
+    CGFloat carbGramsRecommended = (currentUser.carbRatio.floatValue / 100) * bmrValue / 4;
+    CGFloat proteinGramsRecommended = (currentUser.proteinRatio.floatValue / 100) * bmrValue / 4;
+    CGFloat fatGramsRecommended = (currentUser.fatRatio.floatValue / 100) * bmrValue / 9;
     
-    lbl_CaloriesRecommended.text = [NSString stringWithFormat:@"%i", (int)bmrCalories];
-    lbl_CaloriesLogged.text = [NSString stringWithFormat:@"%i", remainingCalories];
+    NSString *carbGramsRecString = [NSString stringWithFormat:@"%.1fg", carbGramsRecommended];
+    NSString *proteinGramsRecString = [NSString stringWithFormat:@"%.1fg", proteinGramsRecommended];
+    NSString *fatGramsRecString = [NSString stringWithFormat:@"%.1fg", fatGramsRecommended];
+    NSString *caloriesRecommended = [NSString stringWithFormat:@"%.0f", bmrValue];
+    [self.logDaySummary setRecommendedLabelsWithCalorie:caloriesRecommended
+                                                  carbs:carbGramsRecString
+                                                protein:proteinGramsRecString
+                                                    fat:fatGramsRecString];
 }
 
 - (void)loadExerciseData:(NSDate *)date {
@@ -712,7 +687,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self.dateFormatter setDateStyle:NSDateFormatterLongStyle];
     NSString *date_Display = [self.dateFormatter stringFromDate:date];
     
-    lbl_dateHdr.text = date_Display;
+    self.lbl_dateHdr.text = date_Display;
     self.date_currentDate = date;
     
     dietmasterEngine.dateSelected = date;
@@ -813,7 +788,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.sectionFoodsDict[@"Snack 3"] = snack3Dict;
             
     [self loadExerciseData:date];
-    [self updateBMRLabel];
     
     [self.tableView reloadData];
     [self.tableView reloadSectionIndexTitles];
@@ -852,13 +826,11 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         [results enumerateStatisticsFromDate:startDate toDate:endDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
             HKQuantity *quantity = result.sumQuantity;
             if (quantity) {
-                //NSDate *date = result.endDate;
-                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
                     [self stepCountSave];
                     
-                    double caloriesBurned = [self.sd stepsToCalories:self.stepCount];
+                    double caloriesBurned = [self.stepData stepsToCaloriesForSteps:self.stepCount];
                     self.calories = caloriesBurned;
                     [self caloriesCount];
                 });
@@ -875,10 +847,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 - (void)stepCountSave {
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
     
     int minutesExercised = 0;
@@ -947,13 +917,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     exerciseLogID = [db lastInsertRowId];
 }
 
-//HHT apple watch
 - (void)caloriesCount {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
+    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];    
     FMDatabase* db = [FMDatabase databaseWithPath:[dietmasterEngine databasePath]];
     if (![db open]) {
-        
     }
     
     int minutesExercised = 0;

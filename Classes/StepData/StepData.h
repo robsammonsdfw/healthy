@@ -7,15 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DMConstants.h"
 
 /**
- *  Math for converting steps into miles and calories as the data is stored in 'steps'
+ *  Handles step data calculations and interaction with Apple Health.
  */
 @interface StepData : NSObject
 
-// Steps is the standardize measurement
-- (double)stepsToMiles:(NSInteger)steps;
-- (double)stepsToCalories:(NSInteger)steps;
-- (double)stepsPerMile:(NSInteger)steps;
+/// Conversions for steps.
+- (double)stepsToMilesForSteps:(NSInteger)steps;
+- (double)stepsToCaloriesForSteps:(NSInteger)steps;
+- (double)stepsPerMileForSteps:(NSInteger)steps;
+
+/// Checks for authorization to read Step Data. The block will return a True/False
+/// status if authorization is granted or not.
+- (void)checkHealthKitAuthorizationWithCompletionBlock:(completionBlockWithStatus)completionBlock;
 
 @end
