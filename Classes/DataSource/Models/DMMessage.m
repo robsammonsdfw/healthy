@@ -51,14 +51,19 @@
             _text = text;
         }
         
-        _isRead = [ValidString(dictionary[@"MsgRead"]) isEqualToString:@"True"] ? YES : NO;
+        if (dictionary[@"MsgRead"]) {
+            _isRead = [ValidString(dictionary[@"MsgRead"]) isEqualToString:@"True"] ? YES : NO;
+        } else {
+            _isRead = [dictionary[@"Read"] boolValue];
+        }
     }
     return self;
 }
 
 - (NSString *)replaceIntoSQLString {
     NSString *sqlString = [NSString stringWithFormat:@"REPLACE INTO Messages "
-                            "(Text, Sender, Date, Id, Read) VALUES (\"%@\", \"%@\", %f, %i, %d)",
+                            "(Text, Sender, Date, Id, Read) VALUES "
+                            "(\"%@\", \"%@\", %f, %i, %d)",
                            self.text,
                            self.senderId,
                            [self.dateSent timeIntervalSince1970],

@@ -8,7 +8,6 @@
 #import "DMMessage.h"
 
 @interface MessageCell () <TTTAttributedLabelDelegate>
-@property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) TTTAttributedLabel *messageLabel;
 @property (nonatomic) DMMessageCellType messageCellType;
 
@@ -31,7 +30,6 @@
 
 - (void)setup {
     self.contentView.backgroundColor = [UIColor clearColor];
-    self.timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.bgImageView = [[UIImageView alloc] init];
     self.bgImageView.contentMode = UIViewContentModeScaleToFill;
     self.messageLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
@@ -51,11 +49,9 @@
     self.messageLabel.linkAttributes = [NSDictionary dictionaryWithDictionary:mutableActiveLinkAttributes];
     self.messageLabel.numberOfLines = 0;
     
-    self.timeLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.bgImageView.translatesAutoresizingMaskIntoConstraints = NO;
     self.messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
-    [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.bgImageView];
     [self.contentView addSubview:self.messageLabel];
 }
@@ -71,6 +67,11 @@
         self.bgImageView.tintColor = OpponentMessageImageColor
     }
     
+    self.messageLabel.textColor = UIColor.blackColor;
+    self.messageLabel.text = message.text;
+    self.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    self.messageLabel.delegate = self;
+
     // Constrain the views.
     switch (self.messageCellType) {
         case DMMessageCellTypeMine: {
@@ -83,13 +84,12 @@
         }
     }
     
-    self.messageLabel.textColor = UIColor.blackColor;
-    self.messageLabel.text = message.text;
-    self.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
-    self.messageLabel.delegate = self;
-    
-    self.timeLabel.text = @"";
-    
+    [self.contentView setNeedsLayout];
+    [self.contentView layoutIfNeeded];
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
     [self.contentView setNeedsLayout];
     [self.contentView layoutIfNeeded];
 }
@@ -97,57 +97,56 @@
 - (void)constrainMine {
     [self.contentView removeConstraints:[self.contentView constraints]];
     
-    CGFloat topPadding = 3.0f;
-    CGFloat bottomPadding = -3.0f;
-    
-    [self.bgImageView.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.timeLabel.trailingAnchor constant:0].active = YES;
-    [self.bgImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-5].active = YES;
-    [self.bgImageView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:topPadding].active = YES;
-    [self.bgImageView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:bottomPadding].active = YES;
-    
-    UIEdgeInsets labelInsets = UIEdgeInsetsMake(4, 8, -4, -13);
-    
+    [self constrainBackgroundImageViewForType:DMMessageCellTypeMine];
+
+    UIEdgeInsets labelInsets = UIEdgeInsetsMake(6, 10, -6, -17);
+
     [self.messageLabel.leadingAnchor constraintEqualToAnchor:self.bgImageView.leadingAnchor constant:labelInsets.left].active = YES;
     [self.messageLabel.trailingAnchor constraintEqualToAnchor:self.bgImageView.trailingAnchor constant:labelInsets.right].active = YES;
     [self.messageLabel.topAnchor constraintEqualToAnchor:self.bgImageView.topAnchor constant:labelInsets.top].active = YES;
     [self.messageLabel.bottomAnchor constraintEqualToAnchor:self.bgImageView.bottomAnchor constant:labelInsets.bottom].active = YES;
     [self.messageLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
-
-    [self.timeLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:0].active = YES;
-    [self.timeLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:0].active = YES;
-    [self.timeLabel.widthAnchor constraintEqualToAnchor:self.contentView.widthAnchor multiplier:0.3].active = YES;
-    [self.timeLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+    [self.messageLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisVertical];
 }
 
 - (void)constrainResponse {
     [self.contentView removeConstraints:[self.contentView constraints]];
     
-    CGFloat topPadding = 3.0f;
-    CGFloat bottomPadding = -3.0f;
-
-    [self.bgImageView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:5].active = YES;
-    [self.bgImageView.trailingAnchor constraintLessThanOrEqualToAnchor:self.timeLabel.leadingAnchor constant:0].active = YES;
-    [self.bgImageView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:topPadding].active = YES;
-    [self.bgImageView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:bottomPadding].active = YES;
+    [self constrainBackgroundImageViewForType:DMMessageCellTypeResponse];
     
-    UIEdgeInsets labelInsets = UIEdgeInsetsMake(4, 14, -4, -8);
-
+    UIEdgeInsets labelInsets = UIEdgeInsetsMake(6, 17, -6, -10);
+    
     [self.messageLabel.leadingAnchor constraintEqualToAnchor:self.bgImageView.leadingAnchor constant:labelInsets.left].active = YES;
     [self.messageLabel.trailingAnchor constraintEqualToAnchor:self.bgImageView.trailingAnchor constant:labelInsets.right].active = YES;
     [self.messageLabel.topAnchor constraintEqualToAnchor:self.bgImageView.topAnchor constant:labelInsets.top].active = YES;
     [self.messageLabel.bottomAnchor constraintEqualToAnchor:self.bgImageView.bottomAnchor constant:labelInsets.bottom].active = YES;
     [self.messageLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+    [self.messageLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisVertical];
+}
 
-    [self.timeLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:0].active = YES;
-    [self.timeLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:0].active = YES;
-    [self.timeLabel.widthAnchor constraintEqualToAnchor:self.contentView.widthAnchor multiplier:0.3].active = YES;
-    [self.timeLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+- (void)constrainBackgroundImageViewForType:(DMMessageCellType)cellType {
+    CGFloat topPadding = 3.0f;
+    CGFloat bottomPadding = -3.0f;
+    CGFloat sidePadding = 8.0f;
+
+    if (cellType == DMMessageCellTypeMine) {
+        [self.bgImageView.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.leadingAnchor constant:sidePadding].active = YES;
+        [self.bgImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-sidePadding].active = YES;
+    } else {
+        [self.bgImageView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:sidePadding].active = YES;
+        [self.bgImageView.trailingAnchor constraintLessThanOrEqualToAnchor:self.contentView.trailingAnchor constant:-sidePadding].active = YES;
+    }
+    [self.bgImageView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:topPadding].active = YES;
+    [self.bgImageView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:bottomPadding].active = YES;
+
+    [self.bgImageView.heightAnchor constraintGreaterThanOrEqualToConstant:38].active = YES;
+    [self.bgImageView.widthAnchor constraintLessThanOrEqualToAnchor:self.contentView.widthAnchor multiplier:0.5].active = YES;
 }
 
 - (CGSize)intrinsicContentSize {
     CGSize size = [super intrinsicContentSize];
-    return CGSizeMake(size.width + self.bgImageView.intrinsicContentSize.width + self.timeLabel.intrinsicContentSize.width + 5,
-                      size.height + self.bgImageView.intrinsicContentSize.height + 5);
+    return CGSizeMake(size.width + self.bgImageView.intrinsicContentSize.width + 10,
+                      size.height + self.bgImageView.intrinsicContentSize.height + 6);
 }
 
 #pragma mark - TTTAttributedLabelDelegate

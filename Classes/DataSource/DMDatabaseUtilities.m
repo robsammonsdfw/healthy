@@ -59,6 +59,7 @@ static NSString *DMDatabasePath = nil;
         [fm copyItemAtPath:pathForStartingDB toPath:fullPath error:nil];
     }
     
+    NSLog(@"DB Path: %@", fullPath);
     DMDatabasePath = fullPath;
     return fullPath;
 }

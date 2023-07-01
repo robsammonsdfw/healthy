@@ -7,6 +7,8 @@
 
 #import "DMMessagesDataProvider.h"
 
+#import "DMMessage.h"
+
 @interface DMMessagesDataProvider()
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong, readonly) FMDatabase *database;
@@ -41,6 +43,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
 
     UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
+    __weak typeof(self) weakSelf = self;
     [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -50,7 +53,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             });
             return;
         }
-        [self processIncomingMessages:messages];
+        [weakSelf processIncomingMessages:messages];
         [[NSNotificationCenter defaultCenter] postNotificationName:UpdatingMessageNotification object:nil];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
@@ -60,34 +63,65 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }];
 }
 
+- (void)saveMessageText:(NSString *)text withCompletionBlock:(completionBlockWithObject)completionBlock {
+    if (!text.length) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(nil, nil);
+            }
+        });
+        return;
+    }
+
+    DMAuthManager *authManager = [DMAuthManager sharedInstance];
+    if (![authManager isUserLoggedIn]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                NSError *error = [DMGUtilities errorWithMessage:@"User not logged in." code:100];
+                completionBlock(nil, error);
+            }
+        });
+        return;
+    }
+    
+    UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
+    [fetcher saveMessageWithText:text completion:^(DMMessage *message, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(message, error);
+            }
+        });
+    }];
+}
+
 - (void)processIncomingMessages:(NSArray<DMMessage *> *)messages {
     if (!messages.count) {
         return;
     }
-    FMDatabase* dataBase = [self database];
-    if (![dataBase open]) {
+    FMDatabase* db = [self database];
+    if (![db open]) {
     }
     
-    [dataBase beginTransaction];
+    [db beginTransaction];
     for (DMMessage *message in messages) {
         NSString *sqlQuery = [message replaceIntoSQLString];
-        [dataBase executeUpdate:sqlQuery];
-        if ([dataBase hadError]) {
-            DM_LOG(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+        [db executeUpdate:sqlQuery];
+        if ([db hadError]) {
+            DM_LOG(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
     }
-    [dataBase commit];
+    [db commit];
 }
 
 - (NSArray<DMMessage *> *)unreadMessages {
-    FMDatabase* dataBase = [self database];
-    if (![dataBase open]) {
+    FMDatabase* db = [self database];
+    if (![db open]) {
     }
     // Sender = 0 means it was sent by an advisor or coach. Sender will be >0
     // if it was sent by the current user.
     NSString *query = @"SELECT * FROM Messages WHERE Sender = 0 AND Read = 0";
     
-    FMResultSet *rs = [dataBase executeQuery:query];
+    FMResultSet *rs = [db executeQuery:query];
     NSMutableArray *result = [NSMutableArray array];
     while ([rs next]) {
         NSDictionary *dict = [rs resultDictionary];
@@ -100,13 +134,13 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 - (NSInteger)unreadMessageCount {
-    FMDatabase* dataBase = [self database];
-    if (![dataBase open]) {
+    FMDatabase* db = [self database];
+    if (![db open]) {
         return 0;
     }
     NSString *query = @"SELECT * FROM Messages WHERE Sender = 0 AND Read = 0";
     
-    FMResultSet *rs = [dataBase executeQuery:query];
+    FMResultSet *rs = [db executeQuery:query];
     NSInteger count = 0;
     while ([rs next]) {
         ++count;
@@ -122,20 +156,53 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
 }
 
 - (void)setReadedMessageId:(NSNumber *)messageId {
-    FMDatabase* dataBase = [self database];
-    if (![dataBase open]) {
+    FMDatabase* db = [self database];
+    if (![db open]) {
         return;
     }
-    [dataBase beginTransaction];
+    [db beginTransaction];
     NSString *sqlQuery = [NSString stringWithFormat:@"UPDATE Messages SET Read = 1 "
                           "WHERE Id = %@", messageId];
-    [dataBase executeUpdate:sqlQuery];
-    if ([dataBase hadError]) {
-        DMLog(@"Err %d: %@", [dataBase lastErrorCode], [dataBase lastErrorMessage]);
+    [db executeUpdate:sqlQuery];
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
-    [dataBase commit];
+    [db commit];
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = [self unreadMessageCount];
+}
+
+- (NSDictionary<NSString *, DMMessage *> *)getMessagesByDate {
+    FMDatabase  *db = [self database];
+    if (![db open]) {
+        return @{};
+    }
+
+    NSString *query = [NSString stringWithFormat: @"SELECT * FROM Messages ORDER BY Id ASC"];
+    FMResultSet *rs = [db executeQuery:query];
+    
+    NSMutableDictionary *messagesDict = [NSMutableDictionary dictionary];
+    while ([rs next]) {
+        NSDictionary *dict = [rs resultDictionary];
+        DMMessage *message = [[DMMessage alloc] initWithDictionary:dict];
+        
+        [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        NSString *dateString = [self.dateFormatter stringFromDate:message.dateSent];
+        if (messagesDict[dateString]) {
+            NSMutableArray *messages = messagesDict[dateString];
+            [messages addObject:message];
+        } else {
+            NSMutableArray *messages = [NSMutableArray array];
+            [messages addObject:message];
+            messagesDict[dateString] = messages;
+        }
+    }
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [rs close];
+    
+    return [messagesDict copy];
 }
 
 @end

@@ -69,7 +69,6 @@
 @property (nonatomic, strong) IBOutlet UIButton *burnedPlusBtn;
 @property (nonatomic, strong) IBOutlet UIButton *calPullDwnBtn;
 @property (nonatomic, strong) IBOutlet UIButton *macrosPullDwnBtn;
-@property (nonatomic, strong) IBOutlet UIButton *sendMsgBtnOutlet;
 @property (nonatomic, strong) IBOutlet UILabel *nameLbl;
 @property (nonatomic, strong) IBOutlet UIButton *weightPullDwnBtn;
 @property (nonatomic, strong) IBOutlet UIStackView *weightHideShowStack;
@@ -110,6 +109,9 @@
 @property (nonatomic, strong) IBOutlet UILabel *lblBurned;
 @property (nonatomic, strong) IBOutlet UILabel *lblStepsCount;
 @property (nonatomic, strong) IBOutlet UILabel *lblProgressBarCurrentWeight;
+
+@property (nonatomic, strong) IBOutlet UIButton *sendMsgButton;
+@property (nonatomic, strong) IBOutlet UIButton *sendMailButton;
 
 @property (nonatomic, strong) NSDate *date_currentDate;
 @property (nonatomic, strong) NSArray *items;
@@ -170,6 +172,17 @@
     self.leftStatus = @"new";
     self.weightStatus = @"up";
 
+    self.nameLbl.textColor = [UIColor blackColor];
+    // Adjust button colors.
+    UIImage *chatImage = self.sendMsgButton.imageView.image;
+    chatImage = [chatImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.sendMsgButton setImage:chatImage forState:UIControlStateNormal];
+    UIImage *emailImage = self.sendMailButton.imageView.image;
+    emailImage = [emailImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.sendMailButton setImage:emailImage forState:UIControlStateNormal];
+    [self.sendMsgButton setTintColor:[UIColor blackColor]];
+    [self.sendMailButton setTintColor:[UIColor blackColor]];
+
     [UIView animateWithDuration:0.25 animations:^{
         self.hideShowConstant.constant = 0;
         self.secondHideShowConstant.constant = 0;
@@ -195,7 +208,7 @@
     self.cpf_Pie.sliceColor = UIColor.lightGrayColor;
     self.cpf_Pie.borderPercentage = 0.5;
 
-    self.numberBadge = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(self.sendMsgBtnOutlet.frame.origin.x + 20, self.sendMsgBtnOutlet.frame.origin.y - 10, 20, 20)];
+    self.numberBadge = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(self.sendMsgButton.frame.origin.x + 20, self.sendMsgButton.frame.origin.y - 10, 20, 20)];
     self.numberBadge.backgroundColor = [UIColor clearColor];
     self.numberBadge.shadow = NO;
     self.numberBadge.font = [UIFont systemFontOfSize:12];
@@ -217,7 +230,7 @@
     int stepsTaken = (int)[[DayDataProvider sharedInstance] getStepsTakenWithDate:nil];
     self.lblStepsCount.text = [NSString stringWithFormat:@"%i", stepsTaken];
     
-    [self.sendMsgBtnOutlet addSubview:self.numberBadge];
+    [self.sendMsgButton addSubview:self.numberBadge];
     [self reloadMessages];
     
     [self.values addObject:[NSNumber numberWithInt:0]];

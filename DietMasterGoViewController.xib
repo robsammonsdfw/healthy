@@ -70,7 +70,8 @@
                 <outlet property="secondExpandVw" destination="n8Z-Gu-Rgw" id="j5f-Ij-Wc4"/>
                 <outlet property="secondHideShowConstant" destination="pdJ-r0-GHA" id="bJz-Ii-nWw"/>
                 <outlet property="secondHideShowStackVw" destination="6sh-qR-hlT" id="u6Q-bg-gcW"/>
-                <outlet property="sendMsgBtnOutlet" destination="EcA-7T-kjD" id="xRn-At-OIM"/>
+                <outlet property="sendMailButton" destination="fg2-Z9-npJ" id="btq-Mb-sED"/>
+                <outlet property="sendMsgButton" destination="EcA-7T-kjD" id="1Un-0E-MjT"/>
                 <outlet property="seperateLineLbl" destination="pWa-Le-34Q" id="vzy-s9-msK"/>
                 <outlet property="stepsImage" destination="8iA-Az-GQM" id="AXi-Hb-GvG"/>
                 <outlet property="stepsView" destination="cPr-RX-d47" id="aaR-SJ-Zs8"/>
@@ -157,7 +158,7 @@
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hi, Chelsea!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sA8-3e-OeF">
-                                    <rect key="frame" x="247" y="94.666666666666671" width="147" height="20.333333333333329"/>
+                                    <rect key="frame" x="247" y="88.666666666666742" width="147" height="20.333333333333371"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -1271,7 +1272,7 @@
                                 <constraint firstItem="rr2-bB-DXJ" firstAttribute="top" secondItem="o2S-Cz-V5j" secondAttribute="top" constant="85" id="Te3-dB-hsj"/>
                                 <constraint firstAttribute="trailing" secondItem="3EO-gt-3aP" secondAttribute="trailing" id="aOe-1L-OhO"/>
                                 <constraint firstItem="sA8-3e-OeF" firstAttribute="leading" secondItem="rr2-bB-DXJ" secondAttribute="trailing" constant="15" id="dkc-Jr-Khh"/>
-                                <constraint firstItem="sA8-3e-OeF" firstAttribute="bottom" secondItem="3EO-gt-3aP" secondAttribute="bottom" constant="-5" id="hac-9I-9ja"/>
+                                <constraint firstItem="sA8-3e-OeF" firstAttribute="bottom" secondItem="3EO-gt-3aP" secondAttribute="bottom" constant="-10.999999999999886" id="hac-9I-9ja"/>
                                 <constraint firstItem="rr2-bB-DXJ" firstAttribute="centerX" secondItem="3EO-gt-3aP" secondAttribute="centerX" id="jDG-lA-TPI"/>
                                 <constraint firstItem="v6o-MC-VKJ" firstAttribute="leading" secondItem="o2S-Cz-V5j" secondAttribute="leading" id="mqe-in-8tM"/>
                             </constraints>

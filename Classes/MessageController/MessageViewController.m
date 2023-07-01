@@ -4,20 +4,18 @@
 //
 
 #import "MessageViewController.h"
+
 #import "MessageCell.h"
 #import "SendView.h"
 #import "Common.h"
-
 #import "DMDataFetcher.h"
 #import "DietmasterEngine.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-
 #import "UIView+FrameControl.h"
+#import "DMMessage.h"
 #import "NSDate+ConvertToString.h"
 #import "NSString+ConvertToDate.h"
-
-#import "DMMessage.h"
 #import "DMMyLogDataProvider.h"
 
 static NSString *OpponentCellIdentifier = @"OpponentCellIdentifier";
@@ -34,6 +32,7 @@ int const MaximumStringLength = 300;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic) int countShowedMessage;
 @property (nonatomic, strong) NSTimer *messageTimer;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation MessageViewController
@@ -43,7 +42,9 @@ int const MaximumStringLength = 300;
 - (instancetype)init {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
         _messagesDict = [[NSMutableDictionary alloc] init];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -91,20 +92,6 @@ int const MaximumStringLength = 300;
     [self.sendView.heightAnchor constraintGreaterThanOrEqualToConstant:50.0f].active = YES;
     UILayoutGuide *keyboardGuide = self.view.keyboardLayoutGuide;
     [self.sendView.bottomAnchor constraintEqualToAnchor:keyboardGuide.topAnchor constant:0].active = YES;
-    
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 32)];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.layer.cornerRadius = 10;
-    button.layer.masksToBounds = YES;
-    button.backgroundColor = UIColorFromHex(0x8e8e93);
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitle:@"Show Previous Messages" forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.];
-    [button setSize:CGSizeMake(200, 20)];
-    [button addTarget:self action:@selector(addMessage) forControlEvents:UIControlEventTouchUpInside];
-    button.center = CGPointMake(headerView.frame.size.width / 2, headerView.frame.size.height / 2);
-    [headerView addSubview:button];
-    self.tableView.tableHeaderView = headerView;
 }
 
 - (void)viewDidLoad {
@@ -162,31 +149,6 @@ int const MaximumStringLength = 300;
     return db;
 }
 
-- (BOOL)isCurrentWeekDate:(NSDate *)date {
-    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:date];
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *dateComps = [gregorian components:NSCalendarUnitWeekday fromDate:date];
-    NSDateComponents *todayComps = [gregorian components:NSCalendarUnitWeekday fromDate:[NSDate date]];
-    
-    return (timeInterval < 7*24*60*60) && (todayComps.weekday >= dateComps.weekday);
-}
-
-- (BOOL)isTodayDate:(NSDate *)date {
-    return [[date stringWithFormat:@"yyyyMMdd"] isEqualToString:[[NSDate date] stringWithFormat:@"yyyyMMdd"]];
-}
-
-- (NSString *)dayStringFromDate:(NSDate *)date {
-    NSString *resultStr = nil;
-    if ([self isTodayDate:date])
-        resultStr = @"Today";
-    else if ([self isCurrentWeekDate:date])
-        resultStr = [date stringWithFormat:@"eeee"];
-    else
-        resultStr = [date stringWithFormat:@"MMMM dd"];
-    
-    return resultStr;
-}
-
 #pragma mark - Message Datasource
 
 - (void)syncMessages:(id)sender {
@@ -201,7 +163,6 @@ int const MaximumStringLength = 300;
             return;
         }
         [weakSelf reloadDataWithScroll];
-        [weakSelf updateHeaderView];
     }];
 }
 
@@ -241,30 +202,9 @@ int const MaximumStringLength = 300;
     [DMActivityIndicator hideActivityIndicator];
     
     NSInteger beforeMessageCount = [self countMessagesInDict:self.messagesDict];
-    
-    NSString *query = [NSString stringWithFormat: @"SELECT * FROM (SELECT * FROM Messages ORDER BY Id DESC) ORDER BY Id ASC"];
-    FMResultSet *rs = [[self database] executeQuery:query];
-    
+    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
     [self.messagesDict removeAllObjects];
-    while ([rs next]) {
-        NSDictionary *dict = [rs resultDictionary];
-        DMMessage *message = [[DMMessage alloc] initWithDictionary:dict];
-        NSString *dayString = [self dayStringFromDate:message.dateSent];
-        
-        if (self.messagesDict[dayString]) {
-            NSMutableArray *messages = self.messagesDict[dayString];
-            [messages addObject:message];
-        } else {
-            NSMutableArray *messages = [NSMutableArray array];
-            [messages addObject:message];
-            self.messagesDict[dayString] = messages;
-        }
-    }
-    if ([[self database] hadError]) {
-        DMLog(@"Err %d: %@", [[self database] lastErrorCode], [[self database] lastErrorMessage]);
-    }
-    [rs close];
-    
+    [self.messagesDict addEntriesFromDictionary:[provider getMessagesByDate]];
     NSInteger afterMessageCount = [self countMessagesInDict:self.messagesDict];
     
     [self.tableView reloadData];
@@ -277,20 +217,6 @@ int const MaximumStringLength = 300;
 
 - (void)backAction:(id)sender {
     [self.navigationController popViewControllerAnimated:true];
-}
-
-- (void)addMessage {
-    [DMActivityIndicator showActivityIndicatorWithMessage:@"Updating..."];
-    self.countShowedMessage += ShowMessageCountStep;
-    [self reloadDataWithScroll];
-    [self updateHeaderView];
-    [DMActivityIndicator hideActivityIndicator];
-}
-
-- (void)updateHeaderView {
-    if ([self countMessagesInDict:self.messagesDict] < self.countShowedMessage) {
-        self.tableView.tableHeaderView = nil;
-    }
 }
 
 - (void)scrollToBottom {
@@ -317,19 +243,26 @@ int const MaximumStringLength = 300;
     [self.sendView resignFirstResponder];
     [DMActivityIndicator showActivityIndicatorWithMessage:@"Sending..."];
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
-    [fetcher saveMessageWithText:text completion:^(DMMessage *message, NSError *error) {
+    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [provider saveMessageText:text withCompletionBlock:^(NSObject *object, NSError *error) {
         if (error) {
+            [DMGUtilities showError:error withTitle:@"Error" message:error.localizedDescription inViewController:nil];
+            return;
+        }
+        
+        if (!object) {
             [DMGUtilities showError:error withTitle:@"Error" message:@"Please try again." inViewController:nil];
             return;
         }
+        
         // Save message that was created.
         FMDatabase* db = [DMDatabaseUtilities database];
         if (![db open]) {
         }
 
         [db beginTransaction];
+        DMMessage *message = (DMMessage *)object;
         NSString *sqlString = [message replaceIntoSQLString];
         [db executeUpdate:sqlString];
         if ([db hadError]) {
@@ -338,7 +271,7 @@ int const MaximumStringLength = 300;
         [db commit];
 
         [DMActivityIndicator hideActivityIndicator];
-        [self reloadDataWithScroll];
+        [weakSelf reloadDataWithScroll];
     }];
 }
 
@@ -368,16 +301,15 @@ int const MaximumStringLength = 300;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSString *key = self.messagesDict.allKeys[section];
-    NSArray *messages = [self.messagesDict[key] copy];
+    NSArray *messages = [self messagesForSection:section];
     return messages.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *key = self.messagesDict.allKeys[indexPath.section];
-    NSArray *messages = [self.messagesDict[key] copy];
+    // Sort the messages by date.
+    NSArray *messages = [self messagesForSection:indexPath.section];
     DMMessage *message = messages[indexPath.row];
-    
+
     DMMessageCellType type = [self typeFromMessage:message];
     NSString *cellIdentifier = [self cellIdentifierForType:type];
     MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
@@ -394,7 +326,6 @@ int const MaximumStringLength = 300;
 - (UIView *)tableView:(UITableView *)tableView_ viewForHeaderInSection:(NSInteger)section {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView_.frame.size.width, 20)];
     
-    label.text = [self tableView:tableView_ titleForHeaderInSection:section];
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
     label.backgroundColor = [UIColor clearColor];
@@ -402,13 +333,14 @@ int const MaximumStringLength = 300;
     label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:0.75];
     label.shadowOffset = CGSizeMake(0, 2);
 
-    return label;
-}
+    // Sort the messages by date.
+    NSString *dateString = [self messageKeysSortedByDate][section];
+    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    NSDate *date = [self.dateFormatter dateFromString:dateString];
+    NSString *dayString = [self dayStringFromDate:date];
+    label.text = dayString;
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSString *key = self.messagesDict.allKeys[section];
-    
-    return [NSString stringWithFormat:@"%@", key];
+    return label;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -423,6 +355,53 @@ int const MaximumStringLength = 300;
 
 - (void)keyboardDidHide:(NSNotification *)notification {
     [self scrollToBottom];
+}
+
+#pragma mark - Helpers
+
+/// Returns an array of messages sorted by date / section.
+- (NSArray *)messagesForSection:(NSInteger)section {
+    NSArray *sortedKeys = [self messageKeysSortedByDate];
+    NSString *dateString = sortedKeys[section];
+    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    NSArray *messages = [self.messagesDict[dateString] copy];
+    return messages;
+}
+
+/// Returns an array of sorted messageDictionary keys by date, so we can lay out
+/// the UI.
+- (NSArray *)messageKeysSortedByDate {
+    if (!self.messagesDict.allKeys.count) {
+        return @[];
+    }
+    NSArray *sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO]];
+    NSArray *sortedKeys = [self.messagesDict.allKeys sortedArrayUsingDescriptors:sortDescriptors];
+    return sortedKeys;
+}
+
+- (BOOL)isCurrentWeekDate:(NSDate *)date {
+    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:date];
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *dateComps = [gregorian components:NSCalendarUnitWeekday fromDate:date];
+    NSDateComponents *todayComps = [gregorian components:NSCalendarUnitWeekday fromDate:[NSDate date]];
+    
+    return (timeInterval < 7*24*60*60) && (todayComps.weekday >= dateComps.weekday);
+}
+
+- (BOOL)isTodayDate:(NSDate *)date {
+    return [[date stringWithFormat:@"yyyyMMdd"] isEqualToString:[[NSDate date] stringWithFormat:@"yyyyMMdd"]];
+}
+
+- (NSString *)dayStringFromDate:(NSDate *)date {
+    NSString *resultStr = nil;
+    if ([self isTodayDate:date])
+        resultStr = @"Today";
+    else if ([self isCurrentWeekDate:date])
+        resultStr = [date stringWithFormat:@"eeee"];
+    else
+        resultStr = [date stringWithFormat:@"MMMM dd"];
+    
+    return resultStr;
 }
 
 @end

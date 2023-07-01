@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class DMMessage;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,8 +25,12 @@ extern NSString * const UpdatingMessageNotification;
 - (void)setReadedMessageId:(NSNumber *)messageId;
 /// Returns the most recent message Id stored in the database.
 - (NSNumber *)getLastMessageId;
+/// Gets all the messages in the database, with a Key = Date, Value = Array of Messages.
+- (NSDictionary<NSString *, DMMessage *> *)getMessagesByDate;
 /// Syncronizes messages now.
 - (void)syncMessagesWithCompletionBlock:(completionBlockWithError)completionBlock;
+/// Saves message to the server and returns the message as object in the block.
+- (void)saveMessageText:(NSString *)text withCompletionBlock:(completionBlockWithObject)completionBlock;
 
 @end
 
