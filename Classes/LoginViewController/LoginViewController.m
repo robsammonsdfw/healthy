@@ -87,15 +87,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
     self.imgtop.backgroundColor=PrimaryColor
-        
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
     
-    self.appNameLabel.text = [appDefaults valueForKey:@"app_name_long"];
+    NSString *appName = [DMGUtilities configValueForKey:@"app_name_long"];
+    self.appNameLabel.text = [appName valueForKey:@"app_name_long"];
     
-    UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
+    if ([[accountCode valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+        UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Login_Screen"];
         [self.loginButton setBackgroundImage:[UIImage imageNamed:@"button_small"] forState:UIControlStateNormal];
         [self.loginButton setBackgroundImage:[UIImage imageNamed:@"button_small"] forState:UIControlStateHighlighted];
@@ -209,10 +207,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (IBAction)emailUs:(id)sender {
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]];
+    NSString *appName = [DMGUtilities configValueForKey:@"app_name_short"];
+    NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", appName];
 
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];

@@ -264,18 +264,14 @@
 
     lblText.text = self.food.name;
     
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                                 target:self
-                                                                                 action:@selector(showActionSheet:)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
     rightButton.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = rightButton;
     
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
+    if ([[accountCode valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+        UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Food_Detail_Screen"];
         pickerView.backgroundColor = [UIColor whiteColor];
     }

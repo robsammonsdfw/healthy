@@ -142,17 +142,14 @@ static NSString *CellIdentifier = @"Cell";
         query = @"SELECT ExerciseID,ActivityName,CaloriesPerHour FROM Exercises ORDER BY ActivityName";
     }
     
-    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [bundlePath stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
         NSNumber *exerciseID = [NSNumber numberWithInt:[rs intForColumn:@"ExerciseID"]];
         NSString *activityName = [[NSString alloc] initWithString:[rs stringForColumn:@"ActivityName"]];
         NSNumber *caloriesPerHour = [NSNumber numberWithDouble:[[rs stringForColumn:@"CaloriesPerHour"] doubleValue]];
         
-        if (![[appDefaults valueForKey:@"account_code"] isEqualToString:@"42_onthego"]) {
+        NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
+        if (![accountCode isEqualToString:@"42_onthego"]) {
             if ([exerciseID intValue] == 265 || [exerciseID intValue] == 266) {
                 continue;
             }

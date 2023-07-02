@@ -96,12 +96,9 @@ CGPoint svos;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
-    UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+        UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Custom_Foods_Editor"];
         for (id view in scrollView.subviews) {
             if ([view isKindOfClass:[UILabel class]]) {

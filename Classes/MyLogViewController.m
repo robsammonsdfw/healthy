@@ -126,11 +126,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.rightBarButtonItem=nil;
         
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+        UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Log_Screen"];
     }
     

@@ -59,11 +59,8 @@
     textStyle.fontName = @"Helvetica";
     textStyle.fontSize = 12; //13;
     
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         textStyle.color = [CPTColor blackColor];
     }
     else {
@@ -71,7 +68,7 @@
     }
     
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         // Custom
         plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
     }
@@ -168,15 +165,13 @@
     
     CPTColor *areaColor;
     CPTGradient *areaGradient;
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         areaColor = [CPTColor colorWithCGColor:[UIColor colorWithRed:0.400 green:0.114 blue:0.384 alpha:1.000].CGColor];
         areaGradient = [CPTGradient gradientWithBeginningColor:areaColor endingColor:[CPTColor colorWithCGColor:[UIColor colorWithRed:0.400 green:0.114 blue:0.384 alpha:1.000].CGColor]];
     }
     else {
-        areaColor = AccentColor //[CPTColor colorWithComponentRed:99.0/255.0f green:196.0/255.0f blue:247.0/255.0f alpha:1.0];
+        areaColor = AccentColor;
         areaGradient = graphGraindentColor;
-
-        //areaGradient = [CPTGradient gradientWithBeginningColor:areaColor endingColor:[CPTColor colorWithCGColor:[UIColor colorWithRed:99.00/255.0f green:196.00/255.0f blue:247.00/255.0f alpha:1.000].CGColor]];
     }
     
     areaGradient.angle = -90.0;

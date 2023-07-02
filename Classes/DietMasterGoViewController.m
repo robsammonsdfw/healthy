@@ -406,10 +406,8 @@
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
     DMUser *currentUser = [authManager loggedInUser];
 
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", [appDefaults valueForKey:@"app_name_short"]];
+    NSString *appName = [DMGUtilities configValueForKey:@"app_name_short"];
+    NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", appName];
     NSString *emailTo = currentUser.email1;
 
     if ([MFMailComposeViewController canSendMail]) {
