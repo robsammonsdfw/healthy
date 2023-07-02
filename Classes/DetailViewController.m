@@ -161,9 +161,12 @@
     }
     
     int measureID = [self.food.measureId intValue];
-    for(NSInteger i = 0; i < [pickerColumn3Array count]; i++){
+    if (self.mealPlanItem) {
+        measureID = self.mealPlanItem.measureId.intValue;
+    }
+    for (NSInteger i = 0; i < [pickerColumn3Array count]; i++){
         int pickerID = [[[pickerColumn3Array objectAtIndex:i] valueForKey:@"MeasureID"] intValue];
-        if(pickerID == measureID){
+        if (pickerID == measureID) {
             self.pickerRow3 = @(i);
             break;
         }
