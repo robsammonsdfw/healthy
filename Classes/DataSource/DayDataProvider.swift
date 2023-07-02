@@ -167,9 +167,6 @@ import FMDB
                     exerciseID == 272 || exerciseID == 275) {
                     totalCaloriesBurnedViaTracker += timeMinutes
                     totalExerciseCalories += timeMinutes
-                    if (currentUser.useCalorieTrackingDevice) {
-                        totalCaloriesBurned += timeMinutes
-                    }
                 // Handle step trackers.
                 // 259 = Override Steps Taken
                 // 269 = Movband Steps
@@ -204,8 +201,16 @@ import FMDB
     /// NOTE: Takes into account the option to use
     /// a health tracker, so those tracked calories are already reflected
     /// in the value if necessary. Defaults to zero if no exercise calories
-    /// should be added to daily intake.
+    /// should be added to daily intake. This utilizes user settings to determine
+    /// how much to return. See AppSettings.h.
     @objc public func getCaloriesBurnedForLog(date: Date?) -> Double {
+        guard let currentUser = currentUser else { return 0.0  }
+        // If wearable option is on, return that in addition to calculated value.
+        if currentUser.useCalorieTrackingDevice {
+            return getExerciseData(date: date).loggedCalories +
+                        getExerciseData(date: date).trackerCalories
+        }
+
         return getExerciseData(date: date).loggedCalories
     }
 
@@ -409,16 +414,12 @@ import FMDB
     /// Gets the total calories remaining, which is "net calories".
     /// This takes into account if the user opted to include logged calories or not.
     @objc public func getTotalCaloriesRemaining(date: Date?) -> NSNumber {
-        guard let currentUser = currentUser else { return NSNumber(floatLiteral: 0) }
-        let totalCaloriesBurnedViaExercise = getExerciseData(date: date).exerciseCalories
+        let totalCaloriesBurnedViaExercise = getCaloriesBurnedForLog(date: date)
         let bmr = getCurrentBMR().doubleValue
         let totalCaloriesToday = getTotalCalories(date: date).doubleValue
 
-        var caloriesRemainingToday = bmr - totalCaloriesToday
-        if currentUser.useBurnedCalories {
-            caloriesRemainingToday = (bmr + totalCaloriesBurnedViaExercise) - totalCaloriesToday
-        }
-        
+        let caloriesRemainingToday = (bmr + totalCaloriesBurnedViaExercise) - totalCaloriesToday
+
         return NSNumber(floatLiteral: caloriesRemainingToday)
     }
 }

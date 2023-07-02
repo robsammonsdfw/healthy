@@ -628,6 +628,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 - (void)reloadData {
     if ([NSThread isMainThread]) {
+        [self updateData:self.date_currentDate];
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self reloadData];
