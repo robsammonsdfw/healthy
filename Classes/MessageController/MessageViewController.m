@@ -205,6 +205,7 @@ int const MaximumStringLength = 300;
         NSInteger beforeMessageCount = [self countMessagesInDict:self.messagesDict];
         DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
         [self.messagesDict removeAllObjects];
+        DMSortedMessageKeysArray = nil;
         [self.messagesDict addEntriesFromDictionary:[provider getMessagesByDate]];
         NSInteger afterMessageCount = [self countMessagesInDict:self.messagesDict];
         
@@ -341,7 +342,7 @@ int const MaximumStringLength = 300;
 
     // Sort the messages by date.
     NSString *dateString = [self messageKeysSortedByDate][section];
-    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [self.dateFormatter setDateStyle:NSDateFormatterFullStyle];
     NSDate *date = [self.dateFormatter dateFromString:dateString];
     NSString *dayString = [self dayStringFromDate:date];
     label.text = dayString;
@@ -369,43 +370,61 @@ int const MaximumStringLength = 300;
 - (NSArray *)messagesForSection:(NSInteger)section {
     NSArray *sortedKeys = [self messageKeysSortedByDate];
     NSString *dateString = sortedKeys[section];
-    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     NSArray *messages = [self.messagesDict[dateString] copy];
     return messages;
 }
 
 /// Returns an array of sorted messageDictionary keys by date, so we can lay out
-/// the UI.
+/// the UI. The key is timeIntervalSince1970 string.
+static NSArray *DMSortedMessageKeysArray = nil;
 - (NSArray *)messageKeysSortedByDate {
     if (!self.messagesDict.allKeys.count) {
         return @[];
     }
-    NSArray *sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO]];
-    NSArray *sortedKeys = [self.messagesDict.allKeys sortedArrayUsingDescriptors:sortDescriptors];
+    // If we have a cached result.
+    if (DMSortedMessageKeysArray) {
+        return DMSortedMessageKeysArray;
+    }
+    [self.dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    NSArray *sortedKeys = [self.messagesDict.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        NSDate *d1 = [self.dateFormatter dateFromString:obj1];
+        NSDate *d2 = [self.dateFormatter dateFromString:obj2];
+        return [d1 compare: d2];
+    }];
+    DMSortedMessageKeysArray = sortedKeys;
     return sortedKeys;
 }
 
 - (BOOL)isCurrentWeekDate:(NSDate *)date {
-    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:date];
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSDateComponents *dateComps = [gregorian components:NSCalendarUnitWeekday fromDate:date];
     NSDateComponents *todayComps = [gregorian components:NSCalendarUnitWeekday fromDate:[NSDate date]];
-    
-    return (timeInterval < 7*24*60*60) && (todayComps.weekday >= dateComps.weekday);
+    return todayComps.weekday >= dateComps.weekday;
+}
+
+- (BOOL)isCurrentWeekWithDate:(NSDate *)date {
+    NSCalendar *calender = [NSCalendar currentCalendar];
+    NSDateComponents *compareDate = [calender components:NSCalendarUnitWeekOfYear fromDate:date];
+    NSDateComponents *currentDate = [calender components:NSCalendarUnitWeekOfYear fromDate:[NSDate date]];
+    return [compareDate weekOfYear] == [currentDate weekOfYear];
 }
 
 - (BOOL)isTodayDate:(NSDate *)date {
-    return [[date stringWithFormat:@"yyyyMMdd"] isEqualToString:[[NSDate date] stringWithFormat:@"yyyyMMdd"]];
+    BOOL today = [[NSCalendar currentCalendar] isDateInToday:date];
+    return today;
 }
 
 - (NSString *)dayStringFromDate:(NSDate *)date {
     NSString *resultStr = nil;
-    if ([self isTodayDate:date])
+    if ([self isTodayDate:date]) {
         resultStr = @"Today";
-    else if ([self isCurrentWeekDate:date])
-        resultStr = [date stringWithFormat:@"eeee"];
-    else
-        resultStr = [date stringWithFormat:@"MMMM dd"];
+    } else if ([self isCurrentWeekWithDate:date]) {
+        [self.dateFormatter setDateFormat:@"eeee"];
+        resultStr = [self.dateFormatter stringFromDate:date];
+    } else {
+        [self.dateFormatter setDateFormat:@"MMMM dd"];
+        resultStr = [self.dateFormatter stringFromDate:date];
+    }
     
     return resultStr;
 }

@@ -172,7 +172,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         return @{};
     }
 
-    NSString *query = [NSString stringWithFormat: @"SELECT * FROM Messages ORDER BY Id ASC"];
+    NSString *query = [NSString stringWithFormat: @"SELECT * FROM Messages ORDER BY Date ASC"];
     FMResultSet *rs = [db executeQuery:query];
     
     NSMutableDictionary *messagesDict = [NSMutableDictionary dictionary];
@@ -180,7 +180,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
         NSDictionary *dict = [rs resultDictionary];
         DMMessage *message = [[DMMessage alloc] initWithDictionary:dict];
         
-        [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [self.dateFormatter setDateStyle:NSDateFormatterFullStyle];
         NSString *dateString = [self.dateFormatter stringFromDate:message.dateSent];
         if (messagesDict[dateString]) {
             NSMutableArray *messages = messagesDict[dateString];
