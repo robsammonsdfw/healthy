@@ -168,19 +168,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self.tableView.bottomAnchor constraintEqualToAnchor:self.logDaySummary.topAnchor constant:0].active = YES;
 }
 
-- (IBAction)swipe_Action:(UISwipeGestureRecognizer *)sender {
-    switch (sender.direction) {
-        case UISwipeGestureRecognizerDirectionLeft:
-            [self shownextDate:nil];
-            break;
-        case UISwipeGestureRecognizerDirectionRight:
-            [self showprevDate:nil];
-            break;
-        default:
-            break;
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -437,6 +424,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
+#pragma mark - Date
+
 - (IBAction)shownextDate:(id)sender {
     NSDateComponents *components = [[NSDateComponents alloc] init];
     NSCalendar *cal = [NSCalendar currentCalendar];
@@ -464,6 +453,39 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self updateData:date_Tomorrow];
 }
 
+- (IBAction)showprevDate:(id)sender {
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    [components setDay:-1];
+    NSDate *date_Yesterday = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
+    self.date_currentDate = date_Yesterday;
+    
+    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
+    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
+        DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+        if (currentUser.enableAppleHealthSync){
+            [self readData];
+        }
+    }
+    
+    [self updateData:date_Yesterday];
+}
+
+- (IBAction)swipe_Action:(UISwipeGestureRecognizer *)sender {
+    switch (sender.direction) {
+        case UISwipeGestureRecognizerDirectionLeft:
+            [self shownextDate:nil];
+            break;
+        case UISwipeGestureRecognizerDirectionRight:
+            [self showprevDate:nil];
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark Saving and Logging
+
 /// Shows the food list or exercise list to user, so they can select
 /// a food or exercise for that time of day selected.
 - (IBAction)logFoodOrExercise:(id)sender {
@@ -488,26 +510,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         [self.navigationController pushViewController:exercisesViewController animated:YES];
     }
 }
-
-- (IBAction)showprevDate:(id)sender {
-    NSDateComponents *components = [[NSDateComponents alloc] init];
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    [components setDay:-1];
-    NSDate *date_Yesterday = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
-    self.date_currentDate = date_Yesterday;
-    
-    HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
-        DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-        if (currentUser.enableAppleHealthSync){
-            [self readData];
-        }
-    }
-    
-    [self updateData:date_Yesterday];
-}
-
-#pragma mark SAVE FAVORITE MEAL METHODS
 
 - (IBAction)saveFavoriteMeal:(id)sender {
     NSInteger section = [sender tag];
@@ -555,18 +557,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 - (void)updateCalorieTotal {
     DayDataProvider* dayProvider = [DayDataProvider sharedInstance];
-    double caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:self.date_currentDate].doubleValue;
-
-    /// What we've consumed.
-    NSString *remainingCalories = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
-    NSString *carbGramsActual = [NSString stringWithFormat:@"%.1fg", round(self.actualCarbCalories / 4)];
-    NSString *fatGramsActual = [NSString stringWithFormat:@"%.1fg", round(self.actualFatCalories / 9)];
-    NSString *proteinGramsActual = [NSString stringWithFormat:@"%.1fg", round(self.actualProteinCalories / 4)];
-
-    [self.logDaySummary setRemainingLabelsWithCalorie:remainingCalories
-                                                carbs:carbGramsActual
-                                              protein:proteinGramsActual
-                                                  fat:fatGramsActual];
 
     // What's recommended.
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
@@ -583,6 +573,19 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                                                   carbs:carbGramsRecString
                                                 protein:proteinGramsRecString
                                                     fat:fatGramsRecString];
+    
+    double caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:self.date_currentDate].doubleValue;
+
+    /// What we've consumed.
+    NSString *remainingCalories = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
+    NSString *carbGramsActual = [NSString stringWithFormat:@"%.1fg", round(carbGramsRecommended - (self.actualCarbCalories / 4))];
+    NSString *fatGramsActual = [NSString stringWithFormat:@"%.1fg", round(fatGramsRecommended - (self.actualFatCalories / 9))];
+    NSString *proteinGramsActual = [NSString stringWithFormat:@"%.1fg", round(proteinGramsRecommended - (self.actualProteinCalories / 4))];
+
+    [self.logDaySummary setRemainingLabelsWithCalorie:remainingCalories
+                                                carbs:carbGramsActual
+                                              protein:proteinGramsActual
+                                                  fat:fatGramsActual];
 }
 
 - (void)loadExerciseData:(NSDate *)date {
