@@ -35,6 +35,13 @@ typedef void(^completionBlockWithNameAndError)(NSString *name, NSError *error);
 /// Block for calling an action.
 typedef void(^actionBlock)(void);
 
+/// Notification that will trigger a UI refresh.
+static NSString *DMReloadDataNotification = @"DMReloadDataNotification";
+
+/// Notifications that when fired off, will trigger an up or down sync.
+static NSString *DMTriggerUpSyncNotification = @"DMTriggerUpSyncNotification";
+static NSString *DMTriggerDownSyncNotification = @"DMTriggerDownSyncNotification";
+
 /// Different task modes that help shape the UI layouts
 /// or functionality.
 typedef NS_ENUM(NSUInteger, DMTaskMode) {

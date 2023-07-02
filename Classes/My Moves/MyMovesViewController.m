@@ -31,7 +31,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 
 @interface MyMovesViewController ()<FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance, UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) MyMovesDataProvider *soapWebService;
+@property (nonatomic, strong) MyMovesDataProvider *dataProvider;
 
 /// Table view that shows the moves.
 @property (nonatomic, strong) UITableView *tableView;
@@ -93,7 +93,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
         _dateFormatter.dateFormat = @"yyyy/MM/dd";
         _healthStore = [[HKHealthStore alloc] init];
         _sd = [[StepData alloc]init];
-        _soapWebService = [[MyMovesDataProvider alloc] init];
+        _dataProvider = [[MyMovesDataProvider alloc] init];
         
         _allUserPlanDays = [NSMutableArray array];
         _selectedUserPlanDays = [NSMutableArray array];
@@ -260,7 +260,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     NSDate *dateNow = [NSDate date];
     // Load default data.
     self.calendarView.today = dateNow;
-    [self.allUserPlanDays addObjectsFromArray:[self.soapWebService getUserPlanDays]];
+    [self.allUserPlanDays addObjectsFromArray:[self.dataProvider getUserPlanDays]];
     [self.calendarView reloadData];
     [self loadMovePlanForDate:dateNow];
 }
@@ -268,9 +268,9 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.soapWebService fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
+    [self.dataProvider fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
         // Load local data.
-        [self.allUserPlanDays addObjectsFromArray:[self.soapWebService getUserPlanDays]];
+        [self.allUserPlanDays addObjectsFromArray:[self.dataProvider getUserPlanDays]];
         [self loadMovePlanForDate:self.selectedDate];
     }];
 
@@ -430,7 +430,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     self.selectedDate = date;
     [self.selectedUserPlanDays removeAllObjects];
     if (date) {
-        NSArray *planData = [self.soapWebService getUserPlanDaysForDate:date];
+        NSArray *planData = [self.dataProvider getUserPlanDaysForDate:date];
         if (planData.count) {
             [self.selectedUserPlanDays addObjectsFromArray:planData];
         }
@@ -517,7 +517,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     }
     
     DMMoveDay *day = self.selectedUserPlanDays[section];
-    DMMovePlan *plan = [self.soapWebService getUserMovePlanForPlanId:day.planId];
+    DMMovePlan *plan = [self.dataProvider getUserMovePlanForPlanId:day.planId];
     if (!plan) {
         return nil;
     }
@@ -602,23 +602,16 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 - (IBAction)addNewMove:(UIButton *)sender {
     MyMovesListViewController *moveListVc = [[MyMovesListViewController alloc] init];
     moveListVc.selectedDate = self.selectedDate;
-    NSArray *planData = [self.soapWebService getUserPlanDaysForDate:self.selectedDate];
-    if (!planData.count) {
-        // Add a date to the plan.
-        NSArray *movePlans = [self.soapWebService getUserMovePlans];
-        if (!movePlans.count) {
-            [DMGUtilities showAlertWithTitle:@"Error" message:@"There are no available plans to add a Move to." inViewController:nil];
-            return; // No plans to add to!
-        }
-        DMMovePlan *plan = movePlans.firstObject;
-        NSNumber *newDayId = [self.soapWebService addMoveDayToDate:self.selectedDate toMovePlan:plan];
-        DMMoveDay *moveDay = [self.soapWebService getUserPlanDayForDayId:newDayId];
+    DMMoveDay *moveDay = [self.dataProvider getCustomUserPlanDayForDate:self.selectedDate];
+    if (!moveDay) {
+        DMMovePlan *customPlan = [self.dataProvider getUserCustomMovePlan];
+        NSNumber *newDayId = [self.dataProvider addMoveDayToDate:self.selectedDate
+                                                      toMovePlan:customPlan];
+        moveDay = [self.dataProvider getUserPlanDayForDayId:newDayId];
         moveListVc.moveDay = moveDay;
         [self loadMovePlanForDate:self.selectedDate];
-    } else {
-        NSUInteger section = [sender tag];
-        moveListVc.moveDay = planData[section];
     }
+    moveListVc.moveDay = moveDay;
     [self.calendarView reloadData];
     [self.tableView reloadData];
     [self.navigationController pushViewController:moveListVc animated:YES];
@@ -643,24 +636,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     }
 
     // Save to the database.
-    [self.soapWebService setMoveCompleted:routine.isCompleted forRoutine:routine];
-}
-
-#pragma mark - WSGetUserWorkoutPlansDelegate
-
-// TODO: Make sure this is connected.
-- (void)getUserWorkoutPlansFailed:(NSError *)error {
-    [DMActivityIndicator hideActivityIndicator];
-}
-
-// TODO: Make sure this is connected.
-- (void)getUserWorkoutPlansFinished:(NSDictionary *)responseArray {
-    [DMActivityIndicator hideActivityIndicator];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.allUserPlanDays addObjectsFromArray:[self.soapWebService getUserPlanDays]];
-        [self loadMovePlanForDate:self.selectedDate];
-    });
+    [self.dataProvider setMoveCompleted:routine.isCompleted forRoutine:routine];
 }
 
 - (void)expandButtonAction:(id)sender {

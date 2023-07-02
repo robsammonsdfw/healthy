@@ -32,6 +32,12 @@
 
 /// Gets all of the move plans for the current user.
 - (NSArray<DMMovePlan *> *)getUserMovePlans;
+/// Returns the "custom" move plan for a user when they wish to add a move.
+/// No "move" should be added to a perscribed plan.
+/// If one doesn't exist, it will be created, saved to DB and returned.
+- (DMMovePlan *)getUserCustomMovePlan;
+/// Saves the user plan object provided. Overwrites existing data.
+- (void)saveUserCustomMovePlan:(DMMovePlan *)movePlan;
 /// Gets the plan for the given planId.
 - (DMMovePlan *)getUserMovePlanForPlanId:(NSNumber *)planId;
 /// Gets the move days for the given move plan.
@@ -42,6 +48,8 @@
 - (DMMoveDay *)getUserPlanDayForDayId:(NSNumber *)dayId;
 /// Returns the array of move plans for the given date. Empty if none found.
 - (NSArray<DMMoveDay *> *)getUserPlanDaysForDate:(NSDate *)date;
+/// Gets the day for the custom user plan. Nil if no day added.
+- (DMMoveDay *)getCustomUserPlanDayForDate:(NSDate *)date;
 /// Gets all of the move routines for a given dayID.
 - (NSArray<DMMoveRoutine *> *)getUserPlanRoutinesForDayID:(NSNumber *)dayId;
 /// Gets the move routine for the given routine Id.

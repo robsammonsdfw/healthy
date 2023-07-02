@@ -45,6 +45,7 @@
     NSString *authHash = currentUser.authToken;
     
     // TODO: Uncomment when server can receive data.
+    // NOTE: Any ID with a negative value is something the user added.
 //        NSArray *userPlanListUpdates = [self getUserPlanListUpdates];
 //        NSArray *userPlanDateListUpdates = [self getUserPlanDateListUpdates];
 //        NSArray *userPlanMoveListUpdates = [self getUserPlanMoveListUpdates];
@@ -118,6 +119,8 @@
 #pragma mark - Local Database
 
 /// Gets all rows that were New, Deleted, or Updated.
+/// NOTE: This includes custom plans, so once server sync is created, will
+/// need to adjust. The default key for Custom plans is -100.
 - (NSArray<NSDictionary *> *)getUserPlanListUpdates {
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
@@ -142,6 +145,8 @@
 }
 
 /// Gets all rows that were New, Deleted, or Updated.
+/// NOTE: This includes custom plans, so once server sync is added, need to adjust
+/// because custom user values have a negative row key.
 - (NSArray<NSDictionary *> *)getUserPlanDateListUpdates {
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
@@ -165,6 +170,8 @@
 }
 
 /// Gets all rows that were New, Deleted, or Updated.
+/// NOTE: This includes custom plans, so once server sync is added, need to adjust
+/// because custom user values have a negative row key.
 - (NSArray<NSDictionary *> *)getUserPlanMoveListUpdates {
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     FMDatabase* db = [DMDatabaseUtilities database];
@@ -188,6 +195,8 @@
 }
 
 /// Gets all rows that were New, Deleted, or Updated.
+/// NOTE: This includes custom plans, so once server sync is added, need to adjust
+/// because custom user values have a negative row key.
 - (NSArray<NSDictionary *> *)getUserPlanMoveSetListUpdates {
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
@@ -212,6 +221,7 @@
     return [arr copy];
 }
 
+/// This also clears custom user data.
 - (void)clearTableData {
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
@@ -541,11 +551,61 @@
     return [results copy];
 }
 
+- (DMMovePlan *)getUserCustomMovePlan {
+    FMDatabase* db = [DMDatabaseUtilities database];
+    if (![db open]) {
+        return nil;
+    }
+
+    // Get the single user plan for their custom routines.
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanList WHERE PlanID = -100 LIMIT 1"];
+    FMResultSet *rs = [db executeQuery:sql];
+
+    DMMovePlan *result = nil;
+    while ([rs next]) {
+        NSDictionary *dict = [rs resultDictionary];
+        result = [[DMMovePlan alloc] initWithDictionary:dict];
+        
+        // Now fetch the composed object.
+        NSArray *moveDays = [self getUserPlanDaysForPlanId:result.planId];
+        [result setMovePlanDays:moveDays];
+    }
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    
+    // If we have no results, create a new plan.
+    if (!result) {
+        result = [DMMovePlan customUserPlan];
+        [self saveUserCustomMovePlan:result];
+    }
+    
+    return result;
+}
+
+- (void)saveUserCustomMovePlan:(DMMovePlan *)movePlan {
+    if (!movePlan) {
+        return;
+    }
+    FMDatabase* db = [DMDatabaseUtilities database];
+    if (![db open]) {
+    }
+        
+    [db beginTransaction];
+    FMResultSet *rs = [db executeQuery:[movePlan replaceIntoSQLString]];
+    [db commit];
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+}
+
 - (DMMovePlan *)getUserMovePlanForPlanId:(NSNumber *)planId {
     if (!planId) {
         return nil;
     }
-FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
+    
+    FMDatabase* db = [DMDatabaseUtilities database];
+    if (![db open]) {
     }
         
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanList WHERE "
@@ -620,7 +680,19 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     return object;
 }
 
+- (DMMoveDay *)getCustomUserPlanDayForDate:(NSDate *)date {
+    DMMovePlan *userCustomPlan = [self getUserCustomMovePlan];
+    NSArray *plans = [self getUserPlanDaysForDate:date forPlanId:userCustomPlan.planId];
+    return plans.firstObject;
+}
+
 - (NSArray<DMMoveDay *> *)getUserPlanDaysForDate:(NSDate *)date {
+    return [self getUserPlanDaysForDate:date forPlanId:nil];
+}
+
+/// Returns user plan days for the provided day and optional planId. If planId is nil,
+/// will return all.
+- (NSArray<DMMoveDay *> *)getUserPlanDaysForDate:(NSDate *)date forPlanId:(NSNumber *)planId {
     if (!date) {
         return @[];
     }
@@ -636,6 +708,9 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
 
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanDateList WHERE "
                                                 "PlanDate LIKE '%%%@T%%' AND Status != 'Deleted'", dateSelected];
+    if (planId) {
+        sql = [sql stringByAppendingFormat:@" AND PlanID = %@", planId];
+    }
     FMResultSet *rs = [db executeQuery:sql];
 
     NSMutableArray *results = [NSMutableArray array];

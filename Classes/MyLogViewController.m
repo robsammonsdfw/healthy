@@ -76,7 +76,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         _sectionTitleArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3", @"Exercise"];
         _healthStore = [[HKHealthStore alloc] init];
         _stepData = [[StepData alloc] init];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:DMReloadDataNotification object:nil];
     }
     return self;
 }

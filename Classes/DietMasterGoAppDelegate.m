@@ -61,6 +61,10 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoginStateDidChangeNotification:) name:UserLoginStateDidChangeNotification object:nil];
 
+    // Sync notification observers.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performUpSync) name:DMTriggerUpSyncNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performDownSync) name:DMTriggerDownSyncNotification object:nil];
+
     // Print out the location of the database
     DMLog(@"Database path: %@", [[DMDatabaseUtilities database] databasePath]);
 
@@ -89,9 +93,7 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [DMMyLogDataProvider uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-        DM_LOG(@"ResignActiveSync: %@, %@", completed ? @"Success":@"Fail", error);
-    }];
+    [self performUpSync];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -99,9 +101,7 @@
     
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
     if ([authManager isUserLoggedIn]) {
-        [DMMyLogDataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-            DM_LOG(@"BecomeActiveFetch: %@, %@", completed ? @"Success":@"Fail", error);
-        }];
+        [self performDownSync];
     }
 }
 
@@ -127,7 +127,7 @@
         [authManager migrateUserIfNeeded];
         [self showLoginIfNeeded];
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
     }
 }
 
@@ -152,6 +152,32 @@
                 [rootController popToRootViewControllerAnimated:YES];
             }];
         }];
+    }
+}
+
+#pragma mark - Syncs
+
+- (void)performUpSync {
+    if ([NSThread isMainThread]) {
+        [DMMyLogDataProvider uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+            DM_LOG(@"performUpSync: %@, %@", completed ? @"Success":@"Fail", error);
+        }];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performUpSync];
+        });
+    }
+}
+
+- (void)performDownSync {
+    if ([NSThread isMainThread]) {
+        [DMMyLogDataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
+            DM_LOG(@"performDownSync: %@, %@", completed ? @"Success":@"Fail", error);
+        }];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performDownSync];
+        });
     }
 }
 

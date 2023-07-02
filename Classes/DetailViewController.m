@@ -305,7 +305,9 @@
             [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
-                [self saveToLog:nil];
+                [self selectMealDateWithCompletionBlock:^(BOOL completed) {
+                    [self saveToLog:nil];
+                }];
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
                                                       style:UIAlertActionStyleDefault
@@ -397,14 +399,14 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(void)confirmDeleteFromLog {
+- (void)confirmDeleteFromLog {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove from Log?"
                                                                    message:@"Are you sure you wish to remove this from the log?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Remove"
                                               style:UIAlertActionStyleDestructive
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self delLog:nil];
+        [self deleteFromRemoteServer];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Don't Remove" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         [alert dismissViewControllerAnimated:YES completion:nil];
@@ -413,7 +415,7 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(void)confirmDeleteFromFavorite {
+- (void)confirmDeleteFromFavorite {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Remove from Favorites?"
                                                                    message:@"Are you sure you wish to remove this?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -431,6 +433,19 @@
 
 -(void)cleanUpView {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+/// Lets the user choose a date prior to completion block action.
+- (void)selectMealDateWithCompletionBlock:(completionBlock)completionBlock {
+    DMDatePickerViewController *dateController = [[DMDatePickerViewController alloc] init];
+    __weak typeof(self) weakSelf = self;
+    dateController.didSelectDateCallback = ^(NSDate *date) {
+        self.selectedDate = date;
+        if (completionBlock) {
+            completionBlock(YES);
+        }
+    };
+    [dateController presentPickerIn:self];
 }
 
 #pragma mark MEAL PLAN METHODS
@@ -510,7 +525,7 @@
             return;
         }
         [DMActivityIndicator showCompletedIndicator];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
         [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
     }];
 }
@@ -683,8 +698,6 @@
     if (![db open]) {
         return;
     }
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-
     int num_measureID = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
     NSDecimalNumber *servingSize1 = [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
     NSDecimalNumber *servingSize2;
@@ -697,27 +710,27 @@
     
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
-
+    
     if (self.taskMode == DMTaskModeAdd) {
         
         int foodID = [self.food.foodKey intValue];
-
+        
         [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+        [self.dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         NSString *date_string = [self.dateFormatter stringFromDate:self.selectedDate];
-
+        
         [db beginTransaction];
         NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%@, DATETIME('%@'))", logMealID, date_string];
         [db executeUpdate:insertSQL];
-                
+        
         NSString *strChkRecord = [NSString stringWithFormat:@"SELECT count(*) FROM Food_Log_Items where FoodID = '%d' AND MealCode = '%d'AND MealID = '%@'",foodID, (int)self.mealCode, logMealID];
         FMResultSet *objChk = [db executeQuery:strChkRecord];
         while ([objChk next]) {
             if ([objChk intForColumn:@"count(*)"] > 0) {
             } else {
                 NSDate* sourceDate = [NSDate date];
-                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                NSString *date_string1 = [dateFormat stringFromDate:sourceDate];
+                [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSString *date_string1 = [self.dateFormatter stringFromDate:sourceDate];
                 
                 insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
                              "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
@@ -731,16 +744,13 @@
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
-        [DMActivityIndicator showCompletedIndicator];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
-
+        
     } else if (self.taskMode == DMTaskModeEdit) {
         
         [db beginTransaction];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        NSString *date_string = [dateFormat stringFromDate:[NSDate date]];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        NSString *date_string = [self.dateFormatter stringFromDate:[NSDate date]];
         
         int foodID = [self.food.foodKey intValue];
         
@@ -750,38 +760,12 @@
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
-        
-        [DMActivityIndicator showCompletedIndicator];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
-    }
-}
-
-- (IBAction)delLog:(id)sender {
-    [self deleteFromWSLog];
-}
-
-- (void)deleteFromLog {
-    FMDatabase* db = [DMDatabaseUtilities database];
-    if (![db open]) {
     }
     
-    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-    NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
-
-    [db beginTransaction];
-    int foodID = [self.food.foodKey intValue];
-    NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealID = %@ AND MealCode = %i", foodID, logMealID, self.mealCode];
-    [db executeUpdate:updateSQL];
-    if ([db hadError]) {
-        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-    }
-    [db commit];
-    
-    [DMActivityIndicator hideActivityIndicator];
     [DMActivityIndicator showCompletedIndicator];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMTriggerUpSyncNotification object:nil];
+    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 }
 
 - (void)deleteFromFavorites {
@@ -813,7 +797,7 @@
             return;
         }
         [DMActivityIndicator showCompletedIndicator];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
     }];
 }
 
@@ -858,30 +842,45 @@
     [db commit];
     
     self.countIsFavorite = 1;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
     [DMActivityIndicator showCompletedIndicator];
 }
 
-- (void)deleteFromWSLog {
+- (void)deleteFromLocalDatabase {
+    FMDatabase* db = [DMDatabaseUtilities database];
+    if (![db open]) {
+    }
+    
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
+
+    [db beginTransaction];
+    int foodID = [self.food.foodKey intValue];
+    NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealID = %@ AND MealCode = %i", foodID, logMealID, (int)self.mealCode];
+    [db executeUpdate:updateSQL];
+    if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    }
+    [db commit];
+    
+    [DMActivityIndicator hideActivityIndicator];
+    [DMActivityIndicator showCompletedIndicator];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)deleteFromRemoteServer {
     [DMActivityIndicator showActivityIndicator];
     
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
-    
-    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                @"DeleteMealItem", @"RequestType",
-                                logMealID, @"MealID",
-                                @(self.mealCode), @"MealCode",
-                                self.food.foodKey, @"FoodID",
-                                nil];
-    
-    [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
+    [provider deleteFoodFromLogWithID:self.food.foodKey logMealId:logMealID mealCode:self.mealCode completionBlock:^(BOOL completed, NSError *error) {
         if (error) {
             [DMActivityIndicator hideActivityIndicator];
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
             return;
         }
-        [self deleteFromLog];
+        [self deleteFromLocalDatabase];
     }];
 }
 

@@ -197,7 +197,7 @@
 
 - (void)syncDatabaseFinished {
     [DMGUtilities setLastSyncToDate:[NSDate date]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
 }
 
 #pragma mark - Foods
@@ -1408,6 +1408,26 @@
     }
     
     return @(minIDvalue);
+}
+
+- (void)deleteFoodFromLogWithID:(NSNumber *)foodKey
+                      logMealId:(NSNumber *)logMealId
+                       mealCode:(DMLogMealCode)mealCode
+                completionBlock:(completionBlockWithError)completionBlock {
+    NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                @"DeleteMealItem", @"RequestType",
+                                logMealId, @"MealID",
+                                @(mealCode), @"MealCode",
+                                foodKey, @"FoodID",
+                                nil];
+
+    [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(error == nil, error);
+            }
+        });
+    }];
 }
 
 #pragma mark - Foods

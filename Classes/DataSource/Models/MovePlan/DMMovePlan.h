@@ -26,7 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// -setMovePlanDays: and passing data.
 @property (nonatomic, strong, readonly) NSArray<DMMoveDay *> *moveDays;
 
+/// Returns a new instance setup as a custom user plan.
++ (instancetype)customUserPlan;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
+
+/// If this plan is a user's custom plan, where they added exercises to.
+- (BOOL)isCustomUserPlan;
 
 /// Returns the object as a dictionary with the keys that match database and webservice fields.
 - (NSDictionary *)dictionaryRepresentation;

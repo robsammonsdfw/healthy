@@ -571,12 +571,12 @@
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     [provider saveExerciseLogsWithCompletionBlock:nil];
     [DMActivityIndicator showCompletedIndicator];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMTriggerUpSyncNotification object:nil];
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 }
 
 - (IBAction)delLog:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
@@ -595,7 +595,7 @@
     [db commit];
     
     [DMActivityIndicator showCompletedIndicator];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

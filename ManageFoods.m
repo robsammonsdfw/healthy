@@ -859,7 +859,7 @@ CGPoint svos;
             [self clearEnteredData];
         }
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
     }];
 }
 

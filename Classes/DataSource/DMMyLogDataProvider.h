@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import "DMMealPlan.h"
 #import "DMConstants.h"
 @class DMMealPlanItem;
 @class DMFood;
@@ -87,6 +88,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// Returns the MealID from Food_Log_Items for the date provided. This is used
 /// for saving items to the log on a given date.
 - (NSNumber *)getLogMealIDForDate:(NSDate *)date;
+
+/// Deletes the food from the log with details provided.
+- (void)deleteFoodFromLogWithID:(NSNumber *)foodKey
+                      logMealId:(NSNumber *)logMealId
+                       mealCode:(DMLogMealCode)mealCode
+                completionBlock:(nullable completionBlockWithError)completionBlock;
 
 #pragma mark - Meals
 

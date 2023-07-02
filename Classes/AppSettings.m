@@ -51,13 +51,13 @@
 - (IBAction)useCalorieTrackingDeviceSwitched:(UISwitch *)sender {
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     currentUser.useCalorieTrackingDevice = sender.isOn;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
 }
 
 - (IBAction)useExerciseCaloriesSwitched:(UISwitch *)sender {
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     currentUser.useBurnedCalories = sender.isOn;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
 }
 
 - (IBAction)enableAppleHealthSyncSwitched:(UISwitch *)sender {
@@ -66,7 +66,7 @@
     if (currentUser.enableAppleHealthSync) {
         [self checkAppleHealth];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
 }
 
 #pragma mark - Apple Health

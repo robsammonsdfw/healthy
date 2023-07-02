@@ -21,6 +21,16 @@
 
 @implementation DMMovePlan
 
++ (instancetype)customUserPlan {
+    DMMovePlan *movePlan = [[DMMovePlan alloc] init];
+    movePlan.planId = @(-100);
+    movePlan.planName = @"My Custom Plan";
+    movePlan.uniqueId = [NSUUID UUID].UUIDString;
+    movePlan.status = @"New";
+    
+    return movePlan;
+}
+
 - (instancetype)init {
     return [self initWithDictionary:@{}];
 }
@@ -39,6 +49,11 @@
         _syncResult = ValidString(dictionary[@"SyncResult"]);
     }
     return self;
+}
+
+- (BOOL)isCustomUserPlan {
+    // Custom plan has an ID of -100.
+    return self.planId.integerValue == -100;
 }
 
 - (NSDictionary *)dictionaryRepresentation {

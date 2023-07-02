@@ -141,7 +141,7 @@
             return;
         }
         [DMActivityIndicator showCompletedIndicator];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
         [self.navigationController popViewControllerAnimated:YES];
     }];
 
