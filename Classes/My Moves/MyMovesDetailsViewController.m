@@ -413,9 +413,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         return;
     }
     NSNumber *unit1Value = @0;
-    if ([sender.text length] != 0) {
-        unit1Value = @([sender.text integerValue]);
-    }
+    unit1Value = @([sender.text integerValue]);
     NSInteger row = sender.tag;
     DMMoveSet *set = [self.routine.sets copy][row];
     [self.movesDataProvider setFirstUnitValue:unit1Value forMoveSet:set];
@@ -426,9 +424,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         return;
     }
     NSNumber *unit2Value = @0;
-    if ([sender.text length] != 0) {
-        unit2Value = @([sender.text integerValue]);
-    }
+    unit2Value = @([sender.text integerValue]);
     NSInteger row = sender.tag;
     DMMoveSet *set = [self.routine.sets copy][row];
     [self.movesDataProvider setSecondUnitValue:unit2Value forMoveSet:set];
