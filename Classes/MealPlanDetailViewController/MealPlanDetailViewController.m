@@ -52,8 +52,12 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     self.staticRecomCalLbl.textColor = PrimaryFontColor
     self.staticCalPlannedLbl.textColor = PrimaryFontColor
 
-    self.imgbar.backgroundColor= PrimaryColor
-    self.imgbarline.backgroundColor=RGB(255, 255, 255, 0.5);
+    self.imgbar.backgroundColor = PrimaryColor
+    self.imgbar.layer.cornerRadius = 25;
+    self.imgbar.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
+    self.imgbar.clipsToBounds = YES;
+
+    self.imgbarline.backgroundColor = RGB(255, 255, 255, 0.5);
   
     self.tableView.estimatedRowHeight = 70;
     self.tableView.estimatedSectionHeaderHeight = 44;

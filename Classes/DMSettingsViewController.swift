@@ -227,16 +227,16 @@ import SafariServices
     }
     
     @objc private func showCustomFoods() {
-        if let controller = FoodsSearch(mealCode: DMLogMealCode.breakfast, mealPlanItem: nil, selectedDate: nil) {
+        if let controller = FoodsSearch(mealCode: DMLogMealCode.breakfast, mealPlan: nil, mealPlanItem: nil, selectedDate: nil) {
             controller.taskMode = DMTaskMode.view
-            controller.searchType = .allFoods
+            controller.searchType = DMFoodSearchType.allFoods
             controller.title = "My Foods"
             navigationController?.pushViewController(controller, animated: true)
         }
     }
     
     @objc private func showAddCustomFood() {
-        if let controller = ManageFoods(food: nil, mealCode: DMLogMealCode.breakfast, selectedDate: nil) {
+        if let controller = ManageFoods(food: nil, mealCode: DMLogMealCode.breakfast, mealPlan: nil, selectedDate: nil) {
             navigationController?.pushViewController(controller, animated: true)
         }
     }

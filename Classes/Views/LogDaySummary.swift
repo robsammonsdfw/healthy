@@ -50,21 +50,25 @@ class LogDaySummary : UIView {
     private func setup() {
         backgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
         self.addSubview(lineView)
-
+        self.layer.cornerRadius = 25
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.clipsToBounds = true
+        
         guard let recommendedView = recommendedView.getComposedStackView(),
                 let remainingView = remainingView.getComposedStackView() else { return }
         self.addSubview(recommendedView)
         self.addSubview(remainingView)
         
+        let layoutGuide = self.safeAreaLayoutGuide
         recommendedView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
         recommendedView.trailingAnchor.constraint(equalTo: lineView.leadingAnchor, constant: 0).isActive = true
         recommendedView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        recommendedView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 12).isActive = true
+        recommendedView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor, constant: 12).isActive = true
         
         remainingView.leadingAnchor.constraint(equalTo: lineView.trailingAnchor, constant: 0).isActive = true
         remainingView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
         remainingView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        remainingView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 12).isActive = true
+        remainingView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor, constant: 12).isActive = true
         
         setRecommendedLabels(calorie: "0g", carbs: "0g", protein: "0g", fat: "0g")
         setRemainingLabels(calorie: "0g", carbs: "0g", protein: "0g", fat: "0g")

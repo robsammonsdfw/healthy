@@ -201,11 +201,6 @@
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     while ([rs next]) {
          NSDictionary *dict = [rs resultDictionary];
-        
-        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-        NSDate *currentDate = [NSDate date];
-        NSString *lastUpdated = [formatter stringFromDate:currentDate];
-
         [arr addObject:dict];
     }
      
@@ -723,7 +718,7 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     }
 
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanMoveSetList WHERE "
-                                                "UserPlanMoveID = '%@' AND Status != 'Deleted'", routineId];
+                                                "UserPlanMoveID = '%@' AND Status != 'Deleted' ORDER BY SetNumber ASC", routineId];
     FMResultSet *rs = [db executeQuery:sql];
     
     NSMutableArray *results = [NSMutableArray array];
@@ -940,8 +935,11 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     NSNumber *lowestSetId = [DMDatabaseUtilities getMinValueForColumn:@"SetID" inTable:@"ServerUserPlanMoveSetList"];
     if (lowestSetId) {
         lowestSetId = @(lowestSetId.integerValue - 1);
-    } else {
-        lowestSetId = @(-100);
+    }
+    // Since this is user-added, we need to flip the database to be negative values.
+    // This way once we build a sync to the server, we can grab those values easily.
+    if (lowestSetId.integerValue >= 0) {
+        lowestSetId = @(-100); // Starting value.
     }
     [db beginTransaction];
 
@@ -956,7 +954,11 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     NSString *uniqueID = [NSUUID UUID].UUIDString;
     NSString *parentUniqueID = [NSString stringWithFormat:@"M-%@", routine.routineId];
     NSNumber *setId = moveSet.setId ?: lowestSetId;
-    
+    // Most move objects default to a zero value if nil, so do the check.
+    if (setId.integerValue == 0) {
+        setId = lowestSetId;
+    }
+
     NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanMoveSetList (SetID, UserPlanMoveID, SetNumber, Unit1ID, Unit1Value, Unit2ID, Unit2Value, LastUpdated, UniqueID, Status, SyncResult, ParentUniqueID) VALUES "
                         "('%@', '%@', '%@', \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",
                            setId, routine.routineId, setNumber, moveSet.unitOneId, moveSet.unitOneValue, moveSet.unitTwoId, moveSet.unitTwoValue, lastUpdated, uniqueID, status, syncResult, parentUniqueID];
@@ -1079,8 +1081,11 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     NSNumber *lowestId = [DMDatabaseUtilities getMinValueForColumn:@"UserPlanDateID" inTable:@"ServerUserPlanDateList"];
     if (lowestId) {
         lowestId = @(lowestId.integerValue - 1);
-    } else {
-        lowestId = @(-100);
+    }
+    // Since this is user-added, we need to flip the database to be negative values.
+    // This way once we build a sync to the server, we can grab those values easily.
+    if (lowestId.integerValue >= 0) {
+        lowestId = @(-100); // Starting value.
     }
     [db beginTransaction];
     
@@ -1184,8 +1189,11 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     NSNumber *lowestID = [DMDatabaseUtilities getMinValueForColumn:@"UserPlanMoveID" inTable:@"ServerUserPlanMoveList"];
     if (lowestID) {
         lowestID = @(lowestID.integerValue - 1);
-    } else {
-        lowestID = @(-100);
+    }
+    // Since this is user-added, we need to flip the database to be negative values.
+    // This way once we build a sync to the server, we can grab those values easily.
+    if (lowestID.integerValue >= 0) {
+        lowestID = @(-100); // Starting value.
     }
     [db beginTransaction];
 
@@ -1195,7 +1203,11 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     NSString *status = @"New";
     NSString *syncResult = @"";
     NSString *parentUniqueID = [NSString stringWithFormat:@"M-%@", moveDay.dayId];
-    NSNumber *routineId = moveRoutine.routineId ?: lowestID;
+    NSNumber *routineId = moveRoutine.routineId;
+    // Most move objects default to a zero value if nil, so do the check.
+    if (routineId.integerValue == 0) {
+        routineId = lowestID;
+    }
     NSString *uniqueId = [NSString stringWithFormat:@"M-%@", routineId];
 
     NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanMoveList (UserPlanMoveID, UserPlanDateID, MoveID, "

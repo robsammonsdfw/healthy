@@ -102,7 +102,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
 
-    self.view.backgroundColor = PrimaryColor;
+    self.view.backgroundColor = [UIColor whiteColor];
     
     if (!self.date_currentDate) {
         NSDate *sourceDate = [NSDate date];
@@ -159,7 +159,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     [self.logDaySummary.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
     [self.logDaySummary.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
-    [self.logDaySummary.bottomAnchor constraintEqualToAnchor:layoutGuide.bottomAnchor constant:0].active = YES;
+    [self.logDaySummary.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
     
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;

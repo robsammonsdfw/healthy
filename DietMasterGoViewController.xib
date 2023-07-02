@@ -98,16 +98,16 @@
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j28-Ra-7Z7">
                     <rect key="frame" x="0.0" y="0.0" width="394" height="1209"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o2S-Cz-V5j">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o2S-Cz-V5j" userLabel="ContentView">
                             <rect key="frame" x="0.0" y="0.0" width="394" height="1155"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3EO-gt-3aP">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3EO-gt-3aP" userLabel="HeaderView">
                                     <rect key="frame" x="0.0" y="0.0" width="394" height="120"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="3SU-VW-wCa">
                                             <rect key="frame" x="20" y="85" width="70" height="30"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EcA-7T-kjD">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EcA-7T-kjD" userLabel="ChatButton">
                                                     <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="F0D-dB-joe"/>
@@ -118,7 +118,7 @@
                                                         <action selector="sendMessageBtn:" destination="-1" eventType="touchUpInside" id="len-RH-5vu"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fg2-Z9-npJ">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fg2-Z9-npJ" userLabel="EmailButton">
                                                     <rect key="frame" x="40" y="0.0" width="30" height="30"/>
                                                     <state key="normal" image="Icon material-email"/>
                                                     <connections>
@@ -138,7 +138,7 @@
                                         <constraint firstItem="3SU-VW-wCa" firstAttribute="leading" secondItem="3EO-gt-3aP" secondAttribute="leading" constant="20" id="td2-h5-1AH"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rr2-bB-DXJ">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rr2-bB-DXJ" userLabel="HomeView">
                                     <rect key="frame" x="162" y="85" width="70" height="70"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon awesome-home" translatesAutoresizingMaskIntoConstraints="NO" id="E0C-x3-68S">
@@ -158,15 +158,15 @@
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hi, Chelsea!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sA8-3e-OeF">
-                                    <rect key="frame" x="247" y="88.666666666666742" width="147" height="20.333333333333371"/>
+                                    <rect key="frame" x="247" y="88.666666666666671" width="147" height="20.333333333333329"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v6o-MC-VKJ">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v6o-MC-VKJ" userLabel="MainView">
                                     <rect key="frame" x="0.0" y="155" width="394" height="1000"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2sA-p4-abh">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2sA-p4-abh" userLabel="SummaryView">
                                             <rect key="frame" x="20" y="10" width="167" height="274"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y2H-gX-Baq">
@@ -318,7 +318,7 @@
                                                 <constraint firstItem="Y2H-gX-Baq" firstAttribute="leading" secondItem="2sA-p4-abh" secondAttribute="leading" constant="1" id="zzd-Oj-WzS"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n8Z-Gu-Rgw">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n8Z-Gu-Rgw" userLabel="MacrosView">
                                             <rect key="frame" x="207" y="10" width="167" height="274"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jly-q4-ty4">
@@ -611,7 +611,7 @@
                                                 <constraint firstItem="jly-q4-ty4" firstAttribute="top" secondItem="n8Z-Gu-Rgw" secondAttribute="top" constant="1" id="wch-Ya-ld6"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5E9-7R-Ub9">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5E9-7R-Ub9" userLabel="MyLogView">
                                             <rect key="frame" x="20" y="304" width="167" height="115"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9yL-bO-qZW">
@@ -674,7 +674,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="9yL-bO-qZW" secondAttribute="bottom" constant="1" id="ULL-w2-c6q"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WY9-6K-Fan">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WY9-6K-Fan" userLabel="SugarView">
                                             <rect key="frame" x="207" y="304" width="167" height="115"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xI9-2U-joG">
@@ -723,7 +723,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="xI9-2U-joG" secondAttribute="bottom" constant="1" id="U5a-sg-6CV"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f7L-Pj-mMS">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f7L-Pj-mMS" userLabel="MyMealsView">
                                             <rect key="frame" x="20" y="439" width="167.66666666666666" height="115"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9es-n3-p1f">
@@ -790,7 +790,7 @@
                                                 <constraint firstAttribute="height" constant="115" id="dw2-uS-y8Y"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OdR-jM-yG3">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OdR-jM-yG3" userLabel="WeightView">
                                             <rect key="frame" x="206.66666666666663" y="439" width="167.33333333333337" height="250"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WfK-F9-mJu">
@@ -960,7 +960,7 @@
                                                 <constraint firstAttribute="height" constant="250" id="yKu-mk-2m5"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cPr-RX-d47">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cPr-RX-d47" userLabel="StepsView">
                                             <rect key="frame" x="20" y="574" width="167" height="115"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KH0-UD-RrJ">
@@ -1009,7 +1009,7 @@
                                                 <constraint firstAttribute="height" constant="115" id="vet-9x-6VS"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pgg-h9-5QZ">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pgg-h9-5QZ" userLabel="BurnedView">
                                             <rect key="frame" x="207" y="709" width="167" height="115"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gVU-ma-4bt">
@@ -1072,7 +1072,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="gVU-ma-4bt" secondAttribute="trailing" constant="1" id="yU0-mk-72e"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pua-sc-Oml">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pua-sc-Oml" userLabel="BMIView">
                                             <rect key="frame" x="20" y="709" width="167" height="115"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YhS-iR-KqX">
@@ -1154,7 +1154,7 @@
                                                 <constraint firstItem="YhS-iR-KqX" firstAttribute="leading" secondItem="Pua-sc-Oml" secondAttribute="leading" constant="1" id="tUW-OV-i69"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NGF-0t-f2U">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NGF-0t-f2U" userLabel="MyMovesView">
                                             <rect key="frame" x="206" y="844" width="168" height="115"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CDS-zl-eUf">

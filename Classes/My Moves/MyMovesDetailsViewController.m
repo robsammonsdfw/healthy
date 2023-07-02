@@ -273,18 +273,8 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
                                                     withReuseIdentifier:MyMovesDetailFooterIdentifier
                                                            forIndexPath:indexPath];
         
-        NSInteger buttonTag = 999;
-        UIButton *button = [footer viewWithTag:buttonTag];
-        if (button) {
-            [button removeFromSuperview];
-        }
-        button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.tag = buttonTag;
-        [button addTarget:self action:@selector(addSet:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"" forState:UIControlStateNormal];
-        button.frame = footer.bounds;
-        [footer addSubview:button];
-        
+        [footer.addSetButton removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+        [footer.addSetButton addTarget:self action:@selector(addSet:) forControlEvents:UIControlEventTouchUpInside];
         return footer;
     }
 

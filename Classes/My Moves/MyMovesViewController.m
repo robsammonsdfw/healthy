@@ -172,7 +172,9 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
-    self.tableView.estimatedRowHeight = 44;
+    self.tableView.estimatedRowHeight = 48;
+    self.tableView.estimatedSectionFooterHeight = 50;
+    self.tableView.estimatedSectionHeaderHeight = 50;
     UINib *cellNib = [UINib nibWithNibName:@"MyMovesTableViewCell" bundle:nil];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:CellIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:EmptyCellIdentifier];
@@ -463,7 +465,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     
     // Hide "add moves" button.
     [cell.addMoveLbl setHidden:YES];
-
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.arrowImgV.hidden = YES; // White arrow, hide in favor of default.
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -521,17 +522,26 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
         return nil;
     }
 
-    static NSString *CellIdentifier = @"MyMovesTableViewCell";
-    NSArray *arrData = [[NSBundle mainBundle] loadNibNamed:@"MyMovesTableViewCell" owner:nil options:nil];
-    MyMovesTableViewCell *cell = [[MyMovesTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    cell = [arrData objectAtIndex:0];
-    UILabel * lbl = [[UILabel alloc]init];
-    lbl.frame = CGRectMake(cell.contentView.frame.origin.x, cell.contentView.frame.origin.y, cell.contentView.frame.size.width, cell.contentView.frame.size.height);
+    UILabel *lbl = [[UILabel alloc] init];
+    lbl.translatesAutoresizingMaskIntoConstraints = NO;
     lbl.backgroundColor = PrimaryColor;
     lbl.textAlignment = NSTextAlignmentCenter;
+    lbl.font = [UIFont systemFontOfSize:17];
     lbl.textColor = [UIColor blackColor];
     lbl.text = plan.planName;
-    return lbl;
+    
+    UIView *headerView = [[UIView alloc] init];
+    [headerView addSubview:lbl];
+    
+    // Now that we have a view, we can constrain the label to create a
+    // custom size.
+    [lbl.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:0].active = YES;
+    [lbl.trailingAnchor constraintEqualToAnchor:headerView.trailingAnchor constant:0].active = YES;
+    [lbl.topAnchor constraintEqualToAnchor:headerView.topAnchor constant:0].active = YES;
+    [lbl.bottomAnchor constraintEqualToAnchor:headerView.bottomAnchor constant:0].active = YES;
+    [lbl.heightAnchor constraintGreaterThanOrEqualToConstant:44].active = YES;
+    
+    return headerView;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
@@ -544,7 +554,8 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     cell.exerciseNameLbl.text = @"";
     cell.templateNameLbl.text = @"";
     [cell.addMoveLbl setHidden:NO];
-    cell.bgView.backgroundColor = PrimaryDarkColor;
+    cell.bgView.backgroundColor = [UIColor darkGrayColor];
+    cell.bgView.layer.cornerRadius = 8;
     cell.textLabel.textColor = [UIColor whiteColor];
     
     [cell.arrowImgV setHidden:NO];
@@ -552,7 +563,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     button.tag = section; // Set section so we know which plan we're adding to.
     [button addTarget:self action:@selector(addNewMove:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:@"" forState:UIControlStateNormal];
-    button.frame = cell.contentView.bounds;
+    button.frame = cell.bgView.frame;
     [cell.contentView addSubview:button];
     cell.userInteractionEnabled = YES;
     
@@ -568,11 +579,11 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
         return 0;
     }
 
-    return 35;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 35;
+    return UITableViewAutomaticDimension;
 }
 
 /// Returns an empty cell.

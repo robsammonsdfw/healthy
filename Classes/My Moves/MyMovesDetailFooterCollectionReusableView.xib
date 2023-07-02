@@ -17,25 +17,37 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Set" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gdz-rf-0UP">
-                            <rect key="frame" x="153" y="13.5" width="54.5" height="18"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <rect key="frame" x="152.5" y="13.5" width="55.5" height="18"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plusfinal" translatesAutoresizingMaskIntoConstraints="NO" id="29W-SG-1xf">
-                            <rect key="frame" x="131" y="14" width="17" height="17"/>
+                            <rect key="frame" x="130.5" y="14" width="17" height="17"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="17" id="g08-O4-fcV"/>
                                 <constraint firstAttribute="width" constant="17" id="hcd-Ss-Ovo"/>
                             </constraints>
                         </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ah4-Sn-cFQ" userLabel="AddSetButton">
+                            <rect key="frame" x="120.5" y="0.0" width="97.5" height="48"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="PW4-I7-bpV"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain"/>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstItem="ah4-Sn-cFQ" firstAttribute="bottom" secondItem="vAH-bH-dwN" secondAttribute="bottom" id="3tb-BO-eeQ"/>
+                        <constraint firstItem="ah4-Sn-cFQ" firstAttribute="leading" secondItem="29W-SG-1xf" secondAttribute="leading" constant="-10" id="5NB-EO-mRt"/>
                         <constraint firstItem="Gdz-rf-0UP" firstAttribute="centerY" secondItem="vAH-bH-dwN" secondAttribute="centerY" id="6OB-pA-PrW"/>
+                        <constraint firstItem="ah4-Sn-cFQ" firstAttribute="top" secondItem="vAH-bH-dwN" secondAttribute="top" id="MNp-8K-ygL"/>
                         <constraint firstItem="29W-SG-1xf" firstAttribute="centerY" secondItem="Gdz-rf-0UP" secondAttribute="centerY" id="aHL-DP-eji"/>
                         <constraint firstItem="Gdz-rf-0UP" firstAttribute="leading" secondItem="29W-SG-1xf" secondAttribute="trailing" constant="5" id="ccn-ch-TDp"/>
                         <constraint firstItem="Gdz-rf-0UP" firstAttribute="centerX" secondItem="vAH-bH-dwN" secondAttribute="centerX" constant="20" id="cgn-K0-Zhc"/>
+                        <constraint firstItem="ah4-Sn-cFQ" firstAttribute="trailing" secondItem="Gdz-rf-0UP" secondAttribute="trailing" constant="10" id="y4v-7Y-tnX"/>
                     </constraints>
                 </view>
             </subviews>
@@ -46,7 +58,10 @@
                 <constraint firstAttribute="bottom" secondItem="vAH-bH-dwN" secondAttribute="bottom" id="YYy-Vp-DUd"/>
                 <constraint firstItem="vAH-bH-dwN" firstAttribute="top" secondItem="siw-t1-dGU" secondAttribute="top" id="i46-ph-SYO"/>
             </constraints>
-            <point key="canvasLocation" x="33" y="72.5"/>
+            <connections>
+                <outlet property="addSetButton" destination="ah4-Sn-cFQ" id="9gr-26-oNv"/>
+            </connections>
+            <point key="canvasLocation" x="32" y="72.413793103448285"/>
         </collectionReusableView>
     </objects>
     <resources>
