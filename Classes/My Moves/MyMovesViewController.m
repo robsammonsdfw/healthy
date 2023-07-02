@@ -619,6 +619,8 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
         NSUInteger section = [sender tag];
         moveListVc.moveDay = planData[section];
     }
+    [self.calendarView reloadData];
+    [self.tableView reloadData];
     [self.navigationController pushViewController:moveListVc animated:YES];
 }
 
