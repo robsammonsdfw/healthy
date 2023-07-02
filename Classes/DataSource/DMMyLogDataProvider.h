@@ -6,10 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DMConstants.h"
 
-@class DMMessage;
-@class DMUser;
+#import "DMConstants.h"
+@class DMMealPlanItem;
 @class DMFood;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -35,12 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)saveFavoriteMealItem:(int)mealID withCompletionBlock:(nullable completionBlockWithError)completionBlock;
 
 /// Gets the measure ID for a food against a meal plan item.
-- (NSNumber *)getMeasureIDForFood:(NSNumber *)foodKey
-                 fromMealPlanItem:(NSDictionary *)mealPlanItemDict;
+- (NSNumber *)getMeasureIDForFoodKey:(NSNumber *)foodKey
+                    fromMealPlanItem:(DMMealPlanItem *)mealPlanItem;
 
 #pragma mark - Exercise
 
-- (void)saveExerciseLogsWithCompletionBlock:(completionBlockWithError)completionBlock;
+- (void)saveExerciseLogsWithCompletionBlock:(nullable completionBlockWithError)completionBlock;
 
 /// Performs a sync of the exercise log, with date of last sync, current page number,
 /// and fetched items if multiple pages. Pass 1 for page number and an empty array if
@@ -66,15 +65,24 @@ NS_ASSUME_NONNULL_BEGIN
         withCompletionBlock:(completionBlockWithError)completionBlock;
 /// Fetches a Food for the given key from the server.
 - (void)fetchFoodForKey:(NSNumber *)foodKey;
-/// Fetches for foods passed in the array if needed.
-/// Pass an array of dictionaries with FoodID, and MeasureID.
-- (void)getMissingFoodsIfNeededForFoods:(NSArray *)foodsArray;
+/// Gets the missing foods, if any, for the meal plan items passed.
+- (void)getMissingFoodsForMealItems:(NSArray<DMMealPlanItem *> *)itemsArray;
 /// Gets a food from the local database.
 - (DMFood *)getFoodForFoodKey:(NSNumber *)foodKey;
+
+/// Gets the measure description for MeasureID and FoodKey provided.
+- (NSString *)getMeasureDescriptionForMeasureId:(NSNumber *)measureId
+                                     forFoodKey:(NSNumber *)foodKey;
 
 #pragma mark - Weight Log
 
 - (void)saveWeightLogWithCompletionBlock:(completionBlockWithError)completionBlock;
+
+#pragma mark - Log
+
+/// Returns the MealID from Food_Log_Items for the date provided. This is used
+/// for saving items to the log on a given date.
+- (NSNumber *)getLogMealIDForDate:(NSDate *)date;
 
 #pragma mark - Meals
 

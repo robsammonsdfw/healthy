@@ -10,16 +10,10 @@
 @class DMMovePlan;
 @class DMMoveDay;
 
-@protocol MyMovesListViewDelegate <NSObject>
-- (void)userDidSelectOption:(nullable NSDictionary *)dict;
-@end
-
 NS_ASSUME_NONNULL_BEGIN
 
 /// View that displays a list of Moves (aka exercises) with a search bar and filters.
 @interface MyMovesListViewController : UIViewController
-/// Delegate for receiving selections from the controller.
-@property (nonatomic, weak) id<MyMovesListViewDelegate> delegate;
 /// The move plan that the user is viewing moves for.
 @property (nonatomic, strong) DMMovePlan *movePlan;
 

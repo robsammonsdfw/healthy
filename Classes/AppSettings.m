@@ -45,14 +45,6 @@
     [super viewDidAppear:animated];
     [self checkAppleHealth];
 }
-#pragma mark - User Actions
-
-- (IBAction)forceUPDBSync:(id)sender {
-    [DMActivityIndicator showActivityIndicator];
-    [DMMyLogDataProvider uploadDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
-        [DMActivityIndicator hideActivityIndicator];
-    }];
-}
 
 #pragma mark - Switch Actions
 
@@ -81,19 +73,18 @@
 
 - (void)checkAppleHealth {
     StepData *stepData = [[StepData alloc] init];
-    __weak typeof(self) weakSelf = self;
     [stepData checkHealthKitAuthorizationWithCompletionBlock:^(BOOL authorized, NSError *error) {
         if (error) {
             DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
             currentUser.enableAppleHealthSync = NO;
-            [weakSelf.appleHealthSwitch setOn:NO];
+            [self.appleHealthSwitch setOn:NO];
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
             return;
         }
         
         DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
         currentUser.enableAppleHealthSync = authorized;
-        [weakSelf.appleHealthSwitch setOn:authorized];
+        [self.appleHealthSwitch setOn:authorized];
     }];
 }
 

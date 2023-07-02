@@ -8,24 +8,29 @@
 
 #import "FavoriteMealsViewController.h"
 #import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
-#import "DietmasterEngine.h"
 #import "DMDetailTableViewCell.h"
 
 static NSString *CellIdentifier = @"CellIdentifier";
 
-@interface FavoriteMealsViewController()
+@interface FavoriteMealsViewController() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) NSMutableArray *searchResults;
+@property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic) DMLogMealCode mealCode;
+@property (nonatomic, strong) NSDate *selectedDate;
 @end
 
 @implementation FavoriteMealsViewController
 
 #pragma mark VIEW LIFECYCLE
 
-- (instancetype)init {
-    self = [super initWithNibName:@"FavoriteMealsViewController" bundle:nil];
+- (instancetype)initWithMealCode:(DMLogMealCode)mealCode
+                    selectedDate:(NSDate *)selectedDate {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
         _searchResults = [[NSMutableArray alloc] init];
+        _mealCode = mealCode;
+        _selectedDate = selectedDate;
     }
     return self;
 }
@@ -108,7 +113,6 @@ static NSString *CellIdentifier = @"CellIdentifier";
 }
 
 - (void)saveFavoriteMealToLog:(NSDictionary *)mealDict {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
@@ -117,74 +121,31 @@ static NSString *CellIdentifier = @"CellIdentifier";
         
         int num_measureID	= [[dict valueForKey:@"MeasureID"] intValue];
         double servingAmount = [[dict valueForKey:@"Servings"] floatValue];
-        
         int foodID = [[dict valueForKey:@"FoodKey"] intValue];
-        int mealCode = [dietmasterEngine.selectedMealID intValue];
       
-        int mealIDValue = 0;
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd"];
-                NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-                [dateFormat setTimeZone:systemTimeZone];
-                NSString *date_Today = [dateFormat stringFromDate:dietmasterEngine.dateSelected];
+        DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+        NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
 
-        NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
-        DMLog(@"mealIDQuery for DetailView is %@", mealIDQuery);
-        FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
-        while ([rsMealID next]) {
-            mealIDValue = [rsMealID intForColumn:@"MealID"];
-        }
-        [rsMealID close];
-        
-        int minIDvalue = 0;
-        if (mealIDValue == 0) {
-            NSString *idQuery = @"SELECT MIN(MealID) as MealID FROM Food_Log";
-            FMResultSet *rsID = [db executeQuery:idQuery];
-            
-            while ([rsID next]) {
-                minIDvalue = [rsID intForColumn:@"MealID"];
-            }
-            
-            [rsID close];
-            minIDvalue = minIDvalue - 1;
-            if (minIDvalue >=0) {
-                int maxValue = minIDvalue;
-                
-                for (int i=0; i<=maxValue; i++) {
-                    if (minIDvalue < 0){
-                        break;
-                    }
-                    minIDvalue--;
-                }
-            }
-        }
-        
-        if (mealIDValue > 0 || mealIDValue < 0) {
-            minIDvalue = mealIDValue;
-        }
-        
         [db beginTransaction];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSTimeZone* systemTimeZone1 = [NSTimeZone systemTimeZone];
         [dateFormatter setTimeZone:systemTimeZone1];
-        NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
+        NSString *date_string = [dateFormatter stringFromDate:self.selectedDate];
         
-        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_string];
+        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%@, DATETIME('%@'))", logMealID, date_string];
         
         [db executeUpdate:insertSQL];
-        
-        int mealID = minIDvalue;
-        
+                
         NSDate* sourceDate = [NSDate date];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSString *date_string1 = [dateFormatter stringFromDate:sourceDate];
+        NSString *lastModifiedString = [dateFormatter stringFromDate:sourceDate];
         
         insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
                      "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
-                     " VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))",
-                     mealID, foodID, mealCode, num_measureID, servingAmount, date_string1];
+                     " VALUES (%@, %i, %i, %i, %f, DATETIME('%@'))",
+                     logMealID, foodID, (int)self.mealCode, num_measureID, servingAmount, lastModifiedString];
         
         [db executeUpdate:insertSQL];
         

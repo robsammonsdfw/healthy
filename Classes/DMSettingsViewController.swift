@@ -51,21 +51,21 @@ import SafariServices
     }()
     private lazy var downSyncButton: UIButton = {
         let button = defaultButton()
-        button.setTitle("Update Local Data", for: .normal)
+        button.setTitle("Force Up Sync", for: .normal)
         button.configuration?.baseForegroundColor = .black
         button.configuration?.baseBackgroundColor = .lightGray
         return button
     }()
     private lazy var upSyncButton: UIButton = {
         let button = defaultButton()
-        button.setTitle("Send Local Data", for: .normal)
+        button.setTitle("Force Down Sync", for: .normal)
         button.configuration?.baseForegroundColor = .black
         button.configuration?.baseBackgroundColor = .lightGray
         return button
     }()
     private lazy var foodsUpdateButton: UIButton = {
         let button = defaultButton()
-        button.setTitle("Update Local Foods", for: .normal)
+        button.setTitle("Sync Local Foods", for: .normal)
         button.configuration?.baseForegroundColor = .black
         button.configuration?.baseBackgroundColor = .lightGray
         return button
@@ -227,27 +227,24 @@ import SafariServices
     }
     
     @objc private func showCustomFoods() {
-        let engine = DietmasterEngine.sharedInstance()
-        engine?.taskMode = "View"
-
-        let controller = FoodsSearch()
-        controller.searchType = .myFoods
-        controller.title = "My Foods"
-        navigationController?.pushViewController(controller, animated: true)
+        if let controller = FoodsSearch(mealCode: DMLogMealCode.breakfast, mealPlanItem: nil, selectedDate: nil) {
+            controller.taskMode = DMTaskMode.view
+            controller.searchType = .allFoods
+            controller.title = "My Foods"
+            navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     @objc private func showAddCustomFood() {
-        let engine = DietmasterEngine.sharedInstance()
-        engine?.taskMode = ""
-        
-        let controller = ManageFoods(food: nil)
-        controller?.hideAddToLog = true
-        navigationController?.pushViewController(controller!, animated: true)
+        if let controller = ManageFoods(food: nil, mealCode: DMLogMealCode.breakfast, selectedDate: nil) {
+            navigationController?.pushViewController(controller, animated: true)
+        }
     }
 
     @objc private func performDownSync() {
+        DMGUtilities.setLastSyncTo(nil)
         DMActivityIndicator.show()
-        DMMyLogDataProvider.syncDatabase { completed, error in
+        DMMyLogDataProvider.syncDatabase(completionBlock: { completed, error in
             DMActivityIndicator.hide()
             if error != nil {
                 DMGUtilities.showAlert(withTitle: "Error", message: error!.localizedDescription, in: nil)
@@ -256,10 +253,11 @@ import SafariServices
             
             DMActivityIndicator.showCompletedIndicator()
             self.lastSyncLabel.text = "Last Sync: " + DMGUtilities.lastSyncDateString()
-        }
+        })
     }
 
     @objc private func performUpSync() {
+        DMGUtilities.setLastSyncTo(nil)
         DMActivityIndicator.show()
         DMMyLogDataProvider.uploadDatabase(completionBlock: { completed, error in
             DMActivityIndicator.hide()

@@ -7,12 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-// FMDB
-#import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
+#import "DMConstants.h"
 
-@interface ExercisesDetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>
+@interface ExercisesDetailViewController : UIViewController
 
-@property (nonatomic) int exerciseLogID;
+/// The task mode that the controller is going to perform.
+@property (nonatomic) DMTaskMode taskMode;
+
+
+- (instancetype)initWithExerciseDict:(NSDictionary *)exerciseDict
+                        selectedDate:(NSDate *)selectedDate NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 
 @end

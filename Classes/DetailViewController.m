@@ -10,6 +10,7 @@
 #import "ExchangeFoodViewController.h"
 #import "DMMealPlanDataProvider.h"
 #import "DMMyLogDataProvider.h"
+#import "DMDataFetcher.h"
 
 @interface DetailViewController()
 @property (nonatomic, strong) NSMutableArray *pickerColumn1Array;
@@ -25,8 +26,18 @@
 @property (nonatomic, strong) IBOutlet UILabel *foodIdLbl;
 
 /// The food that is being displayed to the user.
-@property (nonatomic, strong) NSDictionary *foodDict;
 @property (nonatomic, strong) DMFood *food;
+@property (nonatomic, strong) NSDate *selectedDate;
+/// If the food is a favorite of the user or not.
+@property (nonatomic) NSInteger countIsFavorite;
+
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
+@property (nonatomic, strong) DMMealPlanItem *mealPlanItem;
+@property (nonatomic, strong) DMMealPlan *mealPlan;
+@property (nonatomic) DMLogMealCode mealCode;
+/// The number of servings the user has or had selected.
+@property (nonatomic, strong) NSNumber *selectedServings;
 @end
 
 @implementation DetailViewController
@@ -35,21 +46,36 @@
 @synthesize pickerRow1, pickerRow2, pickerRow3;
 @synthesize pickerDecimalArray, pickerFractionArray;
 
-- (instancetype)initWithFood:(NSDictionary *)foodDict {
+- (instancetype)initWithFood:(DMFood *)food
+                    mealCode:(DMLogMealCode)mealCode
+            selectedServings:(NSNumber *)servings
+                mealPlanItem:(DMMealPlanItem *)mealPlanItem
+                    mealPlan:(DMMealPlan *)mealPlan
+                selectedDate:(NSDate *)selectedDate {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
-        _foodDict = foodDict;
-        [self loadFood];
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _food = food;
+        _mealCode = mealCode;
+        _selectedServings = servings;
+        _mealPlanItem = mealPlanItem;
+        _mealPlan = mealPlan;
+        _selectedDate = selectedDate ?: [NSDate date];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
+
     }
     return self;
 }
 
-#pragma mark DATA METHODS
-
-- (void)loadFood {
-    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-    self.food = [provider getFoodForFoodKey:self.foodDict[@"FoodKey"]];
+- (instancetype)initWithFood:(DMFood *)food
+                    mealCode:(DMLogMealCode)mealCode
+            selectedServings:(NSNumber *)servings
+                selectedDate:(NSDate *)selectedDate {
+    return [self initWithFood:food mealCode:mealCode selectedServings:servings mealPlanItem:nil mealPlan:nil selectedDate:selectedDate];
 }
+
+#pragma mark DATA METHODS
 
 - (void)loadData {
     FMDatabase* db = [DMDatabaseUtilities database];
@@ -57,34 +83,24 @@
     }
     
     double gramWeight = [self.food.gramWeight floatValue];
-    double foodProtein = [[self.foodDict valueForKey:@"Protein"] floatValue];
-    double foodFat = [[self.foodDict valueForKey:@"Fat"] floatValue];
-    double foodCarbs = [[self.foodDict valueForKey:@"Carbohydrates"] floatValue];
-    double servingSize = [[self.foodDict valueForKey:@"ServingSize"] floatValue];
-    double foodCalories = [[self.foodDict valueForKey:@"Calories"] floatValue];
-    double selectedServing = [[self.foodDict valueForKey:@"Servings"] floatValue];
+    double foodProtein = [self.food.protein floatValue];
+    double foodFat = [self.food.fat floatValue];
+    double foodCarbs = [self.food.carbohydrates floatValue];
+    double servingSize = [self.food.servingSize floatValue];
+    double foodCalories = [self.food.calories floatValue];
+    double selectedServing = [self.selectedServings floatValue];
     
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
+    int foodID = [self.food.foodKey intValue];
     
-    lblFat.text			= [NSString stringWithFormat:@"%.2f",foodFat * (gramWeight / 100)];
-    lblCarbs.text		= [NSString stringWithFormat:@"%.2f",foodCarbs * (gramWeight / 100)];
-    lblProtein.text		= [NSString stringWithFormat:@"%.2f",foodProtein * (gramWeight / 100)];
+    lblFat.text = [NSString stringWithFormat:@"%.2f", foodFat * (gramWeight / 100)];
+    lblCarbs.text = [NSString stringWithFormat:@"%.2f", foodCarbs * (gramWeight / 100)];
+    lblProtein.text = [NSString stringWithFormat:@"%.2f", foodProtein * (gramWeight / 100)];
+    self.foodIdLbl.text = self.food.foodKey.stringValue;
     
     NSString *query = [NSString stringWithFormat: @"SELECT m.MeasureID, m.Description, fm.GramWeight, (SELECT count(*) FROM Favorite_Food WHERE FoodID = %i) as favCount FROM Measure m INNER JOIN FoodMeasure fm ON fm.MeasureID = m.MeasureID WHERE fm.FoodID = %i ORDER BY m.Description", foodID,foodID];
-    
-    NSString *addSql = [NSString stringWithFormat:@"SELECT * FROM Food WHERE FoodKey  = %i", foodID];
-    FMResultSet *rss = [db executeQuery:addSql];
-    while ([rss next]) {
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              [NSNumber numberWithInt:[rss intForColumn:@"FoodID"]], @"FoodID", nil];
-        _foodIdLbl.text = [NSString stringWithFormat:@"%@",dict[@"FoodID"]];
-        
-    }
-    
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
-        num_isFavorite		= [rs intForColumn:@"favCount"];
+        self.countIsFavorite = [rs intForColumn:@"favCount"];
         
         NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               [NSNumber numberWithInt:[rs intForColumn:@"MeasureID"]], @"MeasureID",
@@ -94,37 +110,33 @@
         
         rowListArr = [[self filterObjectsByKeys:@"MeasureID" array:pickerColumn3Array] mutableCopy];
         pickerColumn3Array = rowListArr;
-        
     }
     
     double totalCalories;
     if (servingSize == 0){
-        servingSize=1;
+        servingSize = 1;
     }
-    
     if (selectedServing > 0) {
         totalCalories = foodCalories * (selectedServing * gramWeight  / 100 / servingSize);
-    }
-    else {
+    } else {
         selectedServing = 1.0;
         totalCalories = foodCalories * (selectedServing * gramWeight  / 100 / servingSize);
     }
     
     lblCalories.text = [NSString stringWithFormat:@"%.2f", totalCalories];
     
-    NSString *servingList		= [NSString stringWithFormat:@"%.2f", [[self.foodDict valueForKey:@"Servings"] floatValue]];
-    NSArray *servingItems	= [servingList componentsSeparatedByString:@"."];
+    NSString *servingList = [NSString stringWithFormat:@"%.2f", [self.food.servingSize floatValue]];
+    NSArray *servingItems = [servingList componentsSeparatedByString:@"."];
     
     [pickerView reloadAllComponents];
     
-    for(NSInteger i = 0; i < [pickerColumn1Array count]; i++){
+    for (NSInteger i = 0; i < [pickerColumn1Array count]; i++){
         NSString *string = [[pickerColumn1Array objectAtIndex:i] stringValue];
         if([string isEqualToString:[servingItems objectAtIndex:0]]){
             self.pickerRow1 = [NSNumber numberWithInt:(int)i];
             break;
         }
     }
-    
     [pickerView selectRow:[pickerRow1 intValue] inComponent:0 animated:YES];
     
     if ([servingItems count] > 1) {
@@ -144,7 +156,7 @@
         for (NSInteger i = 0; i < [pickerFractionArray count]; i++){
             double pickerValue = [[pickerFractionArray objectAtIndex:i] floatValue];
             
-            if(pickerValue == pickerCompare){
+            if (pickerValue == pickerCompare){
                 fractionPicker = YES;
                 [pickerView reloadAllComponents];
                 decimalButton.style = UIBarButtonItemStylePlain;
@@ -157,7 +169,7 @@
         [pickerView selectRow:[pickerRow2 intValue] inComponent:1 animated:YES];
     }
     
-    int measureID = [[self.foodDict valueForKey:@"MeasureID"] intValue];
+    int measureID = [self.food.measureId intValue];
     for(NSInteger i = 0; i < [pickerColumn3Array count]; i++){
         int pickerID = [[[pickerColumn3Array objectAtIndex:i] valueForKey:@"MeasureID"] intValue];
         if(pickerID == measureID){
@@ -187,11 +199,9 @@
     
     if (!pickerColumn1Array) {
         pickerColumn1Array = [[NSMutableArray alloc] init];
-        
         for (int i = 0; i<501; i++) {
             [pickerColumn1Array addObject:[NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%i",i]]];
         }
-        
     }
     
     fractionPicker = YES;
@@ -205,7 +215,8 @@
                               [NSDecimalNumber decimalNumberWithString:@".2"],
                               [NSDecimalNumber decimalNumberWithString:@".3"],
                               [NSDecimalNumber decimalNumberWithString:@".4"],
-                              [NSDecimalNumber decimalNumberWithString:@".5"],                               [NSDecimalNumber decimalNumberWithString:@".6"],
+                              [NSDecimalNumber decimalNumberWithString:@".5"],
+                              [NSDecimalNumber decimalNumberWithString:@".6"],
                               [NSDecimalNumber decimalNumberWithString:@".7"],
                               [NSDecimalNumber decimalNumberWithString:@".8"],
                               [NSDecimalNumber decimalNumberWithString:@".9"],
@@ -227,13 +238,9 @@
                                nil];
     }
     
-    if (!pickerColumn3Array) {
-        pickerColumn3Array = [[NSMutableArray alloc] init];
-    }
-    
-    [pickerColumn3Array removeAllObjects];
-    
-    lblText.text = [self.foodDict valueForKey:@"Name"];
+    pickerColumn3Array = [[NSMutableArray alloc] init];
+
+    lblText.text = self.food.name;
     
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                  target:self
@@ -245,7 +252,6 @@
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
     NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
     if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Food_Detail_Screen"];
@@ -259,58 +265,43 @@
     [super viewDidAppear:animated];
     // Due to how pickers load, need to load data after a moment.
     [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if ([dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
-        lblMealName.text = @"Add item to Plan";
-    } else {
-        NSString *strDate = dietmasterEngine.dateSelectedFormatted;
-        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
-        [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
-        [dateFormat_display setTimeZone:systemTimeZone];
-        NSDate *date = [dateFormat_display dateFromString:strDate];
-        if (date) {
-            NSString *strFinal = [dateFormat_display stringFromDate:date];
-            lblMealName.text    = [NSString stringWithFormat: @"Log Date: %@", strFinal];
-        }
-        else{
-            lblMealName.text    = [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
-        }
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
-        if (dietmasterEngine.isMealPlanItem) {
-            self.navigationItem.title = @"Plan Item Detail";
-        }
-        else {
+    if (self.taskMode == DMTaskModeView && self.mealPlan) {
+        self.navigationItem.title = @"Plan Item Detail";
+    } else if (self.taskMode == DMTaskModeEdit) {
+        self.navigationItem.title = @"Edit Log";
+
+    } else if (self.taskMode == DMTaskModeAdd) {
+        if (self.mealPlan) {
+            self.navigationItem.title = @"Add to Plan";
+        } else {
             self.navigationItem.title = @"Add to Log";
         }
     }
-    else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
-        self.navigationItem.title = @"Edit Log";
+    
+    if (self.mealPlan) {
+        lblMealName.text = @"Add item to Plan";
+    } else {
+        NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
+        NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
+        [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
+        [dateFormat_display setTimeZone:systemTimeZone];
+        NSString *dateString = [dateFormat_display stringFromDate:self.selectedDate];
+        lblMealName.text = [NSString stringWithFormat: @"Log Date: %@", dateString];
     }
-    else if ([dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
-        self.navigationItem.title = @"Add to Plan";
-    }
+    lblMealName.font = [UIFont boldSystemFontOfSize:17];
     
     infoBtn.frame = CGRectMake(SCREEN_WIDTH - 25, lblProtein.frame.origin.y, infoBtn.frame.size.width, infoBtn.frame.size.height);
 }
 
 #pragma mark ACTION SHEET METHODS
 - (void)showActionSheet:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
     NSString *favoriteOrNot = nil;
-    if (num_isFavorite == 0) {
+    if (self.countIsFavorite == 0) {
         favoriteOrNot = @"Save as Favorite";
     } else {
         favoriteOrNot = @"Remove from Favorites";
@@ -318,8 +309,8 @@
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
-        if (dietmasterEngine.isMealPlanItem) {
+    if (self.taskMode == DMTaskModeAdd) {
+        if (self.mealPlanItem) {
             [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
@@ -328,7 +319,7 @@
             [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
-                if (num_isFavorite == 0) {
+                if (self.countIsFavorite == 0) {
                     [self saveToFavorites];
                 } else {
                     [self confirmDeleteFromFavorite];
@@ -359,7 +350,7 @@
             [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
-                if (num_isFavorite == 0) {
+                if (self.countIsFavorite == 0) {
                     [self saveToFavorites];
                 } else {
                     [self confirmDeleteFromFavorite];
@@ -369,7 +360,7 @@
         }
     }
     
-    if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
+    if (self.taskMode == DMTaskModeEdit) {
         [alert addAction:[UIAlertAction actionWithTitle:@"Save Changes"
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
@@ -378,7 +369,7 @@
         [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            if (num_isFavorite == 0) {
+            if (self.countIsFavorite == 0) {
                 [self saveToFavorites];
             } else {
                 [self confirmDeleteFromFavorite];
@@ -391,7 +382,7 @@
         }]];
     }
     
-    if ([dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
+    if (self.taskMode == DMTaskModeAddToPlan) {
         [alert addAction:[UIAlertAction actionWithTitle:@"Add to Plan"
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
@@ -400,7 +391,7 @@
         [alert addAction:[UIAlertAction actionWithTitle:favoriteOrNot
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            if (num_isFavorite == 0) {
+            if (self.countIsFavorite == 0) {
                 [self saveToFavorites];
             } else {
                 [self confirmDeleteFromFavorite];
@@ -457,16 +448,17 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]  initWithTitle: @"Back" style: UIBarButtonItemStylePlain target: nil action: nil];
     [self.navigationItem setBackBarButtonItem: backButton];
     
-    ExchangeFoodViewController *exchangeVC = [[ExchangeFoodViewController alloc] initWithExchangedFood:[self.foodDict copy]];
+    ExchangeFoodViewController *exchangeVC =
+            [[ExchangeFoodViewController alloc] initWithFoodToExchange:self.food
+                                                       forMealPlanItem:self.mealPlanItem
+                                                            inMealPlan:self.mealPlan];
     [self.navigationController pushViewController:exchangeVC animated:YES];
 }
 
 - (void)updateFoodServings {
     [DMActivityIndicator showActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int num_measureID = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
     NSDecimalNumber *servingSize1 = [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
     NSDecimalNumber *servingSize2;
     if (fractionPicker) {
@@ -477,9 +469,9 @@
     NSDecimalNumber *servingAmount = [servingSize1 decimalNumberByAdding:servingSize2];
     
     NSDictionary *updateDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @(dietmasterEngine.selectedMealPlanID), @"MealID",
-                                    dietmasterEngine.selectedMealID, @"MealCode",
-                                    @(foodID), @"FoodID",
+                                    self.mealPlan.mealId, @"MealID",
+                                    self.mealCode, @"MealCode",
+                                    self.food.foodKey, @"FoodID",
                                     servingAmount, @"ServingSize",
                                     @(num_measureID), @"MeasureID",
                                 nil];
@@ -493,69 +485,55 @@
         }
         
         [DMActivityIndicator showCompletedIndicator];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.didInsertNewFood = YES;
     }];
 }
 
--(void)insertNewFood {
+- (void)insertNewFood {
     [DMActivityIndicator showActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
     int num_measureID	= [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"MeasureID"] intValue];
     
-    NSDecimalNumber *servingSize1	= [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
+    NSDecimalNumber *servingSize1 = [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
     NSDecimalNumber *servingSize2;
     if (fractionPicker) {
-        servingSize2	= [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+        servingSize2 = [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
     }
     else {
-        servingSize2	= [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+        servingSize2 = [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
     }
-    NSDecimalNumber *servingAmount		= [servingSize1 decimalNumberByAdding:servingSize2];
-    
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
-    int mealCode = [dietmasterEngine.selectedMealID intValue];
+    NSDecimalNumber *servingAmount = [servingSize1 decimalNumberByAdding:servingSize2];
     
     NSDictionary *insertDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                [NSNumber numberWithInt:dietmasterEngine.selectedMealPlanID], @"MealID",
-                                [NSNumber numberWithInt:mealCode], @"MealCode",
-                                [NSNumber numberWithInt:foodID], @"FoodID",
+                                self.mealPlan.mealId, @"MealID",
+                                @(self.mealCode), @"MealCode",
+                                self.food.foodKey, @"FoodID",
                                 [NSNumber numberWithInt:num_measureID], @"MeasureID",
                                 servingAmount, @"ServingSize",
                                 nil];
     
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    __weak typeof(self) weakSelf = self;
     [provider saveUserPlannedMealItems:@[insertDict] withCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
             return;
         }
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.didInsertNewFood = YES;
         [DMActivityIndicator showCompletedIndicator];
-        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
+        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
     }];
 }
 
 - (void)deleteFromPlan {
     [DMActivityIndicator showActivityIndicator];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
-    int mealCode = [dietmasterEngine.selectedMealID intValue];
     
     NSDictionary *mealItems = [[NSDictionary alloc] initWithObjectsAndKeys:
-                             @(dietmasterEngine.selectedMealPlanID), @"MealID",
-                             @(mealCode), @"MealCode",
-                             @(foodID), @"FoodID",
+                             self.mealPlan.mealId, @"MealID",
+                             @(self.mealCode), @"MealCode",
+                             self.food.foodKey, @"FoodID",
                              nil];
     
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    __weak typeof(self) weakSelf = self;
     [provider deleteUserPlannedMealItems:@[mealItems] withCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
@@ -563,10 +541,8 @@
             return;
         }
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.didInsertNewFood = YES;
         [DMActivityIndicator showCompletedIndicator];
-        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
     }];
 }
 
@@ -680,39 +656,38 @@
     if (pickerColumn3Array.count) {
         gramWeight = [[[pickerColumn3Array objectAtIndex:[pickerView selectedRowInComponent:cSection3]] valueForKey:@"GramWeight"] floatValue];
     }
-    double servingSize = [[self.foodDict valueForKey:@"ServingSize"] floatValue];
-    double foodCalories = [[self.foodDict valueForKey:@"Calories"] floatValue];
+    double servingSize = [self.food.servingSize floatValue];
+    double foodCalories = [self.food.calories floatValue];
     
-    NSDecimalNumber *servingSize1	= [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
+    NSDecimalNumber *servingSize1 = [pickerColumn1Array objectAtIndex:[pickerView selectedRowInComponent:cSection1]];
     NSDecimalNumber *servingSize2;
     if (fractionPicker) {
-        servingSize2	= [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+        servingSize2 = [pickerFractionArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
     }
     else {
-        servingSize2	= [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
+        servingSize2 = [pickerDecimalArray objectAtIndex:[pickerView selectedRowInComponent:cSection2]];
     }
-    NSDecimalNumber *servingAmount		= [servingSize1 decimalNumberByAdding:servingSize2];
+    NSDecimalNumber *servingAmount = [servingSize1 decimalNumberByAdding:servingSize2];
     
     if (servingSize == 0){
         servingSize=1;
     }
-    double flt_totalCalories	= foodCalories * ([servingAmount floatValue] * gramWeight  / 100 / servingSize);
+    double flt_totalCalories = foodCalories * ([servingAmount floatValue] * gramWeight  / 100 / servingSize);
     
     lblCalories.text = [NSString stringWithFormat:@"%.2f", flt_totalCalories];
     
-    double foodProtein = [[self.foodDict valueForKey:@"Protein"] floatValue];
-    double foodFat = [[self.foodDict valueForKey:@"Fat"] floatValue];
-    double foodCarbs = [[self.foodDict valueForKey:@"Carbohydrates"] floatValue];
+    double foodProtein = [self.food.protein floatValue];
+    double foodFat = [self.food.fat floatValue];
+    double foodCarbs = [self.food.carbohydrates floatValue];
     
-    lblFat.text			= [NSString stringWithFormat:@"%.2f",(foodFat * (gramWeight / 100)) / servingSize * [servingAmount floatValue]];
-    lblCarbs.text		= [NSString stringWithFormat:@"%.2f",(foodCarbs * (gramWeight / 100))  / servingSize * [servingAmount floatValue]];
-    lblProtein.text		= [NSString stringWithFormat:@"%.2f",(foodProtein * (gramWeight / 100))  / servingSize *[servingAmount floatValue]];
+    lblFat.text = [NSString stringWithFormat:@"%.2f",(foodFat * (gramWeight / 100)) / servingSize * [servingAmount floatValue]];
+    lblCarbs.text = [NSString stringWithFormat:@"%.2f",(foodCarbs * (gramWeight / 100))  / servingSize * [servingAmount floatValue]];
+    lblProtein.text = [NSString stringWithFormat:@"%.2f",(foodProtein * (gramWeight / 100))  / servingSize *[servingAmount floatValue]];
 }
 
 #pragma mark LOG METHODS
  
 - (void)saveToLog:(id) sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
@@ -729,60 +704,22 @@
     }
     NSDecimalNumber *servingAmount = [servingSize1 decimalNumberByAdding:servingSize2];
     
-    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
-        
-        int mealIDValue = 0;
-        [dateFormat setDateFormat:@"yyyy-MM-dd"];
-        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormat setTimeZone:systemTimeZone];
-        NSString *date_Today = [dateFormat stringFromDate:dietmasterEngine.dateSelected];
-        
-        NSString *mealIDQuery = [NSString stringWithFormat:@"SELECT MealID FROM Food_Log WHERE (MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59'))", date_Today, date_Today];
-        FMResultSet *rsMealID = [db executeQuery:mealIDQuery];
-        while ([rsMealID next]) {
-            mealIDValue = [rsMealID intForColumn:@"MealID"];
-        }
-        [rsMealID close];
-        int minIDvalue = 0;
-        if (mealIDValue == 0) {
-            NSString *idQuery = @"SELECT MIN(MealID) as MealID FROM Food_Log";
-            FMResultSet *rsID = [db executeQuery:idQuery];
-            while ([rsID next]) {
-                minIDvalue = [rsID intForColumn:@"MealID"];
-            }
-            [rsID close];
-            minIDvalue = minIDvalue - 1;
-            if (minIDvalue >=0) {
-                int maxValue = minIDvalue;
-                for (int i=0; i<=maxValue; i++) {
-                    if (minIDvalue < 0){
-                        break;
-                    }
-                    minIDvalue--;
-                }
-            }
-        }
-        
-        if (mealIDValue > 0 || mealIDValue < 0) {
-            minIDvalue = mealIDValue;
-        }
-        
-        int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
-        int mealCode = [dietmasterEngine.selectedMealID intValue];
-        
-        [db beginTransaction];
-        
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormat setTimeZone:systemTimeZone];
-        NSString *date_string = [dateFormat stringFromDate:dietmasterEngine.dateSelected];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
 
-        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%i, DATETIME('%@'))", minIDvalue, date_string];
+    if (self.taskMode == DMTaskModeAdd) {
+        
+        int foodID = [self.food.foodKey intValue];
+
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+        NSString *date_string = [self.dateFormatter stringFromDate:self.selectedDate];
+
+        [db beginTransaction];
+        NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log (MealID, MealDate) VALUES (%@, DATETIME('%@'))", logMealID, date_string];
         [db executeUpdate:insertSQL];
-        
-        int mealID = minIDvalue;
-        
-        NSString *strChkRecord = [NSString stringWithFormat:@"SELECT count(*) FROM Food_Log_Items where FoodID = '%d' AND MealCode = '%d'AND MealID = '%d'",foodID,mealCode,mealID];
+                
+        NSString *strChkRecord = [NSString stringWithFormat:@"SELECT count(*) FROM Food_Log_Items where FoodID = '%d' AND MealCode = '%d'AND MealID = '%@'",foodID, (int)self.mealCode, logMealID];
         FMResultSet *objChk = [db executeQuery:strChkRecord];
         while ([objChk next]) {
             if ([objChk intForColumn:@"count(*)"] > 0) {
@@ -793,8 +730,8 @@
                 
                 insertSQL = [NSString stringWithFormat: @"REPLACE INTO Food_Log_Items "
                              "(MealID, FoodID, MealCode, MeasureID, NumberOfServings, LastModified) "
-                             " VALUES (%i, %i, %i, %i, %f, DATETIME('%@'))",
-                             mealID, foodID, mealCode, num_measureID, [servingAmount floatValue], date_string1];
+                             " VALUES (%@, %i, %i, %i, %f, DATETIME('%@'))",
+                             logMealID, foodID, (int)self.mealCode, num_measureID, [servingAmount floatValue], date_string1];
                 [db executeUpdate:insertSQL];
             }
         }
@@ -807,18 +744,16 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
         [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 
-    } else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
+    } else if (self.taskMode == DMTaskModeEdit) {
         
         [db beginTransaction];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         NSString *date_string = [dateFormat stringFromDate:[NSDate date]];
         
-        int foodMealID = [[self.foodDict valueForKey:@"FoodLogMealID"] intValue];
-        int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
-        int MealCode  = [dietmasterEngine.selectedMealID intValue];
+        int foodID = [self.food.foodKey intValue];
         
-        NSString *updateSQL = [NSString stringWithFormat: @"UPDATE Food_Log_Items SET MeasureID = %i, NumberOfServings = %f, LastModified = '%@' WHERE FoodID = %i AND MealID = %i AND MealCode = %i", num_measureID,[servingAmount floatValue], date_string, foodID,foodMealID ,MealCode];
+        NSString *updateSQL = [NSString stringWithFormat: @"UPDATE Food_Log_Items SET MeasureID = %i, NumberOfServings = %f, LastModified = '%@' WHERE FoodID = %i AND MealID = %@ AND MealCode = %i", num_measureID,[servingAmount floatValue], date_string, foodID, logMealID, (int)self.mealCode];
         [db executeUpdate:updateSQL];
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -836,15 +771,16 @@
 }
 
 - (void)deleteFromLog {
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
     
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
+
     [db beginTransaction];
-    int foodMealID = [[self.foodDict valueForKey:@"FoodLogMealID"] intValue];
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
-    NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealID = %i AND MealCode = %i", foodID, foodMealID, [dietmasterEngine.selectedMealID intValue]];
+    int foodID = [self.food.foodKey intValue];
+    NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Food_Log_Items WHERE FoodID = %i AND MealID = %@ AND MealCode = %i", foodID, logMealID, self.mealCode];
     [db executeUpdate:updateSQL];
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -863,7 +799,7 @@
         return;
     }
     
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
+    int foodID = [self.food.foodKey intValue];
     [db beginTransaction];
     NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM Favorite_Food WHERE FoodID = %i", foodID];
     [db executeUpdate:updateSQL];
@@ -871,8 +807,7 @@
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
-    
-    num_isFavorite = 0;
+    self.countIsFavorite = 0;
     
     [DMActivityIndicator showActivityIndicator];
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -892,14 +827,13 @@
 }
 
 - (void)saveToFavorites {
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
         return;
     }
     
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
-    int num_measureID = [[self.foodDict valueForKey:@"MeasureID"] intValue];
+    int foodID = [self.food.foodKey intValue];
+    int num_measureID = [self.food.measureId intValue];
     
     int minIDvalue = 0;
     NSString *idQuery = @"SELECT min(Favorite_FoodID) as Favorite_FoodID FROM Favorite_Food";
@@ -920,11 +854,10 @@
     }
     [db beginTransaction];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
-    [dateFormatter setTimeZone:systemTimeZone];
-    NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
+    [self.dateFormatter setTimeZone:systemTimeZone];
+    NSString *date_string = [self.dateFormatter stringFromDate:self.selectedDate];
 
     NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Favorite_Food (Favorite_FoodID, FoodID,modified,MeasureID) VALUES (%i, %i,DATETIME('%@'),%i)", minIDvalue, foodID, date_string, num_measureID];
     [db executeUpdate:insertSQL];
@@ -933,23 +866,22 @@
     }
     [db commit];
     
-    num_isFavorite = 1;
+    self.countIsFavorite = 1;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
     [DMActivityIndicator showCompletedIndicator];
 }
 
 - (void)deleteFromWSLog {
     [DMActivityIndicator showActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     
-    int foodLogID = [[self.foodDict valueForKey:@"FoodLogMealID"] intValue];
-    int foodID = [[self.foodDict valueForKey:@"FoodKey"] intValue];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
     
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"DeleteMealItem", @"RequestType",
-                                [NSNumber numberWithInt:foodLogID], @"MealID",
-                                dietmasterEngine.selectedMealID, @"MealCode",
-                                [NSNumber numberWithInt:foodID], @"FoodID",
+                                logMealID, @"MealID",
+                                @(self.mealCode), @"MealCode",
+                                self.food.foodKey, @"FoodID",
                                 nil];
     
     [DMDataFetcher fetchDataWithRequestParams:infoDict completion:^(NSObject *object, NSError *error) {

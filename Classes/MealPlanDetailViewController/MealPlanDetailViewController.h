@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+@class DMMealPlan;
 
-@interface MealPlanDetailViewController : UIViewController {
-    IBOutlet UILabel *titleLabel;
-    IBOutlet UILabel *recommendedCaloriesLabel;
-    IBOutlet UILabel *caloriesPlannedLabel;
-    int mealCodeToAdd;
-    IBOutlet UIButton *infoBtn;
-}
+/// Shows the meal plan that's selected.
+@interface MealPlanDetailViewController : UIViewController
 
-@property (nonatomic) int selectedIndex;
+- (instancetype)initWithMealPlan:(DMMealPlan *)mealPlan NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
+
 @end

@@ -42,7 +42,7 @@ static NSString *DMServerDateFormat = @"yyyy-MM-dd HH:mm:ss";
     NSString *dateString = nil;
     
     if ([[defaults valueForKey:DMFirstLaunchKey] isEqualToString:@"FirstTime"]) {
-        dateString = @"1970-01-01";
+        dateString = @"01-01-2015";
         [defaults setObject:@"SecondTime" forKey:DMFirstLaunchKey];
     } else {
         NSDate *lastSyncDate = [defaults valueForKey:DMLastSyncPrefsKey];
@@ -59,12 +59,17 @@ static NSString *DMServerDateFormat = @"yyyy-MM-dd HH:mm:ss";
         dateString = [dateFormatter stringFromDate:lastSyncDate];
     }
     
+    if (!dateString.length) {
+        dateString = @"01-01-2015";
+    }
+    
     return dateString;
 }
 
 + (void)setLastSyncToDate:(NSDate *)date {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:date forKey:DMLastSyncPrefsKey];
+    [defaults synchronize];
 }
 
 static NSString *DMLastFoodSyncPrefsKey = @"FoodUpdateLastsyncDate";
@@ -96,6 +101,7 @@ static NSString *DMLastFoodSyncPrefsKey = @"FoodUpdateLastsyncDate";
 + (void)setLastFoodSyncDate:(NSDate *)date {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:date forKey:DMLastFoodSyncPrefsKey];
+    [defaults synchronize];
 }
 
 #pragma mark - Color

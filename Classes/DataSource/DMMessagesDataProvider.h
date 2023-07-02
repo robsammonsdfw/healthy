@@ -23,8 +23,6 @@ extern NSString * const UpdatingMessageNotification;
 - (NSInteger)unreadMessageCount;
 /// Sets a message read.
 - (void)setReadedMessageId:(NSNumber *)messageId;
-/// Returns the most recent message Id stored in the database.
-- (NSNumber *)getLastMessageId;
 /// Gets all the messages in the database, with a Key = Date, Value = Array of Messages.
 - (NSDictionary<NSString *, DMMessage *> *)getMessagesByDate;
 /// Syncronizes messages now.

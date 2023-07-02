@@ -7,22 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DietmasterEngine.h"
 
-@interface Log_Add : UIViewController {
+/// User selects a meal code to then proceed to selecting foods for.
+@interface Log_Add : UIViewController
+@property (nonatomic) DMTaskMode taskMode;
 
-	IBOutlet UITableView *tblLogAdd;
-	
-	NSDate *date_currentDate;
-	NSNumber *int_mealID;
-	
-	NSArray *arryMeals;
-	//NSArray *arryMeals_id;
-	NSArray *arryExercise;
-	
-}
+- (instancetype)initWithMealPlan:(DMMealPlan *)mealPlan selectedDate:(NSDate *)selectedDate;
 
-@property (nonatomic, strong) NSDate *date_currentDate;
-@property (nonatomic, strong) NSNumber *int_mealID;
-
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 @end

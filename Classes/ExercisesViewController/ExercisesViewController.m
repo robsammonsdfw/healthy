@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UISearchBar *mySearchBar;
 @property (nonatomic, strong) NSMutableArray *searchResults;
+
+@property (nonatomic, strong) NSDate *selectedDate;
 @end
 
 static NSString *CellIdentifier = @"Cell";
@@ -25,10 +27,11 @@ static NSString *CellIdentifier = @"Cell";
 
 #pragma mark VIEW LIFECYCLE
 
-- (instancetype)init {
+- (instancetype)initWithSelectedDate:(NSDate *)selectedDate {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         _searchResults = [[NSMutableArray alloc] init];
+        _selectedDate = selectedDate;
     }
     return self;
 }
@@ -240,11 +243,12 @@ static NSString *CellIdentifier = @"Cell";
     NSArray *results = [self.searchResults copy];
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSDictionary *dict = [[NSDictionary alloc] initWithDictionary:[results objectAtIndex:indexPath.row]];
-    [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
-    dietmasterEngine.taskMode = @"Save";
+    NSDictionary *dict = [results objectAtIndex:indexPath.row];
     
-    ExercisesDetailViewController *eDVController = [[ExercisesDetailViewController alloc] init];
+    ExercisesDetailViewController *eDVController =
+        [[ExercisesDetailViewController alloc] initWithExerciseDict:dict
+                                                       selectedDate:self.selectedDate];
+    eDVController.taskMode = DMTaskModeAdd;
     [self.navigationController pushViewController:eDVController animated:YES];
 }
 

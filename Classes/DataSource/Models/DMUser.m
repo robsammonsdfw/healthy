@@ -161,10 +161,11 @@
 }
 
 - (instancetype)init {
-    return [self initWithDictionary:@{}];
+    return [self initWithDictionary:@{} updateDetails:NO];
 }
 
-- (instancetype)initWithDictionary:(NSDictionary *)userDict {
+- (instancetype)initWithDictionary:(NSDictionary *)userDict
+                     updateDetails:(BOOL)updateDetails {
     self = [super init];
     if (self) {
         _userId = ValidNSNumber(userDict[@"UserID"]);
@@ -180,25 +181,21 @@
         _firstName = ValidString(userDict[@"FirstName"]);
         _lastName = ValidString(userDict[@"LastName"]);
 
-        _carbRatio = ValidNSNumber(userDict[@"CarbRatio"]);
-        _proteinRatio = ValidNSNumber(userDict[@"ProteinRatio"]);
-        _fatRatio = ValidNSNumber(userDict[@"FatRatio"]);
-        
-        _hostName = ValidString(userDict[@"HostName"]);
-
         // Formatters.
         _massFormatter = [[NSMassFormatter alloc] init];
         _numberFormatter = [[NSNumberFormatter alloc] init];
         _dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 
-        [self updateUserDetails:userDict];
+        if (updateDetails) {
+            [self updateUserDetails:userDict];
+        }
     }
     return self;
 }
 
 - (void)updateUserDetails:(NSDictionary *)userDict {
-    if (!userDict) {
+    if (!userDict.count) {
         return;
     }
     _weightGoal = ValidNSNumber(userDict[@"WeightGoal"]);
@@ -213,9 +210,11 @@
         _goalStartDate = [_dateFormatter dateFromString:userDict[@"GoalStartDate"]];
     }
 
-    _carbRatio = ValidNSNumber(userDict[@"CarbRatio"]);
-    _proteinRatio = ValidNSNumber(userDict[@"ProteinRatio"]);
-    _fatRatio = ValidNSNumber(userDict[@"FatRatio"]);
+    if (userDict[@"CarbRatio"]) {
+        _carbRatio = ValidNSNumber(userDict[@"CarbRatio"]);
+        _proteinRatio = ValidNSNumber(userDict[@"ProteinRatio"]);
+        _fatRatio = ValidNSNumber(userDict[@"FatRatio"]);
+    }
 
     _profession = ValidNSNumber(userDict[@"Profession"]);
     _bodyType = ValidNSNumber(userDict[@"BodyType"]);

@@ -9,30 +9,38 @@
 #import "MealPlanDetailViewController.h"
 #import "DietmasterEngine.h"
 #import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
 #import "DetailViewController.h"
 #import "Log_Add.h"
 #import "MealPlanDetailsTableViewCell.h"
 #import "TTTAttributedLabel.h"
 #import "DMMealPlanDataProvider.h"
+#import "DMMealPlan.h"
+#import "DMMealPlanItem.h"
 
 @interface MealPlanDetailViewController() <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic) int addToPlanButtonIndex;
 @property (nonatomic, strong) IBOutlet UIImageView *imgbar;
 @property (nonatomic, strong) IBOutlet UIImageView *imgbarline;
 @property (nonatomic, strong) IBOutlet UILabel *staticCalPlannedLbl;
 @property (nonatomic, strong) IBOutlet UILabel *staticRecomCalLbl;
+@property (nonatomic, strong)  UILabel *titleLabel;
+@property (nonatomic, strong) IBOutlet UILabel *recommendedCaloriesLabel;
+@property (nonatomic, strong) IBOutlet UILabel *caloriesPlannedLabel;
+@property (nonatomic, strong) IBOutlet UIButton *infoBtn;
+
+/// The meal plan to display.
+@property (nonatomic, strong) DMMealPlan *mealPlan;
 @end
 
 static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
 @implementation MealPlanDetailViewController
 
-- (instancetype)init {
+- (instancetype)initWithMealPlan:(DMMealPlan *)mealPlan {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
-        _selectedIndex = 0;
+        _mealPlan = mealPlan;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:@"ReloadData" object:nil];
     }
     return self;
 }
@@ -40,14 +48,15 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    titleLabel.textColor=PrimaryDarkFontColor
-    _staticRecomCalLbl.textColor = PrimaryFontColor
-    _staticCalPlannedLbl.textColor = PrimaryFontColor
+    self.titleLabel.textColor=PrimaryDarkFontColor
+    self.staticRecomCalLbl.textColor = PrimaryFontColor
+    self.staticCalPlannedLbl.textColor = PrimaryFontColor
 
-    _imgbar.backgroundColor= PrimaryColor
-    _imgbarline.backgroundColor=RGB(255, 255, 255, 0.5);
+    self.imgbar.backgroundColor= PrimaryColor
+    self.imgbarline.backgroundColor=RGB(255, 255, 255, 0.5);
   
-    self.tableView.estimatedRowHeight = 60;
+    self.tableView.estimatedRowHeight = 70;
+    self.tableView.estimatedSectionHeaderHeight = 44;
     [self.tableView registerNib:[UINib nibWithNibName:CellIdentifier bundle:nil] forCellReuseIdentifier:CellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 
@@ -57,20 +66,20 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
               case 2688:
               case 1792:
                   //iphone x+
-                  infoBtn.frame = CGRectMake(10, _imgbar.frame.origin.y + _staticRecomCalLbl.bounds.size.height, 18, 21);
+                  self.infoBtn.frame = CGRectMake(10, _imgbar.frame.origin.y + _staticRecomCalLbl.bounds.size.height, 18, 21);
 
                   break;
               default:
               //for iphone 8
-              infoBtn.frame = CGRectMake(10, _imgbar.frame.origin.y - 8, 18, 21);
+                  self.infoBtn.frame = CGRectMake(10, _imgbar.frame.origin.y - 8, 18, 21);
 
                   break;
           }
 
     }
 
-    [infoBtn addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchUpInside];
-    [infoBtn setUserInteractionEnabled:YES];
+    [self.infoBtn addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchUpInside];
+    [self.infoBtn setUserInteractionEnabled:YES];
     
     self.title = @"My Meals";
     [self.navigationItem setTitle:@"My Meals"];
@@ -86,11 +95,8 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [self.navigationItem setBackBarButtonItem: backButton];
     
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex]];
-    titleLabel.text = [tempDict valueForKey:@"MealName"];
-    
-    titleLabel.backgroundColor=PrimaryDarkColor
+    self.titleLabel.text = self.mealPlan.mealName;
+    self.titleLabel.backgroundColor = PrimaryDarkColor
    
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                  target:self
@@ -99,34 +105,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     rightButton.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = rightButton;
     
-    if (!dietmasterEngine.dateSelected) {
-        NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormat setTimeZone:systemTimeZone];
-        NSString *date_string = [dateFormat stringFromDate:sourceDate];
-        NSDate *date = [dateFormat dateFromString:date_string];
-        
-        dietmasterEngine.dateSelected = date;
-        NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
-        [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
-        [dateFormat_display setTimeZone:systemTimeZone];
-        NSString *date_Display		= [dateFormat_display stringFromDate:date];
-        dietmasterEngine.dateSelectedFormatted = date_Display;
-    }
-    
     [self updateCalorieLabels];
     
-    mealCodeToAdd = -1;
-    self.addToPlanButtonIndex = -1;
-    
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
     }
 }
@@ -134,12 +117,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    [self checkForMissingFoods];
-    [self loadData];
+    [self updateCalorieLabels];
     [self.tableView reloadData];
 }
 
--(IBAction)goToSafetyGuidelines:(id)sender {
+- (IBAction)goToSafetyGuidelines:(id)sender {
     SFSafariViewController *sfvc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://advancedwebservicegroup.com/AWSGDocuments/GuidelinesAndSafety.html"]];
     [self presentViewController:sfvc animated:YES completion:nil];
 }
@@ -148,91 +130,81 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
-#pragma mark LOAD DATA METHODS
-
-- (void)loadData {
-    DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    __weak typeof(self) weakSelf = self;
-    [provider fetchUserPlannedMealsWithCompletionBlock:^(NSObject *object, NSError *error) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        [dietmasterEngine.mealPlanArray removeAllObjects];
-        if (error) {
-            [[weakSelf tableView] reloadData];
-            return;
-        }
-        NSArray *results = (NSArray *)object;
-        [dietmasterEngine.mealPlanArray addObjectsFromArray:results];
-        [weakSelf checkForMissingFoods];
-        [[weakSelf tableView] reloadData];
-        [weakSelf updateCalorieLabels];
-    }];
+/// This reloads the meal plan that's being displayed.
+- (void)reloadData {
+    if ([NSThread isMainThread]) {
+        DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
+        [DMActivityIndicator showActivityIndicator];
+        [provider fetchUserPlannedMealsWithCompletionBlock:^(NSObject *object, NSError *error) {
+            [DMActivityIndicator hideActivityIndicator];
+            if (error) {
+                [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
+                return;
+            }
+            NSArray *results = (NSArray *)object;
+            for (DMMealPlan *mealPlan in results) {
+                if ([mealPlan.mealId isEqual:self.mealPlan.mealId]) {
+                    self.mealPlan = mealPlan;
+                    break;
+                }
+            }
+            [self.tableView reloadData];
+            [self updateCalorieLabels];
+        }];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadData];
+        });
+    }
 }
 
-- (void)addPlanToLog {
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *tempArray = [[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"];
-
+/// Adds the entire plan to the date selected.
+- (void)addEntirePlanToLogOnDate:(NSDate *)date {
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    for (NSDictionary *dict in [tempArray copy]) {
-        [provider insertMealPlanToLog:dict toDate:dietmasterEngine.dateSelected];
+    for (DMMealPlanItem *item in [[self.mealPlan getAllMealItems] copy]) {
+        [provider insertMealPlanItemIntoLog:item toDate:date];
     }
     [DMActivityIndicator showCompletedIndicator];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 /// Adds the meal to log with the code provided.
-- (void)addMealToLogWithCode:(NSNumber *)mealCode {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealItems = [[[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] copy];
-    
+- (void)addMealToLogWithCode:(DMLogMealCode)mealCode onDate:(NSDate *)date {
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    for (NSDictionary *mealItemDict in [mealItems objectAtIndex:mealCode.integerValue]) {
-        BOOL success = [provider insertMealPlanToLog:mealItemDict toDate:dietmasterEngine.dateSelected];
-        if (!success) {
-            DMLog(@"Food was not added successfully!");
-        }
+    NSArray *mealItems = [self.mealPlan getMealItemsForMealCode:mealCode];
+    for (DMMealPlanItem *item in mealItems) {
+        [provider insertMealPlanItemIntoLog:item toDate:date];
     }
-    
     [DMActivityIndicator showCompletedIndicator];
 }
 
 - (void)addItemToMealPlan:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    int planMealID = [[[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealID"] intValue];
-    dietmasterEngine.selectedMealPlanID = planMealID;
-    dietmasterEngine.isMealPlanItem = YES;
-    dietmasterEngine.taskMode = @"AddMealPlanItem";
-    Log_Add *dvController = [[Log_Add alloc] initWithNibName:@"Log_Add" bundle:nil];
-    dvController.date_currentDate = dietmasterEngine.dateSelected;
+    Log_Add *dvController = [[Log_Add alloc] initWithMealPlan:self.mealPlan selectedDate:[NSDate date]];
+    dvController.taskMode = DMTaskModeAddToPlan;
     [self.navigationController pushViewController:dvController animated:YES];
 }
 
 #pragma mark SELECT DATE METHODS
-- (void)selectMealDate:(UIButton *)sender {
-    self.addToPlanButtonIndex = 1;
 
+/// Action called when user selects to add the meal to a date selected.
+/// E.g. Breakfast to 6/26/2023.
+- (void)selectMealDate:(UIButton *)sender {
     DMDatePickerViewController *dateController = [[DMDatePickerViewController alloc] init];
     __weak typeof(self) weakSelf = self;
     dateController.didSelectDateCallback = ^(NSDate *date) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.dateSelected = date;
         // The sender.tag is the value of the meal code.
-        [weakSelf confirmAddMealToLogWithMealCode:@(sender.tag)];
-        weakSelf.addToPlanButtonIndex = -1;
+        DMLogMealCode code = (DMLogMealCode)sender.tag;
+        [weakSelf confirmAddMealToLogWithMealCode:code onDate:date];
     };
     [dateController presentPickerIn:self];
 }
 
+/// Lets the user add a meal plan to the entire day.
 - (void)selectAllMealDate:(id)sender {
-    self.addToPlanButtonIndex = 0;
-    mealCodeToAdd = -1;
-    
     DMDatePickerViewController *dateController = [[DMDatePickerViewController alloc] init];
     __weak typeof(self) weakSelf = self;
     dateController.didSelectDateCallback = ^(NSDate *date) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.dateSelected = date;
-        [weakSelf confirmAddToLog];
-        weakSelf.addToPlanButtonIndex = -1;
+        [weakSelf confirmAddEntirePlanToLogToDate:date];
     };
     [dateController presentPickerIn:self];
 }
@@ -251,33 +223,23 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 }
 
 #pragma mark TABLE VIEW METHODS
-- (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath;
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
-    if ([mealPlanArray count] > 0) {
-        return [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] count];
-    } else {
-        return 0;
-    }
+    return (NSInteger)DMLogMealCodeSnackThree;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     view.backgroundColor = UIColorFromHex(0xF3F3F3);
 
     DMMealPlanDataProvider *dataProvider = [[DMMealPlanDataProvider alloc] init];
-    if (mealPlanArray.count != 0 ) {
-        NSNumber *totalCalories = [dataProvider getCaloriesForMealCodes: [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section]];
+    NSArray *mealItems = [self.mealPlan getMealItemsForMealCode:section];
+    NSString *mealNote = [self.mealPlan getMealNoteForMealCode:section];
+    if (mealItems.count) {
+        NSNumber *totalCalories = [dataProvider getTotalCaloriesForMealPlanItems:mealItems];
         
         NSString *sectionTitle;
-        
         if(section == 0) {
             sectionTitle = @"Breakfast";
         }
@@ -300,71 +262,79 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
             sectionTitle = @"NONE";
         }
         
-        UILabel *label = [[UILabel alloc] init];
-        label.frame = CGRectMake(10, 10, 150, 18);
-        label.textColor = [UIColor blackColor];
-        label.font = [UIFont boldSystemFontOfSize:17.0];
-        label.text = sectionTitle;
-        label.backgroundColor = [UIColor clearColor];
+        UILabel *mealLabel = [[UILabel alloc] init];
+        mealLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        mealLabel.textColor = [UIColor blackColor];
+        mealLabel.font = [UIFont boldSystemFontOfSize:17.0];
+        mealLabel.text = sectionTitle;
+        mealLabel.backgroundColor = [UIColor clearColor];
         
-        CGRect calorieLabelFrame = CGRectMake(SCREEN_WIDTH - 160, 10, 100, 18);
-        UILabel *calorieLabel			= [[UILabel alloc] initWithFrame:calorieLabelFrame];
-        calorieLabel.text				= [NSString stringWithFormat:@"%.0f Calories", [totalCalories doubleValue]];
-        calorieLabel.textColor			= [UIColor blackColor];
-        calorieLabel.font				= [UIFont boldSystemFontOfSize:13.0];
-        calorieLabel.backgroundColor	= [UIColor clearColor];
+        UILabel *calorieLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        calorieLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        calorieLabel.text = [NSString stringWithFormat:@"%.0f Calories", [totalCalories doubleValue]];
+        calorieLabel.textColor = [UIColor blackColor];
+        calorieLabel.font = [UIFont boldSystemFontOfSize:13.0];
+        calorieLabel.backgroundColor = [UIColor clearColor];
         calorieLabel.textAlignment = NSTextAlignmentRight;
         
-        [view addSubview:label];
-        [view addSubview:calorieLabel];
-        
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.translatesAutoresizingMaskIntoConstraints = NO;
         [button addTarget:self
                    action:@selector(selectMealDate:)
          forControlEvents:UIControlEventTouchUpInside];
         UIImage *myLogImage = [UIImage imageNamed:@"mylog"];
         myLogImage = [myLogImage imageWithTintColor:[UIColor blackColor] renderingMode:UIImageRenderingModeAlwaysTemplate];
         [button setImage:myLogImage forState:UIControlStateNormal];
-        button.frame = CGRectMake(SCREEN_WIDTH - 50, 0, 38, 38);
         button.tag = section;
         button.tintColor = [UIColor blackColor];
+        
+        UILabel *mealNoteLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        mealNoteLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        mealNoteLabel.text = mealNote;
+        mealNoteLabel.textColor = [UIColor blackColor];
+        mealNoteLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        mealNoteLabel.backgroundColor = [UIColor clearColor];
+        mealNoteLabel.textAlignment = NSTextAlignmentLeft;
+        mealNoteLabel.numberOfLines = 0;
+
+        [view addSubview:mealLabel];
+        [view addSubview:calorieLabel];
         [view addSubview:button];
+        [view addSubview:mealNoteLabel];
+        
+        [mealLabel.leadingAnchor constraintEqualToAnchor:view.leadingAnchor constant:12].active = YES;
+        [mealLabel.topAnchor constraintEqualToAnchor:view.topAnchor constant:8].active = YES;
+
+        [calorieLabel.leadingAnchor constraintEqualToAnchor:mealLabel.trailingAnchor constant:0].active = YES;
+        [calorieLabel.topAnchor constraintEqualToAnchor:mealLabel.topAnchor constant:0].active = YES;
+        [calorieLabel.bottomAnchor constraintEqualToAnchor:mealLabel.bottomAnchor constant:0].active = YES;
+        [calorieLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+        
+        [button.leadingAnchor constraintEqualToAnchor:calorieLabel.trailingAnchor constant:12].active = YES;
+        [button.widthAnchor constraintEqualToConstant:26].active = YES;
+        [button.centerYAnchor constraintEqualToAnchor:mealLabel.centerYAnchor constant:0].active = YES;
+        [button.trailingAnchor constraintEqualToAnchor:view.trailingAnchor constant:-12].active = YES;
+
+        [mealNoteLabel.topAnchor constraintEqualToAnchor:mealLabel.bottomAnchor constant:10].active = YES;
+        [mealNoteLabel.leadingAnchor constraintEqualToAnchor:view.leadingAnchor constant:12].active = YES;
+        [mealNoteLabel.trailingAnchor constraintEqualToAnchor:view.trailingAnchor constant:0].active = YES;
+        [mealNoteLabel.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:-10].active = YES;
+        [mealNoteLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisVertical];
     }
     return view;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 40;
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
-
-    if ([[[mealPlanArray objectAtIndex:self.selectedIndex] allKeys] containsObject:@"MealNotes"]) {
-        if ([[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealNotes"]valueForKey:@"MealCode"] containsObject:[NSString stringWithFormat:@"%ld", (long)section]]) {
-            
-            NSUInteger indexOfSection = [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealNotes"]valueForKey:@"MealCode"] indexOfObject:[NSString stringWithFormat:@"%ld", (long)section]];
-            
-            NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealNotes"] objectAtIndex:indexOfSection]];
-            if( [[tempDict valueForKey:@"MealNote"] isEqualToString:@""]) {
-                return [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section] count];
-            }
-            else {
-                return [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section] count] + 1;
-            }
-        }
-        else {
-            return [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section] count];
-        }
-    }
-    else {
-        return [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:section] count];
-    }
+    NSArray *mealItems = [self.mealPlan getMealItemsForMealCode:section];
+    return mealItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -376,141 +346,71 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     cell.userInteractionEnabled = NO;
     cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-    NSInteger indexpathRow = indexPath.row;
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
-    if (mealPlanArray.count != 0) {
-        if ([[[mealPlanArray objectAtIndex:self.selectedIndex] allKeys] containsObject:@"MealNotes"]) {
-            if ([[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealNotes"]valueForKey:@"MealCode"] containsObject:[NSString stringWithFormat:@"%ld", (long)indexPath.section]]) {
-                
-                NSUInteger indexOfSection = [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealNotes"]valueForKey:@"MealCode"] indexOfObject:[NSString stringWithFormat:@"%ld", (long)indexPath.section]];
-                
-                NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealNotes"] objectAtIndex:indexOfSection]];
-                
-                if(![[tempDict valueForKey:@"MealNote"] isEqualToString:@""]) {
-                    if (indexPath.row == 0) {
-                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                        cell.backgroundColor = UIColorFromHex(0xF3F3F3);
-                        cell.lblMealNote.font = [UIFont boldSystemFontOfSize:15.0];
-                        cell.accessoryType = UITableViewCellAccessoryNone;
-                        cell.lblMealNote.numberOfLines = 0;
-                        cell.userInteractionEnabled = NO;
-                    
-                        cell.lblMealNote.text = [tempDict valueForKey:@"MealNote"];
-                        cell.lblMealName.text = nil;
-                        cell.lblServingSize.text = nil;
-                        return cell;
-                    } else {
-                        cell.lblMealNote.text = nil;
-                        indexpathRow -= 1;
-                    }
-                } else {
-                  cell.lblMealNote.text = nil;
-                }
-            } else {
-               cell.lblMealNote.text = nil;
-            }
-        } else {
-           cell.lblMealNote.text = nil;
-        }
-    } else {
-        cell.lblMealNote.text = nil;
-    }
+    
+    NSArray *mealItems = [self.mealPlan getMealItemsForMealCode:indexPath.section];
+    DMMealPlanItem *mealItem = mealItems[indexPath.row];
     
     cell.backgroundColor = [UIColor clearColor];
-    [cell lblMealName].adjustsFontSizeToFitWidth = YES;
     cell.lblMealName.font = [UIFont systemFontOfSize:15.0];
-    cell.lblMealName.minimumScaleFactor = 10.0f;
     cell.lblServingSize.font = [UIFont systemFontOfSize:13.0];
     cell.lblServingSize.textColor = [UIColor darkGrayColor];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.lblMealName.textColor = [UIColor blackColor];
-    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.userInteractionEnabled = YES;
 
-    if (mealPlanArray.count != 0) {
-        NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary: [[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:[indexPath section]] objectAtIndex:indexpathRow]];
-                
-        DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-        DMFood *food = [provider getFoodForFoodKey:[tempDict valueForKey:@"FoodID"]];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    DMFood *food = [provider getFoodForFoodKey:mealItem.foodId];
+    NSString *measureDesc = [provider getMeasureDescriptionForMeasureId:mealItem.measureId
+                                                             forFoodKey:food.foodKey];
+    cell.lblServingSize.text = [NSString stringWithFormat:@"Serving: %.2f - %@",
+                                [mealItem.numberOfServings doubleValue], measureDesc];
+    NSString *foodName = food.name ?: @"Missing Food: Contact your provider.";
+    NSNumber *foodCategory = food.categoryId;
+    NSRange r = [foodName rangeOfString:foodName];
+    
+    if ([foodCategory intValue] == 66) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSString *hostname = [prefs stringForKey:@"HostName"];
+        NSNumber *recipeID = food.recipeId;
+        if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
+            cell.userInteractionEnabled = YES;
+            cell.lblMealName.delegate = self;
+            NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
+            [cell.lblMealName addLinkToURL:[NSURL URLWithString:url] withRange:r];
+        }
         
-        cell.lblServingSize.text = [NSString stringWithFormat:@"Serving: %.2f - %@", [[tempDict valueForKey:@"NumberOfServings"] doubleValue], food.description];
-
-        NSString *foodName = food.name;
-        cell.lblMealName.text = foodName;
-        
-        NSNumber *foodCategory = food.categoryId;
-        NSRange r = [foodName rangeOfString:foodName];
-        
-        if ([foodCategory intValue] == 66) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            NSString *hostname = [prefs stringForKey:@"HostName"];
-            NSNumber *recipeID = food.recipeId;
-            
-            if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
-                cell.userInteractionEnabled = YES;
-                cell.lblMealName.delegate = self;
-                NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-                [cell.lblMealName addLinkToURL:[NSURL URLWithString:url] withRange:r];
-            }
-            
+    } else {
+        NSString *foodURL = food.foodURL;
+        if (foodURL != nil && ![foodURL isEqualToString:@""]) {
+            cell.userInteractionEnabled = YES;
+            cell.lblMealName.delegate = self;
+            [cell.lblMealName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
         } else {
-            NSString *foodURL = food.foodURL;
-            if (foodURL != nil && ![foodURL isEqualToString:@""]) {
-                cell.userInteractionEnabled = YES;
-                cell.lblMealName.delegate = self;
-                [cell.lblMealName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-            } else {
-                cell.lblMealName.delegate = nil;
-            }
+            cell.lblMealName.delegate = nil;
         }
     }
     
+    cell.lblMealName.text = foodName;
+
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSInteger indexpathRow = indexPath.row;
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
-
-    if ([[[mealPlanArray objectAtIndex:self.selectedIndex] allKeys] containsObject:@"MealNotes"]) {
-        NSArray *mealnotesdict = [[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealNotes"];
-        
-        for (int i = 0; i < [mealnotesdict count]; i++) {
-            NSDictionary *mealNote = mealnotesdict[i];
-            NSNumber *mealCode = [mealNote valueForKey:@"MealCode"];
-            NSString *noteString = [mealNote valueForKey:@"MealNote"];
+    NSArray *mealItems = [self.mealPlan getMealItemsForMealCode:indexPath.section];
+    DMMealPlanItem *mealItem = mealItems[indexPath.row];
             
-            if ([mealCode intValue] == (long)indexPath.section && ![noteString isEqualToString:@""]) {
-                indexpathRow = MAX(indexPath.row - 1, 0);
-                break;
-            };
-        }
-    }
-        
-    if (mealPlanArray.count > 0){
-        
-        NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:[[[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:[indexPath section]] objectAtIndex:indexpathRow]];
-                
-        DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-        DMFood *food = [provider getFoodForFoodKey:[tempDict valueForKey:@"FoodID"]];
-        
-        dietmasterEngine.taskMode = @"Save";
-        dietmasterEngine.isMealPlanItem = YES;
-        [dietmasterEngine.mealPlanItemToExchangeDict setDictionary:[food dictionaryRepresentation]]; // For Exchanging!
-        int mealCode = (int)[indexPath section];
-        dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode]; // Meal to exchange with!
-        dietmasterEngine.indexOfItemToExchange = (int)[indexPath row]; // index to exchange, making it easier.
-        int planMealID = [[[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealID"] intValue];
-        dietmasterEngine.selectedMealPlanID = planMealID;
-        
-        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:[food dictionaryRepresentation]];
-        [self.navigationController pushViewController:dvController animated:YES];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    DMFood *food = [provider getFoodForFoodKey:mealItem.foodId];
 
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
+    DetailViewController *dvController = [[DetailViewController alloc] initWithFood:food
+                                                                           mealCode:indexPath.section
+                                                                   selectedServings:mealItem.numberOfServings
+                                                                       mealPlanItem:mealItem
+                                                                           mealPlan:self.mealPlan
+                                                                       selectedDate:nil];
+    [self.navigationController pushViewController:dvController animated:YES];
+
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -518,130 +418,33 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [tableView beginUpdates];
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
-
-        if (mealPlanArray.count != 0) {
-            long index = [indexPath row];
-            
-            NSMutableDictionary *selectedDictionary = [mealPlanArray objectAtIndex:self.selectedIndex];
-                        
-            if ([[selectedDictionary allKeys] containsObject:@"MealNotes"]) {
-                //cannot delete the meal note.
-                if (index == 0) {
-                    [tableView endUpdates];
-                    return;
-                }
-                //if not 0, subtract 1 to get the index of the mealItem
-                index--;
-            }
-            
-            NSDictionary *tempDict = [[NSDictionary alloc] initWithDictionary:
-                                      [[[[mealPlanArray objectAtIndex:self.selectedIndex]
-                                         valueForKey:@"MealItems"]
-                                        objectAtIndex:[indexPath section]]
-                                       objectAtIndex:index]
-                                      ];
-
-            NSString *planMealID = [[mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealID"];
-
-            NSDictionary *newDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                     planMealID, @"MealID",
-                                     [tempDict valueForKey:@"MealCode"], @"MealCode",
-                                     [tempDict valueForKey:@"FoodID"], @"FoodID",
-                                     nil];
-            [self deleteMealPlanItem:newDict];
-            
-            [[[[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"] objectAtIndex:[indexPath section]] removeObjectAtIndex:index];
-            
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            
-            [tableView endUpdates];
-            [tableView reloadData];
-        }
-    }
-}
-
-#pragma mark MISSING FOOD
--(void)checkForMissingFoods {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    NSArray *mealPlanArray = [dietmasterEngine.mealPlanArray copy];
-
-    if (mealPlanArray.count != 0) {
-        NSMutableArray *tempArray = [[NSMutableArray alloc] initWithArray:
-                                     [[mealPlanArray objectAtIndex:self.selectedIndex]
-                                      valueForKey:@"MealItems"]
-                                                                copyItems:YES];
+        NSArray *mealItems = [self.mealPlan getMealItemsForMealCode:indexPath.section];
+        DMMealPlanItem *mealItem = mealItems[indexPath.row];
         
-        NSMutableArray *arrMOnlyValid = (NSMutableArray *)[[NSMutableArray alloc] initWithArray:tempArray];
+        NSDictionary *params = @{@"MealID" : self.mealPlan.mealId,
+                                 @"MealCode" : @(mealItem.mealCode),
+                                 @"FoodID" : mealItem.foodId };
+        [self deleteMealPlanItem:params];
         
-        for (NSArray *mealArray in tempArray) {
-            int sectionIndex = (int)[tempArray indexOfObject:mealArray];
-            
-            NSMutableArray *indexPathArray = [[NSMutableArray alloc] init];
-            
-            for (NSDictionary *mealItems in mealArray) {
-                                
-                DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-                DMFood *food = [provider getFoodForFoodKey:[mealItems valueForKey:@"FoodID"]];
-
-                NSRange range = [food.name rangeOfString:@"Invalid"];
-                
-                if ([food.name isEqualToString:@"Invalid Food, Contact Support"] || range.location != NSNotFound) {
-                    [indexPathArray addObject:mealItems];
-                    
-                    NSMutableArray *arrMInvalidFoodRemoveOperation = [[NSMutableArray alloc] init];
-                    
-                    for (int i=0; i<[[tempArray objectAtIndex:sectionIndex] count]; i++) {
-                        if ([[[tempArray objectAtIndex:sectionIndex] objectAtIndex:i] valueForKey:@"FoodID"] != [mealItems valueForKey:@"FoodID"]) {
-                            [arrMInvalidFoodRemoveOperation addObject:[[tempArray objectAtIndex:sectionIndex] objectAtIndex:i]];
-                        }
-                        
-                        if ([[[tempArray objectAtIndex:sectionIndex] objectAtIndex:i] valueForKey:@"FoodID"] == [mealItems valueForKey:@"FoodID"]) {
-                            [arrMOnlyValid removeObject:mealItems];
-                        }
-                    }
-                    
-                    [arrMOnlyValid replaceObjectAtIndex:sectionIndex withObject:arrMInvalidFoodRemoveOperation];
-                    
-                    
-                    tempArray = [arrMOnlyValid mutableCopy];
-                    
-                    [self.tableView endUpdates];
-                    [self.tableView reloadData];
-                }
-            }
-        }
+        [self.mealPlan removeMealPlanItem:mealItem inMealCode:indexPath.section];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        [tableView endUpdates];
+        [tableView reloadData];
     }
-}
-
-- (void)removeMissingFood:(NSIndexPath *)indexPath {
-    
-    [self.tableView beginUpdates];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    
-    [[[[dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex] valueForKey:@"MealItems"]
-      objectAtIndex:[indexPath section]] removeObjectAtIndex:[indexPath row]];
-    
-    [self.tableView endUpdates];
-    [self.tableView reloadData];
 }
 
 #pragma mark ACTION SHEET METHODS
--(void)showActionSheet:(id)sender {
+
+- (void)showActionSheet:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
     [alert addAction:[UIAlertAction actionWithTitle:@"Add Plan to Log"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        self.addToPlanButtonIndex = 0;
         [self selectAllMealDate:nil];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Add New Food"
@@ -660,11 +463,10 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 #pragma mark CONFIRM DIALOG
 
 /// Confirms to the user they wish to add the meal to the date for given meal code.
-- (void)confirmAddMealToLogWithMealCode:(NSNumber *)mealCode {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+- (void)confirmAddMealToLogWithMealCode:(DMLogMealCode)mealCode onDate:(NSDate *)date {
     NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
     [dateFormat_display setDateFormat:@"MMMM d, yyyy"];
-    NSString *date_Display = [dateFormat_display stringFromDate:dietmasterEngine.dateSelected];
+    NSString *date_Display = [dateFormat_display stringFromDate:date];
     NSString *message = [NSString stringWithFormat:@"You are about to add this meal to:\n %@\nIs this correct?", date_Display];
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Log Date"
@@ -673,7 +475,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self addMealToLogWithCode:mealCode];
+        [self addMealToLogWithCode:mealCode onDate:date];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
                                               style:UIAlertActionStyleCancel
@@ -683,13 +485,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)confirmAddToLog {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
+- (void)confirmAddEntirePlanToLogToDate:(NSDate *)date {
     NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
-    [dateFormat_display setDateFormat:@"MMMM d, yyyy"];
+    [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
+    NSString *date_Display = [dateFormat_display stringFromDate:date];
     
-    NSString *date_Display		= [dateFormat_display stringFromDate:dietmasterEngine.dateSelected];
     NSString *message = [NSString stringWithFormat:@"You are about to add this plan to:\n %@\nIs this correct?", date_Display];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Log Date"
                                                                    message:message
@@ -697,7 +497,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self addPlanToLog];
+        [self addEntirePlanToLogOnDate:date];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
                                               style:UIAlertActionStyleCancel
@@ -713,22 +513,15 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
-#pragma mark LABEL UPDATE METHODS
-
--(void)updateCalorieLabels {
+- (void)updateCalorieLabels {
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-    recommendedCaloriesLabel.text = [NSString stringWithFormat:@"%i", [currentUser.userBMR intValue]];
-
-    double planCalories = 0;
+    self.recommendedCaloriesLabel.text = [NSString stringWithFormat:@"%i", [currentUser.userBMR intValue]];
     
     DMMealPlanDataProvider *dataProvider = [[DMMealPlanDataProvider alloc] init];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    for (int i = 0; i <=5; i++) {
-        NSDictionary *mealPlan = [dietmasterEngine.mealPlanArray objectAtIndex:self.selectedIndex];
-        NSNumber *totalCalories = [dataProvider getCaloriesForMealCodes:[[mealPlan valueForKey:@"MealItems"] objectAtIndex:i]];
-        planCalories = planCalories + [totalCalories doubleValue];
-    }
-    caloriesPlannedLabel.text = [NSString stringWithFormat:@"%.0f", planCalories];
+    NSArray *mealItems = [self.mealPlan getAllMealItems];
+    NSNumber *totalCalories = [dataProvider getTotalCaloriesForMealPlanItems:mealItems];
+
+    self.caloriesPlannedLabel.text = [NSString stringWithFormat:@"%.0f", totalCalories.doubleValue];
 }
 
 @end

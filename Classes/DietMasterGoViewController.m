@@ -208,7 +208,13 @@
     self.cpf_Pie.sliceColor = UIColor.lightGrayColor;
     self.cpf_Pie.borderPercentage = 0.5;
 
-    self.numberBadge = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(self.sendMsgButton.frame.origin.x + 20, self.sendMsgButton.frame.origin.y - 10, 20, 20)];
+    self.numberBadge = [[MKNumberBadgeView alloc] init];
+    self.numberBadge.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.sendMsgButton addSubview:self.numberBadge];
+    [self.numberBadge.heightAnchor constraintEqualToConstant:20].active = YES;
+    [self.numberBadge.widthAnchor constraintEqualToConstant:20].active = YES;
+    [self.numberBadge.leadingAnchor constraintEqualToAnchor:self.sendMsgButton.trailingAnchor constant:0].active = YES;
+    [self.numberBadge.bottomAnchor constraintEqualToAnchor:self.sendMsgButton.topAnchor constant:0].active = YES;
     self.numberBadge.backgroundColor = [UIColor clearColor];
     self.numberBadge.shadow = NO;
     self.numberBadge.font = [UIFont systemFontOfSize:12];
@@ -230,7 +236,6 @@
     int stepsTaken = (int)[[DayDataProvider sharedInstance] getStepsTakenWithDate:nil];
     self.lblStepsCount.text = [NSString stringWithFormat:@"%i", stepsTaken];
     
-    [self.sendMsgButton addSubview:self.numberBadge];
     [self reloadMessages];
     
     [self.values addObject:[NSNumber numberWithInt:0]];
@@ -563,9 +568,15 @@
 }
 
 - (void)updateBadge {
-    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
-    self.numberBadge.value = [provider unreadMessageCount];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = self.numberBadge.value;
+    if ([NSThread isMainThread]) {
+        DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
+        self.numberBadge.value = [provider unreadMessageCount];
+        [UIApplication sharedApplication].applicationIconBadgeNumber = self.numberBadge.value;
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateBadge];
+        });
+    }
 }
 
 - (void)reloadMessages {
@@ -643,11 +654,17 @@
 }
 
 - (void)reloadData {
-    DMAuthManager *authManager = [DMAuthManager sharedInstance];
-    DMUser *currentUser = [authManager loggedInUser];
-    NSString *name = [NSString stringWithFormat: @"Hi, %@!", currentUser.firstName];
-    self.nameLbl.text = name;
-    [self loadData];
+    if ([NSThread isMainThread]) {
+        DMAuthManager *authManager = [DMAuthManager sharedInstance];
+        DMUser *currentUser = [authManager loggedInUser];
+        NSString *name = [NSString stringWithFormat: @"Hi, %@!", currentUser.firstName];
+        self.nameLbl.text = name;
+        [self loadData];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadData];
+        });
+    }
 }
 
 - (void)loadData {

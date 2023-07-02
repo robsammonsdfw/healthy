@@ -214,13 +214,13 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         
     cell.repsTxtFld.tag = indexPath.row;
     [cell.repsTxtFld removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.repsTxtFld addTarget:self action:@selector(repsEditAction:) forControlEvents:UIControlEventEditingChanged];
+    [cell.repsTxtFld addTarget:self action:@selector(repsEditAction:) forControlEvents:UIControlEventEditingDidEnd];
     cell.repsTxtFld.delegate = self;
     cell.repsTxtFld.keyboardType = UIKeyboardTypeNumberPad;
 
     cell.weightTxtFld.tag = indexPath.row;
     [cell.weightTxtFld removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.weightTxtFld addTarget:self action:@selector(weightEditAction:) forControlEvents:UIControlEventEditingChanged];
+    [cell.weightTxtFld addTarget:self action:@selector(weightEditAction:) forControlEvents:UIControlEventEditingDidEnd];
     cell.weightTxtFld.delegate = self;
     cell.weightTxtFld.keyboardType = UIKeyboardTypeNumberPad;
 
@@ -427,9 +427,6 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         unit1Value = @([sender.text integerValue]);
     }
     NSInteger row = sender.tag;
-    if (row > self.routine.sets.count - 1) {
-        return;
-    }
     DMMoveSet *set = [self.routine.sets copy][row];
     [self.movesDataProvider setFirstUnitValue:unit1Value forMoveSet:set];
 }
@@ -443,31 +440,15 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
         unit2Value = @([sender.text integerValue]);
     }
     NSInteger row = sender.tag;
-    if (row > self.routine.sets.count - 1) {
-        return;
-    }
     DMMoveSet *set = [self.routine.sets copy][row];
     [self.movesDataProvider setSecondUnitValue:unit2Value forMoveSet:set];
 }
 
 #pragma mark - UITextViewDelegate
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    // Prevent crashing undo bug – see note below.
-    // Update: I don't see a note below.
-    if(range.length + range.location > textField.text.length) {
-        return NO;
-    }
-    
-    NSUInteger newLength = [textField.text length] + [string length] - range.length;
-    return newLength <= 4;
-}
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
-    
-    if([[touch view] isKindOfClass:[UITextField class]])
-    {
+    if ([[touch view] isKindOfClass:[UITextField class]]) {
         UITextField * txt = (UITextField*)([touch view]);
         [txt resignFirstResponder];
     }
@@ -477,16 +458,6 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
 - (BOOL)textFieldShouldReturn:(UITextField*)textField {
     [textField resignFirstResponder];
     return YES;
-}
-
-#pragma mark - MyMovesListViewDelegate
-
-- (void)userDidSelectOption:(NSDictionary *)dict {
-   // [self setData:dict];
-    //self.workoutMethodID = [dict[@"WorkoutUserDateID"]intValue];
-    //self.moveDetailDict = dict;
-    //[self loadSets];
-#warning THE ABOVE METHOD ISNT FOUND...WHY?
 }
 
 @end

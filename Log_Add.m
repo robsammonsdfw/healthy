@@ -2,159 +2,124 @@
 #import "DietMasterGoAppDelegate.h"
 #import "FoodsHome.h"
 #import "ExercisesViewController.h"
-#import "DietmasterEngine.h"
+#import "DMMealPlan.h"
 
-@interface Log_Add()
+@interface Log_Add() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSDate *selectedDate;
+@property (nonatomic, strong) IBOutlet UITableView *tblLogAdd;
+/// Options the user can select from.
+@property (nonatomic, strong) NSArray *mealOptionsArray;
+@property (nonatomic, strong) NSArray *exerciseOptionsArray;
+
+@property (nonatomic, strong) DMMealPlan *mealPlan;
 @end
 
-@implementation Log_Add
+static NSString *CellIdentifier = @"CellIdentifier";
 
-@synthesize date_currentDate, int_mealID;
+@implementation Log_Add
 
 - (instancetype)init {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
         _dateFormatter = [[NSDateFormatter alloc] init];
+        _selectedDate = [NSDate date]; // Default to now.
+    }
+    return self;
+}
+
+- (instancetype)initWithMealPlan:(DMMealPlan *)mealPlan selectedDate:(NSDate *)selectedDate {
+    self = [self init];
+    if (self) {
+        _mealPlan = mealPlan;
+        _selectedDate = selectedDate;
     }
     return self;
 }
 
 - (void)viewDidLoad {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    [super viewDidLoad];
     
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    
-    if (dietmasterEngine.isMealPlanItem) {
+    if (self.mealPlan) {
         self.title = @"Add To Plan";
-        arryMeals		= [[NSArray alloc] initWithObjects:@"Breakfast",@"Snack 1",@"Lunch",@"Snack 2",@"Dinner",@"Snack 3",nil];
-        arryExercise	= [[NSArray alloc] initWithObjects:nil];
-    }
-    else {
+        self.mealOptionsArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3"];
+    } else {
         self.title = @"Add To Log";
-        arryMeals		= [[NSArray alloc] initWithObjects:@"Breakfast",@"Snack 1",@"Lunch",@"Snack 2",@"Dinner",@"Snack 3",nil];
-        if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"mobilefit"]) {
-            arryExercise	= [[NSArray alloc] initWithObjects:nil];
-        }
-        else {
-            arryExercise	= [[NSArray alloc] initWithObjects:@"Exercise",nil];
-        }
+        self.mealOptionsArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3"];
+        self.exerciseOptionsArray = @[@"Exercise"];
     }
+    
+    // Special case.
+    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
+    if ([accountCode isEqualToString:@"mobilefit"]) {
+        // No exercise.
+        self.exerciseOptionsArray = @[];
+    }
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+        self.tblLogAdd.backgroundView = nil;
+        self.tblLogAdd.backgroundColor = [UIColor clearColor];
+        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Select_Meal_TVGray"]];
+    }
+    self.tblLogAdd.estimatedRowHeight = 44;
+    [self.tblLogAdd registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [self.navigationController.navigationBar setTranslucent:NO];
-
-    if(!self.date_currentDate) {
-        NSDate* sourceDate = [NSDate date];
-        [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        [self.dateFormatter setTimeZone:systemTimeZone];
-        NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
-        NSDate *destinationDate = [self.dateFormatter dateFromString:date_string];
-        self.date_currentDate = destinationDate;
-    }
-    
-    if(!self.int_mealID) {
-        self.int_mealID = @0;
-    }
-        
-    tblLogAdd.rowHeight = 44;
-    
-    if ([[appDefaults valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
-        tblLogAdd.backgroundView = nil;
-        tblLogAdd.backgroundColor = [UIColor clearColor];
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Select_Meal_TVGray"]];
-    }
-    
-    [super viewDidLoad];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(section == 0)
-        return arryMeals.count;
-    else
-        return arryExercise.count;
+    if (section == 0) {
+        return self.mealOptionsArray.count;
+    }
+    
+    return self.exerciseOptionsArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    NSString *title = @"";
+    if (indexPath.section == 0) {
+        title = self.mealOptionsArray[indexPath.row];
+    } else {
+        title = self.exerciseOptionsArray[indexPath.row];
     }
-    
-    if(indexPath.section == 0)
-        cell.textLabel.text = [arryMeals objectAtIndex:indexPath.row];
-    else
-        cell.textLabel.text = [arryExercise objectAtIndex:indexPath.row];
-    
-    cell.textLabel.font = [UIFont systemFontOfSize:13.0];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
+
+    cell.textLabel.text = title;
+    cell.textLabel.font = [UIFont systemFontOfSize:15.0];
     cell.selectionStyle =  UITableViewCellSelectionStyleGray;
     
     return cell;
 }
 
--(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
                                    initWithTitle: @"Back"
                                    style: UIBarButtonItemStylePlain
                                    target: nil action: nil];
-    
     [self.navigationItem setBackBarButtonItem: backButton];
     
     if (indexPath.section == 1) {
-        ExercisesViewController *exercisesViewController = [[ExercisesViewController alloc] init];
+        ExercisesViewController *exercisesViewController = [[ExercisesViewController alloc] initWithSelectedDate:self.selectedDate];
         [self.navigationController pushViewController:exercisesViewController animated:YES];
-    }
-    else {
-        NSUInteger row		= [indexPath row];
-        NSString *MealsName = [arryMeals objectAtIndex:row];
-        
-        if([MealsName isEqualToString:@"Breakfast"]) {
-            int_mealID = [NSNumber numberWithInt:0];
-        }
-        else if ([MealsName isEqualToString:@"Snack 1"])
-        {
-            int_mealID = [NSNumber numberWithInt:1];
-        }
-        else if ([MealsName isEqualToString:@"Lunch"]) {
-            int_mealID = [NSNumber numberWithInt:2];
-        }
-        else if ([MealsName isEqualToString:@"Snack 2"]) {
-            int_mealID = [NSNumber numberWithInt:3];
-        }
-        else if ([MealsName isEqualToString:@"Dinner"]) {
-            int_mealID = [NSNumber numberWithInt:4];
-        }
-        else if ([MealsName isEqualToString:@"Snack 3"]) {
-            int_mealID = [NSNumber numberWithInt:5];
-        }
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.selectedMealID = int_mealID;
-        
-        if (![dietmasterEngine.taskMode isEqualToString:@"AddMealPlanItem"]) {
-            dietmasterEngine.taskMode = @"Save";
-        }
-        
-        FoodsHome *fhController = [[FoodsHome alloc] init];
-        fhController.date_currentDate	= date_currentDate;
-        fhController.title = MealsName;
+    } else {
+        NSString *mealName = [self.mealOptionsArray objectAtIndex:indexPath.row];
+        DMLogMealCode mealCode = (DMLogMealCode)indexPath.row;
+        FoodsHome *fhController = [[FoodsHome alloc] initWithMealTitle:mealName
+                                                              mealCode:mealCode
+                                                              mealPlan:self.mealPlan
+                                                          selectedDate:self.selectedDate];
+        fhController.taskMode = self.taskMode;
         [self.navigationController pushViewController:fhController animated:YES];
     }
 }

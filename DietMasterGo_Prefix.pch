@@ -13,11 +13,14 @@
     #import "NSObject+Description.h"
     #import "UIViewController+Navigation.h"
     
+    #import "DietmasterEngine.h"
+
     #import "DMConstants.h"
     #import "DMAuthManager.h"
     #import "DMMyLogDataProvider.h"
     #import "DMDatabaseUtilities.h"
     #import "DMMessagesDataProvider.h"
+    #import "MyGoalViewController.h"
 
     // Import all Swift files.
     #import "DietMasterGoPlus-Swift.h"

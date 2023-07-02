@@ -16,7 +16,7 @@
     return [FMDatabase databaseWithPath:[self databasePath]];
 }
 
-+ (NSNumber *)getMaxValueForColumn:(NSString *)columnName inTable:(NSString *)tableName {
++ (NSNumber *)getMinValueForColumn:(NSString *)columnName inTable:(NSString *)tableName {
     if (!columnName.length || !tableName.length) {
         return nil;
     }
@@ -25,13 +25,13 @@
         return  nil;
     }
     
-    NSString *sqlString = [NSString stringWithFormat:@"SELECT MAX(%@) as MaxValue FROM %@", columnName, tableName];
+    NSString *sqlString = [NSString stringWithFormat:@"SELECT MIN(%@) as MinValue FROM %@", columnName, tableName];
     FMResultSet *rs = [db executeQuery:sqlString];
 
-    NSNumber *maxValue = nil;
+    NSNumber *minValue = nil;
     while ([rs next]) {
         NSDictionary *resultDict = [rs resultDictionary];
-        maxValue = resultDict[@"MaxValue"];
+        minValue = resultDict[@"MinValue"];
     }
     [rs close];
     if ([db hadError]) {
@@ -39,7 +39,7 @@
         return nil;
     }
     
-    return maxValue;
+    return minValue;
 }
 
 static NSString *DMDatabasePath = nil;

@@ -13,10 +13,6 @@
 @interface ManageFoods : UIViewController <UITextFieldDelegate, MeasurePickerDelegate, FoodCategoryDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate> {
 		
 	IBOutlet UIScrollView *scrollView;
-	NSDate *date_currentDate;
-	NSString *date_Today;
-	NSString *date_Display;
-	NSString *date_DB;
 		
 	BOOL keyboardIsShown;
 	BOOL ScannedFoodis;
@@ -86,11 +82,17 @@
 @property (nonatomic,retain) NSString *scanned_factualID;
 @property (nonatomic,retain) IBOutlet UIButton *scannerButton;
 @property (nonatomic) NSInteger savedFoodID;
-@property (nonatomic) BOOL hideAddToLog;
 @property (nonatomic) int intTabId;
 
+/// The task mode that the controller is going to perform.
+@property (nonatomic) DMTaskMode taskMode;
+
 /// Main inititalizer.
-- (instancetype)initWithFood:(NSDictionary *)foodDict NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFood:(NSDictionary *)foodDict
+                    mealCode:(DMLogMealCode)mealCode
+                    mealPlan:(DMMealPlan *)mealPlan
+                selectedDate:(NSDate *)selectedDate NS_DESIGNATED_INITIALIZER;
+
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
 - (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;

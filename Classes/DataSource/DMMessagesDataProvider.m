@@ -43,7 +43,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     }
 
     UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
-    __weak typeof(self) weakSelf = self;
     [fetcher getMessagesWithCompletion:^(NSArray<DMMessage *> *messages, NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -53,7 +52,7 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
             });
             return;
         }
-        [weakSelf processIncomingMessages:messages];
+        [self processIncomingMessages:messages];
         [[NSNotificationCenter defaultCenter] postNotificationName:UpdatingMessageNotification object:nil];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
@@ -148,11 +147,6 @@ NSString * const UpdatingMessageNotification = @"UpdatingMessageNotification";
     [rs close];
     
     return count;
-}
-
-- (NSNumber *)getLastMessageId {
-    NSNumber *messageId = [DMDatabaseUtilities getMaxValueForColumn:@"MessageID" inTable:@"Messages"];
-    return messageId;
 }
 
 - (void)setReadedMessageId:(NSNumber *)messageId {

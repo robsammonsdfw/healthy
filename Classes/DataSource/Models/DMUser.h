@@ -66,7 +66,7 @@ typedef NS_ENUM(NSUInteger, DMUserWeightGoalType) {
 @property (nonatomic) BOOL enableAppleHealthSync;
 
 /// Designated initializer.
-- (instancetype)initWithDictionary:(NSDictionary *)userDict NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDictionary:(NSDictionary *)userDict updateDetails:(BOOL)updateDetails NS_DESIGNATED_INITIALIZER;
 
 /// User's birthdate as a string.
 - (NSString *)birthDateString;

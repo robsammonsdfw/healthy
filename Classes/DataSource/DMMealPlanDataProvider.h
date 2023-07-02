@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class DMMealPlanItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,13 +31,14 @@ NS_ASSUME_NONNULL_BEGIN
                 withCompletionBlock:(nonnull completionBlockWithError)completionBlock;
 
 /// Fetches the user's planned meals and provides them in the completion block.
+/// NOTE: The object returned is an array of DMMealPlan objects
 - (void)fetchUserPlannedMealsWithCompletionBlock:(nonnull completionBlockWithObject)completionBlock;
 
 /// Gets the total calories for the array of meal codes provided.
-- (NSNumber *)getCaloriesForMealCodes:(NSArray *)array;
+- (NSNumber *)getTotalCaloriesForMealPlanItems:(NSArray<DMMealPlanItem *> *)mealItems;
 
 /// Inserts a meal plan to the local database.
-- (BOOL)insertMealPlanToLog:(NSDictionary *)dict toDate:(NSDate *)date;
+- (void)insertMealPlanItemIntoLog:(DMMealPlanItem *)mealPlanItem toDate:(NSDate *)date;
 
 #pragma mark - Grocery
 

@@ -254,9 +254,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     self.navigationItem.title = @"My Moves";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.taskMode = @"View";
-    
     // Default to today's date.
     NSDate *dateNow = [NSDate date];
     // Load default data.
@@ -269,11 +266,10 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    __weak typeof(self) weakSelf = self;
     [self.soapWebService fetchAllUserPlanDataWithCompletionBlock:^(BOOL completed, NSError *error) {
         // Load local data.
-        [weakSelf.allUserPlanDays addObjectsFromArray:[weakSelf.soapWebService getUserPlanDays]];
-        [weakSelf loadMovePlanForDate:weakSelf.selectedDate];
+        [self.allUserPlanDays addObjectsFromArray:[self.soapWebService getUserPlanDays]];
+        [self loadMovePlanForDate:self.selectedDate];
     }];
 
     [self.navigationController setNavigationBarHidden:NO];
@@ -318,9 +314,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     
     [self.calendarView selectDate:nextDate];
     [self loadMovePlanForDate:nextDate];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.dateSelected = nextDate;
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
@@ -346,9 +339,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     
     [self.calendarView selectDate:prevDate];
     [self loadMovePlanForDate:prevDate];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.dateSelected = prevDate;
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     

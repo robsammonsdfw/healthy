@@ -199,17 +199,23 @@ int const MaximumStringLength = 300;
 }
 
 - (void)reloadDataWithScroll {
-    [DMActivityIndicator hideActivityIndicator];
-    
-    NSInteger beforeMessageCount = [self countMessagesInDict:self.messagesDict];
-    DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
-    [self.messagesDict removeAllObjects];
-    [self.messagesDict addEntriesFromDictionary:[provider getMessagesByDate]];
-    NSInteger afterMessageCount = [self countMessagesInDict:self.messagesDict];
-    
-    [self.tableView reloadData];
-    if (beforeMessageCount != afterMessageCount) {
-        [self scrollToBottom];
+    if ([NSThread isMainThread]) {
+        [DMActivityIndicator hideActivityIndicator];
+        
+        NSInteger beforeMessageCount = [self countMessagesInDict:self.messagesDict];
+        DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
+        [self.messagesDict removeAllObjects];
+        [self.messagesDict addEntriesFromDictionary:[provider getMessagesByDate]];
+        NSInteger afterMessageCount = [self countMessagesInDict:self.messagesDict];
+        
+        [self.tableView reloadData];
+        if (beforeMessageCount != afterMessageCount) {
+            [self scrollToBottom];
+        }
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadDataWithScroll];
+        });
     }
 }
 

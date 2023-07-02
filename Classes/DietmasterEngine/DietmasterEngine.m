@@ -40,9 +40,8 @@
 
 @implementation DietmasterEngine
 
-@synthesize exerciseSelectedDict, taskMode, dateSelected, dateSelectedFormatted;
-@synthesize selectedMealID, selectedMeasureID, selectedCategoryID;
-@synthesize mealPlanArray, isMealPlanItem, mealPlanItemToExchangeDict, indexOfItemToExchange, selectedMealPlanID, didInsertNewFood;
+@synthesize selectedCategoryID;
+@synthesize didInsertNewFood;
 
 + (instancetype)sharedInstance {
     static DietmasterEngine *sharedInstance = nil;
@@ -59,16 +58,10 @@
         _dateformatter = [[NSDateFormatter alloc] init];
         exerciseSelectedDict = [[NSMutableDictionary alloc] init];
         
-        mealPlanArray = [[NSMutableArray alloc] init];
-        
         dateSelected = [[NSDate alloc] init];
         
         [_dateformatter setDateStyle:NSDateFormatterLongStyle];
         dateSelectedFormatted = [_dateformatter stringFromDate:dateSelected];
-        
-        isMealPlanItem = NO;
-        mealPlanItemToExchangeDict = [[NSMutableDictionary alloc] init];
-        didInsertNewFood = NO;
     }
     return self;
 }

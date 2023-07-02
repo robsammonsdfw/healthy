@@ -16,17 +16,24 @@
 @property (nonatomic) BOOL bSearchIsOn;
 
 /// The food being exchanged.
-@property (nonatomic, strong) NSDictionary *exchangedDict;
+@property (nonatomic, strong) DMFood *food;
+/// The meal plan item that the selected food will replace.
+@property (nonatomic, strong) DMMealPlanItem *mealPlanItem;
+@property (nonatomic, strong) DMMealPlan *mealPlan;
 @end
 
 static NSString *CellIdentifier = @"CellIdentifier";
 
 @implementation ExchangeFoodViewController
 
-- (instancetype)initWithExchangedFood:(NSDictionary *)exchangedDict {
+- (instancetype)initWithFoodToExchange:(DMFood *)food
+                       forMealPlanItem:(DMMealPlanItem *)mealPlanItem
+                            inMealPlan:(DMMealPlan *)mealPlan {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        _exchangedDict = exchangedDict;
+        _food = food;
+        _mealPlanItem = mealPlanItem;
+        _mealPlan = mealPlan;
         _foodResults = [[NSMutableArray alloc] init];
     }
     return self;
@@ -115,7 +122,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
 
 #pragma mark EXCHANGE METHODS
 
-- (void)confirmExchangeWithFood:(NSDictionary *)foodDict {
+- (void)confirmExchangeWithFood:(NSDictionary *)newFoodDict {
     NSString *message = @"Are you sure you wish to exchange with this food?";
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Exchange"
                                                                    message:message
@@ -123,7 +130,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self exchangeWithFood:foodDict];
+        [self exchangeWithNewFood:newFoodDict];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
                                               style:UIAlertActionStyleCancel
@@ -133,32 +140,32 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)exchangeWithFood:(NSDictionary *)foodDict {
+- (void)exchangeWithNewFood:(NSDictionary *)newFoodDict {
     [DMActivityIndicator showActivityIndicator];
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    DMFood *oldFood = [provider getFoodForFoodKey:self.mealPlanItem.foodId];
     
-    double newCalories = [[foodDict valueForKey:@"Calories"] doubleValue];
-    double caloriesToMaintain = [self.exchangedDict[@"Calories"] doubleValue];
-    double gramWeight = [[self.exchangedDict valueForKey:@"GramWeight"] doubleValue];
+    NSNumber *selectedMealPlanID = self.mealPlan.mealId;
+    double newCalories = [self.food.calories doubleValue];
+    double caloriesToMaintain = [oldFood.calories doubleValue];
+    double gramWeight = [self.food.gramWeight doubleValue];
     
     double servings = caloriesToMaintain / (newCalories / gramWeight);
     servings = [[NSString stringWithFormat:@"%.1f", servings] doubleValue];
     
-    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-    NSNumber *measureID = [provider getMeasureIDForFood:[foodDict valueForKey:@"FoodKey"]
-                                               fromMealPlanItem:self.exchangedDict];
+    NSNumber *measureID = [provider getMeasureIDForFoodKey:self.food.foodKey
+                                          fromMealPlanItem:self.mealPlanItem];
     
     NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @(dietmasterEngine.selectedMealPlanID), @"MealID",
-                                    self.exchangedDict[@"MealCode"], @"MealCode",
-                                    self.exchangedDict[@"FoodID"], @"FoodID",
+                                    selectedMealPlanID, @"MealID",
+                                    self.mealPlanItem.mealCode, @"MealCode",
+                                    self.mealPlanItem.foodId, @"FoodID",
                                     nil];
     
     NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    @(dietmasterEngine.selectedMealPlanID), @"MealID",
-                                    self.exchangedDict[@"MealCode"], @"MealCode",
-                                    [foodDict valueForKey:@"FoodKey"], @"FoodID",
+                                    self.mealPlan.mealId, "MealCode",
+                                    self.food.foodKey, @"FoodID",
                                     measureID, @"MeasureID",
                                     @(servings), @"ServingSize",
                                     nil];
@@ -171,19 +178,15 @@ static NSString *CellIdentifier = @"CellIdentifier";
         return;
     }
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    __weak typeof(self) weakSelf = self;
     [provider deleteUserPlannedMealItems:@[dict] withCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.didInsertNewFood = YES;
         [DMActivityIndicator showCompletedIndicator];
-        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
     }];
 }
 
 - (void)insertFood:(NSDictionary *)dict {
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    __weak typeof(self) weakSelf = self;
     [provider saveUserPlannedMealItems:@[dict] withCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
@@ -196,7 +199,6 @@ static NSString *CellIdentifier = @"CellIdentifier";
 - (void)exchangeFood:(NSDictionary *)food withFood:(NSDictionary *)newFood {
     [DMActivityIndicator showActivityIndicator];
     DMMealPlanDataProvider *provider = [[DMMealPlanDataProvider alloc] init];
-    __weak typeof(self) weakSelf = self;
     [provider exchangeUserPlannedMealItem:food withItem:newFood withCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
@@ -204,7 +206,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
             return;
         }
         [DMActivityIndicator showCompletedIndicator];
-        [weakSelf.navigationController popToViewController:[[weakSelf.navigationController viewControllers] objectAtIndex:2] animated:YES];
+        [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:2] animated:YES];
     }];
 }
 
@@ -272,17 +274,11 @@ static NSString *CellIdentifier = @"CellIdentifier";
 
 - (void)loadData {
     [DMActivityIndicator showActivityIndicator];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
     
     NSDictionary *params = @{ @"RequestType" : @"GetExchangeItemsForFood",
-                                @"UserID" : currentUser.userId,
-                                @"AuthKey" : currentUser.authToken,
-                                @"FoodID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"FoodID"],
-                                @"MealTypeID" : [dietmasterEngine.mealPlanItemToExchangeDict valueForKey:@"MealTypeID"] };
+                                @"FoodID" : [self.mealPlanItem valueForKey:@"FoodKey"],
+                                @"MealTypeID" : [self.mealPlanItem valueForKey:@"MealTypeID"] };
     
-    __weak typeof(self) weakSelf = self;
-    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     [DMDataFetcher fetchDataWithRequestParams:params completion:^(NSObject *object, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
@@ -290,10 +286,10 @@ static NSString *CellIdentifier = @"CellIdentifier";
             return;
         }
         NSDictionary *responseDict = (NSDictionary *)object;
-        [weakSelf.foodResults removeAllObjects];
-        [weakSelf.foodResults addObjectsFromArray:responseDict[@"Foods"]];
-        [provider getMissingFoodsIfNeededForFoods:[weakSelf.foodResults copy]];
-        [weakSelf.tableView reloadData];
+        [self.foodResults removeAllObjects];
+        [self.foodResults addObjectsFromArray:responseDict[@"Foods"]];
+#warning TODO: Should we look for missing foods here?
+        [self.tableView reloadData];
     }];
 }
 

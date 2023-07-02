@@ -55,6 +55,8 @@
 		0E83C4AC2A4F1EFE001DC6BD /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
 		0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
 		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
+		0E8BF1F62A50BB29000BDDF1 /* DMMealPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F52A50BB29000BDDF1 /* DMMealPlan.m */; };
+		0E8BF1F92A50BDCF000BDDF1 /* DMMealPlanItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F82A50BDCF000BDDF1 /* DMMealPlanItem.m */; };
 		0E8EC8E12A3CF5430095BDEC /* DMActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */; };
 		0E8EC8E42A3CF7E50095BDEC /* DMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */; };
 		0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */; };
@@ -337,6 +339,10 @@
 		0E8588D82A41238400AAB096 /* NSObject+Description.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Description.h"; sourceTree = "<group>"; };
 		0E8588D92A41238400AAB096 /* NSObject+Description.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Description.m"; sourceTree = "<group>"; };
 		0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeScanner.swift; sourceTree = "<group>"; };
+		0E8BF1F42A50BB29000BDDF1 /* DMMealPlan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMealPlan.h; sourceTree = "<group>"; };
+		0E8BF1F52A50BB29000BDDF1 /* DMMealPlan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMealPlan.m; sourceTree = "<group>"; };
+		0E8BF1F72A50BDCF000BDDF1 /* DMMealPlanItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMealPlanItem.h; sourceTree = "<group>"; };
+		0E8BF1F82A50BDCF000BDDF1 /* DMMealPlanItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMealPlanItem.m; sourceTree = "<group>"; };
 		0E8EC8DF2A3CF5430095BDEC /* DMActivityIndicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMActivityIndicator.h; sourceTree = "<group>"; };
 		0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMActivityIndicator.m; sourceTree = "<group>"; };
 		0E8EC8E22A3CF7E50095BDEC /* DMConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMConstants.h; sourceTree = "<group>"; };
@@ -840,6 +846,17 @@
 			path = ExercisesViewController;
 			sourceTree = "<group>";
 		};
+		0E8BF1F32A50BAD1000BDDF1 /* Meal Plan */ = {
+			isa = PBXGroup;
+			children = (
+				0E8BF1F42A50BB29000BDDF1 /* DMMealPlan.h */,
+				0E8BF1F52A50BB29000BDDF1 /* DMMealPlan.m */,
+				0E8BF1F72A50BDCF000BDDF1 /* DMMealPlanItem.h */,
+				0E8BF1F82A50BDCF000BDDF1 /* DMMealPlanItem.m */,
+			);
+			path = "Meal Plan";
+			sourceTree = "<group>";
+		};
 		0E8EC8DE2A3CF52A0095BDEC /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1131,6 +1148,7 @@
 		0EDAB6A92A3B4E9A00DB351A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0E8BF1F32A50BAD1000BDDF1 /* Meal Plan */,
 				0EA18DC62A475BC80017D131 /* Exercises */,
 				0EA18DC42A475BA40017D131 /* MovePlan */,
 				0EDAB6AA2A3B4EAA00DB351A /* DMUser.h */,
@@ -1776,6 +1794,7 @@
 				401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */,
 				401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */,
 				401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */,
+				0E8BF1F62A50BB29000BDDF1 /* DMMealPlan.m in Sources */,
 				0E4409732A49427400AF5BAD /* DMMyLogDataProvider.m in Sources */,
 				0E8EC8E82A3CF9770095BDEC /* NSString+Encode.m in Sources */,
 				401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */,
@@ -1830,6 +1849,7 @@
 				40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
 				0E6F913D2A43580A00956F1E /* UIViewController+Navigation.m in Sources */,
 				65462D2126BD1D99004D1654 /* DailyActivityTypeVC.m in Sources */,
+				0E8BF1F92A50BDCF000BDDF1 /* DMMealPlanItem.m in Sources */,
 				0EDAB6A72A3B3A1000DB351A /* DMGUtilities.m in Sources */,
 				401B655F20B3FC64004453E7 /* MessageCell.m in Sources */,
 				65F2DE86249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m in Sources */,
@@ -1918,7 +1938,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -1986,7 +2006,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -2052,7 +2072,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;

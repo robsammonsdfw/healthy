@@ -87,16 +87,6 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [self.tableView reloadData];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if (dietmasterEngine.didInsertNewFood == YES) {
-        dietmasterEngine.didInsertNewFood = NO;
-        [DMActivityIndicator showActivityIndicator];
-    }
-}
-
 - (void)editGroceryList {
     if (self.tableView.editing) {
         [self.tableView setEditing:NO animated:YES];

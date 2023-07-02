@@ -12,6 +12,5 @@
 
 @property (nonatomic, strong) IBOutlet TTTAttributedLabel *lblMealName;
 @property (nonatomic, strong) IBOutlet UILabel *lblServingSize;
-@property (nonatomic, strong) IBOutlet UILabel *lblMealNote;
 
 @end

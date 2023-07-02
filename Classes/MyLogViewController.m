@@ -6,8 +6,11 @@
 //  Copyright 2010 AE Studios. All rights reserved.
 //
 
-@import SafariServices;
 #import "MyLogViewController.h"
+
+@import SafariServices;
+#import <HealthKit/HealthKit.h>
+
 #import "MyMovesViewController.h"
 #import "DetailViewController.h"
 #import "ExercisesDetailViewController.h"
@@ -15,19 +18,23 @@
 #import "ExercisesViewController.h"
 #import "FoodsHome.h"
 #import "MyLogTableViewCell.h"
+#import "FoodsSearch.h"
+#import "StepData.h"
+#import "MyMovesDataProvider.h"
+#import "TTTAttributedLabel.h"
+#import "DietMasterGoViewController.h"
+#import "MyGoalViewController.h"
+#import "MealPlanViewController.h"
 
 #define DETAIL_VIEW_TAG 883344
 #define CALORIE_BAR_HEIGHT 185
 #define CALORIE_BAR_CLOSED_HEIGHT 68
 
-#import <HealthKit/HealthKit.h>
 #import "StepData.h"
 
-@interface MyLogViewController ()<SFSafariViewControllerDelegate>
+@interface MyLogViewController ()<SFSafariViewControllerDelegate, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate>
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) LogDaySummary *logDaySummary;
-@property (nonatomic) double stepCount;
-@property (nonatomic) double calories;
 /// Array of titles for the sections of the log.
 @property (nonatomic, strong) NSArray *sectionTitleArray;
 /// Dictionary of foods per meal. Key = Section title, eg. "Breakfast"
@@ -36,23 +43,27 @@
 /// Exercises logged for the day.
 @property (nonatomic, strong) NSMutableArray *exerciseResults;
 
-@property (nonatomic, strong) NSDate *date_currentDate1;
-@property (nonatomic, strong) NSNumber *int_mealID;
-@property (assign, nonatomic, readonly) NSInteger primaryKey;
+/// Date that's currently being displayed.
 @property (nonatomic, strong) NSDate *date_currentDate;
+
+/// For collecting Apple Calories / Steps.
 @property (nonatomic,retain) HKHealthStore *healthStore;
 @property (nonatomic, strong) StepData *stepData;
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UIToolbar *dateToolBar;
 @property (nonatomic, strong) IBOutlet UILabel *lbl_dateHdr;
+
+/// Totals for calculating Remaining values.
+@property (nonatomic) CGFloat actualCarbCalories;
+@property (nonatomic) CGFloat actualFatCalories;
+@property (nonatomic) CGFloat actualProteinCalories;
+
 @end
 
 static NSString *CellIdentifier = @"MyLogTableViewCell";
 
 @implementation MyLogViewController
-
-@synthesize primaryKey, date_currentDate, int_mealID, date_currentDate1;
 
 #pragma mark VIEW LIFECYCLE
 
@@ -101,10 +112,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
         NSDate *destinationDate = [self.dateFormatter dateFromString:date_string];
         self.date_currentDate = destinationDate;
-    }
-    
-    if(self.int_mealID == NULL) {
-        self.int_mealID = 0;
     }
     
     NSDate* sourceDate = [NSDate date];
@@ -186,13 +193,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
     [self updateCalorieTotal];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.dateSelected = self.date_currentDate;
     [self updateAppleWatchData];
-    
     [self updateData:self.date_currentDate];
-
 }
 
 - (void)updateAppleWatchData {
@@ -409,30 +411,23 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     if ([sectionTitle isEqualToString:@"Exercise"]) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
         NSDictionary *dict = self.exerciseResults[indexPath.row];
-        [dietmasterEngine.exerciseSelectedDict setDictionary:dict];
-        dietmasterEngine.taskMode = @"Edit";
-        dietmasterEngine.isMealPlanItem = NO;
-        
-        NSInteger mealCode = indexPath.section;
-        dietmasterEngine.selectedMealID = @(mealCode);
-        ExercisesDetailViewController *eDVController = [[ExercisesDetailViewController alloc] init];
-        [self.navigationController pushViewController:eDVController animated:YES];
+        ExercisesDetailViewController *controller =
+            [[ExercisesDetailViewController alloc] initWithExerciseDict:dict
+                                                           selectedDate:self.date_currentDate];
+        controller.taskMode = DMTaskModeEdit;
+        [self.navigationController pushViewController:controller animated:YES];
     }
     else {
+        DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
         NSDictionary *foodDict = self.sectionFoodsDict[sectionTitle][@"Foods"][indexPath.row];
-        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
-        
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.taskMode = @"Edit";
-        dietmasterEngine.isMealPlanItem = NO;
-        dietmasterEngine.dateSelected = date_currentDate;
-        int mealCode = [[foodDict valueForKey:@"MealCode"] intValue];
-        
-        dietmasterEngine.selectedMealID = [NSNumber numberWithInt:mealCode];
-        dvController.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:dvController animated:YES];
+        DMFood *food = [provider getFoodForFoodKey:foodDict[@"FoodID"]];
+        DetailViewController *controller = [[DetailViewController alloc] initWithFood:food
+                                                                             mealCode:indexPath.section
+                                                                     selectedServings:foodDict[@"Servings"]
+                                                                         selectedDate:self.date_currentDate];
+        controller.taskMode = DMTaskModeEdit;
+        [self.navigationController pushViewController:controller animated:YES];
     }
 }
 
@@ -449,10 +444,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSDate *date_Tomorrow = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
     
     self.date_currentDate = date_Tomorrow;
-    
-    //HHT temp (IMP line)
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.dateSelected = date_Tomorrow;
     
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     
@@ -481,64 +472,44 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     if (section > self.sectionTitleArray.count-1) {
         return;
     }
-    NSString *sectionName = self.sectionTitleArray[section];
-        
-    int_mealID = @([self.sectionTitleArray indexOfObject:sectionName]);
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.isMealPlanItem = NO;
     
-    if (section < self.sectionTitleArray.count-1) {
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        dietmasterEngine.selectedMealID = int_mealID;
-        dietmasterEngine.taskMode = @"Save";
-        FoodsSearch *fhController1 = [[FoodsSearch alloc] init];
-        fhController1.date_currentDate = date_currentDate;
-        fhController1.title = sectionName;
+    NSString *mealName = self.sectionTitleArray[section];
+    DMLogMealCode mealCode = (DMLogMealCode)section;
+    
+    if (mealCode <= DMLogMealCodeSnackThree) {
+        FoodsSearch *fhController1 = [[FoodsSearch alloc] initWithMealCode:mealCode selectedDate:self.date_currentDate];
+        fhController1.title = mealName;
+        fhController1.taskMode = DMTaskModeAdd;
         [self.navigationController pushViewController:fhController1 animated:YES];
         
-    } else if (section == self.sectionTitleArray.count-1) {
-        ExercisesViewController *exercisesViewController = [[ExercisesViewController alloc] init];
+    } else if (mealCode == DMLogMealCodeExercise) {
+        ExercisesViewController *exercisesViewController = [[ExercisesViewController alloc] initWithSelectedDate:self.date_currentDate];
+        exercisesViewController.taskMode = DMTaskModeAdd;
         [self.navigationController pushViewController:exercisesViewController animated:YES];
-    } else {
-        Log_Add *dvController = [[Log_Add alloc] init];
-        dvController.date_currentDate = date_currentDate;
-        [self.navigationController pushViewController:dvController animated:YES];
     }
 }
 
--(IBAction)showprevDate:(id)sender {
+- (IBAction)showprevDate:(id)sender {
     NSDateComponents *components = [[NSDateComponents alloc] init];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [components setDay:-1];
     NSDate *date_Yesterday = [cal dateByAddingComponents:components toDate:self.date_currentDate options:0];
-    
     self.date_currentDate = date_Yesterday;
     
-    //HHT temp (IMP line)
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.dateSelected = date_Yesterday;
-    
     HKAuthorizationStatus permissionStatus = [self.healthStore authorizationStatusForType:[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    
-    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-
     if (permissionStatus == HKAuthorizationStatusSharingAuthorized) {
+        DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
         if (currentUser.enableAppleHealthSync){
             [self readData];
         }
-        else {
-            DMLog(@"** Auto update apple watch sync is off **");
-        }
-    }
-    else if (permissionStatus == HKAuthorizationStatusSharingDenied) {
-        DMLog(@"** HKHealthStore HKAuthorizationStatusSharingDenied **");
     }
     
     [self updateData:date_Yesterday];
 }
 
 #pragma mark SAVE FAVORITE MEAL METHODS
--(IBAction)saveFavoriteMeal:(id)sender {
+
+- (IBAction)saveFavoriteMeal:(id)sender {
     NSInteger section = [sender tag];
     NSString *sectionTitle = self.sectionTitleArray[section];
     NSDictionary *mealDict = self.sectionFoodsDict[sectionTitle];
@@ -588,9 +559,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
     /// What we've consumed.
     NSString *remainingCalories = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
-    NSString *carbGramsActual = [NSString stringWithFormat:@"%.1fg", round(actualCarbCalories / 4)];
-    NSString *fatGramsActual = [NSString stringWithFormat:@"%.1fg", round(actualFatCalories / 9)];
-    NSString *proteinGramsActual = [NSString stringWithFormat:@"%.1fg", round(actualProteinCalories / 4)];
+    NSString *carbGramsActual = [NSString stringWithFormat:@"%.1fg", round(self.actualCarbCalories / 4)];
+    NSString *fatGramsActual = [NSString stringWithFormat:@"%.1fg", round(self.actualFatCalories / 9)];
+    NSString *proteinGramsActual = [NSString stringWithFormat:@"%.1fg", round(self.actualProteinCalories / 4)];
 
     [self.logDaySummary setRemainingLabelsWithCalorie:remainingCalories
                                                 carbs:carbGramsActual
@@ -653,15 +624,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (void)reloadData {
-    NSDate* sourceDate = [NSDate date];
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-    [dateFormat setTimeZone:systemTimeZone];
-    NSString *date_string = [dateFormat stringFromDate:sourceDate];
-    NSDate *date_Now = [dateFormat dateFromString:date_string];
-    
-    [self updateData:date_Now];
+    if ([NSThread isMainThread]) {
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadData];
+        });
+    }
 }
 
 - (void)updateData:(NSDate *)date {
@@ -674,7 +642,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSMutableArray *dinnerArray = [NSMutableArray array];
     NSMutableArray *snack3Array = [NSMutableArray array];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
@@ -689,9 +656,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.lbl_dateHdr.text = date_Display;
     self.date_currentDate = date;
     
-    dietmasterEngine.dateSelected = date;
-    dietmasterEngine.dateSelectedFormatted = date_Display;
-    
     NSString *query = [NSString stringWithFormat: @"SELECT Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food_Log_Items.NumberOfServings, Food.FoodKey, Food.Name, Food.Calories, Food.Fat, Food.Carbohydrates, Food.Protein, FoodMeasure.GramWeight, Food.ServingSize, Food.CategoryID, Food.RecipeID, Food.FoodURL, count(1) FROM Food_Log INNER JOIN Food_Log_Items ON Food_Log.MealID = Food_Log_Items.MealID INNER JOIN Food ON Food.FoodKey = Food_Log_Items.FoodID INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey WHERE (Food_Log.MealDate BETWEEN DATETIME('%@ 00:00:00') AND DATETIME('%@ 23:59:59')) AND Food_Log_Items.MeasureID = FoodMeasure.MeasureID group by Food_Log.MealID, Food_Log.MealDate, Food_Log_Items.MealCode, Food_Log_Items.FoodID, Food_Log_Items.MeasureID, Food.FoodKey ORDER BY Food_Log_Items.MealCode ASC", date_Today, date_Today];
     
     NSInteger breakfastCalories = 0;
@@ -701,13 +665,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSInteger dinnerCalories = 0;
     NSInteger snack3Calories = 0;
     
-    actualCarbCalories = 0.0;
-    actualFatCalories = 0.0;
-    actualProteinCalories = 0.0;
-    
+    self.actualCarbCalories = 0.0;
+    self.actualFatCalories = 0.0;
+    self.actualProteinCalories = 0.0;
+
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
-        
         NSInteger mealID = [rs intForColumn:@"MealCode"];
         double calories = [rs doubleForColumn:@"NumberOfServings"] * (([rs doubleForColumn:@"Calories"] * ([rs doubleForColumn:@"GramWeight"] / 100)) / [rs doubleForColumn:@"ServingSize"]);
         
@@ -734,13 +697,13 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                               nil];
         
         double fatGrams = [rs doubleForColumn:@"Fat"];
-        actualFatCalories = actualFatCalories + ([rs doubleForColumn:@"NumberOfServings"] * ((fatGrams * 9.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
+        self.actualFatCalories += ([rs doubleForColumn:@"NumberOfServings"] * ((fatGrams * 9.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
         
         double carbGrams = [rs doubleForColumn:@"Carbohydrates"];
-        actualCarbCalories = actualCarbCalories + ([rs doubleForColumn:@"NumberOfServings"] * ((carbGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
+        self.actualCarbCalories += ([rs doubleForColumn:@"NumberOfServings"] * ((carbGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
         
         double proteinGrams = [rs doubleForColumn:@"Protein"];
-        actualProteinCalories = actualProteinCalories + ([rs doubleForColumn:@"NumberOfServings"] * ((proteinGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
+        self.actualProteinCalories += ([rs doubleForColumn:@"NumberOfServings"] * ((proteinGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
         
         switch (mealID) {
             case 0:
@@ -785,13 +748,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.sectionFoodsDict[@"Snack 2"] = snack2Dict;
     self.sectionFoodsDict[@"Dinner"] = dinnerDict;
     self.sectionFoodsDict[@"Snack 3"] = snack3Dict;
-            
-    [self loadExerciseData:date];
-    
+
     [self.tableView reloadData];
-    [self.tableView reloadSectionIndexTitles];
-    
     [self updateCalorieTotal];
+    [self loadExerciseData:date];
 }
 
 - (void)readData {
@@ -818,20 +778,16 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
             DMLog(@"** An error occurred while calculating the statistics: %@ **",error.localizedDescription);
         }
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        NSDate *endDate = dietmasterEngine.dateSelected;
-        NSDate *startDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:0 toDate:endDate options:0];
-        
-        [results enumerateStatisticsFromDate:startDate toDate:endDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
+        NSDate *startDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:0 toDate:self.date_currentDate options:0];
+        [results enumerateStatisticsFromDate:startDate toDate:self.date_currentDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
             HKQuantity *quantity = result.sumQuantity;
             if (quantity) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
-                    [self stepCountSave];
+                    int stepCount = [quantity doubleValueForUnit:[HKUnit countUnit]];
+                    [self saveStepCount:stepCount];
                     
-                    double caloriesBurned = [self.stepData stepsToCaloriesForSteps:self.stepCount];
-                    self.calories = caloriesBurned;
-                    [self caloriesCount];
+                    double caloriesBurned = [self.stepData stepsToCaloriesForSteps:stepCount];
+                    [self addCaloriesForHealthKit:caloriesBurned];
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -844,8 +800,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self.healthStore executeQuery:query];
 }
 
-- (void)stepCountSave {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
+- (void)saveStepCount:(int)stepCount {
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
@@ -853,7 +808,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     int minutesExercised = 0;
     
     int exerciseIDTemp = 274;
-    minutesExercised = self.stepCount;
+    minutesExercised = stepCount;
     
     [db beginTransaction];
     
@@ -861,12 +816,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
     [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [outdateformatter setTimeZone:systemTimeZone];
-    NSString *logTimeString = [outdateformatter stringFromDate:dietmasterEngine.dateSelected];
+    NSString *logTimeString = [outdateformatter stringFromDate:self.date_currentDate];
     
     NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
     [keydateformatter setDateFormat:@"yyyyMMdd"];
     [keydateformatter setTimeZone:systemTimeZone];
-    NSString *keyDate = [keydateformatter stringFromDate:dietmasterEngine.dateSelected];
+    NSString *keyDate = [keydateformatter stringFromDate:self.date_currentDate];
     
     int exerciseID = exerciseIDTemp;
     NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
@@ -911,35 +866,25 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
-    
-    exerciseLogID = [db lastInsertRowId];
 }
 
-- (void)caloriesCount {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];    
+- (void)addCaloriesForHealthKit:(double)caloriesBurned {
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
-    
-    int minutesExercised = 0;
-    
-    int exerciseIDTemp = 272;
-    minutesExercised = self.calories;
-    
+        
     [db beginTransaction];
     
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-    NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
-    [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [outdateformatter setTimeZone:systemTimeZone];
-    NSString *logTimeString = [outdateformatter stringFromDate:dietmasterEngine.dateSelected];
+    [self.dateFormatter setTimeZone:systemTimeZone];
+    NSString *logTimeString = [self.dateFormatter stringFromDate:self.date_currentDate];
     
-    NSDateFormatter *keydateformatter = [[NSDateFormatter alloc] init];
-    [keydateformatter setDateFormat:@"yyyyMMdd"];
-    [keydateformatter setTimeZone:systemTimeZone];
-    NSString *keyDate = [keydateformatter stringFromDate:dietmasterEngine.dateSelected];
+    [self.dateFormatter setDateFormat:@"yyyyMMdd"];
+    [self.dateFormatter setTimeZone:systemTimeZone];
+    NSString *keyDate = [self.dateFormatter stringFromDate:self.date_currentDate];
     
-    int exerciseID = exerciseIDTemp;
+    int exerciseID = 272;
     NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
     
     int minIDvalue = 0;
@@ -961,10 +906,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     }
     
     NSDate* sourceDate = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:systemTimeZone];
-    NSString *date_string = [dateFormatter stringFromDate:sourceDate];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [self.dateFormatter setTimeZone:systemTimeZone];
+    NSString *date_string = [self.dateFormatter stringFromDate:sourceDate];
     
     NSString *insertQuery = [[NSString alloc] initWithFormat:@"REPLACE INTO Exercise_Log "
                              "(Exercise_Log_ID, Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Date_Modified, Log_Date) "
@@ -972,20 +916,16 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                              minIDvalue,
                              exerciseLogStrID,
                              exerciseID,
-                             minutesExercised,
+                             (int)caloriesBurned,
                              date_string,
                              logTimeString];
-    
     [db executeUpdate:insertQuery];
-    
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
     
     [self loadExerciseData:self.date_currentDate];
-    exerciseLogID = [db lastInsertRowId];
 }
 
 - (IBAction)goToSafetyGuidelines:(id)sender {

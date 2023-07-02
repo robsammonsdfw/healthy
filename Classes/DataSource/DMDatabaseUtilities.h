@@ -16,9 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Returns a new instance of the database.
 + (FMDatabase *)database;
 
-/// Gets the max value for the column provided in the table name.
+/// Gets the least value for the column provided in the table name.
 /// Used to help get ID values since most tables aren't auto incremented.
-+ (NSNumber *)getMaxValueForColumn:(NSString *)columnName inTable:(NSString *)tableName;
++ (NSNumber *)getMinValueForColumn:(NSString *)columnName inTable:(NSString *)tableName;
 
 @end
 

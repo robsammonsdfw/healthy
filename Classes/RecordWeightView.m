@@ -133,7 +133,6 @@
     }
     [db commit];
     
-    __weak typeof(self) weakSelf = self;
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     [provider saveWeightLogWithCompletionBlock:^(BOOL completed, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];
@@ -143,7 +142,7 @@
         }
         [DMActivityIndicator showCompletedIndicator];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
 
 }

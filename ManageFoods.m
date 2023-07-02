@@ -17,6 +17,9 @@
 /// The food that is being displayed to the user.
 @property (nonatomic, strong) NSMutableDictionary *foodDict;
 @property (nonatomic, strong) DMFood *food;
+@property (nonatomic, strong) NSDate *selectedDate;
+@property (nonatomic) DMLogMealCode mealCode;
+@property (nonatomic, strong) DMMealPlan *mealPlan;
 @end
 
 @implementation ManageFoods
@@ -29,10 +32,16 @@ CGPoint svos;
 
 #pragma mark VIEW LIFECYCLE
 
-- (instancetype)initWithFood:(NSDictionary *)foodDict {
+- (instancetype)initWithFood:(NSDictionary *)foodDict
+                    mealCode:(DMLogMealCode)mealCode
+                    mealPlan:(DMMealPlan *)mealPlan
+                selectedDate:(NSDate *)selectedDate {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
         _foodDict = [foodDict mutableCopy];
+        _mealCode = mealCode;
+        _mealPlan = mealPlan;
+        _selectedDate = selectedDate ?: [NSDate date];
         [self loadFood];
     }
     return self;
@@ -119,14 +128,12 @@ CGPoint svos;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
+        
     if (self.foodDict) {
         [self loadData];
     }
     
-    if (!self.helperBubbleWasShown && ![dietmasterEngine.taskMode isEqualToString:@"View"]) {
+    if (!self.helperBubbleWasShown && self.taskMode != DMTaskModeView) {
         
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"calloutbubble"]];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -834,8 +841,6 @@ CGPoint svos;
         [DMActivityIndicator hideActivityIndicator];
         if (error) {
             [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
-            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-            dietmasterEngine.taskMode = @"View";
             [self loadData];
             return;
         }
@@ -843,15 +848,13 @@ CGPoint svos;
         NSArray *results = (NSArray *)object;
         NSDictionary *foodValues = [results firstObject];
         if (saveToLog) {
-            DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-            if (dietmasterEngine.isMealPlanItem) {
-                dietmasterEngine.taskMode = @"AddMealPlanItem";
-            } else {
-                dietmasterEngine.taskMode = @"Save";
-            }
             DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
             DMFood *food = [provider getFoodForFoodKey:foodValues[@"FoodID"]];
-            DetailViewController *dvController = [[DetailViewController alloc] initWithFood:[food dictionaryRepresentation]];
+            DetailViewController *dvController = [[DetailViewController alloc] initWithFood:food
+                                                                                   mealCode:self.mealCode
+                                                                           selectedServings:@0
+                                                                               selectedDate:self.selectedDate];
+            dvController.taskMode = DMTaskModeAdd;
             [self.navigationController pushViewController:dvController animated:YES];
             [self clearEnteredData];
         }
@@ -1088,23 +1091,18 @@ CGPoint svos;
     NSString *actionButtonName = nil;
     NSString *saveToLogName = nil;
     
-    if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
+    if (self.taskMode == DMTaskModeEdit) {
         actionButtonName = @"Update";
         saveToLogName = @"Update & Add to Log";
-    }
-    else {
+    } else if (self.taskMode == DMTaskModeAdd) {
         actionButtonName = @"Save";
         saveToLogName = @"Save & Add to Log";
-    }
-    
-    if (self.hideAddToLog) {
-        saveToLogName = nil;
     }
     
     NSString *alertTitle = @"Select Action";
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:alertTitle message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
 
-    if([dietmasterEngine.taskMode isEqualToString:@"View"]) {
+    if(self.taskMode == DMTaskModeView) {
         [alert addAction:[UIAlertAction actionWithTitle:actionButtonName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             if ([self->txtfieldServingSize.text doubleValue]<=0) {
                 [self alertServingSizeInvalid];
@@ -1147,7 +1145,7 @@ CGPoint svos;
 }
 
 #pragma mark - SCROLL VIEW DELEGATES -
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     UIImageView *imageView = (UIImageView *)[self.view viewWithTag:5566];
     if (imageView == nil) {
         return;

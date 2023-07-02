@@ -7,20 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DietmasterEngine.h"
+#import "DMMealPlan.h"
 
-@interface FoodsHome : UIViewController {
-	IBOutlet UITableView *tblFoodsHome;
+@interface FoodsHome : UIViewController
 
-	NSDate *date_currentDate;
-	NSNumber *int_mealID;
-	
-	NSArray *arrySearch;
-	NSArray *arryOptions;
-	NSArray *arrayFavoriteMeals;
-}
+/// Task mode the user wishes to take.
+@property (nonatomic) DMTaskMode taskMode;
 
-@property (nonatomic, strong) NSDate *date_currentDate;
-@property (nonatomic, strong) NSNumber *int_mealID;
+- (instancetype)initWithMealTitle:(NSString *)mealTitle
+                         mealCode:(DMLogMealCode)mealCode
+                         mealPlan:(DMMealPlan *)mealPlan
+                     selectedDate:(NSDate *)selectedDate NS_DESIGNATED_INITIALIZER;
 
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 @end

@@ -22,6 +22,7 @@
 #import "ExercisesDetailViewController.h"
 #import "DetailViewController.h"
 #import "MealPlanDetailViewController.h"
+#import "MyGoalViewController.h"
 
 #import "DMAuthManager.h"
 #import "ManageFoods.h"

@@ -28,19 +28,31 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 @property (nonatomic, strong) ScrollableSegmentedControl *segmentedControl;
 @property (nonatomic, strong) NSMutableArray *foodResults;
 
+@property (nonatomic) DMLogMealCode mealCode;
+@property (nonatomic, strong) NSDate *selectedDate;
+@property (nonatomic, strong) DMMealPlanItem *mealPlanItem;
+@property (nonatomic, strong) DMMealPlan *mealPlan;
 @end
 
 @implementation FoodsSearch
 
-@synthesize date_currentDate, int_mealID;
+- (instancetype)initWithMealCode:(DMLogMealCode)mealCode
+                    selectedDate:(NSDate *)selectedDate {
+    return [self initWithMealCode:mealCode mealPlan:nil mealPlanItem:nil selectedDate:selectedDate];
+}
 
-#pragma mark - VIEW LIFECYCLE
-
-- (instancetype)init {
+- (instancetype)initWithMealCode:(DMLogMealCode)mealCode
+                        mealPlan:(DMMealPlan *)mealPlan
+                    mealPlanItem:(DMMealPlanItem *)mealPlanItem
+                    selectedDate:(NSDate *)selectedDate {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         _searchType = DMFoodSearchTypeAllFoods;
+        _mealPlanItem = mealPlanItem;
+        _mealPlan = mealPlan;
         _foodResults = [[NSMutableArray alloc] init];
+        _mealCode = mealCode;
+        _selectedDate = selectedDate ?: [NSDate date];
     }
     return self;
 }
@@ -119,17 +131,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-
-    if (!date_currentDate) {
-        NSDate* sourceDate = [NSDate date];
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
-        [dateFormat setTimeZone:systemTimeZone];
-        NSString *date_string = [dateFormat stringFromDate:sourceDate];
-        NSDate *date_today = [dateFormat dateFromString:date_string];
-        self.date_currentDate = date_today;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -150,9 +151,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if (dietmasterEngine.isMealPlanItem) {
+    if (self.mealPlanItem) {
         self.title = @"Equivalent Foods";
     }
 }
@@ -296,19 +295,16 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSMutableArray *arrFoodIDs = [[NSMutableArray alloc] init];
     FMResultSet *rs = [db executeQuery:query];
     
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    NSNumber *logMealID = [provider getLogMealIDForDate:self.selectedDate];
+
     while ([rs next]) {
         int_foodID = [[rs stringForColumn:@"FoodID"] intValue];
-        
-        NSNumber *mealID;
-        mealID = dietmasterEngine.selectedMealID;
-        if (!mealID) {
-            mealID = [NSNumber numberWithInt:0];
-        }
         
         NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               [NSNumber numberWithInt:[rs intForColumn:@"FoodID"]], @"FoodID",
                               [NSNumber numberWithInt:[rs intForColumn:@"FoodKey"]], @"FoodKey",
-                              mealID, @"MealID",
+                              logMealID, @"MealID",
                               [rs stringForColumn:@"Name"], @"Name",
                               [NSNumber numberWithInt:[rs intForColumn:@"Calories"]], @"Calories",
                               [NSNumber numberWithDouble:[rs doubleForColumn:@"Fat"]], @"Fat",
@@ -335,16 +331,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     while ([rs2 next]) {
         int_foodID = [[rs2 stringForColumn:@"FoodID"] intValue];
         
-        NSNumber *mealID;
-        mealID = dietmasterEngine.selectedMealID;
-        if (!mealID) {
-            mealID = [NSNumber numberWithInt:0];
-        }
-        
         NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                               [NSNumber numberWithInt:[rs2 intForColumn:@"FoodID"]], @"FoodID",
                               [NSNumber numberWithInt:[rs2 intForColumn:@"FoodKey"]], @"FoodKey",
-                              mealID, @"MealID",
+                              logMealID, @"MealID",
                               [rs2 stringForColumn:@"Name"], @"Name",
                               [NSNumber numberWithInt:[rs2 intForColumn:@"Calories"]], @"Calories",
                               [NSNumber numberWithDouble:[rs2 doubleForColumn:@"Fat"]], @"Fat",
@@ -368,7 +358,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [rs2 close];
     
     [self.tableView reloadData];
-    
     [DMActivityIndicator hideActivityIndicator];
 }
 
@@ -463,16 +452,23 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     NSDictionary *foodDict = [[self.foodResults objectAtIndex:indexPath.row] copy];
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.dateSelected = date_currentDate;
-    
-    if ([dietmasterEngine.taskMode isEqualToString:@"View"]) {
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-        ManageFoods *mfController = [[ManageFoods alloc] initWithFood:foodDict];
+    if (self.taskMode == DMTaskModeView) {
+        ManageFoods *mfController = [[ManageFoods alloc] initWithFood:foodDict
+                                                             mealCode:self.mealCode
+                                                             mealPlan:self.mealPlan
+                                                         selectedDate:self.selectedDate];
+        mfController.taskMode = self.taskMode;
         [self.navigationController pushViewController:mfController animated:YES];
-        mfController.hideAddToLog = YES;
     } else {
-        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:foodDict];
+        DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+        DMFood *food = [provider getFoodForFoodKey:foodDict[@"FoodKey"]];
+        DetailViewController *dvController = [[DetailViewController alloc] initWithFood:food
+                                                                               mealCode:self.mealCode
+                                                                       selectedServings:self.mealPlanItem.numberOfServings
+                                                                           mealPlanItem:self.mealPlanItem
+                                                                               mealPlan:self.mealPlan
+                                                                           selectedDate:self.selectedDate];
+        dvController.taskMode = self.taskMode;
         [self.navigationController pushViewController:dvController animated:YES];
     }
 }
@@ -485,7 +481,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.searchType = (DMFoodSearchType)control.selectedSegmentIndex;
     
     if (self.searchType == DMFoodSearchTypeFavoriteMeals) {
-        FavoriteMealsViewController *favoriteMealsViewController = [[FavoriteMealsViewController alloc] init];
+        FavoriteMealsViewController *favoriteMealsViewController =
+                [[FavoriteMealsViewController alloc] initWithMealCode:self.mealCode selectedDate:self.selectedDate];
         [self.navigationController pushViewController:favoriteMealsViewController animated:YES];
         return;
     }
@@ -497,13 +494,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 }
 
 - (IBAction)userTappedAddNewFoodButton:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    dietmasterEngine.taskMode = @"Save";
-    
-    ManageFoods *mfController = [[ManageFoods alloc] initWithFood:nil];
-    
+    ManageFoods *mfController = [[ManageFoods alloc] initWithFood:nil
+                                                         mealCode:self.mealCode
+                                                         mealPlan:self.mealPlan
+                                                     selectedDate:self.selectedDate];
+    mfController.taskMode = DMTaskModeAdd;
     [self.navigationController pushViewController:mfController animated:YES];
-    mfController = nil;
 }
 
 #pragma mark - TTTAttributedLabel Delegate

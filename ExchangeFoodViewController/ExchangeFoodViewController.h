@@ -7,12 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DMFood.h"
+#import "DMMealPlanItem.h"
 
 /// Presents foods to a user that they can exchange a food with.
 @interface ExchangeFoodViewController : UIViewController
 
 /// Main inititalizer. Pass in the food to be exchanged.
-- (instancetype)initWithExchangedFood:(NSDictionary *)exchangedDict NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFoodToExchange:(DMFood *)food
+                       forMealPlanItem:(DMMealPlanItem *)mealPlanItem
+                            inMealPlan:(DMMealPlan *)mealPlan NS_DESIGNATED_INITIALIZER;
+
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
 - (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;

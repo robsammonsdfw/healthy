@@ -7,11 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
 #import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
-#import "DietmasterEngine.h"
-#import "DMDataFetcher.h"
+#import "DMMealPlanItem.h"
+#import "DMMealPlan.h"
 
 #define cSection1 0
 #define cSection2 1
@@ -38,18 +36,29 @@
     NSMutableArray *pickerFractionArray;
     NSMutableArray *pickerDecimalArray;
     BOOL fractionPicker;
-    
-    int num_isFavorite;
-    
+        
     IBOutlet UIBarButtonItem *decimalButton;
     IBOutlet UIBarButtonItem *fractionButton;
     NSMutableArray *rowListArr;
 }
 
-@property (nonatomic, weak) NSString *foodIdValue;
+/// The task mode that the controller is going to perform.
+@property (nonatomic) DMTaskMode taskMode;
 
 /// Main inititalizer.
-- (instancetype)initWithFood:(NSDictionary *)foodDict NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFood:(DMFood *)food
+                    mealCode:(DMLogMealCode)mealCode
+            selectedServings:(NSNumber *)servings
+                selectedDate:(NSDate *)selectedDate;
+
+/// For dealing with meal plans.
+- (instancetype)initWithFood:(DMFood *)food
+                    mealCode:(DMLogMealCode)mealCode
+            selectedServings:(NSNumber *)servings
+                mealPlanItem:(DMMealPlanItem *)mealPlanItem
+                    mealPlan:(DMMealPlan *)mealPlan
+                selectedDate:(NSDate *)selectedDate NS_DESIGNATED_INITIALIZER;
+
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
 - (instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;

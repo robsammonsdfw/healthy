@@ -11,7 +11,7 @@
 #import "StepData.h"
 #import "DietmasterEngine.h"
 
-@interface ExercisesDetailViewController() <UITextFieldDelegate>
+@interface ExercisesDetailViewController() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (nonatomic) double stepCount;
 @property (nonatomic, strong) UIBarButtonItem *rightButton;
 @property (nonatomic) double calories;
@@ -36,31 +36,37 @@
 /// Constraint that attaches the imgBar to the bottom.
 @property (nonatomic, strong) NSLayoutConstraint *imgBarBottomConstraint;
 
+/// The exercise currently being presented.
+@property (nonatomic, strong) NSDictionary *exerciseDict;
+@property (nonatomic, strong) NSDate *selectedDate;
 @end
 
 @implementation ExercisesDetailViewController
 
-- (instancetype)init {
+- (instancetype)initWithExerciseDict:(NSDictionary *)exerciseDict
+                        selectedDate:(NSDate *)selectedDate {
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        _exerciseDict = exerciseDict;
+        _selectedDate = selectedDate ?: [NSDate date];
+    }
     return self;
 }
 
-#pragma mark DATA METHODS
--(void)loadData {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    self.exerciseNameLabel.text = [dietmasterEngine.exerciseSelectedDict valueForKey:@"ActivityName"];
+- (void)loadData {
+    self.exerciseNameLabel.text = [self.exerciseDict valueForKey:@"ActivityName"];
     
-    int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+    int exerciseIDTemp = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseIDTemp == 257 || exerciseIDTemp == 267 || exerciseIDTemp == 268 || exerciseIDTemp == 269 || exerciseIDTemp == 275){
-        int caloriesOverride = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Time_Minutes"] intValue];
+        int caloriesOverride = [[self.exerciseDict valueForKey:@"Exercise_Time_Minutes"] intValue];
         if (caloriesOverride != 0)
             self.tfCalories.text = [NSString stringWithFormat:@"%d", caloriesOverride];
         [self.pickerView selectRow:caloriesOverride inComponent:0 animated:YES];
     }
     else if (exerciseIDTemp == 259 || exerciseIDTemp == 276) {
         self.lblCaloriesBurnedTitle.text = @"Step Count";
-        int stepsTaken = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Time_Minutes"] intValue];
+        int stepsTaken = [[self.exerciseDict valueForKey:@"Exercise_Time_Minutes"] intValue];
         if (stepsTaken != 0)
             self.tfCalories.text = [NSString stringWithFormat:@"%d", stepsTaken];
         [self.pickerView selectRow:stepsTaken inComponent:0 animated:YES];
@@ -69,7 +75,7 @@
         
     }
     else {
-        int totalTime = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Time_Minutes"] intValue];
+        int totalTime = [[self.exerciseDict valueForKey:@"Exercise_Time_Minutes"] intValue];
         int hours = totalTime / 60;
         int minutes = (totalTime % 60);
         
@@ -104,9 +110,7 @@
     self.tfCalories.layer.borderWidth = 1.0f;
     self.tfCalories.layer.cornerRadius = 8;
     
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-    
+    int exerciseIDTemp = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274) {
         self.arrData = [NSMutableArray new];
         self.healthStore = [[HKHealthStore alloc] init];
@@ -134,10 +138,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    //HHT apple watch start (to solve issue when user comes from background)
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-    
+    int exerciseIDTemp = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274 || exerciseIDTemp == 275){
         self.arrData = [NSMutableArray new];
         self.healthStore = [[HKHealthStore alloc] init];
@@ -147,8 +148,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(cleanUpView) name:@"CleanUpView" object:nil];
-    
-    self.exerciseLogID = 0;
     [self loadData];
 }
 
@@ -156,8 +155,7 @@
     [super viewWillAppear:animated];
     
     [[UITextField appearance] setTintColor:[UIColor whiteColor]];
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    if([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
+    if (self.taskMode == DMTaskModeAdd) {
         self.navigationItem.title = @"Add to Log";
     }
     else {
@@ -175,7 +173,7 @@
     [self.pickerComponentOneArray removeAllObjects];
     [self.pickerComponentTwoArray removeAllObjects];
     
-    int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+    int exerciseID = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     BOOL showTextField = NO;
     
     if (exerciseID == 259) {
@@ -220,7 +218,10 @@
             [self.pickerComponentTwoArray addObject:minuteString];
         }
     }
-    self.dateLabel.text = [NSString stringWithFormat: @"Log Date: %@", dietmasterEngine.dateSelectedFormatted];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+    self.dateLabel.text = [NSString stringWithFormat: @"Log Date: %@", [dateFormatter stringFromDate:self.selectedDate]];
     
     // Set the constraint based on if TextField is in view or not.
     if (!showTextField) {
@@ -273,10 +274,8 @@
             return;
         }
         
-        DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-        NSDate *endDate = dietmasterEngine.dateSelected;
-        NSDate *startDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:0 toDate:endDate options:0];
-        [results enumerateStatisticsFromDate:startDate toDate:endDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
+        NSDate *startDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:0 toDate:self.selectedDate options:0];
+        [results enumerateStatisticsFromDate:startDate toDate:self.selectedDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 HKQuantity *quantity = result.sumQuantity;
                 if (quantity) {
@@ -304,10 +303,7 @@
     self.tfCalories.hidden = YES;
     self.lblCaloriesBurnedTitle.hidden = NO;
 
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    
-    int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-    
+    int exerciseIDTemp = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     if (exerciseIDTemp == 272 || exerciseIDTemp == 275){
         self.lblCaloriesBurnedTitle.text = @"Calories Burned";
         double caloriesBurned = [self.stepData stepsToCaloriesForSteps:self.stepCount];
@@ -325,7 +321,7 @@
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Action" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
+    if (self.taskMode == DMTaskModeAdd) {
         [alert addAction:[UIAlertAction actionWithTitle:@"Add to Log"
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
@@ -333,7 +329,7 @@
         }]];
     }
     
-    if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
+    if (self.taskMode == DMTaskModeEdit) {
         [alert addAction:[UIAlertAction actionWithTitle:@"Save Changes"
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
@@ -391,9 +387,7 @@
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-    
+    int exerciseID = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     if (exerciseID == 257 || exerciseID == 259 || exerciseID == 267 || exerciseID == 268 || exerciseID == 269 || exerciseID == 275 || exerciseID == 276) {
         return 1;
     }
@@ -406,9 +400,7 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
-    
+    int exerciseID = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     if (exerciseID == 257 || exerciseID == 259 || exerciseID == 267 || exerciseID == 268 || exerciseID == 269 || exerciseID == 275 || exerciseID == 276) {
         return [self.pickerComponentOneArray count];
     }
@@ -429,8 +421,7 @@
 }
 
 - (NSString *)pickerView:(UIPickerView *)thePickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
-    int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+    int exerciseID = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 267 || exerciseID == 275) {
         return [NSString stringWithFormat:@"%@ Calories", [self.pickerComponentOneArray objectAtIndex:row]];
@@ -481,7 +472,7 @@
     int hoursExercised = 0;
     int minutesExercised = 0;
     
-    int exerciseIDTemp = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+    int exerciseIDTemp = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     if (exerciseIDTemp == 257 || exerciseIDTemp == 267 || exerciseIDTemp == 268 || exerciseIDTemp == 269 || exerciseIDTemp == 275 || exerciseIDTemp == 276) {
         minutesExercised = [self.tfCalories.text intValue];
     }
@@ -502,7 +493,7 @@
         minutesExercised = minutesExercised + (hoursExercised * 60);
     }
     
-    if ([dietmasterEngine.taskMode isEqualToString:@"Save"]) {
+    if (self.taskMode == DMTaskModeAdd) {
         [db beginTransaction];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -514,13 +505,10 @@
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [keydateformatter setTimeZone:[NSTimeZone systemTimeZone]];
         
-        NSString *logTimeString = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
-        NSString *keyDate = [keydateformatter stringFromDate:dietmasterEngine.dateSelected];
+        NSString *logTimeString = [dateFormatter stringFromDate:self.selectedDate];
+        NSString *keyDate = [keydateformatter stringFromDate:self.selectedDate];
         
-        
-        
-        
-        int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+        int exerciseID = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
         NSString *exerciseLogStrID = [NSString stringWithFormat:@"%@-%i", keyDate, exerciseID];
         
         int minIDvalue = 0;
@@ -541,8 +529,7 @@
             }
         }
         
-        NSString *date_string = [dateFormatter stringFromDate:dietmasterEngine.dateSelected];
-        
+        NSString *date_string = [dateFormatter stringFromDate:self.selectedDate];
         
         NSString *insertQuery = [[NSString alloc] initWithFormat:@"REPLACE INTO Exercise_Log "
                                  "(Exercise_Log_ID, Exercise_Log_StrID, ExerciseID, Exercise_Time_Minutes, Date_Modified, Log_Date) "
@@ -561,9 +548,8 @@
         }
         [db commit];
         
-        self.exerciseLogID = (int)[db lastInsertRowId];
-    } else if ([dietmasterEngine.taskMode isEqualToString:@"Edit"]) {
-        self.exerciseLogID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Log_ID"] intValue];
+    } else if (self.taskMode == DMTaskModeEdit) {
+        int exerciseLogID = [[self.exerciseDict valueForKey:@"Exercise_Log_ID"] intValue];
         
         [db beginTransaction];
         
@@ -571,7 +557,7 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *date_string = [dateFormatter stringFromDate:[NSDate date]];
         
-        NSString *updateQuery = [[NSString alloc] initWithFormat:@"UPDATE Exercise_Log SET Exercise_Time_Minutes = %i, Date_Modified = '%@' WHERE Exercise_Log_ID = %i", minutesExercised, date_string, self.exerciseLogID];
+        NSString *updateQuery = [[NSString alloc] initWithFormat:@"UPDATE Exercise_Log SET Exercise_Time_Minutes = %i, Date_Modified = '%@' WHERE Exercise_Log_ID = %i", minutesExercised, date_string, exerciseLogID];
         
         [db executeUpdate:updateQuery];
         
@@ -597,9 +583,9 @@
     
     [db beginTransaction];
     
-    self.exerciseLogID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"Exercise_Log_ID"] intValue];
+    int exerciseLogID = [[self.exerciseDict valueForKey:@"Exercise_Log_ID"] intValue];
     
-    NSString *deleteQuery = [[NSString alloc] initWithFormat:@"DELETE FROM Exercise_Log WHERE Exercise_Log_ID = %i", self.exerciseLogID];
+    NSString *deleteQuery = [[NSString alloc] initWithFormat:@"DELETE FROM Exercise_Log WHERE Exercise_Log_ID = %i", exerciseLogID];
     
     [db executeUpdate:deleteQuery];
     
@@ -627,7 +613,7 @@
     DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
     
-    int exerciseID = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"ExerciseID"] intValue];
+    int exerciseID = [[self.exerciseDict valueForKey:@"ExerciseID"] intValue];
     
     if (exerciseID == 257 || exerciseID == 267 || exerciseID == 275) {
         
@@ -650,7 +636,7 @@
         
     }
     else {
-        double caloriesPerHour = [[dietmasterEngine.exerciseSelectedDict valueForKey:@"CaloriesPerHour"] floatValue];
+        double caloriesPerHour = [[self.exerciseDict valueForKey:@"CaloriesPerHour"] floatValue];
         
         int hoursExercised = 0;
         double minutesExercised = 0;

@@ -59,7 +59,6 @@
                                  //userPlanMoveListUpdates, @"MobileUserPlanMoveList",
                                  //userPlanMoveSetListUpdates, @"MobileUserPlanMoveSetList",
                                  nil];
-    __weak typeof(self) weakSelf = self;
     NSURL *url = [NSURL URLWithString:@"https://dmwebpro.com/MobileAPI/SyncUser"];
     [DMDataFetcher fetchDataWithJSONParams:params url:url method:@"POST" completion:^(NSObject *object, NSError *error) {
         if (error) {
@@ -71,10 +70,9 @@
             return;
         }
         
-        __strong typeof(weakSelf) strongSelf = weakSelf;
         // Process the fetch from the server.
         NSDictionary *results = (NSDictionary *)object;
-        [strongSelf saveUserPlanListData:results];
+        [self saveUserPlanListData:results];
 
         // TODO: Uncomment this once the server accepts updates being sent.
         // [strongSelf removeRowsWithDeletedStatus];
@@ -938,10 +936,12 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     if (![db open]) {
     }
     
-    // Get the highest ID in the SetList table.
-    NSNumber *highestSetId = [DMDatabaseUtilities getMaxValueForColumn:@"SetID" inTable:@"ServerUserPlanMoveSetList"];
-    if (highestSetId) {
-        highestSetId = @(highestSetId.integerValue + 1);
+    // Get the lowest ID in the SetList table.
+    NSNumber *lowestSetId = [DMDatabaseUtilities getMinValueForColumn:@"SetID" inTable:@"ServerUserPlanMoveSetList"];
+    if (lowestSetId) {
+        lowestSetId = @(lowestSetId.integerValue - 1);
+    } else {
+        lowestSetId = @(-100);
     }
     [db beginTransaction];
 
@@ -955,7 +955,7 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     NSString *syncResult = @"";
     NSString *uniqueID = [NSUUID UUID].UUIDString;
     NSString *parentUniqueID = [NSString stringWithFormat:@"M-%@", routine.routineId];
-    NSNumber *setId = moveSet.setId ?: highestSetId;
+    NSNumber *setId = moveSet.setId ?: lowestSetId;
     
     NSString *insertSQL = [NSString stringWithFormat: @"INSERT INTO ServerUserPlanMoveSetList (SetID, UserPlanMoveID, SetNumber, Unit1ID, Unit1Value, Unit2ID, Unit2Value, LastUpdated, UniqueID, Status, SyncResult, ParentUniqueID) VALUES "
                         "('%@', '%@', '%@', \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",
@@ -1075,23 +1075,25 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     if (![db open]) {
     }
     
-    // Get the highest ID in the MoveList table.
-    NSNumber *highestId = [DMDatabaseUtilities getMaxValueForColumn:@"UserPlanDateID" inTable:@"ServerUserPlanDateList"];
-    if (highestId) {
-        highestId = @(highestId.integerValue + 1);
+    // Get the lowest ID in the MoveList table.
+    NSNumber *lowestId = [DMDatabaseUtilities getMinValueForColumn:@"UserPlanDateID" inTable:@"ServerUserPlanDateList"];
+    if (lowestId) {
+        lowestId = @(lowestId.integerValue - 1);
+    } else {
+        lowestId = @(-100);
     }
     [db beginTransaction];
     
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
     NSString *lastUpdated = [self.dateFormatter stringFromDate:[NSDate date]];
     NSString *planDate = [self.dateFormatter stringFromDate:date];
-    NSString *uniqueId = [NSString stringWithFormat:@"D-%@", highestId];
+    NSString *uniqueId = [NSString stringWithFormat:@"D-%@", lowestId];
     NSString *status = @"New";
     
     NSString * insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanDateList "
                             "(UserPlanDateID, PlanID, PlanDate, LastUpdated, UniqueID, Status, ParentUniqueID) VALUES "
                             "(\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\")",
-                            highestId, movePlan.planId, planDate, lastUpdated, uniqueId, status, movePlan.uniqueId];
+                            lowestId, movePlan.planId, planDate, lastUpdated, uniqueId, status, movePlan.uniqueId];
     
     [db executeUpdate:insertSQL];
 
@@ -1100,7 +1102,7 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     }
     [db commit];
     
-    return highestId;
+    return lowestId;
 }
 
 - (void)deleteMoveSet:(DMMoveSet *)moveSet {
@@ -1178,10 +1180,12 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     if (![db open]) {
     }
     
-    // Get the highest ID in the MoveList table.
-    NSNumber *highestId = [DMDatabaseUtilities getMaxValueForColumn:@"UserPlanMoveID" inTable:@"ServerUserPlanMoveList"];
-    if (highestId) {
-        highestId = @(highestId.integerValue + 1);
+    // Get the lowest ID in the MoveList table.
+    NSNumber *lowestID = [DMDatabaseUtilities getMinValueForColumn:@"UserPlanMoveID" inTable:@"ServerUserPlanMoveList"];
+    if (lowestID) {
+        lowestID = @(lowestID.integerValue - 1);
+    } else {
+        lowestID = @(-100);
     }
     [db beginTransaction];
 
@@ -1191,7 +1195,7 @@ FMDatabase* db = [DMDatabaseUtilities database];    if (![db open]) {
     NSString *status = @"New";
     NSString *syncResult = @"";
     NSString *parentUniqueID = [NSString stringWithFormat:@"M-%@", moveDay.dayId];
-    NSNumber *routineId = moveRoutine.routineId ?: highestId;
+    NSNumber *routineId = moveRoutine.routineId ?: lowestID;
     NSString *uniqueId = [NSString stringWithFormat:@"M-%@", routineId];
 
     NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO ServerUserPlanMoveList (UserPlanMoveID, UserPlanDateID, MoveID, "

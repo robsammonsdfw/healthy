@@ -41,13 +41,11 @@
 
 - (void)loginUserWithToken:(NSString *)token completionBlock:(completionBlockWithObject)completionBlock {
     UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
-    __weak typeof(self) weakSelf = self;
     [fetcher signInUserWithPassword:token
                          completion:^(DMUser *user, NSString *status, NSString *message) {
-        __strong typeof(self) strongSelf = weakSelf;
-        NSError *error = [weakSelf checkIfErrorForStatus:status withMessage:message];
+        NSError *error = [self checkIfErrorForStatus:status withMessage:message];
         if (error) {
-            strongSelf.currentUser = nil;
+            self.currentUser = nil;
             if (completionBlock) {
                 completionBlock(nil, error);
             }
@@ -55,19 +53,20 @@
         }
 
         // Save user, but is missing user details.
-        strongSelf.currentUser = user;
+        self.currentUser = user;
 
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         // Set a key regarding first time sync.
         [defaults setObject:@"FirstTime" forKey:@"FirstTime"];
         [DMGUtilities setLastSyncToDate:nil];
+        [DMGUtilities setLastFoodSyncDate:nil];
 
         DMLog(@"User signed in: %@, Message: %@", user.firstName, message);
         
         // Now get the user's details.
-        [weakSelf updateUserInfoWithCompletion:^(NSObject *user, NSError *error) {
+        [self updateUserInfoWithCompletion:^(NSObject *user, NSError *error) {
             if (completionBlock) {
-                completionBlock(strongSelf.currentUser, error);
+                completionBlock(self.currentUser, error);
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginStateDidChangeNotification object:nil];
         }];
@@ -97,9 +96,6 @@
     // NSUserDefaults out.
     [defaults setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
     [defaults setObject:@"NewDesign" forKey:@"changeDesign"]; /// To Enable NEW DESIGN
-    
-    DietmasterEngine *dietmasterEngine = [DietmasterEngine sharedInstance];
-    [dietmasterEngine.mealPlanArray removeAllObjects];
     
     #pragma mark DELETE ALL USER DATA
     FMDatabase* db = [DMDatabaseUtilities database];
@@ -147,23 +143,20 @@
 /// Fetches the user's information from the server.
 - (void)updateUserInfoWithCompletion:(completionBlockWithObject)completionBlock {
     UserDataFetcher *fetcher = [[UserDataFetcher alloc] init];
-    __weak typeof(self) weakSelf = self;
     [fetcher getUserDetailsWithCompletion:^(NSDictionary *userDict, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
-                    completionBlock(strongSelf.currentUser, error);
+                    completionBlock(self.currentUser, error);
                 }
             });
             return;
         }
-        [strongSelf.currentUser updateUserDetails:userDict];
-        [strongSelf saveUserToDefaults:strongSelf.currentUser];
-        [strongSelf saveUserInfoToDatabase:strongSelf.currentUser];
+        [self.currentUser updateUserDetails:userDict];
+        [self saveCurrentUserToDefaultsAndDatabase];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
-                completionBlock(strongSelf.currentUser, nil);
+                completionBlock(self.currentUser, nil);
             }
         });
     }];
@@ -285,6 +278,7 @@ static NSString *DMCurrentUserDefaultsKey = @"DMCurrentUser";
     }
     NSData *encodedObject = [NSKeyedArchiver archivedDataWithRootObject:user requiringSecureCoding:YES error:nil];
     [defaults setObject:encodedObject forKey:DMCurrentUserDefaultsKey];
+    [defaults synchronize];
 }
 
 - (DMUser *)getUserFromDefaults {

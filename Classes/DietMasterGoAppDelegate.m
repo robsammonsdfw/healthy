@@ -137,6 +137,8 @@
         [self.loginViewController presentLoginInController:nil
                                             withCompletion:^(BOOL completed, NSError *error) {            
             // Now do a big sync.
+            [DMGUtilities setLastSyncToDate:nil];
+            [DMGUtilities setLastFoodSyncDate:nil];
             [DMActivityIndicator showActivityIndicator];
             [DMMyLogDataProvider syncDatabaseWithCompletionBlock:^(BOOL completed, NSError *error) {
                 [DMActivityIndicator hideActivityIndicator];
@@ -319,7 +321,6 @@
         }
         [prefs setBool:YES forKey:@"1.5"];
     }
-    
     
     BOOL upgrade6302023 = [prefs boolForKey:@"Upgrade6302023"];
     if (upgrade6302023 == NO) {

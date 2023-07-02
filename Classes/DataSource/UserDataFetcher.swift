@@ -42,7 +42,7 @@ class UserDataFetcher : NSObject {
                     return
                 }
                 let jsonResult = jsonArray[0]
-                let user = DMUser(dictionary: (jsonResult as NSDictionary) as! [AnyHashable : Any])
+                let user = DMUser(dictionary: (jsonResult as NSDictionary) as! [AnyHashable : Any], updateDetails: false)
                 DispatchQueue.main.async {
                     completion(user, jsonResult["Status"] as? String, jsonResult["Message"] as? String)
                 }

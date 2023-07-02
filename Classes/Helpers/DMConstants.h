@@ -35,6 +35,23 @@ typedef void(^completionBlockWithNameAndError)(NSString *name, NSError *error);
 /// Block for calling an action.
 typedef void(^actionBlock)(void);
 
+/// Different task modes that help shape the UI layouts
+/// or functionality.
+typedef NS_ENUM(NSUInteger, DMTaskMode) {
+    // Unknknown task mode. Likely a bug.
+    DMTaskModeUnknown = 0,
+    // The user is just browsing something.
+    DMTaskModeView,
+    // The user wishes to edit what's in the view.
+    DMTaskModeEdit,
+    // The user wishes to add something.
+    DMTaskModeAdd,
+    // The user wishes to add something to a plan.
+    DMTaskModeAddToPlan,
+    // The user wishes to exchange something.
+    DMTaskModeExchange
+};
+
 NS_ASSUME_NONNULL_BEGIN
 /// Houses the constants for use in the DMG app.
 @interface DMConstants : NSObject
