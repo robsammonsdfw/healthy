@@ -26,6 +26,7 @@ static NSString *CellIdentifier = @"Cell";
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self) {
         self.title = mealTitle;
+        self.navigationItem.title = mealTitle;
         _mealCode = mealCode;
         _mealPlan = mealPlan;
         _selectedDate = selectedDate ?: [NSDate date];
@@ -39,7 +40,6 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 		
 	self.tblFoodsHome.estimatedRowHeight = 44;
     [self.tblFoodsHome registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
@@ -51,7 +51,9 @@ static NSString *CellIdentifier = @"Cell";
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Select_Meal_TVGray"]];
     }
 
+    [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

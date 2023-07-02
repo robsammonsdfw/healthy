@@ -117,6 +117,14 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
          
+    if (self.mealPlanItem) {
+        self.title = @"Equivalent Foods";
+        self.navigationItem.title = @"Equivalent Foods";
+    } else {
+        self.title = @"Search Foods";
+        self.navigationItem.title = @"Search Foods";
+    }
+
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setFrame:CGRectMake(0, 0, 30, 30)];
     UIImage *plusImage = [UIImage imageNamed:@"05-plus"];
@@ -145,14 +153,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     if (self.searchType == DMFoodSearchTypeFavoriteMeals) {
         self.searchType = DMFoodSearchTypeAllFoods;
         [self loadSearchData:self.mySearchBar.text];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    if (self.mealPlanItem) {
-        self.title = @"Equivalent Foods";
     }
 }
 

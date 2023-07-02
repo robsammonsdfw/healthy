@@ -57,7 +57,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     self.tableView.contentInset = UIEdgeInsetsMake(5, 0, 50, 0);
     
     self.title = @"Grocery List";
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationItem.title = @"Grocery List";
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+
     self.view.backgroundColor = PrimaryColor
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
@@ -81,9 +85,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
+    [super viewWillAppear:animated];    
     [self.tableView reloadData];
 }
 

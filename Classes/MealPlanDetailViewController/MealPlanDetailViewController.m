@@ -85,11 +85,12 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     [self.infoBtn addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchUpInside];
     [self.infoBtn setUserInteractionEnabled:YES];
     
-    self.title = @"My Meals";
-    [self.navigationItem setTitle:@"My Meals"];
+    self.title = @"Meal Details";
+    [self.navigationItem setTitle:@"Meal Details"];
 
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
                                    initWithTitle: @"Back"

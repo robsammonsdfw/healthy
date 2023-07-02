@@ -64,6 +64,9 @@ static NSString *CellIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.title = @"My Meals";
+    [self.navigationItem setTitle:@"My Meals"];
+
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -93,9 +96,6 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    self.title = @"My Meals";
-    [self.navigationItem setTitle:@"My Meals"];
     [self loadData];
 }
 

@@ -178,6 +178,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    lblMealName.text = @"";
+    if (self.taskMode == DMTaskModeView && self.mealPlan) {
+        self.navigationItem.title = @"Plan Item Detail";
+        self.title = @"Plan Item Detail";
+
+    } else if (self.taskMode == DMTaskModeEdit) {
+        self.navigationItem.title = @"Edit Log";
+        self.title = @"Edit Log";
+
+    } else if (self.taskMode == DMTaskModeAdd) {
+        self.navigationItem.title = @"Add to Log";
+        self.title = @"Add to Log";
+        lblMealName.text = @"Please confirm measure.";
+
+    } else if (self.taskMode == DMTaskModeAddToPlan) {
+        self.navigationItem.title = @"Add to Plan";
+        self.title = @"Add to Plan";
+        lblMealName.text = @"Please confirm measure.";
+    }
+    
+    if (!self.mealPlan) {
+        NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
+        NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
+        [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
+        [dateFormat_display setTimeZone:systemTimeZone];
+        NSString *dateString = [dateFormat_display stringFromDate:self.selectedDate];
+        lblMealName.text = [NSString stringWithFormat: @"Log Date: %@", dateString];
+    }
+    lblMealName.font = [UIFont boldSystemFontOfSize:17];
+    
     rowListArr = [[NSMutableArray alloc] init];
 
     _imgbar.backgroundColor= PrimaryColor;
@@ -249,7 +280,9 @@
         pickerView.backgroundColor = [UIColor whiteColor];
     }
     
+    [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -260,31 +293,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    if (self.taskMode == DMTaskModeView && self.mealPlan) {
-        self.navigationItem.title = @"Plan Item Detail";
-    } else if (self.taskMode == DMTaskModeEdit) {
-        self.navigationItem.title = @"Edit Log";
-
-    } else if (self.taskMode == DMTaskModeAdd) {
-        if (self.mealPlan) {
-            self.navigationItem.title = @"Add to Plan";
-        } else {
-            self.navigationItem.title = @"Add to Log";
-        }
-    }
-    
-    if (self.mealPlan) {
-        lblMealName.text = @"Add item to Plan";
-    } else {
-        NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
-        NSDateFormatter *dateFormat_display = [[NSDateFormatter alloc] init];
-        [dateFormat_display setDateStyle:NSDateFormatterLongStyle];
-        [dateFormat_display setTimeZone:systemTimeZone];
-        NSString *dateString = [dateFormat_display stringFromDate:self.selectedDate];
-        lblMealName.text = [NSString stringWithFormat: @"Log Date: %@", dateString];
-    }
-    lblMealName.font = [UIFont boldSystemFontOfSize:17];
     
     infoBtn.frame = CGRectMake(SCREEN_WIDTH - 25, lblProtein.frame.origin.y, infoBtn.frame.size.width, infoBtn.frame.size.height);
 }
@@ -438,7 +446,6 @@
 /// Lets the user choose a date prior to completion block action.
 - (void)selectMealDateWithCompletionBlock:(completionBlock)completionBlock {
     DMDatePickerViewController *dateController = [[DMDatePickerViewController alloc] init];
-    __weak typeof(self) weakSelf = self;
     dateController.didSelectDateCallback = ^(NSDate *date) {
         self.selectedDate = date;
         if (completionBlock) {
@@ -745,6 +752,15 @@
         }
         [db commit];
         
+        [DMActivityIndicator showCompletedIndicator];
+        // Wait a second before pushing view back because otherwise the completed indicator won't work.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:DMTriggerUpSyncNotification object:nil];
+            NSInteger index = self.mealPlan ? 2 : 1;
+            [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:index] animated:YES];
+        });
+
     } else if (self.taskMode == DMTaskModeEdit) {
         
         [db beginTransaction];
@@ -760,12 +776,15 @@
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
+        
+        [DMActivityIndicator showCompletedIndicator];
+        // Wait a second before pushing view back because otherwise the completed indicator won't work.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:DMTriggerUpSyncNotification object:nil];
+            [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
+        });
     }
-    
-    [DMActivityIndicator showCompletedIndicator];
-    [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:DMTriggerUpSyncNotification object:nil];
-    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
 }
 
 - (void)deleteFromFavorites {

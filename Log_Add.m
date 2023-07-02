@@ -42,9 +42,11 @@ static NSString *CellIdentifier = @"CellIdentifier";
     
     if (self.mealPlan) {
         self.title = @"Add To Plan";
+        self.navigationItem.title = @"Add To Plan";
         self.mealOptionsArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3"];
     } else {
         self.title = @"Add To Log";
+        self.navigationItem.title = @"Add To Log";
         self.mealOptionsArray = @[@"Breakfast", @"Snack 1", @"Lunch", @"Snack 2", @"Dinner", @"Snack 3"];
         self.exerciseOptionsArray = @[@"Exercise"];
     }
@@ -63,8 +65,10 @@ static NSString *CellIdentifier = @"CellIdentifier";
     self.tblLogAdd.estimatedRowHeight = 44;
     [self.tblLogAdd registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
     
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

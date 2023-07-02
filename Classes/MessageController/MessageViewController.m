@@ -60,7 +60,6 @@ int const MaximumStringLength = 300;
     
     self.view = [[UIView alloc] initWithFrame:CGRectZero];
     self.view.backgroundColor = UIColorFromHex(0xF3F3F3);
-    self.title = @"Messages";
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -113,7 +112,11 @@ int const MaximumStringLength = 300;
     syncButton.tintColor = [UIColor blackColor];
     self.navigationItem.rightBarButtonItem = syncButton;
 
+    self.title = @"Messages";
+    self.navigationItem.title = @"Messages";
     [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

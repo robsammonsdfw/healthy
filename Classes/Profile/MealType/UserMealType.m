@@ -23,14 +23,18 @@
     [super viewDidLoad];
     [self.btnNo setSelected:YES];
     self.picker = [SBPickerSelector picker];
+    
+    self.title = @"Meal Type";
+    [self.navigationItem setTitle:@"Meal Type"];
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 }
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self getMealType];
-    self.title = @"Meal Type";
-    [self.navigationItem setTitle:@"Meal Type"];
 
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor]}];

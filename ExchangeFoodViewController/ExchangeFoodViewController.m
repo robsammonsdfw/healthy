@@ -41,7 +41,6 @@ static NSString *CellIdentifier = @"CellIdentifier";
 - (void)loadView {
     [super loadView];
     self.view = [[UIView alloc] init];
-    self.title = @"Exchange Food";
     
     self.tableView = [[UITableView alloc] init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -73,8 +72,11 @@ static NSString *CellIdentifier = @"CellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
         
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.title = @"Exchange Food";
+    self.navigationItem.title = @"Exchange Food";
+    [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
