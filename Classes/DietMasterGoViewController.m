@@ -213,8 +213,8 @@
     [self.sendMsgButton addSubview:self.numberBadge];
     [self.numberBadge.heightAnchor constraintEqualToConstant:20].active = YES;
     [self.numberBadge.widthAnchor constraintEqualToConstant:20].active = YES;
-    [self.numberBadge.leadingAnchor constraintEqualToAnchor:self.sendMsgButton.trailingAnchor constant:0].active = YES;
-    [self.numberBadge.bottomAnchor constraintEqualToAnchor:self.sendMsgButton.topAnchor constant:0].active = YES;
+    [self.numberBadge.centerXAnchor constraintEqualToAnchor:self.sendMsgButton.trailingAnchor constant:-1].active = YES;
+    [self.numberBadge.centerYAnchor constraintEqualToAnchor:self.sendMsgButton.topAnchor constant:1].active = YES;
     self.numberBadge.backgroundColor = [UIColor clearColor];
     self.numberBadge.shadow = NO;
     self.numberBadge.font = [UIFont systemFontOfSize:12];
@@ -251,6 +251,7 @@
         self.scheduledView.hidden = YES;
     }
     
+    [self updateBadge];
     [self reloadData];
 }
 
