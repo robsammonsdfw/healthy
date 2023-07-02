@@ -141,15 +141,17 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
                 [DMGUtilities showAlertWithTitle:@"Error" message:error.localizedDescription inViewController:nil];
                 return;
             }
-            NSArray *results = (NSArray *)object;
-            for (DMMealPlan *mealPlan in results) {
-                if ([mealPlan.mealId isEqual:self.mealPlan.mealId]) {
-                    self.mealPlan = mealPlan;
-                    break;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSArray *results = (NSArray *)object;
+                for (DMMealPlan *mealPlan in results) {
+                    if ([mealPlan.mealId isEqual:self.mealPlan.mealId]) {
+                        self.mealPlan = mealPlan;
+                        break;
+                    }
                 }
-            }
-            [self.tableView reloadData];
-            [self updateCalorieLabels];
+                [self.tableView reloadData];
+                [self updateCalorieLabels];
+            });
         }];
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -408,6 +410,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
                                                                        mealPlanItem:mealItem
                                                                            mealPlan:self.mealPlan
                                                                        selectedDate:nil];
+    dvController.taskMode = DMTaskModeAdd;
     [self.navigationController pushViewController:dvController animated:YES];
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

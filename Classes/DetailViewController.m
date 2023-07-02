@@ -89,29 +89,20 @@
     double servingSize = [self.food.servingSize floatValue];
     double foodCalories = [self.food.calories floatValue];
     double selectedServing = [self.selectedServings floatValue];
-    
-    int foodID = [self.food.foodKey intValue];
-    
+        
     lblFat.text = [NSString stringWithFormat:@"%.2f", foodFat * (gramWeight / 100)];
     lblCarbs.text = [NSString stringWithFormat:@"%.2f", foodCarbs * (gramWeight / 100)];
     lblProtein.text = [NSString stringWithFormat:@"%.2f", foodProtein * (gramWeight / 100)];
     self.foodIdLbl.text = self.food.foodKey.stringValue;
     
-    NSString *query = [NSString stringWithFormat: @"SELECT m.MeasureID, m.Description, fm.GramWeight, (SELECT count(*) FROM Favorite_Food WHERE FoodID = %i) as favCount FROM Measure m INNER JOIN FoodMeasure fm ON fm.MeasureID = m.MeasureID WHERE fm.FoodID = %i ORDER BY m.Description", foodID,foodID];
-    FMResultSet *rs = [db executeQuery:query];
-    while ([rs next]) {
-        self.countIsFavorite = [rs intForColumn:@"favCount"];
-        
-        NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              [NSNumber numberWithInt:[rs intForColumn:@"MeasureID"]], @"MeasureID",
-                              [NSNumber numberWithDouble:[rs doubleForColumn:@"GramWeight"]], @"GramWeight",
-                              [rs stringForColumn:@"Description"], @"Description", nil];
-        [pickerColumn3Array addObject:dict];
-        
-        rowListArr = [[self filterObjectsByKeys:@"MeasureID" array:pickerColumn3Array] mutableCopy];
-        pickerColumn3Array = rowListArr;
-    }
-    
+    DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
+    self.countIsFavorite = [provider isFoodFavoritedForFoodKey:self.food.foodKey];
+
+    NSArray *measureDetails = [provider getMeasureDetailsForFoodKey:self.food.foodKey];
+    [pickerColumn3Array addObjectsFromArray:measureDetails];
+    rowListArr = [[self filterObjectsByKeys:@"MeasureID" array:pickerColumn3Array] mutableCopy];
+    pickerColumn3Array = rowListArr;
+
     double totalCalories;
     if (servingSize == 0){
         servingSize = 1;
@@ -125,7 +116,7 @@
     
     lblCalories.text = [NSString stringWithFormat:@"%.2f", totalCalories];
     
-    NSString *servingList = [NSString stringWithFormat:@"%.2f", [self.food.servingSize floatValue]];
+    NSString *servingList = [NSString stringWithFormat:@"%.2f", selectedServing];
     NSArray *servingItems = [servingList componentsSeparatedByString:@"."];
     
     [pickerView reloadAllComponents];
@@ -264,7 +255,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     // Due to how pickers load, need to load data after a moment.
-    [self performSelector:@selector(loadData) withObject:nil afterDelay:0.25];
+    [self performSelector:@selector(loadData) withObject:nil afterDelay:0.2];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -470,7 +461,7 @@
     
     NSDictionary *updateDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     self.mealPlan.mealId, @"MealID",
-                                    self.mealCode, @"MealCode",
+                                    @(self.mealCode), @"MealCode",
                                     self.food.foodKey, @"FoodID",
                                     servingAmount, @"ServingSize",
                                     @(num_measureID), @"MeasureID",

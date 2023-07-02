@@ -13,7 +13,6 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UISearchBar *mySearchBar;
-@property (nonatomic) BOOL bSearchIsOn;
 
 /// The food being exchanged.
 @property (nonatomic, strong) DMFood *food;
@@ -122,7 +121,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
 
 #pragma mark EXCHANGE METHODS
 
-- (void)confirmExchangeWithFood:(NSDictionary *)newFoodDict {
+- (void)confirmExchangeWithFood:(DMFood *)food {
     NSString *message = @"Are you sure you wish to exchange with this food?";
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm Exchange"
                                                                    message:message
@@ -130,7 +129,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes"
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
-        [self exchangeWithNewFood:newFoodDict];
+        [self exchangeWithNewFood:food];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"No"
                                               style:UIAlertActionStyleCancel
@@ -140,36 +139,32 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)exchangeWithNewFood:(NSDictionary *)newFoodDict {
+- (void)exchangeWithNewFood:(DMFood *)newFood {
     [DMActivityIndicator showActivityIndicator];
 
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     DMFood *oldFood = [provider getFoodForFoodKey:self.mealPlanItem.foodId];
     
-    NSNumber *selectedMealPlanID = self.mealPlan.mealId;
-    double newCalories = [self.food.calories doubleValue];
+    double newCalories = [newFood.calories doubleValue];
     double caloriesToMaintain = [oldFood.calories doubleValue];
-    double gramWeight = [self.food.gramWeight doubleValue];
+    double gramWeight = [oldFood.gramWeight doubleValue];
     
     double servings = caloriesToMaintain / (newCalories / gramWeight);
     servings = [[NSString stringWithFormat:@"%.1f", servings] doubleValue];
     
-    NSNumber *measureID = [provider getMeasureIDForFoodKey:self.food.foodKey
+    NSNumber *measureID = [provider getMeasureIDForFoodKey:newFood.foodKey
                                           fromMealPlanItem:self.mealPlanItem];
     
-    NSDictionary *deleteDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    selectedMealPlanID, @"MealID",
-                                    self.mealPlanItem.mealCode, @"MealCode",
-                                    self.mealPlanItem.foodId, @"FoodID",
-                                    nil];
-    
-    NSDictionary *insertDictTemp = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    self.mealPlan.mealId, "MealCode",
-                                    self.food.foodKey, @"FoodID",
-                                    measureID, @"MeasureID",
-                                    @(servings), @"ServingSize",
-                                    nil];
-    
+    NSDictionary *deleteDictTemp = @{@"MealID" : self.mealPlan.mealId,
+                                     @"MealCode" : @(self.mealPlanItem.mealCode),
+                                     @"FoodID" : self.mealPlanItem.foodId };
+
+    NSDictionary *insertDictTemp = @{@"MealID" : self.mealPlan.mealId,
+                                     @"FoodID" : newFood.foodKey,
+                                     @"MealCode" : @(self.mealPlanItem.mealCode),
+                                     @"MeasureID" : measureID,
+                                     @"ServingSize" : @(servings) };
+        
     [self exchangeFood:deleteDictTemp withFood:insertDictTemp];
 }
 
@@ -255,7 +250,8 @@ static NSString *CellIdentifier = @"CellIdentifier";
 - (void)tableView:(UITableView *)myTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
     NSDictionary *dict = [self.foodResults objectAtIndex:indexPath.row];
-    [self confirmExchangeWithFood:dict];
+    DMFood *food = [[DMFood alloc] initWithDictionary:dict];
+    [self confirmExchangeWithFood:food];
 }
 
 #pragma mark - Data Loading
@@ -276,8 +272,8 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [DMActivityIndicator showActivityIndicator];
     
     NSDictionary *params = @{ @"RequestType" : @"GetExchangeItemsForFood",
-                                @"FoodID" : [self.mealPlanItem valueForKey:@"FoodKey"],
-                                @"MealTypeID" : [self.mealPlanItem valueForKey:@"MealTypeID"] };
+                                @"FoodID" :     self.mealPlanItem.foodId,
+                                @"MealTypeID" : self.mealPlan.mealTypeId };
     
     [DMDataFetcher fetchDataWithRequestParams:params completion:^(NSObject *object, NSError *error) {
         [DMActivityIndicator hideActivityIndicator];

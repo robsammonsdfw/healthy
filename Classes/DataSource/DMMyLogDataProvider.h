@@ -73,6 +73,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// Gets the measure description for MeasureID and FoodKey provided.
 - (NSString *)getMeasureDescriptionForMeasureId:(NSNumber *)measureId
                                      forFoodKey:(NSNumber *)foodKey;
+- (NSArray<NSDictionary *> *)getMeasureDetailsForFoodKey:(NSNumber *)foodKey;
+
+/// Determines if a food is favorited or not.
+- (BOOL)isFoodFavoritedForFoodKey:(NSNumber *)foodKey;
 
 #pragma mark - Weight Log
 

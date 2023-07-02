@@ -97,7 +97,7 @@
         }
         _gramWeight = ValidNSNumber(dictionary[@"GramWeight"]);
         if ([_gramWeight isEqual:@0]) {
-            _gramWeight = @100; // Also saw value at 1.
+            _gramWeight = @1; // Also saw value at 100.
         }
         
         _frequency = ValidNSNumber(dictionary[@"Frequency"]);

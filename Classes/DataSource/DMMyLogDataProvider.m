@@ -647,8 +647,8 @@
     FMDatabase* db = [self database];
     if (![db open]) {
     }
-    
-    NSString *query = [NSString stringWithFormat: @"SELECT Measure.MeasureID, Measure.Description, FoodMeasure.FoodID, FoodMeasure.GramWeight FROM Measure INNER JOIN FoodMeasure ON Measure.MeasureID=FoodMeasure.MeasureID WHERE FoodMeasure.FoodID = %@ AND FoodMeasure.MeasureID = %@", foodKey, measureId];
+        
+    NSString *query = [NSString stringWithFormat: @"SELECT m.MeasureID, m.Description, fm.GramWeight FROM Measure m INNER JOIN FoodMeasure fm ON fm.MeasureID = m.MeasureID WHERE fm.FoodID = %@ AND m.MeasureID = %@ ORDER BY m.Description", foodKey, measureId];
     
     NSString *measureDescription = nil;
     FMResultSet *rs = [db executeQuery:query];
@@ -658,6 +658,40 @@
     [rs close];
     
     return measureDescription;
+}
+
+- (NSArray<NSDictionary *> *)getMeasureDetailsForFoodKey:(NSNumber *)foodKey {
+    FMDatabase* db = [self database];
+    if (![db open]) {
+    }
+        
+    NSString *query = [NSString stringWithFormat: @"SELECT m.MeasureID, m.Description, fm.GramWeight FROM Measure m INNER JOIN FoodMeasure fm ON fm.MeasureID = m.MeasureID WHERE fm.FoodID = %@ ORDER BY m.Description", foodKey];
+        
+    NSMutableArray *results = [NSMutableArray array];
+    FMResultSet *rs = [db executeQuery:query];
+    while ([rs next]) {
+        [results addObject:[rs resultDictionary]];
+    }
+    [rs close];
+    
+    return [results copy];
+}
+
+- (BOOL)isFoodFavoritedForFoodKey:(NSNumber *)foodKey {
+    FMDatabase* db = [self database];
+    if (![db open]) {
+    }
+        
+    NSString *query = [NSString stringWithFormat: @"SELECT count(*) as favCount FROM Favorite_Food WHERE FoodID = %@", foodKey];
+    
+    BOOL isFavorite = NO;
+    FMResultSet *rs = [db executeQuery:query];
+    while ([rs next]) {
+        isFavorite = [rs intForColumn:@"favCount"] > 0;
+    }
+    [rs close];
+    
+    return isFavorite;
 }
 
 #pragma mark - Meals

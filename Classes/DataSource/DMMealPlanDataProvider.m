@@ -59,6 +59,7 @@
                                    jsonObject:mealItems
                                    completion:^(NSObject *object, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
             if (completionBlock) {
                 completionBlock(error == nil, error);
             }
@@ -93,6 +94,7 @@
                                    jsonObject:mealItems
                                    completion:^(NSObject *object, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
             if (completionBlock) {
                 completionBlock(error == nil, error);
             }
@@ -125,6 +127,7 @@
                               nil];
     [DMDataFetcher fetchDataWithRequestParams:params jsonObject:mealItems completion:^(NSObject *object, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
             if (completionBlock) {
                 completionBlock(error == nil, error);
             }
@@ -151,6 +154,7 @@
     }];
     
     dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadData" object:nil];
         if (completionBlock) {
             completionBlock(fetchError == nil, fetchError);
         }
