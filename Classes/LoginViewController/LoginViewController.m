@@ -92,7 +92,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.appNameLabel.text = [appName valueForKey:@"app_name_long"];
     
     NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([[accountCode valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Login_Screen"];
         [self.loginButton setBackgroundImage:[UIImage imageNamed:@"button_small"] forState:UIControlStateNormal];

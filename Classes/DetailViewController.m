@@ -270,7 +270,7 @@
     self.navigationItem.rightBarButtonItem = rightButton;
     
     NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([[accountCode valueForKey:@"account_code"] isEqualToString:@"ezdietplanner"]) {
+    if ([accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Food_Detail_Screen"];
         pickerView.backgroundColor = [UIColor whiteColor];
