@@ -89,7 +89,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.imgtop.backgroundColor=PrimaryColor
     
     NSString *appName = [DMGUtilities configValueForKey:@"app_name_long"];
-    self.appNameLabel.text = [appName valueForKey:@"app_name_long"];
+    self.appNameLabel.text = appName;
     
     NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     if ([accountCode isEqualToString:@"ezdietplanner"]) {
