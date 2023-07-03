@@ -220,7 +220,7 @@ import FMDB
     }
     @objc public func getCaloriesBurnedViaExerciseString(date: Date?) -> String {
         let calories = getExerciseData(date: date).exerciseCalories
-        return String(format: "%i", calories)
+        return String(format: "%.f", calories)
     }
 
     /// Selected day's values. Defaults to zero. This only includes
@@ -413,7 +413,7 @@ import FMDB
     }
     @objc public func getTotalCaloriesConsumedString(date: Date?) -> String {
         let consumed = getCalorieData(date: date).totalCalories
-        return String(format: "%i", consumed)
+        return String(format: "%.f", consumed)
     }
 
     @objc public func getTotalCarbCalories(date: Date?) -> NSNumber {

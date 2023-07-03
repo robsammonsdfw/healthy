@@ -732,14 +732,14 @@
     // Now lay out the chart. We'll use whole numbers because I believe there's a bug
     // with the chart when you're using decimals.
     // Get total calories consumed.
-    NSInteger fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].integerValue;
-    NSInteger proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].integerValue;
-    NSInteger carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].integerValue;
-    NSInteger totalPercentage = [dayProvider getCurrentBMR].integerValue;
+    double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
+    double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
+    double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
+    double totalPercentage = [dayProvider getCurrentBMR].doubleValue;
     // Percentages.
-    NSInteger fatGramActualPercent = ((fatCalories / totalPercentage) * 100);
-    NSInteger proteinGramActualPercent = ((proteinCalories / totalPercentage) * 100);
-    NSInteger carbsGramActualPercent = ((carbCalories / totalPercentage) * 100);
+    double fatGramActualPercent = round((fatCalories / totalPercentage) * 100);
+    double proteinGramActualPercent = round((proteinCalories / totalPercentage) * 100);
+    double carbsGramActualPercent = round((carbCalories / totalPercentage) * 100);
     // Check for invalid numbers.
     if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
         carbsGramActualPercent = 0;
