@@ -13,8 +13,6 @@
 #import "NSData+Blocks.h"
 #import "UIDevice+machine.h"
 #import "DietMasterGoAppDelegate.h"
-#import "NSString+ConvertToDate.h"
-#import "MBProgressHUD.h"
 #import "NSNull+NullCategoryExtension.h"
 
 #import "DMMyLogDataProvider.h"

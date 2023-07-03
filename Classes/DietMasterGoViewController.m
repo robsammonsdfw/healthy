@@ -675,12 +675,11 @@
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
     DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
 
-    double totalCalories = [dayProvider getTotalCaloriesWithDate:nil].doubleValue;
+    double totalCalories = [dayProvider getTotalCaloriesConsumedWithDate:nil].doubleValue;
     double sugarGrams = [dayProvider getTotalSugarGramsWithDate:nil].doubleValue;
     double sugarCalories = [dayProvider getTotalSugarCaloriesWithDate:nil].doubleValue;
 
-    NSString *sugarStr = [NSString stringWithFormat:@"%.1f", sugarGrams];
-    self.lblSugar.text = [NSString stringWithFormat:@"%@g",sugarStr];
+    self.lblSugar.text = [NSString stringWithFormat:@"%.fg",sugarGrams];
     
     // If sugar radio is > 10%, color it red.
     if ((sugarCalories / totalCalories) > .1) {
@@ -709,87 +708,72 @@
 
 - (void)updateCalorieTotal {
     DayDataProvider *dayProvider = [DayDataProvider sharedInstance];
-    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-    double totalCalories = [dayProvider getTotalCaloriesWithDate:nil].doubleValue;
-    double caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:nil].doubleValue;
-    double exerciseCalories = [dayProvider getCaloriesBurnedViaExerciseWithDate:nil];
-    int userBMR = dayProvider.getCurrentBMR.intValue;
 
+    int caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:nil].intValue;
+    int userBMR = dayProvider.getCurrentBMR.intValue;
     [self.values removeAllObjects];
-    if (caloriesRemaining <= 0) {
-        [self.values addObject:[NSNumber numberWithInt:1]];
-    } else {
-        [self.values addObject:[NSNumber numberWithInt:(userBMR - caloriesRemaining)]];
-        [self.values addObject:[NSNumber numberWithInt:caloriesRemaining]];
-    }
+    [self.values addObject:@(userBMR - caloriesRemaining)];
+    [self.values addObject:@(caloriesRemaining)];
     [_remaining_Pie reloadData];
 
-    self.lblGoal.text = [NSString stringWithFormat:@"%i", userBMR];
-    self.lblfoodCalories.text = [NSString stringWithFormat:@"+%.0f", totalCalories];
-    self.lblConsumed.text = [NSString stringWithFormat:@"%.0f", totalCalories];
-    self.lblExerciseCalories.text = [NSString stringWithFormat:@"-%.0f", exerciseCalories];
-    self.lblBurned.text = [NSString stringWithFormat:@"%.0f", exerciseCalories];
-    self.lblNetCalories.text = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
-    
-    // Get total calories consumed.
-    double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
-    double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
-    double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
-    double totalPercentage = fatCalories + proteinCalories + carbCalories;
-    
-    // Get grams consumed.
-    CGFloat carbGramsActual = carbCalories / 4;
-    CGFloat proteinGramsActual = proteinCalories / 4;
-    CGFloat fatGramsActual = fatCalories / 9;
+    NSString *burnedCaloriesString = [dayProvider getCaloriesBurnedViaExerciseStringWithDate:nil];
+    NSString *consumedString = [dayProvider getTotalCaloriesConsumedStringWithDate:nil];
 
+    // Summary square.
+    self.lblGoal.text = [dayProvider getCurrentBMRString];
+    self.lblfoodCalories.text = [NSString stringWithFormat:@"+%@", consumedString];
+    self.lblExerciseCalories.text = [NSString stringWithFormat:@"-%@", burnedCaloriesString];
+    self.lblNetCalories.text = [dayProvider getTotalCaloriesRemainingStringWithDate:nil];
+    
+    // For the "MyLog" and "Burned" squares.
+    self.lblConsumed.text = consumedString;
+    self.lblBurned.text = burnedCaloriesString;
+
+    // Now lay out the chart. We'll use whole numbers because I believe there's a bug
+    // with the chart when you're using decimals.
+    // Get total calories consumed.
+    NSInteger fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].integerValue;
+    NSInteger proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].integerValue;
+    NSInteger carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].integerValue;
+    NSInteger totalPercentage = [dayProvider getCurrentBMR].integerValue;
     // Percentages.
-    CGFloat fatGramActualPrecent = ((fatCalories / totalPercentage) * 100);
-    CGFloat proteinGramActualPrecent = ((proteinCalories / totalPercentage) * 100);
-    CGFloat carbsGramActualPercent = ((carbCalories / totalPercentage) * 100);
-  
-    if (carbsGramActualPercent <= 0 || isnan(carbsGramActualPercent)) {
-        carbsGramActualPercent = 0.0;
+    NSInteger fatGramActualPercent = ((fatCalories / totalPercentage) * 100);
+    NSInteger proteinGramActualPercent = ((proteinCalories / totalPercentage) * 100);
+    NSInteger carbsGramActualPercent = ((carbCalories / totalPercentage) * 100);
+    // Check for invalid numbers.
+    if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
+        carbsGramActualPercent = 0;
         self.c_PercentageLbl.text = @"0";
     } else {
-        self.c_PercentageLbl.text = [@(round(carbsGramActualPercent)) stringValue];
+        self.c_PercentageLbl.text = [@(carbsGramActualPercent) stringValue];
     }
-    
-    if (proteinGramActualPrecent <= 0 || isnan(proteinGramActualPrecent)) {
-        proteinGramActualPrecent = 0.0;
+    if (proteinGramActualPercent < 0 || isnan(proteinGramActualPercent)) {
         self.p_PercentageLbl.text = @"/0/";
     } else {
-        self.p_PercentageLbl.text = [NSString stringWithFormat: @"/%@/", @(round(proteinGramActualPrecent))];
+        self.p_PercentageLbl.text = [NSString stringWithFormat: @"/%@/", @(proteinGramActualPercent)];
     }
-
-    if (fatGramActualPrecent <= 0 || isnan(fatGramActualPrecent)) {
-        fatGramActualPrecent = 0.0;
+    if (fatGramActualPercent < 0 || isnan(fatGramActualPercent)) {
         self.f_PercentageLbl.text = @"0";
     } else {
-        self.f_PercentageLbl.text = [@(round(fatGramActualPrecent)) stringValue];
+        self.f_PercentageLbl.text = [@(fatGramActualPercent) stringValue];
     }
-        
     [self.cpf_Values removeAllObjects];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:round(fatGramActualPrecent)]];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:round(proteinGramActualPrecent)]];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:round(carbsGramActualPercent)]];
-    [self.cpf_Values addObject:[NSNumber numberWithFloat:100 - round(carbsGramActualPercent + proteinGramActualPrecent + fatGramActualPrecent)]];
+    [self.cpf_Values addObject:@(fatGramActualPercent)];
+    [self.cpf_Values addObject:@(proteinGramActualPercent)];
+    [self.cpf_Values addObject:@(carbsGramActualPercent)];
+    [self.cpf_Values addObject:@(100 - carbsGramActualPercent + proteinGramActualPercent + fatGramActualPercent)];
     [self.cpf_Pie reloadData];
 
     // Display the consumed grams for the day.
-    self.actualCarbLabel.text = [NSString stringWithFormat:@"%.1f",carbGramsActual];
-    self.actualProtLabel.text = [NSString stringWithFormat:@"%.1f",proteinGramsActual];
-    self.actualFatLabel.text = [NSString stringWithFormat:@"%.1f",fatGramsActual];
+    self.actualCarbLabel.text = [dayProvider getCarbGramsStringWithDate:[NSDate date]];
+    self.actualProtLabel.text = [dayProvider getProteinGramsStringWithDate:[NSDate date]];
+    self.actualFatLabel.text = [dayProvider getFatGramsStringWithDate:[NSDate date]];
     
     // Note, ACTUAL here means "Recommended" for the labels below.
     // The variable names are incorrect.
-    CGFloat bmrValue = [dayProvider getCurrentBMR].floatValue;
-    CGFloat carbGramsRecommended = (currentUser.carbRatio.floatValue / 100) * bmrValue / 4;
-    CGFloat proteinGramsRecommended = (currentUser.proteinRatio.floatValue / 100) * bmrValue / 4;
-    CGFloat fatGramsRecommended = (currentUser.fatRatio.floatValue / 100) * bmrValue / 9;
-    
-    self.actualCarbGramsLabel.text = [NSString stringWithFormat:@"%.1f", carbGramsRecommended];
-    self.actualProteinGramsLabel.text = [NSString stringWithFormat:@"%.1f", proteinGramsRecommended];
-    self.actualFatGramsLabel.text = [NSString stringWithFormat:@"%.1f", fatGramsRecommended];
+    self.actualCarbGramsLabel.text = [dayProvider getCarbGramsStringWithDate:nil];
+    self.actualProteinGramsLabel.text = [dayProvider getProteinGramsStringWithDate:nil];
+    self.actualFatGramsLabel.text = [dayProvider getFatGramsStringWithDate:nil];
 }
 
 @end

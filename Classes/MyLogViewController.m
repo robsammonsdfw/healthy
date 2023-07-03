@@ -54,11 +54,6 @@
 @property (nonatomic, strong) IBOutlet UIToolbar *dateToolBar;
 @property (nonatomic, strong) IBOutlet UILabel *lbl_dateHdr;
 
-/// Totals for calculating Remaining values.
-@property (nonatomic) CGFloat actualCarbCalories;
-@property (nonatomic) CGFloat actualFatCalories;
-@property (nonatomic) CGFloat actualProteinCalories;
-
 @end
 
 static NSString *CellIdentifier = @"MyLogTableViewCell";
@@ -557,29 +552,19 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     DayDataProvider* dayProvider = [DayDataProvider sharedInstance];
 
     // What's recommended.
-    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-    CGFloat bmrValue = [dayProvider getCurrentBMR].floatValue;
-    CGFloat carbGramsRecommended = (currentUser.carbRatio.floatValue / 100) * bmrValue / 4;
-    CGFloat proteinGramsRecommended = (currentUser.proteinRatio.floatValue / 100) * bmrValue / 4;
-    CGFloat fatGramsRecommended = (currentUser.fatRatio.floatValue / 100) * bmrValue / 9;
-    
-    NSString *carbGramsRecString = [NSString stringWithFormat:@"%.1fg", carbGramsRecommended];
-    NSString *proteinGramsRecString = [NSString stringWithFormat:@"%.1fg", proteinGramsRecommended];
-    NSString *fatGramsRecString = [NSString stringWithFormat:@"%.1fg", fatGramsRecommended];
-    NSString *caloriesRecommended = [NSString stringWithFormat:@"%.0f", bmrValue];
+    NSString *carbGramsRecString = [dayProvider getCarbGramsStringWithDate:nil];
+    NSString *proteinGramsRecString = [dayProvider getProteinGramsStringWithDate:nil];
+    NSString *fatGramsRecString = [dayProvider getFatGramsStringWithDate:nil];
+    NSString *caloriesRecommended = [dayProvider getCurrentBMRString];
     [self.logDaySummary setRecommendedLabelsWithCalorie:caloriesRecommended
                                                   carbs:carbGramsRecString
                                                 protein:proteinGramsRecString
                                                     fat:fatGramsRecString];
-    
-    double caloriesRemaining = [dayProvider getTotalCaloriesRemainingWithDate:self.date_currentDate].doubleValue;
-
     /// What we've consumed.
-    NSString *remainingCalories = [NSString stringWithFormat:@"%.0f", caloriesRemaining];
-    NSString *carbGramsActual = [NSString stringWithFormat:@"%.1fg", round(carbGramsRecommended - (self.actualCarbCalories / 4))];
-    NSString *fatGramsActual = [NSString stringWithFormat:@"%.1fg", round(fatGramsRecommended - (self.actualFatCalories / 9))];
-    NSString *proteinGramsActual = [NSString stringWithFormat:@"%.1fg", round(proteinGramsRecommended - (self.actualProteinCalories / 4))];
-
+    NSString *remainingCalories = [dayProvider getTotalCaloriesRemainingStringWithDate:self.date_currentDate];
+    NSString *carbGramsActual = [dayProvider getCarbGramsStringWithDate:self.date_currentDate];
+    NSString *fatGramsActual = [dayProvider getFatGramsStringWithDate:self.date_currentDate];
+    NSString *proteinGramsActual = [dayProvider getProteinGramsStringWithDate:self.date_currentDate];
     [self.logDaySummary setRemainingLabelsWithCalorie:remainingCalories
                                                 carbs:carbGramsActual
                                               protein:proteinGramsActual
@@ -667,10 +652,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     NSInteger dinnerCalories = 0;
     NSInteger snack3Calories = 0;
     
-    self.actualCarbCalories = 0.0;
-    self.actualFatCalories = 0.0;
-    self.actualProteinCalories = 0.0;
-
     FMResultSet *rs = [db executeQuery:query];
     while ([rs next]) {
         NSInteger mealID = [rs intForColumn:@"MealCode"];
@@ -697,15 +678,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                               [rs stringForColumn:@"FoodURL"], @"FoodURL",
                               [NSNumber numberWithInt:[rs intForColumn:@"CategoryID"]], @"CategoryID",
                               nil];
-        
-        double fatGrams = [rs doubleForColumn:@"Fat"];
-        self.actualFatCalories += ([rs doubleForColumn:@"NumberOfServings"] * ((fatGrams * 9.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
-        
-        double carbGrams = [rs doubleForColumn:@"Carbohydrates"];
-        self.actualCarbCalories += ([rs doubleForColumn:@"NumberOfServings"] * ((carbGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
-        
-        double proteinGrams = [rs doubleForColumn:@"Protein"];
-        self.actualProteinCalories += ([rs doubleForColumn:@"NumberOfServings"] * ((proteinGrams * 4.0) * ([rs doubleForColumn:@"GramWeight"] / 100) / [rs doubleForColumn:@"ServingSize"]));
         
         switch (mealID) {
             case 0:

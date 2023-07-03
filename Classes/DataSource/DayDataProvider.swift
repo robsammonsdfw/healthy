@@ -57,7 +57,6 @@ import FMDB
         guard let database = database, database.open() == true else {
             return (0, 0, 0, 0, 0, 0)
         }
-        
         let sourceDate = date ?? Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -219,7 +218,11 @@ import FMDB
     @objc public func getCaloriesBurnedViaExercise(date: Date?) -> Double {
         return getExerciseData(date: date).exerciseCalories
     }
-    
+    @objc public func getCaloriesBurnedViaExerciseString(date: Date?) -> String {
+        let calories = getExerciseData(date: date).exerciseCalories
+        return String(format: "%i", calories)
+    }
+
     /// Selected day's values. Defaults to zero. This only includes
     /// calories from a tracker.
     @objc public func getCaloriesBurnedViaTracker(date: Date?) -> Double {
@@ -322,31 +325,44 @@ import FMDB
         return NSNumber(integerLiteral: Int(bodyMassIndex))
     }
     
-    /// Ratios based on a user's BMR.
-    /// Example: If my ratio of carbs is 10, 10% of my BMR 1000 calories should be carbs.
-    @objc public func getRecommendedCarbRatio() -> NSNumber {
-        guard let currentUser = currentUser else {
-            return NSNumber(floatLiteral: 0)
-        }
-        let bmrValue = getCurrentBMI().doubleValue
-        let carbRatioRecommended = (currentUser.carbRatio.doubleValue / 100.0) * bmrValue / 4.0;
-        return NSNumber(floatLiteral: round(carbRatioRecommended))
+    /// Returns the user's current BMR as a string.
+    @objc public func getCurrentBMRString() -> String {
+        let bmrValue = getCurrentBMR().intValue
+        return String(format: "%i", bmrValue)
     }
-    @objc public func getRecommendedProteinRatio() -> NSNumber {
-        guard let currentUser = currentUser else {
-            return NSNumber(floatLiteral: 0)
+    /// Grams based on a user's BMR and if consumed is provided, will return how many grams are left
+    /// for the day. Example: If ratio of carbs is 10, 10% of BMR 1000 calories is 100 carb calories,
+    /// thus the function will return 25.0g
+    /// NOTE: If a date is provided, it will return remaining for the day provided.
+    @objc public func getCarbGramsString(date: Date?) -> String {
+        guard let currentUser = currentUser else { return "0g" }
+        let bmrValue = getCurrentBMR().doubleValue
+        let carbGrams = (currentUser.carbRatio.doubleValue / 100.0) * bmrValue / 4.0;
+        var consumedGrams = 0.0;
+        if let date = date {
+            consumedGrams = getTotalCarbCalories(date: date).doubleValue / 4;
         }
-        let bmrValue = getCurrentBMI().doubleValue
-        let proteinRatioRecommended = (currentUser.proteinRatio.doubleValue / 100.0) * bmrValue / 4.0;
-        return NSNumber(floatLiteral: round(proteinRatioRecommended))
+        return String(format: "%.fg", round(carbGrams - consumedGrams))
     }
-    @objc public func getRecommendedFatRatio() -> NSNumber {
-        guard let currentUser = currentUser else {
-            return NSNumber(floatLiteral: 0)
+    @objc public func getProteinGramsString(date: Date?) -> String {
+        guard let currentUser = currentUser else { return "0g" }
+        let bmrValue = getCurrentBMR().doubleValue
+        let proteinGrams = (currentUser.proteinRatio.doubleValue / 100.0) * bmrValue / 4.0;
+        var consumedGrams = 0.0;
+        if let date = date {
+            consumedGrams = getTotalProteinCalories(date: date).doubleValue / 4;
         }
-        let bmrValue = getCurrentBMI().doubleValue
-        let fatRatioRecommended = (currentUser.fatRatio.doubleValue / 100.0) * bmrValue / 9.0;
-        return NSNumber(floatLiteral: round(fatRatioRecommended))
+        return String(format: "%.fg", round(proteinGrams - consumedGrams))
+    }
+    @objc public func getFatGramsString(date: Date?) -> String {
+        guard let currentUser = currentUser else { return "0g" }
+        let bmrValue = getCurrentBMR().doubleValue
+        let fatGrams = (currentUser.fatRatio.doubleValue / 100.0) * bmrValue / 9.0;
+        var consumedGrams = 0.0;
+        if let date = date {
+            consumedGrams = getTotalFatCalories(date: date).doubleValue / 4;
+        }
+        return String(format: "%.fg", round(fatGrams - consumedGrams))
     }
 
     // MARK: - Localized Output
@@ -391,10 +407,15 @@ import FMDB
     
     // MARK: - Selected Day's Calories
     
-    @objc public func getTotalCalories(date: Date?) -> NSNumber {
+    /// If date is nil, it will use the current day's date.
+    @objc public func getTotalCaloriesConsumed(date: Date?) -> NSNumber {
         return NSNumber(floatLiteral: getCalorieData(date: date).totalCalories)
     }
-    
+    @objc public func getTotalCaloriesConsumedString(date: Date?) -> String {
+        let consumed = getCalorieData(date: date).totalCalories
+        return String(format: "%i", consumed)
+    }
+
     @objc public func getTotalCarbCalories(date: Date?) -> NSNumber {
         return NSNumber(floatLiteral: getCalorieData(date: date).carbCalories)
     }
@@ -413,13 +434,18 @@ import FMDB
     
     /// Gets the total calories remaining, which is "net calories".
     /// This takes into account if the user opted to include logged calories or not.
+    /// If date is nil, it will use the current day's date.
     @objc public func getTotalCaloriesRemaining(date: Date?) -> NSNumber {
         let totalCaloriesBurnedViaExercise = getCaloriesBurnedForLog(date: date)
         let bmr = getCurrentBMR().doubleValue
-        let totalCaloriesToday = getTotalCalories(date: date).doubleValue
+        let totalCaloriesToday = getTotalCaloriesConsumed(date: date).doubleValue
 
         let caloriesRemainingToday = (bmr + totalCaloriesBurnedViaExercise) - totalCaloriesToday
 
         return NSNumber(floatLiteral: caloriesRemainingToday)
+    }
+    @objc public func getTotalCaloriesRemainingString(date: Date?) -> String {
+        let caloriesRemaining = getTotalCaloriesRemaining(date: date).intValue
+        return String(format: "%i", caloriesRemaining)
     }
 }
