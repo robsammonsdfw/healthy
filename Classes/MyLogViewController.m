@@ -92,12 +92,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.dateToolBar.backgroundColor = AccentColor;
     self.dateToolBar.barTintColor = AccentColor;
     
-    self.tableView.backgroundColor = UIColorFromHex(0xF3F3F3);
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
     UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
 
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = UIColorFromHex(0xF3F3F3);
+    self.view.backgroundColor = UIColorFromHex(0xF3F3F3);
     
     if (!self.date_currentDate) {
         NSDate *sourceDate = [NSDate date];

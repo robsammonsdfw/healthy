@@ -118,7 +118,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     self.calendarView.appearance.subtitleWeekendColor = [UIColor redColor];
     [self.calendarView.calendarHeaderView setHidden:YES];
     self.calendarView.headerHeight = 0;
-    self.calendarView.appearance.todayColor = [UIColor yellowColor];
     [self.view addSubview:self.calendarView];
 
     self.displayedMonthLbl = [[UILabel alloc] init];
