@@ -151,9 +151,9 @@
     self.edgesForExtendedLayout = UIRectEdgeNone;
 
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: self.cpfLbl.attributedText];
-    [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0xC15F6E) range:NSMakeRange(0, 1)];
-    [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x64BB60) range:NSMakeRange(4, 1)];
-    [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x0095B8) range:NSMakeRange(8, 1)];
+    [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#C15F6E") range:NSMakeRange(0, 1)];
+                                                                                 [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#64BB60") range:NSMakeRange(4, 1)];
+                                                                                                                                                              [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#0095B8") range:NSMakeRange(8, 1)];
     [self.cpfLbl setAttributedText: text];
 
     [self setShadowForViews];
@@ -277,26 +277,26 @@
         }
         else
         {
-            return UIColorFromHex(0x64BB60); // Green remaining fill.
+            return UIColorFromHexString(@"#64BB60"); // Green remaining fill.
         }
     }
     else if (pieChartView == _cpf_Pie)
     {
         if (index == 0)
         {
-            return UIColorFromHex(0x0095B8);
+            return UIColorFromHexString(@"#0095B8");
         }
         else if(index == 1)
         {
-            return UIColorFromHex(0x64BB60);
+            return UIColorFromHexString(@"#64BB60");
         }
         else if(index == 2)
         {
-            return UIColorFromHex(0xC15F6E);
+            return UIColorFromHexString(@"#C15F6E");
         }
         else
         {
-            return UIColorFromHex(0xE8E8E8);
+            return UIColorFromHexString(@"#E8E8E8");
         }
     }
     
@@ -341,7 +341,7 @@
 }
 
 -(void)shadowView:(UIView *)selectedView {
-    selectedView.layer.shadowColor = UIColorFromHex(0xd7d7d7).CGColor;
+    selectedView.layer.shadowColor = UIColorFromHexString(@"#d7d7d7").CGColor;
     selectedView.layer.shadowOffset = CGSizeMake(8, 3);
     selectedView.layer.shadowOpacity = 1;
     selectedView.layer.shadowRadius = 2;

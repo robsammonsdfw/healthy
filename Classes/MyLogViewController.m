@@ -96,8 +96,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
 
-    self.tableView.backgroundColor = UIColorFromHex(0xF3F3F3);
-    self.view.backgroundColor = UIColorFromHex(0xF3F3F3);
+    self.tableView.backgroundColor = UIColorFromHexString(@"#F3F3F3");
+    self.view.backgroundColor = UIColorFromHexString(@"#F3F3F3");
     
     if (!self.date_currentDate) {
         NSDate *sourceDate = [NSDate date];
@@ -219,7 +219,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     }
             
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectZero];
-    headerView.backgroundColor = UIColorFromHex(0xF3F3F3);
+    headerView.backgroundColor = UIColorFromHexString(@"#F3F3F3");
 
     UIButton *plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     plusButton.translatesAutoresizingMaskIntoConstraints = NO;

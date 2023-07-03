@@ -30,10 +30,19 @@ static double __attribute__((unused)) ValidDouble(NSNumber *number) {
     return (number && ![number isEqual:[NSNull null]]) ? number.doubleValue : 0.0;
 }
 
-/// Returns the UIColor from Hex.
+/// Returns the UIColor from Hex. E.g. 0xF3F3F3.
 static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
     UIColor *colorResult = [UIColor colorWithRed:(hexColor>>16&0xFF)/255. green:(hexColor>>8&0xFF)/255. blue:(hexColor>>0&0xFF)/255. alpha:1];
     return colorResult;
+}
+
+/// Returns the UIColor from Hex String. E.g. #2E201F (Dark gray).
+static UIColor * __attribute__((unused)) UIColorFromHexString(NSString *hexColorString) {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexColorString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
 /// Utilities used across the project.

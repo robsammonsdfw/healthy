@@ -25,7 +25,7 @@
 }
 
 - (void)setup {
-    self.backgroundColor = UIColorFromHex(0xF3F3F3);
+    self.backgroundColor = UIColorFromHexString(@"#F3F3F3");
     
     self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.sendButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -57,7 +57,7 @@
     self.messageView.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
     self.messageView.backgroundColor = [UIColor whiteColor];
     self.messageView.placeholder = @"Text Message";
-    self.messageView.placeholderColor = UIColorFromHex(0xababab);
+    self.messageView.placeholderColor = UIColorFromHexString(@"#ababab");
     [self.messageView setBackgroundColor:[UIColor clearColor]];
     [self addSubview:self.messageView];
     

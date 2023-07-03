@@ -238,7 +238,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-    view.backgroundColor = UIColorFromHex(0xF3F3F3);
+    view.backgroundColor = UIColorFromHexString(@"#F3F3F3");
 
     DMMealPlanDataProvider *dataProvider = [[DMMealPlanDataProvider alloc] init];
     NSArray *mealItems = [self.mealPlan getMealItemsForMealCode:section];

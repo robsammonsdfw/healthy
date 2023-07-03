@@ -55,7 +55,7 @@ int const MaximumStringLength = 300;
     [super loadView];
     
     self.view = [[UIView alloc] initWithFrame:CGRectZero];
-    self.view.backgroundColor = UIColorFromHex(0xF3F3F3);
+    self.view.backgroundColor = UIColorFromHexString(@"#F3F3F3");
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
