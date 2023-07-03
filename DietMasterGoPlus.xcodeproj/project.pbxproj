@@ -127,7 +127,6 @@
 		401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */; };
 		401B64A220B3FC64004453E7 /* UIViewController+TDSemiModalExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B915924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.m */; };
 		401B64C220B3FC64004453E7 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28C187EDE28004A542C /* Common.m */; };
-		401B64C420B3FC64004453E7 /* NSString+ConvertToDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E292187EDE28004A542C /* NSString+ConvertToDate.m */; };
 		401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B301661FBC4AE90018C016 /* MBCircularProgressBarLayer.m */; };
 		401B64DF20B3FC64004453E7 /* UIViewController+Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E296187EDE28004A542C /* UIViewController+Keyboard.m */; };
 		401B652720B3FC64004453E7 /* SendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2B6187EDE40004A542C /* SendView.m */; };
@@ -137,7 +136,6 @@
 		401B656220B3FC64004453E7 /* MBCircularProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B301681FBC4AE90018C016 /* MBCircularProgressBarView.m */; };
 		401B656720B3FC64004453E7 /* YLProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 09AB77F71FBDABCE00924A51 /* YLProgressBar.m */; };
 		401B656B20B3FC64004453E7 /* StepData.m in Sources */ = {isa = PBXBuildFile; fileRef = 403FEB521FD149A5006D9B8F /* StepData.m */; };
-		401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28E187EDE28004A542C /* NSDate+ConvertToString.m */; };
 		401B658A20B3FC64004453E7 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E436E172ABB7B00C400D4 /* Base64.m */; };
 		401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4370172ABB7B00C400D4 /* NSData-AES.m */; };
 		401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4372172ABB7B00C400D4 /* NSFileManager-AES.m */; };
@@ -445,10 +443,6 @@
 		32CA4F630368D1EE00C91783 /* DietMasterGo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DietMasterGo_Prefix.pch; sourceTree = "<group>"; };
 		3568E28B187EDE28004A542C /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		3568E28C187EDE28004A542C /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
-		3568E28D187EDE28004A542C /* NSDate+ConvertToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+ConvertToString.h"; sourceTree = "<group>"; };
-		3568E28E187EDE28004A542C /* NSDate+ConvertToString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+ConvertToString.m"; sourceTree = "<group>"; };
-		3568E291187EDE28004A542C /* NSString+ConvertToDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ConvertToDate.h"; sourceTree = "<group>"; };
-		3568E292187EDE28004A542C /* NSString+ConvertToDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ConvertToDate.m"; sourceTree = "<group>"; };
 		3568E293187EDE28004A542C /* UIView+FrameControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameControl.h"; sourceTree = "<group>"; };
 		3568E294187EDE28004A542C /* UIView+FrameControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FrameControl.m"; sourceTree = "<group>"; };
 		3568E295187EDE28004A542C /* UIViewController+Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Keyboard.h"; sourceTree = "<group>"; };
@@ -1255,10 +1249,6 @@
 			children = (
 				3568E28B187EDE28004A542C /* Common.h */,
 				3568E28C187EDE28004A542C /* Common.m */,
-				3568E28D187EDE28004A542C /* NSDate+ConvertToString.h */,
-				3568E28E187EDE28004A542C /* NSDate+ConvertToString.m */,
-				3568E291187EDE28004A542C /* NSString+ConvertToDate.h */,
-				3568E292187EDE28004A542C /* NSString+ConvertToDate.m */,
 				3568E293187EDE28004A542C /* UIView+FrameControl.h */,
 				3568E294187EDE28004A542C /* UIView+FrameControl.m */,
 				3568E295187EDE28004A542C /* UIViewController+Keyboard.h */,
@@ -1811,7 +1801,6 @@
 				B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */,
 				0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */,
 				401B64C220B3FC64004453E7 /* Common.m in Sources */,
-				401B64C420B3FC64004453E7 /* NSString+ConvertToDate.m in Sources */,
 				0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */,
 				650208DF250153C300F412B0 /* InAppPurchaseViewController.m in Sources */,
 				401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */,
@@ -1861,7 +1850,6 @@
 				0E6F8FF42A43104200956F1E /* SceneDelegate.swift in Sources */,
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,
 				65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */,
-				401B657720B3FC64004453E7 /* NSDate+ConvertToString.m in Sources */,
 				0E4409812A4B13E500AF5BAD /* DMMealPlanDataProvider.m in Sources */,
 				401B658A20B3FC64004453E7 /* Base64.m in Sources */,
 				0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */,

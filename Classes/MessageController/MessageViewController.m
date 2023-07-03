@@ -14,8 +14,6 @@
 #import "FMDatabaseAdditions.h"
 #import "UIView+FrameControl.h"
 #import "DMMessage.h"
-#import "NSDate+ConvertToString.h"
-#import "NSString+ConvertToDate.h"
 #import "DMMyLogDataProvider.h"
 
 static NSString *OpponentCellIdentifier = @"OpponentCellIdentifier";
