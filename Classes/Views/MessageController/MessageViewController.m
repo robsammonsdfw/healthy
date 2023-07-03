@@ -7,12 +7,10 @@
 
 #import "MessageCell.h"
 #import "SendView.h"
-#import "Common.h"
 #import "DMDataFetcher.h"
 #import "DietmasterEngine.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "UIView+FrameControl.h"
 #import "DMMessage.h"
 #import "DMMyLogDataProvider.h"
 

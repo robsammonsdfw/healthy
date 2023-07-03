@@ -4,7 +4,7 @@
 //
 
 #import "MessageCell.h"
-#import "TTAttributeLable/TTTAttributedLabel.h"
+#import <TTTAttributedLabel/TTTAttributedLabel.h>
 #import "DMMessage.h"
 
 @interface MessageCell () <TTTAttributedLabelDelegate>
@@ -62,9 +62,9 @@
     self.bgImageView.image = (self.messageCellType == DMMessageCellTypeResponse) ? self.bgOpponentImage : self.bgOwnerImage;
     self.bgImageView.image = [self.bgImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     if (self.messageCellType == DMMessageCellTypeMine){
-        self.bgImageView.tintColor = PrimaryColor
+        self.bgImageView.tintColor = PrimaryColor;
     } else {
-        self.bgImageView.tintColor = OpponentMessageImageColor
+        self.bgImageView.tintColor = OpponentMessageImageColor;
     }
     
     self.messageLabel.textColor = UIColor.blackColor;

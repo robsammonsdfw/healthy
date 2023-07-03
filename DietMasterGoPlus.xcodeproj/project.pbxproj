@@ -99,7 +99,6 @@
 		401B643F20B3FC64004453E7 /* GroceryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65981589365800CCE0AD /* GroceryListViewController.xib */; };
 		401B646E20B3FC64004453E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		401B646F20B3FC64004453E7 /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
-		401B647020B3FC64004453E7 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 431EEE491D82AA7D0022AFEA /* TTTAttributedLabel.m */; };
 		401B647420B3FC64004453E7 /* AppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D7129B928400A84340 /* AppSettings.m */; };
 		401B647520B3FC64004453E7 /* ExchangeFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 2455070E129BA4A700A84340 /* ExchangeFood.m */; };
 		401B647620B3FC64004453E7 /* MyLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D2129B926F00A84340 /* MyLogViewController.m */; };
@@ -118,29 +117,15 @@
 		401B648A20B3FC64004453E7 /* DietmasterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */; };
 		401B648B20B3FC64004453E7 /* FavoriteMealsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */; };
 		401B649520B3FC64004453E7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */; };
-		401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */; };
 		401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F44D315003DA6008413AB /* LearnMoreViewController.m */; };
 		401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E002FF3153E19560094341F /* NSData+Blocks.m */; };
 		401B649A20B3FC64004453E7 /* MealPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */; };
 		401B649D20B3FC64004453E7 /* MealPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */; };
 		401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */; };
-		401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */; };
-		401B64A220B3FC64004453E7 /* UIViewController+TDSemiModalExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBFA6B915924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.m */; };
-		401B64C220B3FC64004453E7 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E28C187EDE28004A542C /* Common.m */; };
-		401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B301661FBC4AE90018C016 /* MBCircularProgressBarLayer.m */; };
-		401B64DF20B3FC64004453E7 /* UIViewController+Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E296187EDE28004A542C /* UIViewController+Keyboard.m */; };
 		401B652720B3FC64004453E7 /* SendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2B6187EDE40004A542C /* SendView.m */; };
 		401B653720B3FC64004453E7 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A9187EDE40004A542C /* MessageViewController.m */; };
-		401B654E20B3FC64004453E7 /* UIView+FrameControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E294187EDE28004A542C /* UIView+FrameControl.m */; };
 		401B655F20B3FC64004453E7 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A5187EDE40004A542C /* MessageCell.m */; };
-		401B656220B3FC64004453E7 /* MBCircularProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B301681FBC4AE90018C016 /* MBCircularProgressBarView.m */; };
-		401B656720B3FC64004453E7 /* YLProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 09AB77F71FBDABCE00924A51 /* YLProgressBar.m */; };
 		401B656B20B3FC64004453E7 /* StepData.m in Sources */ = {isa = PBXBuildFile; fileRef = 403FEB521FD149A5006D9B8F /* StepData.m */; };
-		401B658A20B3FC64004453E7 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E436E172ABB7B00C400D4 /* Base64.m */; };
-		401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4370172ABB7B00C400D4 /* NSData-AES.m */; };
-		401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4372172ABB7B00C400D4 /* NSFileManager-AES.m */; };
-		401B658E20B3FC64004453E7 /* rijndael.c in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E4373172ABB7B00C400D4 /* rijndael.c */; };
-		401B659020B3FC64004453E7 /* UIDevice+machine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0A29501744187D003AB90A /* UIDevice+machine.m */; };
 		401B659820B3FC64004453E7 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403FEB4E1FD1379C006D9B8F /* HealthKit.framework */; };
 		401B659920B3FC64004453E7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D254AD1D62F564008513A0 /* Security.framework */; };
 		401B659C20B3FC64004453E7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586641D59BB5F005354D2 /* WebKit.framework */; };
@@ -229,16 +214,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		09AB77F61FBDABCE00924A51 /* YLProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLProgressBar.h; sourceTree = "<group>"; };
-		09AB77F71FBDABCE00924A51 /* YLProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLProgressBar.m; sourceTree = "<group>"; };
-		09B301651FBC4AE90018C016 /* MBCircularProgressBarLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBCircularProgressBarLayer.h; sourceTree = "<group>"; };
-		09B301661FBC4AE90018C016 /* MBCircularProgressBarLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBCircularProgressBarLayer.m; sourceTree = "<group>"; };
-		09B301671FBC4AE90018C016 /* MBCircularProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBCircularProgressBarView.h; sourceTree = "<group>"; };
-		09B301681FBC4AE90018C016 /* MBCircularProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBCircularProgressBarView.m; sourceTree = "<group>"; };
 		0E002FF2153E19550094341F /* NSData+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Blocks.h"; sourceTree = "<group>"; };
 		0E002FF3153E19560094341F /* NSData+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Blocks.m"; sourceTree = "<group>"; };
-		0E0A294F1744187D003AB90A /* UIDevice+machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+machine.h"; sourceTree = "<group>"; };
-		0E0A29501744187D003AB90A /* UIDevice+machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+machine.m"; sourceTree = "<group>"; };
 		0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingTextView.swift; sourceTree = "<group>"; };
 		0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataProvider.swift; sourceTree = "<group>"; };
 		0E0D09FA2A4635940032162E /* DMMovePickerRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMovePickerRow.h; sourceTree = "<group>"; };
@@ -274,18 +251,8 @@
 		0E4788B514EACC0B00B8FFE3 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
-		0E4788BE14EACCCC00B8FFE3 /* SHA1PHPClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1PHPClass.h; sourceTree = "<group>"; };
-		0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHA1PHPClass.m; sourceTree = "<group>"; };
 		0E4788C514EAD8FA00B8FFE3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMSettingsViewController.swift; sourceTree = "<group>"; };
-		0E4E436D172ABB7B00C400D4 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
-		0E4E436E172ABB7B00C400D4 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
-		0E4E436F172ABB7B00C400D4 /* NSData-AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData-AES.h"; sourceTree = "<group>"; };
-		0E4E4370172ABB7B00C400D4 /* NSData-AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData-AES.m"; sourceTree = "<group>"; };
-		0E4E4371172ABB7B00C400D4 /* NSFileManager-AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager-AES.h"; sourceTree = "<group>"; };
-		0E4E4372172ABB7B00C400D4 /* NSFileManager-AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager-AES.m"; sourceTree = "<group>"; };
-		0E4E4373172ABB7B00C400D4 /* rijndael.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rijndael.c; sourceTree = "<group>"; };
-		0E4E4374172ABB7B00C400D4 /* rijndael.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rijndael.h; sourceTree = "<group>"; };
 		0E5ADC9917174DF100628F41 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		0E5ADC9B17174DF600628F41 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		0E5ADC9D17174DFB00628F41 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -381,11 +348,6 @@
 		0EB5424B14E325210023BA4C /* FavoriteMealsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteMealsViewController.h; sourceTree = "<group>"; };
 		0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteMealsViewController.m; sourceTree = "<group>"; };
 		0EB5424D14E325210023BA4C /* FavoriteMealsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoriteMealsViewController.xib; sourceTree = "<group>"; };
-		0EBFA6B515924DEC00AD6E9D /* TDSemiModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSemiModal.h; sourceTree = "<group>"; };
-		0EBFA6B615924DEC00AD6E9D /* TDSemiModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSemiModalViewController.h; sourceTree = "<group>"; };
-		0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSemiModalViewController.m; sourceTree = "<group>"; };
-		0EBFA6B815924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TDSemiModalExtension.h"; sourceTree = "<group>"; };
-		0EBFA6B915924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TDSemiModalExtension.m"; sourceTree = "<group>"; };
 		0ECE6ED414BF3FC1004DEF36 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0ECE6F4614BF4A94004DEF36 /* TUTSimpleScatterPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUTSimpleScatterPlot.h; sourceTree = "<group>"; };
 		0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TUTSimpleScatterPlot.m; sourceTree = "<group>"; };
@@ -441,12 +403,6 @@
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* DietMasterGo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DietMasterGo_Prefix.pch; sourceTree = "<group>"; };
-		3568E28B187EDE28004A542C /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
-		3568E28C187EDE28004A542C /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
-		3568E293187EDE28004A542C /* UIView+FrameControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameControl.h"; sourceTree = "<group>"; };
-		3568E294187EDE28004A542C /* UIView+FrameControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FrameControl.m"; sourceTree = "<group>"; };
-		3568E295187EDE28004A542C /* UIViewController+Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Keyboard.h"; sourceTree = "<group>"; };
-		3568E296187EDE28004A542C /* UIViewController+Keyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Keyboard.m"; sourceTree = "<group>"; };
 		3568E2A4187EDE40004A542C /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
 		3568E2A5187EDE40004A542C /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 		3568E2A8187EDE40004A542C /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
@@ -485,8 +441,6 @@
 		40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMovesDetailHeaderCollectionReusableView.m; sourceTree = "<group>"; };
 		40E035C521F1F2A000968755 /* MyMovesDetailCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMovesDetailCollectionViewCell.h; sourceTree = "<group>"; };
 		40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomImageFlowLayout.m; sourceTree = "<group>"; };
-		431EEE481D82AA7D0022AFEA /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
-		431EEE491D82AA7D0022AFEA /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		43D254AD1D62F564008513A0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		43D586621D59BB53005354D2 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		43D586641D59BB5F005354D2 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -600,86 +554,36 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0E101B9D2A53650C00D8E7E2 /* IIn App Purchase */,
 				1D3623240D0F684500981E51 /* DietMasterGoAppDelegate.h */,
 				1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */,
 				0E6F8FF32A43104200956F1E /* SceneDelegate.swift */,
 				0ECFE7EF2A41DB2000DE631E /* Views */,
 				0E8EC8E52A3CF94A0095BDEC /* Categories */,
-				650208E72501552400F412B0 /* KeyChainWrapper */,
 				0E9F16FE2A33BBE700217BF9 /* PNPieChartView */,
 				0E8EC8DE2A3CF52A0095BDEC /* Helpers */,
 				0EDAB6A82A3B4E9100DB351A /* DataSource */,
 				65301CB4269E50A600CA2CAA /* Profile */,
-				650208EB250155EA00F412B0 /* Today_Old */,
-				650208D3250153C300F412B0 /* In-App Purchase */,
-				403D889721EC7E2B00B2F232 /* My Moves */,
-				403FEB511FD149A5006D9B8F /* StepData */,
-				09AB77F51FBDABCE00924A51 /* YLProgressBar */,
-				09B3015E1FBC4ABC0018C016 /* MBCircularProgressBar */,
-				0E0A2C6C174A5D8A003AB90A /* 1.2.1 New Files */,
-				0E002FF1153E19550094341F /* NSData+Blocks */,
-				0E4788BD14EACCCC00B8FFE3 /* SHA1PHPClass */,
-				0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */,
 				0E71B79514DE1ABD008C9576 /* DietmasterEngine */,
-				0E4788B414EACBFE00B8FFE3 /* LoginViewController */,
-				59DA2ACF1A1B6228008D749F /* Today */,
-				59DA2AD01A1B6230008D749F /* My Goal */,
-				59DA2AD11A1B6239008D749F /* My Log */,
-				59DA2AD21A1B624D008D749F /* My Plan */,
-				59DA2AD31A1B625B008D749F /* Settings */,
-				0E3F44D115003DA6008413AB /* LearnMoreViewController */,
-				3568E29D187EDE40004A542C /* MessageController */,
-				3568E28A187EDE28004A542C /* Model */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		09AB77F51FBDABCE00924A51 /* YLProgressBar */ = {
+		0E101B9D2A53650C00D8E7E2 /* IIn App Purchase */ = {
 			isa = PBXGroup;
 			children = (
-				09AB77F61FBDABCE00924A51 /* YLProgressBar.h */,
-				09AB77F71FBDABCE00924A51 /* YLProgressBar.m */,
+				650208CC2501531A00F412B0 /* IAPHelper.h */,
+				650208CD2501531A00F412B0 /* IAPHelper.m */,
+				650208C9250152FA00F412B0 /* PurchaseIAPHelper.h */,
+				650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */,
+				650208D4250153C300F412B0 /* InAppPurchaseViewController.m */,
+				650208D5250153C300F412B0 /* PlanHeader */,
+				650208D9250153C300F412B0 /* InAppPurchaseViewController.xib */,
+				650208DA250153C300F412B0 /* InAppPurchaseViewController.h */,
+				650208DB250153C300F412B0 /* PlansCell */,
+				650208E72501552400F412B0 /* KeyChainWrapper */,
 			);
-			path = YLProgressBar;
-			sourceTree = "<group>";
-		};
-		09B3015E1FBC4ABC0018C016 /* MBCircularProgressBar */ = {
-			isa = PBXGroup;
-			children = (
-				09B301651FBC4AE90018C016 /* MBCircularProgressBarLayer.h */,
-				09B301661FBC4AE90018C016 /* MBCircularProgressBarLayer.m */,
-				09B301671FBC4AE90018C016 /* MBCircularProgressBarView.h */,
-				09B301681FBC4AE90018C016 /* MBCircularProgressBarView.m */,
-			);
-			path = MBCircularProgressBar;
-			sourceTree = "<group>";
-		};
-		0E002FF1153E19550094341F /* NSData+Blocks */ = {
-			isa = PBXGroup;
-			children = (
-				0E002FF2153E19550094341F /* NSData+Blocks.h */,
-				0E002FF3153E19560094341F /* NSData+Blocks.m */,
-			);
-			path = "NSData+Blocks";
-			sourceTree = "<group>";
-		};
-		0E0A294E1744187D003AB90A /* UIDevice+machine */ = {
-			isa = PBXGroup;
-			children = (
-				0E0A294F1744187D003AB90A /* UIDevice+machine.h */,
-				0E0A29501744187D003AB90A /* UIDevice+machine.m */,
-			);
-			path = "UIDevice+machine";
-			sourceTree = "<group>";
-		};
-		0E0A2C6C174A5D8A003AB90A /* 1.2.1 New Files */ = {
-			isa = PBXGroup;
-			children = (
-				0E4E436C172ABB7B00C400D4 /* Base64Encoder */,
-				0E0A294E1744187D003AB90A /* UIDevice+machine */,
-				0E5ADF4D1718B3B800628F41 /* BarcodeScannerViewController */,
-			);
-			name = "1.2.1 New Files";
+			path = "IIn App Purchase";
 			sourceTree = "<group>";
 		};
 		0E3F44D115003DA6008413AB /* LearnMoreViewController */ = {
@@ -702,38 +606,6 @@
 				0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */,
 			);
 			path = LoginViewController;
-			sourceTree = "<group>";
-		};
-		0E4788BD14EACCCC00B8FFE3 /* SHA1PHPClass */ = {
-			isa = PBXGroup;
-			children = (
-				0E4788BE14EACCCC00B8FFE3 /* SHA1PHPClass.h */,
-				0E4788BF14EACCCC00B8FFE3 /* SHA1PHPClass.m */,
-			);
-			path = SHA1PHPClass;
-			sourceTree = "<group>";
-		};
-		0E4E436C172ABB7B00C400D4 /* Base64Encoder */ = {
-			isa = PBXGroup;
-			children = (
-				0E4E436D172ABB7B00C400D4 /* Base64.h */,
-				0E4E436E172ABB7B00C400D4 /* Base64.m */,
-				0E4E436F172ABB7B00C400D4 /* NSData-AES.h */,
-				0E4E4370172ABB7B00C400D4 /* NSData-AES.m */,
-				0E4E4371172ABB7B00C400D4 /* NSFileManager-AES.h */,
-				0E4E4372172ABB7B00C400D4 /* NSFileManager-AES.m */,
-				0E4E4373172ABB7B00C400D4 /* rijndael.c */,
-				0E4E4374172ABB7B00C400D4 /* rijndael.h */,
-			);
-			path = Base64Encoder;
-			sourceTree = "<group>";
-		};
-		0E5ADF4D1718B3B800628F41 /* BarcodeScannerViewController */ = {
-			isa = PBXGroup;
-			children = (
-				0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */,
-			);
-			path = BarcodeScannerViewController;
 			sourceTree = "<group>";
 		};
 		0E6F8FF52A43289F00956F1E /* Resources */ = {
@@ -869,6 +741,8 @@
 		0E8EC8E52A3CF94A0095BDEC /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				0E002FF2153E19550094341F /* NSData+Blocks.h */,
+				0E002FF3153E19560094341F /* NSData+Blocks.m */,
 				65F2DE84249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.h */,
 				65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */,
 				0E8EC8E62A3CF9770095BDEC /* NSString+Encode.h */,
@@ -950,18 +824,6 @@
 			path = FavoriteMealsViewController;
 			sourceTree = "<group>";
 		};
-		0EBFA6B115924DEC00AD6E9D /* TDSemiModalViewController */ = {
-			isa = PBXGroup;
-			children = (
-				0EBFA6B515924DEC00AD6E9D /* TDSemiModal.h */,
-				0EBFA6B615924DEC00AD6E9D /* TDSemiModalViewController.h */,
-				0EBFA6B715924DEC00AD6E9D /* TDSemiModalViewController.m */,
-				0EBFA6B815924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.h */,
-				0EBFA6B915924DEC00AD6E9D /* UIViewController+TDSemiModalExtension.m */,
-			);
-			path = TDSemiModalViewController;
-			sourceTree = "<group>";
-		};
 		0ECE6ED814BF405A004DEF36 /* FoodCategoryPicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -1013,6 +875,7 @@
 				650208F2250158A900F412B0 /* DietMasterGoViewController.m */,
 			);
 			name = DietMasterGoViewController;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		0ECE6EDE14BF40B7004DEF36 /* MyGoalViewController */ = {
@@ -1107,6 +970,16 @@
 		0ECFE7EF2A41DB2000DE631E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3568E29D187EDE40004A542C /* MessageController */,
+				59DA2AD21A1B624D008D749F /* My Plan */,
+				0E3F44D115003DA6008413AB /* LearnMoreViewController */,
+				59DA2AD31A1B625B008D749F /* Settings */,
+				59DA2AD11A1B6239008D749F /* My Log */,
+				59DA2AD01A1B6230008D749F /* My Goal */,
+				403D889721EC7E2B00B2F232 /* My Moves */,
+				0E4788B414EACBFE00B8FFE3 /* LoginViewController */,
+				0ECE6EDD14BF40A5004DEF36 /* DietMasterGoViewController */,
+				0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */,
 				0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */,
 				0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */,
 				0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */,
@@ -1142,6 +1015,8 @@
 		0EDAB6A92A3B4E9A00DB351A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				403FEB531FD149A5006D9B8F /* StepData.h */,
+				403FEB521FD149A5006D9B8F /* StepData.m */,
 				0E8BF1F32A50BAD1000BDDF1 /* Meal Plan */,
 				0EA18DC62A475BC80017D131 /* Exercises */,
 				0EA18DC42A475BA40017D131 /* MovePlan */,
@@ -1244,23 +1119,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3568E28A187EDE28004A542C /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				3568E28B187EDE28004A542C /* Common.h */,
-				3568E28C187EDE28004A542C /* Common.m */,
-				3568E293187EDE28004A542C /* UIView+FrameControl.h */,
-				3568E294187EDE28004A542C /* UIView+FrameControl.m */,
-				3568E295187EDE28004A542C /* UIViewController+Keyboard.h */,
-				3568E296187EDE28004A542C /* UIViewController+Keyboard.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		3568E29D187EDE40004A542C /* MessageController */ = {
 			isa = PBXGroup;
 			children = (
-				431EEE471D82AA7D0022AFEA /* TTAttributeLable */,
 				3568E2A4187EDE40004A542C /* MessageCell.h */,
 				3568E2A5187EDE40004A542C /* MessageCell.m */,
 				3568E2A8187EDE40004A542C /* MessageViewController.h */,
@@ -1306,32 +1167,6 @@
 			path = "My Moves";
 			sourceTree = "<group>";
 		};
-		403FEB511FD149A5006D9B8F /* StepData */ = {
-			isa = PBXGroup;
-			children = (
-				403FEB531FD149A5006D9B8F /* StepData.h */,
-				403FEB521FD149A5006D9B8F /* StepData.m */,
-			);
-			path = StepData;
-			sourceTree = "<group>";
-		};
-		431EEE471D82AA7D0022AFEA /* TTAttributeLable */ = {
-			isa = PBXGroup;
-			children = (
-				431EEE481D82AA7D0022AFEA /* TTTAttributedLabel.h */,
-				431EEE491D82AA7D0022AFEA /* TTTAttributedLabel.m */,
-			);
-			path = TTAttributeLable;
-			sourceTree = "<group>";
-		};
-		59DA2ACF1A1B6228008D749F /* Today */ = {
-			isa = PBXGroup;
-			children = (
-				0ECE6EDD14BF40A5004DEF36 /* DietMasterGoViewController */,
-			);
-			name = Today;
-			sourceTree = "<group>";
-		};
 		59DA2AD01A1B6230008D749F /* My Goal */ = {
 			isa = PBXGroup;
 			children = (
@@ -1339,6 +1174,7 @@
 				0ECE6EDE14BF40B7004DEF36 /* MyGoalViewController */,
 			);
 			name = "My Goal";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		59DA2AD11A1B6239008D749F /* My Log */ = {
@@ -1356,6 +1192,7 @@
 				59DA2AD61A1B66DA008D749F /* Scaning_Food_Screen */,
 			);
 			name = "My Log";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		59DA2AD21A1B624D008D749F /* My Plan */ = {
@@ -1368,6 +1205,7 @@
 				0EFF65951589364000CCE0AD /* GroceryListViewController */,
 			);
 			name = "My Plan";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		59DA2AD31A1B625B008D749F /* Settings */ = {
@@ -1379,6 +1217,7 @@
 				0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */,
 			);
 			name = Settings;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		59DA2AD41A1B634D008D749F /* Exercise */ = {
@@ -1405,22 +1244,6 @@
 				0ECE6ED914BF4068004DEF36 /* MeasurePicker */,
 			);
 			name = Scaning_Food_Screen;
-			sourceTree = "<group>";
-		};
-		650208D3250153C300F412B0 /* In-App Purchase */ = {
-			isa = PBXGroup;
-			children = (
-				650208CC2501531A00F412B0 /* IAPHelper.h */,
-				650208CD2501531A00F412B0 /* IAPHelper.m */,
-				650208C9250152FA00F412B0 /* PurchaseIAPHelper.h */,
-				650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */,
-				650208D4250153C300F412B0 /* InAppPurchaseViewController.m */,
-				650208D5250153C300F412B0 /* PlanHeader */,
-				650208D9250153C300F412B0 /* InAppPurchaseViewController.xib */,
-				650208DA250153C300F412B0 /* InAppPurchaseViewController.h */,
-				650208DB250153C300F412B0 /* PlansCell */,
-			);
-			path = "In-App Purchase";
 			sourceTree = "<group>";
 		};
 		650208D5250153C300F412B0 /* PlanHeader */ = {
@@ -1450,13 +1273,6 @@
 				650208E92501552400F412B0 /* KeychainItemWrapper.h */,
 			);
 			path = KeyChainWrapper;
-			sourceTree = "<group>";
-		};
-		650208EB250155EA00F412B0 /* Today_Old */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Today_Old;
 			sourceTree = "<group>";
 		};
 		65301CB4269E50A600CA2CAA /* Profile */ = {
@@ -1749,7 +1565,6 @@
 				401B646E20B3FC64004453E7 /* main.m in Sources */,
 				0E83C4AC2A4F1EFE001DC6BD /* DMDetailTableViewCell.m in Sources */,
 				401B646F20B3FC64004453E7 /* DietMasterGoAppDelegate.m in Sources */,
-				401B647020B3FC64004453E7 /* TTTAttributedLabel.m in Sources */,
 				0E29C9D52A503C8600D9884F /* DMMessagesDataProvider.m in Sources */,
 				401B647420B3FC64004453E7 /* AppSettings.m in Sources */,
 				401B647520B3FC64004453E7 /* ExchangeFood.m in Sources */,
@@ -1781,7 +1596,6 @@
 				0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */,
 				401B649520B3FC64004453E7 /* LoginViewController.m in Sources */,
 				40AFA92E21FA13CD009140D9 /* MyMovesListViewController.m in Sources */,
-				401B649620B3FC64004453E7 /* SHA1PHPClass.m in Sources */,
 				401B649820B3FC64004453E7 /* LearnMoreViewController.m in Sources */,
 				401B649920B3FC64004453E7 /* NSData+Blocks.m in Sources */,
 				0E8BF1F62A50BB29000BDDF1 /* DMMealPlan.m in Sources */,
@@ -1794,20 +1608,15 @@
 				401B649E20B3FC64004453E7 /* ExchangeFoodViewController.m in Sources */,
 				40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */,
 				0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */,
-				401B64A120B3FC64004453E7 /* TDSemiModalViewController.m in Sources */,
-				401B64A220B3FC64004453E7 /* UIViewController+TDSemiModalExtension.m in Sources */,
 				65462D1726BD1D6B004D1654 /* ProfileContactVC.m in Sources */,
 				65462D1D26BD1D82004D1654 /* UserMealType.m in Sources */,
 				B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */,
 				0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */,
-				401B64C220B3FC64004453E7 /* Common.m in Sources */,
 				0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */,
 				650208DF250153C300F412B0 /* InAppPurchaseViewController.m in Sources */,
-				401B64D220B3FC64004453E7 /* MBCircularProgressBarLayer.m in Sources */,
 				0E4409762A49A3FF00AF5BAD /* DMAuthManager.m in Sources */,
 				402A3C1121F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m in Sources */,
 				0E29C9DB2A503DCE00D9884F /* DMDatabaseUtilities.m in Sources */,
-				401B64DF20B3FC64004453E7 /* UIViewController+Keyboard.m in Sources */,
 				0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */,
 				650208E0250153C300F412B0 /* headerVw.m in Sources */,
 				0E8EC8F32A3E08E00095BDEC /* UserDataFetcher.swift in Sources */,
@@ -1833,7 +1642,6 @@
 				0E0D09F72A45CD1B0032162E /* GrowingTextView.swift in Sources */,
 				0E6F91382A432A4B00956F1E /* MainMenuFAB.swift in Sources */,
 				650208CE2501531B00F412B0 /* IAPHelper.m in Sources */,
-				401B654E20B3FC64004453E7 /* UIView+FrameControl.m in Sources */,
 				0EA18DBD2A4745040017D131 /* DMMoveDay.m in Sources */,
 				40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
 				0E6F913D2A43580A00956F1E /* UIViewController+Navigation.m in Sources */,
@@ -1843,26 +1651,19 @@
 				401B655F20B3FC64004453E7 /* MessageCell.m in Sources */,
 				65F2DE86249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m in Sources */,
 				0E9F170E2A33BBE700217BF9 /* MCSliceLayer.m in Sources */,
-				401B656220B3FC64004453E7 /* MBCircularProgressBarView.m in Sources */,
-				401B656720B3FC64004453E7 /* YLProgressBar.m in Sources */,
 				401B656B20B3FC64004453E7 /* StepData.m in Sources */,
 				0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */,
 				0E6F8FF42A43104200956F1E /* SceneDelegate.swift in Sources */,
 				650208F4250158A900F412B0 /* DietMasterGoViewController.m in Sources */,
 				65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */,
 				0E4409812A4B13E500AF5BAD /* DMMealPlanDataProvider.m in Sources */,
-				401B658A20B3FC64004453E7 /* Base64.m in Sources */,
 				0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */,
-				401B658B20B3FC64004453E7 /* NSData-AES.m in Sources */,
 				0E0D09F92A45DD8E0032162E /* DayDataProvider.swift in Sources */,
 				0E44097B2A49EFCB00AF5BAD /* DMDataFetcher.m in Sources */,
 				0EA5C9752A4B57F000698BFE /* GroceryListViewController.m in Sources */,
 				650208FD25015A5700F412B0 /* MyGoalViewController.m in Sources */,
 				403D88AE21ECA98700B2F232 /* MyMovesViewController.m in Sources */,
-				401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */,
-				401B658E20B3FC64004453E7 /* rijndael.c in Sources */,
 				0E6F913F2A43C1F500956F1E /* LogDaySummaryView.swift in Sources */,
-				401B659020B3FC64004453E7 /* UIDevice+machine.m in Sources */,
 				650208EA2501552500F412B0 /* KeychainItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1926,7 +1727,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -1994,7 +1795,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;
@@ -2060,7 +1861,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NH27AHXU3;
 				ENABLE_BITCODE = NO;

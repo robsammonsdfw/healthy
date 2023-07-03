@@ -11,7 +11,6 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSData+Blocks.h"
-#import "UIDevice+machine.h"
 #import "DietMasterGoAppDelegate.h"
 #import "NSNull+NullCategoryExtension.h"
 

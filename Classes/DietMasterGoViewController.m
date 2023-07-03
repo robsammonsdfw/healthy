@@ -6,7 +6,6 @@
 #import "DietmasterEngine.h"
 #import "MCPieChartView.h"
 #import "MCSliceLayer.h"
-#import "MBCircularProgressBarView.h"
 #import "GroceryListViewController.h"
 #import "FoodsList.h"
 #import "MessageViewController.h"

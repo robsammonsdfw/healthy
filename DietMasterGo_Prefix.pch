@@ -35,24 +35,9 @@
 // Logs to Crashlytics.
 #define DM_LOG(__FORMAT__, ...) [[FIRCrashlytics crashlytics] logWithFormat:__FORMAT__, ##__VA_ARGS__];
 
-// Hardware Info
-#define   SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
-
-#define IS_IPHONE_4 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
-#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
-#define IS_IPHONE_X_XR_XS ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )812 ) < DBL_EPSILON )
-
-
-#define   IsIOS4_3        (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"4.3"))
-#define   IsIOS5          (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.0"))
-#define   IsIOS6          (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0"))
-#define   IsIOS7          (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0"))
-
-#define AppDel ((DietMasterGoAppDelegate *)[UIApplication sharedApplication].delegate)
-
 //Color
 #define RGB(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0] //UIColorFromRGB(0x#0084cb);
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 //DMGOPLUS
 #define PrimaryColor UIColorFromRGB(0xF2C53D);
@@ -69,8 +54,6 @@
 #define graphGraindentColor [CPTGradient gradientWithBeginningColor:UIColorFromRGB(0x000000) endingColor:[CPTColor colorWithCGColor:UIColorFromRGB(0x000000).CGColor]]
 
 //HHT to change image color dynamically
-#define HeartImageColor [UIColor colorWithRed:0.0/255.0 green:105.0/255.0 blue:160.0/255.0 alpha:1];
-#define OwnerMessageImageColor [UIColor colorWithRed:0.0/255.0 green:105.0/255.0 blue:160.0/255.0 alpha:1];
 #define OpponentMessageImageColor [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:234.0/255.0 alpha:1];
 
 #define PLIST_NAME @"AppDefaults.plist"

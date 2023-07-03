@@ -137,6 +137,7 @@ PODS:
   - SBPickerSelector/Core (1.0.4)
   - ScrollableSegmentedControl (1.5.0)
   - SWXMLHash (7.0.2)
+  - TTTAttributedLabel (2.0.0)
 
 DEPENDENCIES:
   - AlamofireSoap
@@ -152,6 +153,7 @@ DEPENDENCIES:
   - SBPickerSelector (= 1.0.4)
   - ScrollableSegmentedControl
   - SWXMLHash
+  - TTTAttributedLabel
 
 SPEC REPOS:
   trunk:
@@ -182,6 +184,7 @@ SPEC REPOS:
     - SBPickerSelector
     - ScrollableSegmentedControl
     - SWXMLHash
+    - TTTAttributedLabel
 
 SPEC CHECKSUMS:
   Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
@@ -211,7 +214,8 @@ SPEC CHECKSUMS:
   SBPickerSelector: ea57fff3aae81a79b5db3d9559e54a5cbd3c706a
   ScrollableSegmentedControl: 2e64bbe8968a7fcd8aae5014434481464fcdfe60
   SWXMLHash: dd733a457e9c4fe93b1538654057aefae4acb382
+  TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
 
-PODFILE CHECKSUM: 42f63ede229bd9e9accb8db4738d6efb1c93286a
+PODFILE CHECKSUM: 4bd3e0e30a84022af58d430338e3a544eabf41c6
 
 COCOAPODS: 1.12.1
