@@ -34,7 +34,7 @@
 
 @interface MyLogViewController ()<SFSafariViewControllerDelegate, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate>
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
-@property (nonatomic, strong) LogDaySummary *logDaySummary;
+@property (nonatomic, strong) LogDaySummaryView *logDaySummary;
 /// Array of titles for the sections of the log.
 @property (nonatomic, strong) NSArray *sectionTitleArray;
 /// Dictionary of foods per meal. Key = Section title, eg. "Breakfast"
@@ -147,7 +147,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
 
-    self.logDaySummary = [[LogDaySummary alloc] initWithFrame:CGRectZero];
+    self.logDaySummary = [[LogDaySummaryView alloc] initWithFrame:CGRectZero];
     self.logDaySummary.translatesAutoresizingMaskIntoConstraints = NO;
     __weak typeof(self) weakSelf = self;
     self.logDaySummary.didSelectInfoButtonCallback = ^{

@@ -1,5 +1,5 @@
 //
-//  LogDaySummary.swift
+//  LogDaySummaryView.swift
 //  DietMasterGoPlus
 //
 //  Created by Henry T Kirk on 6/21/23.
@@ -9,7 +9,7 @@ import UIKit
 
 /// View that displays the recommended and remaining calories/fat/protein
 /// for their day's food log.
-class LogDaySummary : UIView {
+class LogDaySummaryView : UIView {
     private lazy var recommendedView = {
         let view = SummaryView()
         view.getComposedStackView()?.translatesAutoresizingMaskIntoConstraints = false

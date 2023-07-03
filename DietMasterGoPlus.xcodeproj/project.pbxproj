@@ -50,7 +50,7 @@
 		0E6F91382A432A4B00956F1E /* MainMenuFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */; };
 		0E6F913A2A4350E300956F1E /* DMDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */; };
 		0E6F913D2A43580A00956F1E /* UIViewController+Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913C2A43580A00956F1E /* UIViewController+Navigation.m */; };
-		0E6F913F2A43C1F500956F1E /* LogDaySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913E2A43C1F500956F1E /* LogDaySummary.swift */; };
+		0E6F913F2A43C1F500956F1E /* LogDaySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */; };
 		0E6F91412A43D50C00956F1E /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91402A43D50C00956F1E /* UIColor+Extension.swift */; };
 		0E83C4AC2A4F1EFE001DC6BD /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
 		0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
@@ -322,7 +322,7 @@
 		0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDatePickerViewController.swift; sourceTree = "<group>"; };
 		0E6F913B2A43580A00956F1E /* UIViewController+Navigation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Navigation.h"; sourceTree = "<group>"; };
 		0E6F913C2A43580A00956F1E /* UIViewController+Navigation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Navigation.m"; sourceTree = "<group>"; };
-		0E6F913E2A43C1F500956F1E /* LogDaySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDaySummary.swift; sourceTree = "<group>"; };
+		0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDaySummaryView.swift; sourceTree = "<group>"; };
 		0E6F91402A43D50C00956F1E /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		0E71B79014DE157C008C9576 /* ExercisesDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExercisesDetailViewController.h; sourceTree = "<group>"; };
 		0E71B79114DE157C008C9576 /* ExercisesDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExercisesDetailViewController.m; sourceTree = "<group>"; };
@@ -1116,7 +1116,7 @@
 				0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */,
 				0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */,
 				0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */,
-				0E6F913E2A43C1F500956F1E /* LogDaySummary.swift */,
+				0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */,
 				0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */,
 			);
 			path = Views;
@@ -1873,7 +1873,7 @@
 				403D88AE21ECA98700B2F232 /* MyMovesViewController.m in Sources */,
 				401B658D20B3FC64004453E7 /* NSFileManager-AES.m in Sources */,
 				401B658E20B3FC64004453E7 /* rijndael.c in Sources */,
-				0E6F913F2A43C1F500956F1E /* LogDaySummary.swift in Sources */,
+				0E6F913F2A43C1F500956F1E /* LogDaySummaryView.swift in Sources */,
 				401B659020B3FC64004453E7 /* UIDevice+machine.m in Sources */,
 				650208EA2501552500F412B0 /* KeychainItemWrapper.m in Sources */,
 			);
