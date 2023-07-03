@@ -222,7 +222,7 @@ static NSString *CellIdentifier = @"Cell";
     cell.textLabel.text = [dict valueForKey:@"ActivityName"];
     cell.textLabel.textColor = [UIColor blackColor];
     if (totalCaloriesBurned != 0) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Calories Burned Per Hour: %.2f",totalCaloriesBurned];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"Calories Burned Per Hour: %.f",totalCaloriesBurned];
     } else {
         cell.detailTextLabel.text = @"";
     }

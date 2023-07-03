@@ -448,7 +448,7 @@ CGPoint svos;
     [rs close];
     
     txtfieldFoodName.text = [self.foodDict valueForKey:@"Name"];
-    txtfieldCalories.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Calories"] doubleValue]];
+    txtfieldCalories.text = [NSString stringWithFormat:@"%.f",[[self.foodDict valueForKey:@"Calories"] doubleValue]];
     txtfieldTotalFat.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Fat"] doubleValue]];
     txtfieldSatFat.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"SaturatedFat"] doubleValue]];
     txtfieldSodium.text = [NSString stringWithFormat:@"%.2f",[[self.foodDict valueForKey:@"Sodium"] doubleValue]];

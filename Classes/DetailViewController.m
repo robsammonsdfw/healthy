@@ -83,17 +83,12 @@
     }
     
     double gramWeight = [self.food.gramWeight floatValue];
-    double foodProtein = [self.food.protein floatValue];
-    double foodFat = [self.food.fat floatValue];
-    double foodCarbs = [self.food.carbohydrates floatValue];
     double servingSize = [self.food.servingSize floatValue];
     double foodCalories = [self.food.calories floatValue];
     double selectedServing = [self.selectedServings floatValue];
-        
-    lblFat.text = [NSString stringWithFormat:@"%.2f", foodFat * (gramWeight / 100)];
-    lblCarbs.text = [NSString stringWithFormat:@"%.2f", foodCarbs * (gramWeight / 100)];
-    lblProtein.text = [NSString stringWithFormat:@"%.2f", foodProtein * (gramWeight / 100)];
-    self.foodIdLbl.text = self.food.foodKey.stringValue;
+
+    self.foodIdLbl.text = [NSString stringWithFormat:@"ID: %@", self.food.foodKey.stringValue];
+    self.foodIdLbl.adjustsFontSizeToFitWidth = YES;
     
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
     self.countIsFavorite = [provider isFoodFavoritedForFoodKey:self.food.foodKey];
@@ -114,7 +109,7 @@
         totalCalories = foodCalories * (selectedServing * gramWeight  / 100 / servingSize);
     }
     
-    lblCalories.text = [NSString stringWithFormat:@"%.2f", totalCalories];
+    lblCalories.text = [NSString stringWithFormat:@"%.f", totalCalories];
     
     NSString *servingList = [NSString stringWithFormat:@"%.2f", selectedServing];
     NSArray *servingItems = [servingList componentsSeparatedByString:@"."];
@@ -686,15 +681,15 @@
     }
     double flt_totalCalories = foodCalories * ([servingAmount floatValue] * gramWeight  / 100 / servingSize);
     
-    lblCalories.text = [NSString stringWithFormat:@"%.2f", flt_totalCalories];
+    lblCalories.text = [NSString stringWithFormat:@"%.f", flt_totalCalories];
     
     double foodProtein = [self.food.protein floatValue];
     double foodFat = [self.food.fat floatValue];
     double foodCarbs = [self.food.carbohydrates floatValue];
     
-    lblFat.text = [NSString stringWithFormat:@"%.2f",(foodFat * (gramWeight / 100)) / servingSize * [servingAmount floatValue]];
-    lblCarbs.text = [NSString stringWithFormat:@"%.2f",(foodCarbs * (gramWeight / 100))  / servingSize * [servingAmount floatValue]];
-    lblProtein.text = [NSString stringWithFormat:@"%.2f",(foodProtein * (gramWeight / 100))  / servingSize *[servingAmount floatValue]];
+    lblFat.text = [NSString stringWithFormat:@"%.1f",(foodFat * (gramWeight / 100)) / servingSize * [servingAmount floatValue]];
+    lblCarbs.text = [NSString stringWithFormat:@"%.1f",(foodCarbs * (gramWeight / 100))  / servingSize * [servingAmount floatValue]];
+    lblProtein.text = [NSString stringWithFormat:@"%.1f",(foodProtein * (gramWeight / 100))  / servingSize *[servingAmount floatValue]];
 }
 
 #pragma mark LOG METHODS

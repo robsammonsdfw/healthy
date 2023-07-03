@@ -646,7 +646,7 @@
         
         double totalCaloriesBurned = (caloriesPerHour / 60) * [dayProvider getCurrentWeight].floatValue * minutesExercised;
         
-        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.2f", totalCaloriesBurned];
+        self.caloriesBurnedLabel.text = [NSString stringWithFormat:@"%.f", totalCaloriesBurned];
     }
 }
 

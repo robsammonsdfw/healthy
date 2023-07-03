@@ -189,6 +189,18 @@ import FMDB
         return (minutesExercised, totalCaloriesBurned, totalExerciseCalories, totalCaloriesBurnedViaTracker, stepsTaken)
     }
     
+    /// Helper to output a number to a string with "g" appended.
+    @objc public func numberToGramString(number: NSNumber) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = NSLocale.current
+        formatter.maximumFractionDigits = 1
+        guard let stringValue = formatter.string(from: number) else {
+            return "0g"
+        }
+        return String(format: "%@g", stringValue)
+    }
+
     // MARK: - Exercise and Burned Calories
     
     /// Gets the number of minutes exercised for the given day.
@@ -342,7 +354,7 @@ import FMDB
         if let date = date {
             consumedGrams = getTotalCarbCalories(date: date).doubleValue / 4;
         }
-        return String(format: "%.fg", round(carbGrams - consumedGrams))
+        return numberToGramString(number: NSNumber(floatLiteral: carbGrams - consumedGrams))
     }
     @objc public func getProteinGramsString(date: Date?) -> String {
         guard let currentUser = currentUser else { return "0g" }
@@ -352,7 +364,7 @@ import FMDB
         if let date = date {
             consumedGrams = getTotalProteinCalories(date: date).doubleValue / 4;
         }
-        return String(format: "%.fg", round(proteinGrams - consumedGrams))
+        return numberToGramString(number: NSNumber(floatLiteral: proteinGrams - consumedGrams))
     }
     @objc public func getFatGramsString(date: Date?) -> String {
         guard let currentUser = currentUser else { return "0g" }
@@ -362,11 +374,11 @@ import FMDB
         if let date = date {
             consumedGrams = getTotalFatCalories(date: date).doubleValue / 4;
         }
-        return String(format: "%.fg", round(fatGrams - consumedGrams))
+        return numberToGramString(number: NSNumber(floatLiteral: fatGrams - consumedGrams))
     }
 
     // MARK: - Localized Output
-    
+        
     /// Goal the localized weight goal for the current user.
     @objc public func getLocalizedUserWeightGoalString() -> String {
         return currentUser?.weightGoalLocalizedString() ?? "0.0"
