@@ -111,7 +111,7 @@
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageRespectsSafeAreaInsets</key>
-		<false/>
+		<true/>
 		<key>UIImageName</key>
 		<string>LaunchScreen-logo</string>
 	</dict>
