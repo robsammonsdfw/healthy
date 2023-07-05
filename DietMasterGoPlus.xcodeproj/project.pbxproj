@@ -412,9 +412,6 @@
 		3568E2A9187EDE40004A542C /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		3568E2B5187EDE40004A542C /* SendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendView.h; sourceTree = "<group>"; };
 		3568E2B6187EDE40004A542C /* SendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendView.m; sourceTree = "<group>"; };
-		35E541DF1887BAD5004DECCF /* config-adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-adhoc.xcconfig"; sourceTree = "<group>"; };
-		35E541E01887BAD5004DECCF /* config-appstore.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-appstore.xcconfig"; sourceTree = "<group>"; };
-		35E541E11887BAD5004DECCF /* config-debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "config-debug.xcconfig"; sourceTree = "<group>"; };
 		4018F11D20DA437800FE1252 /* AppDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppDefaults.plist; sourceTree = "<group>"; };
 		401B65BA20B3FC64004453E7 /* DietMasterGoPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DietMasterGoPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		402A3C0E21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesDetailFooterCollectionReusableView.h; sourceTree = "<group>"; };
@@ -1095,9 +1092,6 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				35E541DF1887BAD5004DECCF /* config-adhoc.xcconfig */,
-				35E541E01887BAD5004DECCF /* config-appstore.xcconfig */,
-				35E541E11887BAD5004DECCF /* config-debug.xcconfig */,
 				32CA4F630368D1EE00C91783 /* DietMasterGo_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
