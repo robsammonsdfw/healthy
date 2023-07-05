@@ -1,0 +1,20 @@
+//
+//  DietMasterGoPlus.xcconfig
+//  DietMasterGoPlus
+//
+//  Created by Henry T Kirk on 7/3/23.
+//
+
+// Directions for use:
+// Replace the values on the right with what you'd like to use.
+// Ensure this .xcconfig file is attached to the proper "Build Target", otherwise
+// you'll end up with weird behaviors.
+
+#include "Pods/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus.distribution.xcconfig"
+
+DMG_BUNDLE_DISPLAY_NAME = DMGo+
+DMG_BUNDLE_IDENTIFIER = com.dietmastergoplus
+DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
+DMG_PRODUCT_NAME = DietMasterGoPlus
+DMG_LAUNCH_IMAGE = LaunchScreen-logo
+DMG_APP_ICON = AppIcon-Dmgo+

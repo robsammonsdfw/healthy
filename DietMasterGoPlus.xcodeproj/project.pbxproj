@@ -11,6 +11,7 @@
 		0E0D09F92A45DD8E0032162E /* DayDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */; };
 		0E0D09FC2A4635940032162E /* DMMovePickerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FB2A4635940032162E /* DMMovePickerRow.m */; };
 		0E0D09FF2A4672790032162E /* DMMovePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FE2A4672790032162E /* DMMovePlan.m */; };
+		0E101BA12A55F7EC00D8E7E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E101BA02A55F7EC00D8E7E2 /* Assets.xcassets */; };
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
@@ -222,6 +223,8 @@
 		0E0D09FB2A4635940032162E /* DMMovePickerRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMovePickerRow.m; sourceTree = "<group>"; };
 		0E0D09FD2A4672790032162E /* DMMovePlan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMovePlan.h; sourceTree = "<group>"; };
 		0E0D09FE2A4672790032162E /* DMMovePlan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMovePlan.m; sourceTree = "<group>"; };
+		0E101B9F2A537B4900D8E7E2 /* DietMasterGoPlus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DietMasterGoPlus.xcconfig; sourceTree = "<group>"; };
+		0E101BA02A55F7EC00D8E7E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0E1A3B392A3B66AC004C6033 /* DMMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessage.h; sourceTree = "<group>"; };
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
 		0E1A3B3C2A3B6DAE004C6033 /* DMFood.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMFood.h; sourceTree = "<group>"; };
@@ -586,6 +589,24 @@
 			path = "IIn App Purchase";
 			sourceTree = "<group>";
 		};
+		0E101B9E2A537B2100D8E7E2 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				0E101BA22A55FA2C00D8E7E2 /* DMGo+ */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
+		0E101BA22A55FA2C00D8E7E2 /* DMGo+ */ = {
+			isa = PBXGroup;
+			children = (
+				0E101B9F2A537B4900D8E7E2 /* DietMasterGoPlus.xcconfig */,
+				652B915624B92A72007B08ED /* GoogleService-Info.plist */,
+				0E101BA02A55F7EC00D8E7E2 /* Assets.xcassets */,
+			);
+			path = "DMGo+";
+			sourceTree = "<group>";
+		};
 		0E3F44D115003DA6008413AB /* LearnMoreViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -611,7 +632,6 @@
 		0E6F8FF52A43289F00956F1E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0E6F8FF82A43289F00956F1E /* imgs */,
 				0E6F90742A43289F00956F1E /* DietMasterGoPlus-Info.plist */,
 				0E6F90792A43289F00956F1E /* Update Files */,
 				0E6F90832A43289F00956F1E /* Icons */,
@@ -621,13 +641,6 @@
 				0E6F909A2A43289F00956F1E /* DietMasterGoPlus-Bridging-Header.h */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		0E6F8FF82A43289F00956F1E /* imgs */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = imgs;
 			sourceTree = "<group>";
 		};
 		0E6F90792A43289F00956F1E /* Update Files */ = {
@@ -1065,8 +1078,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				0E101B9E2A537B2100D8E7E2 /* Configurations */,
 				0E6F8FF52A43289F00956F1E /* Resources */,
-				652B915624B92A72007B08ED /* GoogleService-Info.plist */,
 				40402831224E414C0081FFD3 /* sound.mp3 */,
 				0E7593E11600FD0300035A2F /* Settings_Plist */,
 				0EB5423014E2FBD60023BA4C /* Settings.bundle */,
@@ -1444,6 +1457,7 @@
 				65462D2726BD1DAF004D1654 /* UserGoalVC.xib in Resources */,
 				401B63E920B3FC64004453E7 /* ManageFoods.xib in Resources */,
 				401B63EC20B3FC64004453E7 /* FoodCategoryPicker.xib in Resources */,
+				0E101BA12A55F7EC00D8E7E2 /* Assets.xcassets in Resources */,
 				401B63ED20B3FC64004453E7 /* MeasurePicker.xib in Resources */,
 				401B63EE20B3FC64004453E7 /* FoodsList.xib in Resources */,
 				401B63F320B3FC64004453E7 /* ExercisesDetailViewController.xib in Resources */,
@@ -1715,10 +1729,10 @@
 		};
 		401B65B720B3FC64004453E7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1FD689501565AF810B46076 /* Pods-DietMasterGoPlus.debug.xcconfig */;
+			baseConfigurationReference = 0E101B9F2A537B4900D8E7E2 /* DietMasterGoPlus.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dmgo+";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1729,7 +1743,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 27;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 7NH27AHXU3;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1751,7 +1765,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/DietMasterGoPlus-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "DietmasterGo Plus";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1768,9 +1782,9 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dietmastergoplus;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
-				PRODUCT_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(DMG_PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Resources/DietMasterGoPlus-Bridging-Header.h";
@@ -1783,10 +1797,10 @@
 		};
 		401B65B820B3FC64004453E7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7AFE0816BCFB20FD63F5602 /* Pods-DietMasterGoPlus.release.xcconfig */;
+			baseConfigurationReference = 0E101B9F2A537B4900D8E7E2 /* DietMasterGoPlus.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dmgo+";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1797,7 +1811,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 27;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 7NH27AHXU3;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1817,7 +1831,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/DietMasterGoPlus-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "DietmasterGo Plus";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1834,9 +1848,9 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dietmastergoplus;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
-				PRODUCT_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(DMG_PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Resources/DietMasterGoPlus-Bridging-Header.h";
@@ -1849,10 +1863,10 @@
 		};
 		401B65B920B3FC64004453E7 /* Distribution */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1A8C6ACF81E45618A5A744BB /* Pods-DietMasterGoPlus.distribution.xcconfig */;
+			baseConfigurationReference = 0E101B9F2A537B4900D8E7E2 /* DietMasterGoPlus.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dmgo+";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1863,7 +1877,7 @@
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 27;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 7NH27AHXU3;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1883,7 +1897,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/DietMasterGoPlus-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "DietmasterGo Plus";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1900,9 +1914,9 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dietmastergoplus;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
-				PRODUCT_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(DMG_PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Resources/DietMasterGoPlus-Bridging-Header.h";
