@@ -66,7 +66,7 @@ DMG_ACCOUNT_CODE = dmg_demo
 DMG_LOGINVIEW_TEXTCOLOR = #FFFFFF
 
 // Background color when needed in the app.
-DMG_BACKGROUND_COLOR = #F2673D
+DMG_BACKGROUND_COLOR = #FFFFFF
 
 // The foreground color for the "Hamburger" home menu.
 DMG_HOME_ICON_FOREGROUND_COLOR = #000000
