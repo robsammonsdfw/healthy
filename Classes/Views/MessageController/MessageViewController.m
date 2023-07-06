@@ -105,7 +105,7 @@ int const MaximumStringLength = 300;
                                                                                  target:self
                                                                                  action:@selector(syncMessages:)];
     syncButton.style = UIBarButtonItemStylePlain;
-    syncButton.tintColor = [UIColor blackColor];
+    syncButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = syncButton;
 
     self.title = @"Messages";
