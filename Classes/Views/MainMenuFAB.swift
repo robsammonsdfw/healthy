@@ -95,9 +95,11 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
             self.navigationController?.setViewControllers([self.rootViewController, self.mealPlanViewController], animated: false)
         }
 
-        let myMovesImage = UIImage(named: "Icon awesome-dumbbell")?.withRenderingMode(.alwaysTemplate)
-        actionButton.addItem(title: "MyMoves", image: myMovesImage) { item in
-            self.navigationController?.setViewControllers([self.rootViewController, self.myMovesViewController], animated: false)
+        if AppConfiguration.enableMyMoves {
+            let myMovesImage = UIImage(named: "Icon awesome-dumbbell")?.withRenderingMode(.alwaysTemplate)
+            actionButton.addItem(title: "MyMoves", image: myMovesImage) { item in
+                self.navigationController?.setViewControllers([self.rootViewController, self.myMovesViewController], animated: false)
+            }
         }
 
         let settingsImage = UIImage(named: "gear")?.withRenderingMode(.alwaysTemplate)
@@ -119,7 +121,7 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
         controller.view.addSubview(actionButton)
         let safeAreaLayoutGuide = controller.view.safeAreaLayoutGuide
         actionButton.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
-        actionButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        actionButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
     
     /// Resets to Home.
