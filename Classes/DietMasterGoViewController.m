@@ -554,11 +554,6 @@
     }];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self.values removeAllObjects];
-}
-
 - (void)updateBadge {
     if ([NSThread isMainThread]) {
         DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
@@ -757,8 +752,10 @@
     [self.cpf_Values addObject:@(fatGramActualPercent)];
     [self.cpf_Values addObject:@(proteinGramActualPercent)];
     [self.cpf_Values addObject:@(carbsGramActualPercent)];
-    [self.cpf_Values addObject:@(100 - carbsGramActualPercent + proteinGramActualPercent + fatGramActualPercent)];
-    [self.cpf_Pie reloadData];
+    [self.cpf_Values addObject:@(100 - (carbsGramActualPercent + proteinGramActualPercent + fatGramActualPercent))];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.cpf_Pie reloadData];
+    });
 
     // Display the consumed grams for the day.
     self.actualCarbLabel.text = [dayProvider getCarbGramsStringWithDate:[NSDate date]];
