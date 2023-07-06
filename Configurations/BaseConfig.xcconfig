@@ -16,4 +16,4 @@ INFOPLIST_FILE = $(SRCROOT)/Resources/BaseApp-Info.plist
 MARKETING_VERSION = 4.8.1
 // This should increment each time you send a build to the App Store.
 // It never starts over and is independant to the App Version above.
-CURRENT_PROJECT_VERSION = 32
+CURRENT_PROJECT_VERSION = 33

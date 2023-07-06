@@ -778,9 +778,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     int exerciseIDTemp = 274;
     minutesExercised = stepCount;
-    
-    [db beginTransaction];
-    
+        
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
     [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -829,8 +827,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                              date_string,
                              logTimeString];
     
+    [db beginTransaction];
     [db executeUpdate:insertQuery];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
@@ -842,8 +840,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     if (![db open]) {
     }
         
-    [db beginTransaction];
-    
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     [self.dateFormatter setTimeZone:systemTimeZone];
@@ -888,6 +884,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                              (int)caloriesBurned,
                              date_string,
                              logTimeString];
+    [db beginTransaction];
     [db executeUpdate:insertQuery];
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);

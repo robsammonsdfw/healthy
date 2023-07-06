@@ -933,7 +933,7 @@
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
-        [db beginTransaction];
+    [db beginTransaction];
     NSString *sql = [NSString stringWithFormat:@"UPDATE ServerUserPlanMoveList SET "
                         "isCheckBoxClicked = '%@' Where UserPlanMoveID = '%@'",
                         @(completed), routine.routineId];

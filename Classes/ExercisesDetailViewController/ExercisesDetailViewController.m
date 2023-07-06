@@ -465,7 +465,6 @@
 #pragma mark SAVE EDIT DB METHODS
 
 - (void)saveToLog:(id)sender {
-    DietmasterEngine* dietmasterEngine = [DietmasterEngine sharedInstance];
     FMDatabase* db = [DMDatabaseUtilities database];
     if (![db open]) {
     }
@@ -495,7 +494,6 @@
     }
     
     if (self.taskMode == DMTaskModeAdd) {
-        [db beginTransaction];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -542,8 +540,8 @@
                                  date_string,
                                  logTimeString];
         
+        [db beginTransaction];
         [db executeUpdate:insertQuery];
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
@@ -552,21 +550,17 @@
     } else if (self.taskMode == DMTaskModeEdit) {
         int exerciseLogID = [[self.exerciseDict valueForKey:@"Exercise_Log_ID"] intValue];
         
-        [db beginTransaction];
-        
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *date_string = [dateFormatter stringFromDate:[NSDate date]];
         
         NSString *updateQuery = [[NSString alloc] initWithFormat:@"UPDATE Exercise_Log SET Exercise_Time_Minutes = %i, Date_Modified = '%@' WHERE Exercise_Log_ID = %i", minutesExercised, date_string, exerciseLogID];
-        
+        [db beginTransaction];
         [db executeUpdate:updateQuery];
-        
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         }
         [db commit];
-        
     }
 
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
@@ -582,14 +576,12 @@
     if (![db open]) {
     }
     
-    [db beginTransaction];
     
     int exerciseLogID = [[self.exerciseDict valueForKey:@"Exercise_Log_ID"] intValue];
     
     NSString *deleteQuery = [[NSString alloc] initWithFormat:@"DELETE FROM Exercise_Log WHERE Exercise_Log_ID = %i", exerciseLogID];
-    
+    [db beginTransaction];
     [db executeUpdate:deleteQuery];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }

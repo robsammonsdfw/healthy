@@ -766,7 +766,6 @@
 
     } else if (self.taskMode == DMTaskModeEdit) {
         
-        [db beginTransaction];
         [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         NSString *date_string = [self.dateFormatter stringFromDate:[NSDate date]];
@@ -774,6 +773,7 @@
         int foodID = [self.food.foodKey intValue];
         
         NSString *updateSQL = [NSString stringWithFormat: @"UPDATE Food_Log_Items SET MeasureID = %i, NumberOfServings = %f, LastModified = '%@' WHERE FoodID = %i AND MealID = %@ AND MealCode = %i", num_measureID,[servingAmount floatValue], date_string, foodID, logMealID, (int)self.mealCode];
+        [db beginTransaction];
         [db executeUpdate:updateSQL];
         if ([db hadError]) {
             DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -849,7 +849,6 @@
             minIDvalue--;
         }
     }
-    [db beginTransaction];
     
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone *systemTimeZone = [NSTimeZone systemTimeZone];
@@ -857,6 +856,7 @@
     NSString *date_string = [self.dateFormatter stringFromDate:self.selectedDate];
 
     NSString *insertSQL = [NSString stringWithFormat: @"REPLACE INTO Favorite_Food (Favorite_FoodID, FoodID,modified,MeasureID) VALUES (%i, %i,DATETIME('%@'),%i)", minIDvalue, foodID, date_string, num_measureID];
+    [db beginTransaction];
     [db executeUpdate:insertSQL];
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);

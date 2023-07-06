@@ -54,7 +54,7 @@ DMG_APP_NAME_SHORT = My Meal Coach
 // Formerly app_name_long.
 DMG_APP_NAME_LONG = My Meal Coach
 // Formerly support_email.
-DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
+DMG_SUPPORT_EMAIL = app@mealplanstogo.com
 // Formerly account_code.
 DMG_ACCOUNT_CODE = mymealcoach
 
