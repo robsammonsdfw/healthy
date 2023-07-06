@@ -501,8 +501,10 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     if (!self.selectedUserPlanDays.count) {
         return;
     }
-    
     DMMoveDay *day = self.selectedUserPlanDays[indexPath.section];
+    if (!day || !day.routines.count) {
+        return;
+    }
     DMMoveRoutine *routine = day.routines[indexPath.row];
     MyMovesDetailsViewController *moveDetailVc = [[MyMovesDetailsViewController alloc] init];
     moveDetailVc.routine = routine;
