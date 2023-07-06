@@ -570,6 +570,7 @@
         NSArray *moveDays = [self getUserPlanDaysForPlanId:result.planId];
         [result setMovePlanDays:moveDays];
     }
+    [rs close];
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
@@ -592,7 +593,7 @@
     }
         
     [db beginTransaction];
-    FMResultSet *rs = [db executeQuery:[movePlan replaceIntoSQLString]];
+    [db executeUpdate:[movePlan replaceIntoSQLString]];
     [db commit];
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -608,7 +609,7 @@
     if (![db open]) {
     }
         
-    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM ServerUserPlanList WHERE "
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM ServerUserPlanList WHERE "
                                                 "PlanID = '%@' AND Status != 'Deleted'", planId];
     FMResultSet *rs = [db executeQuery:sql];
 
