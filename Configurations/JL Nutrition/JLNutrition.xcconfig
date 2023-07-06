@@ -27,36 +27,36 @@
 // likely means you didn't run the `pod install` command or the value is incorrect.
 // This should match the name of the value in "target 'DietMasterGoPlus' do".
 // #include "Pods/Target Support Files/Pods-APP_NAME_HERE/Pods-APP_NAME_HERE.distribution.xcconfig"
-#include "Pods/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus.distribution.xcconfig"
+#include "Pods/Target Support Files/Pods-JLNutrition/Pods-JLNutrition.distribution.xcconfig"
 
 // ************************************
 // ****** BUILD INFORMATION ***********
 // ************************************
 
 // The name shown under the app icon.
-DMG_BUNDLE_DISPLAY_NAME = DMGo+
+DMG_BUNDLE_DISPLAY_NAME = JL Nutrition
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
-DMG_BUNDLE_IDENTIFIER = com.dietmastergoplus
+DMG_BUNDLE_IDENTIFIER = com.dietmaster.JLNutrition
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
 DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
 // The product name, no spaces. E.g. "DietMasterGoPlus".
-DMG_PRODUCT_NAME = DietMasterGoPlus
-// Enable MyMoves or not for the user. YES = Add it, NO = Don't!
-DMG_MYMOVES_ENABLED = YES
+DMG_PRODUCT_NAME = JLNutrition
 
 // ************************************
 // ********* REPLICA DEFAULTS *********
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = DietMasterGoPlus
+DMG_APP_NAME_SHORT = JLNutrition
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = DietMasterGoPlus™
+DMG_APP_NAME_LONG = JLNutrition
 // Formerly support_email.
-DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
+DMG_SUPPORT_EMAIL = jlucasnutrition@gmail.com
 // Formerly account_code.
-DMG_ACCOUNT_CODE = dmg_mobile
+DMG_ACCOUNT_CODE = jl_nutrition
+// Enable MyMoves or not for the user. YES = Add it, NO = Don't!
+DMG_MYMOVES_ENABLED = YES
 
 // ************************************
 // ********* COLOR SCHEME *************
@@ -66,28 +66,28 @@ DMG_ACCOUNT_CODE = dmg_mobile
 DMG_LOGINVIEW_TEXTCOLOR = #FFFFFF
 
 // Background color when needed in the app.
-DMG_BACKGROUND_COLOR = #F2C53D
+DMG_BACKGROUND_COLOR = #F2673D
 
 // The foreground color for the "Hamburger" home menu.
-DMG_HOME_ICON_FOREGROUND_COLOR = #000000
+DMG_HOME_ICON_FOREGROUND_COLOR = #B70000
 // The home menu icon color on the tiles.
-DMG_MENU_ICON_COLOR = #F2C53D
+DMG_MENU_ICON_COLOR = #AAB7BF
 
 // Color for any header background if needed.
-DMG_HEADER_COLOR = #F2C53D
+DMG_HEADER_COLOR = #AAB7BF
 // Text color for any header if needed.
 DMG_HEADER_TEXTCOLOR = #000000
 
 // Button colors where needed.
-DMG_BUTTON_COLOR = #F2C53D
+DMG_BUTTON_COLOR = #AAB7BF
 // Button text colors where needed.
 DMG_BUTTON_TEXTCOLOR = #000000
 
 // Settings "Switch" ON Color.
-DMG_SWITCH_ON_COLOR = #F2C53D
+DMG_SWITCH_ON_COLOR = #AAB7BF
 
 // Footer background color where needed.
-DMG_FOOTER_COLOR = #F2C53D
+DMG_FOOTER_COLOR = #AAB7BF
 // Text color for any footer if needed.
 DMG_FOOTER_TEXTCOLOR = #000000
 
@@ -95,12 +95,12 @@ DMG_FOOTER_TEXTCOLOR = #000000
 DMG_CHART_COLOR = #000000
 // The color of a point on the weight chart.
 DMG_CHART_POINT_COLOR = #FF0000
-// The circle color in the MyMoves calendar.
+// The circle color in the MyMoves calendar. #BFBFBF is light gray.
 DMG_CALENDAR_MOVEDAY_COLOR = #BFBFBF
 
 // Colors for the Messages Chat.
 // Sender = Current User, Recipient = Coach/Professional.
-DMG_CHAT_SENDER_COLOR = #F2C53D
+DMG_CHAT_SENDER_COLOR = #AAB7BF
 DMG_CHAT_SENDER_TEXTCOLOR = #000000
 DMG_CHAT_RECIPIENT_COLOR = #E5E5E9
 DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
@@ -111,8 +111,8 @@ DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
 
 // Background image for the Login page. The name should match the
 // Asset catalog image name.
-DMG_LOGIN_BACKGROUND_IMAGE = login-background-plus
+DMG_LOGIN_BACKGROUND_IMAGE = login-background
 // The image name from the Asset catalog for launch image.
-DMG_LAUNCH_IMAGE = LaunchScreen-logo
+DMG_LAUNCH_IMAGE = LaunchScreen
 // The app icon name from the Asset catalog.
-DMG_APP_ICON = AppIcon-Dmgo+
+DMG_APP_ICON = AppIcon

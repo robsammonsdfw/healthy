@@ -40,6 +40,8 @@
 @property (nonatomic, strong) IBOutlet UILabel *pleaseLoginLabel;
 @property (nonatomic, strong) IBOutlet UILabel *needHelpLabel;
 @property (nonatomic, strong) IBOutlet UILabel *secureConnectionLabel;
+@property (nonatomic, strong) IBOutlet UIButton *privacyPolicyButton;
+@property (nonatomic, strong) IBOutlet UIButton *termsOfServiceButton;
 
 /// Completion block that should be called when login is complete.
 @property (nonatomic, copy) completionBlockWithError completionBlock;
@@ -102,9 +104,11 @@
     [self.signUpBtn setTitleColor:AppConfiguration.buttonTextColor forState:UIControlStateNormal];
     [self.emailbtuuon setTitleColor:AppConfiguration.buttonTextColor forState:UIControlStateNormal];
 
-    self.pleaseLoginLabel.textColor = [UIColor blackColor];
-    self.needHelpLabel.textColor = [UIColor blackColor];
-    self.secureConnectionLabel.textColor = [UIColor blackColor];
+    self.pleaseLoginLabel.textColor = AppConfiguration.loginViewTextColor;
+    self.needHelpLabel.textColor = AppConfiguration.loginViewTextColor;
+    self.secureConnectionLabel.textColor = AppConfiguration.loginViewTextColor;
+    [self.privacyPolicyButton setTitleColor:AppConfiguration.loginViewTextColor forState:UIControlStateNormal];
+    [self.termsOfServiceButton setTitleColor:AppConfiguration.loginViewTextColor forState:UIControlStateNormal];
 
     // Enable iCloud Password Autofill.
     self.usernameField.textContentType = UITextContentTypeUsername;

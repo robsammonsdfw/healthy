@@ -42,6 +42,8 @@ DMG_BUNDLE_IDENTIFIER = com.dietmaster.replicademo
 DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = ReplicaBaseDemo
+// Enable MyMoves or not for the user. YES = Add it, NO = Don't!
+DMG_MYMOVES_ENABLED = YES
 
 // ************************************
 // ********* REPLICA DEFAULTS *********
@@ -59,6 +61,9 @@ DMG_ACCOUNT_CODE = dmg_demo
 // ************************************
 // ********* COLOR SCHEME *************
 // ************************************
+
+// The color of the text on the Login view and buttons.
+DMG_LOGINVIEW_TEXTCOLOR = #FFFFFF
 
 // Background color when needed in the app.
 DMG_BACKGROUND_COLOR = #F2673D

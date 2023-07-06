@@ -109,6 +109,9 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     rightButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = rightButton;
     
+    self.caloriesPlannedLabel.textColor = AppConfiguration.footerTextColor;
+    self.recommendedCaloriesLabel.textColor = AppConfiguration.footerTextColor;
+    
     [self updateCalorieLabels];
     
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];

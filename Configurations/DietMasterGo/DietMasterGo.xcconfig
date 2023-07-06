@@ -42,6 +42,8 @@ DMG_BUNDLE_IDENTIFIER = com.dietmaster.dietmastergo
 DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = DietMasterGo
+// Enable MyMoves or not for the user. YES = Add it, NO = Don't!
+DMG_MYMOVES_ENABLED = NO
 
 // ************************************
 // ********* REPLICA DEFAULTS *********
@@ -59,6 +61,9 @@ DMG_ACCOUNT_CODE = dmg_mobile
 // ************************************
 // ********* COLOR SCHEME *************
 // ************************************
+
+// The color of the text on the Login view and buttons.
+DMG_LOGINVIEW_TEXTCOLOR = #000000
 
 // Background color when needed in the app.
 DMG_BACKGROUND_COLOR = #0285CA
@@ -96,7 +101,7 @@ DMG_CALENDAR_MOVEDAY_COLOR = #BFBFBF
 // Colors for the Messages Chat.
 // Sender = Current User, Recipient = Coach/Professional.
 DMG_CHAT_SENDER_COLOR = #0285CA
-DMG_CHAT_SENDER_TEXTCOLOR = #000000
+DMG_CHAT_SENDER_TEXTCOLOR = #FFFFFF
 DMG_CHAT_RECIPIENT_COLOR = #E5E5E9
 DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
 

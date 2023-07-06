@@ -270,7 +270,7 @@
     pickerColumn3Array = [[NSMutableArray alloc] init];
 
     lblText.text = self.food.name;
-    
+
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
     rightButton.tintColor = AppConfiguration.headerTextColor;
@@ -284,6 +284,8 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
+    
+    infoBtn.tintColor = AppConfiguration.footerTextColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

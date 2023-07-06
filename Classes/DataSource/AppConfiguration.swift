@@ -5,7 +5,7 @@
 //  Created by Henry T Kirk on 7/5/23.
 //
 
-import Foundation
+import UIKit
 
 /// Main interface class that supplies the different configuration values
 /// stored in the Info.plist to the application. NOTE: The values for the
@@ -62,8 +62,35 @@ import Foundation
             }
         }
     }
+    // See the xcconfig file for color definitions.
+    class var enableMyMoves: Bool {
+        do {
+            let value = try DMGConfiguration.value(for: "DMG_MYMOVES_ENABLED") as String
+            return (value as NSString).boolValue
+        } catch {
+            if let error = error as? ConfigError {
+                fatalError(error.description)
+            } else {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
     
     // MARK: - Color Information
+    
+    // See the xcconfig file for color definitions.
+    class var loginViewTextColor: UIColor {
+        do {
+            let colorHex = try DMGConfiguration.value(for: "DMG_LOGINVIEW_TEXTCOLOR") as String
+            return UIColorFromHexString(colorHex)
+        } catch {
+            if let error = error as? ConfigError {
+                fatalError(error.description)
+            } else {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
     
     // See the xcconfig file for color definitions.
     class var backgroundColor: UIColor {
@@ -78,7 +105,7 @@ import Foundation
             }
         }
     }
-
+    
     // See the xcconfig file for color definitions.
     class var homeIconForegroundColor: UIColor {
         do {
@@ -323,6 +350,7 @@ import Foundation
         debugPrint("appNameShort: \(self.appNameShort)")
         assert(self.appNameLong.count > 0, "App Name Long is not set!")
         debugPrint("appNameLong: \(self.appNameLong)")
+        debugPrint("enableMyMoves: \(self.enableMyMoves == true ? "YES" : "NO")")
 
         assert(self.backgroundColor.isKind(of: UIColor.self), "Color is not a color!")
         debugPrint("backgroundColor: \(self.backgroundColor.hexString())")

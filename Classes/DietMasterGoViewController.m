@@ -247,12 +247,9 @@
     [self.cpf_Values addObject:[NSNumber numberWithDouble:0]];
     [self.cpf_Values addObject:[NSNumber numberWithDouble:0]];
     
-    if (![[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"] isEqual:@"MyMoves"])
-    {
-        self.workoutView.hidden = YES;
-        self.scheduledView.hidden = YES;
-    }
-    
+    self.workoutView.hidden = !AppConfiguration.enableMyMoves;
+    self.scheduledView.hidden = !AppConfiguration.enableMyMoves;
+
     [self updateBadge];
     [self reloadData];
 }
@@ -652,6 +649,10 @@
     if ([NSThread isMainThread]) {
         DMAuthManager *authManager = [DMAuthManager sharedInstance];
         DMUser *currentUser = [authManager loggedInUser];
+        if (!currentUser) {
+            self.nameLbl.text = @"";
+            return;
+        }
         NSString *name = [NSString stringWithFormat: @"Hi, %@!", currentUser.firstName];
         self.nameLbl.text = name;
         [self loadData];
