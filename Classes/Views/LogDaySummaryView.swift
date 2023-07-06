@@ -63,12 +63,12 @@ class LogDaySummaryView : UIView {
         recommendedView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
         recommendedView.trailingAnchor.constraint(equalTo: lineView.leadingAnchor, constant: 0).isActive = true
         recommendedView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        recommendedView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor, constant: 12).isActive = true
+        recommendedView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor, constant: -12).isActive = true
         
         remainingView.leadingAnchor.constraint(equalTo: lineView.trailingAnchor, constant: 0).isActive = true
         remainingView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
         remainingView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        remainingView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor, constant: 12).isActive = true
+        remainingView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor, constant: -12).isActive = true
         
         setRecommendedLabels(calorie: "0g", carbs: "0g", protein: "0g", fat: "0g")
         setRemainingLabels(calorie: "0g", carbs: "0g", protein: "0g", fat: "0g")
