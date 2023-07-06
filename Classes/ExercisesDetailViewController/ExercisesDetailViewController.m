@@ -32,6 +32,7 @@
 @property (nonatomic, strong) IBOutlet UITextField *tfCalories;//09-02-2016
 
 @property (nonatomic, strong) IBOutlet UIImageView *imgbar;
+@property (nonatomic, strong) IBOutlet UIImageView *headerImageView;
 
 /// Constraint that attaches the imgBar to the bottom.
 @property (nonatomic, strong) NSLayoutConstraint *imgBarBottomConstraint;
@@ -87,9 +88,8 @@
     
     [self updateCalorieLabel];
         
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Food_Detail_Screen"];
         self.pickerView.backgroundColor = [UIColor whiteColor];
     }
@@ -101,8 +101,8 @@
     
     self.tfCalories.delegate = self;
     self.tfCalories.placeholder = @"0";
-    self.lblCaloriesBurnedTitle.textColor = PrimaryFontColor;
-    self.caloriesBurnedLabel.textColor = PrimaryFontColor;
+    self.lblCaloriesBurnedTitle.textColor = AppConfiguration.footerTextColor;
+    self.caloriesBurnedLabel.textColor = AppConfiguration.footerTextColor;
     self.tfCalories.textColor = [UIColor blackColor];
     self.exerciseNameLabel.textAlignment = NSTextAlignmentCenter;
     
@@ -118,12 +118,13 @@
         [self checkForPermission];
     }
     
-    self.imgbar.backgroundColor = PrimaryColor;
+    self.imgbar.backgroundColor = AppConfiguration.footerColor;
+    self.headerImageView.backgroundColor = AppConfiguration.headerColor;
     
     self.rightButton = [[UIBarButtonItem alloc]
                            initWithBarButtonSystemItem: UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     self.rightButton.style = UIBarButtonItemStylePlain;
-    self.rightButton.tintColor = [UIColor whiteColor];
+    self.rightButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = self.rightButton;
     
     if (exerciseIDTemp == 272 || exerciseIDTemp == 274){
@@ -244,7 +245,7 @@
             return;
         }
         
-        NSString *appName = [DMGUtilities configValueForKey:@"app_name_long"];
+        NSString *appName = AppConfiguration.appNameLong;
         NSString *message = [NSString stringWithFormat:@"Apple HealthKit permission is needed. Please open the Apple Health app and grant access for %@.", appName];
         [DMGUtilities showAlertWithTitle:@"Permission Needed" message:message inViewController:nil];
     }];

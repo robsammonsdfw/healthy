@@ -11,7 +11,7 @@
 #import "DMMealPlanItem.h"
 
 /// Presents foods to a user that they can exchange a food with.
-@interface ExchangeFoodViewController : UIViewController
+@interface ExchangeFoodViewController : BaseViewController
 
 /// Main inititalizer. Pass in the food to be exchanged.
 - (instancetype)initWithFoodToExchange:(DMFood *)food

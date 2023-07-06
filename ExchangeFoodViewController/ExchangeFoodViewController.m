@@ -76,7 +76,6 @@ static NSString *CellIdentifier = @"CellIdentifier";
     self.navigationItem.title = @"Exchange Food";
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -225,7 +224,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     UITableViewCell *cell = [myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     if ([self.foodResults count] == 0) {
-        cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.textLabel.textColor = [UIColor grayColor];
         [[cell textLabel] setText:@"No results found..."];
         cell.textLabel.font = [UIFont systemFontOfSize:15.0];
         cell.selectionStyle =  UITableViewCellSelectionStyleNone;

@@ -12,6 +12,8 @@
                 <outlet property="addExerciseCaloriesSwitch" destination="D6a-XY-H7B" id="baH-uN-Uy0"/>
                 <outlet property="addTrackedCaloriesSwitch" destination="6gu-Th-Wfb" id="YMh-yR-dCR"/>
                 <outlet property="appleHealthSwitch" destination="KYI-l6-k5T" id="zyh-vp-RJh"/>
+                <outlet property="exerciseTitleLabel" destination="E0j-70-7ab" id="7Qs-91-jlO"/>
+                <outlet property="trackingTitleLabel" destination="4Qv-Cm-dkD" id="5ws-AK-BRz"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>

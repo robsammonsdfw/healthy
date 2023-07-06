@@ -81,17 +81,18 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"My Log";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
         
-    self.lbl_dateHdr.textColor = AccentFontColor
+    self.lbl_dateHdr.textColor = AppConfiguration.headerTextColor;
+    self.lbl_dateHdr.font = [UIFont boldSystemFontOfSize:17];
     self.lbl_dateHdr.backgroundColor = [UIColor clearColor];
     
-    self.dateToolBar.backgroundColor = AccentColor;
-    self.dateToolBar.barTintColor = AccentColor;
-    
+    self.dateToolBar.backgroundColor = AppConfiguration.headerColor;
+    self.dateToolBar.barTintColor = AppConfiguration.headerColor;
+    for (UIBarButtonItem *item in self.dateToolBar.items) {
+        item.tintColor = AppConfiguration.headerTextColor;
+    }
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
     UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
@@ -121,8 +122,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.rightBarButtonItem=nil;
         
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Log_Screen"];
     }
@@ -140,8 +140,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [swipe_Recognizer_Previous setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.tableView addGestureRecognizer:swipe_Recognizer_Previous];
     
-    UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
-
     self.logDaySummary = [[LogDaySummaryView alloc] initWithFrame:CGRectZero];
     self.logDaySummary.translatesAutoresizingMaskIntoConstraints = NO;
     __weak typeof(self) weakSelf = self;
@@ -166,11 +164,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"My Log";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
     [self updateCalorieTotal];
     [self updateAppleWatchData];
@@ -252,7 +247,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [favoriteButton addTarget:self action:@selector(saveFavoriteMeal:) forControlEvents:UIControlEventTouchUpInside];
     UIImage *image = [[UIImage imageNamed:@"03-heart.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [favoriteButton setImage:image forState:UIControlStateNormal];
-    favoriteButton.tintColor = PrimaryColor
+    favoriteButton.tintColor = AppConfiguration.headerColor;
     favoriteButton.tag = section;
     favoriteButton.hidden = [sectionTitle isEqualToString:@"Exercise"];
     [headerView addSubview:favoriteButton];

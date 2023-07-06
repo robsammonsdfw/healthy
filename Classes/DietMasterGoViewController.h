@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 /// The "tile layout" home screen for a user to move around the app.
-@interface DietMasterGoViewController : UIViewController
+@interface DietMasterGoViewController : BaseViewController
 @end
 

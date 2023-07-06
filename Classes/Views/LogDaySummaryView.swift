@@ -24,14 +24,14 @@ class LogDaySummaryView : UIView {
     private lazy var lineView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
+        view.backgroundColor = AppConfiguration.footerTextColor
         return view
     }()
     
     private lazy var infoButton = {
         let button = UIButton(type: .infoLight)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = .black
+        button.tintColor = AppConfiguration.footerTextColor
         return button
     }()
     
@@ -48,7 +48,7 @@ class LogDaySummaryView : UIView {
     }
     
     private func setup() {
-        backgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
+        backgroundColor = AppConfiguration.footerColor
         self.addSubview(lineView)
         self.layer.cornerRadius = 25
         self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -126,6 +126,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 11)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "Calories"
         return view
     }()
@@ -133,6 +134,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "0g"
         return view
     }()
@@ -141,6 +143,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 11)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "Carbs"
         return view
     }()
@@ -148,6 +151,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "0g"
         return view
     }()
@@ -156,6 +160,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 11)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "Protein"
         return view
     }()
@@ -163,6 +168,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "0g"
         return view
     }()
@@ -171,6 +177,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 11)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "Fat"
         return view
     }()
@@ -178,6 +185,7 @@ class SummaryView: NSObject {
        let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        view.textColor = AppConfiguration.footerTextColor
         view.text = "0g"
         return view
     }()

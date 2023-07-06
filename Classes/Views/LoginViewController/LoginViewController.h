@@ -10,7 +10,7 @@
 #import "DMConstants.h"
 
 /// Displays a login UI to the user.
-@interface LoginViewController : UIViewController
+@interface LoginViewController : BaseViewController
 
 /// Logins the user automatically from the authcode provided.
 - (void)loginFromUrl:(NSString *)authcode;

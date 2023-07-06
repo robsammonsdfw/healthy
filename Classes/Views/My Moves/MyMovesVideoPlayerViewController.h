@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MyMovesVideoPlayerViewController : UIViewController
+@interface MyMovesVideoPlayerViewController : BaseViewController
 @property (nonatomic, strong) NSString * videoUrlStr;
 @end
 

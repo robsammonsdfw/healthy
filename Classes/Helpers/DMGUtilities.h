@@ -38,6 +38,7 @@ static UIColor * __attribute__((unused)) UIColorFromHex(int hexColor) {
 
 /// Returns the UIColor from Hex String. E.g. #2E201F (Dark gray).
 static UIColor * __attribute__((unused)) UIColorFromHexString(NSString *hexColorString) {
+    NSCAssert(hexColorString.length > 0, @"Hex String cannot be empty!");
     unsigned rgbValue = 0;
     NSScanner *scanner = [NSScanner scannerWithString:hexColorString];
     [scanner setScanLocation:1]; // bypass '#' character
@@ -47,10 +48,6 @@ static UIColor * __attribute__((unused)) UIColorFromHexString(NSString *hexColor
 
 /// Utilities used across the project.
 @interface DMGUtilities : NSObject
-
-#pragma mark - App Configuration
-
-+ (NSString *)configValueForKey:(NSString *)key;
 
 #pragma mark - Sync Helpers
 

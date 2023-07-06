@@ -112,7 +112,7 @@ int const MaximumStringLength = 300;
     self.navigationItem.title = @"Messages";
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

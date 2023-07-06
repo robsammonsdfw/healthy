@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 /// Displays a user's meal plan.
-@interface MealPlanViewController : UIViewController
+@interface MealPlanViewController : BaseViewController
 @end

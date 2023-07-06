@@ -75,7 +75,7 @@ static NSString *MyMovesDetailFooterIdentifier = @"MyMovesDetailFooterCollection
                                                       target:self
                                                       action:@selector(showDeleteExerciseConfirmation)];
     rightButton.style = UIBarButtonItemStylePlain;
-    rightButton.tintColor = [UIColor whiteColor];
+    rightButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = rightButton;
 
     self.collectionView.collectionViewLayout = [[CustomImageFlowLayout alloc] init];

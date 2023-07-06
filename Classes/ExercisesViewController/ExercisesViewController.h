@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /// Displays exercises for the user to choose for their day's plan.
-@interface ExercisesViewController : UIViewController
+@interface ExercisesViewController : BaseViewController
 /// The task mode that the controller is going to perform.
 @property (nonatomic) DMTaskMode taskMode;
 

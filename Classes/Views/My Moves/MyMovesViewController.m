@@ -60,26 +60,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 /// All user plan days data.
 @property (nonatomic, strong) NSMutableArray<DMMoveDay *> *allUserPlanDays;
 
-//@property (nonatomic, strong) NSMutableArray *selectedExercisesArr;
-//@property (nonatomic, strong) NSMutableArray *prevDataArr;
-//@property (nonatomic, strong) NSMutableArray *arrData;
-//@property (nonatomic, strong) NSMutableArray<NSString *> *datesWithInfo;
-//@property (nonatomic, strong) NSMutableArray *datesExerciseCompletd;
-//@property (nonatomic, strong) NSMutableArray *exerciseData;
-//@property (nonatomic, strong) NSMutableArray *userPlanListData;
-//@property (nonatomic, strong) NSMutableArray *userPlanDateListData;
-//@property (nonatomic, strong) NSMutableArray *userPlanMoveListData;
-//@property (nonatomic, strong) NSMutableArray *userPlanMoveSetListData;
-//@property (nonatomic, strong) NSMutableArray *loadMoveDetails;
-//@property (nonatomic, strong) NSMutableArray *deletedPlanArr;
-//@property (nonatomic, strong) NSMutableArray *deletedPlanDateArr;
-//@property (nonatomic, strong) NSMutableArray *deletedMoveArr;
-//@property (nonatomic, strong) NSMutableArray *deletedMoveSetArr;
-//@property (nonatomic, strong) NSMutableArray *listViewItem;
-//@property (nonatomic, strong) NSMutableArray *tblData;
-//@property (nonatomic, strong) NSMutableArray *sectionTitleDataMovesTblView;
-//@property (nonatomic, strong) NSMutableArray *sectionTitle;
-
 @end
 
 @implementation MyMovesViewController
@@ -214,6 +194,14 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
      
+    [self.navigationController setNavigationBarHidden:NO];
+    self.navigationItem.hidesBackButton = YES;
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.title = @"My Moves";
+    self.title = @"My Moves";
+    
     // Put chat button on Right upper nav.
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setFrame:CGRectMake(0, 0, 28, 28)];
@@ -223,7 +211,7 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     [btnRight setImage:image forState:UIControlStateNormal];
     [btnRight setBackgroundColor:[UIColor clearColor]];
     [btnRight addTarget:self action:@selector(sendMsgBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    [btnRight setTintColor:[UIColor whiteColor]];
+    [btnRight setTintColor:AppConfiguration.headerTextColor];
     UIBarButtonItem *barButtonRight = [[UIBarButtonItem alloc] initWithCustomView:btnRight];
     self.navigationItem.rightBarButtonItem = barButtonRight;
 
@@ -236,25 +224,15 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     [btnLeft setImage:image forState:UIControlStateNormal];
     [btnLeft setBackgroundColor:[UIColor clearColor]];
     [btnLeft addTarget:self action:@selector(expandButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [btnLeft setTintColor:[UIColor whiteColor]];
+    [btnLeft setTintColor:AppConfiguration.headerTextColor];
     UIBarButtonItem *barButtonLeft = [[UIBarButtonItem alloc] initWithCustomView:btnLeft];
     self.navigationItem.leftBarButtonItem = barButtonLeft;
 
-    self.dayToolBar.barTintColor = AccentColor;
+    self.dayToolBar.barTintColor = [UIColor blackColor];
     UIImage *btnImage = [[UIImage imageNamed:@"log_up_arrow"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.expandBtn setImage:btnImage forState:UIControlStateNormal];
-    self.expandBtn.tintColor = AccentColor
+    self.expandBtn.tintColor = [UIColor blackColor];
     
-    [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.hidesBackButton = YES;
-    [self.navigationController setNavigationBarHidden:NO];
-    [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.title = @"My Moves";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-
     // Default to today's date.
     NSDate *dateNow = [NSDate date];
     // Load default data.
@@ -262,6 +240,10 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     [self.allUserPlanDays addObjectsFromArray:[self.dataProvider getUserPlanDays]];
     [self.calendarView reloadData];
     [self loadMovePlanForDate:dateNow];
+    
+    for (UILabel *label in self.calendarView.calendarWeekdayView.weekdayLabels) {
+        label.textColor = [UIColor blackColor];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -272,14 +254,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
         [self.allUserPlanDays addObjectsFromArray:[self.dataProvider getUserPlanDays]];
         [self loadMovePlanForDate:self.selectedDate];
     }];
-
-    [self.navigationController setNavigationBarHidden:NO];
-    [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.title = @"My Moves";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -363,10 +337,6 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     return [UIColor blackColor];
 }
 
-- (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance fillDefaultColorForDate:(NSDate *)date {
-    return [UIColor whiteColor];
-}
-
 - (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderDefaultColorForDate:(NSDate *)date {
     // Define the color of the calendar outline (circle) when
     // the user has something on that date.
@@ -390,13 +360,13 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     }
 
     if (foundDate) {
-        return [UIColor greenColor];
+        return AppConfiguration.calendarMoveDayColor;
     }
     return [UIColor whiteColor];
 }
 
 - (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderSelectionColorForDate:(NSDate *)date {
-    return [UIColor blackColor];
+    return AppConfiguration.calendarMoveDayColor;
 }
 
 #pragma mark - FSCalendarDelegate
@@ -477,10 +447,10 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
     
     cell.bgView.backgroundColor = [UIColor whiteColor];
     // Template name background color.
-    cell.tempLblView.backgroundColor = PrimaryDarkColor;
+    cell.tempLblView.backgroundColor = [UIColor blackColor];;
     
     cell.templateNameLbl.text = @"";
-    cell.templateNameLbl.backgroundColor = PrimaryDarkColor;
+    cell.templateNameLbl.backgroundColor = [UIColor blackColor];;
     
     if (routine.isCompleted.boolValue) {
         cell.checkBoxImgView.image = [UIImage imageNamed:@"checkmark-tick"];
@@ -525,10 +495,10 @@ static NSString *EmptyCellIdentifier = @"EmptyCellIdentifier";
 
     UILabel *lbl = [[UILabel alloc] init];
     lbl.translatesAutoresizingMaskIntoConstraints = NO;
-    lbl.backgroundColor = PrimaryColor;
+    lbl.backgroundColor = AppConfiguration.headerColor;
     lbl.textAlignment = NSTextAlignmentCenter;
     lbl.font = [UIFont systemFontOfSize:17];
-    lbl.textColor = [UIColor blackColor];
+    lbl.textColor = AppConfiguration.headerTextColor;
     lbl.text = plan.planName;
     
     UIView *headerView = [[UIView alloc] init];

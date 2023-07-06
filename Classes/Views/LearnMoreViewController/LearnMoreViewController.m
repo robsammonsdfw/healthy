@@ -46,8 +46,8 @@
 - (void)loadWebView {
     NSString* escapedUrlString = [learnMoreTitle stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     if ([learnMoreTitle isEqualToString:@"privacypolicy"] || [learnMoreTitle isEqualToString:@"termsofservice"]) {
-        NSString *appNameShort = [DMGUtilities configValueForKey:@"app_name_short"];
-        NSString *supportEmail = [DMGUtilities configValueForKey:@"support_email"];
+        NSString *appNameShort = AppConfiguration.appNameShort;
+        NSString *supportEmail = AppConfiguration.supportEmail;
         
         NSString *htmlFile = [[NSBundle mainBundle] pathForResource:escapedUrlString ofType:@"html"];
         NSString* htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSASCIIStringEncoding error:nil];

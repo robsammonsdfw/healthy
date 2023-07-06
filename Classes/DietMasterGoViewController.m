@@ -171,7 +171,7 @@
     self.leftStatus = @"new";
     self.weightStatus = @"up";
 
-    self.nameLbl.textColor = [UIColor blackColor];
+    self.nameLbl.textColor = AppConfiguration.headerTextColor;
     // Adjust button colors.
     UIImage *chatImage = self.sendMsgButton.imageView.image;
     chatImage = [chatImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -179,8 +179,8 @@
     UIImage *emailImage = self.sendMailButton.imageView.image;
     emailImage = [emailImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.sendMailButton setImage:emailImage forState:UIControlStateNormal];
-    [self.sendMsgButton setTintColor:[UIColor blackColor]];
-    [self.sendMailButton setTintColor:[UIColor blackColor]];
+    [self.sendMsgButton setTintColor:AppConfiguration.headerTextColor];
+    [self.sendMailButton setTintColor:AppConfiguration.headerTextColor];
 
     [UIView animateWithDuration:0.25 animations:^{
         self.hideShowConstant.constant = 0;
@@ -218,6 +218,9 @@
     self.numberBadge.shadow = NO;
     self.numberBadge.font = [UIFont systemFontOfSize:12];
     self.numberBadge.hideWhenZero = YES;
+    
+    self.scrollView.backgroundColor = AppConfiguration.headerColor;
+    self.view.backgroundColor = AppConfiguration.headerColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -308,27 +311,24 @@
 }
 
 - (CGFloat)pieChartView:(MCPieChartView *)pieChartView valueForSliceAtIndex:(NSInteger)index {
-    if (pieChartView == _remaining_Pie)
-    {
-        return [[self.values objectAtIndex:index] floatValue];
-    }
-    else if (pieChartView == _cpf_Pie)
-    {
-        return [[self.cpf_Values objectAtIndex:index] floatValue];
+    if (pieChartView == _remaining_Pie) {
+        return [[self.values copy][index] floatValue];
+    } else if (pieChartView == _cpf_Pie) {
+        return [[self.cpf_Values copy][index] floatValue];
     }
     
     return 0;
 }
 
 - (void)buttonStyle:(UIButton *)sender imageToSet:(UIImage *)image {
-    UIColor *borderColor = PrimaryDarkColor
+    UIColor *borderColor = [UIColor darkGrayColor];
     sender.layer.cornerRadius = 15.0f;
     sender.layer.borderColor = borderColor.CGColor;
     sender.layer.borderWidth = 1.0f;
     sender.clipsToBounds = YES;
     
     [sender setImage:image forState:UIControlStateNormal];
-    sender.tintColor = PrimaryDarkColor;
+    sender.tintColor = [UIColor blackColor];
 }
 
 - (void)plusBtnColor {
@@ -340,9 +340,9 @@
     [self buttonStyle:_burnedPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 }
 
--(void)shadowView:(UIView *)selectedView {
+- (void)shadowView:(UIView *)selectedView {
     selectedView.layer.shadowColor = UIColorFromHexString(@"#d7d7d7").CGColor;
-    selectedView.layer.shadowOffset = CGSizeMake(8, 3);
+    selectedView.layer.shadowOffset = CGSizeMake(4, 3);
     selectedView.layer.shadowOpacity = 1;
     selectedView.layer.shadowRadius = 2;
     selectedView.layer.masksToBounds = NO;
@@ -361,37 +361,35 @@
     [self shadowView:self.scheduledView];
 }
 
--(void)setColorsForViews {
-    _firstExpandVw.backgroundColor  = PrimaryDarkColor
-    _secondExpandVw.backgroundColor = PrimaryDarkColor
-    _consumedView.backgroundColor   = PrimaryDarkColor
-    _sugarView.backgroundColor      = PrimaryDarkColor
-    _plannedView.backgroundColor    = PrimaryDarkColor
-    _weightView.backgroundColor     = PrimaryDarkColor
-    _stepsView.backgroundColor      = PrimaryDarkColor
-    _burnedView.backgroundColor     = PrimaryDarkColor
-    _workoutView.backgroundColor    = PrimaryDarkColor
-    _scheduledView.backgroundColor  = PrimaryDarkColor
-    _headerBlueVw.backgroundColor = PrimaryColor
-    _scrollView.backgroundColor = PrimaryColor
+- (void)setColorsForViews {
+    _firstExpandVw.backgroundColor  = [UIColor lightGrayColor];
+    _secondExpandVw.backgroundColor = [UIColor lightGrayColor];
+    _consumedView.backgroundColor   = [UIColor lightGrayColor];
+    _sugarView.backgroundColor      = [UIColor lightGrayColor];
+    _plannedView.backgroundColor    = [UIColor lightGrayColor];
+    _weightView.backgroundColor     = [UIColor lightGrayColor];
+    _stepsView.backgroundColor      = [UIColor lightGrayColor];
+    _burnedView.backgroundColor     = [UIColor lightGrayColor];
+    _workoutView.backgroundColor    = [UIColor lightGrayColor];
+    _scheduledView.backgroundColor  = [UIColor lightGrayColor];
 }
 
--(void)iconsColor:(UIImageView *)image {
-    UIColor *accentColor = PrimaryColor
+- (void)iconsColor:(UIImageView *)image {
     image.image = [image.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [image setTintColor:accentColor];
+    [image setTintColor:AppConfiguration.menuIconColor];
 }
 
--(void)changeImageColors {
-    [self iconsColor:_homeImage];
-    [self iconsColor:_consumedImage];
-    [self iconsColor:_suagrGraphImageVw];
-    [self iconsColor:_plannedImage];
-    [self iconsColor:_weightImage];
-    [self iconsColor:_stepsImage];
-    [self iconsColor:_burnedImage];
-    [self iconsColor:_workoutImage];
-    [self iconsColor:_scheduledImage];
+- (void)changeImageColors {
+    [self iconsColor:self.homeImage];
+    [self iconsColor:self.consumedImage];
+    [self iconsColor:self.suagrGraphImageVw];
+    [self iconsColor:self.plannedImage];
+    [self iconsColor:self.weightImage];
+    [self iconsColor:self.stepsImage];
+    [self iconsColor:self.burnedImage];
+    [self iconsColor:self.workoutImage];
+    [self iconsColor:self.scheduledImage];
+    self.headerBlueVw.backgroundColor = AppConfiguration.menuIconColor;
 }
 
 #pragma mark Message Actions
@@ -405,7 +403,7 @@
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
     DMUser *currentUser = [authManager loggedInUser];
 
-    NSString *appName = [DMGUtilities configValueForKey:@"app_name_short"];
+    NSString *appName = AppConfiguration.appNameShort;
     NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", appName];
     NSString *emailTo = currentUser.email1;
 
@@ -422,7 +420,7 @@
         NSURL *mailToURL = [NSURL URLWithString:urlString];
         [[UIApplication sharedApplication] openURL:mailToURL options:@{} completionHandler:^(BOOL success) {
             if (!success) {
-                [DMGUtilities showAlertWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
+                [DMGUtilities showAlertWithTitle:AppConfiguration.appNameShort message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
             }
         }];
     }
@@ -440,7 +438,6 @@
     vc.title = @"My Goal";
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
-
 }
 
 - (IBAction)addExerciseBtn:(id)sender {
@@ -685,9 +682,8 @@
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_suagrGraphImageVw setTintColor:[UIColor redColor]];
     } else {
-        UIColor *accentColor = PrimaryColor
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [_suagrGraphImageVw setTintColor:accentColor];
+        [_suagrGraphImageVw setTintColor:AppConfiguration.menuIconColor];
     }
             
     self.lblGoal_lbs.text = [currentUser weightGoalLocalizedString];

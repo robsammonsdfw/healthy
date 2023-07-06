@@ -21,9 +21,11 @@
 @property (nonatomic, strong) NSNumber *pickerRow2;
 @property (nonatomic, strong) NSNumber *pickerRow3;
 @property (nonatomic, strong) IBOutlet UIImageView *imgbar;
+@property (nonatomic, strong) IBOutlet UIImageView *headerImageView;
 @property (nonatomic, strong) IBOutlet UILabel *staticCalLbl;
 @property (nonatomic, strong) IBOutlet UILabel *staticProtFatCarbLbl;
 @property (nonatomic, strong) IBOutlet UILabel *foodIdLbl;
+@property (nonatomic, strong) IBOutlet UIToolbar *pickerToolBar;
 
 /// The food that is being displayed to the user.
 @property (nonatomic, strong) DMFood *food;
@@ -209,13 +211,20 @@
     
     rowListArr = [[NSMutableArray alloc] init];
 
-    _imgbar.backgroundColor= PrimaryColor;
-    _staticCalLbl.textColor = PrimaryFontColor;
-    _staticProtFatCarbLbl.textColor = PrimaryFontColor;
-    lblCalories.textColor = PrimaryFontColor
-    lblProtein.textColor = PrimaryFontColor
-    lblFat.textColor = PrimaryFontColor
-    lblCarbs.textColor = PrimaryFontColor
+    self.headerImageView.backgroundColor = AppConfiguration.headerColor;
+    lblMealName.textColor = AppConfiguration.headerTextColor;
+    _imgbar.backgroundColor = AppConfiguration.footerColor;
+    _staticCalLbl.textColor = AppConfiguration.footerTextColor;
+    _staticProtFatCarbLbl.textColor = AppConfiguration.footerTextColor;
+    lblCalories.textColor = AppConfiguration.footerTextColor;
+    lblProtein.textColor = AppConfiguration.footerTextColor;
+    lblFat.textColor = AppConfiguration.footerTextColor;
+    lblCarbs.textColor = AppConfiguration.footerTextColor;
+    self.pickerToolBar.tintColor = AppConfiguration.footerColor;
+    self.pickerToolBar.barTintColor = AppConfiguration.footerColor;
+    decimalButton.tintColor = AppConfiguration.footerTextColor;
+    fractionButton.tintColor = AppConfiguration.footerTextColor;
+    _foodIdLbl.textColor = AppConfiguration.footerTextColor;
     
     if (!pickerColumn1Array) {
         pickerColumn1Array = [[NSMutableArray alloc] init];
@@ -264,11 +273,10 @@
     
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
-    rightButton.tintColor = [UIColor whiteColor];
+    rightButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = rightButton;
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Food_Detail_Screen"];
         pickerView.backgroundColor = [UIColor whiteColor];
@@ -276,7 +284,6 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

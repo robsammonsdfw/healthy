@@ -15,7 +15,10 @@
                 <outlet property="emailbtuuon" destination="7" id="4bc-q0-H6b"/>
                 <outlet property="imgtop" destination="h9L-LL-Xvl" id="bu3-Oo-EAe"/>
                 <outlet property="loginButton" destination="6" id="18"/>
+                <outlet property="needHelpLabel" destination="10" id="iaz-bG-RXK"/>
                 <outlet property="passwordField" destination="32" id="39"/>
+                <outlet property="pleaseLoginLabel" destination="11" id="Zpj-3m-cU8"/>
+                <outlet property="secureConnectionLabel" destination="25" id="3R5-AA-5Mg"/>
                 <outlet property="signUpBtn" destination="1xM-S9-DjT" id="DhY-Dd-Enr"/>
                 <outlet property="usernameField" destination="8" id="38"/>
                 <outlet property="view" destination="1" id="22"/>

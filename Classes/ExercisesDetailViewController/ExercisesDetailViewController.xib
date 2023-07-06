@@ -14,6 +14,7 @@
                 <outlet property="caloriesBurnedLabel" destination="20" id="21"/>
                 <outlet property="dateLabel" destination="25" id="26"/>
                 <outlet property="exerciseNameLabel" destination="11" id="22"/>
+                <outlet property="headerImageView" destination="28" id="tfu-B0-G5Z"/>
                 <outlet property="imgbar" destination="27" id="3Bp-3O-e0t"/>
                 <outlet property="lblCaloriesBurnedTitle" destination="19" id="yYd-JQ-av2"/>
                 <outlet property="pickerView" destination="14" id="16"/>
@@ -43,7 +44,7 @@
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="25" userLabel="DateLabel">
                     <rect key="frame" x="10" y="68" width="300" height="40"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
+                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </label>

@@ -8,7 +8,7 @@
 import UIKit
 
 /// Controller that displays a date picker for the user to choose from.
-class DMDatePickerViewController : UIViewController {
+class DMDatePickerViewController : BaseViewController {
     private var navController: UINavigationController?
     private weak var presentingController: UIViewController?
     private var pickerView = {

@@ -13,7 +13,7 @@ import JJFloatingActionButton
 class MainMenuFAB: NSObject, UINavigationControllerDelegate {
     /// The colors of the button and images.
     private let buttonColor:UIColor = .white
-    private let buttonImageColor:UIColor = .black
+    private let buttonImageColor:UIColor = AppConfiguration.homeIconForegroundColor
     
     /// The navigation controller that the FAB is presented in and uses
     /// for navigation.
@@ -150,6 +150,11 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
         }
         // Hide on MealPlanDetailViewController
         if viewController.isKind(of: MealPlanDetailViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        // Hide on AppSettings
+        if viewController.isKind(of: AppSettings.self) {
             actionButton.isHidden = true
             return
         }

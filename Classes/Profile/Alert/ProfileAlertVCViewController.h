@@ -1,7 +1,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProfileAlertVCViewController : UIViewController
+@interface ProfileAlertVCViewController : BaseViewController
 - (IBAction)btnNoClicked:(id)sender;
 
 @end

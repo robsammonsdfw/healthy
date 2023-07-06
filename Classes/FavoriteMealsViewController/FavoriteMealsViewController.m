@@ -257,7 +257,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     DMDetailTableViewCell *cell = (DMDetailTableViewCell *)[myTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 
     if ([self.searchResults count] == 0) {
-        cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.textLabel.textColor = [UIColor grayColor];
         cell.textLabel.font = [UIFont systemFontOfSize:16.0];
         cell.detailTextLabel.text = @"";
         [[cell textLabel] setText:@"No results found..."];

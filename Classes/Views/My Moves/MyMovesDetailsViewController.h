@@ -10,7 +10,7 @@
 
 /// Displays the details of a routine to the user and lets them
 /// update the number of sets and reps, etc. that they do.
-@interface MyMovesDetailsViewController : UIViewController
+@interface MyMovesDetailsViewController : BaseViewController
 @property (nonatomic, strong) NSDate *selectedDate;
 
 /// Routine that the user is viewing the details for.

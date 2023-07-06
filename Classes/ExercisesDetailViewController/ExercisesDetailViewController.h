@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DMConstants.h"
 
-@interface ExercisesDetailViewController : UIViewController
+@interface ExercisesDetailViewController : BaseViewController
 
 /// The task mode that the controller is going to perform.
 @property (nonatomic) DMTaskMode taskMode;

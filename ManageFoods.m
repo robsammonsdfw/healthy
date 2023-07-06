@@ -96,8 +96,7 @@ CGPoint svos;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Custom_Foods_Editor"];
         for (id view in scrollView.subviews) {
@@ -1136,7 +1135,7 @@ CGPoint svos;
 
 /// Shows an alert to the user that serving size is invalid.
 - (void)alertServingSizeInvalid {
-    [DMGUtilities showAlertWithTitle:APP_NAME
+    [DMGUtilities showAlertWithTitle:AppConfiguration.appNameShort
                              message:@"Serving Size must be a number greater than 0."
                     inViewController:nil];
 }

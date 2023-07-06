@@ -72,8 +72,8 @@
 
 - (NSString *)replaceIntoSQLString {
     NSString *sqlString = [NSString stringWithFormat:@"REPLACE INTO ServerUserPlanList "
-                            "(PlanId, UserID, LastUpdated, Status, SyncResult, PlanName, Notes, UniqueID) "
-                            "VALUES (\"%d\", \"%d\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",
+                            "(PlanID, UserID, LastUpdated, Status, SyncResult, PlanName, Notes, UniqueID) "
+                            "VALUES (%d, %d, \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",
                            self.planId.intValue,
                            self.userId.intValue,
                            self.lastUpdated,

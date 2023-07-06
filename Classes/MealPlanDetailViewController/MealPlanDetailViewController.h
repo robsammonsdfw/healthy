@@ -10,7 +10,7 @@
 @class DMMealPlan;
 
 /// Shows the meal plan that's selected.
-@interface MealPlanDetailViewController : UIViewController
+@interface MealPlanDetailViewController : BaseViewController
 
 - (instancetype)initWithMealPlan:(DMMealPlan *)mealPlan NS_DESIGNATED_INITIALIZER;
 

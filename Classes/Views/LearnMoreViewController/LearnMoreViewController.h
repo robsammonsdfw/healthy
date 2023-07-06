@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
-@interface LearnMoreViewController : UIViewController <UINavigationBarDelegate> {
+@interface LearnMoreViewController : BaseViewController <UINavigationBarDelegate> {
     NSString *learnMoreTitle;
     IBOutlet UINavigationBar *myNavBar;
 }

@@ -33,6 +33,15 @@ def core_pods
   pod 'ASIHTTPRequest' # https://cocoapods.org/pods/ASIHTTPRequest
 end
 
+# Replica Base Demo.
+target 'ReplicaTemplate' do
+  core_pods
+end
+
+target 'DietMasterGo' do
+  core_pods
+end
+
 target 'DietMasterGoPlus' do
   core_pods
 end

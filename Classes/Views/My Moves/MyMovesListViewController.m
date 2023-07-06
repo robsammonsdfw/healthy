@@ -56,6 +56,10 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"Add Move";
+    self.navigationItem.title = @"Add Move";
+    
     self.bodypartTxtFld.text = @"Body Focus...";
     self.filter1.text = @"Filter By...";
 
@@ -64,11 +68,29 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
     self.tableData = @[];
     self.searchBar.delegate = self;
     
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [self.navigationController.navigationBar setTranslucent:NO];
     
     [self.tblView registerClass:[UITableViewCell class] forCellReuseIdentifier:DMMovesCellIdentifier];
     [self.tblView registerClass:[UITableViewCell class] forCellReuseIdentifier:DMMovesEmptyCellIdentifier];
+
+    self.searchBar.tintColor = AppConfiguration.headerColor;
+    self.searchBar.barTintColor = AppConfiguration.headerColor;
+    self.searchBar.showsCancelButton = YES;
+
+    self.bodypartTxtFld.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.bodypartTxtFld.layer.borderWidth = 1.0;
+    self.filter1.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.filter1.layer.borderWidth = 1.0;
+    self.bodypartTxtFld.layer.cornerRadius = 8.0;
+    self.filter1.layer.cornerRadius = 8.0;
+
+    // Padding to the text fields.
+    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 20)];
+    UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 20)];
+    self.bodypartTxtFld.leftView = paddingView;
+    self.bodypartTxtFld.leftViewMode = UITextFieldViewModeAlways;
+    self.filter1.leftView = paddingView2;
+    self.filter1.leftViewMode = UITextFieldViewModeAlways;
 
     [self loadTable];
 }
@@ -144,6 +166,12 @@ static NSString *DMMovesEmptyCellIdentifier = @"DMMovesEmptyCellIdentifier";
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    searchBar.text = @"";
+    [self loadTable];
 }
 
 #pragma mark - TableView Datasource/Delegate

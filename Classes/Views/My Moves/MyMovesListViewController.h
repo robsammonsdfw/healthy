@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// View that displays a list of Moves (aka exercises) with a search bar and filters.
-@interface MyMovesListViewController : UIViewController
+@interface MyMovesListViewController : BaseViewController
 /// The move plan that the user is viewing moves for.
 @property (nonatomic, strong) DMMovePlan *movePlan;
 

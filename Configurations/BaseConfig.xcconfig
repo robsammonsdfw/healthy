@@ -1,0 +1,19 @@
+//
+//  BaseConfig.xcconfig
+//
+//  Created by Henry T Kirk on 7/6/23.
+//
+
+// Don't change this.
+INFOPLIST_FILE = $(SRCROOT)/Resources/BaseApp-Info.plist
+
+// ************************************
+// ****** APP VERSION  INFO ***********
+// ************************************
+
+// This reflects the version in the App Store. Increment this
+// when you plan to send a new version to users.
+MARKETING_VERSION = 4.8.1
+// This should increment each time you send a build to the App Store.
+// It never starts over and is independant to the App Version above.
+CURRENT_PROJECT_VERSION = 29

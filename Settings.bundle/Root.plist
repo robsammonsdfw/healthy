@@ -18,22 +18,6 @@
 		</dict>
 		<dict>
 			<key>Title</key>
-			<string>Version Info</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<string>2.5.7</string>
-			<key>Key</key>
-			<string>version_info</string>
-			<key>Title</key>
-			<string>Version</string>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-		</dict>
-		<dict>
-			<key>Title</key>
 			<string>© Copyright </string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>

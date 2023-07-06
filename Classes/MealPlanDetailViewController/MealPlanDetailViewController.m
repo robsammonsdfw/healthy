@@ -48,16 +48,15 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.titleLabel.textColor=PrimaryDarkFontColor
-    self.staticRecomCalLbl.textColor = PrimaryFontColor
-    self.staticCalPlannedLbl.textColor = PrimaryFontColor
+    self.staticRecomCalLbl.textColor = AppConfiguration.footerTextColor;
+    self.staticCalPlannedLbl.textColor = AppConfiguration.footerTextColor;
 
-    self.imgbar.backgroundColor = PrimaryColor
+    self.imgbar.backgroundColor = AppConfiguration.footerColor;
     self.imgbar.layer.cornerRadius = 25;
     self.imgbar.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
     self.imgbar.clipsToBounds = YES;
 
-    self.imgbarline.backgroundColor = RGB(255, 255, 255, 0.5);
+    self.imgbarline.backgroundColor = AppConfiguration.footerTextColor;
   
     self.tableView.estimatedRowHeight = 70;
     self.tableView.estimatedSectionHeaderHeight = 44;
@@ -84,37 +83,36 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
     [self.infoBtn addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchUpInside];
     [self.infoBtn setUserInteractionEnabled:YES];
+    self.infoBtn.tintColor = AppConfiguration.footerTextColor;
     
     self.title = @"Meal Details";
     [self.navigationItem setTitle:@"Meal Details"];
 
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
                                    initWithTitle: @"Back"
                                    style: UIBarButtonItemStylePlain
                                    target: nil action: nil];
-    backButton.tintColor=[UIColor whiteColor];
+    backButton.tintColor = AppConfiguration.footerTextColor;
     [self.navigationItem setBackBarButtonItem: backButton];
     
-    
     self.titleLabel.text = self.mealPlan.mealName;
-    self.titleLabel.backgroundColor = PrimaryDarkColor
+    self.titleLabel.backgroundColor = AppConfiguration.headerColor;
+    self.titleLabel.textColor = AppConfiguration.headerTextColor;
    
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                  target:self
                                                                                  action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
-    rightButton.tintColor = [UIColor whiteColor];
+    rightButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = rightButton;
     
     [self updateCalorieLabels];
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
     }
 }

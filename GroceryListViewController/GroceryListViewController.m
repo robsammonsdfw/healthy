@@ -13,7 +13,7 @@
 #import "DMMealPlanDataProvider.h"
 #import "TTTAttributedLabel.h"
 
-@interface GroceryListViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface GroceryListViewController() <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *selectedRows;
@@ -55,27 +55,28 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     UINib *nib = [UINib nibWithNibName:@"MealPlanDetailsTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
     self.tableView.contentInset = UIEdgeInsetsMake(5, 0, 50, 0);
+    self.tableView.estimatedRowHeight = 60;
+    self.tableView.estimatedSectionHeaderHeight = 40;
     
     self.title = @"Grocery List";
     self.navigationItem.title = @"Grocery List";
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 
-    self.view.backgroundColor = PrimaryColor
+    self.view.backgroundColor = [UIColor whiteColor];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
                                    initWithTitle: @"Back"
                                    style: UIBarButtonItemStylePlain
                                    target: nil action: nil];
-    
+    backButton.tintColor = AppConfiguration.headerTextColor;
     [self.navigationItem setBackBarButtonItem: backButton];
         
     UIBarButtonItem *aBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editGroceryList)];
+    aBarButtonItem.tintColor = AppConfiguration.headerTextColor;
     [self.navigationItem setRightBarButtonItem:aBarButtonItem];
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
     }
@@ -114,12 +115,13 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     NSDictionary *categoryDict = [[self.groceryArray objectAtIndex:section] copy];
     
     UILabel *label = [[UILabel alloc] init];
-    label.frame = CGRectMake(10, 0, 295, 25);
-    label.textColor = [UIColor blackColor];
+    label.frame = CGRectMake(10, 5, 295, 23);
+    label.textColor = AppConfiguration.headerTextColor;
     label.font = [UIFont boldSystemFontOfSize:17.0];
     label.text = [NSString stringWithString:[categoryDict valueForKey:@"CategoryName"]];
     label.backgroundColor = [UIColor clearColor];
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 25)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 32)];
+    view.backgroundColor = AppConfiguration.headerColor;
     [view addSubview:label];
     
     return view;
@@ -130,11 +132,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 33;
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -156,7 +158,6 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     NSRange r = [foodName rangeOfString:foodName];
     
     if ([foodCategory intValue] == 66) {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *hostname = [[DMAuthManager sharedInstance] loggedInUser].hostName;
         NSNumber *recipeID = [tempDict valueForKey:@"RecipeID"];
         
@@ -183,13 +184,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     cell.backgroundColor = [UIColor whiteColor];
 
     cell.lblMealName.textColor = [UIColor blackColor];
-    cell.lblMealName.adjustsFontSizeToFitWidth = YES;
-    cell.lblMealName.font = [UIFont systemFontOfSize:15.0];
+    cell.lblMealName.font = [UIFont systemFontOfSize:16.0];
     cell.lblMealName.minimumScaleFactor = 10.0f;
     
-    cell.lblServingSize.font = [UIFont systemFontOfSize:13.0];
+    cell.lblServingSize.font = [UIFont systemFontOfSize:14.0];
     cell.lblServingSize.textColor = [UIColor darkGrayColor];
-    
     cell.lblMealName.lineBreakMode = NSLineBreakByTruncatingTail;
          
     cell.lblMealName.text = foodName;
@@ -202,11 +201,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     else {
         image = [UIImage imageNamed:@"checkmark_off"];
     }
+
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     CGRect frame = CGRectMake(0.0, 0.0, 28, 28);
     button.frame = frame;
-    [button setBackgroundImage:image forState:UIControlStateNormal];
-    
+    [button setImage:image forState:UIControlStateNormal];
     [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = [UIColor clearColor];
     cell.accessoryView = button;
@@ -230,11 +229,11 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
         [self.selectedRows addObject:foodName];
         image = [UIImage imageNamed:@"checkmark"];
     }
-    
+
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     CGRect frame = CGRectMake(0.0, 0.0, 28, 28);
     button.frame = frame;
-    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setImage:image forState:UIControlStateNormal];
     
     [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = [UIColor clearColor];
@@ -305,7 +304,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 #pragma mark - TTTAttributedLabel Delegate
 
 - (void)attributedLabel:(__unused TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
-    [[UIApplication sharedApplication] openURL:url];
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
 @end

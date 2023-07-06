@@ -9,44 +9,43 @@ import UIKit
 import SafariServices
 
 /// The main entry point for settings.
-@objc class DMSettingsViewController : UIViewController {
-    let accountCode = DMGUtilities.configValue(forKey: "account_code")
+@objc class DMSettingsViewController : BaseViewController {
     /// Two optional buttons for a custom implementation if account_code
     /// is "trdietpro".
     private lazy var mwlbookletButton: UIButton = {
         let button = defaultButton()
         button.setTitle("View MWL Booklet", for: .normal)
-        button.configuration?.baseForegroundColor = .black
-        button.configuration?.baseBackgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
+        button.configuration?.baseForegroundColor = AppConfiguration.buttonTextColor
+        button.configuration?.baseBackgroundColor = AppConfiguration.buttonColor
         return button
     }()
     private lazy var hcgbookletButton: UIButton = {
         let button = defaultButton()
         button.setTitle("View HCG Booklet", for: .normal)
-        button.configuration?.baseForegroundColor = .black
-        button.configuration?.baseBackgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
+        button.configuration?.baseForegroundColor = AppConfiguration.buttonTextColor
+        button.configuration?.baseBackgroundColor = AppConfiguration.buttonColor
         return button
     }()
     
     private lazy var optionalSettingsButton: UIButton = {
         let button = defaultButton()
         button.setTitle("Optional Settings", for: .normal)
-        button.configuration?.baseForegroundColor = .black
-        button.configuration?.baseBackgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
+        button.configuration?.baseForegroundColor = AppConfiguration.buttonTextColor
+        button.configuration?.baseBackgroundColor = AppConfiguration.buttonColor
         return button
     }()
     private lazy var customFoodsButton: UIButton = {
         let button = defaultButton()
         button.setTitle("My Custom Foods", for: .normal)
-        button.configuration?.baseForegroundColor = .black
-        button.configuration?.baseBackgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
+        button.configuration?.baseForegroundColor = AppConfiguration.buttonTextColor
+        button.configuration?.baseBackgroundColor = AppConfiguration.buttonColor
         return button
     }()
     private lazy var addCustomFoodButton: UIButton = {
         let button = defaultButton()
         button.setTitle("Add Custom Food", for: .normal)
-        button.configuration?.baseForegroundColor = .black
-        button.configuration?.baseBackgroundColor = UIColor(hex: "#F2C53Dff") // Yellow.
+        button.configuration?.baseForegroundColor = AppConfiguration.buttonTextColor
+        button.configuration?.baseBackgroundColor = AppConfiguration.buttonColor
         return button
     }()
     private lazy var downSyncButton: UIButton = {
@@ -124,7 +123,7 @@ import SafariServices
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         // Show add'l buttons if we're TR Diet Pro.
-        if accountCode == "trdietpro" {
+        if AppConfiguration.accountCode == "trdietpro" {
             mwlbookletButton.addTarget(self, action: #selector(showMWLBooklet), for: .touchUpInside)
             hcgbookletButton.addTarget(self, action: #selector(showHCGBooklet), for: .touchUpInside)
             stackView.addArrangedSubview(mwlbookletButton)
