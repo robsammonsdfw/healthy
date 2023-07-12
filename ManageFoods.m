@@ -971,8 +971,11 @@ CGPoint svos;
 #pragma mark - Nutritionix
 
 - (void)nutritionixAPISuccess:(NSDictionary *)dict {
+    if (!dict) {
+        return;
+    }
     scannerDict = [dict mutableCopy];
-    scanned_factualID = [[NSString alloc] initWithString:[dict valueForKey:@"nix_item_id"]];
+    scanned_factualID = [dict valueForKey:@"nix_item_id"];
     
     NSString *serving_size = [dict valueForKey:@"serving_qty"];
     txtfieldServingSize.text = [NSString stringWithFormat:@"%.2f",[serving_size doubleValue]];
