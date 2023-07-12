@@ -39,7 +39,7 @@ DMG_BUNDLE_DISPLAY_NAME = JL Nutrition
 DMG_BUNDLE_IDENTIFIER = com.dietmaster.JLNutrition
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
-DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
+DMG_APPLE_TEAM_PREFIX = HXSH3695HJ
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = JLNutrition
 
@@ -48,9 +48,9 @@ DMG_PRODUCT_NAME = JLNutrition
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = JLNutrition
+DMG_APP_NAME_SHORT = JL Nutrition
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = JLNutrition
+DMG_APP_NAME_LONG = JL Nutrition
 // Formerly support_email.
 DMG_SUPPORT_EMAIL = jlucasnutrition@gmail.com
 // Formerly account_code.
