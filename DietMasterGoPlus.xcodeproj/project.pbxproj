@@ -1136,7 +1136,6 @@
 		0E101BA82A5626E700D8E7E2 /* BaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		0E101BA92A5626E700D8E7E2 /* BaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		0E101C672A56CC7300D8E7E2 /* ReplicaTemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReplicaTemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0E101C682A56CC7300D8E7E2 /* DietMasterGoPlus copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "DietMasterGoPlus copy-Info.plist"; path = "/Users/henrytkirk/Documents/Projects/DietMasterGo/DietMasterGoPlus copy-Info.plist"; sourceTree = "<absolute>"; };
 		0E101C6E2A56CE4900D8E7E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0E101C6F2A56CE4900D8E7E2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0E101C702A56CE4900D8E7E2 /* DietMasterGoPlus.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DietMasterGoPlus.xcconfig; sourceTree = "<group>"; };
@@ -1146,7 +1145,6 @@
 		0E101C822A56D5AE00D8E7E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0E101C832A56D5AE00D8E7E2 /* DietMasterGo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DietMasterGo.xcconfig; sourceTree = "<group>"; };
 		0E101D402A56D5B700D8E7E2 /* DietMasterGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DietMasterGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0E101D412A56D5B700D8E7E2 /* ReplicaTemplate copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReplicaTemplate copy-Info.plist"; path = "/Users/henrytkirk/Documents/Projects/DietMasterGo/ReplicaTemplate copy-Info.plist"; sourceTree = "<absolute>"; };
 		0E101D442A56E3AD00D8E7E2 /* BaseConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BaseConfig.xcconfig; sourceTree = "<group>"; };
 		0E1A3B392A3B66AC004C6033 /* DMMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMessage.h; sourceTree = "<group>"; };
 		0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessage.m; sourceTree = "<group>"; };
@@ -1266,16 +1264,13 @@
 		0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMUser.m; sourceTree = "<group>"; };
 		0EE0CDC52A5F086F0075A4FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0EF136392A5749E10089B4FD /* JLNutrition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JLNutrition.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0EF1363A2A5749E10089B4FD /* ReplicaTemplate copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReplicaTemplate copy2-Info.plist"; path = "/Users/henrytkirk/Documents/Projects/DietMasterGo/ReplicaTemplate copy2-Info.plist"; sourceTree = "<absolute>"; };
 		0EF1363C2A5749F50089B4FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0EF1363D2A5749F50089B4FD /* JLNutrition.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = JLNutrition.xcconfig; sourceTree = "<group>"; };
 		0EF136402A575C620089B4FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0EF136442A575DF10089B4FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0EF136452A575DF10089B4FD /* Quintessa.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Quintessa.xcconfig; sourceTree = "<group>"; };
 		0EF137022A575DF80089B4FD /* Quintessa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quintessa.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0EF137032A575DF80089B4FD /* ReplicaTemplate copy3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReplicaTemplate copy3-Info.plist"; path = "/Users/henrytkirk/Documents/Projects/DietMasterGo/ReplicaTemplate copy3-Info.plist"; sourceTree = "<absolute>"; };
 		0EF137C22A5760390089B4FD /* MyMealCoach.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMealCoach.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0EF137C32A57603C0089B4FD /* ReplicaTemplate copy4-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReplicaTemplate copy4-Info.plist"; path = "/Users/henrytkirk/Documents/Projects/DietMasterGo/ReplicaTemplate copy4-Info.plist"; sourceTree = "<absolute>"; };
 		0EF137C52A57604A0089B4FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0EF137C62A57604A0089B4FD /* MyMealCoach.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = MyMealCoach.xcconfig; sourceTree = "<group>"; };
 		0EFF657F1588CA5200CCE0AD /* ExchangeFoodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangeFoodViewController.h; sourceTree = "<group>"; };
@@ -2193,11 +2188,6 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				0264488C8A5E8074E1E45433 /* Pods */,
-				0E101C682A56CC7300D8E7E2 /* DietMasterGoPlus copy-Info.plist */,
-				0E101D412A56D5B700D8E7E2 /* ReplicaTemplate copy-Info.plist */,
-				0EF1363A2A5749E10089B4FD /* ReplicaTemplate copy2-Info.plist */,
-				0EF137032A575DF80089B4FD /* ReplicaTemplate copy3-Info.plist */,
-				0EF137C32A57603C0089B4FD /* ReplicaTemplate copy4-Info.plist */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
