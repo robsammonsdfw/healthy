@@ -34,7 +34,7 @@
 // ************************************
 
 // The name shown under the app icon.
-DMG_BUNDLE_DISPLAY_NAME = DMGo+
+DMG_BUNDLE_DISPLAY_NAME = DietMaster Go+
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
 DMG_BUNDLE_IDENTIFIER = com.dietmastergoplus
 // The "Developer Team" prefix, found in Apple Developer console.
@@ -50,9 +50,9 @@ DMG_MYMOVES_ENABLED = YES
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = DietMasterGoPlus
+DMG_APP_NAME_SHORT = DietMaster Go+
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = DietMasterGoPlus™
+DMG_APP_NAME_LONG = DietMaster Go+™
 // Formerly support_email.
 DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
 // Formerly account_code.
