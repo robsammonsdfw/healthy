@@ -260,7 +260,6 @@
     } else if (pieChartView == _cpf_Pie) {
         return self.cpf_Values.count;
     }
-    
     return 0;
 }
 
@@ -269,35 +268,24 @@
 }
 
 - (UIColor *)pieChartView:(MCPieChartView *)pieChartView colorForSliceAtIndex:(NSInteger)index {
-    if (pieChartView == _remaining_Pie)
-    {
-        if (index == 0)
-        {
+    if (pieChartView == _remaining_Pie) {
+        if (index == 0) {
             return [UIColor blackColor]; // Used up fill.
         }
-        else
-        {
-            return UIColorFromHexString(@"#64BB60"); // Green remaining fill.
+        return UIColorFromHexString(@"#64BB60"); // Green remaining fill.
+    } else if (pieChartView == _cpf_Pie) {
+        if (self.cpf_Values.count > 1) {
+            if (index == 0) {
+                return UIColorFromHexString(@"#0095B8");
+            } else if(index == 1) {
+                return UIColorFromHexString(@"#64BB60");
+            } else if(index == 2) {
+                return UIColorFromHexString(@"#C15F6E");
+            } else {
+                return UIColorFromHexString(@"#E8E8E8");
+            }
         }
-    }
-    else if (pieChartView == _cpf_Pie)
-    {
-        if (index == 0)
-        {
-            return UIColorFromHexString(@"#0095B8");
-        }
-        else if(index == 1)
-        {
-            return UIColorFromHexString(@"#64BB60");
-        }
-        else if(index == 2)
-        {
-            return UIColorFromHexString(@"#C15F6E");
-        }
-        else
-        {
-            return UIColorFromHexString(@"#E8E8E8");
-        }
+        return UIColorFromHexString(@"#E8E8E8");
     }
     
     return [UIColor whiteColor];
@@ -723,37 +711,45 @@
     // Now lay out the chart. We'll use whole numbers because I believe there's a bug
     // with the chart when you're using decimals.
     // Get total calories consumed.
-    double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
-    double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
-    double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
-    double totalPercentage = [dayProvider getCurrentBMR].doubleValue;
-    // Percentages.
-    double fatGramActualPercent = round((fatCalories / totalPercentage) * 100);
-    double proteinGramActualPercent = round((proteinCalories / totalPercentage) * 100);
-    double carbsGramActualPercent = round((carbCalories / totalPercentage) * 100);
-    // Check for invalid numbers.
-    if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
-        carbsGramActualPercent = 0;
+    double totalPercentage = [dayProvider getTotalCaloriesConsumedWithDate:nil].doubleValue;
+    [self.cpf_Values removeAllObjects];
+    if (totalPercentage <= 0) {
+        [self.cpf_Values addObject:@(100)];
         self.c_PercentageLbl.text = @"0";
-    } else {
-        self.c_PercentageLbl.text = [@(carbsGramActualPercent) stringValue];
-    }
-    if (proteinGramActualPercent < 0 || isnan(proteinGramActualPercent)) {
         self.p_PercentageLbl.text = @"/0/";
-    } else {
-        self.p_PercentageLbl.text = [NSString stringWithFormat: @"/%@/", @(proteinGramActualPercent)];
-    }
-    if (fatGramActualPercent < 0 || isnan(fatGramActualPercent)) {
         self.f_PercentageLbl.text = @"0";
     } else {
-        self.f_PercentageLbl.text = [@(fatGramActualPercent) stringValue];
+        double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
+        double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
+        double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
+        // Percentages.
+        double fatGramActualPercent = round((fatCalories / totalPercentage) * 100);
+        double proteinGramActualPercent = round((proteinCalories / totalPercentage) * 100);
+        double carbsGramActualPercent = round((carbCalories / totalPercentage) * 100);
+        // Check for invalid numbers.
+        if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
+            carbsGramActualPercent = 0;
+            self.c_PercentageLbl.text = @"0";
+        } else {
+            self.c_PercentageLbl.text = [@(carbsGramActualPercent) stringValue];
+        }
+        if (proteinGramActualPercent < 0 || isnan(proteinGramActualPercent)) {
+            proteinGramActualPercent = 0;
+            self.p_PercentageLbl.text = @"/0/";
+        } else {
+            self.p_PercentageLbl.text = [NSString stringWithFormat: @"/%@/", @(proteinGramActualPercent)];
+        }
+        if (fatGramActualPercent < 0 || isnan(fatGramActualPercent)) {
+            fatGramActualPercent = 0;
+            self.f_PercentageLbl.text = @"0";
+        } else {
+            self.f_PercentageLbl.text = [@(fatGramActualPercent) stringValue];
+        }
+        [self.cpf_Values addObject:@(fatGramActualPercent)];
+        [self.cpf_Values addObject:@(proteinGramActualPercent)];
+        [self.cpf_Values addObject:@(carbsGramActualPercent)];
     }
-    [self.cpf_Values removeAllObjects];
-    [self.cpf_Values addObject:@(fatGramActualPercent)];
-    [self.cpf_Values addObject:@(proteinGramActualPercent)];
-    [self.cpf_Values addObject:@(carbsGramActualPercent)];
-    [self.cpf_Values addObject:@(100 - (carbsGramActualPercent + proteinGramActualPercent + fatGramActualPercent))];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.cpf_Pie reloadData];
     });
 
