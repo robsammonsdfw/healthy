@@ -295,7 +295,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     NSString *foodNameText = nil;
     NSString *calorieText = nil;
-    
+    // Url to link to if needed.
+    NSURL *foodNameURL = nil;
+
     if ([sectionTitle isEqualToString:@"Exercise"]) {
         NSArray *exerciseResultsArray = [self.exerciseResults copy];
         NSDictionary *dict = exerciseResultsArray[indexPath.row];
@@ -335,28 +337,21 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         foodNameText = [dict valueForKey:@"ActivityName"];
     } else {
         NSDictionary *dict = self.sectionFoodsDict[sectionTitle][@"Foods"][indexPath.row];
-        NSString *nameString = [dict valueForKey:@"Name"];
-        NSRange r = [nameString rangeOfString:nameString];
-        foodNameText = nameString;
+        foodNameText = [dict valueForKey:@"Name"];
         
         NSNumber *foodCategory = [dict valueForKey:@"CategoryID"];
         if ([foodCategory intValue] == 66) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            NSString *hostname = [prefs stringForKey:@"HostName"];
+            DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+            NSString *hostname = currentUser.hostName;
             NSNumber *recipeID = [dict valueForKey:@"RecipeID"];
-            if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
-                cell.lblFoodName.delegate = self;
-                NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:url] withRange:r];
+            if (hostname.length && recipeID != nil && [recipeID intValue] > 0) {
+                NSString *urlString = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
+                foodNameURL = [NSURL URLWithString:urlString];
             }
-            
         } else {
-            NSString *foodURL = [dict valueForKey:@"FoodURL"];
-            if (foodURL != nil && ![foodURL isEqualToString:@""]) {
-                cell.lblFoodName.delegate = self;
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-            } else {
-                cell.lblFoodName.delegate = nil;
+            NSString *foodURLString = [dict valueForKey:@"FoodURL"];
+            if (foodURLString.length) {
+                foodNameURL = [NSURL URLWithString:foodURLString];
             }
         }
         calorieText = [NSString stringWithFormat:@"%i Calories",[[dict valueForKey:@"TotalCalories"] intValue]];
@@ -376,6 +371,14 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     // after text is set.
     cell.lblCalories.text = calorieText;
     cell.lblFoodName.text = foodNameText;
+
+    if (foodNameURL) {
+        NSRange range = NSMakeRange(0, foodNameText.length);
+        [cell.lblFoodName addLinkToURL:foodNameURL withRange:range];
+        cell.lblFoodName.delegate = self;
+    } else {
+        cell.lblFoodName.delegate = nil;
+    }
 
     return cell;
 }

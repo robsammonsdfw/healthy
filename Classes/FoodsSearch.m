@@ -416,33 +416,32 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         
         NSDictionary *dict1 = [[NSDictionary alloc] initWithDictionary:[self.foodResults objectAtIndex:indexPath.row]];
         NSString *nameString = [dict1 valueForKey:@"Name"];
-        
-        NSRange r = [nameString rangeOfString:nameString];
-        cell.lblFoodName.text = nameString;
-        
+        NSURL *foodNameURL = nil;
         NSNumber *foodCategory = [dict1 valueForKey:@"CategoryID"];
         
         if ([foodCategory intValue] == 66) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            NSString *hostname = [prefs stringForKey:@"HostName"];
+            DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+            NSString *hostname = currentUser.hostName;
             NSNumber *recipeID = [dict1 valueForKey:@"RecipeID"];
-            
-            if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
-                cell.userInteractionEnabled = YES;
-                cell.lblFoodName.delegate = self;
+            if (hostname.length && recipeID != nil && [recipeID intValue] > 0) {
                 NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:url] withRange:r];
+                foodNameURL = [NSURL URLWithString:url];
             }
-            
         } else {
-            NSString *foodURL = [dict1 valueForKey:@"FoodURL"];
-            if (foodURL != nil && ![foodURL isEqualToString:@""]) {
-                cell.userInteractionEnabled = YES;
-                cell.lblFoodName.delegate = self;
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-            } else {
-                cell.lblFoodName.delegate = nil;
+            NSString *foodURLString = [dict1 valueForKey:@"FoodURL"];
+            if (foodURLString.length) {
+                foodNameURL = [NSURL URLWithString:foodURLString];
             }
+        }
+        
+        cell.lblFoodName.text = nameString;
+
+        if (foodNameURL) {
+            NSRange range = NSMakeRange(0, nameString.length);
+            [cell.lblFoodName addLinkToURL:foodNameURL withRange:range];
+            cell.lblFoodName.delegate = self;
+        } else {
+            cell.lblFoodName.delegate = nil;
         }
     }
     

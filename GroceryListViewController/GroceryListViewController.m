@@ -155,7 +155,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
     
     NSNumber *foodCategory = [tempDict valueForKey:@"CategoryID"];
     NSString *foodName = [tempDict valueForKey:@"FoodName"];
-    NSRange r = [foodName rangeOfString:foodName];
+    NSURL *foodNameURL = nil;
     
     if ([foodCategory intValue] == 66) {
         NSString *hostname = [[DMAuthManager sharedInstance] loggedInUser].hostName;
@@ -163,20 +163,23 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
         
         if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
             cell.userInteractionEnabled = YES;
-            cell.lblMealName.delegate = self;
             NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-            [cell.lblMealName addLinkToURL:[NSURL URLWithString:url] withRange:r];
+            foodNameURL = [NSURL URLWithString:url];
         }
-        
     } else {
-        NSString *foodURL = [tempDict valueForKey:@"FoodURL"];
-        if (foodURL != nil && ![foodURL isEqualToString:@""]) {
+        NSString *foodURLString = [tempDict valueForKey:@"FoodURL"];
+        if (foodURLString.length) {
             cell.userInteractionEnabled = YES;
-            cell.lblMealName.delegate = self;
-            [cell.lblMealName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-        } else {
-            cell.lblMealName.delegate = nil;
+            foodNameURL = [NSURL URLWithString:foodURLString];
         }
+    }
+    
+    if (foodNameURL) {
+        NSRange range = NSMakeRange(0, foodName.length);
+        [cell.lblMealName addLinkToURL:foodNameURL withRange:range];
+        cell.lblMealName.delegate = self;
+    } else {
+        cell.lblMealName.delegate = nil;
     }
     
     cell.accessoryType = UITableViewCellAccessoryNone;
