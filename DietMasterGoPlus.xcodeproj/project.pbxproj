@@ -406,8 +406,9 @@
 		0ECFE7F12A41DB3900DE631E /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
 		0EDAB6A72A3B3A1000DB351A /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
 		0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
+		0EE0CDC62A5F08700075A4FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EE0CDC52A5F086F0075A4FC /* GoogleService-Info.plist */; };
+		0EE0CDC72A5F09FC0075A4FC /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
 		0EF135802A5749E10089B4FD /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
-		0EF135812A5749E10089B4FD /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
 		0EF135822A5749E10089B4FD /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
 		0EF135832A5749E10089B4FD /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
 		0EF135842A5749E10089B4FD /* UserMealType.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1A26BD1D82004D1654 /* UserMealType.xib */; };
@@ -578,7 +579,6 @@
 		0EF1362E2A5749E10089B4FD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		0EF1362F2A5749E10089B4FD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		0EF1363E2A5749F50089B4FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EF1363C2A5749F50089B4FD /* Assets.xcassets */; };
-		0EF1363F2A5749F50089B4FD /* JLNutrition.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0EF1363D2A5749F50089B4FD /* JLNutrition.xcconfig */; };
 		0EF136412A575C620089B4FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EF136402A575C620089B4FD /* GoogleService-Info.plist */; };
 		0EF136422A575C8E0089B4FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C732A56CE4900D8E7E2 /* GoogleService-Info.plist */; };
 		0EF136492A575DF80089B4FD /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
@@ -629,7 +629,6 @@
 		0EF136762A575DF80089B4FD /* DietMasterGoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208F5250158BC00F412B0 /* DietMasterGoViewController.xib */; };
 		0EF136772A575DF80089B4FD /* MyMovesDetailFooterCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */; };
 		0EF136782A575DF80089B4FD /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
-		0EF136792A575DF80089B4FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C732A56CE4900D8E7E2 /* GoogleService-Info.plist */; };
 		0EF1367B2A575DF80089B4FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		0EF1367C2A575DF80089B4FD /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
 		0EF1367D2A575DF80089B4FD /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
@@ -803,7 +802,6 @@
 		0EF137352A5760390089B4FD /* DietMasterGoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208F5250158BC00F412B0 /* DietMasterGoViewController.xib */; };
 		0EF137362A5760390089B4FD /* MyMovesDetailFooterCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */; };
 		0EF137372A5760390089B4FD /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
-		0EF137382A5760390089B4FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C732A56CE4900D8E7E2 /* GoogleService-Info.plist */; };
 		0EF1373A2A5760390089B4FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		0EF1373B2A5760390089B4FD /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
 		0EF1373C2A5760390089B4FD /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
@@ -1266,6 +1264,7 @@
 		0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMGUtilities.m; sourceTree = "<group>"; };
 		0EDAB6AA2A3B4EAA00DB351A /* DMUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMUser.h; sourceTree = "<group>"; };
 		0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMUser.m; sourceTree = "<group>"; };
+		0EE0CDC52A5F086F0075A4FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0EF136392A5749E10089B4FD /* JLNutrition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JLNutrition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EF1363A2A5749E10089B4FD /* ReplicaTemplate copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReplicaTemplate copy2-Info.plist"; path = "/Users/henrytkirk/Documents/Projects/DietMasterGo/ReplicaTemplate copy2-Info.plist"; sourceTree = "<absolute>"; };
 		0EF1363C2A5749F50089B4FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -2126,6 +2125,7 @@
 		0EF1363B2A5749F50089B4FD /* JL Nutrition */ = {
 			isa = PBXGroup;
 			children = (
+				0EE0CDC52A5F086F0075A4FC /* GoogleService-Info.plist */,
 				0EF1363C2A5749F50089B4FD /* Assets.xcassets */,
 				0EF1363D2A5749F50089B4FD /* JLNutrition.xcconfig */,
 			);
@@ -2771,7 +2771,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EF135802A5749E10089B4FD /* MyLogViewController.xib in Resources */,
-				0EF135812A5749E10089B4FD /* BaseApp-Info.plist in Resources */,
 				0EF135822A5749E10089B4FD /* AppSettings.xib in Resources */,
 				0EF135832A5749E10089B4FD /* ExchangeFood.xib in Resources */,
 				0EF135842A5749E10089B4FD /* UserMealType.xib in Resources */,
@@ -2783,6 +2782,7 @@
 				0EF1358A2A5749E10089B4FD /* UserGoalVC.xib in Resources */,
 				0EF1358C2A5749E10089B4FD /* ManageFoods.xib in Resources */,
 				0EF1358D2A5749E10089B4FD /* FoodCategoryPicker.xib in Resources */,
+				0EE0CDC72A5F09FC0075A4FC /* BaseApp-Info.plist in Resources */,
 				0EF1358E2A5749E10089B4FD /* MeasurePicker.xib in Resources */,
 				0EF1358F2A5749E10089B4FD /* FoodsList.xib in Resources */,
 				0EF135902A5749E10089B4FD /* ExercisesDetailViewController.xib in Resources */,
@@ -2797,6 +2797,7 @@
 				0EF135992A5749E10089B4FD /* headerVw.xib in Resources */,
 				0EF1359A2A5749E10089B4FD /* measure_sql.sql in Resources */,
 				0EF1359B2A5749E10089B4FD /* LearnMoreViewController.xib in Resources */,
+				0EE0CDC62A5F08700075A4FC /* GoogleService-Info.plist in Resources */,
 				0EF1359C2A5749E10089B4FD /* privacypolicy.html in Resources */,
 				0EF1359D2A5749E10089B4FD /* termsofservice.html in Resources */,
 				0EF1359E2A5749E10089B4FD /* AppImages.xcassets in Resources */,
@@ -2812,7 +2813,6 @@
 				0EF1363E2A5749F50089B4FD /* Assets.xcassets in Resources */,
 				0EF135A92A5749E10089B4FD /* ProfileContactVC.xib in Resources */,
 				0EF135AB2A5749E10089B4FD /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */,
-				0EF1363F2A5749F50089B4FD /* JLNutrition.xcconfig in Resources */,
 				0EF135AC2A5749E10089B4FD /* GroceryListViewController.xib in Resources */,
 				0EF135AD2A5749E10089B4FD /* PlansTableViewCell.xib in Resources */,
 				0EF135AE2A5749E10089B4FD /* OtherHealthServiceVC.xib in Resources */,
@@ -2875,7 +2875,6 @@
 				0EF136762A575DF80089B4FD /* DietMasterGoViewController.xib in Resources */,
 				0EF136772A575DF80089B4FD /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
 				0EF136782A575DF80089B4FD /* MyMovesListViewController.xib in Resources */,
-				0EF136792A575DF80089B4FD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2933,7 +2932,6 @@
 				0EF137352A5760390089B4FD /* DietMasterGoViewController.xib in Resources */,
 				0EF137362A5760390089B4FD /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
 				0EF137372A5760390089B4FD /* MyMovesListViewController.xib in Resources */,
-				0EF137382A5760390089B4FD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4417,13 +4415,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				DEVELOPMENT_TEAM = 89LHX4Y7HJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4444,7 +4441,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy2-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4484,13 +4480,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				DEVELOPMENT_TEAM = 89LHX4Y7HJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4509,7 +4504,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy2-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4549,13 +4543,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				DEVELOPMENT_TEAM = 89LHX4Y7HJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4574,7 +4567,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy2-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4641,7 +4633,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy3-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4706,7 +4697,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy3-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4771,7 +4761,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy3-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4838,7 +4827,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy4-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4903,7 +4891,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy4-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4968,7 +4955,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ReplicaTemplate copy4-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -5032,7 +5018,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(INFOPLIST_FILE)";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/BaseApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				ONLY_ACTIVE_ARCH = NO;
@@ -5270,7 +5256,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(INFOPLIST_FILE)";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/BaseApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				ONLY_ACTIVE_ARCH = NO;
@@ -5315,7 +5301,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(INFOPLIST_FILE)";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/BaseApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				ONLY_ACTIVE_ARCH = NO;
