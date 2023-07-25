@@ -44,8 +44,7 @@ static NSString *CellIdentifier = @"Cell";
 	self.tblFoodsHome.estimatedRowHeight = 44;
     [self.tblFoodsHome registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         self.tblFoodsHome.backgroundView = nil;
         self.tblFoodsHome.backgroundColor = [UIColor clearColor];
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Select_Meal_TVGray"]];

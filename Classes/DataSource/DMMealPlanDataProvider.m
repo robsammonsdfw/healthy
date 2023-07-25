@@ -289,6 +289,7 @@
                  mealPlanItem.measureId, mealPlanItem.numberOfServings.doubleValue, date_string];
     [db executeUpdate:insertSQL];
     if ([db hadError]) {
+        DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
     [db commit];
 }

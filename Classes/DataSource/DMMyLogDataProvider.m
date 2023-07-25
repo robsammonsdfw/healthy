@@ -1051,6 +1051,7 @@
         return;
     }
     
+    [db beginTransaction];
     for (NSDictionary *dict in responseArray) {
         NSDate* sourceDate = [NSDate date];
         [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -1063,7 +1064,6 @@
         
         [db executeUpdate:queryString];
     }
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }

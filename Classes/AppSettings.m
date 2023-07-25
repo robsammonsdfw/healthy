@@ -14,6 +14,9 @@
 /// budget for the day.
 @property (nonatomic, strong) IBOutlet UISwitch *addExerciseCaloriesSwitch;
 
+@property (nonatomic, strong) IBOutlet UILabel *trackingTitleLabel;
+@property (nonatomic, strong) IBOutlet UILabel *exerciseTitleLabel;
+
 @end
 
 @implementation AppSettings
@@ -27,7 +30,18 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    self.title = @"Optional Settings";
+    self.navigationItem.title = @"Optional Settings";
     
+    self.appleHealthSwitch.onTintColor = AppConfiguration.switchOnColor;
+    self.addTrackedCaloriesSwitch.onTintColor = AppConfiguration.switchOnColor;
+    self.addExerciseCaloriesSwitch.onTintColor = AppConfiguration.switchOnColor;
+    
+    self.trackingTitleLabel.backgroundColor = AppConfiguration.footerColor;
+    self.exerciseTitleLabel.backgroundColor = AppConfiguration.footerColor;
+    self.trackingTitleLabel.textColor = AppConfiguration.footerTextColor;
+    self.exerciseTitleLabel.textColor = AppConfiguration.footerTextColor;
+
     pageSize = 1000;
     pageNumberCounter = 1;
 }

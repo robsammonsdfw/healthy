@@ -81,17 +81,18 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"My Log";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
         
-    self.lbl_dateHdr.textColor = AccentFontColor
+    self.lbl_dateHdr.textColor = AppConfiguration.headerTextColor;
+    self.lbl_dateHdr.font = [UIFont boldSystemFontOfSize:17];
     self.lbl_dateHdr.backgroundColor = [UIColor clearColor];
     
-    self.dateToolBar.backgroundColor = AccentColor;
-    self.dateToolBar.barTintColor = AccentColor;
-    
+    self.dateToolBar.backgroundColor = AppConfiguration.headerColor;
+    self.dateToolBar.barTintColor = AppConfiguration.headerColor;
+    for (UIBarButtonItem *item in self.dateToolBar.items) {
+        item.tintColor = AppConfiguration.headerTextColor;
+    }
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
     UINib *nib = [UINib nibWithNibName:@"MyLogTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
@@ -121,8 +122,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.rightBarButtonItem=nil;
         
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Log_Screen"];
     }
@@ -140,8 +140,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [swipe_Recognizer_Previous setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.tableView addGestureRecognizer:swipe_Recognizer_Previous];
     
-    UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
-
     self.logDaySummary = [[LogDaySummaryView alloc] initWithFrame:CGRectZero];
     self.logDaySummary.translatesAutoresizingMaskIntoConstraints = NO;
     __weak typeof(self) weakSelf = self;
@@ -166,11 +164,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"My Log";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
     [self updateCalorieTotal];
     [self updateAppleWatchData];
@@ -252,7 +247,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [favoriteButton addTarget:self action:@selector(saveFavoriteMeal:) forControlEvents:UIControlEventTouchUpInside];
     UIImage *image = [[UIImage imageNamed:@"03-heart.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [favoriteButton setImage:image forState:UIControlStateNormal];
-    favoriteButton.tintColor = PrimaryColor
+    favoriteButton.tintColor = AppConfiguration.headerColor;
     favoriteButton.tag = section;
     favoriteButton.hidden = [sectionTitle isEqualToString:@"Exercise"];
     [headerView addSubview:favoriteButton];
@@ -300,7 +295,9 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     NSString *foodNameText = nil;
     NSString *calorieText = nil;
-    
+    // Url to link to if needed.
+    NSURL *foodNameURL = nil;
+
     if ([sectionTitle isEqualToString:@"Exercise"]) {
         NSArray *exerciseResultsArray = [self.exerciseResults copy];
         NSDictionary *dict = exerciseResultsArray[indexPath.row];
@@ -340,28 +337,21 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         foodNameText = [dict valueForKey:@"ActivityName"];
     } else {
         NSDictionary *dict = self.sectionFoodsDict[sectionTitle][@"Foods"][indexPath.row];
-        NSString *nameString = [dict valueForKey:@"Name"];
-        NSRange r = [nameString rangeOfString:nameString];
-        foodNameText = nameString;
+        foodNameText = [dict valueForKey:@"Name"];
         
         NSNumber *foodCategory = [dict valueForKey:@"CategoryID"];
         if ([foodCategory intValue] == 66) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            NSString *hostname = [prefs stringForKey:@"HostName"];
+            DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+            NSString *hostname = currentUser.hostName;
             NSNumber *recipeID = [dict valueForKey:@"RecipeID"];
-            if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
-                cell.lblFoodName.delegate = self;
-                NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:url] withRange:r];
+            if (hostname.length && recipeID != nil && [recipeID intValue] > 0) {
+                NSString *urlString = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
+                foodNameURL = [NSURL URLWithString:urlString];
             }
-            
         } else {
-            NSString *foodURL = [dict valueForKey:@"FoodURL"];
-            if (foodURL != nil && ![foodURL isEqualToString:@""]) {
-                cell.lblFoodName.delegate = self;
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-            } else {
-                cell.lblFoodName.delegate = nil;
+            NSString *foodURLString = [dict valueForKey:@"FoodURL"];
+            if (foodURLString.length) {
+                foodNameURL = [NSURL URLWithString:foodURLString];
             }
         }
         calorieText = [NSString stringWithFormat:@"%i Calories",[[dict valueForKey:@"TotalCalories"] intValue]];
@@ -381,6 +371,14 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     // after text is set.
     cell.lblCalories.text = calorieText;
     cell.lblFoodName.text = foodNameText;
+
+    if (foodNameURL) {
+        NSRange range = NSMakeRange(0, foodNameText.length);
+        [cell.lblFoodName addLinkToURL:foodNameURL withRange:range];
+        cell.lblFoodName.delegate = self;
+    } else {
+        cell.lblFoodName.delegate = nil;
+    }
 
     return cell;
 }
@@ -783,9 +781,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     
     int exerciseIDTemp = 274;
     minutesExercised = stepCount;
-    
-    [db beginTransaction];
-    
+        
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     NSDateFormatter *outdateformatter = [[NSDateFormatter alloc] init];
     [outdateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -834,8 +830,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                              date_string,
                              logTimeString];
     
+    [db beginTransaction];
     [db executeUpdate:insertQuery];
-    
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
     }
@@ -847,8 +843,6 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     if (![db open]) {
     }
         
-    [db beginTransaction];
-    
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* systemTimeZone = [NSTimeZone systemTimeZone];
     [self.dateFormatter setTimeZone:systemTimeZone];
@@ -893,6 +887,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
                              (int)caloriesBurned,
                              date_string,
                              logTimeString];
+    [db beginTransaction];
     [db executeUpdate:insertQuery];
     if ([db hadError]) {
         DMLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);

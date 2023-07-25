@@ -52,12 +52,11 @@ static NSString *CellIdentifier = @"CellIdentifier";
     }
     
     // Special case.
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"mobilefit"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"mobilefit"]) {
         // No exercise.
         self.exerciseOptionsArray = @[];
     }
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         self.tblLogAdd.backgroundView = nil;
         self.tblLogAdd.backgroundColor = [UIColor clearColor];
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Select_Meal_TVGray"]];

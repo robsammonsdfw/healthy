@@ -31,7 +31,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Filter..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O02-Jc-ZY5">
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Filter..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O02-Jc-ZY5">
                             <rect key="frame" x="10" y="66" width="355" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -49,7 +49,7 @@
                                 <action selector="bodyPartAction:" destination="-1" eventType="touchUpInside" id="b5O-KE-id9"/>
                             </connections>
                         </button>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Filter..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kmv-ap-TI0">
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Filter..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kmv-ap-TI0">
                             <rect key="frame" x="10" y="106" width="355" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -104,13 +104,13 @@
                         <constraint firstItem="kmv-ap-TI0" firstAttribute="leading" secondItem="Zf7-bb-boi" secondAttribute="leading" constant="10" id="B89-ml-f5x"/>
                         <constraint firstItem="kmv-ap-TI0" firstAttribute="leading" secondItem="O02-Jc-ZY5" secondAttribute="leading" id="D8V-BO-CPf"/>
                         <constraint firstItem="eXi-2G-Tgm" firstAttribute="top" secondItem="Zf7-bb-boi" secondAttribute="top" id="F26-bl-luL"/>
-                        <constraint firstAttribute="trailing" secondItem="O02-Jc-ZY5" secondAttribute="trailing" constant="10" id="HyM-Ww-K1b"/>
+                        <constraint firstItem="O02-Jc-ZY5" firstAttribute="trailing" secondItem="Zf7-bb-boi" secondAttribute="trailing" constant="-10" id="HyM-Ww-K1b"/>
                         <constraint firstAttribute="trailing" secondItem="Lev-Xm-JGh" secondAttribute="trailing" constant="21" id="KSR-6U-ILV"/>
                         <constraint firstItem="3fx-5G-9sR" firstAttribute="leading" secondItem="kmv-ap-TI0" secondAttribute="leading" id="MGY-1J-vfh"/>
                         <constraint firstItem="O02-Jc-ZY5" firstAttribute="leading" secondItem="Zf7-bb-boi" secondAttribute="leading" constant="10" id="Qyi-C9-Nqu"/>
                         <constraint firstItem="Lev-Xm-JGh" firstAttribute="centerY" secondItem="O02-Jc-ZY5" secondAttribute="centerY" id="RJT-oz-ydG"/>
                         <constraint firstItem="Khu-nT-uxM" firstAttribute="bottom" secondItem="O02-Jc-ZY5" secondAttribute="bottom" id="RmA-1c-KXS"/>
-                        <constraint firstAttribute="trailing" secondItem="eXi-2G-Tgm" secondAttribute="trailing" id="SF7-ZC-gBq"/>
+                        <constraint firstItem="eXi-2G-Tgm" firstAttribute="trailing" secondItem="Zf7-bb-boi" secondAttribute="trailing" id="SF7-ZC-gBq"/>
                         <constraint firstItem="Lev-Xm-JGh" firstAttribute="trailing" secondItem="zYa-jJ-NdL" secondAttribute="trailing" id="Sca-P5-bj0"/>
                         <constraint firstItem="hFx-zN-U18" firstAttribute="leading" secondItem="kmv-ap-TI0" secondAttribute="leading" id="VKM-TS-dYL"/>
                         <constraint firstItem="Khu-nT-uxM" firstAttribute="trailing" secondItem="O02-Jc-ZY5" secondAttribute="trailing" id="Y4E-5s-z9w"/>
@@ -140,10 +140,10 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="tbk-Br-Egk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="AQK-L6-Gf8"/>
-                <constraint firstAttribute="bottom" secondItem="tbk-Br-Egk" secondAttribute="bottom" id="EUh-a3-Xwg"/>
+                <constraint firstItem="tbk-Br-Egk" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="EUh-a3-Xwg"/>
                 <constraint firstItem="Zf7-bb-boi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="EtI-g6-62S"/>
-                <constraint firstAttribute="trailing" secondItem="tbk-Br-Egk" secondAttribute="trailing" id="Iu6-Wc-wuP"/>
-                <constraint firstAttribute="trailing" secondItem="Zf7-bb-boi" secondAttribute="trailing" id="Txj-xN-M15"/>
+                <constraint firstItem="tbk-Br-Egk" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="Iu6-Wc-wuP"/>
+                <constraint firstItem="Zf7-bb-boi" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="Txj-xN-M15"/>
                 <constraint firstItem="Zf7-bb-boi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Uos-RW-xXg"/>
                 <constraint firstItem="tbk-Br-Egk" firstAttribute="top" secondItem="Zf7-bb-boi" secondAttribute="bottom" id="m7d-Bf-cKY"/>
             </constraints>

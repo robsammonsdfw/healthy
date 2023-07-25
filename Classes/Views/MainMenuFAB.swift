@@ -13,7 +13,7 @@ import JJFloatingActionButton
 class MainMenuFAB: NSObject, UINavigationControllerDelegate {
     /// The colors of the button and images.
     private let buttonColor:UIColor = .white
-    private let buttonImageColor:UIColor = .black
+    private let buttonImageColor:UIColor = AppConfiguration.homeIconForegroundColor
     
     /// The navigation controller that the FAB is presented in and uses
     /// for navigation.
@@ -95,9 +95,11 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
             self.navigationController?.setViewControllers([self.rootViewController, self.mealPlanViewController], animated: false)
         }
 
-        let myMovesImage = UIImage(named: "Icon awesome-dumbbell")?.withRenderingMode(.alwaysTemplate)
-        actionButton.addItem(title: "MyMoves", image: myMovesImage) { item in
-            self.navigationController?.setViewControllers([self.rootViewController, self.myMovesViewController], animated: false)
+        if AppConfiguration.enableMyMoves {
+            let myMovesImage = UIImage(named: "Icon awesome-dumbbell")?.withRenderingMode(.alwaysTemplate)
+            actionButton.addItem(title: "MyMoves", image: myMovesImage) { item in
+                self.navigationController?.setViewControllers([self.rootViewController, self.myMovesViewController], animated: false)
+            }
         }
 
         let settingsImage = UIImage(named: "gear")?.withRenderingMode(.alwaysTemplate)
@@ -119,7 +121,7 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
         controller.view.addSubview(actionButton)
         let safeAreaLayoutGuide = controller.view.safeAreaLayoutGuide
         actionButton.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
-        actionButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        actionButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
     
     /// Resets to Home.
@@ -150,6 +152,11 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
         }
         // Hide on MealPlanDetailViewController
         if viewController.isKind(of: MealPlanDetailViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        // Hide on AppSettings
+        if viewController.isKind(of: AppSettings.self) {
             actionButton.isHidden = true
             return
         }

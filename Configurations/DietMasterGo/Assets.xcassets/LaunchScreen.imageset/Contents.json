@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "DMGO_SplashScreen1242x2688.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

@@ -75,9 +75,10 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
     self.segmentedControl.underlineSelected = YES;
     self.segmentedControl.segmentStyle = ScrollableSegmentedControlSegmentStyleTextOnly;
-    self.segmentedControl.segmentContentColor = [UIColor darkGrayColor];
-    self.segmentedControl.selectedSegmentContentColor = [UIColor blackColor];
-    self.segmentedControl.backgroundColor = [UIColor whiteColor];
+    self.segmentedControl.segmentContentColor = AppConfiguration.headerTextColor;
+    self.segmentedControl.selectedSegmentContentColor = AppConfiguration.headerTextColor;
+    self.segmentedControl.backgroundColor = AppConfiguration.headerColor;
+    self.segmentedControl.tintColor = AppConfiguration.headerTextColor;
     [self.segmentedControl addTarget:self action:@selector(categorySegmentChanged:) forControlEvents:UIControlEventValueChanged];
     // Set the different segment values.
     [self.segmentedControl insertSegmentWithTitle:@"All Foods" at:0];
@@ -93,6 +94,8 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     self.mySearchBar.placeholder = @"Search";
     self.mySearchBar.delegate = self;
     self.mySearchBar.showsCancelButton = YES;
+    self.mySearchBar.barTintColor = AppConfiguration.headerColor;
+    self.mySearchBar.tintColor = AppConfiguration.headerTextColor;
     [self.mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [self.view addSubview:self.mySearchBar];
     
@@ -132,13 +135,12 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
     [btnRight setImage:plusImage forState:UIControlStateNormal];
     [btnRight setBackgroundColor:[UIColor clearColor]];
     [btnRight addTarget:self action:@selector(userTappedAddNewFoodButton:) forControlEvents:UIControlEventTouchUpInside];
-    [btnRight setTintColor:[UIColor whiteColor]];
+    [btnRight setTintColor:AppConfiguration.headerTextColor];
     UIBarButtonItem *barBtnRight = [[UIBarButtonItem alloc] initWithCustomView:btnRight];
     self.navigationItem.rightBarButtonItem = barBtnRight;
     
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -402,7 +404,7 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
 
     if (self.foodResults.count == 0) {
         [cell lblFoodName].adjustsFontSizeToFitWidth = YES;
-        cell.lblFoodName.textColor = [UIColor lightGrayColor];
+        cell.lblFoodName.textColor = [UIColor grayColor];
         [[cell lblFoodName] setText:@"No results found..."];
         cell.lblFoodName.font = [UIFont systemFontOfSize:16.0];
         cell.selectionStyle =  UITableViewCellSelectionStyleNone;
@@ -414,33 +416,32 @@ static NSString *CellIdentifier = @"MyLogTableViewCell";
         
         NSDictionary *dict1 = [[NSDictionary alloc] initWithDictionary:[self.foodResults objectAtIndex:indexPath.row]];
         NSString *nameString = [dict1 valueForKey:@"Name"];
-        
-        NSRange r = [nameString rangeOfString:nameString];
-        cell.lblFoodName.text = nameString;
-        
+        NSURL *foodNameURL = nil;
         NSNumber *foodCategory = [dict1 valueForKey:@"CategoryID"];
         
         if ([foodCategory intValue] == 66) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            NSString *hostname = [prefs stringForKey:@"HostName"];
+            DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+            NSString *hostname = currentUser.hostName;
             NSNumber *recipeID = [dict1 valueForKey:@"RecipeID"];
-            
-            if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
-                cell.userInteractionEnabled = YES;
-                cell.lblFoodName.delegate = self;
+            if (hostname.length && recipeID != nil && [recipeID intValue] > 0) {
                 NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:url] withRange:r];
+                foodNameURL = [NSURL URLWithString:url];
             }
-            
         } else {
-            NSString *foodURL = [dict1 valueForKey:@"FoodURL"];
-            if (foodURL != nil && ![foodURL isEqualToString:@""]) {
-                cell.userInteractionEnabled = YES;
-                cell.lblFoodName.delegate = self;
-                [cell.lblFoodName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-            } else {
-                cell.lblFoodName.delegate = nil;
+            NSString *foodURLString = [dict1 valueForKey:@"FoodURL"];
+            if (foodURLString.length) {
+                foodNameURL = [NSURL URLWithString:foodURLString];
             }
+        }
+        
+        cell.lblFoodName.text = nameString;
+
+        if (foodNameURL) {
+            NSRange range = NSMakeRange(0, nameString.length);
+            [cell.lblFoodName addLinkToURL:foodNameURL withRange:range];
+            cell.lblFoodName.delegate = self;
+        } else {
+            cell.lblFoodName.delegate = nil;
         }
     }
     

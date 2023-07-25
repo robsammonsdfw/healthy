@@ -48,16 +48,15 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.titleLabel.textColor=PrimaryDarkFontColor
-    self.staticRecomCalLbl.textColor = PrimaryFontColor
-    self.staticCalPlannedLbl.textColor = PrimaryFontColor
+    self.staticRecomCalLbl.textColor = AppConfiguration.footerTextColor;
+    self.staticCalPlannedLbl.textColor = AppConfiguration.footerTextColor;
 
-    self.imgbar.backgroundColor = PrimaryColor
+    self.imgbar.backgroundColor = AppConfiguration.footerColor;
     self.imgbar.layer.cornerRadius = 25;
     self.imgbar.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
     self.imgbar.clipsToBounds = YES;
 
-    self.imgbarline.backgroundColor = RGB(255, 255, 255, 0.5);
+    self.imgbarline.backgroundColor = AppConfiguration.footerTextColor;
   
     self.tableView.estimatedRowHeight = 70;
     self.tableView.estimatedSectionHeaderHeight = 44;
@@ -84,37 +83,39 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 
     [self.infoBtn addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchUpInside];
     [self.infoBtn setUserInteractionEnabled:YES];
+    self.infoBtn.tintColor = AppConfiguration.footerTextColor;
     
     self.title = @"Meal Details";
     [self.navigationItem setTitle:@"Meal Details"];
 
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
                                    initWithTitle: @"Back"
                                    style: UIBarButtonItemStylePlain
                                    target: nil action: nil];
-    backButton.tintColor=[UIColor whiteColor];
+    backButton.tintColor = AppConfiguration.footerTextColor;
     [self.navigationItem setBackBarButtonItem: backButton];
     
-    
     self.titleLabel.text = self.mealPlan.mealName;
-    self.titleLabel.backgroundColor = PrimaryDarkColor
+    self.titleLabel.backgroundColor = AppConfiguration.headerColor;
+    self.titleLabel.textColor = AppConfiguration.headerTextColor;
    
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                  target:self
                                                                                  action:@selector(showActionSheet:)];
     rightButton.style = UIBarButtonItemStylePlain;
-    rightButton.tintColor = [UIColor whiteColor];
+    rightButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = rightButton;
+    
+    self.caloriesPlannedLabel.textColor = AppConfiguration.footerTextColor;
+    self.recommendedCaloriesLabel.textColor = AppConfiguration.footerTextColor;
     
     [self updateCalorieLabels];
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
     }
 }
@@ -373,31 +374,36 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
                                 [mealItem.numberOfServings doubleValue], measureDesc];
     NSString *foodName = food.name ?: @"Missing Food: Contact your provider.";
     NSNumber *foodCategory = food.categoryId;
-    NSRange r = [foodName rangeOfString:foodName];
+    NSURL *foodNameURL = nil;
     
     if ([foodCategory intValue] == 66) {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *hostname = [prefs stringForKey:@"HostName"];
+        DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
+        NSString *hostname = currentUser.hostName;
         NSNumber *recipeID = food.recipeId;
         if (hostname != nil && ![hostname isEqualToString:@""] && recipeID != nil && [recipeID intValue] > 0) {
             cell.userInteractionEnabled = YES;
             cell.lblMealName.delegate = self;
             NSString *url = [NSString stringWithFormat:@"%@/PDFviewer.aspx?ReportName=CustomRecipe&ID=%@", hostname, recipeID];
-            [cell.lblMealName addLinkToURL:[NSURL URLWithString:url] withRange:r];
+            foodNameURL = [NSURL URLWithString:url];
         }
         
     } else {
-        NSString *foodURL = food.foodURL;
-        if (foodURL != nil && ![foodURL isEqualToString:@""]) {
+        NSString *foodURLString = food.foodURL;
+        if (foodURLString.length) {
             cell.userInteractionEnabled = YES;
-            cell.lblMealName.delegate = self;
-            [cell.lblMealName addLinkToURL:[NSURL URLWithString:foodURL] withRange:r];
-        } else {
-            cell.lblMealName.delegate = nil;
+            foodNameURL = [NSURL URLWithString:foodURLString];
         }
     }
     
     cell.lblMealName.text = foodName;
+
+    if (foodNameURL) {
+        NSRange range = NSMakeRange(0, foodName.length);
+        [cell.lblMealName addLinkToURL:foodNameURL withRange:range];
+        cell.lblMealName.delegate = self;
+    } else {
+        cell.lblMealName.delegate = nil;
+    }
 
     return cell;
 }

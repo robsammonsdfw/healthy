@@ -35,32 +35,30 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"My Goal";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeInfoLight];
     [btn1 addTarget:self action:@selector(goToSafetyGuidelines:) forControlEvents:UIControlEventTouchDown];
-    btn1.tintColor = UIColor.whiteColor;
+    btn1.tintColor = AppConfiguration.headerTextColor;
     
     UIBarButtonItem * infoButton = [[UIBarButtonItem alloc] initWithCustomView:btn1];
     self.navigationItem.leftBarButtonItem = infoButton;
 
-    _imgbg.backgroundColor=[UIColor whiteColor];
+    _imgbg.backgroundColor = [UIColor whiteColor];
     
-    noDataLabel.textColor = PrimaryDarkColor;
-    segmentedControl.backgroundColor = PrimaryFontColor;
-    _goalWeightLbl.textColor = PrimaryFontColor;
-    _WeightLbl.textColor = PrimaryFontColor;
+    noDataLabel.textColor = [UIColor blackColor];
+    segmentedControl.backgroundColor = [UIColor blackColor];
+    _goalWeightLbl.textColor = AppConfiguration.headerTextColor;
+    _WeightLbl.textColor = AppConfiguration.headerTextColor;
     
-    _imgtop.backgroundColor = PrimaryColor
-    self.btnrecordyourweight.backgroundColor = PrimaryDarkColor;
+    _imgtop.backgroundColor = AppConfiguration.headerColor;
+    self.btnrecordyourweight.backgroundColor = AppConfiguration.buttonColor;
+    [self.btnrecordyourweight setTitleColor:AppConfiguration.buttonTextColor forState:UIControlStateNormal];
     _btnrecordyourweight.layer.cornerRadius = 5;
     
-    segmentedControl.backgroundColor = PrimaryDarkColor
-    segmentedControl.tintColor = AccentColor
+    segmentedControl.backgroundColor = [UIColor blackColor];
+    segmentedControl.tintColor = [UIColor blackColor];
     
     UIColor *tintColor = [segmentedControl tintColor];
     UIImage *tintColorImage = [DMGUtilities imageWithColor:tintColor];
@@ -78,12 +76,11 @@
     self.scatterPlot = [[TUTSimpleScatterPlot alloc] initWithHostingView:_graphHostingView];
     [self getDataForDays:30];
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
     UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         backgroundImage.image = [UIImage imageNamed:@"Weight_Chart"];
     }
-    if ([accountCode isEqualToString:@"gymmatrix"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"gymmatrix"]) {
         for (id view in self.view.subviews) {
             if ([view isKindOfClass:[UILabel class]]) {
                 UILabel *label = (UILabel *)view;
@@ -153,8 +150,6 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationItem.hidesBackButton = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     

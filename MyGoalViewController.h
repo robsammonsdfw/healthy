@@ -11,7 +11,7 @@
 #import "CorePlot-CocoaTouch.h"
 #import "TUTSimpleScatterPlot.h"
 
-@interface MyGoalViewController : UIViewController {
+@interface MyGoalViewController : BaseViewController {
 	
 	IBOutlet UILabel *lbl_weightGoal;
 	int num_weightGoal;

@@ -12,10 +12,10 @@
 @property (nonatomic) DMMessageCellType messageCellType;
 
 @property (nonatomic, strong) UIImageView *bgImageView;
-@property (nonatomic, strong) UIImage *bgOpponentImage;
-@property (nonatomic, strong) UIImage *bgOwnerImage;
-@property (nonatomic, strong) UIColor *opponentTextColor;
-@property (nonatomic, strong) UIColor *ownerTextColor;
+/// Recipient of message (Coach / Professional)
+@property (nonatomic, strong) UIImage *recipientImage;
+/// Sender of message (User).
+@property (nonatomic, strong) UIImage *userImage;
 @end
 
 @implementation MessageCell
@@ -34,13 +34,11 @@
     self.bgImageView.contentMode = UIViewContentModeScaleToFill;
     self.messageLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
     
-    self.bgOpponentImage = [UIImage imageNamed:@"opponent_bg"];
-    self.bgOpponentImage = [self.bgOpponentImage resizableImageWithCapInsets:UIEdgeInsetsMake(10, 15, 10, 15) resizingMode:UIImageResizingModeStretch];
-    self.bgOwnerImage = [UIImage imageNamed:@"owner_bg"];
-    self.bgOwnerImage = [self.bgOwnerImage resizableImageWithCapInsets:UIEdgeInsetsMake(10, 15, 10, 15) resizingMode:UIImageResizingModeStretch];
+    self.recipientImage = [UIImage imageNamed:@"opponent_bg"];
+    self.recipientImage = [self.recipientImage resizableImageWithCapInsets:UIEdgeInsetsMake(10, 15, 10, 15) resizingMode:UIImageResizingModeStretch];
+    self.userImage = [UIImage imageNamed:@"owner_bg"];
+    self.userImage = [self.userImage resizableImageWithCapInsets:UIEdgeInsetsMake(10, 15, 10, 15) resizingMode:UIImageResizingModeStretch];
     
-    self.opponentTextColor = [UIColor blackColor];
-    self.ownerTextColor = [UIColor whiteColor];
     self.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
     
     NSMutableDictionary *mutableActiveLinkAttributes = [NSMutableDictionary dictionary];
@@ -59,15 +57,16 @@
 - (void)setMessage:(DMMessage *)message withCellType:(DMMessageCellType)cellType {
     self.messageCellType = cellType;
     
-    self.bgImageView.image = (self.messageCellType == DMMessageCellTypeResponse) ? self.bgOpponentImage : self.bgOwnerImage;
+    self.bgImageView.image = (self.messageCellType == DMMessageCellTypeResponse) ? self.recipientImage : self.userImage;
     self.bgImageView.image = [self.bgImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     if (self.messageCellType == DMMessageCellTypeMine){
-        self.bgImageView.tintColor = PrimaryColor;
+        self.bgImageView.tintColor = AppConfiguration.chatSenderColor;
+        self.messageLabel.textColor = AppConfiguration.chatSenderTextColor;
     } else {
-        self.bgImageView.tintColor = OpponentMessageImageColor;
+        self.bgImageView.tintColor = AppConfiguration.chatRecipientColor;
+        self.messageLabel.textColor = AppConfiguration.chatRecipientTextColor;
     }
     
-    self.messageLabel.textColor = UIColor.blackColor;
     self.messageLabel.text = message.text;
     self.messageLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
     self.messageLabel.delegate = self;

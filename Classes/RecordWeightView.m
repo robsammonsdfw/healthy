@@ -33,36 +33,34 @@
 
     self.dateFormatter = [[NSDateFormatter alloc] init];
     
-    self.btnrecordweight.backgroundColor = PrimaryColor
+    self.btnrecordweight.backgroundColor = AppConfiguration.buttonColor;
+    [self.btnrecordweight setTitleColor:AppConfiguration.buttonTextColor forState:UIControlStateNormal];
     self.btnrecordweight.layer.cornerRadius = 5;
 
 	[self.txtfieldWeight becomeFirstResponder];
 
 	[self setTitle:@"Log Weight"];
-    	
+    
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Date"
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
                                                                   action:@selector(changeDate:)];
+    editButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = editButton;
         
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Log_Weight_Screen"];
     }
     
     [self updateDate];
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"isKgs"] boolValue]) {
-        self.lblUnit.text = @"lbs";
-    } else {
+    
+    if (NSLocale.currentLocale.usesMetricSystem) {
         self.lblUnit.text = @"Kgs";
+    } else {
+        self.lblUnit.text = @"lbs";
     }
+    self.lblUnit.textColor = [UIColor blackColor];
 }
 
 - (IBAction)changeDate:(id) sender {

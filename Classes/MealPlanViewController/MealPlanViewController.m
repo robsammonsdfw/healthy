@@ -84,11 +84,10 @@ static NSString *CellIdentifier = @"Cell";
                                                            style:UIBarButtonItemStylePlain
                                                           target:self
                                                           action:@selector(showActionSheet:)];
-    self.aBarButtonItem.tintColor = [UIColor whiteColor];
+    self.aBarButtonItem.tintColor = AppConfiguration.headerTextColor;
     [self.navigationItem setRightBarButtonItem:self.aBarButtonItem];
 
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"My_Plan_Background"];
     }
@@ -118,9 +117,11 @@ static NSString *CellIdentifier = @"Cell";
         [self.navigationItem setLeftBarButtonItem:nil];
     } else {
         UIBarButtonItem *aBarButtonItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(loadGroceryList)];
+        aBarButtonItem2.tintColor = AppConfiguration.headerTextColor;
         [self.navigationItem setRightBarButtonItem:aBarButtonItem2];
         
         UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(showGroceryList)];
+        cancelButton.tintColor = AppConfiguration.headerTextColor;
         [self.navigationItem setLeftBarButtonItem:cancelButton];
     }
     

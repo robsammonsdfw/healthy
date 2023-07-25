@@ -8,5 +8,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyLogViewController : UIViewController
+@interface MyLogViewController : BaseViewController
 @end

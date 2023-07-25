@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /// Displays a user's favorite meals to choose from and add to log.
-@interface FavoriteMealsViewController : UIViewController
+@interface FavoriteMealsViewController : BaseViewController
 
 - (instancetype)initWithMealCode:(DMLogMealCode)mealCode
                     selectedDate:(NSDate *)selectedDate NS_DESIGNATED_INITIALIZER;

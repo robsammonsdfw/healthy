@@ -154,6 +154,9 @@
         }
         [self.currentUser updateUserDetails:userDict];
         [self saveCurrentUserToDefaultsAndDatabase];
+        // Save value to Crashlytics for debugging:
+        [[FIRCrashlytics crashlytics] setCustomValue:self.currentUser.userId forKey:@"UID"];
+        [[FIRCrashlytics crashlytics] setCustomValue:self.currentUser.authToken forKey:@"Token"];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
                 completionBlock(self.currentUser, nil);

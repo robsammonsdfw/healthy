@@ -43,8 +43,6 @@
     newBackButton.tintColor = UIColor.whiteColor;
     self.navigationItem.leftBarButtonItem = newBackButton;
     self.navigationItem.title = @"Subscription";
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    
 }
 
 - (void)closeModal {
@@ -193,7 +191,7 @@
     NSArray *arrData = [[NSBundle mainBundle]loadNibNamed:@"headerVw" owner:nil options:nil];
     headerVw *cell = [[headerVw alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     cell = [arrData objectAtIndex:0];
-    cell.accentClrVw.backgroundColor = AccentColor;
+    cell.accentClrVw.backgroundColor = [UIColor blackColor];
     cell.planLbl.text = [self dayPlan][section];
     return cell;
 }

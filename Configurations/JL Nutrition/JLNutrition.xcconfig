@@ -1,0 +1,118 @@
+//
+//  DietMasterGoPlus App Config
+//
+//  Created by Henry T Kirk on 7/3/23.
+//
+// *****************************************************************************
+// ******* DIRECTIONS FOR USE: *************************************************
+// *****************************************************************************
+// Replace the values on the right with what you'd like to use in the app.
+//
+// Note: Ensure this .xcconfig file is attached to the proper "Build Target",
+//       otherwise you'll end up with weird behaviors.
+// Note: Don't ever use "//" in any value, as it's invalid for this file.
+// Note: Don't wrap values in quotes like this: "My Value". Only put My Value.
+// Note: If you have weird results, make sure the Asset catalog and other files
+//       have the correct "Target Membership".
+// Note: This file should never have "Target Membership" selected for any apps.
+// *****************************************************************************
+
+// ************************************
+// ****** INCLUDES INFORMATION ********
+// ************************************
+#include "Configurations/BaseConfig.xcconfig"
+
+// Ensure this include line has "APP_NAME_HERE" replaced with the name of
+// the app that you put in the Podfile. If you get an error when building, it
+// likely means you didn't run the `pod install` command or the value is incorrect.
+// This should match the name of the value in "target 'DietMasterGoPlus' do".
+// #include "Pods/Target Support Files/Pods-APP_NAME_HERE/Pods-APP_NAME_HERE.distribution.xcconfig"
+#include "Pods/Target Support Files/Pods-JLNutrition/Pods-JLNutrition.distribution.xcconfig"
+
+// ************************************
+// ****** BUILD INFORMATION ***********
+// ************************************
+
+// The name shown under the app icon.
+DMG_BUNDLE_DISPLAY_NAME = JL Nutrition
+// The bundle identifier of the app. E.g. "com.dietmastergoplus".
+DMG_BUNDLE_IDENTIFIER = com.dietmaster.JLNutrition
+// The "Developer Team" prefix, found in Apple Developer console.
+// Example: "7NH27AHXU3" is the DietMaster Team name.
+DMG_APPLE_TEAM_PREFIX = HXSH3695HJ
+// The product name, no spaces. E.g. "DietMasterGoPlus".
+DMG_PRODUCT_NAME = JLNutrition
+
+// ************************************
+// ********* REPLICA DEFAULTS *********
+// ************************************
+
+// Formerly app_name_short.
+DMG_APP_NAME_SHORT = JL Nutrition
+// Formerly app_name_long.
+DMG_APP_NAME_LONG = JL Nutrition
+// Formerly support_email.
+DMG_SUPPORT_EMAIL = jlucasnutrition@gmail.com
+// Formerly account_code.
+DMG_ACCOUNT_CODE = jl_nutrition
+// Enable MyMoves or not for the user. YES = Add it, NO = Don't!
+DMG_MYMOVES_ENABLED = YES
+
+// ************************************
+// ********* COLOR SCHEME *************
+// ************************************
+
+// The color of the text on the Login view and buttons.
+DMG_LOGINVIEW_TEXTCOLOR = #FFFFFF
+
+// Background color when needed in the app.
+DMG_BACKGROUND_COLOR = #FFFFFF
+
+// The foreground color for the "Hamburger" home menu.
+DMG_HOME_ICON_FOREGROUND_COLOR = #B70000
+// The home menu icon color on the tiles.
+DMG_MENU_ICON_COLOR = #AAB7BF
+
+// Color for any header background if needed.
+DMG_HEADER_COLOR = #AAB7BF
+// Text color for any header if needed.
+DMG_HEADER_TEXTCOLOR = #000000
+
+// Button colors where needed.
+DMG_BUTTON_COLOR = #AAB7BF
+// Button text colors where needed.
+DMG_BUTTON_TEXTCOLOR = #000000
+
+// Settings "Switch" ON Color.
+DMG_SWITCH_ON_COLOR = #AAB7BF
+
+// Footer background color where needed.
+DMG_FOOTER_COLOR = #AAB7BF
+// Text color for any footer if needed.
+DMG_FOOTER_TEXTCOLOR = #000000
+
+// The color in the weight chart.
+DMG_CHART_COLOR = #000000
+// The color of a point on the weight chart.
+DMG_CHART_POINT_COLOR = #FF0000
+// The circle color in the MyMoves calendar. #BFBFBF is light gray.
+DMG_CALENDAR_MOVEDAY_COLOR = #BFBFBF
+
+// Colors for the Messages Chat.
+// Sender = Current User, Recipient = Coach/Professional.
+DMG_CHAT_SENDER_COLOR = #AAB7BF
+DMG_CHAT_SENDER_TEXTCOLOR = #000000
+DMG_CHAT_RECIPIENT_COLOR = #E5E5E9
+DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
+
+// ************************************
+// *************** IMAGES *************
+// ************************************
+
+// Background image for the Login page. The name should match the
+// Asset catalog image name.
+DMG_LOGIN_BACKGROUND_IMAGE = login-background
+// The image name from the Asset catalog for launch image.
+DMG_LAUNCH_IMAGE = LaunchScreen
+// The app icon name from the Asset catalog.
+DMG_APP_ICON = AppIcon

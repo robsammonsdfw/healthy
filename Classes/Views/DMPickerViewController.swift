@@ -14,7 +14,7 @@ class DMEmptyRow: NSObject, DMPickerViewDataSource {
 
 /// Controller that displays a picker for the user to choose and
 /// option from.
-class DMPickerViewController : UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class DMPickerViewController : BaseViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     private weak var presentingController: UIViewController?
     private var navController: UINavigationController?
     private var pickerView = {

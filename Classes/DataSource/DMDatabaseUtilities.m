@@ -31,7 +31,9 @@
     NSNumber *minValue = nil;
     while ([rs next]) {
         NSDictionary *resultDict = [rs resultDictionary];
-        minValue = resultDict[@"MinValue"];
+        if (![resultDict[@"MinValue"] isEqual:[NSNull null]]) {
+            minValue = resultDict[@"MinValue"];
+        }
     }
     [rs close];
     if ([db hadError]) {

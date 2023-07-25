@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 /// Shows the user's grocery list that they can check off.
-@interface GroceryListViewController : UIViewController
+@interface GroceryListViewController : BaseViewController
 @end

@@ -1,7 +1,0 @@
-//
-//  config-adhoc.xcconfig
-//
-
-PRODUCT_NAME = DietMaster Go
-CURRENT_PROJECT_VERSION = 1.4
-BUNDLE_ID = com.dietmaster.dietmastergo

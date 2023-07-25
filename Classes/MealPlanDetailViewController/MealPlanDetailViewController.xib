@@ -39,7 +39,8 @@
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="14"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <color key="shadowColor" red="0.0" green="0.41176470590000003" blue="0.62745098040000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <size key="shadowOffset" width="0.0" height="0.0"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27" userLabel="Summary ImageView">
                     <rect key="frame" x="0.0" y="582" width="375" height="85"/>
@@ -49,7 +50,7 @@
                     </constraints>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ctp-hx-3qa" userLabel="Divider ImageView">
-                    <rect key="frame" x="187" y="590" width="1" height="77"/>
+                    <rect key="frame" x="187" y="582" width="1" height="85"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="1" id="4KP-MI-8RZ"/>
                     </constraints>
@@ -122,7 +123,7 @@
                 <constraint firstItem="13" firstAttribute="top" secondItem="12" secondAttribute="top" id="81p-NS-hne"/>
                 <constraint firstItem="22" firstAttribute="leading" secondItem="12" secondAttribute="leading" id="8VO-GM-af0"/>
                 <constraint firstItem="13" firstAttribute="leading" secondItem="12" secondAttribute="leading" id="9au-pV-dOp"/>
-                <constraint firstItem="Ctp-hx-3qa" firstAttribute="top" secondItem="27" secondAttribute="top" constant="8" id="EIZ-PT-MjO"/>
+                <constraint firstItem="Ctp-hx-3qa" firstAttribute="top" secondItem="27" secondAttribute="top" id="EIZ-PT-MjO"/>
                 <constraint firstItem="XhH-Ct-LqP" firstAttribute="leading" secondItem="12" secondAttribute="leading" constant="20" id="FbK-wA-j0Q"/>
                 <constraint firstItem="XhH-Ct-LqP" firstAttribute="trailing" secondItem="12" secondAttribute="trailing" constant="-20" id="ITa-V9-aOM"/>
                 <constraint firstItem="v4f-Em-dRS" firstAttribute="leading" secondItem="12" secondAttribute="leading" constant="20" id="IoN-Ar-Mq3"/>

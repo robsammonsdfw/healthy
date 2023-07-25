@@ -20,15 +20,6 @@
     return self;
 }
 
-#pragma mark - App Config
-
-+ (NSString *)configValueForKey:(NSString *)key {
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:PLIST_NAME];
-    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:finalPath];
-    return appDefaults[key];
-}
-
 #pragma mark - Sync Helpers
 
 static NSString *DMLastSyncPrefsKey = @"lastsyncdate";

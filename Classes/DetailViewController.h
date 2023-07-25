@@ -15,7 +15,7 @@
 #define cSection2 1
 #define cSection3 2
 
-@interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
+@interface DetailViewController : BaseViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
 
 	IBOutlet UILabel *lblText;
 	IBOutlet UILabel *lblMealName;

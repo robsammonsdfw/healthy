@@ -1291,6 +1291,7 @@
                 </scrollView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="d1b-re-7W1"/>
+            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="j28-Ra-7Z7" firstAttribute="top" secondItem="cHF-bz-2I6" secondAttribute="top" id="21M-fw-ork"/>
                 <constraint firstItem="j28-Ra-7Z7" firstAttribute="leading" secondItem="cHF-bz-2I6" secondAttribute="leading" id="B2D-V3-2dc"/>

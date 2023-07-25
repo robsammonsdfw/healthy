@@ -37,6 +37,12 @@
 @property (nonatomic, strong) IBOutlet UIButton *signUpBtn;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImgVw;
 
+@property (nonatomic, strong) IBOutlet UILabel *pleaseLoginLabel;
+@property (nonatomic, strong) IBOutlet UILabel *needHelpLabel;
+@property (nonatomic, strong) IBOutlet UILabel *secureConnectionLabel;
+@property (nonatomic, strong) IBOutlet UIButton *privacyPolicyButton;
+@property (nonatomic, strong) IBOutlet UIButton *termsOfServiceButton;
+
 /// Completion block that should be called when login is complete.
 @property (nonatomic, copy) completionBlockWithError completionBlock;
 
@@ -48,12 +54,6 @@
 
 @implementation LoginViewController
 
-static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
-static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
-static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
-static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
-static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
-
 - (instancetype)init {
     self = [super initWithNibName:@"LoginViewController" bundle:nil];
     return self;
@@ -64,35 +64,29 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"]  isEqual: @"MyMoves"]) {
-        self.backgroundImgVw.image = [UIImage imageNamed:@"login-background-plus"];
-    } else {
-        self.backgroundImgVw.image = [UIImage imageNamed:@"login-background"];
-    }
-
+    self.backgroundImgVw.image = AppConfiguration.loginBackgroundImage;
     self.appNameLabel.hidden = false;
     self.imgtop.hidden = false;
 
-    self.loginButton.backgroundColor=PrimaryColor
-    self.loginButton.layer.cornerRadius=5;
+    self.loginButton.backgroundColor = AppConfiguration.buttonColor;
+    self.loginButton.layer.cornerRadius = 5;
     
-    self.emailbtuuon.backgroundColor=PrimaryColor
-    self.emailbtuuon.layer.cornerRadius=5;
+    self.emailbtuuon.backgroundColor = AppConfiguration.buttonColor;
+    self.emailbtuuon.layer.cornerRadius = 5;
     
-    self.signUpBtn.backgroundColor=PrimaryColor
-    self.signUpBtn.layer.cornerRadius=5;
+    self.signUpBtn.backgroundColor = AppConfiguration.buttonColor;
+    self.signUpBtn.layer.cornerRadius = 5;
     self.signUpBtn.hidden = YES;
     if (self.signUpBtn.hidden) {
         [self.loginButton.leadingAnchor constraintEqualToAnchor:self.passwordField.leadingAnchor constant:0].active = YES;
     }
     
-    self.imgtop.backgroundColor=PrimaryColor
+    self.imgtop.backgroundColor = AppConfiguration.headerColor;
     
-    NSString *appName = [DMGUtilities configValueForKey:@"app_name_long"];
+    NSString *appName = AppConfiguration.appNameLong;
     self.appNameLabel.text = appName;
     
-    NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-    if ([accountCode isEqualToString:@"ezdietplanner"]) {
+    if ([AppConfiguration.accountCode isEqualToString:@"ezdietplanner"]) {
         UIImageView *backgroundImage = (UIImageView *)[self.view viewWithTag:501];
         backgroundImage.image = [UIImage imageNamed:@"Login_Screen"];
         [self.loginButton setBackgroundImage:[UIImage imageNamed:@"button_small"] forState:UIControlStateNormal];
@@ -105,10 +99,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
     // Set text colors.
-    self.appNameLabel.textColor = [UIColor blackColor];
-    [self.loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.signUpBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.emailbtuuon setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.appNameLabel.textColor = AppConfiguration.headerTextColor;
+    [self.loginButton setTitleColor:AppConfiguration.buttonTextColor forState:UIControlStateNormal];
+    [self.signUpBtn setTitleColor:AppConfiguration.buttonTextColor forState:UIControlStateNormal];
+    [self.emailbtuuon setTitleColor:AppConfiguration.buttonTextColor forState:UIControlStateNormal];
+
+    self.pleaseLoginLabel.textColor = AppConfiguration.loginViewTextColor;
+    self.needHelpLabel.textColor = AppConfiguration.loginViewTextColor;
+    self.secureConnectionLabel.textColor = AppConfiguration.loginViewTextColor;
+    [self.privacyPolicyButton setTitleColor:AppConfiguration.loginViewTextColor forState:UIControlStateNormal];
+    [self.termsOfServiceButton setTitleColor:AppConfiguration.loginViewTextColor forState:UIControlStateNormal];
 
     // Enable iCloud Password Autofill.
     self.usernameField.textContentType = UITextContentTypeUsername;
@@ -196,7 +196,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             [DMActivityIndicator hideActivityIndicator];
             self.loginButton.enabled = YES;
             if (error) {
-                [DMGUtilities showAlertWithTitle:APP_NAME message:error.localizedDescription inViewController:nil];
+                [DMGUtilities showAlertWithTitle:AppConfiguration.appNameShort message:error.localizedDescription inViewController:nil];
                 return;
             }
             if (self.completionBlock) {
@@ -207,24 +207,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (IBAction)emailUs:(id)sender {
-    NSString *appName = [DMGUtilities configValueForKey:@"app_name_short"];
+    NSString *appName = AppConfiguration.appNameShort;
     NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", appName];
 
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
         [mailComposer setSubject:subjectString];
         [mailComposer setMessageBody:@"" isHTML:NO];
-        [mailComposer setToRecipients:@[Support_Email]];
+        [mailComposer setToRecipients:@[AppConfiguration.supportEmail]];
         mailComposer.mailComposeDelegate = self;
         mailComposer.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         [self presentViewController:mailComposer animated:YES completion:nil];
     }
     else {
-        NSString *urlString = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", Support_Email, [subjectString encodeStringForURL], [@"" encodeStringForURL]];
+        NSString *urlString = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", AppConfiguration.supportEmail, [subjectString encodeStringForURL], [@"" encodeStringForURL]];
         NSURL *mailToURL = [NSURL URLWithString:urlString];
         [[UIApplication sharedApplication] openURL:mailToURL options:@{} completionHandler:^(BOOL success) {
             if (!success) {
-                [DMGUtilities showAlertWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
+                [DMGUtilities showAlertWithTitle:AppConfiguration.appNameShort
+                                         message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings."
+                                inViewController:nil];
             }
         }];
     }

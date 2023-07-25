@@ -105,14 +105,14 @@ int const MaximumStringLength = 300;
                                                                                  target:self
                                                                                  action:@selector(syncMessages:)];
     syncButton.style = UIBarButtonItemStylePlain;
-    syncButton.tintColor = [UIColor blackColor];
+    syncButton.tintColor = AppConfiguration.headerTextColor;
     self.navigationItem.rightBarButtonItem = syncButton;
 
     self.title = @"Messages";
     self.navigationItem.title = @"Messages";
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

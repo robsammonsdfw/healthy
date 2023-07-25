@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'DietMasterGo' target in the 'DietMasterGo' project
+// Prefix header for all source files of the DietMaster Go app and replicas.
 //
 
 #ifdef __OBJC__
@@ -8,6 +8,7 @@
     #import <FirebaseCrashlytics/FirebaseCrashlytics.h>
 
     #import "DietMasterGoAppDelegate.h"
+    #import "BaseViewController.h"
     #import "DMGUtilities.h"
     #import "DMActivityIndicator.h"
     #import "NSObject+Description.h"
@@ -36,29 +37,15 @@
 #define DM_LOG(__FORMAT__, ...) [[FIRCrashlytics crashlytics] logWithFormat:__FORMAT__, ##__VA_ARGS__];
 
 //Color
-#define RGB(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 //DMGOPLUS
-#define PrimaryColor UIColorFromRGB(0xF2C53D);
 #define PrimaryDarkColor UIColorFromRGB(0x444746);
-#define AccentColor UIColorFromRGB(0x000000);
-#define ProgressColor UIColorFromRGB(0x000000);
 
 //DMGOPLUS
 #define PrimaryFontColor [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1];
 #define PrimaryDarkFontColor [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1];
 #define AccentFontColor [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1];
-
-//DMGOPLUS
-#define graphGraindentColor [CPTGradient gradientWithBeginningColor:UIColorFromRGB(0x000000) endingColor:[CPTColor colorWithCGColor:UIColorFromRGB(0x000000).CGColor]]
-
-//HHT to change image color dynamically
-#define OpponentMessageImageColor [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:234.0/255.0 alpha:1];
-
-#define PLIST_NAME @"AppDefaults.plist"
-#define Support_Email @"apps.dmgo@dietmastersoftware.com"
-#define APP_NAME @"DietMaster Go"
 
 #pragma mark ----> In-App Purchase :-
 

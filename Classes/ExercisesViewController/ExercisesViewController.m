@@ -73,7 +73,6 @@ static NSString *CellIdentifier = @"Cell";
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
 
     [self.navigationItem setTitle:@"Exercises"];
     self.title = @"Exercises";
@@ -148,8 +147,7 @@ static NSString *CellIdentifier = @"Cell";
         NSString *activityName = [[NSString alloc] initWithString:[rs stringForColumn:@"ActivityName"]];
         NSNumber *caloriesPerHour = [NSNumber numberWithDouble:[[rs stringForColumn:@"CaloriesPerHour"] doubleValue]];
         
-        NSString *accountCode = [DMGUtilities configValueForKey:@"account_code"];
-        if (![accountCode isEqualToString:@"42_onthego"]) {
+        if (![AppConfiguration.accountCode isEqualToString:@"42_onthego"]) {
             if ([exerciseID intValue] == 265 || [exerciseID intValue] == 266) {
                 continue;
             }
@@ -204,7 +202,7 @@ static NSString *CellIdentifier = @"Cell";
     // Show empty cell if needed.
     if ([results count] == 0) {
         [cell textLabel].adjustsFontSizeToFitWidth = YES;
-        cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.textLabel.textColor = [UIColor grayColor];
         cell.textLabel.font = [UIFont systemFontOfSize:17.0];
         cell.detailTextLabel.text = @"";
         [[cell textLabel] setText:@"No results found..."];

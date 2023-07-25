@@ -253,7 +253,7 @@ import FMDB
         let defaultValue = NSNumber(floatLiteral: 0.0)
         guard let database = database, database.open() == true else { return defaultValue }
         
-        let query = "SELECT weight FROM weightlog where logtime in (select max(logtime) from weightlog WHERE deleted = 1) AND deleted = 1"
+        let query = "SELECT weight FROM weightlog WHERE logtime IN (SELECT MAX(logtime) FROM weightlog WHERE deleted = 1) AND deleted = 1"
         
         var currentWeight = 0.0
 
@@ -274,8 +274,8 @@ import FMDB
         let defaultValue = NSNumber(floatLiteral: 0.0)
         guard let database = database, database.open() == true else { return defaultValue }
         
-        let query = "SELECT weight FROM weightlog WHERE logtime LIKE '%%%@%%' AND deleted = 1"
-        
+        let query = "SELECT weight FROM weightlog WHERE logtime IN (SELECT MIN(logtime) FROM weightlog WHERE deleted = 1) AND deleted = 1"
+
         var startingWeight = 0.0
 
         do {

@@ -73,6 +73,9 @@
     
     // NOTE: The RootViewController is created in the SceneDelegate now.
 
+    // Validate the app configuration values are present.
+    [AppConfiguration validateConfiguration];
+    
     return YES;
 }
 

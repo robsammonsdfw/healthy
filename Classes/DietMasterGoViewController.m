@@ -171,7 +171,7 @@
     self.leftStatus = @"new";
     self.weightStatus = @"up";
 
-    self.nameLbl.textColor = [UIColor blackColor];
+    self.nameLbl.textColor = AppConfiguration.headerTextColor;
     // Adjust button colors.
     UIImage *chatImage = self.sendMsgButton.imageView.image;
     chatImage = [chatImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -179,8 +179,8 @@
     UIImage *emailImage = self.sendMailButton.imageView.image;
     emailImage = [emailImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.sendMailButton setImage:emailImage forState:UIControlStateNormal];
-    [self.sendMsgButton setTintColor:[UIColor blackColor]];
-    [self.sendMailButton setTintColor:[UIColor blackColor]];
+    [self.sendMsgButton setTintColor:AppConfiguration.headerTextColor];
+    [self.sendMailButton setTintColor:AppConfiguration.headerTextColor];
 
     [UIView animateWithDuration:0.25 animations:^{
         self.hideShowConstant.constant = 0;
@@ -218,6 +218,9 @@
     self.numberBadge.shadow = NO;
     self.numberBadge.font = [UIFont systemFontOfSize:12];
     self.numberBadge.hideWhenZero = YES;
+    
+    self.scrollView.backgroundColor = AppConfiguration.headerColor;
+    self.view.backgroundColor = AppConfiguration.headerColor;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -244,12 +247,9 @@
     [self.cpf_Values addObject:[NSNumber numberWithDouble:0]];
     [self.cpf_Values addObject:[NSNumber numberWithDouble:0]];
     
-    if (![[[NSUserDefaults standardUserDefaults] stringForKey:@"switch"] isEqual:@"MyMoves"])
-    {
-        self.workoutView.hidden = YES;
-        self.scheduledView.hidden = YES;
-    }
-    
+    self.workoutView.hidden = !AppConfiguration.enableMyMoves;
+    self.scheduledView.hidden = !AppConfiguration.enableMyMoves;
+
     [self updateBadge];
     [self reloadData];
 }
@@ -260,7 +260,6 @@
     } else if (pieChartView == _cpf_Pie) {
         return self.cpf_Values.count;
     }
-    
     return 0;
 }
 
@@ -269,35 +268,24 @@
 }
 
 - (UIColor *)pieChartView:(MCPieChartView *)pieChartView colorForSliceAtIndex:(NSInteger)index {
-    if (pieChartView == _remaining_Pie)
-    {
-        if (index == 0)
-        {
+    if (pieChartView == _remaining_Pie) {
+        if (index == 0) {
             return [UIColor blackColor]; // Used up fill.
         }
-        else
-        {
-            return UIColorFromHexString(@"#64BB60"); // Green remaining fill.
+        return UIColorFromHexString(@"#64BB60"); // Green remaining fill.
+    } else if (pieChartView == _cpf_Pie) {
+        if (self.cpf_Values.count > 1) {
+            if (index == 0) {
+                return UIColorFromHexString(@"#0095B8");
+            } else if(index == 1) {
+                return UIColorFromHexString(@"#64BB60");
+            } else if(index == 2) {
+                return UIColorFromHexString(@"#C15F6E");
+            } else {
+                return UIColorFromHexString(@"#E8E8E8");
+            }
         }
-    }
-    else if (pieChartView == _cpf_Pie)
-    {
-        if (index == 0)
-        {
-            return UIColorFromHexString(@"#0095B8");
-        }
-        else if(index == 1)
-        {
-            return UIColorFromHexString(@"#64BB60");
-        }
-        else if(index == 2)
-        {
-            return UIColorFromHexString(@"#C15F6E");
-        }
-        else
-        {
-            return UIColorFromHexString(@"#E8E8E8");
-        }
+        return UIColorFromHexString(@"#E8E8E8");
     }
     
     return [UIColor whiteColor];
@@ -308,27 +296,24 @@
 }
 
 - (CGFloat)pieChartView:(MCPieChartView *)pieChartView valueForSliceAtIndex:(NSInteger)index {
-    if (pieChartView == _remaining_Pie)
-    {
-        return [[self.values objectAtIndex:index] floatValue];
-    }
-    else if (pieChartView == _cpf_Pie)
-    {
-        return [[self.cpf_Values objectAtIndex:index] floatValue];
+    if (pieChartView == _remaining_Pie) {
+        return [[self.values copy][index] floatValue];
+    } else if (pieChartView == _cpf_Pie) {
+        return [[self.cpf_Values copy][index] floatValue];
     }
     
     return 0;
 }
 
 - (void)buttonStyle:(UIButton *)sender imageToSet:(UIImage *)image {
-    UIColor *borderColor = PrimaryDarkColor
+    UIColor *borderColor = [UIColor darkGrayColor];
     sender.layer.cornerRadius = 15.0f;
     sender.layer.borderColor = borderColor.CGColor;
     sender.layer.borderWidth = 1.0f;
     sender.clipsToBounds = YES;
     
     [sender setImage:image forState:UIControlStateNormal];
-    sender.tintColor = PrimaryDarkColor;
+    sender.tintColor = [UIColor blackColor];
 }
 
 - (void)plusBtnColor {
@@ -340,9 +325,9 @@
     [self buttonStyle:_burnedPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 }
 
--(void)shadowView:(UIView *)selectedView {
+- (void)shadowView:(UIView *)selectedView {
     selectedView.layer.shadowColor = UIColorFromHexString(@"#d7d7d7").CGColor;
-    selectedView.layer.shadowOffset = CGSizeMake(8, 3);
+    selectedView.layer.shadowOffset = CGSizeMake(4, 3);
     selectedView.layer.shadowOpacity = 1;
     selectedView.layer.shadowRadius = 2;
     selectedView.layer.masksToBounds = NO;
@@ -361,37 +346,35 @@
     [self shadowView:self.scheduledView];
 }
 
--(void)setColorsForViews {
-    _firstExpandVw.backgroundColor  = PrimaryDarkColor
-    _secondExpandVw.backgroundColor = PrimaryDarkColor
-    _consumedView.backgroundColor   = PrimaryDarkColor
-    _sugarView.backgroundColor      = PrimaryDarkColor
-    _plannedView.backgroundColor    = PrimaryDarkColor
-    _weightView.backgroundColor     = PrimaryDarkColor
-    _stepsView.backgroundColor      = PrimaryDarkColor
-    _burnedView.backgroundColor     = PrimaryDarkColor
-    _workoutView.backgroundColor    = PrimaryDarkColor
-    _scheduledView.backgroundColor  = PrimaryDarkColor
-    _headerBlueVw.backgroundColor = PrimaryColor
-    _scrollView.backgroundColor = PrimaryColor
+- (void)setColorsForViews {
+    _firstExpandVw.backgroundColor  = [UIColor lightGrayColor];
+    _secondExpandVw.backgroundColor = [UIColor lightGrayColor];
+    _consumedView.backgroundColor   = [UIColor lightGrayColor];
+    _sugarView.backgroundColor      = [UIColor lightGrayColor];
+    _plannedView.backgroundColor    = [UIColor lightGrayColor];
+    _weightView.backgroundColor     = [UIColor lightGrayColor];
+    _stepsView.backgroundColor      = [UIColor lightGrayColor];
+    _burnedView.backgroundColor     = [UIColor lightGrayColor];
+    _workoutView.backgroundColor    = [UIColor lightGrayColor];
+    _scheduledView.backgroundColor  = [UIColor lightGrayColor];
 }
 
--(void)iconsColor:(UIImageView *)image {
-    UIColor *accentColor = PrimaryColor
+- (void)iconsColor:(UIImageView *)image {
     image.image = [image.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [image setTintColor:accentColor];
+    [image setTintColor:AppConfiguration.menuIconColor];
 }
 
--(void)changeImageColors {
-    [self iconsColor:_homeImage];
-    [self iconsColor:_consumedImage];
-    [self iconsColor:_suagrGraphImageVw];
-    [self iconsColor:_plannedImage];
-    [self iconsColor:_weightImage];
-    [self iconsColor:_stepsImage];
-    [self iconsColor:_burnedImage];
-    [self iconsColor:_workoutImage];
-    [self iconsColor:_scheduledImage];
+- (void)changeImageColors {
+    [self iconsColor:self.homeImage];
+    [self iconsColor:self.consumedImage];
+    [self iconsColor:self.suagrGraphImageVw];
+    [self iconsColor:self.plannedImage];
+    [self iconsColor:self.weightImage];
+    [self iconsColor:self.stepsImage];
+    [self iconsColor:self.burnedImage];
+    [self iconsColor:self.workoutImage];
+    [self iconsColor:self.scheduledImage];
+    self.headerBlueVw.backgroundColor = AppConfiguration.menuIconColor;
 }
 
 #pragma mark Message Actions
@@ -405,7 +388,7 @@
     DMAuthManager *authManager = [DMAuthManager sharedInstance];
     DMUser *currentUser = [authManager loggedInUser];
 
-    NSString *appName = [DMGUtilities configValueForKey:@"app_name_short"];
+    NSString *appName = AppConfiguration.appNameShort;
     NSString *subjectString = [NSString stringWithFormat:@"%@ App Help & Support", appName];
     NSString *emailTo = currentUser.email1;
 
@@ -422,7 +405,7 @@
         NSURL *mailToURL = [NSURL URLWithString:urlString];
         [[UIApplication sharedApplication] openURL:mailToURL options:@{} completionHandler:^(BOOL success) {
             if (!success) {
-                [DMGUtilities showAlertWithTitle:APP_NAME message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
+                [DMGUtilities showAlertWithTitle:AppConfiguration.appNameShort message:@"There are no Mail accounts configured. You can add or create a Mail account in Settings." inViewController:nil];
             }
         }];
     }
@@ -440,7 +423,6 @@
     vc.title = @"My Goal";
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
-
 }
 
 - (IBAction)addExerciseBtn:(id)sender {
@@ -560,11 +542,6 @@
     }];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self.values removeAllObjects];
-}
-
 - (void)updateBadge {
     if ([NSThread isMainThread]) {
         DMMessagesDataProvider *provider = [[DMMessagesDataProvider alloc] init];
@@ -655,6 +632,10 @@
     if ([NSThread isMainThread]) {
         DMAuthManager *authManager = [DMAuthManager sharedInstance];
         DMUser *currentUser = [authManager loggedInUser];
+        if (!currentUser) {
+            self.nameLbl.text = @"";
+            return;
+        }
         NSString *name = [NSString stringWithFormat: @"Hi, %@!", currentUser.firstName];
         self.nameLbl.text = name;
         [self loadData];
@@ -685,9 +666,8 @@
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_suagrGraphImageVw setTintColor:[UIColor redColor]];
     } else {
-        UIColor *accentColor = PrimaryColor
         _suagrGraphImageVw.image = [_suagrGraphImageVw.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [_suagrGraphImageVw setTintColor:accentColor];
+        [_suagrGraphImageVw setTintColor:AppConfiguration.menuIconColor];
     }
             
     self.lblGoal_lbs.text = [currentUser weightGoalLocalizedString];
@@ -731,37 +711,47 @@
     // Now lay out the chart. We'll use whole numbers because I believe there's a bug
     // with the chart when you're using decimals.
     // Get total calories consumed.
-    double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
-    double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
-    double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
-    double totalPercentage = [dayProvider getCurrentBMR].doubleValue;
-    // Percentages.
-    double fatGramActualPercent = round((fatCalories / totalPercentage) * 100);
-    double proteinGramActualPercent = round((proteinCalories / totalPercentage) * 100);
-    double carbsGramActualPercent = round((carbCalories / totalPercentage) * 100);
-    // Check for invalid numbers.
-    if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
-        carbsGramActualPercent = 0;
+    double totalPercentage = [dayProvider getTotalCaloriesConsumedWithDate:nil].doubleValue;
+    [self.cpf_Values removeAllObjects];
+    if (totalPercentage <= 0) {
+        [self.cpf_Values addObject:@(100)];
         self.c_PercentageLbl.text = @"0";
-    } else {
-        self.c_PercentageLbl.text = [@(carbsGramActualPercent) stringValue];
-    }
-    if (proteinGramActualPercent < 0 || isnan(proteinGramActualPercent)) {
         self.p_PercentageLbl.text = @"/0/";
-    } else {
-        self.p_PercentageLbl.text = [NSString stringWithFormat: @"/%@/", @(proteinGramActualPercent)];
-    }
-    if (fatGramActualPercent < 0 || isnan(fatGramActualPercent)) {
         self.f_PercentageLbl.text = @"0";
     } else {
-        self.f_PercentageLbl.text = [@(fatGramActualPercent) stringValue];
+        double fatCalories = [dayProvider getTotalFatCaloriesWithDate:nil].doubleValue;
+        double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
+        double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
+        // Percentages.
+        double fatGramActualPercent = round((fatCalories / totalPercentage) * 100);
+        double proteinGramActualPercent = round((proteinCalories / totalPercentage) * 100);
+        double carbsGramActualPercent = round((carbCalories / totalPercentage) * 100);
+        // Check for invalid numbers.
+        if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
+            carbsGramActualPercent = 0;
+            self.c_PercentageLbl.text = @"0";
+        } else {
+            self.c_PercentageLbl.text = [@(carbsGramActualPercent) stringValue];
+        }
+        if (proteinGramActualPercent < 0 || isnan(proteinGramActualPercent)) {
+            proteinGramActualPercent = 0;
+            self.p_PercentageLbl.text = @"/0/";
+        } else {
+            self.p_PercentageLbl.text = [NSString stringWithFormat: @"/%@/", @(proteinGramActualPercent)];
+        }
+        if (fatGramActualPercent < 0 || isnan(fatGramActualPercent)) {
+            fatGramActualPercent = 0;
+            self.f_PercentageLbl.text = @"0";
+        } else {
+            self.f_PercentageLbl.text = [@(fatGramActualPercent) stringValue];
+        }
+        [self.cpf_Values addObject:@(fatGramActualPercent)];
+        [self.cpf_Values addObject:@(proteinGramActualPercent)];
+        [self.cpf_Values addObject:@(carbsGramActualPercent)];
     }
-    [self.cpf_Values removeAllObjects];
-    [self.cpf_Values addObject:@(fatGramActualPercent)];
-    [self.cpf_Values addObject:@(proteinGramActualPercent)];
-    [self.cpf_Values addObject:@(carbsGramActualPercent)];
-    [self.cpf_Values addObject:@(100 - carbsGramActualPercent + proteinGramActualPercent + fatGramActualPercent)];
-    [self.cpf_Pie reloadData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.cpf_Pie reloadData];
+    });
 
     // Display the consumed grams for the day.
     self.actualCarbLabel.text = [dayProvider getCarbGramsStringWithDate:[NSDate date]];
