@@ -26,8 +26,6 @@ static NSString *DMLastSyncPrefsKey = @"lastsyncdate";
 static NSString *DMFirstLaunchKey = @"FirstTime";
 static NSString *DMServerDateFormat = @"yyyy-MM-dd HH:mm:ss";
 
-/// Returns the formatted string: "yyyy-MM-dd HH:mm:ss" when the last data sync ocurred.
-/// If a sync has not happened, will return a date in 1970.
 + (NSString *)lastSyncDateString {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *dateString = nil;
@@ -37,10 +35,18 @@ static NSString *DMServerDateFormat = @"yyyy-MM-dd HH:mm:ss";
         [defaults setObject:@"SecondTime" forKey:DMFirstLaunchKey];
     } else {
         NSDate *lastSyncDate = [defaults valueForKey:DMLastSyncPrefsKey];
-        // If current date is missing, let's assume the last sync as a week ago.
+        if (lastSyncDate) {
+            // Always return 48 hours prior to the existing date to ensure we're getting
+            // the latest values.
+            lastSyncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
+                                                                    value:-2
+                                                                   toDate:lastSyncDate
+                                                                  options:0];
+        }
+        // If current date was never set, create a date 90 days ago.
         if (!lastSyncDate) {
             lastSyncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
-                                                                    value:-8
+                                                                    value:-90
                                                                    toDate:[NSDate date]
                                                                   options:0];
         }
@@ -73,6 +79,14 @@ static NSString *DMLastFoodSyncPrefsKey = @"FoodUpdateLastsyncDate";
         dateString = @"2015-01-01";
     } else {
         NSDate *lastSyncDate = [defaults valueForKey:DMLastFoodSyncPrefsKey];
+        if (lastSyncDate) {
+            // Always return 48 hours prior to the existing date to ensure we're getting
+            // the latest values.
+            lastSyncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
+                                                                    value:-2
+                                                                   toDate:lastSyncDate
+                                                                  options:0];
+        }
         // If current date is missing, let's assume the last sync as 90 days ago.
         if (!lastSyncDate) {
             lastSyncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay

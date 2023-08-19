@@ -51,17 +51,19 @@ static UIColor * __attribute__((unused)) UIColorFromHexString(NSString *hexColor
 
 #pragma mark - Sync Helpers
 
-/// Returns the formatted string: "yyyy-MM-dd HH:mm:ss" when the last data sync ocurred.
-/// This value is stored in user defaults.
-/// If a sync has not happened, will return a date in 2015.
+/// Returns the formatted string: "yyyy-MM-dd HH:mm:ss" when the last data sync ocurred,
+/// minus 2 days (to ensure we're getting latest).
+/// If a sync has not happened ever, will return a date in 1970 to get everything.
+/// If the last sync is nil, then it will default to 90 days ago.
 + (nonnull NSString *)lastSyncDateString;
 
 /// Sets the last sync date to the date provided, stores it ind efaults
-///  and returns the string value. Passing nil will cause the date to be
-///  -8 days ago for last sync.
+/// and returns the string value. Passing nil will cause the date to be
+/// -90 days ago for next sync.
 + (void)setLastSyncToDate:(nullable NSDate *)date;
 
-/// Returns the date string for a Food database sync.
+/// Returns the date string for a Food database sync, minus 2 days to
+/// ensure we're getting latest data.
 /// If it's never been set before, the value returned is 2015.
 /// If it was set, but an error happened, it'll be 90 days ago.
 + (NSString *)lastFoodSyncDateString;

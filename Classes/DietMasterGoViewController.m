@@ -198,11 +198,13 @@
 
     self.remaining_Pie.dataSource = self;
     self.remaining_Pie.delegate = self;
+    self.remaining_Pie.animationEnabled = YES;
     self.remaining_Pie.animationDuration = 0.5;
     
     self.cpf_Pie.dataSource = self;
     self.cpf_Pie.delegate = self;
-    self.cpf_Pie.animationDuration = 0.5;
+    self.cpf_Pie.animationDuration = 0;
+    self.cpf_Pie.animationEnabled = YES;
     self.cpf_Pie.internalRadius = 28;
     self.cpf_Pie.sliceColor = UIColor.lightGrayColor;
     self.cpf_Pie.borderPercentage = 0.5;
@@ -693,7 +695,7 @@
     [self.values removeAllObjects];
     [self.values addObject:@(userBMR - caloriesRemaining)];
     [self.values addObject:@(caloriesRemaining)];
-    [_remaining_Pie reloadData];
+    [self.remaining_Pie reloadData];
 
     NSString *burnedCaloriesString = [dayProvider getCaloriesBurnedViaExerciseStringWithDate:nil];
     NSString *consumedString = [dayProvider getTotalCaloriesConsumedStringWithDate:nil];
@@ -712,9 +714,9 @@
     // with the chart when you're using decimals.
     // Get total calories consumed.
     double totalPercentage = [dayProvider getTotalCaloriesConsumedWithDate:nil].doubleValue;
-    [self.cpf_Values removeAllObjects];
+    NSMutableArray *cpfTempArray = [NSMutableArray array];
     if (totalPercentage <= 0) {
-        [self.cpf_Values addObject:@(100)];
+        [cpfTempArray addObject:@(100)];
         self.c_PercentageLbl.text = @"0";
         self.p_PercentageLbl.text = @"/0/";
         self.f_PercentageLbl.text = @"0";
@@ -723,9 +725,9 @@
         double proteinCalories = [dayProvider getTotalProteinCaloriesWithDate:nil].doubleValue;
         double carbCalories = [dayProvider getTotalCarbCaloriesWithDate:nil].doubleValue;
         // Percentages.
-        double fatGramActualPercent = round((fatCalories / totalPercentage) * 100);
-        double proteinGramActualPercent = round((proteinCalories / totalPercentage) * 100);
-        double carbsGramActualPercent = round((carbCalories / totalPercentage) * 100);
+        double fatGramActualPercent = roundf((fatCalories / totalPercentage) * 100);
+        double proteinGramActualPercent = roundf((proteinCalories / totalPercentage) * 100);
+        double carbsGramActualPercent = roundf((carbCalories / totalPercentage) * 100);
         // Check for invalid numbers.
         if (carbsGramActualPercent < 0 || isnan(carbsGramActualPercent)) {
             carbsGramActualPercent = 0;
@@ -745,11 +747,17 @@
         } else {
             self.f_PercentageLbl.text = [@(fatGramActualPercent) stringValue];
         }
-        [self.cpf_Values addObject:@(fatGramActualPercent)];
-        [self.cpf_Values addObject:@(proteinGramActualPercent)];
-        [self.cpf_Values addObject:@(carbsGramActualPercent)];
+        [cpfTempArray addObject:@(fatGramActualPercent)];
+        [cpfTempArray addObject:@(proteinGramActualPercent)];
+        [cpfTempArray addObject:@(carbsGramActualPercent)];
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int)(0.30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+    [self.cpf_Values removeAllObjects];
+    [self.cpf_Values addObjectsFromArray:cpfTempArray];
+    [self.cpf_Pie reloadData];
+    // Call reload again because there seems to be a bug in pie charts
+    // with text in center.
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self.cpf_Pie reloadData];
     });
 
