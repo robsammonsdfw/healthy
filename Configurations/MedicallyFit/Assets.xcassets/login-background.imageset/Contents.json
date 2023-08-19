@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "MedicallyFit-LoginBG.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
