@@ -70,6 +70,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getMissingFoodsForMealItems:(NSArray<DMMealPlanItem *> *)itemsArray;
 /// Gets a food from the local database.
 - (DMFood *)getFoodForFoodKey:(NSNumber *)foodKey;
+/// Gets a food from the local database and includes measure information.
+- (DMFood *)getFoodForFoodKey:(NSNumber *)foodKey withMeasureID:(NSNumber *)measureID;
 
 /// Gets the measure description for MeasureID and FoodKey provided.
 - (NSString *)getMeasureDescriptionForMeasureId:(NSNumber *)measureId

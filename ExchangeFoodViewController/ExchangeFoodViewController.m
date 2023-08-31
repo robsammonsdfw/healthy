@@ -144,18 +144,21 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [DMActivityIndicator showActivityIndicator];
 
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-    DMFood *oldFood = [provider getFoodForFoodKey:self.mealPlanItem.foodId];
-    
-    double newCalories = [newFood.calories doubleValue];
-    double caloriesToMaintain = [oldFood.calories doubleValue];
-    double gramWeight = [oldFood.gramWeight doubleValue];
-    
-    double servings = caloriesToMaintain / (newCalories / gramWeight);
-    servings = [[NSString stringWithFormat:@"%.1f", servings] doubleValue];
-    
+    DMFood *oldFood = [provider getFoodForFoodKey:self.mealPlanItem.foodId withMeasureID:self.mealPlanItem.measureId];
+    // Determine how many calories we need to match.
+    double totalOldCalories = oldFood.calories.doubleValue * self.mealPlanItem.numberOfServings.doubleValue * oldFood.gramWeight.doubleValue / 100.0;
+
+    // Get the measureID that is closest to what we have.
     NSNumber *measureID = [provider getMeasureIDForFoodKey:newFood.foodKey
                                           fromMealPlanItem:self.mealPlanItem];
-    
+    DMFood *exchangedFood = [provider getFoodForFoodKey:newFood.foodKey withMeasureID:measureID];
+    double gramWeight = [exchangedFood.gramWeight doubleValue];
+    double newCalories = [exchangedFood.calories doubleValue];
+
+    // Calculate the servings for the new food
+    double servings = totalOldCalories * 100.0 / (newCalories * gramWeight);
+    servings = [[NSString stringWithFormat:@"%.1f", servings] doubleValue];
+
     NSDictionary *deleteDictTemp = @{@"MealID" : self.mealPlan.mealId,
                                      @"MealCode" : @(self.mealPlanItem.mealCode),
                                      @"FoodID" : self.mealPlanItem.foodId };
