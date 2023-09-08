@@ -245,6 +245,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle =  UITableViewCellSelectionStyleGray;
     [cell textLabel].adjustsFontSizeToFitWidth = NO;
+    cell.userInteractionEnabled = YES;
     cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.textLabel.numberOfLines = 0;
 
