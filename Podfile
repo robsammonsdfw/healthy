@@ -70,6 +70,10 @@ target 'YOUtrition' do
   core_pods
 end
 
+target 'SlimNation' do
+  core_pods
+end
+
 # Ensure all dependencies are a minimum version of iOS 15.
 post_install do |installer|
     installer.generated_projects.each do |project|
