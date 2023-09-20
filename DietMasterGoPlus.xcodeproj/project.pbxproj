@@ -1626,6 +1626,7 @@
 		0EF9770D2A8523680089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770A2A8523650089FC8D /* Assets.xcassets */; };
 		0EF9770E2A85236D0089FC8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770B2A8523650089FC8D /* GoogleService-Info.plist */; };
 		0EF9770F2A85262D0089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C722A56CE4900D8E7E2 /* Assets.xcassets */; };
+		2DF9329B09470370125D374E /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 523385A51C6AE3C7F5A1944A /* Pods_ReplicaTemplate.framework */; };
 		344D04E0062B1EF17D26813E /* Pods_DietMasterGoPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B488B5092C0776AE999195E4 /* Pods_DietMasterGoPlus.framework */; };
 		355F17FD1DB705DA96ED1F99 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		3A552991C0BB3A2CEA1D5E95 /* Pods_MyMealCoach.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B68C969F0E692DCDF0D76CB /* Pods_MyMealCoach.framework */; };
@@ -2126,6 +2127,7 @@
 		43D586641D59BB5F005354D2 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		468BDA5ABA39F68EA3A74425 /* Pods_MedicallyFit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MedicallyFit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5058C10EBC8FF61052DC68B9 /* Pods-ReplicaTemplate.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReplicaTemplate.distribution.xcconfig"; path = "Target Support Files/Pods-ReplicaTemplate/Pods-ReplicaTemplate.distribution.xcconfig"; sourceTree = "<group>"; };
+		523385A51C6AE3C7F5A1944A /* Pods_ReplicaTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReplicaTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		53018DCB97F98ACD128C3660 /* Pods-MedicallyFit.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MedicallyFit.distribution.xcconfig"; path = "Target Support Files/Pods-MedicallyFit/Pods-MedicallyFit.distribution.xcconfig"; sourceTree = "<group>"; };
 		5B687527A0012DA97C197D91 /* Pods-MyMealCoach.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMealCoach.release.xcconfig"; path = "Target Support Files/Pods-MyMealCoach/Pods-MyMealCoach.release.xcconfig"; sourceTree = "<group>"; };
 		5E0C9B04649669D69A63D1F2 /* Pods-JLNutrition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLNutrition.debug.xcconfig"; path = "Target Support Files/Pods-JLNutrition/Pods-JLNutrition.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2275,6 +2277,7 @@
 				D9BC158A98415FB751684271 /* (null) in Frameworks */,
 				09D5CFE36B0F38621A7F3354 /* (null) in Frameworks */,
 				CD6778D885ECCAC3ECD90C5D /* (null) in Frameworks */,
+				2DF9329B09470370125D374E /* Pods_ReplicaTemplate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3190,6 +3193,7 @@
 				468BDA5ABA39F68EA3A74425 /* Pods_MedicallyFit.framework */,
 				6ACCA5A680989E869035C75D /* Pods_YOUtrition.framework */,
 				69D8CBBC5BF328AAFA1A25A9 /* Pods_SlimNation.framework */,
+				523385A51C6AE3C7F5A1944A /* Pods_ReplicaTemplate.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3437,8 +3441,8 @@
 				0E04F3252AABAC6F0068A488 /* Resources */,
 				0E04F3572AABAC6F0068A488 /* Sources */,
 				0E04F3C12AABAC6F0068A488 /* Frameworks */,
-				0E04F3DB2AABAC6F0068A488 /* Embed Frameworks */,
 				0E04F3DC2AABAC6F0068A488 /* ShellScript */,
+				0E04F3DB2AABAC6F0068A488 /* Embed Frameworks */,
 				0E04F3DD2AABAC6F0068A488 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
