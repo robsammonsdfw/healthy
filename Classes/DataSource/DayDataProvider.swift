@@ -349,30 +349,33 @@ import FMDB
     @objc public func getCarbGramsString(date: Date?) -> String {
         guard let currentUser = currentUser else { return "0g" }
         let bmrValue = getCurrentBMR().doubleValue
-        let carbGrams = (currentUser.carbRatio.doubleValue / 100.0) * bmrValue / 4.0;
+        let caloriesPerGram = 4.0;
+        let carbGrams = (currentUser.carbRatio.doubleValue / 100.0) * bmrValue / caloriesPerGram;
         var consumedGrams = 0.0;
         if let date = date {
-            consumedGrams = getTotalCarbCalories(date: date).doubleValue / 4;
+            consumedGrams = getTotalCarbCalories(date: date).doubleValue / caloriesPerGram;
         }
         return numberToGramString(number: NSNumber(floatLiteral: carbGrams - consumedGrams))
     }
     @objc public func getProteinGramsString(date: Date?) -> String {
         guard let currentUser = currentUser else { return "0g" }
         let bmrValue = getCurrentBMR().doubleValue
-        let proteinGrams = (currentUser.proteinRatio.doubleValue / 100.0) * bmrValue / 4.0;
+        let caloriesPerGram = 4.0;
+        let proteinGrams = (currentUser.proteinRatio.doubleValue / 100.0) * bmrValue / caloriesPerGram;
         var consumedGrams = 0.0;
         if let date = date {
-            consumedGrams = getTotalProteinCalories(date: date).doubleValue / 4;
+            consumedGrams = getTotalProteinCalories(date: date).doubleValue / caloriesPerGram;
         }
         return numberToGramString(number: NSNumber(floatLiteral: proteinGrams - consumedGrams))
     }
     @objc public func getFatGramsString(date: Date?) -> String {
         guard let currentUser = currentUser else { return "0g" }
         let bmrValue = getCurrentBMR().doubleValue
-        let fatGrams = (currentUser.fatRatio.doubleValue / 100.0) * bmrValue / 9.0;
+        let caloriesPerGram = 9.0;
+        let fatGrams = (currentUser.fatRatio.doubleValue / 100.0) * bmrValue / caloriesPerGram;
         var consumedGrams = 0.0;
         if let date = date {
-            consumedGrams = getTotalFatCalories(date: date).doubleValue / 4;
+            consumedGrams = getTotalFatCalories(date: date).doubleValue / caloriesPerGram;
         }
         return numberToGramString(number: NSNumber(floatLiteral: fatGrams - consumedGrams))
     }

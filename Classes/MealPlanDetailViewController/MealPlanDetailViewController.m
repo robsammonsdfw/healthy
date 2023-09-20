@@ -233,7 +233,7 @@ static NSString *CellIdentifier = @"MealPlanDetailsTableViewCell";
 #pragma mark TABLE VIEW METHODS
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return (NSInteger)DMLogMealCodeSnackThree;
+    return (NSInteger)DMLogMealCodeSnackThree + 1;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

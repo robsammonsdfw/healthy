@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>4642952049-je6n230v7uqkm3ek737eo6jok7k27gks.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.4642952049-je6n230v7uqkm3ek737eo6jok7k27gks</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAkUUfkYYpsb5TyATIqypX4GTfV5Kj4cII</string>
+	<key>GCM_SENDER_ID</key>
+	<string>4642952049</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dietmaster.Quintessa</string>
+	<key>PROJECT_ID</key>
+	<string>dmgo-a94a4</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dmgo-a94a4.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:4642952049:ios:dad6f6f5530a056bb35cd0</string>
+	<key>DATABASE_URL</key>
+	<string>https://dmgo-a94a4.firebaseio.com</string>
+</dict>
+</plist>

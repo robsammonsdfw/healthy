@@ -62,6 +62,18 @@ target 'SweetStrength' do
   core_pods
 end
 
+target 'MedicallyFit' do
+  core_pods
+end
+
+target 'YOUtrition' do
+  core_pods
+end
+
+target 'SlimNation' do
+  core_pods
+end
+
 # Ensure all dependencies are a minimum version of iOS 15.
 post_install do |installer|
     installer.generated_projects.each do |project|
@@ -71,4 +83,12 @@ post_install do |installer|
                end
           end
    end
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            xcconfig_path = config.base_configuration_reference.real_path
+            xcconfig = File.read(xcconfig_path)
+            xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
+            File.open(xcconfig_path, "w") { |file| file << xcconfig_mod }
+        end
+    end
 end

@@ -1074,7 +1074,7 @@
     FMDatabase* db = [self database];
     if (![db open]) {
     }
-    DMFood *mealPlanFood = [self getFoodForFoodKey:mealPlanItem.foodId];
+    DMFood *mealPlanFood = [self getFoodForFoodKey:mealPlanItem.foodId withMeasureID:mealPlanItem.measureId];
     
     NSNumber *exchangeID = 0;
     NSInteger measureID = 0;
@@ -1085,7 +1085,7 @@
         exchangeID = mealPlanItem.measureId;
         
         if (exchangeID != 0) {
-            query = [NSString stringWithFormat: @"SELECT Measure.MeasureID, Measure.Description, FoodMeasure.FoodID, FoodMeasure.GramWeight FROM Measure INNER JOIN FoodMeasure ON Measure.MeasureID=FoodMeasure.MeasureID WHERE FoodMeasure.FoodID = %li AND FoodMeasure.MeasureID = %li", (long)[foodKey integerValue], (long)[exchangeID integerValue]];
+            query = [NSString stringWithFormat: @"SELECT Measure.MeasureID, Measure.Description, FoodMeasure.FoodID, FoodMeasure.GramWeight FROM Measure INNER JOIN FoodMeasure ON Measure.MeasureID = FoodMeasure.MeasureID WHERE FoodMeasure.FoodID = %li AND FoodMeasure.MeasureID = %li", (long)[foodKey integerValue], (long)[exchangeID integerValue]];
         
             FMResultSet *rs1 = [db executeQuery:query];
             int previousGramWeight = 0;
@@ -1518,7 +1518,7 @@
     
     NSMutableArray *missingFoods = [NSMutableArray array];
     for (DMMealPlanItem *planItem in itemsArray) {
-        NSString *query = [NSString stringWithFormat: @"SELECT COUNT (Food.FoodID) as FoodCount FROM Food "
+        NSString *query = [NSString stringWithFormat: @"SELECT COUNT (Food.FoodKey) as FoodCount FROM Food "
                            "INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey "
                            "INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID "
                            "WHERE Food.FoodKey = %i AND Measure.MeasureID = %i LIMIT 1",
@@ -1547,6 +1547,23 @@
     }
     
     NSString *query = [NSString stringWithFormat: @"SELECT * FROM Food WHERE FoodKey = %@", foodKey];
+    FMResultSet *rs = [db executeQuery:query];
+    DMFood *food = nil;
+    while ([rs next]) {
+        NSDictionary *resultDict = [rs resultDictionary];
+        food = [[DMFood alloc] initWithDictionary:resultDict];
+    }
+    [rs close];
+
+    return food;
+}
+
+- (DMFood *)getFoodForFoodKey:(NSNumber *)foodKey withMeasureID:(NSNumber *)measureID {
+    FMDatabase* db = [self database];
+    if (![db open]) {
+    }
+
+    NSString *query = [NSString stringWithFormat: @"SELECT Food.*, FoodMeasure.GramWeight, Measure.MeasureID, Measure.Description FROM Food INNER JOIN FoodMeasure ON FoodMeasure.FoodID = Food.FoodKey INNER JOIN Measure ON FoodMeasure.MeasureID = Measure.MeasureID WHERE FoodKey = %@ AND FoodMeasure.MeasureID = %@", foodKey, measureID];
     FMResultSet *rs = [db executeQuery:query];
     DMFood *food = nil;
     while ([rs next]) {

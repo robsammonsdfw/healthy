@@ -10,6 +10,7 @@
 @interface ExchangeFoodViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray *foodResults;
+@property (nonatomic, strong) NSArray *fetchedFoodResults;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UISearchBar *mySearchBar;
@@ -52,10 +53,13 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [self.view addSubview:self.tableView];
 
     self.mySearchBar = [[UISearchBar alloc] init];
+    self.mySearchBar.translatesAutoresizingMaskIntoConstraints = NO;
     self.mySearchBar.placeholder = @"Search Foods";
     self.mySearchBar.delegate = self;
     self.mySearchBar.showsCancelButton = YES;
     [self.mySearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    self.mySearchBar.barTintColor = AppConfiguration.headerColor;
+    self.mySearchBar.tintColor = AppConfiguration.headerTextColor;
     [self.view addSubview:self.mySearchBar];
     
     // Constrain
@@ -102,6 +106,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [searchBar resignFirstResponder];
     searchBar.text = @"";
     [self.foodResults removeAllObjects];
+    [self.foodResults addObjectsFromArray:self.fetchedFoodResults];
     [self.tableView reloadData];
 }
 
@@ -144,18 +149,43 @@ static NSString *CellIdentifier = @"CellIdentifier";
     [DMActivityIndicator showActivityIndicator];
 
     DMMyLogDataProvider *provider = [[DMMyLogDataProvider alloc] init];
-    DMFood *oldFood = [provider getFoodForFoodKey:self.mealPlanItem.foodId];
-    
-    double newCalories = [newFood.calories doubleValue];
-    double caloriesToMaintain = [oldFood.calories doubleValue];
-    double gramWeight = [oldFood.gramWeight doubleValue];
-    
-    double servings = caloriesToMaintain / (newCalories / gramWeight);
-    servings = [[NSString stringWithFormat:@"%.1f", servings] doubleValue];
-    
+    DMFood *oldFood = [provider getFoodForFoodKey:self.mealPlanItem.foodId withMeasureID:self.mealPlanItem.measureId];
+    // Determine how many calories we need to match.
+    double totalOldCalories = self.mealPlanItem.numberOfServings.doubleValue * (oldFood.calories.doubleValue  * (oldFood.gramWeight.doubleValue / 100.0) / oldFood.servingSize.doubleValue);
+
+    // Get the measureID that is closest to what we have.
     NSNumber *measureID = [provider getMeasureIDForFoodKey:newFood.foodKey
                                           fromMealPlanItem:self.mealPlanItem];
-    
+    DMFood *exchangedFood = [provider getFoodForFoodKey:newFood.foodKey withMeasureID:measureID];
+    double gramWeight = [exchangedFood.gramWeight doubleValue];
+    double newCalories = [exchangedFood.calories doubleValue];
+    if (gramWeight == 0){
+        gramWeight = 100.0;
+    }
+
+    // Calculate the servings for the new food.
+    double servings = totalOldCalories / ((newCalories * gramWeight) / newFood.servingSize.doubleValue);
+    double totalNewCalories = servings * ((newCalories * gramWeight) / newFood.servingSize.doubleValue);
+    double newFoodNumberOfServings = ((totalNewCalories) * 100) / ((newCalories / newFood.servingSize.doubleValue) * gramWeight);
+
+    double totalServingAmount = newFoodNumberOfServings;
+    double fraction = (totalServingAmount - (int)totalServingAmount);
+    if (0 < fraction && fraction < 0.25) {
+        totalServingAmount = (int) totalServingAmount;
+    }
+    else if (0.25 < fraction && fraction < 0.75) {
+        totalServingAmount = (int) totalServingAmount + 0.5;
+    }
+    else if (fraction > 0.75) {
+        totalServingAmount = (int) totalServingAmount + 1;
+    }
+    if (totalServingAmount == 0) {
+        totalServingAmount = 0.5;
+    }
+    if (isnan(totalServingAmount)) {
+      totalServingAmount = 0.5;
+    }
+
     NSDictionary *deleteDictTemp = @{@"MealID" : self.mealPlan.mealId,
                                      @"MealCode" : @(self.mealPlanItem.mealCode),
                                      @"FoodID" : self.mealPlanItem.foodId };
@@ -164,8 +194,8 @@ static NSString *CellIdentifier = @"CellIdentifier";
                                      @"FoodID" : newFood.foodKey,
                                      @"MealCode" : @(self.mealPlanItem.mealCode),
                                      @"MeasureID" : measureID,
-                                     @"ServingSize" : @(servings) };
-        
+                                     @"ServingSize" : @(totalServingAmount) };
+
     [self exchangeFood:deleteDictTemp withFood:insertDictTemp];
 }
 
@@ -242,6 +272,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle =  UITableViewCellSelectionStyleGray;
     [cell textLabel].adjustsFontSizeToFitWidth = NO;
+    cell.userInteractionEnabled = YES;
     cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.textLabel.numberOfLines = 0;
 
@@ -262,9 +293,11 @@ static NSString *CellIdentifier = @"CellIdentifier";
     if (text.length) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat: @"Name CONTAINS[cd] %@", text];
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"Name" ascending:YES];
-        NSArray *searchArray = [self.foodResults copy];
+        NSArray *searchArray = [self.fetchedFoodResults copy];
         NSArray *results = [[searchArray filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[descriptor]];
         [self.foodResults addObjectsFromArray:results];
+    } else {
+      [self.foodResults addObjectsFromArray:self.fetchedFoodResults];
     }
     [self.tableView reloadData];
 }
@@ -283,8 +316,9 @@ static NSString *CellIdentifier = @"CellIdentifier";
             return;
         }
         NSDictionary *responseDict = (NSDictionary *)object;
+        self.fetchedFoodResults = responseDict[@"Foods"];
         [self.foodResults removeAllObjects];
-        [self.foodResults addObjectsFromArray:responseDict[@"Foods"]];
+        [self.foodResults addObjectsFromArray:self.fetchedFoodResults];
 #warning TODO: Should we look for missing foods here?
         [self.tableView reloadData];
     }];
