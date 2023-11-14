@@ -7,7 +7,6 @@
 
 int main(int argc, char *argv[])
 {
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([DietMasterGoAppDelegate class]));
+    @autoreleasepool {        return UIApplicationMain(argc, argv, nil, NSStringFromClass([DietMasterGoAppDelegate class]));
     }
 }
