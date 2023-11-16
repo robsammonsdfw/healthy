@@ -150,6 +150,17 @@
         }
     }];
 
+    // Sync the user's foods so the food measure table is up to date.
+    DMMyLogDataProvider *foodsDataProvider = [[DMMyLogDataProvider alloc] init];
+    dispatch_group_enter(fetchGroup);
+    [foodsDataProvider syncFoods:@"" pageNumber:0 fetchedItems:@[]
+             withCompletionBlock:^(BOOL completed, NSError *error) {
+        dispatch_group_leave(fetchGroup);
+        if (error) {
+            syncError = error;
+        }
+    }];
+
     DMMyLogDataProvider *favoriteProvider = [[DMMyLogDataProvider alloc] init];
     dispatch_group_enter(fetchGroup);
     [favoriteProvider syncFavoriteFoods:dateString withCompletionBlock:^(BOOL completed, NSError *error) {
@@ -1444,10 +1455,9 @@
         return;
     }
 
-    if (!dateString) {
+    if (!dateString.length) {
         dateString = [DMGUtilities lastFoodSyncDateString];
     }
-    dateString = @"2015-01-01";
     // Must start at one.
     if (pageNumber == 0) {
         pageNumber = 1;
@@ -1721,7 +1731,8 @@
         NSString *strMeasureDes = [dict valueForKey:@"MeasureDescriptions"];
         NSArray *arrMeasureDesc = [strMeasureDes componentsSeparatedByString:@","];
         
-        if (arrMeasure.count>0) {
+        NSString *query = @"INSERT OR REPLACE INTO Measure (MeasureID, Description) VALUES (?, ?)";
+        if (arrMeasure.count > 0) {
             for (int i=0 ; i<arrMeasure.count; i++) {
                 NSString *strMeasureIDNew = [arrMeasure objectAtIndex:i];
                 NSString *strMeasureDescription;
@@ -1731,16 +1742,10 @@
                     //anything in here contains an invalid measureid
                     strMeasureDescription = [arrMeasureDesc objectAtIndex:(arrMeasureDesc.count - 1)];
                 }
-                
-                NSString *insertForMessure = [NSString stringWithFormat: @"INSERT OR REPLACE INTO Measure (MeasureID, Description) VALUES (%i, '%@')",[strMeasureIDNew intValue],strMeasureDescription];
-                [db executeUpdate:insertForMessure];
-                
-                
+                [db executeUpdate:query, strMeasureIDNew, strMeasureDescription];
             }
-        }
-        else {
-            NSString *insertForMessure = [NSString stringWithFormat: @"INSERT OR REPLACE INTO Measure (MeasureID, Description) VALUES (%i, '%@')",[[dict valueForKey:@"MeasureIDs"] intValue],[dict valueForKey:@"MeasureDescriptions"]];
-            [db executeUpdate:insertForMessure];
+        } else {
+            [db executeUpdate:query, [dict valueForKey:@"MeasureIDs"], [dict valueForKey:@"MeasureDescriptions"]];
         }
     }
     
