@@ -80,19 +80,16 @@ static NSString *DMLastFoodSyncPrefsKey = @"FoodUpdateLastsyncDate";
     } else {
         NSDate *lastSyncDate = [defaults valueForKey:DMLastFoodSyncPrefsKey];
         if (lastSyncDate) {
-            // Always return 48 hours prior to the existing date to ensure we're getting
+            // Always return 30 days prior to the existing date to ensure we're getting
             // the latest values.
             lastSyncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
-                                                                    value:-2
+                                                                    value:-30
                                                                    toDate:lastSyncDate
                                                                   options:0];
         }
-        // If current date is missing, let's assume the last sync as 90 days ago.
+        // If current date is missing, let's assume it was never done.
         if (!lastSyncDate) {
-            lastSyncDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay
-                                                                    value:-90
-                                                                   toDate:[NSDate date]
-                                                                  options:0];
+            dateString = @"2015-01-01";
         }
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.timeZone = [NSTimeZone systemTimeZone];
