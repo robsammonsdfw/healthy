@@ -140,19 +140,19 @@
                 withCompletionBlock:(nonnull completionBlockWithError)completionBlock {
     dispatch_group_t fetchGroup = dispatch_group_create();
     __block NSError *fetchError = nil;
-    
     dispatch_group_enter(fetchGroup);
     [self saveUserPlannedMealItems:@[newMealItem] withCompletionBlock:^(BOOL completed, NSError *error) {
         fetchError = error;
+        if (!error) {
+            dispatch_group_enter(fetchGroup);
+            [self deleteUserPlannedMealItems:@[mealItem] withCompletionBlock:^(BOOL completed, NSError *error) {
+                fetchError = error;
+                dispatch_group_leave(fetchGroup);
+            }];
+        }
         dispatch_group_leave(fetchGroup);
     }];
-    
-    dispatch_group_enter(fetchGroup);
-    [self deleteUserPlannedMealItems:@[mealItem] withCompletionBlock:^(BOOL completed, NSError *error) {
-        fetchError = error;
-        dispatch_group_leave(fetchGroup);
-    }];
-    
+
     dispatch_group_notify(fetchGroup, dispatch_get_main_queue(),^{
         [[NSNotificationCenter defaultCenter] postNotificationName:DMReloadDataNotification object:nil];
         if (completionBlock) {

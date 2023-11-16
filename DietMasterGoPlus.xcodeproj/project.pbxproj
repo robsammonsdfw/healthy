@@ -1753,11 +1753,12 @@
 		82C45661233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C4565F233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m */; };
 		82C45662233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C45660233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib */; };
 		9A1AAD8BA8DA155454C999CF /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		9E66F09653D8DEE5855EF8D2 /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 113C0D47721B2E99A75A9000 /* Pods_ReplicaTemplate.framework */; };
+		9E66F09653D8DEE5855EF8D2 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9ED04BB675B69E8613F767BD /* Pods_TeleDiets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98367A6A8864A2A169C0A47B /* Pods_TeleDiets.framework */; };
 		A249E529B4A08C444AE71625 /* Pods_ZFitStudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A5FC584DF4F9291A61165B /* Pods_ZFitStudio.framework */; };
 		A9C4CEE28410724D64246CD5 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		AA4D99304341CEEEEE3EF8C3 /* Pods_JoyfulWellness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004BD0824C832DAAE73419BA /* Pods_JoyfulWellness.framework */; };
+		AB7711AD5B38A8549691A5A8 /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 210DD636A341E8EF7510396E /* Pods_ReplicaTemplate.framework */; };
 		AEB72F4811A197F5096A5571 /* Pods_MedicallyFit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 468BDA5ABA39F68EA3A74425 /* Pods_MedicallyFit.framework */; };
 		B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */; };
 		B2119A4B224BA2210020FF5D /* MyMovesListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */; };
@@ -1933,15 +1934,6 @@
 		BF0385F72AFABE610049A79B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		BF0385F82AFABE610049A79B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		BF0385F92AFABE610049A79B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		BF0385FA2AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0385FB2AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0385FC2AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0385FD2AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0385FE2AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0385FF2AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0386002AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0386012AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF0386022AFABE610049A79B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BF03860D2AFAC1E30049A79B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF0385442AFABE4A0049A79B /* Assets.xcassets */; };
 		BF03860E2AFAC1E70049A79B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF0385452AFABE4A0049A79B /* GoogleService-Info.plist */; };
 		BF03860F2AFAC1EA0049A79B /* SeeYouHealthy.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BF0385462AFABE4A0049A79B /* SeeYouHealthy.xcconfig */; };
@@ -2999,6 +2991,7 @@
 		1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DietMasterGoAppDelegate.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2036D0BDA4D2C65E24E693EC /* Pods-ZFitStudio.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZFitStudio.distribution.xcconfig"; path = "Target Support Files/Pods-ZFitStudio/Pods-ZFitStudio.distribution.xcconfig"; sourceTree = "<group>"; };
+		210DD636A341E8EF7510396E /* Pods_ReplicaTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReplicaTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2409564D12D749660065548F /* Log_Add.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Log_Add.h; path = ../Log_Add.h; sourceTree = "<group>"; };
 		2409564E12D749660065548F /* Log_Add.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Log_Add.m; path = ../Log_Add.m; sourceTree = "<group>"; };
 		2409564F12D749660065548F /* Log_Add.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Log_Add.xib; path = ../Log_Add.xib; sourceTree = "<group>"; };
@@ -3261,7 +3254,8 @@
 				2DF9329B09470370125D374E /* BuildFile in Frameworks */,
 				9A1AAD8BA8DA155454C999CF /* BuildFile in Frameworks */,
 				A9C4CEE28410724D64246CD5 /* BuildFile in Frameworks */,
-				9E66F09653D8DEE5855EF8D2 /* Pods_ReplicaTemplate.framework in Frameworks */,
+				9E66F09653D8DEE5855EF8D2 /* BuildFile in Frameworks */,
+				AB7711AD5B38A8549691A5A8 /* Pods_ReplicaTemplate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4349,6 +4343,7 @@
 				78A5FC584DF4F9291A61165B /* Pods_ZFitStudio.framework */,
 				004BD0824C832DAAE73419BA /* Pods_JoyfulWellness.framework */,
 				D6B87326DC8F87E0E5BEEC84 /* Pods_SeeYouHealthy.framework */,
+				210DD636A341E8EF7510396E /* Pods_ReplicaTemplate.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
