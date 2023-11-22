@@ -263,6 +263,9 @@ static NSString *CellIdentifier = @"Cell";
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else {
+        if (!self.mealPlanArray.count) {
+          return;
+        }
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
