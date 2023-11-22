@@ -183,6 +183,8 @@
                     return;
                 }
                 NSString *xmlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                // Remove line breaks, as it's not permitted.
+                xmlString = [[xmlString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@" "];
                 NSData *jsonData = [FetchUtilities processXMLToDataWithXmlString:xmlString methodName:requestType];
                 id results = nil; // Should this be nil or empty?
                 @try {
