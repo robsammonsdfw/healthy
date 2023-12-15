@@ -102,6 +102,30 @@ target 'GOMealPlans' do
   core_pods
 end
 
+target 'GOMealsPlus' do
+  core_pods
+end
+
+target 'SuperBodyMethod' do
+  core_pods
+end
+
+target 'UpperhandAthletics' do
+  core_pods
+end
+
+target 'FitProComplete' do
+  core_pods
+end
+
+target 'ProWeightLoss' do
+  core_pods
+end
+
+target 'LightOfTheWhirl' do
+  core_pods
+end
+
 
 
 # Ensure all dependencies are a minimum version of iOS 15.

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "GoMealsPlus-LoginBG.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

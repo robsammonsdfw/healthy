@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "FitPro Complete Splash Image 320x480.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}
