@@ -126,6 +126,10 @@ target 'LightOfTheWhirl' do
   core_pods
 end
 
+target 'MyNeWeighs' do
+  core_pods
+end
+
 
 
 # Ensure all dependencies are a minimum version of iOS 15.

@@ -1757,6 +1757,7 @@
 		66C92B9376ACF004ECAA0199 /* Pods_ProWeightLoss.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F759D184F740D84D4A9F1814 /* Pods_ProWeightLoss.framework */; };
 		6A1FF65C67A74ABC189C68B9 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		6CF3FFC0A42040761DA6F930 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		71D1FD92173A31E8B1B0E02D /* Pods_MyNeWeighs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B94447B544D103211DDAEF53 /* Pods_MyNeWeighs.framework */; };
 		724681E6B9541C8273EF7C54 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		74CBFCE936688632A320F0A9 /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 365D1B126EF252B662555F9E /* Pods_ReplicaTemplate.framework */; };
 		79774E99241ADA602C03E02E /* Pods_GOMealsPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F841B90B3576E46FDA31141 /* Pods_GOMealsPlus.framework */; };
@@ -2468,21 +2469,6 @@
 		BF3CC22A2B2CD9ED004493C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		BF3CC22B2B2CD9ED004493C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		BF3CC22C2B2CD9ED004493C0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		BF3CC22D2B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC22E2B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC22F2B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2302B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2312B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2322B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2332B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2342B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2352B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2362B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2372B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2382B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC2392B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC23B2B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF3CC23C2B2CD9ED004493C0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BF3CC2472B2CDA43004493C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF3CC1772B2CD9E2004493C0 /* Assets.xcassets */; };
 		BF3CC2482B2CDA46004493C0 /* LightOfTheWhirl.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BF3CC1792B2CD9E2004493C0 /* LightOfTheWhirl.xcconfig */; };
 		BF3CC2492B2CDA49004493C0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF3CC1782B2CD9E2004493C0 /* GoogleService-Info.plist */; };
@@ -3187,6 +3173,196 @@
 		BF6F24D82AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BF6F24E22AD75478003041B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF6F241E2AD74000003041B1 /* Assets.xcassets */; };
 		BF6F24E32AD755D6003041B1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF6F241F2AD74000003041B1 /* GoogleService-Info.plist */; };
+		BF8680372B3F5FFF00C2ECAB /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
+		BF8680382B3F5FFF00C2ECAB /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
+		BF8680392B3F5FFF00C2ECAB /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
+		BF86803A2B3F5FFF00C2ECAB /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
+		BF86803B2B3F5FFF00C2ECAB /* UserMealType.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1A26BD1D82004D1654 /* UserMealType.xib */; };
+		BF86803C2B3F5FFF00C2ECAB /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2467EC6912D5749600B5591E /* DetailViewController.xib */; };
+		BF86803D2B3F5FFF00C2ECAB /* Log_Add.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2409564F12D749660065548F /* Log_Add.xib */; };
+		BF86803E2B3F5FFF00C2ECAB /* RecordWeightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FF54FD12D781D900E81066 /* RecordWeightView.xib */; };
+		BF86803F2B3F5FFF00C2ECAB /* FoodsHome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2417DD7F131D942200346132 /* FoodsHome.xib */; };
+		BF8680402B3F5FFF00C2ECAB /* DailyActivityTypeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1F26BD1D98004D1654 /* DailyActivityTypeVC.xib */; };
+		BF8680412B3F5FFF00C2ECAB /* UserGoalVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2426BD1DAE004D1654 /* UserGoalVC.xib */; };
+		BF8680422B3F5FFF00C2ECAB /* ManageFoods.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247695B013FEA91000ED37E6 /* ManageFoods.xib */; };
+		BF8680432B3F5FFF00C2ECAB /* FoodCategoryPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CE65382148EB2AA00A3C992 /* FoodCategoryPicker.xib */; };
+		BF8680442B3F5FFF00C2ECAB /* MeasurePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC81492DB950098A0C1 /* MeasurePicker.xib */; };
+		BF8680452B3F5FFF00C2ECAB /* FoodsList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B54DB14A2A72800D210CA /* FoodsList.xib */; };
+		BF8680462B3F5FFF00C2ECAB /* ExercisesDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E71B79214DE157C008C9576 /* ExercisesDetailViewController.xib */; };
+		BF8680472B3F5FFF00C2ECAB /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5423014E2FBD60023BA4C /* Settings.bundle */; };
+		BF8680482B3F5FFF00C2ECAB /* MyGoalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208FA25015A5700F412B0 /* MyGoalViewController.xib */; };
+		BF8680492B3F5FFF00C2ECAB /* MyMovesDetailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035C021F1F29F00968755 /* MyMovesDetailCollectionViewCell.xib */; };
+		BF86804A2B3F5FFF00C2ECAB /* InAppPurchaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D9250153C300F412B0 /* InAppPurchaseViewController.xib */; };
+		BF86804B2B3F5FFF00C2ECAB /* FavoriteMealsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5424D14E325210023BA4C /* FavoriteMealsViewController.xib */; };
+		BF86804C2B3F5FFF00C2ECAB /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */; };
+		BF86804D2B3F5FFF00C2ECAB /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
+		BF86804E2B3F5FFF00C2ECAB /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40402831224E414C0081FFD3 /* sound.mp3 */; };
+		BF86804F2B3F5FFF00C2ECAB /* headerVw.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D7250153C300F412B0 /* headerVw.xib */; };
+		BF8680512B3F5FFF00C2ECAB /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
+		BF8680522B3F5FFF00C2ECAB /* LearnMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */; };
+		BF8680532B3F5FFF00C2ECAB /* privacypolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D815004364008413AB /* privacypolicy.html */; };
+		BF8680542B3F5FFF00C2ECAB /* termsofservice.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D915004364008413AB /* termsofservice.html */; };
+		BF8680552B3F5FFF00C2ECAB /* AppImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90962A43289F00956F1E /* AppImages.xcassets */; };
+		BF8680572B3F5FFF00C2ECAB /* DMGO_v3.9.2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90992A43289F00956F1E /* DMGO_v3.9.2.sqlite */; };
+		BF8680582B3F5FFF00C2ECAB /* MyMovesListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */; };
+		BF8680592B3F5FFF00C2ECAB /* ProfileVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65301CC2269E50A600CA2CAA /* ProfileVC.xib */; };
+		BF86805A2B3F5FFF00C2ECAB /* MyMovesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88A821ECA95F00B2F232 /* MyMovesTableViewCell.xib */; };
+		BF86805B2B3F5FFF00C2ECAB /* MealPlanDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF437B2497F4B900583000 /* MealPlanDetailsTableViewCell.xib */; };
+		BF86805C2B3F5FFF00C2ECAB /* ProfileAlertVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1026BD1D48004D1654 /* ProfileAlertVCViewController.xib */; };
+		BF86805D2B3F5FFF00C2ECAB /* MealPlanDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */; };
+		BF86805E2B3F5FFF00C2ECAB /* MyMovesVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C45660233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib */; };
+		BF86805F2B3F5FFF00C2ECAB /* MyMovesDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88B221ECD53200B2F232 /* MyMovesDetailsViewController.xib */; };
+		BF8680602B3F5FFF00C2ECAB /* ProfileContactVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1626BD1D6B004D1654 /* ProfileContactVC.xib */; };
+		BF8680612B3F5FFF00C2ECAB /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035BF21F1F29E00968755 /* MyMovesDetailHeaderCollectionReusableView.xib */; };
+		BF8680622B3F5FFF00C2ECAB /* GroceryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65981589365800CCE0AD /* GroceryListViewController.xib */; };
+		BF8680632B3F5FFF00C2ECAB /* PlansTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208DD250153C300F412B0 /* PlansTableViewCell.xib */; };
+		BF8680642B3F5FFF00C2ECAB /* OtherHealthServiceVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2926BD1DC3004D1654 /* OtherHealthServiceVC.xib */; };
+		BF8680652B3F5FFF00C2ECAB /* DietMasterGoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208F5250158BC00F412B0 /* DietMasterGoViewController.xib */; };
+		BF8680662B3F5FFF00C2ECAB /* MyMovesDetailFooterCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */; };
+		BF8680672B3F5FFF00C2ECAB /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
+		BF86806A2B3F5FFF00C2ECAB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		BF86806B2B3F5FFF00C2ECAB /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
+		BF86806C2B3F5FFF00C2ECAB /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
+		BF86806D2B3F5FFF00C2ECAB /* DMMessagesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */; };
+		BF86806E2B3F5FFF00C2ECAB /* AppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D7129B928400A84340 /* AppSettings.m */; };
+		BF86806F2B3F5FFF00C2ECAB /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E101BA92A5626E700D8E7E2 /* BaseViewController.m */; };
+		BF8680702B3F5FFF00C2ECAB /* ExchangeFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 2455070E129BA4A700A84340 /* ExchangeFood.m */; };
+		BF8680712B3F5FFF00C2ECAB /* MyMovesDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */; };
+		BF8680722B3F5FFF00C2ECAB /* MyLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D2129B926F00A84340 /* MyLogViewController.m */; };
+		BF8680732B3F5FFF00C2ECAB /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2467EC6812D5749600B5591E /* DetailViewController.m */; };
+		BF8680742B3F5FFF00C2ECAB /* Log_Add.m in Sources */ = {isa = PBXBuildFile; fileRef = 2409564E12D749660065548F /* Log_Add.m */; };
+		BF8680752B3F5FFF00C2ECAB /* RecordWeightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 24FF54FC12D781D900E81066 /* RecordWeightView.m */; };
+		BF8680762B3F5FFF00C2ECAB /* DMMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */; };
+		BF8680772B3F5FFF00C2ECAB /* FoodsHome.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DD7E131D942200346132 /* FoodsHome.m */; };
+		BF8680782B3F5FFF00C2ECAB /* FoodsSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DE0C131DA14E00346132 /* FoodsSearch.m */; };
+		BF8680792B3F5FFF00C2ECAB /* ManageFoods.m in Sources */ = {isa = PBXBuildFile; fileRef = 247695AF13FEA91000ED37E6 /* ManageFoods.m */; };
+		BF86807A2B3F5FFF00C2ECAB /* FoodCategoryPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CE65381148EB2AA00A3C992 /* FoodCategoryPicker.m */; };
+		BF86807B2B3F5FFF00C2ECAB /* MeasurePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC71492DB950098A0C1 /* MeasurePicker.m */; };
+		BF86807C2B3F5FFF00C2ECAB /* DMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */; };
+		BF86807D2B3F5FFF00C2ECAB /* FoodsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C3B54DA14A2A72800D210CA /* FoodsList.m */; };
+		BF86807E2B3F5FFF00C2ECAB /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91402A43D50C00956F1E /* UIColor+Extension.swift */; };
+		BF86807F2B3F5FFF00C2ECAB /* TUTSimpleScatterPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */; };
+		BF8680802B3F5FFF00C2ECAB /* MealPlanDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF437A2497F4B900583000 /* MealPlanDetailsTableViewCell.m */; };
+		BF8680812B3F5FFF00C2ECAB /* DMActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */; };
+		BF8680822B3F5FFF00C2ECAB /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */; };
+		BF8680832B3F5FFF00C2ECAB /* ExercisesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E81811E14D46A49002C8520 /* ExercisesViewController.m */; };
+		BF8680842B3F5FFF00C2ECAB /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
+		BF8680852B3F5FFF00C2ECAB /* MyMovesDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88B121ECD53200B2F232 /* MyMovesDetailsViewController.m */; };
+		BF8680862B3F5FFF00C2ECAB /* ExercisesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79114DE157C008C9576 /* ExercisesDetailViewController.m */; };
+		BF8680872B3F5FFF00C2ECAB /* DMMoveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBF2A4751690017D131 /* DMMoveSet.m */; };
+		BF8680882B3F5FFF00C2ECAB /* DietmasterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */; };
+		BF8680892B3F5FFF00C2ECAB /* FavoriteMealsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */; };
+		BF86808A2B3F5FFF00C2ECAB /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
+		BF86808B2B3F5FFF00C2ECAB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */; };
+		BF86808C2B3F5FFF00C2ECAB /* MyMovesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */; };
+		BF86808D2B3F5FFF00C2ECAB /* LearnMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F44D315003DA6008413AB /* LearnMoreViewController.m */; };
+		BF86808E2B3F5FFF00C2ECAB /* NSData+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E002FF3153E19560094341F /* NSData+Blocks.m */; };
+		BF86808F2B3F5FFF00C2ECAB /* DMMealPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F52A50BB29000BDDF1 /* DMMealPlan.m */; };
+		BF8680902B3F5FFF00C2ECAB /* DMMyLogDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */; };
+		BF8680912B3F5FFF00C2ECAB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */; };
+		BF8680922B3F5FFF00C2ECAB /* MealPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */; };
+		BF8680932B3F5FFF00C2ECAB /* ProfileAlertVCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D0F26BD1D48004D1654 /* ProfileAlertVCViewController.m */; };
+		BF8680942B3F5FFF00C2ECAB /* DMMoveRoutine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DC22A4757010017D131 /* DMMoveRoutine.m */; };
+		BF8680952B3F5FFF00C2ECAB /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E101BA42A56028900D8E7E2 /* AppConfiguration.swift */; };
+		BF8680962B3F5FFF00C2ECAB /* MealPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */; };
+		BF8680972B3F5FFF00C2ECAB /* ExchangeFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */; };
+		BF8680982B3F5FFF00C2ECAB /* CustomImageFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */; };
+		BF8680992B3F5FFF00C2ECAB /* DMMoveCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */; };
+		BF86809A2B3F5FFF00C2ECAB /* ProfileContactVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1526BD1D6B004D1654 /* ProfileContactVC.m */; };
+		BF86809B2B3F5FFF00C2ECAB /* UserMealType.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1B26BD1D82004D1654 /* UserMealType.m */; };
+		BF86809C2B3F5FFF00C2ECAB /* MyMovesListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */; };
+		BF86809D2B3F5FFF00C2ECAB /* DMMovePickerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FB2A4635940032162E /* DMMovePickerRow.m */; };
+		BF86809E2B3F5FFF00C2ECAB /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
+		BF86809F2B3F5FFF00C2ECAB /* InAppPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D4250153C300F412B0 /* InAppPurchaseViewController.m */; };
+		BF8680A02B3F5FFF00C2ECAB /* DMAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */; };
+		BF8680A12B3F5FFF00C2ECAB /* MyMovesDetailFooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 402A3C0F21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m */; };
+		BF8680A22B3F5FFF00C2ECAB /* DMDatabaseUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */; };
+		BF8680A32B3F5FFF00C2ECAB /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
+		BF8680A42B3F5FFF00C2ECAB /* headerVw.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D6250153C300F412B0 /* headerVw.m */; };
+		BF8680A52B3F5FFF00C2ECAB /* UserDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */; };
+		BF8680A62B3F5FFF00C2ECAB /* PlansTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208DC250153C300F412B0 /* PlansTableViewCell.m */; };
+		BF8680A72B3F5FFF00C2ECAB /* DMMovePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FE2A4672790032162E /* DMMovePlan.m */; };
+		BF8680A82B3F5FFF00C2ECAB /* MyMovesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */; };
+		BF8680A92B3F5FFF00C2ECAB /* MyMovesVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C4565F233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m */; };
+		BF8680AA2B3F5FFF00C2ECAB /* UserGoalVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D2326BD1DAE004D1654 /* UserGoalVC.m */; };
+		BF8680AB2B3F5FFF00C2ECAB /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
+		BF8680AC2B3F5FFF00C2ECAB /* DMMoveTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */; };
+		BF8680AD2B3F5FFF00C2ECAB /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
+		BF8680AE2B3F5FFF00C2ECAB /* DMSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */; };
+		BF8680AF2B3F5FFF00C2ECAB /* ProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D0A26BD1D28004D1654 /* ProfileVC.m */; };
+		BF8680B02B3F5FFF00C2ECAB /* OtherHealthServiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D2826BD1DC2004D1654 /* OtherHealthServiceVC.m */; };
+		BF8680B12B3F5FFF00C2ECAB /* FetchUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */; };
+		BF8680B22B3F5FFF00C2ECAB /* SendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2B6187EDE40004A542C /* SendView.m */; };
+		BF8680B32B3F5FFF00C2ECAB /* MyMovesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88A721ECA95F00B2F232 /* MyMovesTableViewCell.m */; };
+		BF8680B42B3F5FFF00C2ECAB /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
+		BF8680B52B3F5FFF00C2ECAB /* DMDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */; };
+		BF8680B62B3F5FFF00C2ECAB /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A9187EDE40004A542C /* MessageViewController.m */; };
+		BF8680B72B3F5FFF00C2ECAB /* PurchaseIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */; };
+		BF8680B82B3F5FFF00C2ECAB /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
+		BF8680B92B3F5FFF00C2ECAB /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
+		BF8680BA2B3F5FFF00C2ECAB /* MainMenuFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */; };
+		BF8680BB2B3F5FFF00C2ECAB /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CD2501531A00F412B0 /* IAPHelper.m */; };
+		BF8680BC2B3F5FFF00C2ECAB /* DMMoveDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBC2A4745040017D131 /* DMMoveDay.m */; };
+		BF8680BD2B3F5FFF00C2ECAB /* MyMovesDetailHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */; };
+		BF8680BE2B3F5FFF00C2ECAB /* UIViewController+Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913C2A43580A00956F1E /* UIViewController+Navigation.m */; };
+		BF8680BF2B3F5FFF00C2ECAB /* DailyActivityTypeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1E26BD1D98004D1654 /* DailyActivityTypeVC.m */; };
+		BF8680C02B3F5FFF00C2ECAB /* DMMealPlanItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F82A50BDCF000BDDF1 /* DMMealPlanItem.m */; };
+		BF8680C12B3F5FFF00C2ECAB /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
+		BF8680C22B3F5FFF00C2ECAB /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A5187EDE40004A542C /* MessageCell.m */; };
+		BF8680C32B3F5FFF00C2ECAB /* NSNull+NullCategoryExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */; };
+		BF8680C42B3F5FFF00C2ECAB /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */; };
+		BF8680C52B3F5FFF00C2ECAB /* StepData.m in Sources */ = {isa = PBXBuildFile; fileRef = 403FEB521FD149A5006D9B8F /* StepData.m */; };
+		BF8680C62B3F5FFF00C2ECAB /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
+		BF8680C72B3F5FFF00C2ECAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F8FF32A43104200956F1E /* SceneDelegate.swift */; };
+		BF8680C82B3F5FFF00C2ECAB /* DietMasterGoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208F2250158A900F412B0 /* DietMasterGoViewController.m */; };
+		BF8680C92B3F5FFF00C2ECAB /* MyLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4382249885D100583000 /* MyLogTableViewCell.m */; };
+		BF8680CA2B3F5FFF00C2ECAB /* DMMealPlanDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409802A4B13E500AF5BAD /* DMMealPlanDataProvider.m */; };
+		BF8680CB2B3F5FFF00C2ECAB /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
+		BF8680CC2B3F5FFF00C2ECAB /* DayDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */; };
+		BF8680CD2B3F5FFF00C2ECAB /* DMDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */; };
+		BF8680CE2B3F5FFF00C2ECAB /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */; };
+		BF8680CF2B3F5FFF00C2ECAB /* MyGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208FB25015A5700F412B0 /* MyGoalViewController.m */; };
+		BF8680D02B3F5FFF00C2ECAB /* MyMovesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88AC21ECA98600B2F232 /* MyMovesViewController.m */; };
+		BF8680D12B3F5FFF00C2ECAB /* LogDaySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */; };
+		BF8680D22B3F5FFF00C2ECAB /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208E82501552400F412B0 /* KeychainItemWrapper.m */; };
+		BF8680D42B3F5FFF00C2ECAB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4318E2F38800FB97A7 /* SystemConfiguration.framework */; };
+		BF8680D52B3F5FFF00C2ECAB /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402C5060221577C600259359 /* AVKit.framework */; };
+		BF8680D62B3F5FFF00C2ECAB /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403FEB4E1FD1379C006D9B8F /* HealthKit.framework */; };
+		BF8680D72B3F5FFF00C2ECAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D254AD1D62F564008513A0 /* Security.framework */; };
+		BF8680D82B3F5FFF00C2ECAB /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586641D59BB5F005354D2 /* WebKit.framework */; };
+		BF8680D92B3F5FFF00C2ECAB /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586621D59BB53005354D2 /* CoreTelephony.framework */; };
+		BF8680DA2B3F5FFF00C2ECAB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4118E2F37900FB97A7 /* CFNetwork.framework */; };
+		BF8680DB2B3F5FFF00C2ECAB /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA3F18E2F37200FB97A7 /* MobileCoreServices.framework */; };
+		BF8680DC2B3F5FFF00C2ECAB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADF531718B79400628F41 /* AudioToolbox.framework */; };
+		BF8680DD2B3F5FFF00C2ECAB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADF4B1718B26800628F41 /* ImageIO.framework */; };
+		BF8680DE2B3F5FFF00C2ECAB /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9D17174DFB00628F41 /* CoreVideo.framework */; };
+		BF8680DF2B3F5FFF00C2ECAB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650208E5250154CC00F412B0 /* StoreKit.framework */; };
+		BF8680E02B3F5FFF00C2ECAB /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9B17174DF600628F41 /* CoreMedia.framework */; };
+		BF8680E12B3F5FFF00C2ECAB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9917174DF100628F41 /* AVFoundation.framework */; };
+		BF8680E22B3F5FFF00C2ECAB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E4788C514EAD8FA00B8FFE3 /* MessageUI.framework */; };
+		BF8680E32B3F5FFF00C2ECAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECE6ED414BF3FC1004DEF36 /* QuartzCore.framework */; };
+		BF8680E42B3F5FFF00C2ECAB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		BF8680E52B3F5FFF00C2ECAB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		BF8680E62B3F5FFF00C2ECAB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		BF8680E72B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680E82B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680E92B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680EA2B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680EB2B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680EC2B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680ED2B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680EE2B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680EF2B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680F02B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680F12B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680F22B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680F32B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680F52B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680F62B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8680F72B3F5FFF00C2ECAB /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF8681022B3F60D500C2ECAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF8680312B3F5FD200C2ECAB /* Assets.xcassets */; };
+		BF8681032B3F60D900C2ECAB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF8680322B3F5FD200C2ECAB /* GoogleService-Info.plist */; };
+		BF8681042B3F60DE00C2ECAB /* MyNeWeighs.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BF8680332B3F5FD200C2ECAB /* MyNeWeighs.xcconfig */; };
 		BFB3C3A52AF55CF900F2CFA2 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		BFB3C3A62AF55CF900F2CFA2 /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
 		BFB3C3A72AF55CF900F2CFA2 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
@@ -4059,8 +4235,9 @@
 		BFFC10E82AC6139F0011444E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFFC10E52AC6139F0011444E /* GoogleService-Info.plist */; };
 		BFFC10EA2AC618BB0011444E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C732A56CE4900D8E7E2 /* GoogleService-Info.plist */; };
 		CD6778D885ECCAC3ECD90C5D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		CE90CB2C499407717D4A175D /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F12DB40BE81DAFABBB368B0F /* Pods_ReplicaTemplate.framework */; };
 		D3CF66537F3F438CABE7DBAF /* Pods_SlimNation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D8CBBC5BF328AAFA1A25A9 /* Pods_SlimNation.framework */; };
-		D9B47E33FDD12182850AD75B /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8C42EFD853021C1B1AA1A76 /* Pods_ReplicaTemplate.framework */; };
+		D9B47E33FDD12182850AD75B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		D9BC158A98415FB751684271 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		E0E37BD3DCD87F225ECA21BA /* Pods_YOUtrition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ACCA5A680989E869035C75D /* Pods_YOUtrition.framework */; };
 		F08A1BB549E7ABC19832118B /* Pods_SuperBodyMethod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E460B370BDA5CB13296EDEFF /* Pods_SuperBodyMethod.framework */; };
@@ -4240,6 +4417,16 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BF6F24D92AD7405B003041B1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF8680F92B3F5FFF00C2ECAB /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -4588,6 +4775,7 @@
 		5C44E725A560359246FA33AB /* Pods-SuperBodyMethod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperBodyMethod.debug.xcconfig"; path = "Target Support Files/Pods-SuperBodyMethod/Pods-SuperBodyMethod.debug.xcconfig"; sourceTree = "<group>"; };
 		5E0C9B04649669D69A63D1F2 /* Pods-JLNutrition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLNutrition.debug.xcconfig"; path = "Target Support Files/Pods-JLNutrition/Pods-JLNutrition.debug.xcconfig"; sourceTree = "<group>"; };
 		5F945A8092571B895C42FBF9 /* Pods-TeleDiets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleDiets.debug.xcconfig"; path = "Target Support Files/Pods-TeleDiets/Pods-TeleDiets.debug.xcconfig"; sourceTree = "<group>"; };
+		639C96B99C04ACF4A7A20BD8 /* Pods-MyNeWeighs.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNeWeighs.distribution.xcconfig"; path = "Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs.distribution.xcconfig"; sourceTree = "<group>"; };
 		650208C9250152FA00F412B0 /* PurchaseIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseIAPHelper.h; sourceTree = "<group>"; };
 		650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseIAPHelper.m; sourceTree = "<group>"; };
 		650208CC2501531A00F412B0 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
@@ -4662,6 +4850,7 @@
 		8BE3F3D7E3982377037BC1AB /* Pods-SweetStrength.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SweetStrength.distribution.xcconfig"; path = "Target Support Files/Pods-SweetStrength/Pods-SweetStrength.distribution.xcconfig"; sourceTree = "<group>"; };
 		92DE075FA7825C168F2DD4BE /* Pods-ZFitStudio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZFitStudio.debug.xcconfig"; path = "Target Support Files/Pods-ZFitStudio/Pods-ZFitStudio.debug.xcconfig"; sourceTree = "<group>"; };
 		933AA8FA44F4A32520A13BD0 /* Pods-MedicallyFit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MedicallyFit.release.xcconfig"; path = "Target Support Files/Pods-MedicallyFit/Pods-MedicallyFit.release.xcconfig"; sourceTree = "<group>"; };
+		9603E117542611AADEBF5E1C /* Pods-MyNeWeighs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNeWeighs.release.xcconfig"; path = "Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs.release.xcconfig"; sourceTree = "<group>"; };
 		97300F28DD4E813CF42CEAE1 /* Pods-YOUTrition.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YOUTrition.distribution.xcconfig"; path = "Target Support Files/Pods-YOUTrition/Pods-YOUTrition.distribution.xcconfig"; sourceTree = "<group>"; };
 		97E24744E713A6CB878A00D8 /* Pods-ProWeightLoss.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProWeightLoss.release.xcconfig"; path = "Target Support Files/Pods-ProWeightLoss/Pods-ProWeightLoss.release.xcconfig"; sourceTree = "<group>"; };
 		98367A6A8864A2A169C0A47B /* Pods_TeleDiets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TeleDiets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4680,6 +4869,7 @@
 		B488B5092C0776AE999195E4 /* Pods_DietMasterGoPlus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DietMasterGoPlus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8886BFA3A51B24E45F4BAAF /* Pods_LightOfTheWhirl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LightOfTheWhirl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B90641243F445B2134D8F2FF /* Pods-SuperBodyMethod.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperBodyMethod.distribution.xcconfig"; path = "Target Support Files/Pods-SuperBodyMethod/Pods-SuperBodyMethod.distribution.xcconfig"; sourceTree = "<group>"; };
+		B94447B544D103211DDAEF53 /* Pods_MyNeWeighs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyNeWeighs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDF5E5130A8AE501F5EAAC9F /* Pods-SeeYouHealthy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeeYouHealthy.debug.xcconfig"; path = "Target Support Files/Pods-SeeYouHealthy/Pods-SeeYouHealthy.debug.xcconfig"; sourceTree = "<group>"; };
 		BE7D42451EEBF6977EB432DE /* Pods-JoyfulWellness.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JoyfulWellness.debug.xcconfig"; path = "Target Support Files/Pods-JoyfulWellness/Pods-JoyfulWellness.debug.xcconfig"; sourceTree = "<group>"; };
 		BF0385442AFABE4A0049A79B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -4714,6 +4904,10 @@
 		BF6F241E2AD74000003041B1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF6F241F2AD74000003041B1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BF6F24E02AD7405B003041B1 /* TeleDiets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeleDiets.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF8680312B3F5FD200C2ECAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BF8680322B3F5FD200C2ECAB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BF8680332B3F5FD200C2ECAB /* MyNeWeighs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MyNeWeighs.xcconfig; sourceTree = "<group>"; };
+		BF8681002B3F5FFF00C2ECAB /* MyNeWeighs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyNeWeighs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFB3C39F2AF55CD300F2CFA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFB3C3A02AF55CD300F2CFA2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BFB3C3A12AF55CD300F2CFA2 /* JoyfulWellness.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JoyfulWellness.xcconfig; sourceTree = "<group>"; };
@@ -4734,7 +4928,6 @@
 		BFFC10E42AC6139F0011444E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFFC10E52AC6139F0011444E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BFFC10E62AC6139F0011444E /* XtremeFitness.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = XtremeFitness.xcconfig; sourceTree = "<group>"; };
-		C23BF780E0202CA328FB0AFB /* Pods_ReplicaTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReplicaTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3F394F12CAEC46EB05FFBF7 /* Pods-ReplicaTemplate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReplicaTemplate.release.xcconfig"; path = "Target Support Files/Pods-ReplicaTemplate/Pods-ReplicaTemplate.release.xcconfig"; sourceTree = "<group>"; };
 		C43368F8CF4781EA085B0576 /* Pods_UpperhandAthletics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpperhandAthletics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C436B05770F6230267E74AD3 /* Pods-UpperhandAthletics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpperhandAthletics.debug.xcconfig"; path = "Target Support Files/Pods-UpperhandAthletics/Pods-UpperhandAthletics.debug.xcconfig"; sourceTree = "<group>"; };
@@ -4753,12 +4946,14 @@
 		E71F3E43FEC1443C8B682A8D /* Pods-MyMealCoach.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMealCoach.debug.xcconfig"; path = "Target Support Files/Pods-MyMealCoach/Pods-MyMealCoach.debug.xcconfig"; sourceTree = "<group>"; };
 		E87FFA2276C2FAE93FAA0A1E /* Pods-Quintessa.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quintessa.debug.xcconfig"; path = "Target Support Files/Pods-Quintessa/Pods-Quintessa.debug.xcconfig"; sourceTree = "<group>"; };
 		E886809B204E9459F2D4AC53 /* Pods_XtremeFitness.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XtremeFitness.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F12DB40BE81DAFABBB368B0F /* Pods_ReplicaTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReplicaTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4B1B9DB37B185B603A884EC /* Pods-FitProComplete.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FitProComplete.release.xcconfig"; path = "Target Support Files/Pods-FitProComplete/Pods-FitProComplete.release.xcconfig"; sourceTree = "<group>"; };
 		F53C84223521CCCB37859606 /* Pods-UpperhandAthletics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpperhandAthletics.release.xcconfig"; path = "Target Support Files/Pods-UpperhandAthletics/Pods-UpperhandAthletics.release.xcconfig"; sourceTree = "<group>"; };
 		F68B5A35B35A8ABEF722C720 /* Pods_DietMasterGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DietMasterGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F759D184F740D84D4A9F1814 /* Pods_ProWeightLoss.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ProWeightLoss.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC355265E4C23E7ACF1C4D1 /* Pods-MyMealCoach.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMealCoach.distribution.xcconfig"; path = "Target Support Files/Pods-MyMealCoach/Pods-MyMealCoach.distribution.xcconfig"; sourceTree = "<group>"; };
 		FECD0BEBEA7F0C28FA814D70 /* Pods-XtremeFitness.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XtremeFitness.release.xcconfig"; path = "Target Support Files/Pods-XtremeFitness/Pods-XtremeFitness.release.xcconfig"; sourceTree = "<group>"; };
+		FFFAEC9C0C734B79CB6CA891 /* Pods-MyNeWeighs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNeWeighs.debug.xcconfig"; path = "Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4828,8 +5023,9 @@
 				74CBFCE936688632A320F0A9 /* Pods_ReplicaTemplate.framework in Frameworks */,
 				09A505FE3A286961244C9300 /* BuildFile in Frameworks */,
 				A820B4E51AEBE6770A64E4E3 /* BuildFile in Frameworks */,
-				D9B47E33FDD12182850AD75B /* Pods_ReplicaTemplate.framework in Frameworks */,
+				D9B47E33FDD12182850AD75B /* BuildFile in Frameworks */,
 				469D03EB910BF0D9A620604A /* Pods_ReplicaTemplate.framework in Frameworks */,
+				CE90CB2C499407717D4A175D /* Pods_ReplicaTemplate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5278,6 +5474,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BF8680D32B3F5FFF00C2ECAB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF8680D42B3F5FFF00C2ECAB /* SystemConfiguration.framework in Frameworks */,
+				BF8680D52B3F5FFF00C2ECAB /* AVKit.framework in Frameworks */,
+				BF8680D62B3F5FFF00C2ECAB /* HealthKit.framework in Frameworks */,
+				BF8680D72B3F5FFF00C2ECAB /* Security.framework in Frameworks */,
+				BF8680D82B3F5FFF00C2ECAB /* WebKit.framework in Frameworks */,
+				BF8680D92B3F5FFF00C2ECAB /* CoreTelephony.framework in Frameworks */,
+				BF8680DA2B3F5FFF00C2ECAB /* CFNetwork.framework in Frameworks */,
+				BF8680DB2B3F5FFF00C2ECAB /* MobileCoreServices.framework in Frameworks */,
+				BF8680DC2B3F5FFF00C2ECAB /* AudioToolbox.framework in Frameworks */,
+				BF8680DD2B3F5FFF00C2ECAB /* ImageIO.framework in Frameworks */,
+				BF8680DE2B3F5FFF00C2ECAB /* CoreVideo.framework in Frameworks */,
+				BF8680DF2B3F5FFF00C2ECAB /* StoreKit.framework in Frameworks */,
+				BF8680E02B3F5FFF00C2ECAB /* CoreMedia.framework in Frameworks */,
+				BF8680E12B3F5FFF00C2ECAB /* AVFoundation.framework in Frameworks */,
+				BF8680E22B3F5FFF00C2ECAB /* MessageUI.framework in Frameworks */,
+				BF8680E32B3F5FFF00C2ECAB /* QuartzCore.framework in Frameworks */,
+				BF8680E42B3F5FFF00C2ECAB /* Foundation.framework in Frameworks */,
+				BF8680E52B3F5FFF00C2ECAB /* UIKit.framework in Frameworks */,
+				BF8680E62B3F5FFF00C2ECAB /* CoreGraphics.framework in Frameworks */,
+				71D1FD92173A31E8B1B0E02D /* Pods_MyNeWeighs.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFB3C4402AF55CF900F2CFA2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -5491,6 +5714,9 @@
 				13B5F47B06606EE57FB8D778 /* Pods-LightOfTheWhirl.debug.xcconfig */,
 				452E44895F9399C2A45E0DE4 /* Pods-LightOfTheWhirl.release.xcconfig */,
 				711C7D1E75C8A55C9659856C /* Pods-LightOfTheWhirl.distribution.xcconfig */,
+				FFFAEC9C0C734B79CB6CA891 /* Pods-MyNeWeighs.debug.xcconfig */,
+				9603E117542611AADEBF5E1C /* Pods-MyNeWeighs.release.xcconfig */,
+				639C96B99C04ACF4A7A20BD8 /* Pods-MyNeWeighs.distribution.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -5543,6 +5769,7 @@
 		0E101C6C2A56CE4900D8E7E2 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				BF8680302B3F5FD200C2ECAB /* MyNeWeighs */,
 				BF3CC1762B2CD9E1004493C0 /* LightOfTheWhirl */,
 				BF3CC0A32B2BA741004493C0 /* ProWeightLoss */,
 				BF3CBF032B2B83FE004493C0 /* FitProComplete */,
@@ -6108,6 +6335,7 @@
 				BF3CC09E2B2B8C77004493C0 /* FitProComplete.app */,
 				BF3CC1712B2BA768004493C0 /* ProWeightLoss.app */,
 				BF3CC2452B2CD9ED004493C0 /* LightOfTheWhirl.app */,
+				BF8681002B3F5FFF00C2ECAB /* MyNeWeighs.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6182,7 +6410,8 @@
 				81A2B028EC1BA323776691B8 /* Pods_FitProComplete.framework */,
 				F759D184F740D84D4A9F1814 /* Pods_ProWeightLoss.framework */,
 				B8886BFA3A51B24E45F4BAAF /* Pods_LightOfTheWhirl.framework */,
-				C23BF780E0202CA328FB0AFB /* Pods_ReplicaTemplate.framework */,
+				B94447B544D103211DDAEF53 /* Pods_MyNeWeighs.framework */,
+				F12DB40BE81DAFABBB368B0F /* Pods_ReplicaTemplate.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -6497,6 +6726,16 @@
 				BF6F241F2AD74000003041B1 /* GoogleService-Info.plist */,
 			);
 			path = TeleDiets;
+			sourceTree = "<group>";
+		};
+		BF8680302B3F5FD200C2ECAB /* MyNeWeighs */ = {
+			isa = PBXGroup;
+			children = (
+				BF8680312B3F5FD200C2ECAB /* Assets.xcassets */,
+				BF8680322B3F5FD200C2ECAB /* GoogleService-Info.plist */,
+				BF8680332B3F5FD200C2ECAB /* MyNeWeighs.xcconfig */,
+			);
+			path = MyNeWeighs;
 			sourceTree = "<group>";
 		};
 		BFB3C39E2AF55CD300F2CFA2 /* Joyful Wellness */ = {
@@ -6938,6 +7177,27 @@
 			productReference = BF6F24E02AD7405B003041B1 /* TeleDiets.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BF8680342B3F5FFF00C2ECAB /* MyNeWeighs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF8680FC2B3F5FFF00C2ECAB /* Build configuration list for PBXNativeTarget "MyNeWeighs" */;
+			buildPhases = (
+				BF8680352B3F5FFF00C2ECAB /* [CP] Check Pods Manifest.lock */,
+				BF8680362B3F5FFF00C2ECAB /* Resources */,
+				BF8680692B3F5FFF00C2ECAB /* Sources */,
+				BF8680D32B3F5FFF00C2ECAB /* Frameworks */,
+				BF8680F92B3F5FFF00C2ECAB /* Embed Frameworks */,
+				BF8680FA2B3F5FFF00C2ECAB /* ShellScript */,
+				BF8680FB2B3F5FFF00C2ECAB /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyNeWeighs;
+			productName = DietMasterGo;
+			productReference = BF8681002B3F5FFF00C2ECAB /* MyNeWeighs.app */;
+			productType = "com.apple.product-type.application";
+		};
 		BFB3C3A22AF55CF900F2CFA2 /* JoyfulWellness */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BFB3C4602AF55CF900F2CFA2 /* Build configuration list for PBXNativeTarget "JoyfulWellness" */;
@@ -7104,6 +7364,7 @@
 				BF3CBFD52B2B8C77004493C0 /* FitProComplete */,
 				BF3CC0A72B2BA768004493C0 /* ProWeightLoss */,
 				BF3CC17A2B2CD9ED004493C0 /* LightOfTheWhirl */,
+				BF8680342B3F5FFF00C2ECAB /* MyNeWeighs */,
 			);
 		};
 /* End PBXProject section */
@@ -8122,6 +8383,63 @@
 				BF6F24E22AD75478003041B1 /* Assets.xcassets in Resources */,
 				BF6F24522AD7405B003041B1 /* MyMovesListViewController.xib in Resources */,
 				BF6F24E32AD755D6003041B1 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF8680362B3F5FFF00C2ECAB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF8680372B3F5FFF00C2ECAB /* MyLogViewController.xib in Resources */,
+				BF8680382B3F5FFF00C2ECAB /* BaseApp-Info.plist in Resources */,
+				BF8680392B3F5FFF00C2ECAB /* AppSettings.xib in Resources */,
+				BF86803A2B3F5FFF00C2ECAB /* ExchangeFood.xib in Resources */,
+				BF86803B2B3F5FFF00C2ECAB /* UserMealType.xib in Resources */,
+				BF86803C2B3F5FFF00C2ECAB /* DetailViewController.xib in Resources */,
+				BF86803D2B3F5FFF00C2ECAB /* Log_Add.xib in Resources */,
+				BF86803E2B3F5FFF00C2ECAB /* RecordWeightView.xib in Resources */,
+				BF86803F2B3F5FFF00C2ECAB /* FoodsHome.xib in Resources */,
+				BF8680402B3F5FFF00C2ECAB /* DailyActivityTypeVC.xib in Resources */,
+				BF8680412B3F5FFF00C2ECAB /* UserGoalVC.xib in Resources */,
+				BF8680422B3F5FFF00C2ECAB /* ManageFoods.xib in Resources */,
+				BF8680432B3F5FFF00C2ECAB /* FoodCategoryPicker.xib in Resources */,
+				BF8681032B3F60D900C2ECAB /* GoogleService-Info.plist in Resources */,
+				BF8680442B3F5FFF00C2ECAB /* MeasurePicker.xib in Resources */,
+				BF8680452B3F5FFF00C2ECAB /* FoodsList.xib in Resources */,
+				BF8680462B3F5FFF00C2ECAB /* ExercisesDetailViewController.xib in Resources */,
+				BF8680472B3F5FFF00C2ECAB /* Settings.bundle in Resources */,
+				BF8680482B3F5FFF00C2ECAB /* MyGoalViewController.xib in Resources */,
+				BF8680492B3F5FFF00C2ECAB /* MyMovesDetailCollectionViewCell.xib in Resources */,
+				BF86804A2B3F5FFF00C2ECAB /* InAppPurchaseViewController.xib in Resources */,
+				BF86804B2B3F5FFF00C2ECAB /* FavoriteMealsViewController.xib in Resources */,
+				BF86804C2B3F5FFF00C2ECAB /* LoginViewController.xib in Resources */,
+				BF86804D2B3F5FFF00C2ECAB /* MyLogTableViewCell.xib in Resources */,
+				BF86804E2B3F5FFF00C2ECAB /* sound.mp3 in Resources */,
+				BF86804F2B3F5FFF00C2ECAB /* headerVw.xib in Resources */,
+				BF8680512B3F5FFF00C2ECAB /* measure_sql.sql in Resources */,
+				BF8680522B3F5FFF00C2ECAB /* LearnMoreViewController.xib in Resources */,
+				BF8680532B3F5FFF00C2ECAB /* privacypolicy.html in Resources */,
+				BF8680542B3F5FFF00C2ECAB /* termsofservice.html in Resources */,
+				BF8680552B3F5FFF00C2ECAB /* AppImages.xcassets in Resources */,
+				BF8680572B3F5FFF00C2ECAB /* DMGO_v3.9.2.sqlite in Resources */,
+				BF8680582B3F5FFF00C2ECAB /* MyMovesListTableViewCell.xib in Resources */,
+				BF8680592B3F5FFF00C2ECAB /* ProfileVC.xib in Resources */,
+				BF86805A2B3F5FFF00C2ECAB /* MyMovesTableViewCell.xib in Resources */,
+				BF86805B2B3F5FFF00C2ECAB /* MealPlanDetailsTableViewCell.xib in Resources */,
+				BF86805C2B3F5FFF00C2ECAB /* ProfileAlertVCViewController.xib in Resources */,
+				BF86805D2B3F5FFF00C2ECAB /* MealPlanDetailViewController.xib in Resources */,
+				BF86805E2B3F5FFF00C2ECAB /* MyMovesVideoPlayerViewController.xib in Resources */,
+				BF8681022B3F60D500C2ECAB /* Assets.xcassets in Resources */,
+				BF86805F2B3F5FFF00C2ECAB /* MyMovesDetailsViewController.xib in Resources */,
+				BF8680602B3F5FFF00C2ECAB /* ProfileContactVC.xib in Resources */,
+				BF8680612B3F5FFF00C2ECAB /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */,
+				BF8680622B3F5FFF00C2ECAB /* GroceryListViewController.xib in Resources */,
+				BF8680632B3F5FFF00C2ECAB /* PlansTableViewCell.xib in Resources */,
+				BF8681042B3F60DE00C2ECAB /* MyNeWeighs.xcconfig in Resources */,
+				BF8680642B3F5FFF00C2ECAB /* OtherHealthServiceVC.xib in Resources */,
+				BF8680652B3F5FFF00C2ECAB /* DietMasterGoViewController.xib in Resources */,
+				BF8680662B3F5FFF00C2ECAB /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
+				BF8680672B3F5FFF00C2ECAB /* MyMovesListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9454,6 +9772,64 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TeleDiets/Pods-TeleDiets-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BF8680352B3F5FFF00C2ECAB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MyNeWeighs-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BF8680FA2B3F5FFF00C2ECAB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		BF8680FB2B3F5FFF00C2ECAB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BFB3C3A32AF55CF900F2CFA2 /* [CP] Check Pods Manifest.lock */ = {
@@ -11762,6 +12138,118 @@
 				BF6F24BB2AD7405B003041B1 /* MyMovesViewController.m in Sources */,
 				BF6F24BC2AD7405B003041B1 /* LogDaySummaryView.swift in Sources */,
 				BF6F24BD2AD7405B003041B1 /* KeychainItemWrapper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF8680692B3F5FFF00C2ECAB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF86806A2B3F5FFF00C2ECAB /* main.m in Sources */,
+				BF86806B2B3F5FFF00C2ECAB /* DMDetailTableViewCell.m in Sources */,
+				BF86806C2B3F5FFF00C2ECAB /* DietMasterGoAppDelegate.m in Sources */,
+				BF86806D2B3F5FFF00C2ECAB /* DMMessagesDataProvider.m in Sources */,
+				BF86806E2B3F5FFF00C2ECAB /* AppSettings.m in Sources */,
+				BF86806F2B3F5FFF00C2ECAB /* BaseViewController.m in Sources */,
+				BF8680702B3F5FFF00C2ECAB /* ExchangeFood.m in Sources */,
+				BF8680712B3F5FFF00C2ECAB /* MyMovesDetailCollectionViewCell.m in Sources */,
+				BF8680722B3F5FFF00C2ECAB /* MyLogViewController.m in Sources */,
+				BF8680732B3F5FFF00C2ECAB /* DetailViewController.m in Sources */,
+				BF8680742B3F5FFF00C2ECAB /* Log_Add.m in Sources */,
+				BF8680752B3F5FFF00C2ECAB /* RecordWeightView.m in Sources */,
+				BF8680762B3F5FFF00C2ECAB /* DMMove.m in Sources */,
+				BF8680772B3F5FFF00C2ECAB /* FoodsHome.m in Sources */,
+				BF8680782B3F5FFF00C2ECAB /* FoodsSearch.m in Sources */,
+				BF8680792B3F5FFF00C2ECAB /* ManageFoods.m in Sources */,
+				BF86807A2B3F5FFF00C2ECAB /* FoodCategoryPicker.m in Sources */,
+				BF86807B2B3F5FFF00C2ECAB /* MeasurePicker.m in Sources */,
+				BF86807C2B3F5FFF00C2ECAB /* DMConstants.m in Sources */,
+				BF86807D2B3F5FFF00C2ECAB /* FoodsList.m in Sources */,
+				BF86807E2B3F5FFF00C2ECAB /* UIColor+Extension.swift in Sources */,
+				BF86807F2B3F5FFF00C2ECAB /* TUTSimpleScatterPlot.m in Sources */,
+				BF8680802B3F5FFF00C2ECAB /* MealPlanDetailsTableViewCell.m in Sources */,
+				BF8680812B3F5FFF00C2ECAB /* DMActivityIndicator.m in Sources */,
+				BF8680822B3F5FFF00C2ECAB /* MCNewCustomLayeredView.m in Sources */,
+				BF8680832B3F5FFF00C2ECAB /* ExercisesViewController.m in Sources */,
+				BF8680842B3F5FFF00C2ECAB /* DMFood.m in Sources */,
+				BF8680852B3F5FFF00C2ECAB /* MyMovesDetailsViewController.m in Sources */,
+				BF8680862B3F5FFF00C2ECAB /* ExercisesDetailViewController.m in Sources */,
+				BF8680872B3F5FFF00C2ECAB /* DMMoveSet.m in Sources */,
+				BF8680882B3F5FFF00C2ECAB /* DietmasterEngine.m in Sources */,
+				BF8680892B3F5FFF00C2ECAB /* FavoriteMealsViewController.m in Sources */,
+				BF86808A2B3F5FFF00C2ECAB /* DMWeightLogEntry.m in Sources */,
+				BF86808B2B3F5FFF00C2ECAB /* LoginViewController.m in Sources */,
+				BF86808C2B3F5FFF00C2ECAB /* MyMovesListViewController.m in Sources */,
+				BF86808D2B3F5FFF00C2ECAB /* LearnMoreViewController.m in Sources */,
+				BF86808E2B3F5FFF00C2ECAB /* NSData+Blocks.m in Sources */,
+				BF86808F2B3F5FFF00C2ECAB /* DMMealPlan.m in Sources */,
+				BF8680902B3F5FFF00C2ECAB /* DMMyLogDataProvider.m in Sources */,
+				BF8680912B3F5FFF00C2ECAB /* NSString+Encode.m in Sources */,
+				BF8680922B3F5FFF00C2ECAB /* MealPlanViewController.m in Sources */,
+				BF8680932B3F5FFF00C2ECAB /* ProfileAlertVCViewController.m in Sources */,
+				BF8680942B3F5FFF00C2ECAB /* DMMoveRoutine.m in Sources */,
+				BF8680952B3F5FFF00C2ECAB /* AppConfiguration.swift in Sources */,
+				BF8680962B3F5FFF00C2ECAB /* MealPlanDetailViewController.m in Sources */,
+				BF8680972B3F5FFF00C2ECAB /* ExchangeFoodViewController.m in Sources */,
+				BF8680982B3F5FFF00C2ECAB /* CustomImageFlowLayout.m in Sources */,
+				BF8680992B3F5FFF00C2ECAB /* DMMoveCategory.m in Sources */,
+				BF86809A2B3F5FFF00C2ECAB /* ProfileContactVC.m in Sources */,
+				BF86809B2B3F5FFF00C2ECAB /* UserMealType.m in Sources */,
+				BF86809C2B3F5FFF00C2ECAB /* MyMovesListTableViewCell.m in Sources */,
+				BF86809D2B3F5FFF00C2ECAB /* DMMovePickerRow.m in Sources */,
+				BF86809E2B3F5FFF00C2ECAB /* MCNewCustomLayer.m in Sources */,
+				BF86809F2B3F5FFF00C2ECAB /* InAppPurchaseViewController.m in Sources */,
+				BF8680A02B3F5FFF00C2ECAB /* DMAuthManager.m in Sources */,
+				BF8680A12B3F5FFF00C2ECAB /* MyMovesDetailFooterCollectionReusableView.m in Sources */,
+				BF8680A22B3F5FFF00C2ECAB /* DMDatabaseUtilities.m in Sources */,
+				BF8680A32B3F5FFF00C2ECAB /* DMMessage.m in Sources */,
+				BF8680A42B3F5FFF00C2ECAB /* headerVw.m in Sources */,
+				BF8680A52B3F5FFF00C2ECAB /* UserDataFetcher.swift in Sources */,
+				BF8680A62B3F5FFF00C2ECAB /* PlansTableViewCell.m in Sources */,
+				BF8680A72B3F5FFF00C2ECAB /* DMMovePlan.m in Sources */,
+				BF8680A82B3F5FFF00C2ECAB /* MyMovesDataProvider.m in Sources */,
+				BF8680A92B3F5FFF00C2ECAB /* MyMovesVideoPlayerViewController.m in Sources */,
+				BF8680AA2B3F5FFF00C2ECAB /* UserGoalVC.m in Sources */,
+				BF8680AB2B3F5FFF00C2ECAB /* MCPieChartView.m in Sources */,
+				BF8680AC2B3F5FFF00C2ECAB /* DMMoveTag.m in Sources */,
+				BF8680AD2B3F5FFF00C2ECAB /* BarCodeScanner.swift in Sources */,
+				BF8680AE2B3F5FFF00C2ECAB /* DMSettingsViewController.swift in Sources */,
+				BF8680AF2B3F5FFF00C2ECAB /* ProfileVC.m in Sources */,
+				BF8680B02B3F5FFF00C2ECAB /* OtherHealthServiceVC.m in Sources */,
+				BF8680B12B3F5FFF00C2ECAB /* FetchUtilities.swift in Sources */,
+				BF8680B22B3F5FFF00C2ECAB /* SendView.m in Sources */,
+				BF8680B32B3F5FFF00C2ECAB /* MyMovesTableViewCell.m in Sources */,
+				BF8680B42B3F5FFF00C2ECAB /* DMPickerViewController.swift in Sources */,
+				BF8680B52B3F5FFF00C2ECAB /* DMDatePickerViewController.swift in Sources */,
+				BF8680B62B3F5FFF00C2ECAB /* MessageViewController.m in Sources */,
+				BF8680B72B3F5FFF00C2ECAB /* PurchaseIAPHelper.m in Sources */,
+				BF8680B82B3F5FFF00C2ECAB /* MCUtil.m in Sources */,
+				BF8680B92B3F5FFF00C2ECAB /* GrowingTextView.swift in Sources */,
+				BF8680BA2B3F5FFF00C2ECAB /* MainMenuFAB.swift in Sources */,
+				BF8680BB2B3F5FFF00C2ECAB /* IAPHelper.m in Sources */,
+				BF8680BC2B3F5FFF00C2ECAB /* DMMoveDay.m in Sources */,
+				BF8680BD2B3F5FFF00C2ECAB /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
+				BF8680BE2B3F5FFF00C2ECAB /* UIViewController+Navigation.m in Sources */,
+				BF8680BF2B3F5FFF00C2ECAB /* DailyActivityTypeVC.m in Sources */,
+				BF8680C02B3F5FFF00C2ECAB /* DMMealPlanItem.m in Sources */,
+				BF8680C12B3F5FFF00C2ECAB /* DMGUtilities.m in Sources */,
+				BF8680C22B3F5FFF00C2ECAB /* MessageCell.m in Sources */,
+				BF8680C32B3F5FFF00C2ECAB /* NSNull+NullCategoryExtension.m in Sources */,
+				BF8680C42B3F5FFF00C2ECAB /* MCSliceLayer.m in Sources */,
+				BF8680C52B3F5FFF00C2ECAB /* StepData.m in Sources */,
+				BF8680C62B3F5FFF00C2ECAB /* DMUser.m in Sources */,
+				BF8680C72B3F5FFF00C2ECAB /* SceneDelegate.swift in Sources */,
+				BF8680C82B3F5FFF00C2ECAB /* DietMasterGoViewController.m in Sources */,
+				BF8680C92B3F5FFF00C2ECAB /* MyLogTableViewCell.m in Sources */,
+				BF8680CA2B3F5FFF00C2ECAB /* DMMealPlanDataProvider.m in Sources */,
+				BF8680CB2B3F5FFF00C2ECAB /* NSObject+Description.m in Sources */,
+				BF8680CC2B3F5FFF00C2ECAB /* DayDataProvider.swift in Sources */,
+				BF8680CD2B3F5FFF00C2ECAB /* DMDataFetcher.m in Sources */,
+				BF8680CE2B3F5FFF00C2ECAB /* GroceryListViewController.m in Sources */,
+				BF8680CF2B3F5FFF00C2ECAB /* MyGoalViewController.m in Sources */,
+				BF8680D02B3F5FFF00C2ECAB /* MyMovesViewController.m in Sources */,
+				BF8680D12B3F5FFF00C2ECAB /* LogDaySummaryView.swift in Sources */,
+				BF8680D22B3F5FFF00C2ECAB /* KeychainItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15860,6 +16348,200 @@
 			};
 			name = Distribution;
 		};
+		BF8680FD2B3F5FFF00C2ECAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF8680332B3F5FD200C2ECAB /* MyNeWeighs.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Debug;
+		};
+		BF8680FE2B3F5FFF00C2ECAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF8680332B3F5FD200C2ECAB /* MyNeWeighs.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Release;
+		};
+		BF8680FF2B3F5FFF00C2ECAB /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF8680332B3F5FD200C2ECAB /* MyNeWeighs.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Distribution;
+		};
 		BFB3C4612AF55CF900F2CFA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFB3C3A12AF55CD300F2CFA2 /* JoyfulWellness.xcconfig */;
@@ -17101,6 +17783,16 @@
 				BF6F24DD2AD7405B003041B1 /* Debug */,
 				BF6F24DE2AD7405B003041B1 /* Release */,
 				BF6F24DF2AD7405B003041B1 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF8680FC2B3F5FFF00C2ECAB /* Build configuration list for PBXNativeTarget "MyNeWeighs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF8680FD2B3F5FFF00C2ECAB /* Debug */,
+				BF8680FE2B3F5FFF00C2ECAB /* Release */,
+				BF8680FF2B3F5FFF00C2ECAB /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
