@@ -43,7 +43,7 @@ DMG_APPLE_TEAM_PREFIX = KRVB6ZB9W4
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = ProWeightLoss
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
-DMG_MYMOVES_ENABLED = NO
+DMG_MYMOVES_ENABLED = Yes
 
 // ************************************
 // ********* REPLICA DEFAULTS *********

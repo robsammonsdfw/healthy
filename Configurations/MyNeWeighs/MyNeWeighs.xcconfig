@@ -71,10 +71,10 @@ DMG_BACKGROUND_COLOR = #FFFFFF
 // The foreground color for the "Hamburger" home menu.
 DMG_HOME_ICON_FOREGROUND_COLOR = #000000
 // The home menu icon color on the tiles.
-DMG_MENU_ICON_COLOR = #1b6292
+DMG_MENU_ICON_COLOR = #3cb64b
 
 // Color for any header background if needed.
-DMG_HEADER_COLOR = #1b6292
+DMG_HEADER_COLOR = #3cb64b
 // Text color for any header if needed.
 DMG_HEADER_TEXTCOLOR = #000000
 
@@ -84,10 +84,10 @@ DMG_BUTTON_COLOR = #3cb64b
 DMG_BUTTON_TEXTCOLOR = #000000
 
 // Settings "Switch" ON Color.
-DMG_SWITCH_ON_COLOR = #1b6292
+DMG_SWITCH_ON_COLOR = #3cb64b
 
 // Footer background color where needed.
-DMG_FOOTER_COLOR = #1b6292
+DMG_FOOTER_COLOR = #3cb64b
 // Text color for any footer if needed.
 DMG_FOOTER_TEXTCOLOR = #000000
 
@@ -100,7 +100,7 @@ DMG_CALENDAR_MOVEDAY_COLOR = #BFBFBF
 
 // Colors for the Messages Chat.
 // Sender = Current User, Recipient = Coach/Professional.
-DMG_CHAT_SENDER_COLOR = #1b6292
+DMG_CHAT_SENDER_COLOR = #3cb64b
 DMG_CHAT_SENDER_TEXTCOLOR = #000000
 DMG_CHAT_RECIPIENT_COLOR = #E5E5E9
 DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
