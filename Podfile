@@ -134,6 +134,11 @@ target 'Nutrishape' do
   core_pods
 end
 
+target 'VAYDA' do
+  core_pods
+end
+
+
 
 # Ensure all dependencies are a minimum version of iOS 15.
 post_install do |installer|
