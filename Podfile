@@ -138,6 +138,22 @@ target 'VAYDA' do
   core_pods
 end
 
+target 'RESHAPE' do
+  core_pods
+end
+
+target 'GETUFIT' do
+  core_pods
+end
+
+target 'N W Genetics' do
+  core_pods
+end
+
+target 'Forte 4Ever' do
+  core_pods
+end
+
 
 
 # Ensure all dependencies are a minimum version of iOS 15.
