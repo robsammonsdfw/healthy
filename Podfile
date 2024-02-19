@@ -154,6 +154,14 @@ target 'Forte 4Ever' do
   core_pods
 end
 
+target '2FIT1' do
+  core_pods
+end
+
+target 'BEYOND MOTION NUTRITION' do
+  core_pods
+end
+
 
 
 # Ensure all dependencies are a minimum version of iOS 15.
