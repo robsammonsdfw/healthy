@@ -162,6 +162,11 @@ target 'BEYOND MOTION NUTRITION' do
   core_pods
 end
 
+target 'TRANSFORM by Juliette Wooten' do
+  core_pods
+end
+
+
 
 
 # Ensure all dependencies are a minimum version of iOS 15.

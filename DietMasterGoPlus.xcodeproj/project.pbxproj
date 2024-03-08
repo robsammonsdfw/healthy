@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		022A1B8CFCED6C125855D94C /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		022A1B8CFCED6C125855D94C /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		057CC0779C9770409801ADC2 /* Pods_N_W_Genetics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DB1A316B346C8207F704751 /* Pods_N_W_Genetics.framework */; };
 		05D8803B6F2C6591197B1F58 /* Pods_SweetStrength.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 865486590A852148ED9A04C2 /* Pods_SweetStrength.framework */; };
-		09A505FE3A286961244C9300 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		09A505FE3A286961244C9300 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		09C00E2BE1A7F17E0E63C9F1 /* Pods_XtremeFitness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E886809B204E9459F2D4AC53 /* Pods_XtremeFitness.framework */; };
-		09D5CFE36B0F38621A7F3354 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		09D5CFE36B0F38621A7F3354 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		0E04F3262AABAC6F0068A488 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		0E04F3272AABAC6F0068A488 /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
 		0E04F3282AABAC6F0068A488 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
@@ -561,7 +561,7 @@
 		0E6F913D2A43580A00956F1E /* UIViewController+Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913C2A43580A00956F1E /* UIViewController+Navigation.m */; };
 		0E6F913F2A43C1F500956F1E /* LogDaySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */; };
 		0E6F91412A43D50C00956F1E /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91402A43D50C00956F1E /* UIColor+Extension.swift */; };
-		0E773C885DDC5B4EACF8301A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0E773C885DDC5B4EACF8301A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		0E83C4AC2A4F1EFE001DC6BD /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
 		0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
 		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
@@ -1622,21 +1622,21 @@
 		0EF976F82A85233D0089FC8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		0EF976F92A85233D0089FC8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		0EF976FA2A85233D0089FC8D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		0EF976FB2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FC2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FD2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FE2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FF2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FB2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FC2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FD2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FE2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FF2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		0EF9770D2A8523680089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770A2A8523650089FC8D /* Assets.xcassets */; };
 		0EF9770E2A85236D0089FC8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770B2A8523650089FC8D /* GoogleService-Info.plist */; };
 		0EF9770F2A85262D0089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C722A56CE4900D8E7E2 /* Assets.xcassets */; };
 		111B526553778A85CE2D7BC0 /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 637E9F959283085C295F8DFA /* Pods_ReplicaTemplate.framework */; };
-		1C447619E42D4908D09EBF2B /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		1C447619E42D4908D09EBF2B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		210CDE593E0EEE5DEFFE4CE6 /* Pods_LightOfTheWhirl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8886BFA3A51B24E45F4BAAF /* Pods_LightOfTheWhirl.framework */; };
-		2DF9329B09470370125D374E /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		3448A0C84B4DB0383710D52A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		2DF9329B09470370125D374E /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		3448A0C84B4DB0383710D52A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		344D04E0062B1EF17D26813E /* Pods_DietMasterGoPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B488B5092C0776AE999195E4 /* Pods_DietMasterGoPlus.framework */; };
-		355F17FD1DB705DA96ED1F99 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		355F17FD1DB705DA96ED1F99 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		3A552991C0BB3A2CEA1D5E95 /* Pods_MyMealCoach.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B68C969F0E692DCDF0D76CB /* Pods_MyMealCoach.framework */; };
 		401B63A920B3FC64004453E7 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		401B63AA20B3FC64004453E7 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
@@ -1721,7 +1721,7 @@
 		40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */; };
 		40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */; };
 		43D99F9DB643EA5BA07DE375 /* Pods_NexGenFitness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB45ACC18C68A7A5DDDB6263 /* Pods_NexGenFitness.framework */; };
-		469D03EB910BF0D9A620604A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		469D03EB910BF0D9A620604A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		4C27831E1D550BC29F553871 /* Pods_GOMealPlans.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1494C4E5411FA8EB0F0752B0 /* Pods_GOMealPlans.framework */; };
 		4D5CAD6F497F22CE587E48D5 /* Pods_UpperhandAthletics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C43368F8CF4781EA085B0576 /* Pods_UpperhandAthletics.framework */; };
 		518429FFD7616926DA03BA65 /* Pods_SeeYouHealthy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B87326DC8F87E0E5BEEC84 /* Pods_SeeYouHealthy.framework */; };
@@ -1761,11 +1761,11 @@
 		65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4382249885D100583000 /* MyLogTableViewCell.m */; };
 		65FF4386249885D100583000 /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
 		66C92B9376ACF004ECAA0199 /* Pods_ProWeightLoss.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F759D184F740D84D4A9F1814 /* Pods_ProWeightLoss.framework */; };
-		6A1FF65C67A74ABC189C68B9 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		6A1FF65C67A74ABC189C68B9 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		6BDA16102D7CC4F08CC81FCE /* Pods_BEYOND_MOTION_NUTRITION.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92D24E7E4CC4B111646D1FC /* Pods_BEYOND_MOTION_NUTRITION.framework */; };
-		6CF3FFC0A42040761DA6F930 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		6CF3FFC0A42040761DA6F930 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		71D1FD92173A31E8B1B0E02D /* Pods_MyNeWeighs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B94447B544D103211DDAEF53 /* Pods_MyNeWeighs.framework */; };
-		724681E6B9541C8273EF7C54 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		724681E6B9541C8273EF7C54 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		74CBFCE936688632A320F0A9 /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 365D1B126EF252B662555F9E /* Pods_ReplicaTemplate.framework */; };
 		774CE2704C71DF32174413C5 /* Pods_Forte_4Ever.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 414B9240485B71B7D04E94A6 /* Pods_Forte_4Ever.framework */; };
 		79774E99241ADA602C03E02E /* Pods_GOMealsPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F841B90B3576E46FDA31141 /* Pods_GOMealsPlus.framework */; };
@@ -1773,21 +1773,21 @@
 		8079ACEA15E2054F10DCBF85 /* Pods_2FIT1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE60515175919F83C2BCA396 /* Pods_2FIT1.framework */; };
 		82C45661233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C4565F233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m */; };
 		82C45662233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C45660233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib */; };
-		9A1AAD8BA8DA155454C999CF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		9E66F09653D8DEE5855EF8D2 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		9A1AAD8BA8DA155454C999CF /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		9E66F09653D8DEE5855EF8D2 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9ED04BB675B69E8613F767BD /* Pods_TeleDiets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98367A6A8864A2A169C0A47B /* Pods_TeleDiets.framework */; };
 		A249E529B4A08C444AE71625 /* Pods_ZFitStudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A5FC584DF4F9291A61165B /* Pods_ZFitStudio.framework */; };
-		A820B4E51AEBE6770A64E4E3 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		A9C4CEE28410724D64246CD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		A820B4E51AEBE6770A64E4E3 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		A9C4CEE28410724D64246CD5 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		AA4D99304341CEEEEE3EF8C3 /* Pods_JoyfulWellness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004BD0824C832DAAE73419BA /* Pods_JoyfulWellness.framework */; };
-		AB7711AD5B38A8549691A5A8 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		AB7711AD5B38A8549691A5A8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		AEB72F4811A197F5096A5571 /* Pods_MedicallyFit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 468BDA5ABA39F68EA3A74425 /* Pods_MedicallyFit.framework */; };
 		B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */; };
 		B2119A4B224BA2210020FF5D /* MyMovesListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */; };
-		B3BC8AB135E4F72D48D99561 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		B3BC8AB135E4F72D48D99561 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		B6192CD5055DB5C8257245BC /* Pods_GETUFIT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4601BCFD3BCF2DD9713A0B69 /* Pods_GETUFIT.framework */; };
-		BB7B950B990AFE6411ECA416 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		BE13E39D9B75DD8C8F49C6CE /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BB7B950B990AFE6411ECA416 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BE13E39D9B75DD8C8F49C6CE /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BF03854A2AFABE610049A79B /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		BF03854B2AFABE610049A79B /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
 		BF03854C2AFABE610049A79B /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
@@ -3176,13 +3176,13 @@
 		BF6F24CF2AD7405B003041B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		BF6F24D02AD7405B003041B1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		BF6F24D12AD7405B003041B1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		BF6F24D22AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D32AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D42AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D52AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D62AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D72AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D82AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D22AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D32AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D42AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D52AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D62AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D72AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D82AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BF6F24E22AD75478003041B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF6F241E2AD74000003041B1 /* Assets.xcassets */; };
 		BF6F24E32AD755D6003041B1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF6F241F2AD74000003041B1 /* GoogleService-Info.plist */; };
 		BF7B938E2B71740A007EC568 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
@@ -4229,6 +4229,204 @@
 		BFA9416A2B7E9F2B001C3D48 /* BEYOND MOTION NUTRITION.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BFA940922B7E9C9F001C3D48 /* BEYOND MOTION NUTRITION.xcconfig */; };
 		BFA9416B2B7E9F2E001C3D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFA940932B7E9C9F001C3D48 /* Assets.xcassets */; };
 		BFA941722B7EB2E5001C3D48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFA941712B7EB2E5001C3D48 /* GoogleService-Info.plist */; };
+		BFA9417A2B851999001C3D48 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
+		BFA9417B2B851999001C3D48 /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
+		BFA9417C2B851999001C3D48 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
+		BFA9417D2B851999001C3D48 /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
+		BFA9417E2B851999001C3D48 /* UserMealType.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1A26BD1D82004D1654 /* UserMealType.xib */; };
+		BFA9417F2B851999001C3D48 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2467EC6912D5749600B5591E /* DetailViewController.xib */; };
+		BFA941802B851999001C3D48 /* Log_Add.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2409564F12D749660065548F /* Log_Add.xib */; };
+		BFA941812B851999001C3D48 /* RecordWeightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FF54FD12D781D900E81066 /* RecordWeightView.xib */; };
+		BFA941822B851999001C3D48 /* FoodsHome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2417DD7F131D942200346132 /* FoodsHome.xib */; };
+		BFA941832B851999001C3D48 /* DailyActivityTypeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1F26BD1D98004D1654 /* DailyActivityTypeVC.xib */; };
+		BFA941842B851999001C3D48 /* UserGoalVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2426BD1DAE004D1654 /* UserGoalVC.xib */; };
+		BFA941852B851999001C3D48 /* ManageFoods.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247695B013FEA91000ED37E6 /* ManageFoods.xib */; };
+		BFA941862B851999001C3D48 /* FoodCategoryPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CE65382148EB2AA00A3C992 /* FoodCategoryPicker.xib */; };
+		BFA941872B851999001C3D48 /* MeasurePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC81492DB950098A0C1 /* MeasurePicker.xib */; };
+		BFA941882B851999001C3D48 /* FoodsList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B54DB14A2A72800D210CA /* FoodsList.xib */; };
+		BFA941892B851999001C3D48 /* ExercisesDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E71B79214DE157C008C9576 /* ExercisesDetailViewController.xib */; };
+		BFA9418A2B851999001C3D48 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5423014E2FBD60023BA4C /* Settings.bundle */; };
+		BFA9418B2B851999001C3D48 /* MyGoalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208FA25015A5700F412B0 /* MyGoalViewController.xib */; };
+		BFA9418C2B851999001C3D48 /* MyMovesDetailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035C021F1F29F00968755 /* MyMovesDetailCollectionViewCell.xib */; };
+		BFA9418D2B851999001C3D48 /* InAppPurchaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D9250153C300F412B0 /* InAppPurchaseViewController.xib */; };
+		BFA9418E2B851999001C3D48 /* FavoriteMealsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5424D14E325210023BA4C /* FavoriteMealsViewController.xib */; };
+		BFA9418F2B851999001C3D48 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */; };
+		BFA941902B851999001C3D48 /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
+		BFA941912B851999001C3D48 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40402831224E414C0081FFD3 /* sound.mp3 */; };
+		BFA941922B851999001C3D48 /* headerVw.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D7250153C300F412B0 /* headerVw.xib */; };
+		BFA941942B851999001C3D48 /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
+		BFA941952B851999001C3D48 /* LearnMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */; };
+		BFA941962B851999001C3D48 /* privacypolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D815004364008413AB /* privacypolicy.html */; };
+		BFA941972B851999001C3D48 /* termsofservice.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D915004364008413AB /* termsofservice.html */; };
+		BFA941982B851999001C3D48 /* AppImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90962A43289F00956F1E /* AppImages.xcassets */; };
+		BFA9419A2B851999001C3D48 /* DMGO_v3.9.2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90992A43289F00956F1E /* DMGO_v3.9.2.sqlite */; };
+		BFA9419B2B851999001C3D48 /* MyMovesListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */; };
+		BFA9419C2B851999001C3D48 /* ProfileVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65301CC2269E50A600CA2CAA /* ProfileVC.xib */; };
+		BFA9419D2B851999001C3D48 /* MyMovesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88A821ECA95F00B2F232 /* MyMovesTableViewCell.xib */; };
+		BFA9419E2B851999001C3D48 /* MealPlanDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF437B2497F4B900583000 /* MealPlanDetailsTableViewCell.xib */; };
+		BFA9419F2B851999001C3D48 /* ProfileAlertVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1026BD1D48004D1654 /* ProfileAlertVCViewController.xib */; };
+		BFA941A02B851999001C3D48 /* MealPlanDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */; };
+		BFA941A12B851999001C3D48 /* MyMovesVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C45660233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib */; };
+		BFA941A22B851999001C3D48 /* MyMovesDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88B221ECD53200B2F232 /* MyMovesDetailsViewController.xib */; };
+		BFA941A32B851999001C3D48 /* ProfileContactVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1626BD1D6B004D1654 /* ProfileContactVC.xib */; };
+		BFA941A42B851999001C3D48 /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035BF21F1F29E00968755 /* MyMovesDetailHeaderCollectionReusableView.xib */; };
+		BFA941A52B851999001C3D48 /* GroceryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65981589365800CCE0AD /* GroceryListViewController.xib */; };
+		BFA941A62B851999001C3D48 /* PlansTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208DD250153C300F412B0 /* PlansTableViewCell.xib */; };
+		BFA941A72B851999001C3D48 /* OtherHealthServiceVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2926BD1DC3004D1654 /* OtherHealthServiceVC.xib */; };
+		BFA941A82B851999001C3D48 /* DietMasterGoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208F5250158BC00F412B0 /* DietMasterGoViewController.xib */; };
+		BFA941A92B851999001C3D48 /* MyMovesDetailFooterCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */; };
+		BFA941AA2B851999001C3D48 /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
+		BFA941AD2B851999001C3D48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		BFA941AE2B851999001C3D48 /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
+		BFA941AF2B851999001C3D48 /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
+		BFA941B02B851999001C3D48 /* DMMessagesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */; };
+		BFA941B12B851999001C3D48 /* AppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D7129B928400A84340 /* AppSettings.m */; };
+		BFA941B22B851999001C3D48 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E101BA92A5626E700D8E7E2 /* BaseViewController.m */; };
+		BFA941B32B851999001C3D48 /* ExchangeFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 2455070E129BA4A700A84340 /* ExchangeFood.m */; };
+		BFA941B42B851999001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */; };
+		BFA941B52B851999001C3D48 /* MyLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D2129B926F00A84340 /* MyLogViewController.m */; };
+		BFA941B62B851999001C3D48 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2467EC6812D5749600B5591E /* DetailViewController.m */; };
+		BFA941B72B851999001C3D48 /* Log_Add.m in Sources */ = {isa = PBXBuildFile; fileRef = 2409564E12D749660065548F /* Log_Add.m */; };
+		BFA941B82B851999001C3D48 /* RecordWeightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 24FF54FC12D781D900E81066 /* RecordWeightView.m */; };
+		BFA941B92B851999001C3D48 /* DMMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */; };
+		BFA941BA2B851999001C3D48 /* FoodsHome.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DD7E131D942200346132 /* FoodsHome.m */; };
+		BFA941BB2B851999001C3D48 /* FoodsSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DE0C131DA14E00346132 /* FoodsSearch.m */; };
+		BFA941BC2B851999001C3D48 /* ManageFoods.m in Sources */ = {isa = PBXBuildFile; fileRef = 247695AF13FEA91000ED37E6 /* ManageFoods.m */; };
+		BFA941BD2B851999001C3D48 /* FoodCategoryPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CE65381148EB2AA00A3C992 /* FoodCategoryPicker.m */; };
+		BFA941BE2B851999001C3D48 /* MeasurePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC71492DB950098A0C1 /* MeasurePicker.m */; };
+		BFA941BF2B851999001C3D48 /* DMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */; };
+		BFA941C02B851999001C3D48 /* FoodsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C3B54DA14A2A72800D210CA /* FoodsList.m */; };
+		BFA941C12B851999001C3D48 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91402A43D50C00956F1E /* UIColor+Extension.swift */; };
+		BFA941C22B851999001C3D48 /* TUTSimpleScatterPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */; };
+		BFA941C32B851999001C3D48 /* MealPlanDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF437A2497F4B900583000 /* MealPlanDetailsTableViewCell.m */; };
+		BFA941C42B851999001C3D48 /* DMActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */; };
+		BFA941C52B851999001C3D48 /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */; };
+		BFA941C62B851999001C3D48 /* ExercisesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E81811E14D46A49002C8520 /* ExercisesViewController.m */; };
+		BFA941C72B851999001C3D48 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
+		BFA941C82B851999001C3D48 /* MyMovesDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88B121ECD53200B2F232 /* MyMovesDetailsViewController.m */; };
+		BFA941C92B851999001C3D48 /* ExercisesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79114DE157C008C9576 /* ExercisesDetailViewController.m */; };
+		BFA941CA2B851999001C3D48 /* DMMoveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBF2A4751690017D131 /* DMMoveSet.m */; };
+		BFA941CB2B851999001C3D48 /* DietmasterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */; };
+		BFA941CC2B851999001C3D48 /* FavoriteMealsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */; };
+		BFA941CD2B851999001C3D48 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
+		BFA941CE2B851999001C3D48 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */; };
+		BFA941CF2B851999001C3D48 /* MyMovesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */; };
+		BFA941D02B851999001C3D48 /* LearnMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F44D315003DA6008413AB /* LearnMoreViewController.m */; };
+		BFA941D12B851999001C3D48 /* NSData+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E002FF3153E19560094341F /* NSData+Blocks.m */; };
+		BFA941D22B851999001C3D48 /* DMMealPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F52A50BB29000BDDF1 /* DMMealPlan.m */; };
+		BFA941D32B851999001C3D48 /* DMMyLogDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */; };
+		BFA941D42B851999001C3D48 /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */; };
+		BFA941D52B851999001C3D48 /* MealPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */; };
+		BFA941D62B851999001C3D48 /* ProfileAlertVCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D0F26BD1D48004D1654 /* ProfileAlertVCViewController.m */; };
+		BFA941D72B851999001C3D48 /* DMMoveRoutine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DC22A4757010017D131 /* DMMoveRoutine.m */; };
+		BFA941D82B851999001C3D48 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E101BA42A56028900D8E7E2 /* AppConfiguration.swift */; };
+		BFA941D92B851999001C3D48 /* MealPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */; };
+		BFA941DA2B851999001C3D48 /* ExchangeFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */; };
+		BFA941DB2B851999001C3D48 /* CustomImageFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */; };
+		BFA941DC2B851999001C3D48 /* DMMoveCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */; };
+		BFA941DD2B851999001C3D48 /* ProfileContactVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1526BD1D6B004D1654 /* ProfileContactVC.m */; };
+		BFA941DE2B851999001C3D48 /* UserMealType.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1B26BD1D82004D1654 /* UserMealType.m */; };
+		BFA941DF2B851999001C3D48 /* MyMovesListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */; };
+		BFA941E02B851999001C3D48 /* DMMovePickerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FB2A4635940032162E /* DMMovePickerRow.m */; };
+		BFA941E12B851999001C3D48 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
+		BFA941E22B851999001C3D48 /* InAppPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D4250153C300F412B0 /* InAppPurchaseViewController.m */; };
+		BFA941E32B851999001C3D48 /* DMAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */; };
+		BFA941E42B851999001C3D48 /* MyMovesDetailFooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 402A3C0F21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m */; };
+		BFA941E52B851999001C3D48 /* DMDatabaseUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */; };
+		BFA941E62B851999001C3D48 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
+		BFA941E72B851999001C3D48 /* headerVw.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D6250153C300F412B0 /* headerVw.m */; };
+		BFA941E82B851999001C3D48 /* UserDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */; };
+		BFA941E92B851999001C3D48 /* PlansTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208DC250153C300F412B0 /* PlansTableViewCell.m */; };
+		BFA941EA2B851999001C3D48 /* DMMovePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FE2A4672790032162E /* DMMovePlan.m */; };
+		BFA941EB2B851999001C3D48 /* MyMovesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */; };
+		BFA941EC2B851999001C3D48 /* MyMovesVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C4565F233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m */; };
+		BFA941ED2B851999001C3D48 /* UserGoalVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D2326BD1DAE004D1654 /* UserGoalVC.m */; };
+		BFA941EE2B851999001C3D48 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
+		BFA941EF2B851999001C3D48 /* DMMoveTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */; };
+		BFA941F02B851999001C3D48 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
+		BFA941F12B851999001C3D48 /* DMSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */; };
+		BFA941F22B851999001C3D48 /* ProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D0A26BD1D28004D1654 /* ProfileVC.m */; };
+		BFA941F32B851999001C3D48 /* OtherHealthServiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D2826BD1DC2004D1654 /* OtherHealthServiceVC.m */; };
+		BFA941F42B851999001C3D48 /* FetchUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */; };
+		BFA941F52B851999001C3D48 /* SendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2B6187EDE40004A542C /* SendView.m */; };
+		BFA941F62B851999001C3D48 /* MyMovesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88A721ECA95F00B2F232 /* MyMovesTableViewCell.m */; };
+		BFA941F72B851999001C3D48 /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
+		BFA941F82B851999001C3D48 /* DMDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */; };
+		BFA941F92B851999001C3D48 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A9187EDE40004A542C /* MessageViewController.m */; };
+		BFA941FA2B851999001C3D48 /* PurchaseIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */; };
+		BFA941FB2B851999001C3D48 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
+		BFA941FC2B851999001C3D48 /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
+		BFA941FD2B851999001C3D48 /* MainMenuFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */; };
+		BFA941FE2B851999001C3D48 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CD2501531A00F412B0 /* IAPHelper.m */; };
+		BFA941FF2B851999001C3D48 /* DMMoveDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBC2A4745040017D131 /* DMMoveDay.m */; };
+		BFA942002B851999001C3D48 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */; };
+		BFA942012B851999001C3D48 /* UIViewController+Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913C2A43580A00956F1E /* UIViewController+Navigation.m */; };
+		BFA942022B851999001C3D48 /* DailyActivityTypeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1E26BD1D98004D1654 /* DailyActivityTypeVC.m */; };
+		BFA942032B851999001C3D48 /* DMMealPlanItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F82A50BDCF000BDDF1 /* DMMealPlanItem.m */; };
+		BFA942042B851999001C3D48 /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
+		BFA942052B851999001C3D48 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A5187EDE40004A542C /* MessageCell.m */; };
+		BFA942062B851999001C3D48 /* NSNull+NullCategoryExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */; };
+		BFA942072B851999001C3D48 /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */; };
+		BFA942082B851999001C3D48 /* StepData.m in Sources */ = {isa = PBXBuildFile; fileRef = 403FEB521FD149A5006D9B8F /* StepData.m */; };
+		BFA942092B851999001C3D48 /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
+		BFA9420A2B851999001C3D48 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F8FF32A43104200956F1E /* SceneDelegate.swift */; };
+		BFA9420B2B851999001C3D48 /* DietMasterGoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208F2250158A900F412B0 /* DietMasterGoViewController.m */; };
+		BFA9420C2B851999001C3D48 /* MyLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4382249885D100583000 /* MyLogTableViewCell.m */; };
+		BFA9420D2B851999001C3D48 /* DMMealPlanDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409802A4B13E500AF5BAD /* DMMealPlanDataProvider.m */; };
+		BFA9420E2B851999001C3D48 /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
+		BFA9420F2B851999001C3D48 /* DayDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */; };
+		BFA942102B851999001C3D48 /* DMDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */; };
+		BFA942112B851999001C3D48 /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */; };
+		BFA942122B851999001C3D48 /* MyGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208FB25015A5700F412B0 /* MyGoalViewController.m */; };
+		BFA942132B851999001C3D48 /* MyMovesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88AC21ECA98600B2F232 /* MyMovesViewController.m */; };
+		BFA942142B851999001C3D48 /* LogDaySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */; };
+		BFA942152B851999001C3D48 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208E82501552400F412B0 /* KeychainItemWrapper.m */; };
+		BFA942172B851999001C3D48 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4318E2F38800FB97A7 /* SystemConfiguration.framework */; };
+		BFA942182B851999001C3D48 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402C5060221577C600259359 /* AVKit.framework */; };
+		BFA942192B851999001C3D48 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403FEB4E1FD1379C006D9B8F /* HealthKit.framework */; };
+		BFA9421A2B851999001C3D48 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D254AD1D62F564008513A0 /* Security.framework */; };
+		BFA9421B2B851999001C3D48 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586641D59BB5F005354D2 /* WebKit.framework */; };
+		BFA9421C2B851999001C3D48 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586621D59BB53005354D2 /* CoreTelephony.framework */; };
+		BFA9421D2B851999001C3D48 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4118E2F37900FB97A7 /* CFNetwork.framework */; };
+		BFA9421E2B851999001C3D48 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA3F18E2F37200FB97A7 /* MobileCoreServices.framework */; };
+		BFA9421F2B851999001C3D48 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADF531718B79400628F41 /* AudioToolbox.framework */; };
+		BFA942202B851999001C3D48 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADF4B1718B26800628F41 /* ImageIO.framework */; };
+		BFA942212B851999001C3D48 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9D17174DFB00628F41 /* CoreVideo.framework */; };
+		BFA942222B851999001C3D48 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650208E5250154CC00F412B0 /* StoreKit.framework */; };
+		BFA942232B851999001C3D48 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9B17174DF600628F41 /* CoreMedia.framework */; };
+		BFA942242B851999001C3D48 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9917174DF100628F41 /* AVFoundation.framework */; };
+		BFA942252B851999001C3D48 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E4788C514EAD8FA00B8FFE3 /* MessageUI.framework */; };
+		BFA942262B851999001C3D48 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECE6ED414BF3FC1004DEF36 /* QuartzCore.framework */; };
+		BFA942272B851999001C3D48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		BFA942282B851999001C3D48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		BFA942292B851999001C3D48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		BFA9422A2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9422B2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9422C2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9422D2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9422E2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9422F2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942302B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942312B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942322B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942332B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942342B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942352B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942362B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942382B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942392B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9423A2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9423B2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9423C2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9423D2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9423E2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9423F2B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942402B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942412B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA942422B851999001C3D48 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA9424D2B8519AE001C3D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFA941742B851806001C3D48 /* Assets.xcassets */; };
+		BFA9424E2B8519B3001C3D48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFA941752B851806001C3D48 /* GoogleService-Info.plist */; };
+		BFA9424F2B8519B6001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BFA941762B851806001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig */; };
 		BFB3C3A52AF55CF900F2CFA2 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		BFB3C3A62AF55CF900F2CFA2 /* BaseApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90742A43289F00956F1E /* BaseApp-Info.plist */; };
 		BFB3C3A72AF55CF900F2CFA2 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
@@ -5635,13 +5833,14 @@
 		BFFC10EA2AC618BB0011444E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C732A56CE4900D8E7E2 /* GoogleService-Info.plist */; };
 		C28A16C1088E787D051891A6 /* Pods_RESHAPE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B60E24780F5024AB4B8BB772 /* Pods_RESHAPE.framework */; };
 		C3E20FD4F3707C9B2ECBA92F /* Pods_VAYDA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50875338B60E03B900504EED /* Pods_VAYDA.framework */; };
-		CC3C2DFAFB9E38ABD2DE018C /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		CD6778D885ECCAC3ECD90C5D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		CE90CB2C499407717D4A175D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		CC3C2DFAFB9E38ABD2DE018C /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		CD6778D885ECCAC3ECD90C5D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		CE90CB2C499407717D4A175D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		D3CF66537F3F438CABE7DBAF /* Pods_SlimNation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D8CBBC5BF328AAFA1A25A9 /* Pods_SlimNation.framework */; };
-		D9B47E33FDD12182850AD75B /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		D9BC158A98415FB751684271 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		D9B47E33FDD12182850AD75B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		D9BC158A98415FB751684271 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		E0E37BD3DCD87F225ECA21BA /* Pods_YOUtrition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ACCA5A680989E869035C75D /* Pods_YOUtrition.framework */; };
+		E33A64837F5A5B08C09BD6AD /* Pods_TRANSFORM_by_Juliette_Wooten.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EF728307DDF00FA425B407 /* Pods_TRANSFORM_by_Juliette_Wooten.framework */; };
 		F08A1BB549E7ABC19832118B /* Pods_SuperBodyMethod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E460B370BDA5CB13296EDEFF /* Pods_SuperBodyMethod.framework */; };
 		F85AAEB6149C7FBD236D9910 /* Pods_FitProComplete.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81A2B028EC1BA323776691B8 /* Pods_FitProComplete.framework */; };
 		F8819979CA5FDD9072D056C8 /* Pods_DietMasterGo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F68B5A35B35A8ABEF722C720 /* Pods_DietMasterGo.framework */; };
@@ -5879,6 +6078,16 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BFA941612B7E9ECA001C3D48 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFA942442B851999001C3D48 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -6156,6 +6365,7 @@
 		13B5F47B06606EE57FB8D778 /* Pods-LightOfTheWhirl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LightOfTheWhirl.debug.xcconfig"; path = "Target Support Files/Pods-LightOfTheWhirl/Pods-LightOfTheWhirl.debug.xcconfig"; sourceTree = "<group>"; };
 		1494C4E5411FA8EB0F0752B0 /* Pods_GOMealPlans.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GOMealPlans.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		150FDA4D0571872B341BE874 /* Pods-N W Genetics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-N W Genetics.debug.xcconfig"; path = "Target Support Files/Pods-N W Genetics/Pods-N W Genetics.debug.xcconfig"; sourceTree = "<group>"; };
+		18CBB309DAFF0A44E3F2B546 /* Pods-TRANSFORM by Juliette Wooten.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TRANSFORM by Juliette Wooten.debug.xcconfig"; path = "Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten.debug.xcconfig"; sourceTree = "<group>"; };
 		19EAF17BD8E12111B3C684B8 /* Pods-UpperhandAthletics.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpperhandAthletics.distribution.xcconfig"; path = "Target Support Files/Pods-UpperhandAthletics/Pods-UpperhandAthletics.distribution.xcconfig"; sourceTree = "<group>"; };
 		1A8C6ACF81E45618A5A744BB /* Pods-DietMasterGoPlus.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DietMasterGoPlus.distribution.xcconfig"; path = "Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus.distribution.xcconfig"; sourceTree = "<group>"; };
 		1ABE5973387B672FB8579F5D /* Pods-Quintessa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quintessa.release.xcconfig"; path = "Target Support Files/Pods-Quintessa/Pods-Quintessa.release.xcconfig"; sourceTree = "<group>"; };
@@ -6219,6 +6429,7 @@
 		394C3A812DA5CC2F3396ABAC /* Pods-NexGenFitness.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NexGenFitness.release.xcconfig"; path = "Target Support Files/Pods-NexGenFitness/Pods-NexGenFitness.release.xcconfig"; sourceTree = "<group>"; };
 		3A2073C172E241C8D8070888 /* Pods-SlimNation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlimNation.debug.xcconfig"; path = "Target Support Files/Pods-SlimNation/Pods-SlimNation.debug.xcconfig"; sourceTree = "<group>"; };
 		3B4EB1BD262AEE1F96EB1622 /* Pods-YOUtrition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YOUtrition.debug.xcconfig"; path = "Target Support Files/Pods-YOUtrition/Pods-YOUtrition.debug.xcconfig"; sourceTree = "<group>"; };
+		3BD8C67DB1F6E0386FA59ABB /* Pods-TRANSFORM by Juliette Wooten.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TRANSFORM by Juliette Wooten.distribution.xcconfig"; path = "Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten.distribution.xcconfig"; sourceTree = "<group>"; };
 		401B65BA20B3FC64004453E7 /* DietMasterGoPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DietMasterGoPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		402A3C0E21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesDetailFooterCollectionReusableView.h; sourceTree = "<group>"; };
 		402A3C0F21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesDetailFooterCollectionReusableView.m; sourceTree = "<group>"; };
@@ -6274,7 +6485,6 @@
 		5C44E725A560359246FA33AB /* Pods-SuperBodyMethod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperBodyMethod.debug.xcconfig"; path = "Target Support Files/Pods-SuperBodyMethod/Pods-SuperBodyMethod.debug.xcconfig"; sourceTree = "<group>"; };
 		5E0C9B04649669D69A63D1F2 /* Pods-JLNutrition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLNutrition.debug.xcconfig"; path = "Target Support Files/Pods-JLNutrition/Pods-JLNutrition.debug.xcconfig"; sourceTree = "<group>"; };
 		5F945A8092571B895C42FBF9 /* Pods-TeleDiets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleDiets.debug.xcconfig"; path = "Target Support Files/Pods-TeleDiets/Pods-TeleDiets.debug.xcconfig"; sourceTree = "<group>"; };
-		637E9F959283085C295F8DFA /* Pods_ReplicaTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReplicaTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		639C96B99C04ACF4A7A20BD8 /* Pods-MyNeWeighs.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNeWeighs.distribution.xcconfig"; path = "Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs.distribution.xcconfig"; sourceTree = "<group>"; };
 		63F414984F1DCF14999EEEB8 /* Pods-Forte 4Ever.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Forte 4Ever.distribution.xcconfig"; path = "Target Support Files/Pods-Forte 4Ever/Pods-Forte 4Ever.distribution.xcconfig"; sourceTree = "<group>"; };
 		650208C9250152FA00F412B0 /* PurchaseIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseIAPHelper.h; sourceTree = "<group>"; };
@@ -6353,6 +6563,7 @@
 		8BE3F3D7E3982377037BC1AB /* Pods-SweetStrength.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SweetStrength.distribution.xcconfig"; path = "Target Support Files/Pods-SweetStrength/Pods-SweetStrength.distribution.xcconfig"; sourceTree = "<group>"; };
 		92DE075FA7825C168F2DD4BE /* Pods-ZFitStudio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZFitStudio.debug.xcconfig"; path = "Target Support Files/Pods-ZFitStudio/Pods-ZFitStudio.debug.xcconfig"; sourceTree = "<group>"; };
 		933AA8FA44F4A32520A13BD0 /* Pods-MedicallyFit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MedicallyFit.release.xcconfig"; path = "Target Support Files/Pods-MedicallyFit/Pods-MedicallyFit.release.xcconfig"; sourceTree = "<group>"; };
+		93EF728307DDF00FA425B407 /* Pods_TRANSFORM_by_Juliette_Wooten.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TRANSFORM_by_Juliette_Wooten.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FC597562A9D885DFC77C8F /* Pods-2FIT1.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-2FIT1.release.xcconfig"; path = "Target Support Files/Pods-2FIT1/Pods-2FIT1.release.xcconfig"; sourceTree = "<group>"; };
 		9603E117542611AADEBF5E1C /* Pods-MyNeWeighs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNeWeighs.release.xcconfig"; path = "Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs.release.xcconfig"; sourceTree = "<group>"; };
 		97300F28DD4E813CF42CEAE1 /* Pods-YOUTrition.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YOUTrition.distribution.xcconfig"; path = "Target Support Files/Pods-YOUTrition/Pods-YOUTrition.distribution.xcconfig"; sourceTree = "<group>"; };
@@ -6374,6 +6585,7 @@
 		B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesListTableViewCell.m; sourceTree = "<group>"; };
 		B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMovesListTableViewCell.xib; sourceTree = "<group>"; };
 		B488B5092C0776AE999195E4 /* Pods_DietMasterGoPlus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DietMasterGoPlus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5F4DEE30AE35B87CFA67764 /* Pods-TRANSFORM by Juliette Wooten.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TRANSFORM by Juliette Wooten.release.xcconfig"; path = "Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten.release.xcconfig"; sourceTree = "<group>"; };
 		B60E24780F5024AB4B8BB772 /* Pods_RESHAPE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RESHAPE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8886BFA3A51B24E45F4BAAF /* Pods_LightOfTheWhirl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LightOfTheWhirl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8A15CCE601D6048A375E49A /* Pods-RESHAPE.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RESHAPE.distribution.xcconfig"; path = "Target Support Files/Pods-RESHAPE/Pods-RESHAPE.distribution.xcconfig"; sourceTree = "<group>"; };
@@ -6437,6 +6649,10 @@
 		BFA940932B7E9C9F001C3D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFA941682B7E9ECA001C3D48 /* BEYOND MOTION NUTRITION.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BEYOND MOTION NUTRITION.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA941712B7EB2E5001C3D48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BFA941742B851806001C3D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BFA941752B851806001C3D48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BFA941762B851806001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "TRANSFORM by Juliette Wooten.xcconfig"; sourceTree = "<group>"; };
+		BFA9424B2B851999001C3D48 /* TRANSFORM by Juliette Wooten.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TRANSFORM by Juliette Wooten.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFB3C39F2AF55CD300F2CFA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFB3C3A02AF55CD300F2CFA2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BFB3C3A12AF55CD300F2CFA2 /* JoyfulWellness.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JoyfulWellness.xcconfig; sourceTree = "<group>"; };
@@ -6553,31 +6769,31 @@
 				0E101C5C2A56CC7300D8E7E2 /* Foundation.framework in Frameworks */,
 				0E101C5D2A56CC7300D8E7E2 /* UIKit.framework in Frameworks */,
 				0E101C5E2A56CC7300D8E7E2 /* CoreGraphics.framework in Frameworks */,
-				724681E6B9541C8273EF7C54 /* (null) in Frameworks */,
-				B3BC8AB135E4F72D48D99561 /* (null) in Frameworks */,
-				355F17FD1DB705DA96ED1F99 /* (null) in Frameworks */,
-				D9BC158A98415FB751684271 /* (null) in Frameworks */,
-				09D5CFE36B0F38621A7F3354 /* (null) in Frameworks */,
-				CD6778D885ECCAC3ECD90C5D /* (null) in Frameworks */,
-				2DF9329B09470370125D374E /* (null) in Frameworks */,
-				9A1AAD8BA8DA155454C999CF /* (null) in Frameworks */,
-				A9C4CEE28410724D64246CD5 /* (null) in Frameworks */,
-				9E66F09653D8DEE5855EF8D2 /* (null) in Frameworks */,
-				AB7711AD5B38A8549691A5A8 /* (null) in Frameworks */,
-				3448A0C84B4DB0383710D52A /* (null) in Frameworks */,
-				6A1FF65C67A74ABC189C68B9 /* (null) in Frameworks */,
+				724681E6B9541C8273EF7C54 /* BuildFile in Frameworks */,
+				B3BC8AB135E4F72D48D99561 /* BuildFile in Frameworks */,
+				355F17FD1DB705DA96ED1F99 /* BuildFile in Frameworks */,
+				D9BC158A98415FB751684271 /* BuildFile in Frameworks */,
+				09D5CFE36B0F38621A7F3354 /* BuildFile in Frameworks */,
+				CD6778D885ECCAC3ECD90C5D /* BuildFile in Frameworks */,
+				2DF9329B09470370125D374E /* BuildFile in Frameworks */,
+				9A1AAD8BA8DA155454C999CF /* BuildFile in Frameworks */,
+				A9C4CEE28410724D64246CD5 /* BuildFile in Frameworks */,
+				9E66F09653D8DEE5855EF8D2 /* BuildFile in Frameworks */,
+				AB7711AD5B38A8549691A5A8 /* BuildFile in Frameworks */,
+				3448A0C84B4DB0383710D52A /* BuildFile in Frameworks */,
+				6A1FF65C67A74ABC189C68B9 /* BuildFile in Frameworks */,
 				74CBFCE936688632A320F0A9 /* Pods_ReplicaTemplate.framework in Frameworks */,
-				09A505FE3A286961244C9300 /* (null) in Frameworks */,
-				A820B4E51AEBE6770A64E4E3 /* (null) in Frameworks */,
-				D9B47E33FDD12182850AD75B /* (null) in Frameworks */,
-				469D03EB910BF0D9A620604A /* (null) in Frameworks */,
-				CE90CB2C499407717D4A175D /* (null) in Frameworks */,
-				CC3C2DFAFB9E38ABD2DE018C /* (null) in Frameworks */,
-				BE13E39D9B75DD8C8F49C6CE /* (null) in Frameworks */,
-				0E773C885DDC5B4EACF8301A /* (null) in Frameworks */,
-				022A1B8CFCED6C125855D94C /* (null) in Frameworks */,
-				1C447619E42D4908D09EBF2B /* (null) in Frameworks */,
-				BB7B950B990AFE6411ECA416 /* (null) in Frameworks */,
+				09A505FE3A286961244C9300 /* BuildFile in Frameworks */,
+				A820B4E51AEBE6770A64E4E3 /* BuildFile in Frameworks */,
+				D9B47E33FDD12182850AD75B /* BuildFile in Frameworks */,
+				469D03EB910BF0D9A620604A /* BuildFile in Frameworks */,
+				CE90CB2C499407717D4A175D /* BuildFile in Frameworks */,
+				CC3C2DFAFB9E38ABD2DE018C /* BuildFile in Frameworks */,
+				BE13E39D9B75DD8C8F49C6CE /* BuildFile in Frameworks */,
+				0E773C885DDC5B4EACF8301A /* BuildFile in Frameworks */,
+				022A1B8CFCED6C125855D94C /* BuildFile in Frameworks */,
+				1C447619E42D4908D09EBF2B /* BuildFile in Frameworks */,
+				BB7B950B990AFE6411ECA416 /* BuildFile in Frameworks */,
 				111B526553778A85CE2D7BC0 /* Pods_ReplicaTemplate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6767,11 +6983,11 @@
 				0EF976F82A85233D0089FC8D /* Foundation.framework in Frameworks */,
 				0EF976F92A85233D0089FC8D /* UIKit.framework in Frameworks */,
 				0EF976FA2A85233D0089FC8D /* CoreGraphics.framework in Frameworks */,
-				0EF976FB2A85233D0089FC8D /* (null) in Frameworks */,
-				0EF976FC2A85233D0089FC8D /* (null) in Frameworks */,
-				0EF976FD2A85233D0089FC8D /* (null) in Frameworks */,
-				0EF976FE2A85233D0089FC8D /* (null) in Frameworks */,
-				0EF976FF2A85233D0089FC8D /* (null) in Frameworks */,
+				0EF976FB2A85233D0089FC8D /* BuildFile in Frameworks */,
+				0EF976FC2A85233D0089FC8D /* BuildFile in Frameworks */,
+				0EF976FD2A85233D0089FC8D /* BuildFile in Frameworks */,
+				0EF976FE2A85233D0089FC8D /* BuildFile in Frameworks */,
+				0EF976FF2A85233D0089FC8D /* BuildFile in Frameworks */,
 				AEB72F4811A197F5096A5571 /* Pods_MedicallyFit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6799,7 +7015,7 @@
 				401B65B220B3FC64004453E7 /* Foundation.framework in Frameworks */,
 				401B65B320B3FC64004453E7 /* UIKit.framework in Frameworks */,
 				401B65B420B3FC64004453E7 /* CoreGraphics.framework in Frameworks */,
-				6CF3FFC0A42040761DA6F930 /* (null) in Frameworks */,
+				6CF3FFC0A42040761DA6F930 /* BuildFile in Frameworks */,
 				344D04E0062B1EF17D26813E /* Pods_DietMasterGoPlus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7016,13 +7232,13 @@
 				BF6F24CF2AD7405B003041B1 /* Foundation.framework in Frameworks */,
 				BF6F24D02AD7405B003041B1 /* UIKit.framework in Frameworks */,
 				BF6F24D12AD7405B003041B1 /* CoreGraphics.framework in Frameworks */,
-				BF6F24D22AD7405B003041B1 /* (null) in Frameworks */,
-				BF6F24D32AD7405B003041B1 /* (null) in Frameworks */,
-				BF6F24D42AD7405B003041B1 /* (null) in Frameworks */,
-				BF6F24D52AD7405B003041B1 /* (null) in Frameworks */,
-				BF6F24D62AD7405B003041B1 /* (null) in Frameworks */,
-				BF6F24D72AD7405B003041B1 /* (null) in Frameworks */,
-				BF6F24D82AD7405B003041B1 /* (null) in Frameworks */,
+				BF6F24D22AD7405B003041B1 /* BuildFile in Frameworks */,
+				BF6F24D32AD7405B003041B1 /* BuildFile in Frameworks */,
+				BF6F24D42AD7405B003041B1 /* BuildFile in Frameworks */,
+				BF6F24D52AD7405B003041B1 /* BuildFile in Frameworks */,
+				BF6F24D62AD7405B003041B1 /* BuildFile in Frameworks */,
+				BF6F24D72AD7405B003041B1 /* BuildFile in Frameworks */,
+				BF6F24D82AD7405B003041B1 /* BuildFile in Frameworks */,
 				9ED04BB675B69E8613F767BD /* Pods_TeleDiets.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7186,6 +7402,33 @@
 				BFA941462B7E9ECA001C3D48 /* UIKit.framework in Frameworks */,
 				BFA941472B7E9ECA001C3D48 /* CoreGraphics.framework in Frameworks */,
 				6BDA16102D7CC4F08CC81FCE /* Pods_BEYOND_MOTION_NUTRITION.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFA942162B851999001C3D48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFA942172B851999001C3D48 /* SystemConfiguration.framework in Frameworks */,
+				BFA942182B851999001C3D48 /* AVKit.framework in Frameworks */,
+				BFA942192B851999001C3D48 /* HealthKit.framework in Frameworks */,
+				BFA9421A2B851999001C3D48 /* Security.framework in Frameworks */,
+				BFA9421B2B851999001C3D48 /* WebKit.framework in Frameworks */,
+				BFA9421C2B851999001C3D48 /* CoreTelephony.framework in Frameworks */,
+				BFA9421D2B851999001C3D48 /* CFNetwork.framework in Frameworks */,
+				BFA9421E2B851999001C3D48 /* MobileCoreServices.framework in Frameworks */,
+				BFA9421F2B851999001C3D48 /* AudioToolbox.framework in Frameworks */,
+				BFA942202B851999001C3D48 /* ImageIO.framework in Frameworks */,
+				BFA942212B851999001C3D48 /* CoreVideo.framework in Frameworks */,
+				BFA942222B851999001C3D48 /* StoreKit.framework in Frameworks */,
+				BFA942232B851999001C3D48 /* CoreMedia.framework in Frameworks */,
+				BFA942242B851999001C3D48 /* AVFoundation.framework in Frameworks */,
+				BFA942252B851999001C3D48 /* MessageUI.framework in Frameworks */,
+				BFA942262B851999001C3D48 /* QuartzCore.framework in Frameworks */,
+				BFA942272B851999001C3D48 /* Foundation.framework in Frameworks */,
+				BFA942282B851999001C3D48 /* UIKit.framework in Frameworks */,
+				BFA942292B851999001C3D48 /* CoreGraphics.framework in Frameworks */,
+				E33A64837F5A5B08C09BD6AD /* Pods_TRANSFORM_by_Juliette_Wooten.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7510,6 +7753,9 @@
 				A5FB141368191E31C868BE5C /* Pods-BEYOND MOTION NUTRITION.debug.xcconfig */,
 				553CD8D14B7523F0D7C8857C /* Pods-BEYOND MOTION NUTRITION.release.xcconfig */,
 				A852964B303852EA78E9A2A8 /* Pods-BEYOND MOTION NUTRITION.distribution.xcconfig */,
+				18CBB309DAFF0A44E3F2B546 /* Pods-TRANSFORM by Juliette Wooten.debug.xcconfig */,
+				B5F4DEE30AE35B87CFA67764 /* Pods-TRANSFORM by Juliette Wooten.release.xcconfig */,
+				3BD8C67DB1F6E0386FA59ABB /* Pods-TRANSFORM by Juliette Wooten.distribution.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -7562,6 +7808,7 @@
 		0E101C6C2A56CE4900D8E7E2 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				BFA941732B851806001C3D48 /* TRANSFORM by Juliette Wooten */,
 				BFA940912B7E9C9F001C3D48 /* BEYOND MOTION NUTRITION */,
 				BFA93FB62B7D44DE001C3D48 /* 2FIT1 */,
 				BF7B95382B757B87007EC568 /* Forte 4Ever */,
@@ -8145,11 +8392,12 @@
 				BF7B960D2B757B9E007EC568 /* Forte 4Ever.app */,
 				BFA9408C2B7D44F7001C3D48 /* 2FIT1.app */,
 				BFA941682B7E9ECA001C3D48 /* BEYOND MOTION NUTRITION.app */,
+				BFA9424B2B851999001C3D48 /* TRANSFORM by Juliette Wooten.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
 				0E101C6C2A56CE4900D8E7E2 /* Configurations */,
@@ -8228,7 +8476,7 @@
 				414B9240485B71B7D04E94A6 /* Pods_Forte_4Ever.framework */,
 				CE60515175919F83C2BCA396 /* Pods_2FIT1.framework */,
 				F92D24E7E4CC4B111646D1FC /* Pods_BEYOND_MOTION_NUTRITION.framework */,
-				637E9F959283085C295F8DFA /* Pods_ReplicaTemplate.framework */,
+				93EF728307DDF00FA425B407 /* Pods_TRANSFORM_by_Juliette_Wooten.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -8603,6 +8851,16 @@
 				BFA940932B7E9C9F001C3D48 /* Assets.xcassets */,
 			);
 			path = "BEYOND MOTION NUTRITION";
+			sourceTree = "<group>";
+		};
+		BFA941732B851806001C3D48 /* TRANSFORM by Juliette Wooten */ = {
+			isa = PBXGroup;
+			children = (
+				BFA941742B851806001C3D48 /* Assets.xcassets */,
+				BFA941752B851806001C3D48 /* GoogleService-Info.plist */,
+				BFA941762B851806001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig */,
+			);
+			path = "TRANSFORM by Juliette Wooten";
 			sourceTree = "<group>";
 		};
 		BFB3C39E2AF55CD300F2CFA2 /* Joyful Wellness */ = {
@@ -9200,6 +9458,27 @@
 			productReference = BFA941682B7E9ECA001C3D48 /* BEYOND MOTION NUTRITION.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BFA941772B851999001C3D48 /* TRANSFORM by Juliette Wooten */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BFA942472B851999001C3D48 /* Build configuration list for PBXNativeTarget "TRANSFORM by Juliette Wooten" */;
+			buildPhases = (
+				BFA941782B851999001C3D48 /* [CP] Check Pods Manifest.lock */,
+				BFA941792B851999001C3D48 /* Resources */,
+				BFA941AC2B851999001C3D48 /* Sources */,
+				BFA942162B851999001C3D48 /* Frameworks */,
+				BFA942442B851999001C3D48 /* Embed Frameworks */,
+				BFA942452B851999001C3D48 /* ShellScript */,
+				BFA942462B851999001C3D48 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TRANSFORM by Juliette Wooten";
+			productName = DietMasterGo;
+			productReference = BFA9424B2B851999001C3D48 /* TRANSFORM by Juliette Wooten.app */;
+			productType = "com.apple.product-type.application";
+		};
 		BFB3C3A22AF55CF900F2CFA2 /* JoyfulWellness */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BFB3C4602AF55CF900F2CFA2 /* Build configuration list for PBXNativeTarget "JoyfulWellness" */;
@@ -9401,7 +9680,7 @@
 				ja,
 				Base,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -9438,6 +9717,7 @@
 				BF7B953C2B757B9E007EC568 /* Forte 4Ever */,
 				BFA93FBA2B7D44F7001C3D48 /* 2FIT1 */,
 				BFA940952B7E9ECA001C3D48 /* BEYOND MOTION NUTRITION */,
+				BFA941772B851999001C3D48 /* TRANSFORM by Juliette Wooten */,
 			);
 		};
 /* End PBXProject section */
@@ -10808,6 +11088,63 @@
 				BFA940C62B7E9ECA001C3D48 /* DietMasterGoViewController.xib in Resources */,
 				BFA940C72B7E9ECA001C3D48 /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
 				BFA940C82B7E9ECA001C3D48 /* MyMovesListViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFA941792B851999001C3D48 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFA9417A2B851999001C3D48 /* MyLogViewController.xib in Resources */,
+				BFA9417B2B851999001C3D48 /* BaseApp-Info.plist in Resources */,
+				BFA9417C2B851999001C3D48 /* AppSettings.xib in Resources */,
+				BFA9417D2B851999001C3D48 /* ExchangeFood.xib in Resources */,
+				BFA9417E2B851999001C3D48 /* UserMealType.xib in Resources */,
+				BFA9417F2B851999001C3D48 /* DetailViewController.xib in Resources */,
+				BFA941802B851999001C3D48 /* Log_Add.xib in Resources */,
+				BFA941812B851999001C3D48 /* RecordWeightView.xib in Resources */,
+				BFA9424F2B8519B6001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig in Resources */,
+				BFA941822B851999001C3D48 /* FoodsHome.xib in Resources */,
+				BFA941832B851999001C3D48 /* DailyActivityTypeVC.xib in Resources */,
+				BFA941842B851999001C3D48 /* UserGoalVC.xib in Resources */,
+				BFA941852B851999001C3D48 /* ManageFoods.xib in Resources */,
+				BFA941862B851999001C3D48 /* FoodCategoryPicker.xib in Resources */,
+				BFA9424E2B8519B3001C3D48 /* GoogleService-Info.plist in Resources */,
+				BFA941872B851999001C3D48 /* MeasurePicker.xib in Resources */,
+				BFA941882B851999001C3D48 /* FoodsList.xib in Resources */,
+				BFA941892B851999001C3D48 /* ExercisesDetailViewController.xib in Resources */,
+				BFA9418A2B851999001C3D48 /* Settings.bundle in Resources */,
+				BFA9418B2B851999001C3D48 /* MyGoalViewController.xib in Resources */,
+				BFA9418C2B851999001C3D48 /* MyMovesDetailCollectionViewCell.xib in Resources */,
+				BFA9418D2B851999001C3D48 /* InAppPurchaseViewController.xib in Resources */,
+				BFA9418E2B851999001C3D48 /* FavoriteMealsViewController.xib in Resources */,
+				BFA9418F2B851999001C3D48 /* LoginViewController.xib in Resources */,
+				BFA941902B851999001C3D48 /* MyLogTableViewCell.xib in Resources */,
+				BFA941912B851999001C3D48 /* sound.mp3 in Resources */,
+				BFA941922B851999001C3D48 /* headerVw.xib in Resources */,
+				BFA941942B851999001C3D48 /* measure_sql.sql in Resources */,
+				BFA941952B851999001C3D48 /* LearnMoreViewController.xib in Resources */,
+				BFA941962B851999001C3D48 /* privacypolicy.html in Resources */,
+				BFA941972B851999001C3D48 /* termsofservice.html in Resources */,
+				BFA941982B851999001C3D48 /* AppImages.xcassets in Resources */,
+				BFA9419A2B851999001C3D48 /* DMGO_v3.9.2.sqlite in Resources */,
+				BFA9419B2B851999001C3D48 /* MyMovesListTableViewCell.xib in Resources */,
+				BFA9419C2B851999001C3D48 /* ProfileVC.xib in Resources */,
+				BFA9419D2B851999001C3D48 /* MyMovesTableViewCell.xib in Resources */,
+				BFA9419E2B851999001C3D48 /* MealPlanDetailsTableViewCell.xib in Resources */,
+				BFA9419F2B851999001C3D48 /* ProfileAlertVCViewController.xib in Resources */,
+				BFA941A02B851999001C3D48 /* MealPlanDetailViewController.xib in Resources */,
+				BFA941A12B851999001C3D48 /* MyMovesVideoPlayerViewController.xib in Resources */,
+				BFA9424D2B8519AE001C3D48 /* Assets.xcassets in Resources */,
+				BFA941A22B851999001C3D48 /* MyMovesDetailsViewController.xib in Resources */,
+				BFA941A32B851999001C3D48 /* ProfileContactVC.xib in Resources */,
+				BFA941A42B851999001C3D48 /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */,
+				BFA941A52B851999001C3D48 /* GroceryListViewController.xib in Resources */,
+				BFA941A62B851999001C3D48 /* PlansTableViewCell.xib in Resources */,
+				BFA941A72B851999001C3D48 /* OtherHealthServiceVC.xib in Resources */,
+				BFA941A82B851999001C3D48 /* DietMasterGoViewController.xib in Resources */,
+				BFA941A92B851999001C3D48 /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
+				BFA941AA2B851999001C3D48 /* MyMovesListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12660,6 +12997,64 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BEYOND MOTION NUTRITION/Pods-BEYOND MOTION NUTRITION-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BFA941782B851999001C3D48 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TRANSFORM by Juliette Wooten-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BFA942452B851999001C3D48 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		BFA942462B851999001C3D48 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BFB3C3A32AF55CF900F2CFA2 /* [CP] Check Pods Manifest.lock */ = {
@@ -15814,6 +16209,118 @@
 				BFA941312B7E9ECA001C3D48 /* MyMovesViewController.m in Sources */,
 				BFA941322B7E9ECA001C3D48 /* LogDaySummaryView.swift in Sources */,
 				BFA941332B7E9ECA001C3D48 /* KeychainItemWrapper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFA941AC2B851999001C3D48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFA941AD2B851999001C3D48 /* main.m in Sources */,
+				BFA941AE2B851999001C3D48 /* DMDetailTableViewCell.m in Sources */,
+				BFA941AF2B851999001C3D48 /* DietMasterGoAppDelegate.m in Sources */,
+				BFA941B02B851999001C3D48 /* DMMessagesDataProvider.m in Sources */,
+				BFA941B12B851999001C3D48 /* AppSettings.m in Sources */,
+				BFA941B22B851999001C3D48 /* BaseViewController.m in Sources */,
+				BFA941B32B851999001C3D48 /* ExchangeFood.m in Sources */,
+				BFA941B42B851999001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */,
+				BFA941B52B851999001C3D48 /* MyLogViewController.m in Sources */,
+				BFA941B62B851999001C3D48 /* DetailViewController.m in Sources */,
+				BFA941B72B851999001C3D48 /* Log_Add.m in Sources */,
+				BFA941B82B851999001C3D48 /* RecordWeightView.m in Sources */,
+				BFA941B92B851999001C3D48 /* DMMove.m in Sources */,
+				BFA941BA2B851999001C3D48 /* FoodsHome.m in Sources */,
+				BFA941BB2B851999001C3D48 /* FoodsSearch.m in Sources */,
+				BFA941BC2B851999001C3D48 /* ManageFoods.m in Sources */,
+				BFA941BD2B851999001C3D48 /* FoodCategoryPicker.m in Sources */,
+				BFA941BE2B851999001C3D48 /* MeasurePicker.m in Sources */,
+				BFA941BF2B851999001C3D48 /* DMConstants.m in Sources */,
+				BFA941C02B851999001C3D48 /* FoodsList.m in Sources */,
+				BFA941C12B851999001C3D48 /* UIColor+Extension.swift in Sources */,
+				BFA941C22B851999001C3D48 /* TUTSimpleScatterPlot.m in Sources */,
+				BFA941C32B851999001C3D48 /* MealPlanDetailsTableViewCell.m in Sources */,
+				BFA941C42B851999001C3D48 /* DMActivityIndicator.m in Sources */,
+				BFA941C52B851999001C3D48 /* MCNewCustomLayeredView.m in Sources */,
+				BFA941C62B851999001C3D48 /* ExercisesViewController.m in Sources */,
+				BFA941C72B851999001C3D48 /* DMFood.m in Sources */,
+				BFA941C82B851999001C3D48 /* MyMovesDetailsViewController.m in Sources */,
+				BFA941C92B851999001C3D48 /* ExercisesDetailViewController.m in Sources */,
+				BFA941CA2B851999001C3D48 /* DMMoveSet.m in Sources */,
+				BFA941CB2B851999001C3D48 /* DietmasterEngine.m in Sources */,
+				BFA941CC2B851999001C3D48 /* FavoriteMealsViewController.m in Sources */,
+				BFA941CD2B851999001C3D48 /* DMWeightLogEntry.m in Sources */,
+				BFA941CE2B851999001C3D48 /* LoginViewController.m in Sources */,
+				BFA941CF2B851999001C3D48 /* MyMovesListViewController.m in Sources */,
+				BFA941D02B851999001C3D48 /* LearnMoreViewController.m in Sources */,
+				BFA941D12B851999001C3D48 /* NSData+Blocks.m in Sources */,
+				BFA941D22B851999001C3D48 /* DMMealPlan.m in Sources */,
+				BFA941D32B851999001C3D48 /* DMMyLogDataProvider.m in Sources */,
+				BFA941D42B851999001C3D48 /* NSString+Encode.m in Sources */,
+				BFA941D52B851999001C3D48 /* MealPlanViewController.m in Sources */,
+				BFA941D62B851999001C3D48 /* ProfileAlertVCViewController.m in Sources */,
+				BFA941D72B851999001C3D48 /* DMMoveRoutine.m in Sources */,
+				BFA941D82B851999001C3D48 /* AppConfiguration.swift in Sources */,
+				BFA941D92B851999001C3D48 /* MealPlanDetailViewController.m in Sources */,
+				BFA941DA2B851999001C3D48 /* ExchangeFoodViewController.m in Sources */,
+				BFA941DB2B851999001C3D48 /* CustomImageFlowLayout.m in Sources */,
+				BFA941DC2B851999001C3D48 /* DMMoveCategory.m in Sources */,
+				BFA941DD2B851999001C3D48 /* ProfileContactVC.m in Sources */,
+				BFA941DE2B851999001C3D48 /* UserMealType.m in Sources */,
+				BFA941DF2B851999001C3D48 /* MyMovesListTableViewCell.m in Sources */,
+				BFA941E02B851999001C3D48 /* DMMovePickerRow.m in Sources */,
+				BFA941E12B851999001C3D48 /* MCNewCustomLayer.m in Sources */,
+				BFA941E22B851999001C3D48 /* InAppPurchaseViewController.m in Sources */,
+				BFA941E32B851999001C3D48 /* DMAuthManager.m in Sources */,
+				BFA941E42B851999001C3D48 /* MyMovesDetailFooterCollectionReusableView.m in Sources */,
+				BFA941E52B851999001C3D48 /* DMDatabaseUtilities.m in Sources */,
+				BFA941E62B851999001C3D48 /* DMMessage.m in Sources */,
+				BFA941E72B851999001C3D48 /* headerVw.m in Sources */,
+				BFA941E82B851999001C3D48 /* UserDataFetcher.swift in Sources */,
+				BFA941E92B851999001C3D48 /* PlansTableViewCell.m in Sources */,
+				BFA941EA2B851999001C3D48 /* DMMovePlan.m in Sources */,
+				BFA941EB2B851999001C3D48 /* MyMovesDataProvider.m in Sources */,
+				BFA941EC2B851999001C3D48 /* MyMovesVideoPlayerViewController.m in Sources */,
+				BFA941ED2B851999001C3D48 /* UserGoalVC.m in Sources */,
+				BFA941EE2B851999001C3D48 /* MCPieChartView.m in Sources */,
+				BFA941EF2B851999001C3D48 /* DMMoveTag.m in Sources */,
+				BFA941F02B851999001C3D48 /* BarCodeScanner.swift in Sources */,
+				BFA941F12B851999001C3D48 /* DMSettingsViewController.swift in Sources */,
+				BFA941F22B851999001C3D48 /* ProfileVC.m in Sources */,
+				BFA941F32B851999001C3D48 /* OtherHealthServiceVC.m in Sources */,
+				BFA941F42B851999001C3D48 /* FetchUtilities.swift in Sources */,
+				BFA941F52B851999001C3D48 /* SendView.m in Sources */,
+				BFA941F62B851999001C3D48 /* MyMovesTableViewCell.m in Sources */,
+				BFA941F72B851999001C3D48 /* DMPickerViewController.swift in Sources */,
+				BFA941F82B851999001C3D48 /* DMDatePickerViewController.swift in Sources */,
+				BFA941F92B851999001C3D48 /* MessageViewController.m in Sources */,
+				BFA941FA2B851999001C3D48 /* PurchaseIAPHelper.m in Sources */,
+				BFA941FB2B851999001C3D48 /* MCUtil.m in Sources */,
+				BFA941FC2B851999001C3D48 /* GrowingTextView.swift in Sources */,
+				BFA941FD2B851999001C3D48 /* MainMenuFAB.swift in Sources */,
+				BFA941FE2B851999001C3D48 /* IAPHelper.m in Sources */,
+				BFA941FF2B851999001C3D48 /* DMMoveDay.m in Sources */,
+				BFA942002B851999001C3D48 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
+				BFA942012B851999001C3D48 /* UIViewController+Navigation.m in Sources */,
+				BFA942022B851999001C3D48 /* DailyActivityTypeVC.m in Sources */,
+				BFA942032B851999001C3D48 /* DMMealPlanItem.m in Sources */,
+				BFA942042B851999001C3D48 /* DMGUtilities.m in Sources */,
+				BFA942052B851999001C3D48 /* MessageCell.m in Sources */,
+				BFA942062B851999001C3D48 /* NSNull+NullCategoryExtension.m in Sources */,
+				BFA942072B851999001C3D48 /* MCSliceLayer.m in Sources */,
+				BFA942082B851999001C3D48 /* StepData.m in Sources */,
+				BFA942092B851999001C3D48 /* DMUser.m in Sources */,
+				BFA9420A2B851999001C3D48 /* SceneDelegate.swift in Sources */,
+				BFA9420B2B851999001C3D48 /* DietMasterGoViewController.m in Sources */,
+				BFA9420C2B851999001C3D48 /* MyLogTableViewCell.m in Sources */,
+				BFA9420D2B851999001C3D48 /* DMMealPlanDataProvider.m in Sources */,
+				BFA9420E2B851999001C3D48 /* NSObject+Description.m in Sources */,
+				BFA9420F2B851999001C3D48 /* DayDataProvider.swift in Sources */,
+				BFA942102B851999001C3D48 /* DMDataFetcher.m in Sources */,
+				BFA942112B851999001C3D48 /* GroceryListViewController.m in Sources */,
+				BFA942122B851999001C3D48 /* MyGoalViewController.m in Sources */,
+				BFA942132B851999001C3D48 /* MyMovesViewController.m in Sources */,
+				BFA942142B851999001C3D48 /* LogDaySummaryView.swift in Sources */,
+				BFA942152B851999001C3D48 /* KeychainItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -21412,6 +21919,200 @@
 			};
 			name = Distribution;
 		};
+		BFA942482B851999001C3D48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFA941762B851806001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Debug;
+		};
+		BFA942492B851999001C3D48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFA941762B851806001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Release;
+		};
+		BFA9424A2B851999001C3D48 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFA941762B851806001C3D48 /* TRANSFORM by Juliette Wooten.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Distribution;
+		};
 		BFB3C4612AF55CF900F2CFA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFB3C3A12AF55CD300F2CFA2 /* JoyfulWellness.xcconfig */;
@@ -23295,6 +23996,16 @@
 				BFA941652B7E9ECA001C3D48 /* Debug */,
 				BFA941662B7E9ECA001C3D48 /* Release */,
 				BFA941672B7E9ECA001C3D48 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BFA942472B851999001C3D48 /* Build configuration list for PBXNativeTarget "TRANSFORM by Juliette Wooten" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFA942482B851999001C3D48 /* Debug */,
+				BFA942492B851999001C3D48 /* Release */,
+				BFA9424A2B851999001C3D48 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
