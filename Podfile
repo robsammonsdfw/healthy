@@ -166,6 +166,10 @@ target 'TRANSFORM by Juliette Wooten' do
   core_pods
 end
 
+target 'HCFDiet' do
+  core_pods
+end
+
 
 
 
