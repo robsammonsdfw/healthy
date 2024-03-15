@@ -170,6 +170,10 @@ target 'HCFDiet' do
   core_pods
 end
 
+target 'DietAlpha' do
+  core_pods
+end
+
 
 
 
