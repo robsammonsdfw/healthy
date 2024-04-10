@@ -174,6 +174,10 @@ target 'DietAlpha' do
   core_pods
 end
 
+target 'SoarWell' do
+  core_pods
+end
+
 
 
 
