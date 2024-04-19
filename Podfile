@@ -178,6 +178,14 @@ target 'SoarWell' do
   core_pods
 end
 
+target 'HealthyJourneyProApp' do
+  core_pods
+end
+
+target 'AStrongLife' do
+  core_pods
+end
+
 
 
 
