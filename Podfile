@@ -186,6 +186,18 @@ target 'AStrongLife' do
   core_pods
 end
 
+target 'NutriMove' do
+  core_pods
+end
+
+target 'AyurvedaPlus' do
+  core_pods
+end
+
+target 'EzDietPlanner' do
+  core_pods
+end
+
 
 
 
