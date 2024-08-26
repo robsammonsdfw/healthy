@@ -39,7 +39,7 @@ DMG_BUNDLE_DISPLAY_NAME = EzDietPlanner
 DMG_BUNDLE_IDENTIFIER = com.dietmaster.ezdietplanner
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
-DMG_APPLE_TEAM_PREFIX = K689T64HD4
+DMG_APPLE_TEAM_PREFIX = JVNL3DNTQC
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = EzDietPlanner
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!

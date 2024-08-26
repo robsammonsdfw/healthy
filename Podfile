@@ -198,6 +198,21 @@ target 'EzDietPlanner' do
   core_pods
 end
 
+target 'RGH P4YH' do
+  core_pods
+end
+
+target 'CustomFit Chef' do
+  core_pods
+end
+
+target 'BodyCompPlus' do
+  core_pods
+end
+
+
+
+
 
 
 

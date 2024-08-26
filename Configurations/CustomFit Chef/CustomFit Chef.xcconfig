@@ -27,36 +27,35 @@
 // likely means you didn't run the `pod install` command or the value is incorrect.
 // This should match the name of the value in "target 'DietMasterGoPlus' do".
 // #include "Pods/Target Support Files/Pods-APP_NAME_HERE/Pods-APP_NAME_HERE.distribution.xcconfig"
-#include "Pods/Target Support Files/Pods-RGH P4YH/Pods-RGH P4YH.distribution.xcconfig"
-
+#include "Pods/Target Support Files/Pods-CustomFit Chef/Pods-CustomFit Chef.distribution.xcconfig"
 // ************************************
 // ****** BUILD INFORMATION ***********
 // ************************************
 
 // The name shown under the app icon.
-DMG_BUNDLE_DISPLAY_NAME = RGH P4YH
+DMG_BUNDLE_DISPLAY_NAME = CustomFit Chef
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
-DMG_BUNDLE_IDENTIFIER = com.dietmaster.RGHP4YH
+DMG_BUNDLE_IDENTIFIER = com.dietmaster.customfit
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
-DMG_APPLE_TEAM_PREFIX = JVNL3DNTQC
+DMG_APPLE_TEAM_PREFIX = CY58X5U5H3
 // The product name, no spaces. E.g. "DietMasterGoPlus".
-DMG_PRODUCT_NAME = RGHP4YH
+DMG_PRODUCT_NAME = CustomFit Chef
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
-DMG_MYMOVES_ENABLED = YES
+DMG_MYMOVES_ENABLED = No
 
 // ************************************
 // ********* REPLICA DEFAULTS *********
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = RGH P4YH
+DMG_APP_NAME_SHORT = CustomFit
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = Roane General Hospital P4YH
+DMG_APP_NAME_LONG = CustomFit Chef
 // Formerly support_email.
-DMG_SUPPORT_EMAIL = Dietmaster@rghwv.org
+DMG_SUPPORT_EMAIL = nick@customfitchef.com
 // Formerly account_code.
-DMG_ACCOUNT_CODE = dmg_RGHP4YH
+DMG_ACCOUNT_CODE = dmg_CustomFit
 
 // ************************************
 // ********* COLOR SCHEME *************
@@ -71,25 +70,25 @@ DMG_BACKGROUND_COLOR = #FFFFFF
 // The foreground color for the "Hamburger" home menu.
 DMG_HOME_ICON_FOREGROUND_COLOR = #000000
 // The home menu icon color on the tiles.
-DMG_MENU_ICON_COLOR = #28587f
+DMG_MENU_ICON_COLOR = #047a40
 
 // Color for any header background if needed.
-DMG_HEADER_COLOR = #50868e
+DMG_HEADER_COLOR = #047a40
 // Text color for any header if needed.
-DMG_HEADER_TEXTCOLOR = #ffffff
+DMG_HEADER_TEXTCOLOR = #000000
 
 // Button colors where needed.
-DMG_BUTTON_COLOR = #50868e
+DMG_BUTTON_COLOR = #047a40
 // Button text colors where needed.
 DMG_BUTTON_TEXTCOLOR = #000000
 
 // Settings "Switch" ON Color.
-DMG_SWITCH_ON_COLOR = #F2673D
+DMG_SWITCH_ON_COLOR = #047a40
 
 // Footer background color where needed.
-DMG_FOOTER_COLOR = #28587f
+DMG_FOOTER_COLOR = #047a40
 // Text color for any footer if needed.
-DMG_FOOTER_TEXTCOLOR = #ffffff
+DMG_FOOTER_TEXTCOLOR = #000000
 
 // The color in the weight chart.
 DMG_CHART_COLOR = #000000
@@ -100,7 +99,7 @@ DMG_CALENDAR_MOVEDAY_COLOR = #BFBFBF
 
 // Colors for the Messages Chat.
 // Sender = Current User, Recipient = Coach/Professional.
-DMG_CHAT_SENDER_COLOR = #f2ab00
+DMG_CHAT_SENDER_COLOR = #047a40
 DMG_CHAT_SENDER_TEXTCOLOR = #000000
 DMG_CHAT_RECIPIENT_COLOR = #E5E5E9
 DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
