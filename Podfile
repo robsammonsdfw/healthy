@@ -210,6 +210,14 @@ target 'BodyCompPlus' do
   core_pods
 end
 
+target 'MyKetaFit' do
+  core_pods
+end
+
+target 'feedme smart' do
+  core_pods
+end
+
 
 
 
