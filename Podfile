@@ -218,6 +218,24 @@ target 'feedme smart' do
   core_pods
 end
 
+target 'mDiet' do
+  core_pods
+end
+
+target 'MicroFit Go' do
+  core_pods
+end
+
+target 'Global Fit App' do
+  core_pods
+end
+
+target 'Metabolic Testing Center' do
+  core_pods
+end
+
+
+
 
 
 
