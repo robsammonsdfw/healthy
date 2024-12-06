@@ -234,6 +234,19 @@ target 'Metabolic Testing Center' do
   core_pods
 end
 
+target 'Horizons Burn Zone' do
+  core_pods
+end
+
+target 'GLPBuddy' do
+  core_pods
+end
+
+target 'RapidFit' do
+  core_pods
+end
+
+
 
 
 
