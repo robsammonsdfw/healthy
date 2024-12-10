@@ -27,21 +27,21 @@
 // likely means you didn't run the `pod install` command or the value is incorrect.
 // This should match the name of the value in "target 'DietMasterGoPlus' do".
 // #include "Pods/Target Support Files/Pods-APP_NAME_HERE/Pods-APP_NAME_HERE.distribution.xcconfig"
-#include "Pods/Target Support Files/Pods-RapidFit/Pods-RapidFit.distribution.xcconfig"
+#include "Pods/Target Support Files/Pods-ReplicaTemplate/Pods-ReplicaTemplate.distribution.xcconfig"
 
 // ************************************
 // ****** BUILD INFORMATION ***********
 // ************************************
 
 // The name shown under the app icon.
-DMG_BUNDLE_DISPLAY_NAME = RapidFit
+DMG_BUNDLE_DISPLAY_NAME = DMG Demo
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
-DMG_BUNDLE_IDENTIFIER = com.rapidfit
+DMG_BUNDLE_IDENTIFIER = com.dietmaster.replicademo
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
-DMG_APPLE_TEAM_PREFIX = 822D6NB567
+DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
 // The product name, no spaces. E.g. "DietMasterGoPlus".
-DMG_PRODUCT_NAME = RapidFit
+DMG_PRODUCT_NAME = ReplicaBaseDemo
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
 DMG_MYMOVES_ENABLED = YES
 
@@ -50,13 +50,13 @@ DMG_MYMOVES_ENABLED = YES
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = RapidFit
+DMG_APP_NAME_SHORT = DietMasterGo Demo
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = RapidFit
+DMG_APP_NAME_LONG = DietMasterGo™ Demo
 // Formerly support_email.
-DMG_SUPPORT_EMAIL = rapidfithealth@gmail.com
+DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
 // Formerly account_code.
-DMG_ACCOUNT_CODE = dmg_RapidFit
+DMG_ACCOUNT_CODE = dmg_demo
 
 // ************************************
 // ********* COLOR SCHEME *************
@@ -71,23 +71,23 @@ DMG_BACKGROUND_COLOR = #FFFFFF
 // The foreground color for the "Hamburger" home menu.
 DMG_HOME_ICON_FOREGROUND_COLOR = #000000
 // The home menu icon color on the tiles.
-DMG_MENU_ICON_COLOR = #2175a1
+DMG_MENU_ICON_COLOR = #F2673D
 
 // Color for any header background if needed.
-DMG_HEADER_COLOR = #2175a1
+DMG_HEADER_COLOR = #F2673D
 // Text color for any header if needed.
 DMG_HEADER_TEXTCOLOR = #000000
 
 // Button colors where needed.
-DMG_BUTTON_COLOR = #2175a1
+DMG_BUTTON_COLOR = #F2673D
 // Button text colors where needed.
 DMG_BUTTON_TEXTCOLOR = #000000
 
 // Settings "Switch" ON Color.
-DMG_SWITCH_ON_COLOR = #d2b16c
+DMG_SWITCH_ON_COLOR = #F2673D
 
 // Footer background color where needed.
-DMG_FOOTER_COLOR = #d2b16c
+DMG_FOOTER_COLOR = #F2673D
 // Text color for any footer if needed.
 DMG_FOOTER_TEXTCOLOR = #000000
 

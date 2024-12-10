@@ -43,7 +43,7 @@ DMG_APPLE_TEAM_PREFIX =Z3CL6MWM59
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = GLPBuddy
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
-DMG_MYMOVES_ENABLED = no
+DMG_MYMOVES_ENABLED = yes
 
 // ************************************
 // ********* REPLICA DEFAULTS *********
