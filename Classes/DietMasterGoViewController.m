@@ -25,8 +25,11 @@
 @property (nonatomic, strong) MyMovesDataProvider *soapWebService;
 
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
-/// The view that's within the scrollView.
+/// The view that's within the scrollView. A.K.A MainView
 @property (nonatomic, strong) IBOutlet UIView *entireView;
+/// Should be 1000 for Standard, 1100 for MyMoves.
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *entireViewHeightConstraint;
+@property (nonatomic) CGFloat entireViewDefaultHeight;
 
 @property (nonatomic, strong) MKNumberBadgeView *numberBadge;
 @property (nonatomic, strong) IBOutlet UIView *circleHomeView;
@@ -44,6 +47,12 @@
 @property (nonatomic, strong) IBOutlet UIView *burnedView;
 @property (nonatomic, strong) IBOutlet UIView *workoutView;
 @property (nonatomic, strong) IBOutlet UIView *scheduledView;
+
+/// Body Scanning
+@property (nonatomic, strong) IBOutlet UIView *bodyScanView;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bodyScanningTopConstraint;
+@property (nonatomic, strong) IBOutlet UIButton *bodyScanningPlusBtn;
+@property (nonatomic, strong) IBOutlet UIImageView *bodyScanImage;
 
 @property (nonatomic, strong) IBOutlet UIImageView *suagrGraphImageVw;
 @property (nonatomic, strong) IBOutlet UILabel *c_PercentageLbl;
@@ -146,89 +155,97 @@
 }
 
 - (void)viewDidLoad{
-    [super viewDidLoad];
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+  [super viewDidLoad];
+  [[self navigationController] setNavigationBarHidden:YES animated:YES];
+  self.edgesForExtendedLayout = UIRectEdgeNone;
 
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: self.cpfLbl.attributedText];
-    [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#C15F6E") range:NSMakeRange(0, 1)];
-                                                                                 [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#64BB60") range:NSMakeRange(4, 1)];
-                                                                                                                                                              [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#0095B8") range:NSMakeRange(8, 1)];
-    [self.cpfLbl setAttributedText: text];
+  NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: self.cpfLbl.attributedText];
+  [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#C15F6E") range:NSMakeRange(0, 1)];
+  [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#64BB60") range:NSMakeRange(4, 1)];
+  [text addAttribute:NSForegroundColorAttributeName value:UIColorFromHexString(@"#0095B8") range:NSMakeRange(8, 1)];
+  [self.cpfLbl setAttributedText: text];
 
-    [self setShadowForViews];
-    [self setColorsForViews];
-    [self changeImageColors];
-    [self plusBtnColor];
-    
-    self.circleHomeView.layer.cornerRadius = 35;
-    self.circleHomeView.layer.masksToBounds = YES;
-    
-    self.hideShowStack.hidden = true;
-    self.secondHideShowStackVw.hidden = true;
-    
-    self.status = @"first";
-    self.leftStatus = @"new";
-    self.weightStatus = @"up";
+  [self setShadowForViews];
+  [self setColorsForViews];
+  [self changeImageColors];
+  [self plusBtnColor];
 
-    self.nameLbl.textColor = AppConfiguration.headerTextColor;
-    // Adjust button colors.
-    UIImage *chatImage = self.sendMsgButton.imageView.image;
-    chatImage = [chatImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.sendMsgButton setImage:chatImage forState:UIControlStateNormal];
-    UIImage *emailImage = self.sendMailButton.imageView.image;
-    emailImage = [emailImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.sendMailButton setImage:emailImage forState:UIControlStateNormal];
-    [self.sendMsgButton setTintColor:AppConfiguration.headerTextColor];
-    [self.sendMailButton setTintColor:AppConfiguration.headerTextColor];
+  self.circleHomeView.layer.cornerRadius = 35;
+  self.circleHomeView.layer.masksToBounds = YES;
 
-    [UIView animateWithDuration:0.25 animations:^{
-        self.hideShowConstant.constant = 0;
-        self.secondHideShowConstant.constant = 0;
-        self.weightHideShowHeightConst.constant = 0;
+  self.hideShowStack.hidden = true;
+  self.secondHideShowStackVw.hidden = true;
 
-        self.expandViewHeightConst.constant = 125;
-        self.secondExpandViewHeightConst.constant = 125;
-        self.weightSeperatorLbl.text = @"";
-        self.thirdExpVwHeightConst.constant = 115;
-    }];
-    
-    self.values = [[NSMutableArray alloc] init];
-    self.cpf_Values = [[NSMutableArray alloc] init];
+  self.status = @"first";
+  self.leftStatus = @"new";
+  self.weightStatus = @"up";
 
-    self.remaining_Pie.dataSource = self;
-    self.remaining_Pie.delegate = self;
-    self.remaining_Pie.animationEnabled = YES;
-    self.remaining_Pie.animationDuration = 0.5;
-    
-    self.cpf_Pie.dataSource = self;
-    self.cpf_Pie.delegate = self;
-    self.cpf_Pie.animationDuration = 0;
-    self.cpf_Pie.animationEnabled = YES;
-    self.cpf_Pie.internalRadius = 28;
-    self.cpf_Pie.sliceColor = UIColor.lightGrayColor;
-    self.cpf_Pie.borderPercentage = 0.5;
+  self.nameLbl.textColor = AppConfiguration.headerTextColor;
+  // Adjust button colors.
+  UIImage *chatImage = self.sendMsgButton.imageView.image;
+  chatImage = [chatImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+  [self.sendMsgButton setImage:chatImage forState:UIControlStateNormal];
+  UIImage *emailImage = self.sendMailButton.imageView.image;
+  emailImage = [emailImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+  [self.sendMailButton setImage:emailImage forState:UIControlStateNormal];
+  [self.sendMsgButton setTintColor:AppConfiguration.headerTextColor];
+  [self.sendMailButton setTintColor:AppConfiguration.headerTextColor];
 
-    self.numberBadge = [[MKNumberBadgeView alloc] init];
-    self.numberBadge.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.sendMsgButton addSubview:self.numberBadge];
-    [self.numberBadge.heightAnchor constraintEqualToConstant:20].active = YES;
-    [self.numberBadge.widthAnchor constraintEqualToConstant:20].active = YES;
-    [self.numberBadge.centerXAnchor constraintEqualToAnchor:self.sendMsgButton.trailingAnchor constant:-1].active = YES;
-    [self.numberBadge.centerYAnchor constraintEqualToAnchor:self.sendMsgButton.topAnchor constant:1].active = YES;
-    self.numberBadge.backgroundColor = [UIColor clearColor];
-    self.numberBadge.shadow = NO;
-    self.numberBadge.font = [UIFont systemFontOfSize:12];
-    self.numberBadge.hideWhenZero = YES;
-    
-    self.scrollView.backgroundColor = AppConfiguration.headerColor;
-    self.view.backgroundColor = AppConfiguration.headerColor;
+  [UIView animateWithDuration:0.25 animations:^{
+    self.hideShowConstant.constant = 0;
+    self.secondHideShowConstant.constant = 0;
+    self.weightHideShowHeightConst.constant = 0;
+
+    self.expandViewHeightConst.constant = 125;
+    self.secondExpandViewHeightConst.constant = 125;
+    self.weightSeperatorLbl.text = @"";
+    self.thirdExpVwHeightConst.constant = 115;
+  }];
+
+  self.values = [[NSMutableArray alloc] init];
+  self.cpf_Values = [[NSMutableArray alloc] init];
+
+  self.remaining_Pie.dataSource = self;
+  self.remaining_Pie.delegate = self;
+  self.remaining_Pie.animationEnabled = YES;
+  self.remaining_Pie.animationDuration = 0.5;
+
+  self.cpf_Pie.dataSource = self;
+  self.cpf_Pie.delegate = self;
+  self.cpf_Pie.animationDuration = 0;
+  self.cpf_Pie.animationEnabled = YES;
+  self.cpf_Pie.internalRadius = 28;
+  self.cpf_Pie.sliceColor = UIColor.lightGrayColor;
+  self.cpf_Pie.borderPercentage = 0.5;
+
+  self.numberBadge = [[MKNumberBadgeView alloc] init];
+  self.numberBadge.translatesAutoresizingMaskIntoConstraints = NO;
+  [self.sendMsgButton addSubview:self.numberBadge];
+  [self.numberBadge.heightAnchor constraintEqualToConstant:20].active = YES;
+  [self.numberBadge.widthAnchor constraintEqualToConstant:20].active = YES;
+  [self.numberBadge.centerXAnchor constraintEqualToAnchor:self.sendMsgButton.trailingAnchor constant:-1].active = YES;
+  [self.numberBadge.centerYAnchor constraintEqualToAnchor:self.sendMsgButton.topAnchor constant:1].active = YES;
+  self.numberBadge.backgroundColor = [UIColor clearColor];
+  self.numberBadge.shadow = NO;
+  self.numberBadge.font = [UIFont systemFontOfSize:12];
+  self.numberBadge.hideWhenZero = YES;
+
+  self.scrollView.backgroundColor = AppConfiguration.headerColor;
+  self.view.backgroundColor = AppConfiguration.headerColor;
+
+  self.entireViewDefaultHeight = 850;
+  self.entireViewHeightConstraint = [self.entireView.heightAnchor constraintEqualToConstant:self.entireViewDefaultHeight];
+  if (AppConfiguration.enableMyMoves) {
+    self.entireViewDefaultHeight = 950;
+    self.entireViewHeightConstraint.constant = self.entireViewDefaultHeight;
+  }
+  [self.entireViewHeightConstraint setActive:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     UIEdgeInsets layoutGuide = self.view.safeAreaInsets;
-    self.scrollView.contentOffset = CGPointMake(0, layoutGuide.top - layoutGuide.bottom);
+    self.scrollView.contentOffset = CGPointMake(0, -layoutGuide.top);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -251,6 +268,15 @@
     
     self.workoutView.hidden = !AppConfiguration.enableMyMoves;
     self.scheduledView.hidden = !AppConfiguration.enableMyMoves;
+
+    // Body Scanning
+    self.bodyScanView.hidden = !AppConfiguration.enableBodyScanning;
+    UIView *bodyScanAnchorView = self.stepsView;
+    if (AppConfiguration.enableMyMoves) {
+      bodyScanAnchorView = self.workoutView;
+    }
+    self.bodyScanningTopConstraint = [self.bodyScanView.topAnchor constraintEqualToAnchor:bodyScanAnchorView.bottomAnchor constant:20];
+    [self.bodyScanningTopConstraint setActive:YES];
 
     [self updateBadge];
     [self reloadData];
@@ -325,6 +351,7 @@
     [self buttonStyle:_gotoWorkout imageToSet:[[UIImage imageNamed:@"up_arrow_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self buttonStyle:_gotoScheduled imageToSet:[[UIImage imageNamed:@"up_arrow_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self buttonStyle:_burnedPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    [self buttonStyle:_bodyScanningPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 }
 
 - (void)shadowView:(UIView *)selectedView {
@@ -346,6 +373,7 @@
     [self shadowView:self.burnedView];
     [self shadowView:self.workoutView];
     [self shadowView:self.scheduledView];
+    [self shadowView:self.bodyScanView];
 }
 
 - (void)setColorsForViews {
@@ -359,6 +387,7 @@
     _burnedView.backgroundColor     = [UIColor lightGrayColor];
     _workoutView.backgroundColor    = [UIColor lightGrayColor];
     _scheduledView.backgroundColor  = [UIColor lightGrayColor];
+    _bodyScanView.backgroundColor   = [UIColor lightGrayColor];
 }
 
 - (void)iconsColor:(UIImageView *)image {
@@ -376,6 +405,7 @@
     [self iconsColor:self.burnedImage];
     [self iconsColor:self.workoutImage];
     [self iconsColor:self.scheduledImage];
+    [self iconsColor:self.bodyScanImage];
     self.headerBlueVw.backgroundColor = AppConfiguration.menuIconColor;
 }
 
@@ -412,6 +442,15 @@
         }];
     }
 }
+
+#pragma mark Body Scanning Actions
+
+- (IBAction)userTappedBodyScanButton:(id)sender {
+  NSLog(@"Button tapped!!");
+}
+
+
+#pragma mark Menu Actions
 
 - (IBAction)addFoodBtn:(id)sender {
     MyLogViewController *vc = [[MyLogViewController alloc] init];
@@ -461,6 +500,7 @@
         [UIView transitionWithView:_firstExpandVw duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             self.hideShowConstant.constant = 130;
             self.expandViewHeightConst.constant = 262;
+            self.entireViewHeightConstraint.constant = self.entireViewHeightConstraint.constant + 125;
         } completion:nil];
         
         self.status = @"next";
@@ -471,6 +511,7 @@
             self.hideShowConstant.constant = 0;
             self.expandViewHeightConst.constant = 125;
             self.hideShowStack.hidden = true;
+          self.entireViewHeightConstraint.constant = MAX(self.entireViewHeightConstraint.constant - 125, self.entireViewDefaultHeight);
         } completion:NULL];
         
         self.status = @"first";
@@ -484,12 +525,13 @@
     self.leftStackVw.hidden = FALSE;
     self.rightStackVw.hidden = FALSE;
     self.midLineVw.hidden = FALSE;
-    
+
     if([self.leftStatus isEqualToString:@"new"])
     {
         [UIView transitionWithView:self.secondExpandVw duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             self.secondHideShowConstant.constant = 173;
             self.secondExpandViewHeightConst.constant = 262;
+            self.entireViewHeightConstraint.constant = self.entireViewHeightConstraint.constant + 125;
         } completion:NULL];
         
         self.leftStatus = @"old";
@@ -500,6 +542,7 @@
             self.secondHideShowConstant.constant = 0;
             self.secondHideShowStackVw.hidden = true;
             self.secondExpandViewHeightConst.constant = 125;
+            self.entireViewHeightConstraint.constant = MAX(self.entireViewHeightConstraint.constant - 125, self.entireViewDefaultHeight);
         } completion:NULL];
         self.leftStatus = @"new";
     }
@@ -518,6 +561,7 @@
         [UIView transitionWithView:self.weightView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             self.weightHideShowHeightConst.constant = 115;
             self.thirdExpVwHeightConst.constant = 250;
+            self.entireViewHeightConstraint.constant = self.entireViewHeightConstraint.constant + 125;
         } completion:NULL];
         self.weightSeperatorLbl.text = @"- - - - - - - - - - - - - - - - -";
         self.weightStatus = @"down";
@@ -527,7 +571,7 @@
         [UIView transitionWithView:self.weightView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             self.thirdExpVwHeightConst.constant = 115;
             self.weightHideShowHeightConst.constant = 0;
-            
+            self.entireViewHeightConstraint.constant = MAX(self.entireViewHeightConstraint.constant - 125, self.entireViewDefaultHeight);
         } completion:NULL];
         self.weightSeperatorLbl.text = @"";
         self.weightStatus = @"up";

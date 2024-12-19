@@ -191,5 +191,7 @@
 	<string>$(DMG_LOGIN_BACKGROUND_IMAGE)</string>
 	<key>DMG_MYMOVES_ENABLED</key>
 	<string>$(DMG_MYMOVES_ENABLED)</string>
+	<key>DMG_BODYSCANNING_ENABLED</key>
+	<string>$(DMG_BODYSCANNING_ENABLED)</string>
 </dict>
 </plist>
