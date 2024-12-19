@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "camera-4-512.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

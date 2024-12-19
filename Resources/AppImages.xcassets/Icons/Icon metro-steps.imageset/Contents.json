@@ -1,23 +1,23 @@
 {
   "images" : [
     {
+      "filename" : "Icon metro-steps.png",
       "idiom" : "universal",
-      "filename" : "Icon awesome-weight.png",
       "scale" : "1x"
     },
     {
+      "filename" : "Icon metro-steps@2x.png",
       "idiom" : "universal",
-      "filename" : "Icon awesome-weight@2x.png",
       "scale" : "2x"
     },
     {
+      "filename" : "Icon metro-steps@3x.png",
       "idiom" : "universal",
-      "filename" : "Icon awesome-weight@3x.png",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }
