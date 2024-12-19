@@ -67,6 +67,13 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+# Uncomment the next line if you don't want to check in Xcode SPM integration status
+# *.xcodeproj/xcshareddata/swiftpm/
+
 # Misc
 .DS_Store
 
