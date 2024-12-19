@@ -44,6 +44,8 @@ DMG_APPLE_TEAM_PREFIX = A8J837468C
 DMG_PRODUCT_NAME = UpperhandAthletics
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
 DMG_MYMOVES_ENABLED = YES
+// Enable or disable body scanning. For Embrace Health only. YES = Add.
+DMG_BODYSCANNING_ENABLED = NO
 
 // ************************************
 // ********* REPLICA DEFAULTS *********

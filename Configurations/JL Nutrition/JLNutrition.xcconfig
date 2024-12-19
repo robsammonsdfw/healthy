@@ -57,6 +57,8 @@ DMG_SUPPORT_EMAIL = jlucasnutrition@gmail.com
 DMG_ACCOUNT_CODE = jl_nutrition
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
 DMG_MYMOVES_ENABLED = YES
+// Enable or disable body scanning. For Embrace Health only. YES = Add.
+DMG_BODYSCANNING_ENABLED = NO
 
 // ************************************
 // ********* COLOR SCHEME *************
