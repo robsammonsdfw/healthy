@@ -546,6 +546,7 @@
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
 		0E29C9D52A503C8600D9884F /* DMMessagesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */; };
 		0E29C9DB2A503DCE00D9884F /* DMDatabaseUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */; };
+		0E2FF3802D14B45E009FF7D6 /* PrismScannerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2FF37E2D14B45E009FF7D6 /* PrismScannerManager.swift */; };
 		0E4409732A49427400AF5BAD /* DMMyLogDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */; };
 		0E4409762A49A3FF00AF5BAD /* DMAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */; };
 		0E4409782A49EA6E00AF5BAD /* FetchUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */; };
@@ -584,7 +585,70 @@
 		0EA18DBD2A4745040017D131 /* DMMoveDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBC2A4745040017D131 /* DMMoveDay.m */; };
 		0EA18DC02A4751690017D131 /* DMMoveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBF2A4751690017D131 /* DMMoveSet.m */; };
 		0EA18DC32A4757010017D131 /* DMMoveRoutine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DC22A4757010017D131 /* DMMoveRoutine.m */; };
+		0EA36EAF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB02D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB12D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB22D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB32D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB42D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB52D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB62D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB72D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB82D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EB92D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EBA2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EBB2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EBC2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EBD2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EBE2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EBF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC02D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC12D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC22D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC32D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC42D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC52D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC62D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC72D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC82D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EC92D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ECA2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ECB2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ECC2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ECD2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ECE2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ECF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED02D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED12D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED22D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED32D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED42D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED52D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED62D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED72D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED82D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36ED92D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EDA2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EDB2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EDC2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EDD2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EDE2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EDF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EE02D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EE12D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EE22D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EE32D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
+		0EA36EE52D15C4CF002B5015 /* BodyScanResultListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EE42D15C4BA002B5015 /* BodyScanResultListViewController.swift */; };
+		0EA36EEE2D164775002B5015 /* Fitness_Thresholds.md in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EEA2D164775002B5015 /* Fitness_Thresholds.md */; };
+		0EA36EEF2D164775002B5015 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EEC2D164775002B5015 /* main.js */; };
+		0EA36EF02D164775002B5015 /* Calories_Recommendations.md in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EE72D164775002B5015 /* Calories_Recommendations.md */; };
+		0EA36EF12D164775002B5015 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EE82D164775002B5015 /* styles.css */; };
+		0EA36EF22D164775002B5015 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EEB2D164775002B5015 /* index.html */; };
+		0EA36EF42D164788002B5015 /* BodyScanResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EF32D16477D002B5015 /* BodyScanResultsViewController.swift */; };
+		0EA36EFB2D16EDA5002B5015 /* HealthReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EF92D16EDA5002B5015 /* HealthReport.swift */; };
 		0EA5C9752A4B57F000698BFE /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */; };
+		0ECCFD5D2D14B7FC003A1F5C /* PrismSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 0ECCFD5C2D14B7FC003A1F5C /* PrismSDK */; };
+		0ECCFD5F2D14BA95003A1F5C /* SampleCode.md in Resources */ = {isa = PBXBuildFile; fileRef = 0ECCFD5E2D14BA91003A1F5C /* SampleCode.md */; };
 		0ECFE7F12A41DB3900DE631E /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
 		0EDAB6A72A3B3A1000DB351A /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
 		0EDAB6AC2A3B4EAA00DB351A /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
@@ -9932,6 +9996,7 @@
 		0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMessagesDataProvider.m; sourceTree = "<group>"; };
 		0E29C9D92A503DCE00D9884F /* DMDatabaseUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMDatabaseUtilities.h; sourceTree = "<group>"; };
 		0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMDatabaseUtilities.m; sourceTree = "<group>"; };
+		0E2FF37E2D14B45E009FF7D6 /* PrismScannerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismScannerManager.swift; sourceTree = "<group>"; };
 		0E3F44D215003DA6008413AB /* LearnMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LearnMoreViewController.h; sourceTree = "<group>"; };
 		0E3F44D315003DA6008413AB /* LearnMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LearnMoreViewController.m; sourceTree = "<group>"; };
 		0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LearnMoreViewController.xib; sourceTree = "<group>"; };
@@ -10021,6 +10086,15 @@
 		0EA18DC12A4757010017D131 /* DMMoveRoutine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveRoutine.h; sourceTree = "<group>"; };
 		0EA18DC22A4757010017D131 /* DMMoveRoutine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveRoutine.m; sourceTree = "<group>"; };
 		0EA18DC72A47BD670017D131 /* DMPickerViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMPickerViewDataSource.h; sourceTree = "<group>"; };
+		0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenButton.swift; sourceTree = "<group>"; };
+		0EA36EE42D15C4BA002B5015 /* BodyScanResultListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyScanResultListViewController.swift; sourceTree = "<group>"; };
+		0EA36EE72D164775002B5015 /* Calories_Recommendations.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Calories_Recommendations.md; sourceTree = "<group>"; };
+		0EA36EE82D164775002B5015 /* styles.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = styles.css; sourceTree = "<group>"; };
+		0EA36EEA2D164775002B5015 /* Fitness_Thresholds.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Fitness_Thresholds.md; sourceTree = "<group>"; };
+		0EA36EEB2D164775002B5015 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		0EA36EEC2D164775002B5015 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		0EA36EF32D16477D002B5015 /* BodyScanResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyScanResultsViewController.swift; sourceTree = "<group>"; };
+		0EA36EF92D16EDA5002B5015 /* HealthReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthReport.swift; sourceTree = "<group>"; };
 		0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroceryListViewController.m; sourceTree = "<group>"; };
 		0EA5C9732A4B57D100698BFE /* GroceryListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroceryListViewController.h; sourceTree = "<group>"; };
 		0EAD266D1578EAED008E77D7 /* MealPlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanViewController.h; sourceTree = "<group>"; };
@@ -10029,6 +10103,7 @@
 		0EB5424B14E325210023BA4C /* FavoriteMealsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteMealsViewController.h; sourceTree = "<group>"; };
 		0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteMealsViewController.m; sourceTree = "<group>"; };
 		0EB5424D14E325210023BA4C /* FavoriteMealsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoriteMealsViewController.xib; sourceTree = "<group>"; };
+		0ECCFD5E2D14BA91003A1F5C /* SampleCode.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SampleCode.md; sourceTree = "<group>"; };
 		0ECE6ED414BF3FC1004DEF36 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0ECE6F4614BF4A94004DEF36 /* TUTSimpleScatterPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUTSimpleScatterPlot.h; sourceTree = "<group>"; };
 		0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TUTSimpleScatterPlot.m; sourceTree = "<group>"; };
@@ -10684,6 +10759,7 @@
 				0E101D282A56D5B700D8E7E2 /* Security.framework in Frameworks */,
 				0E101D292A56D5B700D8E7E2 /* WebKit.framework in Frameworks */,
 				0E101D2A2A56D5B700D8E7E2 /* CoreTelephony.framework in Frameworks */,
+				0ECCFD5D2D14B7FC003A1F5C /* PrismSDK in Frameworks */,
 				0E101D2B2A56D5B700D8E7E2 /* CFNetwork.framework in Frameworks */,
 				0E101D2C2A56D5B700D8E7E2 /* MobileCoreServices.framework in Frameworks */,
 				0E101D2D2A56D5B700D8E7E2 /* AudioToolbox.framework in Frameworks */,
@@ -12239,6 +12315,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0E2FF37F2D14B45E009FF7D6 /* BodyScanning */,
 				0E101B9D2A53650C00D8E7E2 /* IIn App Purchase */,
 				1D3623240D0F684500981E51 /* DietMasterGoAppDelegate.h */,
 				1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */,
@@ -12370,6 +12447,19 @@
 				0E101C832A56D5AE00D8E7E2 /* DietMasterGo.xcconfig */,
 			);
 			path = DietMasterGo;
+			sourceTree = "<group>";
+		};
+		0E2FF37F2D14B45E009FF7D6 /* BodyScanning */ = {
+			isa = PBXGroup;
+			children = (
+				0EA36EFA2D16EDA5002B5015 /* Models */,
+				0EA36EF32D16477D002B5015 /* BodyScanResultsViewController.swift */,
+				0EA36EE62D15FBD5002B5015 /* Reports */,
+				0EA36EE42D15C4BA002B5015 /* BodyScanResultListViewController.swift */,
+				0ECCFD5E2D14BA91003A1F5C /* SampleCode.md */,
+				0E2FF37E2D14B45E009FF7D6 /* PrismScannerManager.swift */,
+			);
+			path = BodyScanning;
 			sourceTree = "<group>";
 		};
 		0E3F44D115003DA6008413AB /* LearnMoreViewController */ = {
@@ -12543,6 +12633,26 @@
 			path = Exercises;
 			sourceTree = "<group>";
 		};
+		0EA36EE62D15FBD5002B5015 /* Reports */ = {
+			isa = PBXGroup;
+			children = (
+				0EA36EE72D164775002B5015 /* Calories_Recommendations.md */,
+				0EA36EEA2D164775002B5015 /* Fitness_Thresholds.md */,
+				0EA36EE82D164775002B5015 /* styles.css */,
+				0EA36EEB2D164775002B5015 /* index.html */,
+				0EA36EEC2D164775002B5015 /* main.js */,
+			);
+			path = Reports;
+			sourceTree = "<group>";
+		};
+		0EA36EFA2D16EDA5002B5015 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0EA36EF92D16EDA5002B5015 /* HealthReport.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		0EAD266B1578EABF008E77D7 /* MealPlanViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -12611,6 +12721,7 @@
 				650208F5250158BC00F412B0 /* DietMasterGoViewController.xib */,
 				650208F3250158A900F412B0 /* DietMasterGoViewController.h */,
 				650208F2250158A900F412B0 /* DietMasterGoViewController.m */,
+				0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */,
 			);
 			name = DietMasterGoViewController;
 			path = ..;
@@ -14839,6 +14950,9 @@
 				Base,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			packageReferences = (
+				0ECCFD5B2D14B7FC003A1F5C /* XCRemoteSwiftPackageReference "prismsdk-ios" */,
+			);
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -15027,6 +15141,7 @@
 				0E101C8B2A56D5B700D8E7E2 /* UserMealType.xib in Resources */,
 				0E101C8C2A56D5B700D8E7E2 /* DetailViewController.xib in Resources */,
 				0E101D422A56D5C400D8E7E2 /* Assets.xcassets in Resources */,
+				0ECCFD5F2D14BA95003A1F5C /* SampleCode.md in Resources */,
 				0E101C8D2A56D5B700D8E7E2 /* Log_Add.xib in Resources */,
 				0E101C8E2A56D5B700D8E7E2 /* RecordWeightView.xib in Resources */,
 				0E101C8F2A56D5B700D8E7E2 /* FoodsHome.xib in Resources */,
@@ -15061,6 +15176,11 @@
 				0E101CAD2A56D5B700D8E7E2 /* MealPlanDetailViewController.xib in Resources */,
 				0E101CAE2A56D5B700D8E7E2 /* MyMovesVideoPlayerViewController.xib in Resources */,
 				0E101CAF2A56D5B700D8E7E2 /* MyMovesDetailsViewController.xib in Resources */,
+				0EA36EEE2D164775002B5015 /* Fitness_Thresholds.md in Resources */,
+				0EA36EEF2D164775002B5015 /* main.js in Resources */,
+				0EA36EF02D164775002B5015 /* Calories_Recommendations.md in Resources */,
+				0EA36EF12D164775002B5015 /* styles.css in Resources */,
+				0EA36EF22D164775002B5015 /* index.html in Resources */,
 				0E101CB02A56D5B700D8E7E2 /* ProfileContactVC.xib in Resources */,
 				0E101CB22A56D5B700D8E7E2 /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */,
 				0E101CB32A56D5B700D8E7E2 /* GroceryListViewController.xib in Resources */,
@@ -21016,6 +21136,7 @@
 				0E04F35F2AABAC6F0068A488 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0E04F3602AABAC6F0068A488 /* MyLogViewController.m in Sources */,
 				0E04F3612AABAC6F0068A488 /* DetailViewController.m in Sources */,
+				0EA36EB52D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0E04F3622AABAC6F0068A488 /* Log_Add.m in Sources */,
 				0E04F3632AABAC6F0068A488 /* RecordWeightView.m in Sources */,
 				0E04F3642AABAC6F0068A488 /* DMMove.m in Sources */,
@@ -21128,6 +21249,7 @@
 				0E101BE92A56CC7300D8E7E2 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0E101BEA2A56CC7300D8E7E2 /* MyLogViewController.m in Sources */,
 				0E101BEB2A56CC7300D8E7E2 /* DetailViewController.m in Sources */,
+				0EA36EBB2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0E101BEC2A56CC7300D8E7E2 /* Log_Add.m in Sources */,
 				0E101BED2A56CC7300D8E7E2 /* RecordWeightView.m in Sources */,
 				0E101BEE2A56CC7300D8E7E2 /* DMMove.m in Sources */,
@@ -21236,6 +21358,7 @@
 				0E101CBE2A56D5B700D8E7E2 /* DMMessagesDataProvider.m in Sources */,
 				0E101CBF2A56D5B700D8E7E2 /* AppSettings.m in Sources */,
 				0E101CC02A56D5B700D8E7E2 /* BaseViewController.m in Sources */,
+				0E2FF3802D14B45E009FF7D6 /* PrismScannerManager.swift in Sources */,
 				0E101CC12A56D5B700D8E7E2 /* ExchangeFood.m in Sources */,
 				0E101CC22A56D5B700D8E7E2 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0E101CC32A56D5B700D8E7E2 /* MyLogViewController.m in Sources */,
@@ -21255,6 +21378,7 @@
 				0E101CD12A56D5B700D8E7E2 /* MealPlanDetailsTableViewCell.m in Sources */,
 				0E101CD22A56D5B700D8E7E2 /* DMActivityIndicator.m in Sources */,
 				0E101CD32A56D5B700D8E7E2 /* MCNewCustomLayeredView.m in Sources */,
+				0EA36EB32D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0E101CD42A56D5B700D8E7E2 /* ExercisesViewController.m in Sources */,
 				0E101CD52A56D5B700D8E7E2 /* DMFood.m in Sources */,
 				0E101CD62A56D5B700D8E7E2 /* MyMovesDetailsViewController.m in Sources */,
@@ -21314,6 +21438,8 @@
 				0E101D0C2A56D5B700D8E7E2 /* IAPHelper.m in Sources */,
 				0E101D0D2A56D5B700D8E7E2 /* DMMoveDay.m in Sources */,
 				0E101D0E2A56D5B700D8E7E2 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
+				0EA36EF42D164788002B5015 /* BodyScanResultsViewController.swift in Sources */,
+				0EA36EFB2D16EDA5002B5015 /* HealthReport.swift in Sources */,
 				0E101D0F2A56D5B700D8E7E2 /* UIViewController+Navigation.m in Sources */,
 				0E101D102A56D5B700D8E7E2 /* DailyActivityTypeVC.m in Sources */,
 				0E101D112A56D5B700D8E7E2 /* DMMealPlanItem.m in Sources */,
@@ -21330,6 +21456,7 @@
 				0E101D1C2A56D5B700D8E7E2 /* NSObject+Description.m in Sources */,
 				0E101D1D2A56D5B700D8E7E2 /* DayDataProvider.swift in Sources */,
 				0E101D1E2A56D5B700D8E7E2 /* DMDataFetcher.m in Sources */,
+				0EA36EE52D15C4CF002B5015 /* BodyScanResultListViewController.swift in Sources */,
 				0E101D1F2A56D5B700D8E7E2 /* GroceryListViewController.m in Sources */,
 				0E101D202A56D5B700D8E7E2 /* MyGoalViewController.m in Sources */,
 				0E101D212A56D5B700D8E7E2 /* MyMovesViewController.m in Sources */,
@@ -21352,6 +21479,7 @@
 				0EE35D4F2A7026FF00019AB5 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EE35D502A7026FF00019AB5 /* MyLogViewController.m in Sources */,
 				0EE35D512A7026FF00019AB5 /* DetailViewController.m in Sources */,
+				0EA36EE22D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0EE35D522A7026FF00019AB5 /* Log_Add.m in Sources */,
 				0EE35D532A7026FF00019AB5 /* RecordWeightView.m in Sources */,
 				0EE35D542A7026FF00019AB5 /* DMMove.m in Sources */,
@@ -21464,6 +21592,7 @@
 				0EF135BA2A5749E10089B4FD /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF135BB2A5749E10089B4FD /* MyLogViewController.m in Sources */,
 				0EF135BC2A5749E10089B4FD /* DetailViewController.m in Sources */,
+				0EA36ECE2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0EF135BD2A5749E10089B4FD /* Log_Add.m in Sources */,
 				0EF135BE2A5749E10089B4FD /* RecordWeightView.m in Sources */,
 				0EF135BF2A5749E10089B4FD /* DMMove.m in Sources */,
@@ -21576,6 +21705,7 @@
 				0EF136822A575DF80089B4FD /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF136832A575DF80089B4FD /* MyLogViewController.m in Sources */,
 				0EF136842A575DF80089B4FD /* DetailViewController.m in Sources */,
+				0EA36EB42D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0EF136852A575DF80089B4FD /* Log_Add.m in Sources */,
 				0EF136862A575DF80089B4FD /* RecordWeightView.m in Sources */,
 				0EF136872A575DF80089B4FD /* DMMove.m in Sources */,
@@ -21688,6 +21818,7 @@
 				0EF137412A5760390089B4FD /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF137422A5760390089B4FD /* MyLogViewController.m in Sources */,
 				0EF137432A5760390089B4FD /* DetailViewController.m in Sources */,
+				0EA36EC42D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0EF137442A5760390089B4FD /* Log_Add.m in Sources */,
 				0EF137452A5760390089B4FD /* RecordWeightView.m in Sources */,
 				0EF137462A5760390089B4FD /* DMMove.m in Sources */,
@@ -21800,6 +21931,7 @@
 				0EF975BF2A8522810089FC8D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF975C02A8522810089FC8D /* MyLogViewController.m in Sources */,
 				0EF975C12A8522810089FC8D /* DetailViewController.m in Sources */,
+				0EA36ECA2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0EF975C22A8522810089FC8D /* Log_Add.m in Sources */,
 				0EF975C32A8522810089FC8D /* RecordWeightView.m in Sources */,
 				0EF975C42A8522810089FC8D /* DMMove.m in Sources */,
@@ -21912,6 +22044,7 @@
 				0EF976852A85233D0089FC8D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF976862A85233D0089FC8D /* MyLogViewController.m in Sources */,
 				0EF976872A85233D0089FC8D /* DetailViewController.m in Sources */,
+				0EA36EBF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				0EF976882A85233D0089FC8D /* Log_Add.m in Sources */,
 				0EF976892A85233D0089FC8D /* RecordWeightView.m in Sources */,
 				0EF9768A2A85233D0089FC8D /* DMMove.m in Sources */,
@@ -22024,6 +22157,7 @@
 				40E035C921F1F2A100968755 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				401B647620B3FC64004453E7 /* MyLogViewController.m in Sources */,
 				401B647720B3FC64004453E7 /* DetailViewController.m in Sources */,
+				0EA36EDB2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				401B647820B3FC64004453E7 /* Log_Add.m in Sources */,
 				401B647920B3FC64004453E7 /* RecordWeightView.m in Sources */,
 				0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */,
@@ -22136,6 +22270,7 @@
 				BF0385842AFABE610049A79B /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF0385852AFABE610049A79B /* MyLogViewController.m in Sources */,
 				BF0385862AFABE610049A79B /* DetailViewController.m in Sources */,
+				0EA36EB72D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF0385872AFABE610049A79B /* Log_Add.m in Sources */,
 				BF0385882AFABE610049A79B /* RecordWeightView.m in Sources */,
 				BF0385892AFABE610049A79B /* DMMove.m in Sources */,
@@ -22248,6 +22383,7 @@
 				BF130D7D2C7CF08400EA978D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF130D7E2C7CF08400EA978D /* MyLogViewController.m in Sources */,
 				BF130D7F2C7CF08400EA978D /* DetailViewController.m in Sources */,
+				0EA36ED32D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF130D802C7CF08400EA978D /* Log_Add.m in Sources */,
 				BF130D812C7CF08400EA978D /* RecordWeightView.m in Sources */,
 				BF130D822C7CF08400EA978D /* DMMove.m in Sources */,
@@ -22360,6 +22496,7 @@
 				BF18C8A72CF1053B00C5437D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF18C8A82CF1053B00C5437D /* MyLogViewController.m in Sources */,
 				BF18C8A92CF1053B00C5437D /* DetailViewController.m in Sources */,
+				0EA36EE12D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF18C8AA2CF1053B00C5437D /* Log_Add.m in Sources */,
 				BF18C8AB2CF1053B00C5437D /* RecordWeightView.m in Sources */,
 				BF18C8AC2CF1053B00C5437D /* DMMove.m in Sources */,
@@ -22472,6 +22609,7 @@
 				BF1AE3E02BC9923D009F7BF5 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF1AE3E12BC9923D009F7BF5 /* MyLogViewController.m in Sources */,
 				BF1AE3E22BC9923D009F7BF5 /* DetailViewController.m in Sources */,
+				0EA36ED92D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF1AE3E32BC9923D009F7BF5 /* Log_Add.m in Sources */,
 				BF1AE3E42BC9923D009F7BF5 /* RecordWeightView.m in Sources */,
 				BF1AE3E52BC9923D009F7BF5 /* DMMove.m in Sources */,
@@ -22584,6 +22722,7 @@
 				BF2809D62C8F5CCE00884D6E /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF2809D72C8F5CCE00884D6E /* MyLogViewController.m in Sources */,
 				BF2809D82C8F5CCE00884D6E /* DetailViewController.m in Sources */,
+				0EA36EBD2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF2809D92C8F5CCE00884D6E /* Log_Add.m in Sources */,
 				BF2809DA2C8F5CCE00884D6E /* RecordWeightView.m in Sources */,
 				BF2809DB2C8F5CCE00884D6E /* DMMove.m in Sources */,
@@ -22696,6 +22835,7 @@
 				BF2B03BD2C47045E0046955E /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF2B03BE2C47045E0046955E /* MyLogViewController.m in Sources */,
 				BF2B03BF2C47045E0046955E /* DetailViewController.m in Sources */,
+				0EA36ECB2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF2B03C02C47045E0046955E /* Log_Add.m in Sources */,
 				BF2B03C12C47045E0046955E /* RecordWeightView.m in Sources */,
 				BF2B03C22C47045E0046955E /* DMMove.m in Sources */,
@@ -22808,6 +22948,7 @@
 				BF34CD2C2BD3026700090D1A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF34CD2D2BD3026700090D1A /* MyLogViewController.m in Sources */,
 				BF34CD2E2BD3026700090D1A /* DetailViewController.m in Sources */,
+				0EA36EC82D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF34CD2F2BD3026700090D1A /* Log_Add.m in Sources */,
 				BF34CD302BD3026700090D1A /* RecordWeightView.m in Sources */,
 				BF34CD312BD3026700090D1A /* DMMove.m in Sources */,
@@ -22920,6 +23061,7 @@
 				BF3CC0122B2B8C77004493C0 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3CC0132B2B8C77004493C0 /* MyLogViewController.m in Sources */,
 				BF3CC0142B2B8C77004493C0 /* DetailViewController.m in Sources */,
+				0EA36EBA2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF3CC0152B2B8C77004493C0 /* Log_Add.m in Sources */,
 				BF3CC0162B2B8C77004493C0 /* RecordWeightView.m in Sources */,
 				BF3CC0172B2B8C77004493C0 /* DMMove.m in Sources */,
@@ -23032,6 +23174,7 @@
 				BF3CC0E42B2BA768004493C0 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3CC0E52B2BA768004493C0 /* MyLogViewController.m in Sources */,
 				BF3CC0E62B2BA768004493C0 /* DetailViewController.m in Sources */,
+				0EA36EB82D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF3CC0E72B2BA768004493C0 /* Log_Add.m in Sources */,
 				BF3CC0E82B2BA768004493C0 /* RecordWeightView.m in Sources */,
 				BF3CC0E92B2BA768004493C0 /* DMMove.m in Sources */,
@@ -23144,6 +23287,7 @@
 				BF3CC1B72B2CD9ED004493C0 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3CC1B82B2CD9ED004493C0 /* MyLogViewController.m in Sources */,
 				BF3CC1B92B2CD9ED004493C0 /* DetailViewController.m in Sources */,
+				0EA36EDF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF3CC1BA2B2CD9ED004493C0 /* Log_Add.m in Sources */,
 				BF3CC1BB2B2CD9ED004493C0 /* RecordWeightView.m in Sources */,
 				BF3CC1BC2B2CD9ED004493C0 /* DMMove.m in Sources */,
@@ -23256,6 +23400,7 @@
 				BF3D05FE2CC1601F00F0473F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3D05FF2CC1601F00F0473F /* MyLogViewController.m in Sources */,
 				BF3D06002CC1601F00F0473F /* DetailViewController.m in Sources */,
+				0EA36EC52D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF3D06012CC1601F00F0473F /* Log_Add.m in Sources */,
 				BF3D06022CC1601F00F0473F /* RecordWeightView.m in Sources */,
 				BF3D06032CC1601F00F0473F /* DMMove.m in Sources */,
@@ -23368,6 +23513,7 @@
 				BF3D3AC52B14E23F0029C30A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3D3AC62B14E23F0029C30A /* MyLogViewController.m in Sources */,
 				BF3D3AC72B14E23F0029C30A /* DetailViewController.m in Sources */,
+				0EA36EDE2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF3D3AC82B14E23F0029C30A /* Log_Add.m in Sources */,
 				BF3D3AC92B14E23F0029C30A /* RecordWeightView.m in Sources */,
 				BF3D3ACA2B14E23F0029C30A /* DMMove.m in Sources */,
@@ -23480,6 +23626,7 @@
 				BF3D3B952B14FA1F0029C30A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3D3B962B14FA1F0029C30A /* MyLogViewController.m in Sources */,
 				BF3D3B972B14FA1F0029C30A /* DetailViewController.m in Sources */,
+				0EA36ED62D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF3D3B982B14FA1F0029C30A /* Log_Add.m in Sources */,
 				BF3D3B992B14FA1F0029C30A /* RecordWeightView.m in Sources */,
 				BF3D3B9A2B14FA1F0029C30A /* DMMove.m in Sources */,
@@ -23592,6 +23739,7 @@
 				BF5BBB012BA0E0650090AE2F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BBB022BA0E0650090AE2F /* MyLogViewController.m in Sources */,
 				BF5BBB032BA0E0650090AE2F /* DetailViewController.m in Sources */,
+				0EA36EB92D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF5BBB042BA0E0650090AE2F /* Log_Add.m in Sources */,
 				BF5BBB052BA0E0650090AE2F /* RecordWeightView.m in Sources */,
 				BF5BBB062BA0E0650090AE2F /* DMMove.m in Sources */,
@@ -23704,6 +23852,7 @@
 				BF5BBBDE2BA21AD00090AE2F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BBBDF2BA21AD00090AE2F /* MyLogViewController.m in Sources */,
 				BF5BBBE02BA21AD00090AE2F /* DetailViewController.m in Sources */,
+				0EA36ECF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF5BBBE12BA21AD00090AE2F /* Log_Add.m in Sources */,
 				BF5BBBE22BA21AD00090AE2F /* RecordWeightView.m in Sources */,
 				BF5BBBE32BA21AD00090AE2F /* DMMove.m in Sources */,
@@ -23816,6 +23965,7 @@
 				BF5BBCBC2BAB68F80090AE2F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BBCBD2BAB68F80090AE2F /* MyLogViewController.m in Sources */,
 				BF5BBCBE2BAB68F80090AE2F /* DetailViewController.m in Sources */,
+				0EA36EBE2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF5BBCBF2BAB68F80090AE2F /* Log_Add.m in Sources */,
 				BF5BBCC02BAB68F80090AE2F /* RecordWeightView.m in Sources */,
 				BF5BBCC12BAB68F80090AE2F /* DMMove.m in Sources */,
@@ -23928,6 +24078,7 @@
 				BF5BEF942C921CDE00785B7A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BEF952C921CDE00785B7A /* MyLogViewController.m in Sources */,
 				BF5BEF962C921CDE00785B7A /* DetailViewController.m in Sources */,
+				0EA36EB22D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF5BEF972C921CDE00785B7A /* Log_Add.m in Sources */,
 				BF5BEF982C921CDE00785B7A /* RecordWeightView.m in Sources */,
 				BF5BEF992C921CDE00785B7A /* DMMove.m in Sources */,
@@ -24040,6 +24191,7 @@
 				BF5CAB9E2AE1C4F800FAD555 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5CAB9F2AE1C4F800FAD555 /* MyLogViewController.m in Sources */,
 				BF5CABA02AE1C4F800FAD555 /* DetailViewController.m in Sources */,
+				0EA36ED22D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF5CABA12AE1C4F800FAD555 /* Log_Add.m in Sources */,
 				BF5CABA22AE1C4F800FAD555 /* RecordWeightView.m in Sources */,
 				BF5CABA32AE1C4F800FAD555 /* DMMove.m in Sources */,
@@ -24152,6 +24304,7 @@
 				BF66ABE72BE1995B00BE0170 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF66ABE82BE1995B00BE0170 /* MyLogViewController.m in Sources */,
 				BF66ABE92BE1995B00BE0170 /* DetailViewController.m in Sources */,
+				0EA36EB12D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF66ABEA2BE1995B00BE0170 /* Log_Add.m in Sources */,
 				BF66ABEB2BE1995B00BE0170 /* RecordWeightView.m in Sources */,
 				BF66ABEC2BE1995B00BE0170 /* DMMove.m in Sources */,
@@ -24264,6 +24417,7 @@
 				BF6969AD2CBDBA0800544418 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF6969AE2CBDBA0800544418 /* MyLogViewController.m in Sources */,
 				BF6969AF2CBDBA0800544418 /* DetailViewController.m in Sources */,
+				0EA36EE02D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF6969B02CBDBA0800544418 /* Log_Add.m in Sources */,
 				BF6969B12CBDBA0800544418 /* RecordWeightView.m in Sources */,
 				BF6969B22CBDBA0800544418 /* DMMove.m in Sources */,
@@ -24376,6 +24530,7 @@
 				BF6F245C2AD7405B003041B1 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF6F245D2AD7405B003041B1 /* MyLogViewController.m in Sources */,
 				BF6F245E2AD7405B003041B1 /* DetailViewController.m in Sources */,
+				0EA36EB62D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF6F245F2AD7405B003041B1 /* Log_Add.m in Sources */,
 				BF6F24602AD7405B003041B1 /* RecordWeightView.m in Sources */,
 				BF6F24612AD7405B003041B1 /* DMMove.m in Sources */,
@@ -24488,6 +24643,7 @@
 				BF7B93C82B71740A007EC568 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF7B93C92B71740A007EC568 /* MyLogViewController.m in Sources */,
 				BF7B93CA2B71740A007EC568 /* DetailViewController.m in Sources */,
+				0EA36ED02D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF7B93CB2B71740A007EC568 /* Log_Add.m in Sources */,
 				BF7B93CC2B71740A007EC568 /* RecordWeightView.m in Sources */,
 				BF7B93CD2B71740A007EC568 /* DMMove.m in Sources */,
@@ -24600,6 +24756,7 @@
 				BF7B94A02B75522E007EC568 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF7B94A12B75522E007EC568 /* MyLogViewController.m in Sources */,
 				BF7B94A22B75522E007EC568 /* DetailViewController.m in Sources */,
+				0EA36ED42D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF7B94A32B75522E007EC568 /* Log_Add.m in Sources */,
 				BF7B94A42B75522E007EC568 /* RecordWeightView.m in Sources */,
 				BF7B94A52B75522E007EC568 /* DMMove.m in Sources */,
@@ -24712,6 +24869,7 @@
 				BF7B95792B757B9E007EC568 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF7B957A2B757B9E007EC568 /* MyLogViewController.m in Sources */,
 				BF7B957B2B757B9E007EC568 /* DetailViewController.m in Sources */,
+				0EA36EDC2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF7B957C2B757B9E007EC568 /* Log_Add.m in Sources */,
 				BF7B957D2B757B9E007EC568 /* RecordWeightView.m in Sources */,
 				BF7B957E2B757B9E007EC568 /* DMMove.m in Sources */,
@@ -24824,6 +24982,7 @@
 				BF8680712B3F5FFF00C2ECAB /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8680722B3F5FFF00C2ECAB /* MyLogViewController.m in Sources */,
 				BF8680732B3F5FFF00C2ECAB /* DetailViewController.m in Sources */,
+				0EA36EC62D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF8680742B3F5FFF00C2ECAB /* Log_Add.m in Sources */,
 				BF8680752B3F5FFF00C2ECAB /* RecordWeightView.m in Sources */,
 				BF8680762B3F5FFF00C2ECAB /* DMMove.m in Sources */,
@@ -24936,6 +25095,7 @@
 				BF86FB912C88D07300C7E816 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF86FB922C88D07300C7E816 /* MyLogViewController.m in Sources */,
 				BF86FB932C88D07300C7E816 /* DetailViewController.m in Sources */,
+				0EA36EBC2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF86FB942C88D07300C7E816 /* Log_Add.m in Sources */,
 				BF86FB952C88D07300C7E816 /* RecordWeightView.m in Sources */,
 				BF86FB962C88D07300C7E816 /* DMMove.m in Sources */,
@@ -25048,6 +25208,7 @@
 				BF8787C42C18E34A0068E8BA /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8787C52C18E34A0068E8BA /* MyLogViewController.m in Sources */,
 				BF8787C62C18E34A0068E8BA /* DetailViewController.m in Sources */,
+				0EA36EC92D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF8787C72C18E34A0068E8BA /* Log_Add.m in Sources */,
 				BF8787C82C18E34A0068E8BA /* RecordWeightView.m in Sources */,
 				BF8787C92C18E34A0068E8BA /* DMMove.m in Sources */,
@@ -25160,6 +25321,7 @@
 				BF8788A62C2211810068E8BA /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8788A72C2211810068E8BA /* MyLogViewController.m in Sources */,
 				BF8788A82C2211810068E8BA /* DetailViewController.m in Sources */,
+				0EA36EDA2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF8788A92C2211810068E8BA /* Log_Add.m in Sources */,
 				BF8788AA2C2211810068E8BA /* RecordWeightView.m in Sources */,
 				BF8788AB2C2211810068E8BA /* DMMove.m in Sources */,
@@ -25272,6 +25434,7 @@
 				BF8E9BE02C4C3C8F0073AEB6 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8E9BE12C4C3C8F0073AEB6 /* MyLogViewController.m in Sources */,
 				BF8E9BE22C4C3C8F0073AEB6 /* DetailViewController.m in Sources */,
+				0EA36EC12D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF8E9BE32C4C3C8F0073AEB6 /* Log_Add.m in Sources */,
 				BF8E9BE42C4C3C8F0073AEB6 /* RecordWeightView.m in Sources */,
 				BF8E9BE52C4C3C8F0073AEB6 /* DMMove.m in Sources */,
@@ -25384,6 +25547,7 @@
 				BF9A77162D039D660028C17C /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF9A77172D039D660028C17C /* MyLogViewController.m in Sources */,
 				BF9A77182D039D660028C17C /* DetailViewController.m in Sources */,
+				0EA36EAF2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BF9A77192D039D660028C17C /* Log_Add.m in Sources */,
 				BF9A771A2D039D660028C17C /* RecordWeightView.m in Sources */,
 				BF9A771B2D039D660028C17C /* DMMove.m in Sources */,
@@ -25496,6 +25660,7 @@
 				BFA93FF72B7D44F7001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFA93FF82B7D44F7001C3D48 /* MyLogViewController.m in Sources */,
 				BFA93FF92B7D44F7001C3D48 /* DetailViewController.m in Sources */,
+				0EA36ECD2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFA93FFA2B7D44F7001C3D48 /* Log_Add.m in Sources */,
 				BFA93FFB2B7D44F7001C3D48 /* RecordWeightView.m in Sources */,
 				BFA93FFC2B7D44F7001C3D48 /* DMMove.m in Sources */,
@@ -25608,6 +25773,7 @@
 				BFA940D22B7E9ECA001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFA940D32B7E9ECA001C3D48 /* MyLogViewController.m in Sources */,
 				BFA940D42B7E9ECA001C3D48 /* DetailViewController.m in Sources */,
+				0EA36EE32D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFA940D52B7E9ECA001C3D48 /* Log_Add.m in Sources */,
 				BFA940D62B7E9ECA001C3D48 /* RecordWeightView.m in Sources */,
 				BFA940D72B7E9ECA001C3D48 /* DMMove.m in Sources */,
@@ -25720,6 +25886,7 @@
 				BFA941B42B851999001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFA941B52B851999001C3D48 /* MyLogViewController.m in Sources */,
 				BFA941B62B851999001C3D48 /* DetailViewController.m in Sources */,
+				0EA36EC72D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFA941B72B851999001C3D48 /* Log_Add.m in Sources */,
 				BFA941B82B851999001C3D48 /* RecordWeightView.m in Sources */,
 				BFA941B92B851999001C3D48 /* DMMove.m in Sources */,
@@ -25832,6 +25999,7 @@
 				BFB3C3DE2AF55CF900F2CFA2 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFB3C3DF2AF55CF900F2CFA2 /* MyLogViewController.m in Sources */,
 				BFB3C3E02AF55CF900F2CFA2 /* DetailViewController.m in Sources */,
+				0EA36EB02D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFB3C3E12AF55CF900F2CFA2 /* Log_Add.m in Sources */,
 				BFB3C3E22AF55CF900F2CFA2 /* RecordWeightView.m in Sources */,
 				BFB3C3E32AF55CF900F2CFA2 /* DMMove.m in Sources */,
@@ -25944,6 +26112,7 @@
 				BFBFB1F82B6C3B0E0094D2CB /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFBFB1F92B6C3B0E0094D2CB /* MyLogViewController.m in Sources */,
 				BFBFB1FA2B6C3B0E0094D2CB /* DetailViewController.m in Sources */,
+				0EA36ED82D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFBFB1FB2B6C3B0E0094D2CB /* Log_Add.m in Sources */,
 				BFBFB1FC2B6C3B0E0094D2CB /* RecordWeightView.m in Sources */,
 				BFBFB1FD2B6C3B0E0094D2CB /* DMMove.m in Sources */,
@@ -26056,6 +26225,7 @@
 				BFCAB9352D020FDA00716996 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFCAB9362D020FDA00716996 /* MyLogViewController.m in Sources */,
 				BFCAB9372D020FDA00716996 /* DetailViewController.m in Sources */,
+				0EA36EDD2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFCAB9382D020FDA00716996 /* Log_Add.m in Sources */,
 				BFCAB9392D020FDA00716996 /* RecordWeightView.m in Sources */,
 				BFCAB93A2D020FDA00716996 /* DMMove.m in Sources */,
@@ -26168,6 +26338,7 @@
 				BFD4572F2B17AFD500AB2E40 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFD457302B17AFD500AB2E40 /* MyLogViewController.m in Sources */,
 				BFD457312B17AFD500AB2E40 /* DetailViewController.m in Sources */,
+				0EA36ECC2D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFD457322B17AFD500AB2E40 /* Log_Add.m in Sources */,
 				BFD457332B17AFD500AB2E40 /* RecordWeightView.m in Sources */,
 				BFD457342B17AFD500AB2E40 /* DMMove.m in Sources */,
@@ -26280,6 +26451,7 @@
 				BFE14BC72B61A31F00667F29 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFE14BC82B61A31F00667F29 /* MyLogViewController.m in Sources */,
 				BFE14BC92B61A31F00667F29 /* DetailViewController.m in Sources */,
+				0EA36EC32D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFE14BCA2B61A31F00667F29 /* Log_Add.m in Sources */,
 				BFE14BCB2B61A31F00667F29 /* RecordWeightView.m in Sources */,
 				BFE14BCC2B61A31F00667F29 /* DMMove.m in Sources */,
@@ -26392,6 +26564,7 @@
 				BFEA6CE22C9B319100C9E1CB /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFEA6CE32C9B319100C9E1CB /* MyLogViewController.m in Sources */,
 				BFEA6CE42C9B319100C9E1CB /* DetailViewController.m in Sources */,
+				0EA36ED52D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFEA6CE52C9B319100C9E1CB /* Log_Add.m in Sources */,
 				BFEA6CE62C9B319100C9E1CB /* RecordWeightView.m in Sources */,
 				BFEA6CE72C9B319100C9E1CB /* DMMove.m in Sources */,
@@ -26504,6 +26677,7 @@
 				BFF29C292B586AA10012223C /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFF29C2A2B586AA10012223C /* MyLogViewController.m in Sources */,
 				BFF29C2B2B586AA10012223C /* DetailViewController.m in Sources */,
+				0EA36ED72D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFF29C2C2B586AA10012223C /* Log_Add.m in Sources */,
 				BFF29C2D2B586AA10012223C /* RecordWeightView.m in Sources */,
 				BFF29C2E2B586AA10012223C /* DMMove.m in Sources */,
@@ -26616,6 +26790,7 @@
 				BFF993D02B0D27970064240D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFF993D12B0D27970064240D /* MyLogViewController.m in Sources */,
 				BFF993D22B0D27970064240D /* DetailViewController.m in Sources */,
+				0EA36ED12D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFF993D32B0D27970064240D /* Log_Add.m in Sources */,
 				BFF993D42B0D27970064240D /* RecordWeightView.m in Sources */,
 				BFF993D52B0D27970064240D /* DMMove.m in Sources */,
@@ -26728,6 +26903,7 @@
 				BFF994A22B0E73A90064240D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFF994A32B0E73A90064240D /* MyLogViewController.m in Sources */,
 				BFF994A42B0E73A90064240D /* DetailViewController.m in Sources */,
+				0EA36EC02D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFF994A52B0E73A90064240D /* Log_Add.m in Sources */,
 				BFF994A62B0E73A90064240D /* RecordWeightView.m in Sources */,
 				BFF994A72B0E73A90064240D /* DMMove.m in Sources */,
@@ -26840,6 +27016,7 @@
 				BFFC105D2AC612950011444E /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFFC105E2AC612950011444E /* MyLogViewController.m in Sources */,
 				BFFC105F2AC612950011444E /* DetailViewController.m in Sources */,
+				0EA36EC22D15AC16002B5015 /* HomeScreenButton.swift in Sources */,
 				BFFC10602AC612950011444E /* Log_Add.m in Sources */,
 				BFFC10612AC612950011444E /* RecordWeightView.m in Sources */,
 				BFFC10622AC612950011444E /* DMMove.m in Sources */,
@@ -27360,10 +27537,22 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"PB_FIELD_32BIT=1",
+					"PB_NO_PACKED_STRUCTS=1",
+					"PB_ENABLE_MALLOC=1",
+					"BODYSCANNING_ENABLED=1",
+				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
+					"$(SRCROOT)/Classes",
+					"$(SRCROOT)/Classes/Views",
+					"$(SRCROOT)/Classes/Models",
 				);
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
@@ -27388,7 +27577,6 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
@@ -27423,10 +27611,20 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"PB_FIELD_32BIT=1",
+					"PB_NO_PACKED_STRUCTS=1",
+					"PB_ENABLE_MALLOC=1",
+					"BODYSCANNING_ENABLED=1",
+				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
+					"$(SRCROOT)/Classes",
 				);
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
@@ -27450,7 +27648,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
@@ -27486,10 +27683,20 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"PB_FIELD_32BIT=1",
+					"PB_NO_PACKED_STRUCTS=1",
+					"PB_ENABLE_MALLOC=1",
+					"BODYSCANNING_ENABLED=1",
+				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(inherited)",
+					"$(SRCROOT)/Classes",
 				);
 				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
@@ -27513,7 +27720,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
@@ -28708,6 +28914,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -28723,6 +28930,7 @@
 				PROVISIONING_PROFILE = "25a37cd3-0ea6-4da1-92ed-4c8b73a1fe7f";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Resources/BaseApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Distribution;
@@ -37291,6 +37499,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -37305,6 +37514,7 @@
 				PROVISIONING_PROFILE = "25a37cd3-0ea6-4da1-92ed-4c8b73a1fe7f";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Resources/BaseApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
@@ -37336,6 +37546,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -37351,6 +37562,7 @@
 				PROVISIONING_PROFILE = "25a37cd3-0ea6-4da1-92ed-4c8b73a1fe7f";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Resources/BaseApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
@@ -37899,6 +38111,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0ECCFD5B2D14B7FC003A1F5C /* XCRemoteSwiftPackageReference "prismsdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/prismlabs-tech/prismsdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0ECCFD5C2D14B7FC003A1F5C /* PrismSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0ECCFD5B2D14B7FC003A1F5C /* XCRemoteSwiftPackageReference "prismsdk-ios" */;
+			productName = PrismSDK;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }

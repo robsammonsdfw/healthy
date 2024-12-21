@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assessment Report</title>
+    <!-- Google Fonts for Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap for responsive grid -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> <!-- Keep the external CSS link -->
+</head>
+<body>
+    <div class="container">
+        <!-- Add Report Title -->
+        <h1 class="report-title">My Health Report</h1>
+
+        <!-- Header Section -->
+        <div class="report-header">
+            <div class="demographics-section">
+                <h2 class="section-title">Demographics</h2>
+                <div class="data-grid">
+                    <span class="data-label">Name</span>
+                    <span class="data-value" id="user-name">John Smith</span>
+                    
+                    <span class="data-label">Date</span>
+                    <span class="data-value" id="scan-date">March 19, 2024</span>
+                    
+                    <span class="data-label">Age</span>
+                    <span class="data-value" id="user-age">32 years</span>
+                    
+                    <span class="data-label">Gender</span>
+                    <span class="data-value" id="user-gender">Male</span>
+                    
+                    <span class="data-label">Height</span>
+                    <span class="data-value" id="user-height">5'11"</span>
+                    
+                    <span class="data-label">Weight</span>
+                    <span class="data-value" id="user-weight">176.5 lbs</span>
+                </div>
+            </div>
+            
+            <div class="measurements-section">
+                <h2 class="section-title">Measurements</h2>
+                <div class="data-grid">
+                    <span class="data-label">Neck</span>
+                    <span class="data-value" id="neck-circumference">15.7"</span>
+                    
+                    <span class="data-label">Chest</span>
+                    <span class="data-value" id="chest-circumference">42.1"</span>
+                    
+                    <span class="data-label">Waist</span>
+                    <span class="data-value" id="waist-circumference">34.6"</span>
+                    
+                    <span class="data-label">Arms</span>
+                    <span class="data-value" id="arms-circumference">13.8"</span>
+                    
+                    <span class="data-label">Thighs</span>
+                    <span class="data-value" id="thighs-circumference">23.6"</span>
+                    
+                    <span class="data-label">Calves</span>
+                    <span class="data-value" id="calves-circumference">15.7"</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full-width background section for 3D avatar section -->
+        <section class="full-width-bg">
+            <div class="container">
+                <!-- Section 1: 3D OBJ files side by side -->
+                <section id="avatar-section" class="row">
+                    <div class="col-6 text-center p-0">
+                        <span class="weight-label">TODAY</span>
+                        <span class="weight-text" id="current-weight">176.5 lbs</span>
+                        <div class="avatar-box">
+                            <div id="today-avatar" class="avatar-container"></div>
+                        </div>
+                    </div>
+                    <div class="col-6 text-center p-0">
+                        <span class="weight-label">FUTURE ME</span>
+                        <span class="weight-text" id="target-weight">140.0 lbs</span>
+                        <div class="avatar-box">
+                            <div id="future-avatar" class="avatar-container"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- Section 2: Report Summary -->
+        <section id="summary-section" class="mt-4">
+            <h2 style="text-align: left;">Report Summary</h2>
+            <p class="light-text" id="summary-text">
+                Your trajectory is looking great! Keep up the hard work and stick to your personalized program.
+            </p>
+            <div class="row">
+                <div class="col-6">
+                    <div class="metric-box">
+                        <svg class="metric-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5M8 8v8m-4 0h16"/>
+                        </svg>
+                        <div class="metric-content">
+                            <div class="metric-label">Body Fat %</div>
+                            <span class="status" id="body-fat-status">25.4%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="metric-box">
+                        <svg class="metric-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m8-8v16"/>
+                        </svg>
+                        <div class="metric-content">
+                            <div class="metric-label">Fat Mass</div>
+                            <span class="status" id="fat-mass-status">44.8 lbs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="metric-box">
+                        <svg class="metric-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 6l6 6m0 0l-6 6"/>
+                        </svg>
+                        <div class="metric-content">
+                            <div class="metric-label">Lean Mass</div>
+                            <span class="status" id="lean-mass-status">131.7 lbs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="metric-box">
+                        <svg class="metric-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m-4-4h8"/>
+                        </svg>
+                        <div class="metric-content">
+                            <div class="metric-label">Waist-to-Height</div>
+                            <span class="status" id="waist-ratio-status">0.49</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Body Fat Section -->
+        <section class="full-width-bg">
+            <div class="container mt-4">
+                <div class="detailed-label">Body Fat Percentage</div>
+                
+                <p class="description">The percentage of your body that is fat. One of the top predictors of long-term health, lifespan, metabolism, and athletic performance. Improve your body fat percentage by losing fat, building muscle, or both.</p>
+                
+                <p class="description">The percentile bar below shows how your body fat percentage compares to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). A value in the 50th percentile means your measurement is average for your demographic, while the 75th percentile means 75% of people have a lower value than you.</p>
+                
+                <!-- Bars -->
+                <div class="bar-container">
+                    <div class="gradient-bar">
+                        <div class="marker" style="left: 25.4%"></div>
+                    </div>
+                    <div class="bar-labels">
+                        <span>Low</span>
+                        <span>Minimum</span>
+                        <span>Healthy</span>
+                        <span>High</span>
+                        <span>Unhealthy</span>
+                    </div>
+                    
+                    <!-- New percentile bar -->
+                    <div class="percentile-container">
+                        <div class="percentile-bar">
+                            <!-- Percentile segments -->
+                            <div class="percentile-segment p5" style="width: 5%"></div>
+                            <div class="percentile-segment p10" style="width: 5%"></div>
+                            <div class="percentile-segment p15" style="width: 5%"></div>
+                            <div class="percentile-segment p25" style="width: 10%"></div>
+                            <div class="percentile-segment p50" style="width: 25%"></div>
+                            <div class="percentile-segment p75" style="width: 25%"></div>
+                            <div class="percentile-segment p90" style="width: 15%"></div>
+                            <div class="percentile-segment p95" style="width: 5%"></div>
+                            <div class="percentile-segment p100" style="width: 5%"></div>
+                            <!-- User's percentile marker -->
+                            <div class="percentile-marker" style="left: 75%"></div>
+                        </div>
+                        <div class="percentile-labels">
+                            <span>5%</span>
+                            <span>25%</span>
+                            <span>50%</span>
+                            <span>75%</span>
+                            <span>95%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fat Mass Section -->
+        <div class="container mt-4">
+            <div class="detailed-label">Fat Mass</div>
+            
+            <p class="description">Decreasing fat mass is associated with improved health, lifespan, and athletic performance. However, it is not as strong of an indicator as body fat % because body fat % incorporates both fat and lean mass.</p>
+            
+            <p class="description">The percentile bar shows your fat mass compared to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). The percentiles are based on population data and measured in kilograms, with the 50th percentile representing the average value.</p>
+            
+            <div class="bar-container">
+                <div class="gradient-bar fat-mass-gradient">
+                    <div class="marker" style="left: 44.8%"></div>
+                </div>
+                <div class="bar-labels">
+                    <span>Very Low</span>
+                    <span>Low</span>
+                    <span>Healthy</span>
+                    <span>High</span>
+                    <span>Unhealthy</span>
+                </div>
+                
+                <!-- New percentile bar -->
+                <div class="percentile-container">
+                    <div class="percentile-bar">
+                        <div class="percentile-segment p5" style="width: 5%"></div>
+                        <div class="percentile-segment p10" style="width: 5%"></div>
+                        <div class="percentile-segment p15" style="width: 5%"></div>
+                        <div class="percentile-segment p25" style="width: 10%"></div>
+                        <div class="percentile-segment p50" style="width: 25%"></div>
+                        <div class="percentile-segment p75" style="width: 25%"></div>
+                        <div class="percentile-segment p90" style="width: 15%"></div>
+                        <div class="percentile-segment p95" style="width: 5%"></div>
+                        <div class="percentile-segment p100" style="width: 5%"></div>
+                        <div class="percentile-marker" style="left: 44.8%"></div>
+                    </div>
+                    <div class="percentile-labels">
+                        <span>5%</span>
+                        <span>25%</span>
+                        <span>50%</span>
+                        <span>75%</span>
+                        <span>95%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lean Mass Section -->
+        <section class="full-width-bg">
+            <div class="container mt-4">
+                <div class="detailed-label">Lean Mass</div>
+                
+                <p class="description">Your non-fat or muscle mass (also including water, bone, etc.). More lean mass is associated with better health, lifespan, metabolism, and athletic performance.</p>
+                
+                <p class="description">The percentile bar compares your lean mass to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). The percentiles are measured in kilograms, with higher percentiles indicating more lean mass relative to the population.</p>
+                
+                <div class="bar-container">
+                    <div class="gradient-bar lean-mass-gradient">
+                        <div class="marker" style="left: 50%"></div>
+                    </div>
+                    <div class="bar-labels">
+                        <span>Very Low</span>
+                        <span>Low</span>
+                        <span>Healthy</span>
+                        <span>Healthy</span>
+                        <span>Healthy</span>
+                    </div>
+                    
+                    <!-- New percentile bar -->
+                    <div class="percentile-container">
+                        <div class="percentile-bar">
+                            <div class="percentile-segment p5" style="width: 5%"></div>
+                            <div class="percentile-segment p10" style="width: 5%"></div>
+                            <div class="percentile-segment p15" style="width: 5%"></div>
+                            <div class="percentile-segment p25" style="width: 10%"></div>
+                            <div class="percentile-segment p50" style="width: 25%"></div>
+                            <div class="percentile-segment p75" style="width: 25%"></div>
+                            <div class="percentile-segment p90" style="width: 15%"></div>
+                            <div class="percentile-segment p95" style="width: 5%"></div>
+                            <div class="percentile-segment p100" style="width: 5%"></div>
+                            <div class="percentile-marker" style="left: 50%"></div>
+                        </div>
+                        <div class="percentile-labels">
+                            <span>5%</span>
+                            <span>25%</span>
+                            <span>50%</span>
+                            <span>75%</span>
+                            <span>95%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Waist-to-Height Section -->
+        <div class="container mt-4">
+            <div class="detailed-label">Waist-to-Height Ratio</div>
+            
+            <p class="description">Waist-to-height ratio is a strong indicator of health and longevity. A lower ratio reduces the risk of heart disease, diabetes, and overall mortality by better reflecting abdominal fat than BMI.</p>
+            
+            <p class="description">The percentile bar shows how your waist circumference compares to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). The percentiles are based on population measurements in meters, with lower percentiles generally indicating better health outcomes.</p>
+            
+            <div class="bar-container">
+                <div class="gradient-bar waist-ratio-gradient">
+                    <div class="marker" style="left: 49%"></div>
+                </div>
+                <div class="bar-labels">
+                    <span>In Range</span>
+                    <span>High</span>
+                    <span>Very High</span>
+                </div>
+                
+                <!-- New percentile bar -->
+                <div class="percentile-container">
+                    <div class="percentile-bar">
+                        <div class="percentile-segment p5" style="width: 5%"></div>
+                        <div class="percentile-segment p10" style="width: 5%"></div>
+                        <div class="percentile-segment p15" style="width: 5%"></div>
+                        <div class="percentile-segment p25" style="width: 10%"></div>
+                        <div class="percentile-segment p50" style="width: 25%"></div>
+                        <div class="percentile-segment p75" style="width: 25%"></div>
+                        <div class="percentile-segment p90" style="width: 15%"></div>
+                        <div class="percentile-segment p95" style="width: 5%"></div>
+                        <div class="percentile-segment p100" style="width: 5%"></div>
+                        <div class="percentile-marker" style="left: 49%"></div>
+                    </div>
+                    <div class="percentile-labels">
+                        <span>5%</span>
+                        <span>25%</span>
+                        <span>50%</span>
+                        <span>75%</span>
+                        <span>95%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metabolism Section -->
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-6">
+                    <div class="detailed-label">Metabolism</div>
+                </div> 
+            </div>
+            
+            <p class="description">Metabolism is the sum of all chemical processes that take place in your body. It is also the amount of energy (Calories) your body needs daily. Track your daily caloric intake and eat under this number to lose weight or over to gain. In general, a higher metabolism means better health and faster weight-loss. Improve yours by building muscle and/or improving cardiovascular fitness (VO2 max).</p>
+
+            <div class="metabolism-grid">
+                <div class="metabolism-box">
+                    <div class="metabolism-header">Weight Loss</div>
+                    <div class="metabolism-value">2,079</div>
+                    <div class="metabolism-unit">calories per day</div>
+                    <div class="metabolism-description">Range for fat loss</div>
+                    <div class="metabolism-range">Min-Max: 1,800-2,200</div>
+                </div>
+                <div class="metabolism-box">
+                    <div class="metabolism-header">Maintain</div>
+                    <div class="metabolism-value">2,579</div>
+                    <div class="metabolism-unit">calories per day</div>
+                    <div class="metabolism-description">To maintain current weight</div>
+                    <div class="metabolism-base">Base BMR: 1,663</div>
+                </div>
+                <div class="metabolism-box">
+                    <div class="metabolism-header">Build Muscle</div>
+                    <div class="metabolism-value">3,079</div>
+                    <div class="metabolism-unit">calories per day</div>
+                    <div class="metabolism-description">Range for muscle gain</div>
+                    <div class="metabolism-range">Min-Max: 2,800-3,200</div>
+                </div>
+            </div>
+            <div class="mt-2">
+                <p class="description">These recommendations assume a sedentary lifestyle. If you are more active, your calorie needs will be higher. The minimum recommended daily intake is 1,200 calories.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script type="module" src="main.js"></script>
+
+</body>
+</html>

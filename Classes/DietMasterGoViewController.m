@@ -20,6 +20,8 @@
 #import "FMDatabase.h"
 #import "DMMyLogDataProvider.h"
 
+#import "DietMasterGoPlus-Swift.h"
+
 @interface DietMasterGoViewController() <MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, MCPieChartViewDataSource, MCPieChartViewDelegate>
 
 @property (nonatomic, strong) MyMovesDataProvider *soapWebService;
@@ -49,10 +51,8 @@
 @property (nonatomic, strong) IBOutlet UIView *scheduledView;
 
 /// Body Scanning
-@property (nonatomic, strong) IBOutlet UIView *bodyScanView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bodyScanningTopConstraint;
-@property (nonatomic, strong) IBOutlet UIButton *bodyScanningPlusBtn;
-@property (nonatomic, strong) IBOutlet UIImageView *bodyScanImage;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bodyScanResultsTopConstraint;
 
 @property (nonatomic, strong) IBOutlet UIImageView *suagrGraphImageVw;
 @property (nonatomic, strong) IBOutlet UILabel *c_PercentageLbl;
@@ -240,12 +240,19 @@
     self.entireViewHeightConstraint.constant = self.entireViewDefaultHeight;
   }
   [self.entireViewHeightConstraint setActive:YES];
+  UIEdgeInsets layoutGuide = self.view.safeAreaInsets;
+  self.scrollView.contentOffset = CGPointMake(0, -layoutGuide.top);
+
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                         selector:@selector(handleScanCompleted:)
+                                             name:@"DMBodyScanCompletedNotification"
+                                           object:nil];
+    // Body Scanning
+    [self setupBodyScanningButtons];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    UIEdgeInsets layoutGuide = self.view.safeAreaInsets;
-    self.scrollView.contentOffset = CGPointMake(0, -layoutGuide.top);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -268,15 +275,6 @@
     
     self.workoutView.hidden = !AppConfiguration.enableMyMoves;
     self.scheduledView.hidden = !AppConfiguration.enableMyMoves;
-
-    // Body Scanning
-    self.bodyScanView.hidden = !AppConfiguration.enableBodyScanning;
-    UIView *bodyScanAnchorView = self.stepsView;
-    if (AppConfiguration.enableMyMoves) {
-      bodyScanAnchorView = self.workoutView;
-    }
-    self.bodyScanningTopConstraint = [self.bodyScanView.topAnchor constraintEqualToAnchor:bodyScanAnchorView.bottomAnchor constant:20];
-    [self.bodyScanningTopConstraint setActive:YES];
 
     [self updateBadge];
     [self reloadData];
@@ -351,7 +349,6 @@
     [self buttonStyle:_gotoWorkout imageToSet:[[UIImage imageNamed:@"up_arrow_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self buttonStyle:_gotoScheduled imageToSet:[[UIImage imageNamed:@"up_arrow_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self buttonStyle:_burnedPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self buttonStyle:_bodyScanningPlusBtn imageToSet:[[UIImage imageNamed:@"Icon feather-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 }
 
 - (void)shadowView:(UIView *)selectedView {
@@ -373,7 +370,6 @@
     [self shadowView:self.burnedView];
     [self shadowView:self.workoutView];
     [self shadowView:self.scheduledView];
-    [self shadowView:self.bodyScanView];
 }
 
 - (void)setColorsForViews {
@@ -387,7 +383,6 @@
     _burnedView.backgroundColor     = [UIColor lightGrayColor];
     _workoutView.backgroundColor    = [UIColor lightGrayColor];
     _scheduledView.backgroundColor  = [UIColor lightGrayColor];
-    _bodyScanView.backgroundColor   = [UIColor lightGrayColor];
 }
 
 - (void)iconsColor:(UIImageView *)image {
@@ -405,7 +400,6 @@
     [self iconsColor:self.burnedImage];
     [self iconsColor:self.workoutImage];
     [self iconsColor:self.scheduledImage];
-    [self iconsColor:self.bodyScanImage];
     self.headerBlueVw.backgroundColor = AppConfiguration.menuIconColor;
 }
 
@@ -443,12 +437,122 @@
     }
 }
 
-#pragma mark Body Scanning Actions
+#pragma mark Body Scanning
 
-- (IBAction)userTappedBodyScanButton:(id)sender {
-  NSLog(@"Button tapped!!");
+- (void)setupBodyScanningButtons {
+    if (!AppConfiguration.enableBodyScanning) {
+      return;
+    }
+#ifdef BODYSCANNING_ENABLED
+    HomeScreenButton *bodyScanButton = [HomeScreenButton createBodyScanningButton];
+    HomeScreenButton *bodyScanResultsButton = [HomeScreenButton createBodyScanResultsButton];
+    [self.view addSubview:bodyScanButton];
+    [self.view addSubview:bodyScanResultsButton];
+
+    bodyScanButton.hidden = !AppConfiguration.enableBodyScanning;
+    bodyScanResultsButton.hidden = !AppConfiguration.enableBodyScanning;
+
+    // Top Constraint for Scan Button.
+    UIView *bodyScanAnchorView = self.stepsView;
+    if (AppConfiguration.enableMyMoves) {
+      bodyScanAnchorView = self.workoutView;
+    }
+    self.bodyScanningTopConstraint = [bodyScanButton.topAnchor constraintEqualToAnchor:bodyScanAnchorView.bottomAnchor constant:20];
+
+    // Top Constraint for Results Button. scheduledView or burnedView
+    UIView *bodyScanResultsAnchorView = self.burnedView;
+    if (AppConfiguration.enableMyMoves) {
+      bodyScanResultsAnchorView = self.scheduledView;
+    }
+    self.bodyScanResultsTopConstraint = [bodyScanResultsButton.topAnchor constraintEqualToAnchor:bodyScanResultsAnchorView.bottomAnchor constant:20];
+
+    // Setup constraints
+    [NSLayoutConstraint activateConstraints:@[
+        [bodyScanButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20],
+        [bodyScanResultsButton.leadingAnchor constraintEqualToAnchor:bodyScanButton.trailingAnchor constant:20],
+
+        [bodyScanButton.trailingAnchor constraintEqualToAnchor:self.workoutView.trailingAnchor],
+        [bodyScanResultsButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20],
+
+        self.bodyScanningTopConstraint,
+        self.bodyScanResultsTopConstraint
+    ]];
+
+    bodyScanButton.cornerButtonTapped = ^{
+        [self userTappedBodyScanButton:nil];
+    };
+
+    bodyScanResultsButton.cornerButtonTapped = ^{
+        [self userTappedScanResultsButton:nil];
+    };
+#endif
 }
 
+- (void)userTappedBodyScanButton:(id)sender {
+  if (!AppConfiguration.enableBodyScanning) {
+    return;
+  }
+  NSLog(@"Tapped Body Scanning Button!");
+
+#ifdef BODYSCANNING_ENABLED
+  NSLog(@"Starting Body Scanning!");
+  [[PrismScannerManager shared] startScanWithCompletion:^(NSError * _Nullable error) {
+    if (error) {
+      [DMGUtilities showAlertWithTitle:@"Error"
+                             message:error.localizedDescription
+                    inViewController:nil];
+      return;
+    }
+    // Handle successful scan
+    [DMGUtilities showAlertWithTitle:@"Success"
+                           message:@"Body scan completed successfully!"
+                  inViewController:nil];
+  }];
+#endif
+}
+
+- (void)userTappedScanResultsButton:(id)sender {
+    if (!AppConfiguration.enableBodyScanning) {
+        return;
+    }
+#ifdef BODYSCANNING_ENABLED
+    BodyScanResultListViewController *resultsVC = [[BodyScanResultListViewController alloc] init];
+    resultsVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:resultsVC animated:YES];
+#endif
+}
+
+- (void)handleScanCompleted:(NSNotification *)notification {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self handleScanCompleted:notification];
+        });
+        return;
+    }
+    if (!AppConfiguration.enableBodyScanning) {
+        return;
+    }
+#ifdef BODYSCANNING_ENABLED
+    NSString *scanId = notification.userInfo[@"scanId"];
+    if (!scanId) return;
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Body Scan Complete"
+                                                                 message:@"Your body scan results are ready to view!"
+                                                          preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"View Results"
+                                            style:UIAlertActionStyleDefault
+                                          handler:^(UIAlertAction * _Nonnull action) {
+        [self userTappedScanResultsButton:nil];
+    }]];
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Later"
+                                            style:UIAlertActionStyleCancel
+                                          handler:nil]];
+
+    [self presentViewController:alert animated:YES completion:nil];
+#endif
+}
 
 #pragma mark Menu Actions
 

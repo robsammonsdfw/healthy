@@ -80,10 +80,36 @@ import UIKit
     }
   }
 
-  // See the xcconfig file for color definitions.
+  // MARK: - Body Scanning (Embrace Health)
+
+  // See the xcconfig file for definitions.
   class var enableBodyScanning: Bool {
     do {
       let value = try DMGConfiguration.value(for: "DMG_BODYSCANNING_ENABLED") as String
+      return (value as NSString).boolValue
+    } catch {
+      if let error = error as? ConfigError {
+        fatalError(error.description)
+      } else {
+        fatalError(error.localizedDescription)
+      }
+    }
+  }
+  class var bodyScanningDevAPIKey: Bool {
+    do {
+      let value = try DMGConfiguration.value(for: "DMG_BODYSCANNING_DEV_APIKEY") as String
+      return (value as NSString).boolValue
+    } catch {
+      if let error = error as? ConfigError {
+        fatalError(error.description)
+      } else {
+        fatalError(error.localizedDescription)
+      }
+    }
+  }
+  class var bodyScanningProdAPIKey: Bool {
+    do {
+      let value = try DMGConfiguration.value(for: "DMG_BODYSCANNING_PROD_APIKEY") as String
       return (value as NSString).boolValue
     } catch {
       if let error = error as? ConfigError {
@@ -364,6 +390,32 @@ import UIKit
     }
   }
 
+  // MARK: - Body Scanning (Embrace Health)
+
+  class var bodyScanningDevKey: String {
+    do {
+      return try DMGConfiguration.value(for: "DMG_BODYSCANNING_DEV_APIKEY")
+    } catch {
+      if let error = error as? ConfigError {
+        fatalError(error.description)
+      } else {
+        fatalError(error.localizedDescription)
+      }
+    }
+  }
+
+  class var bodyScanningProdKey: String {
+    do {
+      return try DMGConfiguration.value(for: "DMG_BODYSCANNING_PROD_APIKEY")
+    } catch {
+      if let error = error as? ConfigError {
+        fatalError(error.description)
+      } else {
+        fatalError(error.localizedDescription)
+      }
+    }
+  }
+
   /// Function that iterates through all of the possible values and
   /// ensures they are set. If you add a new value to the Info.plist,
   /// ensure it's set here as a test.
@@ -423,6 +475,17 @@ import UIKit
 
     assert(self.loginBackgroundImage != nil, "Image must be present!")
     debugPrint("loginBackgroundImage: \(String(describing: self.loginBackgroundImage))")
+
+    // Validate body scanning configuration
+    if enableBodyScanning {
+        #if DEBUG
+        assert(bodyScanningDevKey.count > 0, "Body Scanning Dev API Key is not set!")
+        debugPrint("bodyScanningDevKey: [HIDDEN]")
+        #else
+        assert(bodyScanningProdKey.count > 0, "Body Scanning Prod API Key is not set!")
+        debugPrint("bodyScanningProdKey: [HIDDEN]")
+        #endif
+    }
   }
 }
 

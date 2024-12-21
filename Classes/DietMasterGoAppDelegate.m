@@ -22,6 +22,7 @@
 
 @import StoreKit;
 @import Firebase;
+@import UserNotifications;
 
 #define D_MINUTE	60
 #define D_HOUR		3600
@@ -30,6 +31,7 @@
 #define D_YEAR		31556926
 
 @interface DietMasterGoAppDelegate()
+<UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) IBOutlet DietMasterGoViewController *viewController;
 @property (nonatomic, strong) IBOutlet DetailViewController *navigationController;
 @property (nonatomic, strong) LoginViewController *loginViewController;
@@ -44,14 +46,15 @@
     
     [PurchaseIAPHelper sharedInstance];
 
+    // Configure Firebase
+    [FIRApp configure];
+    
     // Note: See -checkUserLogin as it will wipe these values if the user is Logged out.
     // -checkUserLogin will set the values to enable MyMoves and NewDesign.
     /*==========================================To Enable & Disable MyMoves==========================*/
         [[NSUserDefaults standardUserDefaults]setObject:@"MyMoves" forKey:@"switch"]; // To Enable MyMoves
 //      [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"switch"]; // To disable MyMoves
-        
-    [FIRApp configure];
-    
+            
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
@@ -75,6 +78,25 @@
 
     // Validate the app configuration values are present.
     [AppConfiguration validateConfiguration];
+    
+    // Configure PrismSDK if body scanning is enabled - do this after validating configuration
+    if (AppConfiguration.enableBodyScanning) {
+#ifdef BODYSCANNING_ENABLED
+        [[PrismScannerManager shared] configure];
+        DMLog(@"PrismSDK configured for body scanning");
+        // Request notification authorization
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound)
+                              completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            if (error) {
+                DMLog(@"Error requesting notification authorization: %@", error);
+                return;
+            }
+            DMLog(@"Permissions were granted: %@", granted ? @"YES" : @"NO");
+        }];
+        center.delegate = self;
+#endif
+    }
     
     return YES;
 }
@@ -577,6 +599,33 @@
     // Use this method to select a configuration to create the new scene with.
     UISceneConfiguration *config = [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
     return config;
+}
+
+#pragma mark - UNUserNotificationCenterDelegate
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center 
+       willPresentNotification:(UNNotification *)notification 
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    // Show notification even when app is in foreground
+    completionHandler(UNNotificationPresentationOptionBanner | UNNotificationPresentationOptionSound);
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)(void))completionHandler {
+    // Handle notification tap
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    NSString *scanId = userInfo[@"scanId"];
+    
+    if (scanId) {
+        // Show scan results
+        BodyScanResultListViewController *resultsVC = [[BodyScanResultListViewController alloc] init];
+        UINavigationController *navController = (UINavigationController *)[DMGUtilities rootViewController];
+        resultsVC.hidesBottomBarWhenPushed = YES;
+        [navController pushViewController:resultsVC animated:YES];
+    }
+    
+    completionHandler();
 }
 
 @end
