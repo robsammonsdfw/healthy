@@ -138,6 +138,16 @@ import WebKit
         }
         
         let reportDirectoryURL = reportURL.deletingLastPathComponent()
+        debugPrint("[BodyScanResultsViewController] Report directory:", reportDirectoryURL)
+        debugPrint("[BodyScanResultsViewController] Report URL:", reportURL)
+        
+        // Debug: Check if styles.css exists
+        if let stylesURL = Bundle.main.url(forResource: "styles", withExtension: "css") {
+            debugPrint("[BodyScanResultsViewController] Found styles.css at:", stylesURL)
+        } else {
+            debugPrint("[BodyScanResultsViewController] ⚠️ styles.css not found")
+        }
+        
         webView.loadFileURL(reportURL, allowingReadAccessTo: reportDirectoryURL)
     }
     
@@ -162,18 +172,73 @@ import WebKit
             in: self
         )
     }
+    
+    private func injectHealthReportData() {
+        guard let report = healthReport else { return }
+        
+        debugPrint("[BodyScanResultsViewController] Injecting health report data")
+        
+        // Add debug logging for percentile data
+        let bodyFatPercentile = report.bodyFatPercentageReport.percentile
+        debugPrint("[BodyScanResultsViewController] Body Fat Percentile:", bodyFatPercentile)
+        
+        // Convert to JSON with pretty printing for debugging
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = .prettyPrinted
+        
+        guard let jsonData = try? encoder.encode(report),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            handleError("Failed to encode health report data")
+            return
+        }
+        
+        // Inject data via JavaScript with additional error handling
+        let script = """
+            try {
+                console.log('Injecting health report data');
+                window.healthReport = \(jsonString);
+                if (typeof window.updateHealthReport === 'function') {
+                    console.log('Calling updateHealthReport');
+                    window.updateHealthReport(window.healthReport);
+                } else {
+                    console.error('updateHealthReport function not found');
+                }
+            } catch (error) {
+                console.error('Error injecting health report:', error);
+            }
+        """
+        
+        webView.evaluateJavaScript(script) { result, error in
+            if let error = error {
+                debugPrint("[BodyScanResultsViewController] JavaScript evaluation error:", error)
+                self.handleError("Failed to update report: \(error.localizedDescription)")
+            } else {
+                debugPrint("[BodyScanResultsViewController] Successfully injected health report data")
+            }
+        }
+    }
 }
 
 // MARK: - WKNavigationDelegate
 
 extension BodyScanResultsViewController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        // Here we'll inject the data after template loads
-        // For now, just stop the spinner
         activityIndicator.stopAnimating()
+        
+        // Test if JavaScript is working
+        webView.evaluateJavaScript("console.log('Navigation complete')") { result, error in
+            if let error = error {
+                debugPrint("[BodyScanResultsViewController] Console log error:", error)
+            }
+        }
+        
+        injectHealthReportData()
     }
     
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        debugPrint("[BodyScanResultsViewController] Navigation failed:", error)
         handleError(error.localizedDescription)
     }
     
@@ -182,12 +247,9 @@ extension BodyScanResultsViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-        // Only allow loading the initial file URL
-        if navigationAction.navigationType == .other {
-            decisionHandler(.allow)
-        } else {
-            decisionHandler(.cancel)
-        }
+        debugPrint("[BodyScanResultsViewController] Deciding policy for:", navigationAction.request.url?.absoluteString ?? "unknown URL")
+        // Allow all navigation while debugging
+        decisionHandler(.allow)
     }
 }
 

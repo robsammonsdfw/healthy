@@ -639,9 +639,7 @@
 		0EA36EE22D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
 		0EA36EE32D15AC16002B5015 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */; };
 		0EA36EE52D15C4CF002B5015 /* BodyScanResultListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EE42D15C4BA002B5015 /* BodyScanResultListViewController.swift */; };
-		0EA36EEE2D164775002B5015 /* Fitness_Thresholds.md in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EEA2D164775002B5015 /* Fitness_Thresholds.md */; };
 		0EA36EEF2D164775002B5015 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EEC2D164775002B5015 /* main.js */; };
-		0EA36EF02D164775002B5015 /* Calories_Recommendations.md in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EE72D164775002B5015 /* Calories_Recommendations.md */; };
 		0EA36EF12D164775002B5015 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EE82D164775002B5015 /* styles.css */; };
 		0EA36EF22D164775002B5015 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 0EA36EEB2D164775002B5015 /* index.html */; };
 		0EA36EF42D164788002B5015 /* BodyScanResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA36EF32D16477D002B5015 /* BodyScanResultsViewController.swift */; };
@@ -10088,9 +10086,7 @@
 		0EA18DC72A47BD670017D131 /* DMPickerViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMPickerViewDataSource.h; sourceTree = "<group>"; };
 		0EA36EAE2D15AC16002B5015 /* HomeScreenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenButton.swift; sourceTree = "<group>"; };
 		0EA36EE42D15C4BA002B5015 /* BodyScanResultListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyScanResultListViewController.swift; sourceTree = "<group>"; };
-		0EA36EE72D164775002B5015 /* Calories_Recommendations.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Calories_Recommendations.md; sourceTree = "<group>"; };
 		0EA36EE82D164775002B5015 /* styles.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = styles.css; sourceTree = "<group>"; };
-		0EA36EEA2D164775002B5015 /* Fitness_Thresholds.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Fitness_Thresholds.md; sourceTree = "<group>"; };
 		0EA36EEB2D164775002B5015 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		0EA36EEC2D164775002B5015 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		0EA36EF32D16477D002B5015 /* BodyScanResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyScanResultsViewController.swift; sourceTree = "<group>"; };
@@ -12636,8 +12632,6 @@
 		0EA36EE62D15FBD5002B5015 /* Reports */ = {
 			isa = PBXGroup;
 			children = (
-				0EA36EE72D164775002B5015 /* Calories_Recommendations.md */,
-				0EA36EEA2D164775002B5015 /* Fitness_Thresholds.md */,
 				0EA36EE82D164775002B5015 /* styles.css */,
 				0EA36EEB2D164775002B5015 /* index.html */,
 				0EA36EEC2D164775002B5015 /* main.js */,
@@ -15176,9 +15170,7 @@
 				0E101CAD2A56D5B700D8E7E2 /* MealPlanDetailViewController.xib in Resources */,
 				0E101CAE2A56D5B700D8E7E2 /* MyMovesVideoPlayerViewController.xib in Resources */,
 				0E101CAF2A56D5B700D8E7E2 /* MyMovesDetailsViewController.xib in Resources */,
-				0EA36EEE2D164775002B5015 /* Fitness_Thresholds.md in Resources */,
 				0EA36EEF2D164775002B5015 /* main.js in Resources */,
-				0EA36EF02D164775002B5015 /* Calories_Recommendations.md in Resources */,
 				0EA36EF12D164775002B5015 /* styles.css in Resources */,
 				0EA36EF22D164775002B5015 /* index.html in Resources */,
 				0E101CB02A56D5B700D8E7E2 /* ProfileContactVC.xib in Resources */,

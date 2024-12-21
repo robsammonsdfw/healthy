@@ -413,37 +413,62 @@ body::-webkit-scrollbar {
 /* Percentile bar styling */
 .percentile-container {
     margin-top: 25px;
+    padding: 0 2px;
 }
 
 .percentile-bar {
-    height: 25px;
-    width: 100%;
     position: relative;
-    border-radius: 15px;
+    width: 100%;
+    height: 20px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    margin: 10px 0;
     overflow: hidden;
-    background: linear-gradient(
-        to right,
-        #FFCCCC 0%,      /* Red - Below 5th */
-        #FFD6B0 15%,     /* Orange - Around 15th */
-        #FFE5A3 25%,     /* Yellow - Around 25th */
-        #C8E6C9 40%,     /* Green - Normal range start */
-        #C8E6C9 60%,     /* Green - Normal range end */
-        #FFD6B0 75%,     /* Orange - Around 75th */
-        #FFCCCC 95%      /* Red - Above 95th */
-    );
+    display: flex;
 }
 
-/* Remove individual segments since we're using gradient */
+.percentile-segments {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
 .percentile-segment {
-    display: none;
+    height: 100%;
+    transition: width 0.3s ease;
 }
 
-/* Percentile labels */
+.percentile-segment.p5 { background: #FF9999; }  /* Very Low - Light Red */
+.percentile-segment.p10 { background: #FFCC99; } /* Low - Light Orange */
+.percentile-segment.p15 { background: #FFEB99; } /* Below Average - Light Yellow */
+.percentile-segment.p25 { background: #E8FFE8; } /* Lower Normal - Very Light Green */
+.percentile-segment.p50 { background: #90EE90; } /* Normal - Light Green */
+.percentile-segment.p75 { background: #E8FFE8; } /* Upper Normal - Very Light Green */
+.percentile-segment.p90 { background: #FFCC99; } /* High - Light Orange */
+.percentile-segment.p95 { background: #FFAD99; } /* Very High - Orange Red */
+.percentile-segment.p100 { background: #FF9999; } /* Extremely High - Light Red */
+
+.percentile-marker {
+    position: absolute;
+    top: -5px;
+    width: 4px;
+    height: 30px;
+    background: #333;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
 .percentile-labels {
     display: flex;
     justify-content: space-between;
     margin-top: 5px;
     padding: 0 2%;
-    font-size: 11px;
-    color: #666666;
+    font-size: 12px;
+    color: #666;
+}
+
+.age-range {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
 }

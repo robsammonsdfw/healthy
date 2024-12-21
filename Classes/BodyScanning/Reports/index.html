@@ -8,7 +8,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
     <!-- Bootstrap for responsive grid -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"> <!-- Keep the external CSS link -->
+    <link rel="stylesheet" href="styles.css"> <!-- Use relative path -->
+       <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        // Error handler for script loading
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.log('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+            return false;
+        };
+    </script>
+    <script src="main.js" onerror="console.log('Failed to load main.js')"></script>
 </head>
 <body>
     <div class="container">
@@ -17,26 +29,27 @@
 
         <!-- Header Section -->
         <div class="report-header">
+            <!-- Demographics Section -->
             <div class="demographics-section">
                 <h2 class="section-title">Demographics</h2>
                 <div class="data-grid">
                     <span class="data-label">Name</span>
-                    <span class="data-value" id="user-name">John Smith</span>
+                    <span class="data-value" id="user-name"></span>
                     
                     <span class="data-label">Date</span>
-                    <span class="data-value" id="scan-date">March 19, 2024</span>
+                    <span class="data-value" id="scan-date"></span>
                     
                     <span class="data-label">Age</span>
-                    <span class="data-value" id="user-age">32 years</span>
+                    <span class="data-value" id="user-age"></span>
                     
                     <span class="data-label">Gender</span>
-                    <span class="data-value" id="user-gender">Male</span>
+                    <span class="data-value" id="user-gender"></span>
                     
                     <span class="data-label">Height</span>
-                    <span class="data-value" id="user-height">5'11"</span>
+                    <span class="data-value" id="user-height"></span>
                     
                     <span class="data-label">Weight</span>
-                    <span class="data-value" id="user-weight">176.5 lbs</span>
+                    <span class="data-value" id="user-weight"></span>
                 </div>
             </div>
             
@@ -44,22 +57,22 @@
                 <h2 class="section-title">Measurements</h2>
                 <div class="data-grid">
                     <span class="data-label">Neck</span>
-                    <span class="data-value" id="neck-circumference">15.7"</span>
+                    <span class="data-value" id="neck-circumference"></span>
                     
                     <span class="data-label">Chest</span>
-                    <span class="data-value" id="chest-circumference">42.1"</span>
+                    <span class="data-value" id="chest-circumference"></span>
                     
                     <span class="data-label">Waist</span>
-                    <span class="data-value" id="waist-circumference">34.6"</span>
+                    <span class="data-value" id="waist-circumference"></span>
                     
                     <span class="data-label">Arms</span>
-                    <span class="data-value" id="arms-circumference">13.8"</span>
+                    <span class="data-value" id="arms-circumference"></span>
                     
                     <span class="data-label">Thighs</span>
-                    <span class="data-value" id="thighs-circumference">23.6"</span>
+                    <span class="data-value" id="thighs-circumference"></span>
                     
                     <span class="data-label">Calves</span>
-                    <span class="data-value" id="calves-circumference">15.7"</span>
+                    <span class="data-value" id="calves-circumference"></span>
                 </div>
             </div>
         </div>
@@ -90,9 +103,7 @@
         <!-- Section 2: Report Summary -->
         <section id="summary-section" class="mt-4">
             <h2 style="text-align: left;">Report Summary</h2>
-            <p class="light-text" id="summary-text">
-                Your trajectory is looking great! Keep up the hard work and stick to your personalized program.
-            </p>
+            <p class="light-text" id="summary-text"></p>
             <div class="row">
                 <div class="col-6">
                     <div class="metric-box">
@@ -149,7 +160,7 @@
                 
                 <p class="description">The percentage of your body that is fat. One of the top predictors of long-term health, lifespan, metabolism, and athletic performance. Improve your body fat percentage by losing fat, building muscle, or both.</p>
                 
-                <p class="description">The percentile bar below shows how your body fat percentage compares to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). A value in the 50th percentile means your measurement is average for your demographic, while the 75th percentile means 75% of people have a lower value than you.</p>
+                <p class="description">The percentile bar shows how your body fat percentage compares to others in your gender and age range (<span class="age-range"></span> years). A value in the 50th percentile means your measurement is average for your demographic, while the 75th percentile means 75% of people have a lower value than you.</p>
                 
                 <!-- Bars -->
                 <div class="bar-container">
@@ -165,20 +176,9 @@
                     </div>
                     
                     <!-- New percentile bar -->
-                    <div class="percentile-container">
+                    <div class="percentile-container" data-metric="body-fat">
                         <div class="percentile-bar">
-                            <!-- Percentile segments -->
-                            <div class="percentile-segment p5" style="width: 5%"></div>
-                            <div class="percentile-segment p10" style="width: 5%"></div>
-                            <div class="percentile-segment p15" style="width: 5%"></div>
-                            <div class="percentile-segment p25" style="width: 10%"></div>
-                            <div class="percentile-segment p50" style="width: 25%"></div>
-                            <div class="percentile-segment p75" style="width: 25%"></div>
-                            <div class="percentile-segment p90" style="width: 15%"></div>
-                            <div class="percentile-segment p95" style="width: 5%"></div>
-                            <div class="percentile-segment p100" style="width: 5%"></div>
-                            <!-- User's percentile marker -->
-                            <div class="percentile-marker" style="left: 75%"></div>
+                            <!-- Segments will be added by JavaScript -->
                         </div>
                         <div class="percentile-labels">
                             <span>5%</span>
@@ -189,6 +189,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="debug-info" style="font-size: 12px; color: #666; margin-top: 5px; font-family: monospace;">
+                    Expected positions: <span class="debug-body-fat"></span>
+                </div>
             </div>
         </section>
 
@@ -198,7 +201,7 @@
             
             <p class="description">Decreasing fat mass is associated with improved health, lifespan, and athletic performance. However, it is not as strong of an indicator as body fat % because body fat % incorporates both fat and lean mass.</p>
             
-            <p class="description">The percentile bar shows your fat mass compared to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). The percentiles are based on population data and measured in kilograms, with the 50th percentile representing the average value.</p>
+            <p class="description">The percentile bar compares your fat mass to others in your gender and age range (<span class="age-range"></span> years). The percentiles are based on population data and measured in kilograms, with the 50th percentile representing the average value.</p>
             
             <div class="bar-container">
                 <div class="gradient-bar fat-mass-gradient">
@@ -213,7 +216,7 @@
                 </div>
                 
                 <!-- New percentile bar -->
-                <div class="percentile-container">
+                <div class="percentile-container" data-metric="fat-mass">
                     <div class="percentile-bar">
                         <div class="percentile-segment p5" style="width: 5%"></div>
                         <div class="percentile-segment p10" style="width: 5%"></div>
@@ -234,6 +237,9 @@
                         <span>95%</span>
                     </div>
                 </div>
+                <div class="debug-info" style="font-size: 12px; color: #666; margin-top: 5px; font-family: monospace;">
+                    Expected positions: <span class="debug-fat-mass"></span>
+                </div>
             </div>
         </div>
 
@@ -244,7 +250,7 @@
                 
                 <p class="description">Your non-fat or muscle mass (also including water, bone, etc.). More lean mass is associated with better health, lifespan, metabolism, and athletic performance.</p>
                 
-                <p class="description">The percentile bar compares your lean mass to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). The percentiles are measured in kilograms, with higher percentiles indicating more lean mass relative to the population.</p>
+                <p class="description">The percentile bar compares your lean mass to others in your gender and age range (<span class="age-range lean-mass-age"></span> years). The percentiles are measured in kilograms, with higher percentiles indicating more lean mass relative to the population.</p>
                 
                 <div class="bar-container">
                     <div class="gradient-bar lean-mass-gradient">
@@ -259,7 +265,7 @@
                     </div>
                     
                     <!-- New percentile bar -->
-                    <div class="percentile-container">
+                    <div class="percentile-container" data-metric="lean-mass">
                         <div class="percentile-bar">
                             <div class="percentile-segment p5" style="width: 5%"></div>
                             <div class="percentile-segment p10" style="width: 5%"></div>
@@ -281,6 +287,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="debug-info" style="font-size: 12px; color: #666; margin-top: 5px; font-family: monospace;">
+                    Expected positions: <span class="debug-lean-mass"></span>
+                </div>
             </div>
         </section>
 
@@ -290,7 +299,7 @@
             
             <p class="description">Waist-to-height ratio is a strong indicator of health and longevity. A lower ratio reduces the risk of heart disease, diabetes, and overall mortality by better reflecting abdominal fat than BMI.</p>
             
-            <p class="description">The percentile bar shows how your waist circumference compares to others in your gender and age range (${userAgeRange.low}-${userAgeRange.high} years). The percentiles are based on population measurements in meters, with lower percentiles generally indicating better health outcomes.</p>
+            <p class="description">The percentile bar shows how your waist circumference compares to others in your gender and age range (<span class="age-range waist-ratio-age"></span> years). The percentiles are based on population measurements in meters, with lower percentiles generally indicating better health outcomes.</p>
             
             <div class="bar-container">
                 <div class="gradient-bar waist-ratio-gradient">
@@ -303,7 +312,7 @@
                 </div>
                 
                 <!-- New percentile bar -->
-                <div class="percentile-container">
+                <div class="percentile-container" data-metric="waist-ratio">
                     <div class="percentile-bar">
                         <div class="percentile-segment p5" style="width: 5%"></div>
                         <div class="percentile-segment p10" style="width: 5%"></div>
@@ -324,6 +333,9 @@
                         <span>95%</span>
                     </div>
                 </div>
+                <div class="debug-info" style="font-size: 12px; color: #666; margin-top: 5px; font-family: monospace;">
+                    Expected positions: <span class="debug-waist-ratio"></span>
+                </div>
             </div>
         </div>
 
@@ -340,24 +352,22 @@
             <div class="metabolism-grid">
                 <div class="metabolism-box">
                     <div class="metabolism-header">Weight Loss</div>
-                    <div class="metabolism-value">2,079</div>
+                    <div class="metabolism-value" id="weight-loss-value">2,079</div>
                     <div class="metabolism-unit">calories per day</div>
                     <div class="metabolism-description">Range for fat loss</div>
-                    <div class="metabolism-range">Min-Max: 1,800-2,200</div>
                 </div>
                 <div class="metabolism-box">
                     <div class="metabolism-header">Maintain</div>
-                    <div class="metabolism-value">2,579</div>
+                    <div class="metabolism-value" id="maintenance-value">2,579</div>
                     <div class="metabolism-unit">calories per day</div>
                     <div class="metabolism-description">To maintain current weight</div>
-                    <div class="metabolism-base">Base BMR: 1,663</div>
+                    <div class="metabolism-base">Base BMR: <span id="bmr-value">1,663</span></div>
                 </div>
                 <div class="metabolism-box">
                     <div class="metabolism-header">Build Muscle</div>
-                    <div class="metabolism-value">3,079</div>
+                    <div class="metabolism-value" id="muscle-gain-value">3,079</div>
                     <div class="metabolism-unit">calories per day</div>
                     <div class="metabolism-description">Range for muscle gain</div>
-                    <div class="metabolism-range">Min-Max: 2,800-3,200</div>
                 </div>
             </div>
             <div class="mt-2">
@@ -365,12 +375,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JS -->
-    <script type="module" src="main.js"></script>
-
 </body>
 </html>
