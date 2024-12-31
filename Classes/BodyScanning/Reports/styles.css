@@ -56,10 +56,24 @@ body::-webkit-scrollbar {
     height: 300px;
 }
 
-#today-avatar,
-#future-avatar {
+#today-avatar {
+    width: 100%;
+    height: 100%;
     background-color: #ffffff;
     overflow: hidden;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#future-avatar {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    overflow: hidden;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* Light text styling for the summary text */
@@ -291,6 +305,14 @@ body::-webkit-scrollbar {
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     padding: 15px;
     margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#avatar-section {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 /* Add spacing between avatar boxes */
@@ -471,4 +493,49 @@ body::-webkit-scrollbar {
     font-size: 14px;
     color: #666;
     margin: 5px 0;
+}
+
+.measurements-section {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 24px;
+    align-items: center;
+}
+
+.data-label {
+    font-weight: 500;
+    font-size: 16px;
+    color: #666666;
+}
+
+.data-value {
+    font-size: 16px;
+    color: #333333;
+    text-align: right;
+    font-weight: 600;
+}
+
+/* Add a subtle hover effect */
+.data-grid > span {
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.data-grid > span:nth-child(4n+1),
+.data-grid > span:nth-child(4n+2) {
+    background-color: rgba(0,0,0,0.02);
+}
+
+.data-grid > span:hover {
+    background-color: rgba(0,0,0,0.05);
 }

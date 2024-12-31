@@ -577,6 +577,8 @@
 		0E8EC8EE2A3DE56F0095BDEC /* DMMoveCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */; };
 		0E8EC8F12A3DE57D0095BDEC /* DMMoveTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */; };
 		0E8EC8F32A3E08E00095BDEC /* UserDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */; };
+		0E92DFA32D243ADB0079C210 /* BodyScan3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E92DFA22D243ADB0079C210 /* BodyScan3DViewController.swift */; };
+		0E92DFA52D2451380079C210 /* BodyScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E92DFA42D2451290079C210 /* BodyScan.swift */; };
 		0E9F170B2A33BBE700217BF9 /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
 		0E9F170C2A33BBE700217BF9 /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
 		0E9F170D2A33BBE700217BF9 /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
@@ -10065,6 +10067,8 @@
 		0E8EC8EF2A3DE57D0095BDEC /* DMMoveTag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMMoveTag.h; sourceTree = "<group>"; };
 		0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMMoveTag.m; sourceTree = "<group>"; };
 		0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataFetcher.swift; sourceTree = "<group>"; };
+		0E92DFA22D243ADB0079C210 /* BodyScan3DViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyScan3DViewController.swift; sourceTree = "<group>"; };
+		0E92DFA42D2451290079C210 /* BodyScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyScan.swift; sourceTree = "<group>"; };
 		0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNewCustomLayer.m; sourceTree = "<group>"; };
 		0E9F17002A33BBE700217BF9 /* MCUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCUtil.m; sourceTree = "<group>"; };
 		0E9F17012A33BBE700217BF9 /* MCSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSliceLayer.h; sourceTree = "<group>"; };
@@ -12452,6 +12456,7 @@
 				0EA36EF32D16477D002B5015 /* BodyScanResultsViewController.swift */,
 				0EA36EE62D15FBD5002B5015 /* Reports */,
 				0EA36EE42D15C4BA002B5015 /* BodyScanResultListViewController.swift */,
+				0E92DFA22D243ADB0079C210 /* BodyScan3DViewController.swift */,
 				0ECCFD5E2D14BA91003A1F5C /* SampleCode.md */,
 				0E2FF37E2D14B45E009FF7D6 /* PrismScannerManager.swift */,
 			);
@@ -12642,6 +12647,7 @@
 		0EA36EFA2D16EDA5002B5015 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0E92DFA42D2451290079C210 /* BodyScan.swift */,
 				0EA36EF92D16EDA5002B5015 /* HealthReport.swift */,
 			);
 			path = Models;
@@ -21346,6 +21352,7 @@
 			files = (
 				0E101CBB2A56D5B700D8E7E2 /* main.m in Sources */,
 				0E101CBC2A56D5B700D8E7E2 /* DMDetailTableViewCell.m in Sources */,
+				0E92DFA32D243ADB0079C210 /* BodyScan3DViewController.swift in Sources */,
 				0E101CBD2A56D5B700D8E7E2 /* DietMasterGoAppDelegate.m in Sources */,
 				0E101CBE2A56D5B700D8E7E2 /* DMMessagesDataProvider.m in Sources */,
 				0E101CBF2A56D5B700D8E7E2 /* AppSettings.m in Sources */,
@@ -21355,6 +21362,7 @@
 				0E101CC22A56D5B700D8E7E2 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0E101CC32A56D5B700D8E7E2 /* MyLogViewController.m in Sources */,
 				0E101CC42A56D5B700D8E7E2 /* DetailViewController.m in Sources */,
+				0E92DFA52D2451380079C210 /* BodyScan.swift in Sources */,
 				0E101CC52A56D5B700D8E7E2 /* Log_Add.m in Sources */,
 				0E101CC62A56D5B700D8E7E2 /* RecordWeightView.m in Sources */,
 				0E101CC72A56D5B700D8E7E2 /* DMMove.m in Sources */,
@@ -27563,6 +27571,7 @@
 					"-all_load",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -DBODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -27635,6 +27644,7 @@
 					"-all_load",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -DBODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -27707,6 +27717,7 @@
 					"-all_load",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -DBODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";

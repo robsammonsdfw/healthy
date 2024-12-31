@@ -160,6 +160,21 @@ class MainMenuFAB: NSObject, UINavigationControllerDelegate {
             actionButton.isHidden = true
             return
         }
+    #if BODYSCANNING_ENABLED
+        // Hide on Body Scanning
+        if viewController.isKind(of: BodyScanResultsViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        if viewController.isKind(of: BodyScanResultListViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+        if viewController.isKind(of: BodyScan3DViewController.self) {
+            actionButton.isHidden = true
+            return
+        }
+    #endif
         actionButton.isHidden = false
     }
 }

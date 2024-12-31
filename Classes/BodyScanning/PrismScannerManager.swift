@@ -38,7 +38,7 @@ import SwiftUI
     
     /// Environment-specific configuration
     private enum Environment {
-        #if DEBUG
+        #if DEBUGA
         static let apiURL = "https://sandbox-api.hosted.prismlabs.tech"
         static var apiKey: String { 
             debugPrint("[PrismScanner] Using DEBUG environment")
@@ -355,19 +355,30 @@ import SwiftUI
             do {
                 let assetUrls = try await scanClient.assetUrls(forScan: scanId)
                 debugPrint("[PrismScanner] Successfully fetched asset URLs for scan: \(scanId)")
-                
+
                 // Convert AssetUrls to dictionary for Objective-C
                 // Only include URLs that are not nil
                 var urlDict: [String: String] = [:]
-                
+
                 if let modelUrl = assetUrls.model {
                     urlDict["model"] = modelUrl
                 }
-                
                 if let textureUrl = assetUrls.texture {
                     urlDict["texture"] = textureUrl
                 }
-                
+                if let previewUrl = assetUrls.previewImage {
+                    urlDict["preview"] = previewUrl
+                }
+                if let canonicalUrl = assetUrls.canonicalModel {
+                    urlDict["canonicalModel"] = canonicalUrl
+                }
+                if let materialUrl = assetUrls.material {
+                    urlDict["material"] = materialUrl
+                }
+                if let stripesUrl = assetUrls.stripes {
+                    urlDict["stripes"] = stripesUrl
+                }
+
                 DispatchQueue.main.async {
                     completion(urlDict, nil)
                 }

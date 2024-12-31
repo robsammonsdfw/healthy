@@ -143,7 +143,31 @@ import PrismSDK
                             bodyfat.leanMass.map { mass in
                                 Measurement(value: mass, unit: "kg")
                             }
-                        }
+                        },
+                        neckFit: prismScan.measurements?.neckFit ?? 0,
+                        shoulderFit: prismScan.measurements?.shoulderFit ?? 0,
+                        upperChestFit: prismScan.measurements?.upperChestFit ?? 0,
+                        chestFit: prismScan.measurements?.chestFit ?? 0,
+                        lowerChestFit: prismScan.measurements?.lowerChestFit ?? 0,
+                        waistFit: prismScan.measurements?.waistFit ?? 0,
+                        waistNavyFit: prismScan.measurements?.waistNavyFit ?? 0,
+                        stomachFit: prismScan.measurements?.stomachFit ?? 0,
+                        hipsFit: prismScan.measurements?.hipsFit ?? 0,
+                        upperThighLeftFit: prismScan.measurements?.upperThighLeftFit ?? 0,
+                        upperThighRightFit: prismScan.measurements?.upperThighRightFit ?? 0,
+                        thighLeftFit: prismScan.measurements?.thighLeftFit ?? 0,
+                        thighRightFit: prismScan.measurements?.thighRightFit ?? 0,
+                        lowerThighLeftFit: prismScan.measurements?.lowerThighLeftFit ?? 0,
+                        lowerThighRightFit: prismScan.measurements?.lowerThighRightFit ?? 0,
+                        calfLeftFit: prismScan.measurements?.calfLeftFit ?? 0,
+                        calfRightFit: prismScan.measurements?.calfRightFit ?? 0,
+                        ankleLeftFit: prismScan.measurements?.ankleLeftFit ?? 0,
+                        ankleRightFit: prismScan.measurements?.ankleRightFit ?? 0,
+                        midArmRightFit: prismScan.measurements?.midArmRightFit ?? 0,
+                        midArmLeftFit: prismScan.measurements?.midArmLeftFit ?? 0,
+                        lowerArmRightFit: prismScan.measurements?.lowerArmRightFit ?? 0,
+                        lowerArmLeftFit: prismScan.measurements?.lowerArmLeftFit ?? 0,
+                        waistToHipRatio: prismScan.measurements?.waistToHipRatio ?? 0
                     )
                     
                     return ScanResult(
@@ -241,7 +265,8 @@ extension BodyScanResultListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let scan = scanResults[indexPath.row]
-        let resultsVC = BodyScanResultsViewController(scanResult: scan)
+        let cell = tableView.cellForRow(at: indexPath) as? BodyScanResultCell
+        let resultsVC = BodyScanResultsViewController(scanResult: scan, assetUrls: cell?.assetUrls)
         navigationController?.pushViewController(resultsVC, animated: true)
     }
     
@@ -268,6 +293,15 @@ extension BodyScanResultListViewController: UITableViewDelegate {
 
 private class BodyScanResultCell: UITableViewCell {
     static let reuseIdentifier = "BodyScanResultCell"
+    
+    // Add preview image view
+    private let previewImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        return imageView
+    }()
     
     private let weightFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -312,9 +346,15 @@ private class BodyScanResultCell: UITableViewCell {
         return label
     }()
     
+    // Add property to store asset URLs
+    public var assetUrls: [String: String]?
+    // Add property to track current scan for image loading
+    public var scan: ScanResult?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        contentView.addSubview(previewImageView)
         contentView.addSubview(stackView)
         contentView.addSubview(statusLabel)
         
@@ -326,11 +366,19 @@ private class BodyScanResultCell: UITableViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            // Preview image constraints
+            previewImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            previewImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            previewImageView.widthAnchor.constraint(equalToConstant: 65),
+            previewImageView.heightAnchor.constraint(equalToConstant: 75),
+            
+            // Stack view constraints (now positioned after the image)
+            stackView.leadingAnchor.constraint(equalTo: previewImageView.trailingAnchor, constant: 10),
             stackView.trailingAnchor.constraint(equalTo: statusLabel.leadingAnchor, constant: -8),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
+            // Status label constraints
             statusLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             statusLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             statusLabel.heightAnchor.constraint(equalToConstant: 24),
@@ -339,6 +387,7 @@ private class BodyScanResultCell: UITableViewCell {
     }
     
     func configure(with scan: ScanResult) {
+        self.scan = scan
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
@@ -377,6 +426,58 @@ private class BodyScanResultCell: UITableViewCell {
         statusLabel.text = "\(scan.status.capitalized)"
         statusLabel.backgroundColor = UIColor.statusColor(for: scan.status)
         statusLabel.textColor = UIColor.statusTextColor(for: scan.status)
+        
+        // Add preview image loading
+        previewImageView.image = nil // Clear existing image
+        
+        // Fetch asset URLs and load preview
+        PrismScannerManager.shared.fetchAssetUrls(forScan: scan.id) { [weak self] urls, error in
+            if let error = error {
+                debugPrint("[BodyScan] ❌ Error fetching asset URLs for scan \(scan.id): \(error)")
+                return
+            }
+            
+            if let urls = urls {
+                debugPrint("[BodyScan] 📱 Asset URLs for scan \(scan.id):")
+                urls.forEach { (key, value) in
+                    debugPrint("[BodyScan] - \(key): \(value)")
+                }
+            }
+            // Store URLs
+            self?.assetUrls = urls
+            
+            // Load preview image
+            if let previewUrl = urls?["preview"],
+               let url = URL(string: previewUrl) {
+                debugPrint("[BodyScan] 📱 Loading preview image (\(url)) for scan \(scan.id)")
+                URLSession.shared.dataTask(with: url) { data, response, error in
+                    if let error = error {
+                        debugPrint("[BodyScan] ❌ Error loading preview image (\(url)) for scan \(scan.id): \(error)")
+                        return
+                    }
+                    if let data = data, let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            // Only set the image if the cell hasn't been reused
+                            if self?.scan?.id == scan.id {
+                                self?.previewImageView.image = image
+                            }
+                        }
+                    }
+                }.resume()
+            }
+        }
+    }
+        
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        previewImageView.image = nil
+        scan = nil
+        assetUrls = nil
+        // Reset all labels
+        dateLabel.text = nil
+        detailsLabel.text = nil
+        statusLabel.text = nil
+        statusLabel.backgroundColor = nil
     }
     
     required init?(coder: NSCoder) {
@@ -417,41 +518,4 @@ private extension UIColor {
     }
 }
 
-// MARK: - Models
-
-/// Represents a scan result from the API
-public struct ScanResult {
-    public let id: String
-    public let createdAt: Date
-    public let status: String
-    public let measurements: Measurements?
-}
-
-/// Represents measurement data from a scan
-public struct Measurements {
-    public let weight: Measurement?
-    public let bodyFat: Measurement?
-    public let muscleMass: Measurement?
-    
-    public init(weight: Measurement?, bodyFat: Measurement?, muscleMass: Measurement?) {
-        self.weight = weight
-        self.bodyFat = bodyFat
-        self.muscleMass = muscleMass
-    }
-}
-
-/// Represents a single measurement with value and unit
-public struct Measurement {
-    public let value: Double
-    public let unit: String
-    
-    public init(value: Double, unit: String) {
-        self.value = value
-        self.unit = unit
-    }
-    
-    public var formatted: String {
-        return String(format: "%.1f %@", value, unit)
-    }
-}
 
