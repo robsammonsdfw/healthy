@@ -246,6 +246,18 @@ target 'RapidFit' do
   core_pods
 end
 
+target 'FitAndPhat' do
+  core_pods
+end
+
+target 'Fit2Win' do
+  core_pods
+end
+
+target 'NVP Eat Smart, Live Well' do
+  core_pods
+end
+
 
 
 
