@@ -254,7 +254,7 @@ target 'Fit2Win' do
   core_pods
 end
 
-target 'NVP Eat Smart, Live Well' do
+target 'NVPeatsmart' do
   core_pods
 end
 

@@ -4051,7 +4051,6 @@
 		BF3FD0882D3ECCC200F00CCA /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
 		BF3FD0892D3ECCC200F00CCA /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40402831224E414C0081FFD3 /* sound.mp3 */; };
 		BF3FD08A2D3ECCC200F00CCA /* headerVw.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D7250153C300F412B0 /* headerVw.xib */; };
-		BF3FD08B2D3ECCC200F00CCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C722A56CE4900D8E7E2 /* Assets.xcassets */; };
 		BF3FD08C2D3ECCC200F00CCA /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
 		BF3FD08D2D3ECCC200F00CCA /* LearnMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */; };
 		BF3FD08E2D3ECCC200F00CCA /* privacypolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D815004364008413AB /* privacypolicy.html */; };
@@ -4074,7 +4073,6 @@
 		BF3FD0A02D3ECCC200F00CCA /* DietMasterGoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208F5250158BC00F412B0 /* DietMasterGoViewController.xib */; };
 		BF3FD0A12D3ECCC200F00CCA /* MyMovesDetailFooterCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */; };
 		BF3FD0A22D3ECCC200F00CCA /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
-		BF3FD0A32D3ECCC200F00CCA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C732A56CE4900D8E7E2 /* GoogleService-Info.plist */; };
 		BF3FD0A52D3ECCC200F00CCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		BF3FD0A62D3ECCC200F00CCA /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
 		BF3FD0A72D3ECCC200F00CCA /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
@@ -4198,6 +4196,9 @@
 		BF3FD11E2D3ECCC200F00CCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		BF3FD11F2D3ECCC200F00CCA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		BF3FD1202D3ECCC200F00CCA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		BF3FD15D2D41524A00F00CCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF3FD1592D3ED2C600F00CCA /* Assets.xcassets */; };
+		BF3FD15E2D41525400F00CCA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF3FD15A2D3ED2C600F00CCA /* GoogleService-Info.plist */; };
+		BF3FD15F2D41525E00F00CCA /* NVPeatsmart.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BF3FD15B2D3ED2C600F00CCA /* NVPeatsmart.xcconfig */; };
 		BF5BBAC72BA0E0650090AE2F /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		BF5BBAC92BA0E0650090AE2F /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
 		BF5BBACA2BA0E0650090AE2F /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
@@ -10790,7 +10791,7 @@
 		BF3D3B562B14F9F00029C30A /* SuperBodyMethod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SuperBodyMethod.xcconfig; sourceTree = "<group>"; };
 		BF3D3B572B14F9F00029C30A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BF3D3C1F2B14FA1F0029C30A /* SuperBodyMethod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperBodyMethod.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF3FD1572D3ECCC200F00CCA /* NVP Eat Smart, Live Well.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NVP Eat Smart, Live Well.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF3FD1572D3ECCC200F00CCA /* NVP Eat Smart Live Well.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NVP Eat Smart Live Well.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF3FD1592D3ED2C600F00CCA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF3FD15A2D3ED2C600F00CCA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BF3FD15B2D3ED2C600F00CCA /* NVPeatsmart.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = NVPeatsmart.xcconfig; sourceTree = "<group>"; };
@@ -12730,7 +12731,7 @@
 		0E101C6C2A56CE4900D8E7E2 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
-				BF3FD15C2D3ED2C600F00CCA /* NVP Eat Smart, Live Well */,
+				BF3FD15C2D3ED2C600F00CCA /* NVP Eat Smart Live Well */,
 				BF75CAFF2D13825900F3179A /* Fit2Win */,
 				BF5F20142D0CA792001B75BF /* FitAndPhat */,
 				BF9A76D82D039D550028C17C /* RapidFit */,
@@ -13360,7 +13361,7 @@
 				BF9A77BF2D039D660028C17C /* RapidFit.app */,
 				BF5F20FC2D0CA854001B75BF /* FitAndPhat.app */,
 				BF75CBE82D13827500F3179A /* Fit2Win.app */,
-				BF3FD1572D3ECCC200F00CCA /* NVP Eat Smart, Live Well.app */,
+				BF3FD1572D3ECCC200F00CCA /* NVP Eat Smart Live Well.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -13836,14 +13837,14 @@
 			path = SuperBodyMethod;
 			sourceTree = "<group>";
 		};
-		BF3FD15C2D3ED2C600F00CCA /* NVP Eat Smart, Live Well */ = {
+		BF3FD15C2D3ED2C600F00CCA /* NVP Eat Smart Live Well */ = {
 			isa = PBXGroup;
 			children = (
 				BF3FD1592D3ED2C600F00CCA /* Assets.xcassets */,
 				BF3FD15A2D3ED2C600F00CCA /* GoogleService-Info.plist */,
 				BF3FD15B2D3ED2C600F00CCA /* NVPeatsmart.xcconfig */,
 			);
-			path = "NVP Eat Smart, Live Well";
+			path = "NVP Eat Smart Live Well";
 			sourceTree = "<group>";
 		};
 		BF5BBAC32BA0DF760090AE2F /* HCF Diet */ = {
@@ -14659,9 +14660,9 @@
 			productReference = BF3D3C1F2B14FA1F0029C30A /* SuperBodyMethod.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BF3FD06F2D3ECCC200F00CCA /* NVP Eat Smart, Live Well */ = {
+		BF3FD06F2D3ECCC200F00CCA /* NVP Eat Smart Live Well */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BF3FD1532D3ECCC200F00CCA /* Build configuration list for PBXNativeTarget "NVP Eat Smart, Live Well" */;
+			buildConfigurationList = BF3FD1532D3ECCC200F00CCA /* Build configuration list for PBXNativeTarget "NVP Eat Smart Live Well" */;
 			buildPhases = (
 				BF3FD0702D3ECCC200F00CCA /* [CP] Check Pods Manifest.lock */,
 				BF3FD0712D3ECCC200F00CCA /* Resources */,
@@ -14675,9 +14676,9 @@
 			);
 			dependencies = (
 			);
-			name = "NVP Eat Smart, Live Well";
+			name = "NVP Eat Smart Live Well";
 			productName = DietMasterGo;
-			productReference = BF3FD1572D3ECCC200F00CCA /* NVP Eat Smart, Live Well.app */;
+			productReference = BF3FD1572D3ECCC200F00CCA /* NVP Eat Smart Live Well.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BF5BBAC42BA0E0650090AE2F /* HCFDiet */ = {
@@ -15450,7 +15451,7 @@
 				BF9A76D92D039D660028C17C /* RapidFit */,
 				BF5F20152D0CA854001B75BF /* FitAndPhat */,
 				BF75CB002D13827500F3179A /* Fit2Win */,
-				BF3FD06F2D3ECCC200F00CCA /* NVP Eat Smart, Live Well */,
+				BF3FD06F2D3ECCC200F00CCA /* NVP Eat Smart Live Well */,
 			);
 		};
 /* End PBXProject section */
@@ -16749,8 +16750,9 @@
 				BF3FD0882D3ECCC200F00CCA /* MyLogTableViewCell.xib in Resources */,
 				BF3FD0892D3ECCC200F00CCA /* sound.mp3 in Resources */,
 				BF3FD08A2D3ECCC200F00CCA /* headerVw.xib in Resources */,
-				BF3FD08B2D3ECCC200F00CCA /* Assets.xcassets in Resources */,
+				BF3FD15D2D41524A00F00CCA /* Assets.xcassets in Resources */,
 				BF3FD08C2D3ECCC200F00CCA /* measure_sql.sql in Resources */,
+				BF3FD15E2D41525400F00CCA /* GoogleService-Info.plist in Resources */,
 				BF3FD08D2D3ECCC200F00CCA /* LearnMoreViewController.xib in Resources */,
 				BF3FD08E2D3ECCC200F00CCA /* privacypolicy.html in Resources */,
 				BF3FD08F2D3ECCC200F00CCA /* termsofservice.html in Resources */,
@@ -16772,7 +16774,7 @@
 				BF3FD0A02D3ECCC200F00CCA /* DietMasterGoViewController.xib in Resources */,
 				BF3FD0A12D3ECCC200F00CCA /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
 				BF3FD0A22D3ECCC200F00CCA /* MyMovesListViewController.xib in Resources */,
-				BF3FD0A32D3ECCC200F00CCA /* GoogleService-Info.plist in Resources */,
+				BF3FD15F2D41525E00F00CCA /* NVPeatsmart.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39139,7 +39141,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BF3FD1532D3ECCC200F00CCA /* Build configuration list for PBXNativeTarget "NVP Eat Smart, Live Well" */ = {
+		BF3FD1532D3ECCC200F00CCA /* Build configuration list for PBXNativeTarget "NVP Eat Smart Live Well" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BF3FD1542D3ECCC200F00CCA /* Debug */,

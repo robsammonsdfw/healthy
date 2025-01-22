@@ -41,7 +41,7 @@ DMG_BUNDLE_IDENTIFIER = com.nvpeatsmart
 // Example: "7NH27AHXU3" is the DietMaster Team name.
 DMG_APPLE_TEAM_PREFIX = Z3CL6MWM59
 // The product name, no spaces. E.g. "DietMasterGoPlus".
-DMG_PRODUCT_NAME = NVP Eat Smart, Live Well
+DMG_PRODUCT_NAME = NVP Eat Smart Live Well
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
 DMG_MYMOVES_ENABLED = no
 
@@ -52,7 +52,7 @@ DMG_MYMOVES_ENABLED = no
 // Formerly app_name_short.
 DMG_APP_NAME_SHORT = NVP Eat Smart
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = NVP Eat Smart, Live Well
+DMG_APP_NAME_LONG = NVP Eat Smart Live Well
 // Formerly support_email.
 DMG_SUPPORT_EMAIL = NVP-EatSmart-Support@nvpmedicalgroup.com
 // Formerly account_code.
