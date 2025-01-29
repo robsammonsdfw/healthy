@@ -254,7 +254,7 @@ target 'Fit2Win' do
   core_pods
 end
 
-target 'NVPeatsmart' do
+target 'NVPEatSmart' do
   core_pods
 end
 

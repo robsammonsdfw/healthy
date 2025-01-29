@@ -27,21 +27,21 @@
 // likely means you didn't run the `pod install` command or the value is incorrect.
 // This should match the name of the value in "target 'DietMasterGoPlus' do".
 // #include "Pods/Target Support Files/Pods-APP_NAME_HERE/Pods-APP_NAME_HERE.distribution.xcconfig"
-#include "Pods/Target Support Files/Pods-NVPeatsmart/Pods-NVPeatsmart.distribution.xcconfig"
+#include "Pods/Target Support Files/Pods-NVPEatSmart/Pods-NVPEatSmart.distribution.xcconfig"
 
 // ************************************
 // ****** BUILD INFORMATION ***********
 // ************************************
 
 // The name shown under the app icon.
-DMG_BUNDLE_DISPLAY_NAME = NVP Eat Smart, Live Well
+DMG_BUNDLE_DISPLAY_NAME = NVP Eat Smart
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
 DMG_BUNDLE_IDENTIFIER = com.nvpeatsmart
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
 DMG_APPLE_TEAM_PREFIX = Z3CL6MWM59
 // The product name, no spaces. E.g. "DietMasterGoPlus".
-DMG_PRODUCT_NAME = NVP Eat Smart Live Well
+DMG_PRODUCT_NAME = NVPEatSmartLiveWell
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
 DMG_MYMOVES_ENABLED = no
 
