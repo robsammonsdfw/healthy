@@ -258,6 +258,10 @@ target 'NVPEatSmart' do
   core_pods
 end
 
+target 'W3FN' do
+  core_pods
+end
+
 
 
 
