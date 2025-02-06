@@ -262,6 +262,10 @@ target 'W3FN' do
   core_pods
 end
 
+target 'eMedEats' do
+  core_pods
+end
+
 
 
 
