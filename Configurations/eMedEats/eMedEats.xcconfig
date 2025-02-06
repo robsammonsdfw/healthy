@@ -50,9 +50,9 @@ DMG_MYMOVES_ENABLED = NO
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = eMed Eats
+DMG_APP_NAME_SHORT = eMed eats
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = eMed Eats
+DMG_APP_NAME_LONG = eMed eats
 // Formerly support_email.
 DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
 // Formerly account_code.
@@ -63,7 +63,7 @@ DMG_ACCOUNT_CODE = dmg_eMed
 // ************************************
 
 // The color of the text on the Login view and buttons.
-DMG_LOGINVIEW_TEXTCOLOR = #ffffff
+DMG_LOGINVIEW_TEXTCOLOR = #000000
 
 // Background color when needed in the app.
 DMG_BACKGROUND_COLOR = #000000
