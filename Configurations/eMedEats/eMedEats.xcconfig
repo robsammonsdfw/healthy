@@ -39,7 +39,7 @@ DMG_BUNDLE_DISPLAY_NAME = eMed eats
 DMG_BUNDLE_IDENTIFIER = com.emed.s2p
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
-DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
+DMG_APPLE_TEAM_PREFIX =5CLYL89Y37
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = eMedEats
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
