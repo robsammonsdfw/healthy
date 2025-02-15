@@ -27,67 +27,67 @@
 // likely means you didn't run the `pod install` command or the value is incorrect.
 // This should match the name of the value in "target 'DietMasterGoPlus' do".
 // #include "Pods/Target Support Files/Pods-APP_NAME_HERE/Pods-APP_NAME_HERE.distribution.xcconfig"
-#include "Pods/Target Support Files/Pods-NVPeatsmart/Pods-NVPeatsmart.distribution.xcconfig"
+#include "Pods/Target Support Files/Pods-eMedEats/Pods-eMedEats.distribution.xcconfig"
 
 // ************************************
 // ****** BUILD INFORMATION ***********
 // ************************************
 
 // The name shown under the app icon.
-DMG_BUNDLE_DISPLAY_NAME = NVP Eat Smart, Live Well
+DMG_BUNDLE_DISPLAY_NAME = eMed eats™
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
-DMG_BUNDLE_IDENTIFIER = com.nvpeatsmart
+DMG_BUNDLE_IDENTIFIER = com.emed.s2p
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
-DMG_APPLE_TEAM_PREFIX = Z3CL6MWM59
+DMG_APPLE_TEAM_PREFIX =5CLYL89Y37
 // The product name, no spaces. E.g. "DietMasterGoPlus".
-DMG_PRODUCT_NAME = NVP Eat Smart, Live Well
+DMG_PRODUCT_NAME = eMedEats
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
-DMG_MYMOVES_ENABLED = no
+DMG_MYMOVES_ENABLED = NO
 
 // ************************************
 // ********* REPLICA DEFAULTS *********
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = NVP Eat Smart
+DMG_APP_NAME_SHORT = eMed eats™
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = NVP Eat Smart, Live Well
+DMG_APP_NAME_LONG = eMed eats™
 // Formerly support_email.
-DMG_SUPPORT_EMAIL = NVP-EatSmart-Support@nvpmedicalgroup.com
+DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
 // Formerly account_code.
-DMG_ACCOUNT_CODE = dmg_NVP
+DMG_ACCOUNT_CODE = dmg_eMed
 
 // ************************************
 // ********* COLOR SCHEME *************
 // ************************************
 
 // The color of the text on the Login view and buttons.
-DMG_LOGINVIEW_TEXTCOLOR = #FFFFFF
+DMG_LOGINVIEW_TEXTCOLOR = #000000
 
 // Background color when needed in the app.
-DMG_BACKGROUND_COLOR = #FFFFFF
+DMG_BACKGROUND_COLOR = #000000
 
 // The foreground color for the "Hamburger" home menu.
 DMG_HOME_ICON_FOREGROUND_COLOR = #000000
 // The home menu icon color on the tiles.
-DMG_MENU_ICON_COLOR = #aa8b55
+DMG_MENU_ICON_COLOR = #000000
 
 // Color for any header background if needed.
-DMG_HEADER_COLOR = #aa8b55
+DMG_HEADER_COLOR = #ffffff
 // Text color for any header if needed.
 DMG_HEADER_TEXTCOLOR = #000000
 
 // Button colors where needed.
-DMG_BUTTON_COLOR = #aa8b55
+DMG_BUTTON_COLOR = #ffffff
 // Button text colors where needed.
 DMG_BUTTON_TEXTCOLOR = #000000
 
 // Settings "Switch" ON Color.
-DMG_SWITCH_ON_COLOR = #aa8b55
+DMG_SWITCH_ON_COLOR = #ffffff
 
 // Footer background color where needed.
-DMG_FOOTER_COLOR = #aa8b55
+DMG_FOOTER_COLOR = #ffffff
 // Text color for any footer if needed.
 DMG_FOOTER_TEXTCOLOR = #000000
 
@@ -100,7 +100,7 @@ DMG_CALENDAR_MOVEDAY_COLOR = #BFBFBF
 
 // Colors for the Messages Chat.
 // Sender = Current User, Recipient = Coach/Professional.
-DMG_CHAT_SENDER_COLOR = #aa8b55
+DMG_CHAT_SENDER_COLOR = #F2673D
 DMG_CHAT_SENDER_TEXTCOLOR = #000000
 DMG_CHAT_RECIPIENT_COLOR = #E5E5E9
 DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
