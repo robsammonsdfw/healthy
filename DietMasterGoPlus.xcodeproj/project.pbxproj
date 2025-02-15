@@ -4115,7 +4115,6 @@
 		BF3FD0882D3ECCC200F00CCA /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
 		BF3FD0892D3ECCC200F00CCA /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40402831224E414C0081FFD3 /* sound.mp3 */; };
 		BF3FD08A2D3ECCC200F00CCA /* headerVw.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D7250153C300F412B0 /* headerVw.xib */; };
-		BF3FD08B2D3ECCC200F00CCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C722A56CE4900D8E7E2 /* Assets.xcassets */; };
 		BF3FD08C2D3ECCC200F00CCA /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
 		BF3FD08D2D3ECCC200F00CCA /* LearnMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */; };
 		BF3FD08E2D3ECCC200F00CCA /* privacypolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D815004364008413AB /* privacypolicy.html */; };
@@ -16867,7 +16866,6 @@
 				BF3FD0882D3ECCC200F00CCA /* MyLogTableViewCell.xib in Resources */,
 				BF3FD0892D3ECCC200F00CCA /* sound.mp3 in Resources */,
 				BF3FD08A2D3ECCC200F00CCA /* headerVw.xib in Resources */,
-				BF3FD08B2D3ECCC200F00CCA /* Assets.xcassets in Resources */,
 				BF3FD08C2D3ECCC200F00CCA /* measure_sql.sql in Resources */,
 				BF3FD08D2D3ECCC200F00CCA /* LearnMoreViewController.xib in Resources */,
 				BF3FD08E2D3ECCC200F00CCA /* privacypolicy.html in Resources */,
