@@ -613,6 +613,7 @@
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)(void))completionHandler {
+#ifdef BODYSCANNING_ENABLED
     // Handle notification tap
     NSDictionary *userInfo = response.notification.request.content.userInfo;
     NSString *scanId = userInfo[@"scanId"];
@@ -626,6 +627,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     
     completionHandler();
+#endif
 }
 
 @end
