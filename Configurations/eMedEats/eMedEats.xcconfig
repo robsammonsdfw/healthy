@@ -34,12 +34,12 @@
 // ************************************
 
 // The name shown under the app icon.
-DMG_BUNDLE_DISPLAY_NAME = eMed eats™
+DMG_BUNDLE_DISPLAY_NAME = eMed eats
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
 DMG_BUNDLE_IDENTIFIER = com.emed.s2p
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
-DMG_APPLE_TEAM_PREFIX =5CLYL89Y37
+DMG_APPLE_TEAM_PREFIX = 5CLYL89Y37
 // The product name, no spaces. E.g. "DietMasterGoPlus".
 DMG_PRODUCT_NAME = eMedEats
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
@@ -50,9 +50,9 @@ DMG_MYMOVES_ENABLED = NO
 // ************************************
 
 // Formerly app_name_short.
-DMG_APP_NAME_SHORT = eMed eats™
+DMG_APP_NAME_SHORT = eMed eats
 // Formerly app_name_long.
-DMG_APP_NAME_LONG = eMed eats™
+DMG_APP_NAME_LONG = eMed eats
 // Formerly support_email.
 DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
 // Formerly account_code.
