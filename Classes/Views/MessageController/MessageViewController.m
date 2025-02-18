@@ -73,20 +73,26 @@ int const MaximumStringLength = 300;
     self.sendView = [[SendView alloc] initWithFrame:CGRectZero];
     self.sendView.translatesAutoresizingMaskIntoConstraints = NO;
     self.sendView.delegate = self;
-    [self.view addSubview:self.sendView];
-    
+
     // Constrain.
     UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
     [self.tableView.leadingAnchor constraintEqualToAnchor:layoutGuide.leadingAnchor constant:0].active = YES;
     [self.tableView.trailingAnchor constraintEqualToAnchor:layoutGuide.trailingAnchor constant:0].active = YES;
     [self.tableView.topAnchor constraintEqualToAnchor:layoutGuide.topAnchor constant:0].active = YES;
 
-    [self.sendView.topAnchor constraintEqualToAnchor:self.tableView.bottomAnchor constant:0].active = YES;
-    [self.sendView.leadingAnchor constraintEqualToAnchor:layoutGuide.leadingAnchor constant:0].active = YES;
-    [self.sendView.trailingAnchor constraintEqualToAnchor:layoutGuide.trailingAnchor constant:0].active = YES;
-    [self.sendView.heightAnchor constraintGreaterThanOrEqualToConstant:50.0f].active = YES;
-    UILayoutGuide *keyboardGuide = self.view.keyboardLayoutGuide;
-    [self.sendView.bottomAnchor constraintEqualToAnchor:keyboardGuide.topAnchor constant:0].active = YES;
+    // Special constraints for eMed. eMed does not support sending of messages.
+    if ([AppConfiguration.accountCode isEqualToString:@"dmg_eMed"]) {
+        [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
+    } else {
+        // Default, sending is permitted.
+        [self.view addSubview:self.sendView];
+        [self.sendView.topAnchor constraintEqualToAnchor:self.tableView.bottomAnchor constant:0].active = YES;
+        [self.sendView.leadingAnchor constraintEqualToAnchor:layoutGuide.leadingAnchor constant:0].active = YES;
+        [self.sendView.trailingAnchor constraintEqualToAnchor:layoutGuide.trailingAnchor constant:0].active = YES;
+        [self.sendView.heightAnchor constraintGreaterThanOrEqualToConstant:50.0f].active = YES;
+        UILayoutGuide *keyboardGuide = self.view.keyboardLayoutGuide;
+        [self.sendView.bottomAnchor constraintEqualToAnchor:keyboardGuide.topAnchor constant:0].active = YES;
+    }
 }
 
 - (void)viewDidLoad {
