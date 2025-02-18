@@ -2,145 +2,16 @@ PODS:
   - Alamofire (5.0.5)
   - AlamofireSoap (0.1.3):
     - Alamofire (~> 5.0.0-rc.2)
-  - ASIHTTPRequest (1.8.2):
-    - ASIHTTPRequest/ASIWebPageRequest (= 1.8.2)
-    - ASIHTTPRequest/CloudFiles (= 1.8.2)
-    - ASIHTTPRequest/Core (= 1.8.2)
-    - ASIHTTPRequest/S3 (= 1.8.2)
-  - ASIHTTPRequest/ASIWebPageRequest (1.8.2):
-    - ASIHTTPRequest/Core
-  - ASIHTTPRequest/CloudFiles (1.8.2):
-    - ASIHTTPRequest/Core
-  - ASIHTTPRequest/Core (1.8.2):
-    - Reachability
-  - ASIHTTPRequest/S3 (1.8.2):
-    - ASIHTTPRequest/Core
   - CorePlot (2.3)
-  - Firebase/Analytics (10.22.0):
-    - Firebase/Core
-  - Firebase/Core (10.22.0):
-    - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 10.22.0)
-  - Firebase/CoreOnly (10.22.0):
-    - FirebaseCore (= 10.22.0)
-  - Firebase/Crashlytics (10.22.0):
-    - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 10.22.0)
-  - FirebaseAnalytics (10.22.0):
-    - FirebaseAnalytics/AdIdSupport (= 10.22.0)
-    - FirebaseCore (~> 10.0)
-    - FirebaseInstallations (~> 10.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
-    - GoogleUtilities/MethodSwizzler (~> 7.11)
-    - GoogleUtilities/Network (~> 7.11)
-    - "GoogleUtilities/NSData+zlib (~> 7.11)"
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (10.22.0):
-    - FirebaseCore (~> 10.0)
-    - FirebaseInstallations (~> 10.0)
-    - GoogleAppMeasurement (= 10.22.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
-    - GoogleUtilities/MethodSwizzler (~> 7.11)
-    - GoogleUtilities/Network (~> 7.11)
-    - "GoogleUtilities/NSData+zlib (~> 7.11)"
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-  - FirebaseCore (10.22.0):
-    - FirebaseCoreInternal (~> 10.0)
-    - GoogleUtilities/Environment (~> 7.12)
-    - GoogleUtilities/Logger (~> 7.12)
-  - FirebaseCoreExtension (10.22.0):
-    - FirebaseCore (~> 10.0)
-  - FirebaseCoreInternal (10.22.0):
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseCrashlytics (10.22.0):
-    - FirebaseCore (~> 10.5)
-    - FirebaseInstallations (~> 10.0)
-    - FirebaseSessions (~> 10.5)
-    - GoogleDataTransport (~> 9.2)
-    - GoogleUtilities/Environment (~> 7.8)
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-    - PromisesObjC (~> 2.1)
-  - FirebaseInstallations (10.22.0):
-    - FirebaseCore (~> 10.0)
-    - GoogleUtilities/Environment (~> 7.8)
-    - GoogleUtilities/UserDefaults (~> 7.8)
-    - PromisesObjC (~> 2.1)
-  - FirebaseSessions (10.22.0):
-    - FirebaseCore (~> 10.5)
-    - FirebaseCoreExtension (~> 10.0)
-    - FirebaseInstallations (~> 10.0)
-    - GoogleDataTransport (~> 9.2)
-    - GoogleUtilities/Environment (~> 7.10)
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-    - PromisesSwift (~> 2.1)
-  - FMDB (2.7.9):
-    - FMDB/standard (= 2.7.9)
-  - FMDB/standard (2.7.9)
+  - FMDB (2.7.12):
+    - FMDB/standard (= 2.7.12)
+  - FMDB/Core (2.7.12)
+  - FMDB/standard (2.7.12):
+    - FMDB/Core
   - FSCalendar (2.8.4)
-  - GoogleAppMeasurement (10.22.0):
-    - GoogleAppMeasurement/AdIdSupport (= 10.22.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
-    - GoogleUtilities/MethodSwizzler (~> 7.11)
-    - GoogleUtilities/Network (~> 7.11)
-    - "GoogleUtilities/NSData+zlib (~> 7.11)"
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (10.22.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.22.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
-    - GoogleUtilities/MethodSwizzler (~> 7.11)
-    - GoogleUtilities/Network (~> 7.11)
-    - "GoogleUtilities/NSData+zlib (~> 7.11)"
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (10.22.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
-    - GoogleUtilities/MethodSwizzler (~> 7.11)
-    - GoogleUtilities/Network (~> 7.11)
-    - "GoogleUtilities/NSData+zlib (~> 7.11)"
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-  - GoogleDataTransport (9.4.1):
-    - GoogleUtilities/Environment (~> 7.7)
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/AppDelegateSwizzler (7.13.0):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (7.13.0):
-    - GoogleUtilities/Privacy
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.13.0):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/MethodSwizzler (7.13.0):
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (7.13.0):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Privacy
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.13.0)":
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (7.13.0)
-  - GoogleUtilities/Reachability (7.13.0):
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/UserDefaults (7.13.0):
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Privacy
-  - JJFloatingActionButton (3.0.0)
+  - JJFloatingActionButton (3.0.1)
   - MBProgressHUD (1.2.0)
   - MKNumberBadgeView (0.0.1)
-  - nanopb (2.30910.0):
-    - nanopb/decode (= 2.30910.0)
-    - nanopb/encode (= 2.30910.0)
-  - nanopb/decode (2.30910.0)
-  - nanopb/encode (2.30910.0)
-  - PromisesObjC (2.4.0)
-  - PromisesSwift (2.4.0):
-    - PromisesObjC (= 2.4.0)
-  - Reachability (3.2)
   - SBPickerSelector (1.0.4):
     - SBPickerSelector/Core (= 1.0.4)
   - SBPickerSelector/Core (1.0.4)
@@ -150,10 +21,7 @@ PODS:
 
 DEPENDENCIES:
   - AlamofireSoap
-  - ASIHTTPRequest
   - CorePlot
-  - Firebase/Analytics
-  - Firebase/Crashlytics
   - FMDB
   - FSCalendar
   - JJFloatingActionButton
@@ -168,28 +36,12 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - AlamofireSoap
-    - ASIHTTPRequest
     - CorePlot
-    - Firebase
-    - FirebaseAnalytics
-    - FirebaseCore
-    - FirebaseCoreExtension
-    - FirebaseCoreInternal
-    - FirebaseCrashlytics
-    - FirebaseInstallations
-    - FirebaseSessions
     - FMDB
     - FSCalendar
-    - GoogleAppMeasurement
-    - GoogleDataTransport
-    - GoogleUtilities
     - JJFloatingActionButton
     - MBProgressHUD
     - MKNumberBadgeView
-    - nanopb
-    - PromisesObjC
-    - PromisesSwift
-    - Reachability
     - SBPickerSelector
     - ScrollableSegmentedControl
     - SWXMLHash
@@ -198,33 +50,17 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
   AlamofireSoap: 3ff94d1b9a9dccc6fde075c8f5ee1986b78a0c23
-  ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
   CorePlot: 6bfe6d30d215beec3cfd18ee43e434620119bc1e
-  Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
-  FirebaseAnalytics: 8d0ff929c63b7f72260f332b86ccf569776b75d3
-  FirebaseCore: 0326ec9b05fbed8f8716cddbf0e36894a13837f7
-  FirebaseCoreExtension: 6394c00b887d0bebadbc7049c464aa0cbddc5d41
-  FirebaseCoreInternal: bca337352024b18424a61e478460547d46c4c753
-  FirebaseCrashlytics: e568d68ce89117c80cddb04073ab9018725fbb8c
-  FirebaseInstallations: 763814908793c0da14c18b3dcffdec71e29ed55e
-  FirebaseSessions: cd97fb07674f3906619c871eefbd260a1546c9d3
-  FMDB: aa44149f6fb634b1ac54f64f47064bb0d0c5a032
+  FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
-  GoogleAppMeasurement: ccefe3eac9b0aa27f96066809fb1a7fe4b462626
-  GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
-  GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
-  JJFloatingActionButton: 42d4a142b856cd202976cc085d449b2ec55f4d3a
+  JJFloatingActionButton: 6a20da0a36bc2c5e2097e754b5e765aa9e4b6365
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MKNumberBadgeView: 4007883b46f7babcf8bca339ecddff187e0cbb1f
-  nanopb: 438bc412db1928dac798aa6fd75726007be04262
-  PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SBPickerSelector: ea57fff3aae81a79b5db3d9559e54a5cbd3c706a
   ScrollableSegmentedControl: 2e64bbe8968a7fcd8aae5014434481464fcdfe60
   SWXMLHash: dd733a457e9c4fe93b1538654057aefae4acb382
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
 
-PODFILE CHECKSUM: 657ead28e9a5268708220a3efae811916cf37a64
+PODFILE CHECKSUM: e62851144491582499fa23574c8e27c0a8cccd05
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

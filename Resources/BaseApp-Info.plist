@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ACCOUNT_CODE</key>
+	<string>$(DMG_ACCOUNT_CODE)</string>
+	<key>APP_NAME_LONG</key>
+	<string>$(DMG_APP_NAME_LONG)</string>
+	<key>APP_NAME_SHORT</key>
+	<string>$(DMG_APP_NAME_SHORT)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
@@ -27,6 +33,8 @@
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -37,8 +45,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -52,6 +58,54 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>DMG_BACKGROUND_COLOR</key>
+	<string>$(DMG_BACKGROUND_COLOR)</string>
+	<key>DMG_BODYSCANNING_DEV_APIKEY</key>
+	<string>$(DMG_BODYSCANNING_DEV_APIKEY)</string>
+	<key>DMG_BODYSCANNING_ENABLED</key>
+	<string>$(DMG_BODYSCANNING_ENABLED)</string>
+	<key>DMG_BODYSCANNING_PROD_APIKEY</key>
+	<string>$(DMG_BODYSCANNING_PROD_APIKEY)</string>
+	<key>DMG_BUTTON_COLOR</key>
+	<string>$(DMG_BUTTON_COLOR)</string>
+	<key>DMG_BUTTON_TEXTCOLOR</key>
+	<string>$(DMG_BUTTON_TEXTCOLOR)</string>
+	<key>DMG_CALENDAR_MOVEDAY_COLOR</key>
+	<string>$(DMG_CALENDAR_MOVEDAY_COLOR)</string>
+	<key>DMG_CHART_COLOR</key>
+	<string>$(DMG_CHART_COLOR)</string>
+	<key>DMG_CHART_POINT_COLOR</key>
+	<string>$(DMG_CHART_POINT_COLOR)</string>
+	<key>DMG_CHAT_RECIPIENT_COLOR</key>
+	<string>$(DMG_CHAT_RECIPIENT_COLOR)</string>
+	<key>DMG_CHAT_RECIPIENT_TEXTCOLOR</key>
+	<string>$(DMG_CHAT_RECIPIENT_TEXTCOLOR)</string>
+	<key>DMG_CHAT_SENDER_COLOR</key>
+	<string>$(DMG_CHAT_SENDER_COLOR)</string>
+	<key>DMG_CHAT_SENDER_TEXTCOLOR</key>
+	<string>$(DMG_CHAT_SENDER_TEXTCOLOR)</string>
+	<key>DMG_FOOTER_COLOR</key>
+	<string>$(DMG_FOOTER_COLOR)</string>
+	<key>DMG_FOOTER_TEXTCOLOR</key>
+	<string>$(DMG_FOOTER_TEXTCOLOR)</string>
+	<key>DMG_HEADER_COLOR</key>
+	<string>$(DMG_HEADER_COLOR)</string>
+	<key>DMG_HEADER_TEXTCOLOR</key>
+	<string>$(DMG_HEADER_TEXTCOLOR)</string>
+	<key>DMG_HOME_ICON_FOREGROUND_COLOR</key>
+	<string>$(DMG_HOME_ICON_FOREGROUND_COLOR)</string>
+	<key>DMG_LOGINVIEW_TEXTCOLOR</key>
+	<string>$(DMG_LOGINVIEW_TEXTCOLOR)</string>
+	<key>DMG_LOGIN_BACKGROUND_IMAGE</key>
+	<string>$(DMG_LOGIN_BACKGROUND_IMAGE)</string>
+	<key>DMG_MENU_ICON_COLOR</key>
+	<string>$(DMG_MENU_ICON_COLOR)</string>
+	<key>DMG_MYMOVES_ENABLED</key>
+	<string>$(DMG_MYMOVES_ENABLED)</string>
+	<key>DMG_SWITCH_ON_COLOR</key>
+	<string>$(DMG_SWITCH_ON_COLOR)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
@@ -89,10 +143,12 @@
 	<string>Requesting access to Health data to read and record steps from daily activity to track calories and exercise levels.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Requesting access to Health data to read, record and update steps from daily activity to track calories and exercise levels.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to the photo library.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Motion data is used to improve the accuracy of your body measurements</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to the photo library.</string>
+	<key>SUPPORT_EMAIL</key>
+	<string>$(DMG_SUPPORT_EMAIL)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -143,61 +199,5 @@
 			</dict>
 		</dict>
 	</array>
-	<key>APP_NAME_SHORT</key>
-	<string>$(DMG_APP_NAME_SHORT)</string>
-	<key>APP_NAME_LONG</key>
-	<string>$(DMG_APP_NAME_LONG)</string>
-	<key>ACCOUNT_CODE</key>
-	<string>$(DMG_ACCOUNT_CODE)</string>
-	<key>SUPPORT_EMAIL</key>
-	<string>$(DMG_SUPPORT_EMAIL)</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>DMG_BACKGROUND_COLOR</key>
-	<string>$(DMG_BACKGROUND_COLOR)</string>
-	<key>DMG_LOGINVIEW_TEXTCOLOR</key>
-	<string>$(DMG_LOGINVIEW_TEXTCOLOR)</string>
-	<key>DMG_HOME_ICON_FOREGROUND_COLOR</key>
-	<string>$(DMG_HOME_ICON_FOREGROUND_COLOR)</string>
-	<key>DMG_MENU_ICON_COLOR</key>
-	<string>$(DMG_MENU_ICON_COLOR)</string>
-	<key>DMG_HEADER_COLOR</key>
-	<string>$(DMG_HEADER_COLOR)</string>
-	<key>DMG_HEADER_TEXTCOLOR</key>
-	<string>$(DMG_HEADER_TEXTCOLOR)</string>
-	<key>DMG_BUTTON_COLOR</key>
-	<string>$(DMG_BUTTON_COLOR)</string>
-	<key>DMG_BUTTON_TEXTCOLOR</key>
-	<string>$(DMG_BUTTON_TEXTCOLOR)</string>
-	<key>DMG_SWITCH_ON_COLOR</key>
-	<string>$(DMG_SWITCH_ON_COLOR)</string>
-	<key>DMG_FOOTER_COLOR</key>
-	<string>$(DMG_FOOTER_COLOR)</string>
-	<key>DMG_FOOTER_TEXTCOLOR</key>
-	<string>$(DMG_FOOTER_TEXTCOLOR)</string>
-	<key>DMG_CHART_COLOR</key>
-	<string>$(DMG_CHART_COLOR)</string>
-	<key>DMG_CHART_POINT_COLOR</key>
-	<string>$(DMG_CHART_POINT_COLOR)</string>
-	<key>DMG_CALENDAR_MOVEDAY_COLOR</key>
-	<string>$(DMG_CALENDAR_MOVEDAY_COLOR)</string>
-	<key>DMG_CHAT_SENDER_COLOR</key>
-	<string>$(DMG_CHAT_SENDER_COLOR)</string>
-	<key>DMG_CHAT_SENDER_TEXTCOLOR</key>
-	<string>$(DMG_CHAT_SENDER_TEXTCOLOR)</string>
-	<key>DMG_CHAT_RECIPIENT_COLOR</key>
-	<string>$(DMG_CHAT_RECIPIENT_COLOR)</string>
-	<key>DMG_CHAT_RECIPIENT_TEXTCOLOR</key>
-	<string>$(DMG_CHAT_RECIPIENT_TEXTCOLOR)</string>
-	<key>DMG_LOGIN_BACKGROUND_IMAGE</key>
-	<string>$(DMG_LOGIN_BACKGROUND_IMAGE)</string>
-	<key>DMG_MYMOVES_ENABLED</key>
-	<string>$(DMG_MYMOVES_ENABLED)</string>
-	<key>DMG_BODYSCANNING_ENABLED</key>
-	<string>$(DMG_BODYSCANNING_ENABLED)</string>
-	<key>DMG_BODYSCANNING_DEV_APIKEY</key>
-	<string>$(DMG_BODYSCANNING_DEV_APIKEY)</string>
-	<key>DMG_BODYSCANNING_PROD_APIKEY</key>
-	<string>$(DMG_BODYSCANNING_PROD_APIKEY)</string>
 </dict>
 </plist>

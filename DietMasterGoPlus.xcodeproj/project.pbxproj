@@ -7,14 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0064B9CC2B93B8190A12597F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		022A1B8CFCED6C125855D94C /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		057CC0779C9770409801ADC2 /* Pods_N_W_Genetics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DB1A316B346C8207F704751 /* Pods_N_W_Genetics.framework */; };
 		05D8803B6F2C6591197B1F58 /* Pods_SweetStrength.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 865486590A852148ED9A04C2 /* Pods_SweetStrength.framework */; };
-		09A505FE3A286961244C9300 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		09C00E2BE1A7F17E0E63C9F1 /* Pods_XtremeFitness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E886809B204E9459F2D4AC53 /* Pods_XtremeFitness.framework */; };
-		09CCDE7AF74971AB60DFD39A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		09D5CFE36B0F38621A7F3354 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		0E04F3262AABAC6F0068A488 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		0E04F3282AABAC6F0068A488 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
 		0E04F3292AABAC6F0068A488 /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
@@ -556,7 +551,6 @@
 		0E6F913D2A43580A00956F1E /* UIViewController+Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913C2A43580A00956F1E /* UIViewController+Navigation.m */; };
 		0E6F913F2A43C1F500956F1E /* LogDaySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */; };
 		0E6F91412A43D50C00956F1E /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91402A43D50C00956F1E /* UIColor+Extension.swift */; };
-		0E773C885DDC5B4EACF8301A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		0E83C4AC2A4F1EFE001DC6BD /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
 		0E8588DA2A41238400AAB096 /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
 		0E89824F2A33D47600DD7221 /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
@@ -1604,29 +1598,22 @@
 		0EF976F82A85233D0089FC8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		0EF976F92A85233D0089FC8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		0EF976FA2A85233D0089FC8D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		0EF976FB2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FC2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FD2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FE2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		0EF976FF2A85233D0089FC8D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FB2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FC2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FD2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FE2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0EF976FF2A85233D0089FC8D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		0EF9770D2A8523680089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770A2A8523650089FC8D /* Assets.xcassets */; };
 		0EF9770E2A85236D0089FC8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770B2A8523650089FC8D /* GoogleService-Info.plist */; };
 		0EF9770F2A85262D0089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C722A56CE4900D8E7E2 /* Assets.xcassets */; };
-		102326CC5C0A9D737F2A8B15 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		111B526553778A85CE2D7BC0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		17BB8FA288899D5974007FDA /* Pods_Horizons_Burn_Zone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F973A617C7103C2F82CB19F /* Pods_Horizons_Burn_Zone.framework */; };
 		18088D8D115E9FFB0DC486B1 /* Pods_MyKetaFit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAB4E3B2AC966E2D01CA5CCF /* Pods_MyKetaFit.framework */; };
 		1A7F47BD83FD14EE262B4CA6 /* Pods_HCFDiet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD25231CB5F39726BC81372 /* Pods_HCFDiet.framework */; };
-		1C447619E42D4908D09EBF2B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		1EEB542BA13D44979C48F979 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		210CDE593E0EEE5DEFFE4CE6 /* Pods_LightOfTheWhirl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8886BFA3A51B24E45F4BAAF /* Pods_LightOfTheWhirl.framework */; };
 		22C5AB1C1717CD39F8ECE1C2 /* Pods_SoarWell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8542ED72934FB6DAD04821D3 /* Pods_SoarWell.framework */; };
 		28BA0944ACEAB6FE1A45046D /* Pods_NVPEatSmart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 671044B5FB80B2B33F4EF832 /* Pods_NVPEatSmart.framework */; };
-		2DF9329B09470370125D374E /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		327ACE6A3B6B1808C4CA32C6 /* Pods_RGH_P4YH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9363B5B0DB65D211A516761E /* Pods_RGH_P4YH.framework */; };
-		3448A0C84B4DB0383710D52A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		344D04E0062B1EF17D26813E /* Pods_DietMasterGoPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B488B5092C0776AE999195E4 /* Pods_DietMasterGoPlus.framework */; };
-		355F17FD1DB705DA96ED1F99 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		37DB646CE4520B84A54A60A1 /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AB7085FD907EE88B8EB910A /* Pods_ReplicaTemplate.framework */; };
 		3A552991C0BB3A2CEA1D5E95 /* Pods_MyMealCoach.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B68C969F0E692DCDF0D76CB /* Pods_MyMealCoach.framework */; };
 		401B63A920B3FC64004453E7 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
@@ -1712,21 +1699,15 @@
 		40E035CA21F1F2A100968755 /* MyMovesDetailHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */; };
 		40E035CB21F1F2A100968755 /* CustomImageFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */; };
 		43D99F9DB643EA5BA07DE375 /* Pods_NexGenFitness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB45ACC18C68A7A5DDDB6263 /* Pods_NexGenFitness.framework */; };
-		469D03EB910BF0D9A620604A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		4800A7882AF75CCC4E7F14A8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		4867C9D7C485217D2BD19984 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		4C27831E1D550BC29F553871 /* Pods_GOMealPlans.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1494C4E5411FA8EB0F0752B0 /* Pods_GOMealPlans.framework */; };
 		4D5CAD6F497F22CE587E48D5 /* Pods_UpperhandAthletics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C43368F8CF4781EA085B0576 /* Pods_UpperhandAthletics.framework */; };
 		518429FFD7616926DA03BA65 /* Pods_SeeYouHealthy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B87326DC8F87E0E5BEEC84 /* Pods_SeeYouHealthy.framework */; };
 		52EE5D429F1A906A5EEB25BD /* Pods_Fit2Win.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79384E506706430323D63FFD /* Pods_Fit2Win.framework */; };
 		55F4F441FCEECBC0537967E3 /* Pods_Quintessa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F92EDA5DC5ACECE9D03228E /* Pods_Quintessa.framework */; };
-		56ACD5DD37137CA6E7E9DCA2 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		57763D0F70A66FA177716305 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		5788ED5D9B1926A8A42507B4 /* Pods_FitAndPhat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 717D096C8892F10AFB04B0A9 /* Pods_FitAndPhat.framework */; };
 		5A62FF723238D53A69C8B018 /* Pods_Nutrishape.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59FB124CC6B268C45D443116 /* Pods_Nutrishape.framework */; };
 		613FECD9580D2B260BEF445B /* Pods_BodyCompPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C01CB01A7240C8D6862347B9 /* Pods_BodyCompPlus.framework */; };
 		6399B0F94A808F8CE959CA44 /* Pods_Global_Fit_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C94794EFD21C86D8174423 /* Pods_Global_Fit_App.framework */; };
-		647D706731EAE4733DDE146C /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		650208CB250152FA00F412B0 /* PurchaseIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */; };
 		650208CE2501531B00F412B0 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CD2501531A00F412B0 /* IAPHelper.m */; };
 		650208DF250153C300F412B0 /* InAppPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D4250153C300F412B0 /* InAppPurchaseViewController.m */; };
@@ -1761,51 +1742,31 @@
 		65FF4385249885D100583000 /* MyLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4382249885D100583000 /* MyLogTableViewCell.m */; };
 		65FF4386249885D100583000 /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
 		66C92B9376ACF004ECAA0199 /* Pods_ProWeightLoss.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F759D184F740D84D4A9F1814 /* Pods_ProWeightLoss.framework */; };
-		691A0BE46DB6368D69B3D1F6 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		6A1FF65C67A74ABC189C68B9 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		6BDA16102D7CC4F08CC81FCE /* Pods_BEYOND_MOTION_NUTRITION.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F92D24E7E4CC4B111646D1FC /* Pods_BEYOND_MOTION_NUTRITION.framework */; };
-		6CF3FFC0A42040761DA6F930 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		71D1FD92173A31E8B1B0E02D /* Pods_MyNeWeighs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B94447B544D103211DDAEF53 /* Pods_MyNeWeighs.framework */; };
-		724681E6B9541C8273EF7C54 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		739AF3C2C4B042E4223D973C /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		76258FA35E8D6E34433831E9 /* Pods_eMedEats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1270DE54F7FEBAB56FFC523 /* Pods_eMedEats.framework */; };
 		774CE2704C71DF32174413C5 /* Pods_Forte_4Ever.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 414B9240485B71B7D04E94A6 /* Pods_Forte_4Ever.framework */; };
 		79774E99241ADA602C03E02E /* Pods_GOMealsPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F841B90B3576E46FDA31141 /* Pods_GOMealsPlus.framework */; };
-		7F2E7A31287A70F4973CDFDE /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		7F890E0215DD1B1434C4AAC7 /* Pods_JLNutrition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38233849200D9F9AA209C111 /* Pods_JLNutrition.framework */; };
 		7FC3CFD9E75736E06284C782 /* Pods_CustomFit_Chef.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AAE0784CB369DEBAA6FE0E6 /* Pods_CustomFit_Chef.framework */; };
 		8079ACEA15E2054F10DCBF85 /* Pods_2FIT1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE60515175919F83C2BCA396 /* Pods_2FIT1.framework */; };
-		81EB24E8ADE709FF2C9BF757 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		82C45661233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C4565F233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m */; };
 		82C45662233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C45660233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib */; };
 		85895CE1BF0AE748306142BD /* Pods_MicroFit_Go.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BFE69107DC81DFB5B992AA /* Pods_MicroFit_Go.framework */; };
 		88AC8216564C05036E37BFAB /* Pods_HealthyJourneyProApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E69895F75CDF4E7E3DCADBA /* Pods_HealthyJourneyProApp.framework */; };
-		8AA77E8159B5A6F5689F380A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		90E889152AAC350502DB34CD /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9443793DA865DE44FA1F0F7B /* Pods_Metabolic_Testing_Center.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C22A2201DF20564D90A9B711 /* Pods_Metabolic_Testing_Center.framework */; };
-		98E9075EF23B3A23AF73C849 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		9A1AAD8BA8DA155454C999CF /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		9E66F09653D8DEE5855EF8D2 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9ED04BB675B69E8613F767BD /* Pods_TeleDiets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98367A6A8864A2A169C0A47B /* Pods_TeleDiets.framework */; };
 		A249E529B4A08C444AE71625 /* Pods_ZFitStudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A5FC584DF4F9291A61165B /* Pods_ZFitStudio.framework */; };
-		A820B4E51AEBE6770A64E4E3 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		A98BCB5E5A942F9AEB83FC45 /* Pods_RapidFit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA658A463FFD9CC571DF4A82 /* Pods_RapidFit.framework */; };
-		A9C4CEE28410724D64246CD5 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		AA4D99304341CEEEEE3EF8C3 /* Pods_JoyfulWellness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004BD0824C832DAAE73419BA /* Pods_JoyfulWellness.framework */; };
-		AB7711AD5B38A8549691A5A8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		AEB72F4811A197F5096A5571 /* Pods_MedicallyFit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 468BDA5ABA39F68EA3A74425 /* Pods_MedicallyFit.framework */; };
 		AEE51EFD01D2881A73987A7A /* Pods_AyurvedaPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E1C0447C9B4DBDFCB49105 /* Pods_AyurvedaPlus.framework */; };
 		B2119A4A224BA2210020FF5D /* MyMovesListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */; };
 		B2119A4B224BA2210020FF5D /* MyMovesListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */; };
-		B3BC8AB135E4F72D48D99561 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		B467222B685D96D78450EFE6 /* Pods_AStrongLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20BC09E2CBCFD4EEB23DD40D /* Pods_AStrongLife.framework */; };
 		B6192CD5055DB5C8257245BC /* Pods_GETUFIT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4601BCFD3BCF2DD9713A0B69 /* Pods_GETUFIT.framework */; };
 		B639AB4704E33CE8CA634EFF /* Pods_mDiet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE4091479B20BEAD1A6F4F2C /* Pods_mDiet.framework */; };
 		B7449271E16DA8B26341ED77 /* Pods_feedme_smart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AEDBA0192B76F704B6B7E66 /* Pods_feedme_smart.framework */; };
-		BB7B950B990AFE6411ECA416 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BD3E5DE40A96C3A8F4111CB6 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BE13E39D9B75DD8C8F49C6CE /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BE82AFDBC8B4BC15CD7D0566 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BF03854A2AFABE610049A79B /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		BF03854C2AFABE610049A79B /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
 		BF03854D2AFABE610049A79B /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
@@ -5909,13 +5870,13 @@
 		BF6F24CF2AD7405B003041B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		BF6F24D02AD7405B003041B1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		BF6F24D12AD7405B003041B1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		BF6F24D22AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D32AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D42AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D52AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D62AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D72AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BF6F24D82AD7405B003041B1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D22AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D32AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D42AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D52AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D62AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D72AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BF6F24D82AD7405B003041B1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		BF6F24E22AD75478003041B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF6F241E2AD74000003041B1 /* Assets.xcassets */; };
 		BF6F24E32AD755D6003041B1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF6F241F2AD74000003041B1 /* GoogleService-Info.plist */; };
 		BF75CB032D13827500F3179A /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
@@ -7798,52 +7759,52 @@
 		BFA750CA2D552618008ADD7A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		BFA750CB2D552618008ADD7A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		BFA750CC2D552618008ADD7A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		BFA750CD2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750CE2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750CF2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D02D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D12D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D22D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D32D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D42D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D52D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D62D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D72D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D82D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750D92D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750DA2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750DB2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750DC2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750DD2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750DE2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750DF2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E02D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E12D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E22D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E32D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E42D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E52D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E62D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E72D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E82D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750E92D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750EA2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750EB2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750EC2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750ED2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750EE2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750EF2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F02D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F12D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F22D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F32D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F42D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F52D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F62D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F72D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F82D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750F92D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		BFA750FA2D552618008ADD7A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750CD2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750CE2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750CF2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D02D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D12D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D22D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D32D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D42D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D52D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D62D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D72D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D82D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750D92D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750DA2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750DB2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750DC2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750DD2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750DE2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750DF2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E02D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E12D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E22D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E32D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E42D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E52D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E62D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E72D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E82D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750E92D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750EA2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750EB2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750EC2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750ED2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750EE2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750EF2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F02D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F12D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F22D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F32D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F42D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F52D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F62D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F72D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F82D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750F92D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BFA750FA2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		BFA751042D552689008ADD7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFA750192D55255B008ADD7A /* Assets.xcassets */; };
 		BFA751052D5526A1008ADD7A /* eMedEats.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BFA7501A2D55255B008ADD7A /* eMedEats.xcconfig */; };
 		BFA751062D5526AB008ADD7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFA7501B2D55255B008ADD7A /* GoogleService-Info.plist */; };
@@ -10074,18 +10035,10 @@
 		C28A16C1088E787D051891A6 /* Pods_RESHAPE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B60E24780F5024AB4B8BB772 /* Pods_RESHAPE.framework */; };
 		C3E20FD4F3707C9B2ECBA92F /* Pods_VAYDA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50875338B60E03B900504EED /* Pods_VAYDA.framework */; };
 		CB6180DD59CA1A3712DEF0F5 /* Pods_EzDietPlanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073A12D5F0290FDBC4946373 /* Pods_EzDietPlanner.framework */; };
-		CC3C2DFAFB9E38ABD2DE018C /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		CD6778D885ECCAC3ECD90C5D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		CE90CB2C499407717D4A175D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		D3CF66537F3F438CABE7DBAF /* Pods_SlimNation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D8CBBC5BF328AAFA1A25A9 /* Pods_SlimNation.framework */; };
-		D9B47E33FDD12182850AD75B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		D9BC158A98415FB751684271 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		E0E1B7E72931CC567C24FC0A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		E0E37BD3DCD87F225ECA21BA /* Pods_YOUtrition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ACCA5A680989E869035C75D /* Pods_YOUtrition.framework */; };
 		E3365CC2F682358CAE43FC04 /* Pods_DietAlpha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98D95BAB35B7B71455488CA4 /* Pods_DietAlpha.framework */; };
 		E33A64837F5A5B08C09BD6AD /* Pods_TRANSFORM_by_Juliette_Wooten.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EF728307DDF00FA425B407 /* Pods_TRANSFORM_by_Juliette_Wooten.framework */; };
-		EABD4D53D026ED0720FF765F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
-		EF0120442F4E3BDF92506790 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		F08A1BB549E7ABC19832118B /* Pods_SuperBodyMethod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E460B370BDA5CB13296EDEFF /* Pods_SuperBodyMethod.framework */; };
 		F2F1E11E6C3514A661252370 /* Pods_W3FN.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E4664146BD37599C600BA5 /* Pods_W3FN.framework */; };
 		F85AAEB6149C7FBD236D9910 /* Pods_FitProComplete.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81A2B028EC1BA323776691B8 /* Pods_FitProComplete.framework */; };
@@ -10455,16 +10408,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BF7B952C2B75522E007EC568 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BF7B96062B757B9E007EC568 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -11012,7 +10955,6 @@
 		5A8EE4755F233D9094E30EA7 /* Pods-SoarWell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoarWell.release.xcconfig"; path = "Target Support Files/Pods-SoarWell/Pods-SoarWell.release.xcconfig"; sourceTree = "<group>"; };
 		5AAE0784CB369DEBAA6FE0E6 /* Pods_CustomFit_Chef.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CustomFit_Chef.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AFACEDF184A41E8930D2320 /* Pods-Fit2Win.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fit2Win.release.xcconfig"; path = "Target Support Files/Pods-Fit2Win/Pods-Fit2Win.release.xcconfig"; sourceTree = "<group>"; };
-		5B0647FBF6BB8C45012C96DA /* Pods-NVP Eat Smart, Live Well.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVP Eat Smart, Live Well.debug.xcconfig"; path = "Target Support Files/Pods-NVP Eat Smart, Live Well/Pods-NVP Eat Smart, Live Well.debug.xcconfig"; sourceTree = "<group>"; };
 		5B687527A0012DA97C197D91 /* Pods-MyMealCoach.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMealCoach.release.xcconfig"; path = "Target Support Files/Pods-MyMealCoach/Pods-MyMealCoach.release.xcconfig"; sourceTree = "<group>"; };
 		5C44E725A560359246FA33AB /* Pods-SuperBodyMethod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperBodyMethod.debug.xcconfig"; path = "Target Support Files/Pods-SuperBodyMethod/Pods-SuperBodyMethod.debug.xcconfig"; sourceTree = "<group>"; };
 		5E0C9B04649669D69A63D1F2 /* Pods-JLNutrition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLNutrition.debug.xcconfig"; path = "Target Support Files/Pods-JLNutrition/Pods-JLNutrition.debug.xcconfig"; sourceTree = "<group>"; };
@@ -11098,7 +11040,6 @@
 		8109EF685B3299D44509C9A5 /* Pods-CustomFit Chef.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomFit Chef.release.xcconfig"; path = "Target Support Files/Pods-CustomFit Chef/Pods-CustomFit Chef.release.xcconfig"; sourceTree = "<group>"; };
 		81A2B028EC1BA323776691B8 /* Pods_FitProComplete.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FitProComplete.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8250E4D3E3A1C8C53E40BB5F /* Pods-GOMealPlans.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GOMealPlans.release.xcconfig"; path = "Target Support Files/Pods-GOMealPlans/Pods-GOMealPlans.release.xcconfig"; sourceTree = "<group>"; };
-		82A75D782766F219C79A0067 /* Pods-NVP Eat Smart, Live Well.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVP Eat Smart, Live Well.release.xcconfig"; path = "Target Support Files/Pods-NVP Eat Smart, Live Well/Pods-NVP Eat Smart, Live Well.release.xcconfig"; sourceTree = "<group>"; };
 		82C4565E233E26D80085A7D8 /* MyMovesVideoPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMovesVideoPlayerViewController.h; sourceTree = "<group>"; };
 		82C4565F233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMovesVideoPlayerViewController.m; sourceTree = "<group>"; };
 		82C45660233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyMovesVideoPlayerViewController.xib; sourceTree = "<group>"; };
@@ -11361,7 +11302,6 @@
 		C43368F8CF4781EA085B0576 /* Pods_UpperhandAthletics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpperhandAthletics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C436B05770F6230267E74AD3 /* Pods-UpperhandAthletics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpperhandAthletics.debug.xcconfig"; path = "Target Support Files/Pods-UpperhandAthletics/Pods-UpperhandAthletics.debug.xcconfig"; sourceTree = "<group>"; };
 		C4BFE69107DC81DFB5B992AA /* Pods_MicroFit_Go.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MicroFit_Go.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C4CFBC0CC6A4BC528492DA6C /* Pods-NVP Eat Smart, Live Well.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVP Eat Smart, Live Well.distribution.xcconfig"; path = "Target Support Files/Pods-NVP Eat Smart, Live Well/Pods-NVP Eat Smart, Live Well.distribution.xcconfig"; sourceTree = "<group>"; };
 		C5E35AE2F6849F8BBB0F0D54 /* Pods-HCFDiet.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HCFDiet.distribution.xcconfig"; path = "Target Support Files/Pods-HCFDiet/Pods-HCFDiet.distribution.xcconfig"; sourceTree = "<group>"; };
 		C62E167C24A866420CD2EC77 /* Pods-ReplicaTemplate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReplicaTemplate.debug.xcconfig"; path = "Target Support Files/Pods-ReplicaTemplate/Pods-ReplicaTemplate.debug.xcconfig"; sourceTree = "<group>"; };
 		C71E922499F82D915396A1FC /* Pods-SeeYouHealthy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeeYouHealthy.release.xcconfig"; path = "Target Support Files/Pods-SeeYouHealthy/Pods-SeeYouHealthy.release.xcconfig"; sourceTree = "<group>"; };
@@ -11466,52 +11406,6 @@
 				0E101C5C2A56CC7300D8E7E2 /* Foundation.framework in Frameworks */,
 				0E101C5D2A56CC7300D8E7E2 /* UIKit.framework in Frameworks */,
 				0E101C5E2A56CC7300D8E7E2 /* CoreGraphics.framework in Frameworks */,
-				724681E6B9541C8273EF7C54 /* BuildFile in Frameworks */,
-				B3BC8AB135E4F72D48D99561 /* BuildFile in Frameworks */,
-				355F17FD1DB705DA96ED1F99 /* BuildFile in Frameworks */,
-				D9BC158A98415FB751684271 /* BuildFile in Frameworks */,
-				09D5CFE36B0F38621A7F3354 /* BuildFile in Frameworks */,
-				CD6778D885ECCAC3ECD90C5D /* BuildFile in Frameworks */,
-				2DF9329B09470370125D374E /* BuildFile in Frameworks */,
-				9A1AAD8BA8DA155454C999CF /* BuildFile in Frameworks */,
-				A9C4CEE28410724D64246CD5 /* BuildFile in Frameworks */,
-				9E66F09653D8DEE5855EF8D2 /* BuildFile in Frameworks */,
-				AB7711AD5B38A8549691A5A8 /* BuildFile in Frameworks */,
-				3448A0C84B4DB0383710D52A /* BuildFile in Frameworks */,
-				6A1FF65C67A74ABC189C68B9 /* BuildFile in Frameworks */,
-				09A505FE3A286961244C9300 /* BuildFile in Frameworks */,
-				A820B4E51AEBE6770A64E4E3 /* BuildFile in Frameworks */,
-				D9B47E33FDD12182850AD75B /* BuildFile in Frameworks */,
-				469D03EB910BF0D9A620604A /* BuildFile in Frameworks */,
-				CE90CB2C499407717D4A175D /* BuildFile in Frameworks */,
-				CC3C2DFAFB9E38ABD2DE018C /* BuildFile in Frameworks */,
-				BE13E39D9B75DD8C8F49C6CE /* BuildFile in Frameworks */,
-				0E773C885DDC5B4EACF8301A /* BuildFile in Frameworks */,
-				022A1B8CFCED6C125855D94C /* BuildFile in Frameworks */,
-				1C447619E42D4908D09EBF2B /* BuildFile in Frameworks */,
-				BB7B950B990AFE6411ECA416 /* BuildFile in Frameworks */,
-				111B526553778A85CE2D7BC0 /* BuildFile in Frameworks */,
-				09CCDE7AF74971AB60DFD39A /* BuildFile in Frameworks */,
-				739AF3C2C4B042E4223D973C /* BuildFile in Frameworks */,
-				7F2E7A31287A70F4973CDFDE /* BuildFile in Frameworks */,
-				647D706731EAE4733DDE146C /* BuildFile in Frameworks */,
-				0064B9CC2B93B8190A12597F /* BuildFile in Frameworks */,
-				90E889152AAC350502DB34CD /* BuildFile in Frameworks */,
-				102326CC5C0A9D737F2A8B15 /* BuildFile in Frameworks */,
-				8AA77E8159B5A6F5689F380A /* BuildFile in Frameworks */,
-				BE82AFDBC8B4BC15CD7D0566 /* BuildFile in Frameworks */,
-				4867C9D7C485217D2BD19984 /* BuildFile in Frameworks */,
-				81EB24E8ADE709FF2C9BF757 /* BuildFile in Frameworks */,
-				EABD4D53D026ED0720FF765F /* BuildFile in Frameworks */,
-				98E9075EF23B3A23AF73C849 /* BuildFile in Frameworks */,
-				56ACD5DD37137CA6E7E9DCA2 /* BuildFile in Frameworks */,
-				57763D0F70A66FA177716305 /* BuildFile in Frameworks */,
-				1EEB542BA13D44979C48F979 /* BuildFile in Frameworks */,
-				E0E1B7E72931CC567C24FC0A /* BuildFile in Frameworks */,
-				691A0BE46DB6368D69B3D1F6 /* BuildFile in Frameworks */,
-				EF0120442F4E3BDF92506790 /* BuildFile in Frameworks */,
-				4800A7882AF75CCC4E7F14A8 /* BuildFile in Frameworks */,
-				BD3E5DE40A96C3A8F4111CB6 /* BuildFile in Frameworks */,
 				37DB646CE4520B84A54A60A1 /* Pods_ReplicaTemplate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11694,11 +11588,11 @@
 				0EF976F82A85233D0089FC8D /* Foundation.framework in Frameworks */,
 				0EF976F92A85233D0089FC8D /* UIKit.framework in Frameworks */,
 				0EF976FA2A85233D0089FC8D /* CoreGraphics.framework in Frameworks */,
-				0EF976FB2A85233D0089FC8D /* BuildFile in Frameworks */,
-				0EF976FC2A85233D0089FC8D /* BuildFile in Frameworks */,
-				0EF976FD2A85233D0089FC8D /* BuildFile in Frameworks */,
-				0EF976FE2A85233D0089FC8D /* BuildFile in Frameworks */,
-				0EF976FF2A85233D0089FC8D /* BuildFile in Frameworks */,
+				0EF976FB2A85233D0089FC8D /* (null) in Frameworks */,
+				0EF976FC2A85233D0089FC8D /* (null) in Frameworks */,
+				0EF976FD2A85233D0089FC8D /* (null) in Frameworks */,
+				0EF976FE2A85233D0089FC8D /* (null) in Frameworks */,
+				0EF976FF2A85233D0089FC8D /* (null) in Frameworks */,
 				AEB72F4811A197F5096A5571 /* Pods_MedicallyFit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11725,7 +11619,6 @@
 				401B65B220B3FC64004453E7 /* Foundation.framework in Frameworks */,
 				401B65B320B3FC64004453E7 /* UIKit.framework in Frameworks */,
 				401B65B420B3FC64004453E7 /* CoreGraphics.framework in Frameworks */,
-				6CF3FFC0A42040761DA6F930 /* BuildFile in Frameworks */,
 				344D04E0062B1EF17D26813E /* Pods_DietMasterGoPlus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -12350,13 +12243,13 @@
 				BF6F24CF2AD7405B003041B1 /* Foundation.framework in Frameworks */,
 				BF6F24D02AD7405B003041B1 /* UIKit.framework in Frameworks */,
 				BF6F24D12AD7405B003041B1 /* CoreGraphics.framework in Frameworks */,
-				BF6F24D22AD7405B003041B1 /* BuildFile in Frameworks */,
-				BF6F24D32AD7405B003041B1 /* BuildFile in Frameworks */,
-				BF6F24D42AD7405B003041B1 /* BuildFile in Frameworks */,
-				BF6F24D52AD7405B003041B1 /* BuildFile in Frameworks */,
-				BF6F24D62AD7405B003041B1 /* BuildFile in Frameworks */,
-				BF6F24D72AD7405B003041B1 /* BuildFile in Frameworks */,
-				BF6F24D82AD7405B003041B1 /* BuildFile in Frameworks */,
+				BF6F24D22AD7405B003041B1 /* (null) in Frameworks */,
+				BF6F24D32AD7405B003041B1 /* (null) in Frameworks */,
+				BF6F24D42AD7405B003041B1 /* (null) in Frameworks */,
+				BF6F24D52AD7405B003041B1 /* (null) in Frameworks */,
+				BF6F24D62AD7405B003041B1 /* (null) in Frameworks */,
+				BF6F24D72AD7405B003041B1 /* (null) in Frameworks */,
+				BF6F24D82AD7405B003041B1 /* (null) in Frameworks */,
 				9ED04BB675B69E8613F767BD /* Pods_TeleDiets.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -12643,52 +12536,52 @@
 				BFA750CA2D552618008ADD7A /* Foundation.framework in Frameworks */,
 				BFA750CB2D552618008ADD7A /* UIKit.framework in Frameworks */,
 				BFA750CC2D552618008ADD7A /* CoreGraphics.framework in Frameworks */,
-				BFA750CD2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750CE2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750CF2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D02D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D12D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D22D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D32D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D42D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D52D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D62D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D72D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D82D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750D92D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750DA2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750DB2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750DC2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750DD2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750DE2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750DF2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E02D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E12D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E22D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E32D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E42D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E52D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E62D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E72D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E82D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750E92D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750EA2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750EB2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750EC2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750ED2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750EE2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750EF2D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F02D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F12D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F22D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F32D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F42D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F52D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F62D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F72D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F82D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750F92D552618008ADD7A /* BuildFile in Frameworks */,
-				BFA750FA2D552618008ADD7A /* BuildFile in Frameworks */,
+				BFA750CD2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750CE2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750CF2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D02D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D12D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D22D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D32D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D42D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D52D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D62D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D72D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D82D552618008ADD7A /* (null) in Frameworks */,
+				BFA750D92D552618008ADD7A /* (null) in Frameworks */,
+				BFA750DA2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750DB2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750DC2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750DD2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750DE2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750DF2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E02D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E12D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E22D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E32D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E42D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E52D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E62D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E72D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E82D552618008ADD7A /* (null) in Frameworks */,
+				BFA750E92D552618008ADD7A /* (null) in Frameworks */,
+				BFA750EA2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750EB2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750EC2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750ED2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750EE2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750EF2D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F02D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F12D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F22D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F32D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F42D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F52D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F62D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F72D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F82D552618008ADD7A /* (null) in Frameworks */,
+				BFA750F92D552618008ADD7A /* (null) in Frameworks */,
+				BFA750FA2D552618008ADD7A /* (null) in Frameworks */,
 				76258FA35E8D6E34433831E9 /* Pods_eMedEats.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13205,9 +13098,6 @@
 				69462B21286F8C4D63E8C416 /* Pods-Fit2Win.debug.xcconfig */,
 				5AFACEDF184A41E8930D2320 /* Pods-Fit2Win.release.xcconfig */,
 				FF5C98731093D41240459EE8 /* Pods-Fit2Win.distribution.xcconfig */,
-				5B0647FBF6BB8C45012C96DA /* Pods-NVP Eat Smart, Live Well.debug.xcconfig */,
-				82A75D782766F219C79A0067 /* Pods-NVP Eat Smart, Live Well.release.xcconfig */,
-				C4CFBC0CC6A4BC528492DA6C /* Pods-NVP Eat Smart, Live Well.distribution.xcconfig */,
 				EAB33035980C57CE2E1F31A2 /* Pods-NVPEatSmart.debug.xcconfig */,
 				B8BF3E046BC036B338871B70 /* Pods-NVPEatSmart.release.xcconfig */,
 				839ACA3A5F0C6B6AFA7B94F1 /* Pods-NVPEatSmart.distribution.xcconfig */,
@@ -13908,7 +13798,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				0E101C6C2A56CE4900D8E7E2 /* Configurations */,
@@ -14739,7 +14629,6 @@
 				0E04F3252AABAC6F0068A488 /* Resources */,
 				0E04F3572AABAC6F0068A488 /* Sources */,
 				0E04F3C12AABAC6F0068A488 /* Frameworks */,
-				0E04F3DC2AABAC6F0068A488 /* ShellScript */,
 				0E04F3DB2AABAC6F0068A488 /* Embed Frameworks */,
 				0E04F3DD2AABAC6F0068A488 /* [CP] Embed Pods Frameworks */,
 			);
@@ -14761,7 +14650,6 @@
 				0E101BE12A56CC7300D8E7E2 /* Sources */,
 				0E101C4B2A56CC7300D8E7E2 /* Frameworks */,
 				0E101C602A56CC7300D8E7E2 /* Embed Frameworks */,
-				0E101C612A56CC7300D8E7E2 /* ShellScript */,
 				0E101C622A56CC7300D8E7E2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14782,7 +14670,6 @@
 				0E101CBA2A56D5B700D8E7E2 /* Sources */,
 				0E101D242A56D5B700D8E7E2 /* Frameworks */,
 				0E101D392A56D5B700D8E7E2 /* Embed Frameworks */,
-				0E101D3A2A56D5B700D8E7E2 /* ShellScript */,
 				0E101D3B2A56D5B700D8E7E2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14803,7 +14690,6 @@
 				0EE35D472A7026FF00019AB5 /* Sources */,
 				0EE35DB12A7026FF00019AB5 /* Frameworks */,
 				0EE35DCA2A7026FF00019AB5 /* Embed Frameworks */,
-				0EE35DCB2A7026FF00019AB5 /* ShellScript */,
 				0EE35DCC2A7026FF00019AB5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14824,7 +14710,6 @@
 				0EF135B22A5749E10089B4FD /* Sources */,
 				0EF1361C2A5749E10089B4FD /* Frameworks */,
 				0EF136322A5749E10089B4FD /* Embed Frameworks */,
-				0EF136332A5749E10089B4FD /* ShellScript */,
 				0EF136342A5749E10089B4FD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14845,7 +14730,6 @@
 				0EF1367A2A575DF80089B4FD /* Sources */,
 				0EF136E42A575DF80089B4FD /* Frameworks */,
 				0EF136FB2A575DF80089B4FD /* Embed Frameworks */,
-				0EF136FC2A575DF80089B4FD /* ShellScript */,
 				0EF136FD2A575DF80089B4FD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14866,7 +14750,6 @@
 				0EF137392A5760390089B4FD /* Sources */,
 				0EF137A32A5760390089B4FD /* Frameworks */,
 				0EF137BB2A5760390089B4FD /* Embed Frameworks */,
-				0EF137BC2A5760390089B4FD /* ShellScript */,
 				0EF137BD2A5760390089B4FD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14887,7 +14770,6 @@
 				0EF975B72A8522810089FC8D /* Sources */,
 				0EF976212A8522810089FC8D /* Frameworks */,
 				0EF9763A2A8522810089FC8D /* Embed Frameworks */,
-				0EF9763B2A8522810089FC8D /* ShellScript */,
 				0EF9763C2A8522810089FC8D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14908,7 +14790,6 @@
 				0EF9767D2A85233D0089FC8D /* Sources */,
 				0EF976E72A85233D0089FC8D /* Frameworks */,
 				0EF977002A85233D0089FC8D /* Embed Frameworks */,
-				0EF977012A85233D0089FC8D /* ShellScript */,
 				0EF977022A85233D0089FC8D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14929,7 +14810,6 @@
 				401B646D20B3FC64004453E7 /* Sources */,
 				401B659720B3FC64004453E7 /* Frameworks */,
 				656D949424B9363B001DE651 /* Embed Frameworks */,
-				658D503D24BCD6B30022811A /* ShellScript */,
 				42E87FD247D3CE1545C14BBE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14950,7 +14830,6 @@
 				BF03857C2AFABE610049A79B /* Sources */,
 				BF0385E62AFABE610049A79B /* Frameworks */,
 				BF0386042AFABE610049A79B /* Embed Frameworks */,
-				BF0386052AFABE610049A79B /* ShellScript */,
 				BF0386062AFABE610049A79B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14971,7 +14850,6 @@
 				BF130D752C7CF08400EA978D /* Sources */,
 				BF130DDF2C7CF08400EA978D /* Frameworks */,
 				BF130E162C7CF08400EA978D /* Embed Frameworks */,
-				BF130E172C7CF08400EA978D /* ShellScript */,
 				BF130E182C7CF08400EA978D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -14992,7 +14870,6 @@
 				BF18C89F2CF1053B00C5437D /* Sources */,
 				BF18C9092CF1053B00C5437D /* Frameworks */,
 				BF18C9472CF1053B00C5437D /* Embed Frameworks */,
-				BF18C9482CF1053B00C5437D /* ShellScript */,
 				BF18C9492CF1053B00C5437D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15013,7 +14890,6 @@
 				BF1AE3D82BC9923D009F7BF5 /* Sources */,
 				BF1AE4422BC9923D009F7BF5 /* Frameworks */,
 				BF1AE4722BC9923D009F7BF5 /* Embed Frameworks */,
-				BF1AE4732BC9923D009F7BF5 /* ShellScript */,
 				BF1AE4742BC9923D009F7BF5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15034,7 +14910,6 @@
 				BF2809CE2C8F5CCE00884D6E /* Sources */,
 				BF280A382C8F5CCE00884D6E /* Frameworks */,
 				BF280A712C8F5CCE00884D6E /* Embed Frameworks */,
-				BF280A722C8F5CCE00884D6E /* ShellScript */,
 				BF280A732C8F5CCE00884D6E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15055,7 +14930,6 @@
 				BF2B03B52C47045E0046955E /* Sources */,
 				BF2B041F2C47045E0046955E /* Frameworks */,
 				BF2B04542C47045E0046955E /* Embed Frameworks */,
-				BF2B04552C47045E0046955E /* ShellScript */,
 				BF2B04562C47045E0046955E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15076,7 +14950,6 @@
 				BF34CD242BD3026700090D1A /* Sources */,
 				BF34CD8E2BD3026700090D1A /* Frameworks */,
 				BF34CDBF2BD3026700090D1A /* Embed Frameworks */,
-				BF34CDC02BD3026700090D1A /* ShellScript */,
 				BF34CDC12BD3026700090D1A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15097,7 +14970,6 @@
 				BF3CC00A2B2B8C77004493C0 /* Sources */,
 				BF3CC0742B2B8C77004493C0 /* Frameworks */,
 				BF3CC0972B2B8C77004493C0 /* Embed Frameworks */,
-				BF3CC0982B2B8C77004493C0 /* ShellScript */,
 				BF3CC0992B2B8C77004493C0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15118,7 +14990,6 @@
 				BF3CC0DC2B2BA768004493C0 /* Sources */,
 				BF3CC1462B2BA768004493C0 /* Frameworks */,
 				BF3CC16A2B2BA768004493C0 /* Embed Frameworks */,
-				BF3CC16B2B2BA768004493C0 /* ShellScript */,
 				BF3CC16C2B2BA768004493C0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15139,7 +15010,6 @@
 				BF3CC1AF2B2CD9ED004493C0 /* Sources */,
 				BF3CC2192B2CD9ED004493C0 /* Frameworks */,
 				BF3CC23E2B2CD9ED004493C0 /* Embed Frameworks */,
-				BF3CC23F2B2CD9ED004493C0 /* ShellScript */,
 				BF3CC2402B2CD9ED004493C0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15160,7 +15030,6 @@
 				BF3D05F62CC1601F00F0473F /* Sources */,
 				BF3D06602CC1601F00F0473F /* Frameworks */,
 				BF3D069D2CC1601F00F0473F /* Embed Frameworks */,
-				BF3D069E2CC1601F00F0473F /* ShellScript */,
 				BF3D069F2CC1601F00F0473F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15181,7 +15050,6 @@
 				BF3D3ABD2B14E23F0029C30A /* Sources */,
 				BF3D3B272B14E23F0029C30A /* Frameworks */,
 				BF3D3B482B14E23F0029C30A /* Embed Frameworks */,
-				BF3D3B492B14E23F0029C30A /* ShellScript */,
 				BF3D3B4A2B14E23F0029C30A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15202,7 +15070,6 @@
 				BF3D3B8D2B14FA1F0029C30A /* Sources */,
 				BF3D3BF72B14FA1F0029C30A /* Frameworks */,
 				BF3D3C182B14FA1F0029C30A /* Embed Frameworks */,
-				BF3D3C192B14FA1F0029C30A /* ShellScript */,
 				BF3D3C1A2B14FA1F0029C30A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15223,7 +15090,6 @@
 				BF3FD0A42D3ECCC200F00CCA /* Sources */,
 				BF3FD10E2D3ECCC200F00CCA /* Frameworks */,
 				BF3FD1502D3ECCC200F00CCA /* Embed Frameworks */,
-				BF3FD1512D3ECCC200F00CCA /* ShellScript */,
 				BF3FD1522D3ECCC200F00CCA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15244,7 +15110,6 @@
 				BF3FD1982D4BE9C200F00CCA /* Sources */,
 				BF3FD2022D4BE9C200F00CCA /* Frameworks */,
 				BF3FD2432D4BE9C200F00CCA /* Embed Frameworks */,
-				BF3FD2442D4BE9C200F00CCA /* ShellScript */,
 				BF3FD2452D4BE9C200F00CCA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15265,7 +15130,6 @@
 				BF5BBAF92BA0E0650090AE2F /* Sources */,
 				BF5BBB632BA0E0650090AE2F /* Frameworks */,
 				BF5BBB912BA0E0650090AE2F /* Embed Frameworks */,
-				BF5BBB922BA0E0650090AE2F /* ShellScript */,
 				BF5BBB932BA0E0650090AE2F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15286,7 +15150,6 @@
 				BF5BBBD62BA21AD00090AE2F /* Sources */,
 				BF5BBC402BA21AD00090AE2F /* Frameworks */,
 				BF5BBC6F2BA21AD00090AE2F /* Embed Frameworks */,
-				BF5BBC702BA21AD00090AE2F /* ShellScript */,
 				BF5BBC712BA21AD00090AE2F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15307,7 +15170,6 @@
 				BF5BBCB42BAB68F80090AE2F /* Sources */,
 				BF5BBD1E2BAB68F80090AE2F /* Frameworks */,
 				BF5BBD4E2BAB68F80090AE2F /* Embed Frameworks */,
-				BF5BBD4F2BAB68F80090AE2F /* ShellScript */,
 				BF5BBD502BAB68F80090AE2F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15328,7 +15190,6 @@
 				BF5BEF8C2C921CDE00785B7A /* Sources */,
 				BF5BEFF62C921CDE00785B7A /* Frameworks */,
 				BF5BF02F2C921CDE00785B7A /* Embed Frameworks */,
-				BF5BF0302C921CDE00785B7A /* ShellScript */,
 				BF5BF0312C921CDE00785B7A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15349,7 +15210,6 @@
 				BF5CAB962AE1C4F800FAD555 /* Sources */,
 				BF5CAC002AE1C4F800FAD555 /* Frameworks */,
 				BF5CAC1C2AE1C4F800FAD555 /* Embed Frameworks */,
-				BF5CAC1D2AE1C4F800FAD555 /* ShellScript */,
 				BF5CAC1E2AE1C4F800FAD555 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15370,7 +15230,6 @@
 				BF5F204A2D0CA854001B75BF /* Sources */,
 				BF5F20B42D0CA854001B75BF /* Frameworks */,
 				BF5F20F52D0CA854001B75BF /* Embed Frameworks */,
-				BF5F20F62D0CA854001B75BF /* ShellScript */,
 				BF5F20F72D0CA854001B75BF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15391,7 +15250,6 @@
 				BF66ABDF2BE1995B00BE0170 /* Sources */,
 				BF66AC492BE1995B00BE0170 /* Frameworks */,
 				BF66AC7B2BE1995B00BE0170 /* Embed Frameworks */,
-				BF66AC7C2BE1995B00BE0170 /* ShellScript */,
 				BF66AC7D2BE1995B00BE0170 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15412,7 +15270,6 @@
 				BF6969A52CBDBA0800544418 /* Sources */,
 				BF696A0F2CBDBA0800544418 /* Frameworks */,
 				BF696A4B2CBDBA0800544418 /* Embed Frameworks */,
-				BF696A4C2CBDBA0800544418 /* ShellScript */,
 				BF696A4D2CBDBA0800544418 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15433,7 +15290,6 @@
 				BF6F24542AD7405B003041B1 /* Sources */,
 				BF6F24BE2AD7405B003041B1 /* Frameworks */,
 				BF6F24D92AD7405B003041B1 /* Embed Frameworks */,
-				BF6F24DA2AD7405B003041B1 /* ShellScript */,
 				BF6F24DB2AD7405B003041B1 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15454,7 +15310,6 @@
 				BF75CB352D13827500F3179A /* Sources */,
 				BF75CB9F2D13827500F3179A /* Frameworks */,
 				BF75CBE12D13827500F3179A /* Embed Frameworks */,
-				BF75CBE22D13827500F3179A /* ShellScript */,
 				BF75CBE32D13827500F3179A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15475,7 +15330,6 @@
 				BF7B93C02B71740A007EC568 /* Sources */,
 				BF7B942A2B71740A007EC568 /* Frameworks */,
 				BF7B94532B71740A007EC568 /* Embed Frameworks */,
-				BF7B94542B71740A007EC568 /* ShellScript */,
 				BF7B94552B71740A007EC568 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15496,7 +15350,6 @@
 				BF7B94982B75522E007EC568 /* Sources */,
 				BF7B95022B75522E007EC568 /* Frameworks */,
 				BF7B952C2B75522E007EC568 /* Embed Frameworks */,
-				BF7B952D2B75522E007EC568 /* ShellScript */,
 				BF7B952E2B75522E007EC568 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15516,8 +15369,6 @@
 				BF7B953E2B757B9E007EC568 /* Resources */,
 				BF7B95712B757B9E007EC568 /* Sources */,
 				BF7B95DB2B757B9E007EC568 /* Frameworks */,
-				BF7B96062B757B9E007EC568 /* Embed Frameworks */,
-				BF7B96072B757B9E007EC568 /* ShellScript */,
 				BF7B96082B757B9E007EC568 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15538,7 +15389,6 @@
 				BF8680692B3F5FFF00C2ECAB /* Sources */,
 				BF8680D32B3F5FFF00C2ECAB /* Frameworks */,
 				BF8680F92B3F5FFF00C2ECAB /* Embed Frameworks */,
-				BF8680FA2B3F5FFF00C2ECAB /* ShellScript */,
 				BF8680FB2B3F5FFF00C2ECAB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15559,7 +15409,6 @@
 				BF86FB892C88D07300C7E816 /* Sources */,
 				BF86FBF32C88D07300C7E816 /* Frameworks */,
 				BF86FC2B2C88D07300C7E816 /* Embed Frameworks */,
-				BF86FC2C2C88D07300C7E816 /* ShellScript */,
 				BF86FC2D2C88D07300C7E816 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15580,7 +15429,6 @@
 				BF8787BC2C18E34A0068E8BA /* Sources */,
 				BF8788262C18E34A0068E8BA /* Frameworks */,
 				BF8788592C18E34A0068E8BA /* Embed Frameworks */,
-				BF87885A2C18E34A0068E8BA /* ShellScript */,
 				BF87885B2C18E34A0068E8BA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15601,7 +15449,6 @@
 				BF87889E2C2211810068E8BA /* Sources */,
 				BF8789082C2211810068E8BA /* Frameworks */,
 				BF87893C2C2211810068E8BA /* Embed Frameworks */,
-				BF87893D2C2211810068E8BA /* ShellScript */,
 				BF87893E2C2211810068E8BA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15622,7 +15469,6 @@
 				BF8E9BD82C4C3C8F0073AEB6 /* Sources */,
 				BF8E9C422C4C3C8F0073AEB6 /* Frameworks */,
 				BF8E9C782C4C3C8F0073AEB6 /* Embed Frameworks */,
-				BF8E9C792C4C3C8F0073AEB6 /* ShellScript */,
 				BF8E9C7A2C4C3C8F0073AEB6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15643,7 +15489,6 @@
 				BF9A770E2D039D660028C17C /* Sources */,
 				BF9A77782D039D660028C17C /* Frameworks */,
 				BF9A77B82D039D660028C17C /* Embed Frameworks */,
-				BF9A77B92D039D660028C17C /* ShellScript */,
 				BF9A77BA2D039D660028C17C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15664,7 +15509,6 @@
 				BFA750502D552618008ADD7A /* Sources */,
 				BFA750BA2D552618008ADD7A /* Frameworks */,
 				BFA750FB2D552618008ADD7A /* Embed Frameworks */,
-				BFA750FC2D552618008ADD7A /* ShellScript */,
 				BFA750FD2D552618008ADD7A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15685,7 +15529,6 @@
 				BFA93FEF2B7D44F7001C3D48 /* Sources */,
 				BFA940592B7D44F7001C3D48 /* Frameworks */,
 				BFA940852B7D44F7001C3D48 /* Embed Frameworks */,
-				BFA940862B7D44F7001C3D48 /* ShellScript */,
 				BFA940872B7D44F7001C3D48 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15706,7 +15549,6 @@
 				BFA940CA2B7E9ECA001C3D48 /* Sources */,
 				BFA941342B7E9ECA001C3D48 /* Frameworks */,
 				BFA941612B7E9ECA001C3D48 /* Embed Frameworks */,
-				BFA941622B7E9ECA001C3D48 /* ShellScript */,
 				BFA941632B7E9ECA001C3D48 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15727,7 +15569,6 @@
 				BFA941AC2B851999001C3D48 /* Sources */,
 				BFA942162B851999001C3D48 /* Frameworks */,
 				BFA942442B851999001C3D48 /* Embed Frameworks */,
-				BFA942452B851999001C3D48 /* ShellScript */,
 				BFA942462B851999001C3D48 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15748,7 +15589,6 @@
 				BFB3C3D62AF55CF900F2CFA2 /* Sources */,
 				BFB3C4402AF55CF900F2CFA2 /* Frameworks */,
 				BFB3C45D2AF55CF900F2CFA2 /* Embed Frameworks */,
-				BFB3C45E2AF55CF900F2CFA2 /* ShellScript */,
 				BFB3C45F2AF55CF900F2CFA2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15769,7 +15609,6 @@
 				BFBFB1F02B6C3B0E0094D2CB /* Sources */,
 				BFBFB25A2B6C3B0E0094D2CB /* Frameworks */,
 				BFBFB2822B6C3B0E0094D2CB /* Embed Frameworks */,
-				BFBFB2832B6C3B0E0094D2CB /* ShellScript */,
 				BFBFB2842B6C3B0E0094D2CB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15790,7 +15629,6 @@
 				BFCAB92D2D020FDA00716996 /* Sources */,
 				BFCAB9972D020FDA00716996 /* Frameworks */,
 				BFCAB9D62D020FDA00716996 /* Embed Frameworks */,
-				BFCAB9D72D020FDA00716996 /* ShellScript */,
 				BFCAB9D82D020FDA00716996 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15811,7 +15649,6 @@
 				BFD457272B17AFD500AB2E40 /* Sources */,
 				BFD457912B17AFD500AB2E40 /* Frameworks */,
 				BFD457B42B17AFD500AB2E40 /* Embed Frameworks */,
-				BFD457B52B17AFD500AB2E40 /* ShellScript */,
 				BFD457B62B17AFD500AB2E40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15832,7 +15669,6 @@
 				BFE14BBF2B61A31F00667F29 /* Sources */,
 				BFE14C292B61A31F00667F29 /* Frameworks */,
 				BFE14C512B61A31F00667F29 /* Embed Frameworks */,
-				BFE14C522B61A31F00667F29 /* ShellScript */,
 				BFE14C532B61A31F00667F29 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15853,7 +15689,6 @@
 				BFEA6CDA2C9B319100C9E1CB /* Sources */,
 				BFEA6D442C9B319100C9E1CB /* Frameworks */,
 				BFEA6D7F2C9B319100C9E1CB /* Embed Frameworks */,
-				BFEA6D802C9B319100C9E1CB /* ShellScript */,
 				BFEA6D812C9B319100C9E1CB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15874,7 +15709,6 @@
 				BFF29C212B586AA10012223C /* Sources */,
 				BFF29C8B2B586AA10012223C /* Frameworks */,
 				BFF29CB22B586AA10012223C /* Embed Frameworks */,
-				BFF29CB32B586AA10012223C /* ShellScript */,
 				BFF29CB42B586AA10012223C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15895,7 +15729,6 @@
 				BFF993C82B0D27970064240D /* Sources */,
 				BFF994322B0D27970064240D /* Frameworks */,
 				BFF994512B0D27970064240D /* Embed Frameworks */,
-				BFF994522B0D27970064240D /* ShellScript */,
 				BFF994532B0D27970064240D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15916,7 +15749,6 @@
 				BFF9949A2B0E73A90064240D /* Sources */,
 				BFF995042B0E73A90064240D /* Frameworks */,
 				BFF995242B0E73A90064240D /* Embed Frameworks */,
-				BFF995252B0E73A90064240D /* ShellScript */,
 				BFF995262B0E73A90064240D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15937,7 +15769,6 @@
 				BFFC10552AC612950011444E /* Sources */,
 				BFFC10BF2AC612950011444E /* Frameworks */,
 				BFFC10DA2AC612950011444E /* Embed Frameworks */,
-				BFFC10DB2AC612950011444E /* ShellScript */,
 				BFFC10DC2AC612950011444E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -15987,7 +15818,7 @@
 				ja,
 				Base,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -19273,25 +19104,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0E04F3DC2AABAC6F0068A488 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		0E04F3DD2AABAC6F0068A488 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19330,25 +19142,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		0E101C612A56CC7300D8E7E2 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		0E101C622A56CC7300D8E7E2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19389,25 +19182,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0E101D3A2A56D5B700D8E7E2 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		0E101D3B2A56D5B700D8E7E2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19446,25 +19220,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		0EE35DCB2A7026FF00019AB5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		0EE35DCC2A7026FF00019AB5 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19505,25 +19260,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0EF136332A5749E10089B4FD /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		0EF136342A5749E10089B4FD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19562,25 +19298,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		0EF136FC2A575DF80089B4FD /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		0EF136FD2A575DF80089B4FD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19621,25 +19338,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0EF137BC2A5760390089B4FD /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		0EF137BD2A5760390089B4FD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19679,25 +19377,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0EF9763B2A8522810089FC8D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		0EF9763C2A8522810089FC8D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19736,25 +19415,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		0EF977012A85233D0089FC8D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		0EF977022A85233D0089FC8D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19812,25 +19472,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		658D503D24BCD6B30022811A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF0385482AFABE610049A79B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19852,25 +19493,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF0386052AFABE610049A79B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF0386062AFABE610049A79B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19911,25 +19533,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF130E172C7CF08400EA978D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF130E182C7CF08400EA978D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19968,25 +19571,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF18C9482CF1053B00C5437D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF18C9492CF1053B00C5437D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20027,25 +19611,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF1AE4732BC9923D009F7BF5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF1AE4742BC9923D009F7BF5 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20084,25 +19649,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF280A722C8F5CCE00884D6E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF280A732C8F5CCE00884D6E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20143,25 +19689,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF2B04552C47045E0046955E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF2B04562C47045E0046955E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20200,25 +19727,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF34CDC02BD3026700090D1A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF34CDC12BD3026700090D1A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20259,25 +19767,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF3CC0982B2B8C77004493C0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF3CC0992B2B8C77004493C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20316,25 +19805,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF3CC16B2B2BA768004493C0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF3CC16C2B2BA768004493C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20375,25 +19845,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF3CC23F2B2CD9ED004493C0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF3CC2402B2CD9ED004493C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20432,25 +19883,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF3D069E2CC1601F00F0473F /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF3D069F2CC1601F00F0473F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20491,25 +19923,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF3D3B492B14E23F0029C30A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF3D3B4A2B14E23F0029C30A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20548,25 +19961,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF3D3C192B14FA1F0029C30A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF3D3C1A2B14FA1F0029C30A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20607,25 +20001,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF3FD1512D3ECCC200F00CCA /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF3FD1522D3ECCC200F00CCA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20664,25 +20039,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF3FD2442D4BE9C200F00CCA /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF3FD2452D4BE9C200F00CCA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20723,25 +20079,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF5BBB922BA0E0650090AE2F /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF5BBB932BA0E0650090AE2F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20780,25 +20117,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF5BBC702BA21AD00090AE2F /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF5BBC712BA21AD00090AE2F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20839,25 +20157,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF5BBD4F2BAB68F80090AE2F /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF5BBD502BAB68F80090AE2F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -20896,25 +20195,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF5BF0302C921CDE00785B7A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF5BF0312C921CDE00785B7A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20955,25 +20235,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF5CAC1D2AE1C4F800FAD555 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF5CAC1E2AE1C4F800FAD555 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21012,25 +20273,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF5F20F62D0CA854001B75BF /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF5F20F72D0CA854001B75BF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21071,25 +20313,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF66AC7C2BE1995B00BE0170 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF66AC7D2BE1995B00BE0170 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21128,25 +20351,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF696A4C2CBDBA0800544418 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF696A4D2CBDBA0800544418 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21187,25 +20391,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF6F24DA2AD7405B003041B1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF6F24DB2AD7405B003041B1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21244,25 +20429,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF75CBE22D13827500F3179A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF75CBE32D13827500F3179A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21303,25 +20469,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF7B94542B71740A007EC568 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF7B94552B71740A007EC568 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21360,25 +20507,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF7B952D2B75522E007EC568 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF7B952E2B75522E007EC568 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21419,25 +20547,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF7B96072B757B9E007EC568 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF7B96082B757B9E007EC568 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21476,25 +20585,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF8680FA2B3F5FFF00C2ECAB /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF8680FB2B3F5FFF00C2ECAB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21535,25 +20625,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF86FC2C2C88D07300C7E816 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF86FC2D2C88D07300C7E816 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21592,25 +20663,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF87885A2C18E34A0068E8BA /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF87885B2C18E34A0068E8BA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21651,25 +20703,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF87893D2C2211810068E8BA /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF87893E2C2211810068E8BA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21708,25 +20741,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BF8E9C792C4C3C8F0073AEB6 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BF8E9C7A2C4C3C8F0073AEB6 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21767,25 +20781,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF9A77B92D039D660028C17C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BF9A77BA2D039D660028C17C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21824,25 +20819,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BFA750FC2D552618008ADD7A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BFA750FD2D552618008ADD7A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21883,25 +20859,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BFA940862B7D44F7001C3D48 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BFA940872B7D44F7001C3D48 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -21940,25 +20897,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BFA941622B7E9ECA001C3D48 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BFA941632B7E9ECA001C3D48 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -21999,25 +20937,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BFA942452B851999001C3D48 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BFA942462B851999001C3D48 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -22056,25 +20975,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BFB3C45E2AF55CF900F2CFA2 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BFB3C45F2AF55CF900F2CFA2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -22115,25 +21015,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BFBFB2832B6C3B0E0094D2CB /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BFBFB2842B6C3B0E0094D2CB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -22172,25 +21053,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BFCAB9D72D020FDA00716996 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BFCAB9D82D020FDA00716996 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -22231,25 +21093,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BFD457B52B17AFD500AB2E40 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BFD457B62B17AFD500AB2E40 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -22288,25 +21131,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BFE14C522B61A31F00667F29 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BFE14C532B61A31F00667F29 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -22347,25 +21171,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BFEA6D802C9B319100C9E1CB /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BFEA6D812C9B319100C9E1CB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -22404,25 +21209,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BFF29CB32B586AA10012223C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BFF29CB42B586AA10012223C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -22463,25 +21249,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BFF994522B0D27970064240D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BFF994532B0D27970064240D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -22521,25 +21288,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BFF995252B0E73A90064240D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
 		BFF995262B0E73A90064240D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -22578,25 +21326,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		BFFC10DB2AC612950011444E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		BFFC10DC2AC612950011444E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -37586,7 +36315,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
-				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				DEVELOPMENT_TEAM = FHG32NX464;
 				ENABLE_BITCODE = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -37626,6 +36355,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.s2p2;
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -37652,7 +36382,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
-				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				DEVELOPMENT_TEAM = FHG32NX464;
 				ENABLE_BITCODE = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -37690,6 +36420,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.s2p2;
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -37716,7 +36447,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
-				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				DEVELOPMENT_TEAM = FHG32NX464;
 				ENABLE_BITCODE = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -37754,6 +36485,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.s2p2;
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

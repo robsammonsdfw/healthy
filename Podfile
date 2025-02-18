@@ -13,8 +13,6 @@ def core_pods
   pod 'AlamofireSoap' # https://github.com/ShakeebM/AlamofireSoap
   pod 'SWXMLHash' # For decoding XML in Alamofire responses - https://github.com/drmohundro/SWXMLHash
 
-  pod 'Firebase/Crashlytics'
-  pod 'Firebase/Analytics'
   pod 'SBPickerSelector', '1.0.4' # Last Objc version.
   pod 'CorePlot' # https://github.com/core-plot/core-plot
   pod 'FMDB' # https://github.com/ccgus/fmdb
@@ -28,9 +26,6 @@ def core_pods
   
   # Note, this pod is archived as of 2021, but should last 2 years before needing replacement.
   pod 'ScrollableSegmentedControl' # https://github.com/GocePetrovski/ScrollableSegmentedControl
-
-  # To be deprecated:
-  pod 'ASIHTTPRequest' # https://cocoapods.org/pods/ASIHTTPRequest
 end
 
 # Replica Base Demo.

@@ -5,7 +5,6 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import <FirebaseCrashlytics/FirebaseCrashlytics.h>
 
     #import "DietMasterGoAppDelegate.h"
     #import "BaseViewController.h"
@@ -34,7 +33,7 @@
 // Prints with line number and class.
 #define DMLog(__FORMAT__, ...) NSLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 // Logs to Crashlytics.
-#define DM_LOG(__FORMAT__, ...) [[FIRCrashlytics crashlytics] logWithFormat:__FORMAT__, ##__VA_ARGS__];
+#define DM_LOG(__FORMAT__, ...) NSLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 //Color
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]

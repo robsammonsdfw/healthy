@@ -21,7 +21,6 @@
 #import "DMMyLogDataProvider.h"
 
 @import StoreKit;
-@import Firebase;
 @import UserNotifications;
 
 #define D_MINUTE	60
@@ -45,9 +44,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [PurchaseIAPHelper sharedInstance];
-
-    // Configure Firebase
-    [FIRApp configure];
     
     // Note: See -checkUserLogin as it will wipe these values if the user is Logged out.
     // -checkUserLogin will set the values to enable MyMoves and NewDesign.

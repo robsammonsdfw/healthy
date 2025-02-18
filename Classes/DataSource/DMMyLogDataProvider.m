@@ -1759,9 +1759,6 @@
     if (!syncDate.length) {
         syncDate = [DMGUtilities lastSyncDateString];
     }
-    DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
-    [[FIRCrashlytics crashlytics] logWithFormat:@"GetUserData-UserId: %@", currentUser.userId];
-    
     NSDictionary *infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 @"GetUserData", @"RequestType",
                                 syncDate, @"LastSync",
@@ -1806,12 +1803,6 @@
         DMUser *currentUser = [[DMAuthManager sharedInstance] loggedInUser];
         [currentUser updateUserDetails:userDict];
         [[DMAuthManager sharedInstance] saveCurrentUserToDefaultsAndDatabase];
-        
-        // Log values to Firebase.
-        [[FIRCrashlytics crashlytics] log:@"GetUserData completed."];
-        for (id key in userDict) {
-            [[FIRCrashlytics crashlytics] setCustomValue:[userDict valueForKey:key] forKey:key];
-        }
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs setValue:currentUser.hostName forKey:@"HostName"];

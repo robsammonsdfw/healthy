@@ -7,7 +7,6 @@
 //
 
 #import "DietmasterEngine.h"
-@import Firebase;
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSData+Blocks.h"
