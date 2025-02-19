@@ -7807,7 +7807,6 @@
 		BFA750FA2D552618008ADD7A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		BFA751042D552689008ADD7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFA750192D55255B008ADD7A /* Assets.xcassets */; };
 		BFA751052D5526A1008ADD7A /* eMedEats.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BFA7501A2D55255B008ADD7A /* eMedEats.xcconfig */; };
-		BFA751062D5526AB008ADD7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFA7501B2D55255B008ADD7A /* GoogleService-Info.plist */; };
 		BFA93FBD2B7D44F7001C3D48 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		BFA93FBF2B7D44F7001C3D48 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
 		BFA93FC02B7D44F7001C3D48 /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
@@ -11241,7 +11240,6 @@
 		BF9A77BF2D039D660028C17C /* RapidFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RapidFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA750192D55255B008ADD7A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFA7501A2D55255B008ADD7A /* eMedEats.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = eMedEats.xcconfig; sourceTree = "<group>"; };
-		BFA7501B2D55255B008ADD7A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BFA751022D552618008ADD7A /* eMedEats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eMedEats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA93FB72B7D44DE001C3D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFA93FB82B7D44DE001C3D48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -14483,7 +14481,6 @@
 			children = (
 				BFA750192D55255B008ADD7A /* Assets.xcassets */,
 				BFA7501A2D55255B008ADD7A /* eMedEats.xcconfig */,
-				BFA7501B2D55255B008ADD7A /* GoogleService-Info.plist */,
 			);
 			path = eMedEats;
 			sourceTree = "<group>";
@@ -18340,7 +18337,6 @@
 				BFA750392D552618008ADD7A /* measure_sql.sql in Resources */,
 				BFA7503A2D552618008ADD7A /* LearnMoreViewController.xib in Resources */,
 				BFA7503B2D552618008ADD7A /* privacypolicy.html in Resources */,
-				BFA751062D5526AB008ADD7A /* GoogleService-Info.plist in Resources */,
 				BFA7503C2D552618008ADD7A /* termsofservice.html in Resources */,
 				BFA7503D2D552618008ADD7A /* AppImages.xcassets in Resources */,
 				BFA7503E2D552618008ADD7A /* DMGO_v3.9.2.sqlite in Resources */,
@@ -36315,7 +36311,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
-				DEVELOPMENT_TEAM = FHG32NX464;
+				DEVELOPMENT_TEAM = NFNGMTBK4X;
 				ENABLE_BITCODE = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -36355,7 +36351,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.s2p2;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.eats;
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -36382,7 +36378,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
-				DEVELOPMENT_TEAM = FHG32NX464;
+				DEVELOPMENT_TEAM = NFNGMTBK4X;
 				ENABLE_BITCODE = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -36420,7 +36416,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.s2p2;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.eats;
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -36447,7 +36443,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
-				DEVELOPMENT_TEAM = FHG32NX464;
+				DEVELOPMENT_TEAM = NFNGMTBK4X;
 				ENABLE_BITCODE = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -36485,7 +36481,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.s2p2;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.emed.eats;
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

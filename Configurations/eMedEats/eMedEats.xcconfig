@@ -36,7 +36,7 @@
 // The name shown under the app icon.
 DMG_BUNDLE_DISPLAY_NAME = eMed eats
 // The bundle identifier of the app. E.g. "com.dietmastergoplus".
-DMG_BUNDLE_IDENTIFIER = com.emed.s2p
+DMG_BUNDLE_IDENTIFIER = com.emed.eats
 // The "Developer Team" prefix, found in Apple Developer console.
 // Example: "7NH27AHXU3" is the DietMaster Team name.
 DMG_APPLE_TEAM_PREFIX = 5CLYL89Y37
@@ -54,7 +54,7 @@ DMG_APP_NAME_SHORT = eMed eats
 // Formerly app_name_long.
 DMG_APP_NAME_LONG = eMed eats
 // Formerly support_email.
-DMG_SUPPORT_EMAIL = apps.dmgo@dietmastersoftware.com
+DMG_SUPPORT_EMAIL = support@emed.com
 // Formerly account_code.
 DMG_ACCOUNT_CODE = dmg_eMed
 
@@ -74,9 +74,9 @@ DMG_HOME_ICON_FOREGROUND_COLOR = #000000
 DMG_MENU_ICON_COLOR = #000000
 
 // Color for any header background if needed.
-DMG_HEADER_COLOR = #ffffff
+DMG_HEADER_COLOR = #aaaaaa
 // Text color for any header if needed.
-DMG_HEADER_TEXTCOLOR = #000000
+DMG_HEADER_TEXTCOLOR = #ffffff
 
 // Button colors where needed.
 DMG_BUTTON_COLOR = #ffffff
@@ -101,7 +101,7 @@ DMG_CALENDAR_MOVEDAY_COLOR = #BFBFBF
 // Colors for the Messages Chat.
 // Sender = Current User, Recipient = Coach/Professional.
 DMG_CHAT_SENDER_COLOR = #F2673D
-DMG_CHAT_SENDER_TEXTCOLOR = #000000
+DMG_CHAT_SENDER_TEXTCOLOR = #aaaaaa
 DMG_CHAT_RECIPIENT_COLOR = #E5E5E9
 DMG_CHAT_RECIPIENT_TEXTCOLOR = #000000
 
