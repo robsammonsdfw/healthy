@@ -65,7 +65,7 @@ DMG_ACCOUNT_CODE = dmg_slimnation
 // ************************************
 
 // The color of the text on the Login view and buttons.
-DMG_LOGINVIEW_TEXTCOLOR = #FFFFFF
+DMG_LOGINVIEW_TEXTCOLOR = #000000
 
 // Background color when needed in the app.
 DMG_BACKGROUND_COLOR = #FFFFFF
@@ -73,10 +73,10 @@ DMG_BACKGROUND_COLOR = #FFFFFF
 // The foreground color for the "Hamburger" home menu.
 DMG_HOME_ICON_FOREGROUND_COLOR = #000000
 // The home menu icon color on the tiles.
-DMG_MENU_ICON_COLOR = #8ac394
+DMG_MENU_ICON_COLOR = #4a9cd4
 
 // Color for any header background if needed.
-DMG_HEADER_COLOR = #4a9cd4
+DMG_HEADER_COLOR = #8ac394
 // Text color for any header if needed.
 DMG_HEADER_TEXTCOLOR = #000000
 
@@ -89,7 +89,7 @@ DMG_BUTTON_TEXTCOLOR = #000000
 DMG_SWITCH_ON_COLOR = #8ac394
 
 // Footer background color where needed.
-DMG_FOOTER_COLOR = #8ac394
+DMG_FOOTER_COLOR = #4a9cd4
 // Text color for any footer if needed.
 DMG_FOOTER_TEXTCOLOR = #000000
 
