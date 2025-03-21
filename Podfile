@@ -10,14 +10,15 @@ use_frameworks!
 
 # Pods that should be included in all apps.
 def core_pods
-  pod 'AlamofireSoap' # https://github.com/ShakeebM/AlamofireSoap
+  # Using a forked AlamofireSoap with updated Alamofire dependency
+  pod 'AlamofireSoap', :git => 'https://github.com/henrytkirk/AlamofireSoap.git', :branch => 'update-alamofire-dependency'
   pod 'SWXMLHash' # For decoding XML in Alamofire responses - https://github.com/drmohundro/SWXMLHash
 
   pod 'SBPickerSelector', '1.0.4' # Last Objc version.
   pod 'CorePlot' # https://github.com/core-plot/core-plot
   pod 'FMDB' # https://github.com/ccgus/fmdb
   pod 'FSCalendar' # https://github.com/WenchaoD/FSCalendar
-  pod 'MBProgressHUD' # https://github.com/matej/MBProgressHUD
+  pod 'MBProgressHUD', :git => 'https://github.com/jdg/MBProgressHUD.git', :commit => '18c442d57398cee5ef57f852df10fc5ff65f0763'
   pod 'MKNumberBadgeView' # https://github.com/erichoracek/MKNumberBadgeView
   pod 'JJFloatingActionButton' # https://github.com/jjochen/JJFloatingActionButton
   pod 'TTTAttributedLabel' # https://github.com/TTTAttributedLabel/TTTAttributedLabel

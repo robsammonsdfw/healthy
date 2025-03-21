@@ -1,7 +1,7 @@
 PODS:
-  - Alamofire (5.0.5)
-  - AlamofireSoap (0.1.3):
-    - Alamofire (~> 5.0.0-rc.2)
+  - Alamofire (5.10.2)
+  - AlamofireSoap (0.1.4):
+    - Alamofire (~> 5.10.2)
   - CorePlot (2.3)
   - FMDB (2.7.12):
     - FMDB/standard (= 2.7.12)
@@ -20,12 +20,12 @@ PODS:
   - TTTAttributedLabel (2.0.0)
 
 DEPENDENCIES:
-  - AlamofireSoap
+  - AlamofireSoap (from `https://github.com/henrytkirk/AlamofireSoap.git`, branch `update-alamofire-dependency`)
   - CorePlot
   - FMDB
   - FSCalendar
   - JJFloatingActionButton
-  - MBProgressHUD
+  - MBProgressHUD (from `https://github.com/jdg/MBProgressHUD.git`, commit `18c442d57398cee5ef57f852df10fc5ff65f0763`)
   - MKNumberBadgeView
   - SBPickerSelector (= 1.0.4)
   - ScrollableSegmentedControl
@@ -35,32 +35,46 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
-    - AlamofireSoap
     - CorePlot
     - FMDB
     - FSCalendar
     - JJFloatingActionButton
-    - MBProgressHUD
     - MKNumberBadgeView
     - SBPickerSelector
     - ScrollableSegmentedControl
     - SWXMLHash
     - TTTAttributedLabel
 
+EXTERNAL SOURCES:
+  AlamofireSoap:
+    :branch: update-alamofire-dependency
+    :git: https://github.com/henrytkirk/AlamofireSoap.git
+  MBProgressHUD:
+    :commit: 18c442d57398cee5ef57f852df10fc5ff65f0763
+    :git: https://github.com/jdg/MBProgressHUD.git
+
+CHECKOUT OPTIONS:
+  AlamofireSoap:
+    :commit: 431b7b180a12df7c2c7f61b4fb91f5dc5dc9150d
+    :git: https://github.com/henrytkirk/AlamofireSoap.git
+  MBProgressHUD:
+    :commit: 18c442d57398cee5ef57f852df10fc5ff65f0763
+    :git: https://github.com/jdg/MBProgressHUD.git
+
 SPEC CHECKSUMS:
-  Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
-  AlamofireSoap: 3ff94d1b9a9dccc6fde075c8f5ee1986b78a0c23
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
+  AlamofireSoap: 61c74ca4875543ff3f5bc35ae05f8baf04271965
   CorePlot: 6bfe6d30d215beec3cfd18ee43e434620119bc1e
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   JJFloatingActionButton: 6a20da0a36bc2c5e2097e754b5e765aa9e4b6365
-  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MBProgressHUD: 1b0fb447e80a0fda94808180750e8b78a07b3cd2
   MKNumberBadgeView: 4007883b46f7babcf8bca339ecddff187e0cbb1f
   SBPickerSelector: ea57fff3aae81a79b5db3d9559e54a5cbd3c706a
   ScrollableSegmentedControl: 2e64bbe8968a7fcd8aae5014434481464fcdfe60
   SWXMLHash: dd733a457e9c4fe93b1538654057aefae4acb382
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
 
-PODFILE CHECKSUM: f239b06d8754e259857d24f859e1462323aa213d
+PODFILE CHECKSUM: d460d1bbfd940f93f086760827cd7f2f5c153cd4
 
 COCOAPODS: 1.16.2
