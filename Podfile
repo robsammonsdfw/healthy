@@ -262,6 +262,11 @@ target 'eMedEats' do
   core_pods
 end
 
+target 'EmbraceHealth' do
+  core_pods
+end
+
+
 
 
 
