@@ -1,0 +1,10 @@
+.pdf-page {
+  width: 612pt;
+  height: 792pt;
+  margin: 0;
+  padding: 36pt;
+  box-sizing: border-box;
+  font-family: "Manrope", sans-serif;
+}
+
+/* Rest of your styles but without any page break properties */

@@ -9,6 +9,7 @@
 #import "MyMovesDataProvider.h"
 #import "DMMyLogDataProvider.h"
 #import "FMDatabase.h"
+#import "DietMasterGoPlus-Swift.h"
 
 @interface DMAuthManager()
 @property (nonatomic, strong) DMUser *currentUser;
@@ -154,6 +155,20 @@
         }
         [self.currentUser updateUserDetails:userDict];
         [self saveCurrentUserToDefaultsAndDatabase];
+        
+#ifdef BODYSCANNING_ENABLED
+        // Update the Prism Scanner profile when body scanning is enabled
+        if (AppConfiguration.enableBodyScanning) {
+            [[PrismScannerManager shared] updateProfile:self.currentUser completion:^(NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"Error updating Prism profile: %@", error.localizedDescription);
+                } else {
+                    NSLog(@"Successfully updated Prism profile for user: %@", self.currentUser.firstName);
+                }
+            }];
+        }
+#endif
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
                 completionBlock(self.currentUser, nil);

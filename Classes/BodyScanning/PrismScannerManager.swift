@@ -38,7 +38,7 @@ import SwiftUI
     
     /// Environment-specific configuration
     private enum Environment {
-        #if DEBUGA
+        #if DEBUG
         static let apiURL = "https://sandbox-api.hosted.prismlabs.tech"
         static var apiKey: String { 
             debugPrint("[PrismScanner] Using DEBUG environment")
@@ -98,7 +98,8 @@ import SwiftUI
             apiURL: Environment.apiURL,
             clientAppId: Bundle.main.bundleIdentifier ?? ""
         )
-        
+        debugPrint("Using apiURL: \(config.apiURL)")
+        debugPrint("Using apiKey: \(config.apiKey)")
         initialize(with: config)
     }
     
@@ -123,9 +124,9 @@ import SwiftUI
     
     /// Updates the user's profile in PrismSDK and locally
     /// - Parameters:
-    ///   - profile: The updated profile information
+    ///   - user: The DMG user to update in PrismSDK
     ///   - completion: Called with error if update fails, nil if successful
-    public func updateProfile(_ profile: PrismUserProfile, completion: @escaping (Error?) -> Void) {
+    public func updateProfile(_ user: DMUser, completion: @escaping (Error?) -> Void) {
         guard let apiClient = apiClient else {
             completion(NSError(domain: "PrismScannerManager", code: -1, 
                              userInfo: [NSLocalizedDescriptionKey: "API client not initialized"]))
@@ -134,13 +135,29 @@ import SwiftUI
         
         // Create user client and existing user model
         let userClient = UserClient(client: apiClient)
+        let userId = String(format: "dmg_%@", user.userId.stringValue)
+        
+        // Create date from birthDate if available
+        let birthDate = user.birthDate as Date?
+        
         let existingUser = ExistingUser(
-            token: profile.userId,
-            sex: Sex(rawValue: profile.gender),
-            birthDate: profile.dateOfBirth,
-            weight: Weight(value: Double(profile.weight), unit: .pounds),
-            height: Height(value: Double(profile.height), unit: .inches)
+            token: userId,
+            sex: Sex(rawValue: mapGender(user.gender.intValue)),
+            birthDate: birthDate,
+            weight: Weight(value: Double(user.weightGoal.floatValue), unit: .pounds),
+            height: Height(value: Double(user.height.floatValue), unit: .inches)
         )
+        
+        // Create local profile
+        let profile = PrismUserProfile()
+        profile.userId = userId
+        profile.firstName = user.firstName
+        profile.lastName = user.lastName
+        profile.height = user.height.floatValue
+        profile.weight = user.weightGoal.floatValue
+        profile.gender = mapGender(user.gender.intValue)
+        profile.dateOfBirth = birthDate
+        profile.goalWeight = user.weightGoal.floatValue
         
         Task {
             do {
@@ -305,7 +322,7 @@ import SwiftUI
         
         Task {
             do {
-                try await scanClient.deleteScan(scanId)
+                try await _ = scanClient.deleteScan(scanId)
                 debugPrint("[PrismScanner] Successfully deleted scan: \(scanId)")
                 
                 DispatchQueue.main.async {

@@ -16,7 +16,38 @@ public struct ScanResult {
 }
 
 /// Represents measurement data from a scan
-public struct Measurements {
+public struct Measurements: Codable {
+    // Add coding keys to ensure proper JSON encoding
+    enum CodingKeys: String, CodingKey {
+        case weight
+        case bodyFat = "body_fat"
+        case muscleMass = "muscle_mass"
+        case neckFit = "neck_fit"
+        case shoulderFit = "shoulder_fit"
+        case upperChestFit = "upper_chest_fit"
+        case chestFit = "chest_fit"
+        case lowerChestFit = "lower_chest_fit"
+        case waistFit = "waist_fit"
+        case waistNavyFit = "waist_navy_fit"
+        case stomachFit = "stomach_fit"
+        case hipsFit = "hips_fit"
+        case upperThighLeftFit = "upper_thigh_left_fit"
+        case upperThighRightFit = "upper_thigh_right_fit"
+        case thighLeftFit = "thigh_left_fit"
+        case thighRightFit = "thigh_right_fit"
+        case lowerThighLeftFit = "lower_thigh_left_fit"
+        case lowerThighRightFit = "lower_thigh_right_fit"
+        case calfLeftFit = "calf_left_fit"
+        case calfRightFit = "calf_right_fit"
+        case ankleLeftFit = "ankle_left_fit"
+        case ankleRightFit = "ankle_right_fit"
+        case midArmRightFit = "mid_arm_right_fit"
+        case midArmLeftFit = "mid_arm_left_fit"
+        case lowerArmRightFit = "lower_arm_right_fit"
+        case lowerArmLeftFit = "lower_arm_left_fit"
+        case waistToHipRatio = "waist_to_hip_ratio"
+    }
+
     public let weight: Measurement?
     public let bodyFat: Measurement?
     public let muscleMass: Measurement?
@@ -105,7 +136,7 @@ public struct Measurements {
 }
 
 /// Represents a single measurement with value and unit
-public struct Measurement {
+public struct Measurement: Codable {
     public let value: Double
     public let unit: String
     

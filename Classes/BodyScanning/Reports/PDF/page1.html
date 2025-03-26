@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="pdf_styles.css" />
+  </head>
+  <body class="pdf-page">
+    <h1 class="report-title">My Health Report</h1>
+    <div class="demographics-section">
+      <h2 class="section-title">Demographics</h2>
+      <div class="data-grid">
+        <span class="data-label">Name</span>
+        <span class="data-value" id="user-name"></span>
+        <!-- ... rest of demographics ... -->
+      </div>
+    </div>
+    <div class="measurements-section">
+      <h2 class="section-title">Body Measurements</h2>
+      <div class="data-grid">
+        <span class="data-label">Neck</span>
+        <span class="data-value" id="neck-circumference">--</span>
+        <!-- ... rest of measurements ... -->
+      </div>
+    </div>
+  </body>
+</html>

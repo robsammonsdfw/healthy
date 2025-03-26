@@ -2,540 +2,565 @@
 html {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  height: 100%;
+  width: 100%;
+  height: auto;
 }
 
 body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-y: scroll;
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
   background-color: #ffffff;
   color: #333333;
 }
 
-/* Hide scrollbars for Chrome, Safari, and Opera */
-body::-webkit-scrollbar {
-  display: none;
-}
-
 /* Full-width section styling */
 .full-width-bg {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    background-color: #ffffff;
-    padding: 10px 0;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background-color: #ffffff;
+  padding: 10px 0;
 }
 
 /* Ensure container content stays within 720px on larger screens */
 .container {
-    max-width: 720px;
-    margin: 5px auto;
-    padding: 10px 10px 10px 10px !important;
+  max-width: 720px;
+  margin: 5px auto;
+  padding: 10px 10px 10px 10px !important;
 }
 
 /* Responsive design: ensure sections are centered on smaller screens */
 @media (max-width: 576px) {
-    #avatar-section, #summary-section {
-        text-align: center;
-    }
+  #avatar-section,
+  #summary-section {
+    text-align: center;
+  }
 }
 
 /* Align the content of the columns to the left */
 .col-6 {
-    text-align: left;
+  text-align: left;
 }
 
 /* Avatar section: define avatar container styles */
 .avatar-container {
-    width: 100%;
-    height: 300px;
+  width: 100%;
+  height: 300px;
 }
 
 #today-avatar {
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    overflow: hidden;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  overflow: hidden;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 #future-avatar {
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    overflow: hidden;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  overflow: hidden;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Light text styling for the summary text */
 .light-text {
-    font-weight: lighter;
-    text-align: left;
-    color: #333333;
+  font-weight: lighter;
+  text-align: left;
+  color: #333333;
 }
 
 /* Status text styling for metrics */
 .status {
-    font-size: 24px;
-    font-weight: 500;
-    color: #333333;
-    display: block;
-    margin-top: 10px;
+  font-size: 24px;
+  font-weight: 500;
+  color: #333333;
+  display: block;
+  margin-top: 10px;
 }
 
 /* Weight and label text styles */
 .weight-label {
-    display: block;
-    margin: 0;
-    font-weight: 600;
-    color: #333333;
+  display: block;
+  margin: 0;
+  font-weight: 600;
+  color: #333333;
 }
 
 .weight-text {
-    display: block;
-    margin: 5px 0 10px 0;
-    font-weight: 400;
-    color: #333333;
+  display: block;
+  margin: 5px 0 10px 0;
+  font-weight: 400;
+  color: #333333;
 }
 
 /* Metric box styling */
 .metric-box {
-    padding: 15px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #eeeeee;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    margin-bottom: 15px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 15px;
 }
 
 .metric-label {
-    font-weight: 600;
-    margin-bottom: 10px;
-    font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 /* Trend indicator styling */
 .trend {
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: white;
-    display: block;
-    margin-top: 5px;
-    width: fit-content;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  display: block;
+  margin-top: 5px;
+  width: fit-content;
 }
 
 .btn-secondary {
-    background-color: #bc64a3;
-    border-color: #bc64a3;
-    border-radius: 50px;
+  background-color: #bc64a3;
+  border-color: #bc64a3;
+  border-radius: 50px;
 }
 
 /* Bar styling */
 .bar-container {
-    margin: 15px 0;
+  margin: 15px 0;
 }
 
 .gradient-bar {
-    width: 100%;
-    height: 25px;
-    border-radius: 15px;
-    position: relative;
-    background: linear-gradient(
-        to right,
-        #FF9999 0%,      /* Light red (Low) */
-        #FFB366 20%,     /* Light orange (Minimum) */
-        #90EE90 40%,     /* Light green (Healthy) */
-        #FFB366 70%,     /* Light orange (High) */
-        #FF9999 100%     /* Light red (Unhealthy) */
-    );
+  width: 100%;
+  height: 25px;
+  border-radius: 15px;
+  position: relative;
+  background: linear-gradient(
+    to right,
+    #ff9999 0%,
+    /* Light red (Low) */ #ffb366 20%,
+    /* Light orange (Minimum) */ #90ee90 40%,
+    /* Light green (Healthy) */ #ffb366 70%,
+    /* Light orange (High) */ #ff9999 100% /* Light red (Unhealthy) */
+  );
 }
 
 /* Unified marker styling for both bars */
-.marker, .percentile-marker {
-    position: absolute;
-    width: 4px;
-    height: 35px;
-    background-color: #333333;
-    top: -5px;
-    bottom: -5px;
-    transform: translateX(-50%);
+.marker,
+.percentile-marker {
+  position: absolute;
+  width: 4px;
+  height: 35px;
+  background-color: #333333;
+  top: -5px;
+  bottom: -5px;
+  transform: translateX(-50%);
 }
 
 /* Labels below the bar */
 .bar-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    padding: 0 2%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 2%;
 }
 
 .bar-labels span {
-    font-size: 12px;
-    color: #333333;
+  font-size: 12px;
+  color: #333333;
 }
 
 .detailed-label {
-    color: #333333;
-    font-weight: 700;
-    font-size: 24px;
-    margin-bottom: 15px;
-    text-transform: none;
-    letter-spacing: -0.2px;
+  color: #333333;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-transform: none;
+  letter-spacing: -0.2px;
 }
 
-#low-bar, #very-low-fm-bar, #unhealthy-lm-bar, #in-range-bar {
-    border-radius: 15px 0px 0px 15px;
+#low-bar,
+#very-low-fm-bar,
+#unhealthy-lm-bar,
+#in-range-bar {
+  border-radius: 15px 0px 0px 15px;
 }
 
-#unhealthy-bar, #unhealthy-fm-bar, #low-lm-bar, #very-high-bar {
-    border-radius: 0px 15px 15px 0px;
+#unhealthy-bar,
+#unhealthy-fm-bar,
+#low-lm-bar,
+#very-high-bar {
+  border-radius: 0px 15px 15px 0px;
 }
 
 /* Labels below the bars */
 .description {
-    font-size: 1em;
-    color: #333333;
-    line-height: 1.4;
+  font-size: 1em;
+  color: #333333;
+  line-height: 1.4;
 }
 
 /* Add styles for the header section */
 .report-header {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-    margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.demographics-section, .measurements-section {
-    padding: 15px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #eeeeee;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+.demographics-section,
+.measurements-section {
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .section-title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #333333;
-    flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333333;
+  flex-shrink: 0;
 }
 
 .data-grid {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 12px;
-    align-items: center;
-    flex-grow: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  flex-grow: 1;
 }
 
 .data-label {
-    font-weight: 500;
-    font-size: 16px;
-    color: #666666;
+  font-weight: 500;
+  font-size: 16px;
+  color: #666666;
 }
 
 .data-value {
-    font-size: 16px;
-    color: #333333;
-    text-align: right;
+  font-size: 16px;
+  color: #333333;
+  text-align: right;
 }
 
 /* Add header title styling */
 .report-title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #333333;
-    text-align: center;
-    margin: 30px 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #333333;
+  text-align: center;
+  margin: 30px 0;
 }
 
 /* Bar segment colors for testing */
-#low-bar, #very-low-fm-bar, #unhealthy-lm-bar {
-    background-color: #FF9999; /* Light red */
+#low-bar,
+#very-low-fm-bar,
+#unhealthy-lm-bar {
+  background-color: #ff9999; /* Light red */
 }
 
-#min-bar, #low-fm-bar, #high-lm-bar {
-    background-color: #FFB366; /* Light orange */
+#min-bar,
+#low-fm-bar,
+#high-lm-bar {
+  background-color: #ffb366; /* Light orange */
 }
 
-#healthy-bar, #healthy-fm-bar, #healthy-lm-bar {
-    background-color: #90EE90; /* Light green */
+#healthy-bar,
+#healthy-fm-bar,
+#healthy-lm-bar {
+  background-color: #90ee90; /* Light green */
 }
 
-#high-bar, #high-fm-bar, #min-lm-bar {
-    background-color: #FFB366; /* Light orange */
+#high-bar,
+#high-fm-bar,
+#min-lm-bar {
+  background-color: #ffb366; /* Light orange */
 }
 
-#unhealthy-bar, #unhealthy-fm-bar, #low-lm-bar {
-    background-color: #FF9999; /* Light red */
+#unhealthy-bar,
+#unhealthy-fm-bar,
+#low-lm-bar {
+  background-color: #ff9999; /* Light red */
 }
 
 /* Waist-to-height ratio bars */
 #in-range-bar {
-    background-color: #90EE90; /* Light green */
+  background-color: #90ee90; /* Light green */
 }
 
 #wht-high-bar {
-    background-color: #FFB366; /* Light orange */
+  background-color: #ffb366; /* Light orange */
 }
 
 #very-high-bar {
-    background-color: #FF9999; /* Light red */
+  background-color: #ff9999; /* Light red */
 }
 
 /* Avatar box styling */
 .avatar-box {
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #eeeeee;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    padding: 15px;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #avatar-section {
-    margin-left: 10px;
-    margin-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 /* Add spacing between avatar boxes */
 #avatar-section .col-6:first-child {
-    padding-right: 10px !important;
+  padding-right: 10px !important;
 }
 
 #avatar-section .col-6:last-child {
-    padding-left: 10px !important;
+  padding-left: 10px !important;
 }
 
 /* Or if you want more space, increase the padding values */
 #avatar-section .col-6:first-child {
-    padding-right: 15px !important;
+  padding-right: 15px !important;
 }
 
 #avatar-section .col-6:last-child {
-    padding-left: 15px !important;
+  padding-left: 15px !important;
 }
 
 /* Metabolism section styling */
 .metabolism-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-    margin: 15px 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin: 15px 0;
 }
 
 .metabolism-box {
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #eeeeee;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    padding: 20px;
-    text-align: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  text-align: center;
 }
 
 .metabolism-header {
-    font-weight: 600;
-    font-size: 24px;
-    color: #333333;
-    margin-bottom: 12px;
-    text-align: center;
+  font-weight: 600;
+  font-size: 24px;
+  color: #333333;
+  margin-bottom: 12px;
+  text-align: center;
 }
 
 .metabolism-value {
-    font-size: 36px;
-    font-weight: 700;
-    color: #333333;
-    margin: 5px 0;
+  font-size: 36px;
+  font-weight: 700;
+  color: #333333;
+  margin: 5px 0;
 }
 
 .metabolism-unit {
-    font-size: 14px;
-    color: #666666;
-    margin-bottom: 10px;
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 10px;
 }
 
 .metabolism-description {
-    font-size: 16px;
-    color: #666666;
-    margin: 0;
+  font-size: 16px;
+  color: #666666;
+  margin: 0;
 }
 
-.metabolism-range, .metabolism-base {
-    font-size: 14px;
-    color: #666666;
-    margin-top: 6px;
+.metabolism-range,
+.metabolism-base {
+  font-size: 14px;
+  color: #666666;
+  margin-top: 6px;
 }
 
 /* Icon styling */
 .metric-icon {
-    margin-bottom: 15px;
-    stroke: #333333;
-    width: 24px;
-    height: 24px;
+  margin-bottom: 15px;
+  stroke: #333333;
+  width: 24px;
+  height: 24px;
 }
 
 .metric-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 /* Specific gradients for each metric */
 .fat-mass-gradient {
-    background: linear-gradient(
-        to right,
-        #FF9999 0%,      /* Very Low */
-        #FFB366 20%,     /* Low */
-        #90EE90 40%,     /* Healthy */
-        #FFB366 70%,     /* High */
-        #FF9999 100%     /* Unhealthy */
-    );
+  background: linear-gradient(
+    to right,
+    #ff9999 0%,
+    /* Very Low */ #ffb366 20%,
+    /* Low */ #90ee90 40%,
+    /* Healthy */ #ffb366 70%,
+    /* High */ #ff9999 100% /* Unhealthy */
+  );
 }
 
 .lean-mass-gradient {
-    background: linear-gradient(
-        to right,
-        #FF9999 0%,      /* Very Low */
-        #FFB366 20%,     /* Low */
-        #90EE90 40%,     /* Healthy */
-        #90EE90 70%,     /* Healthy */
-        #90EE90 100%     /* Healthy */
-    );
+  background: linear-gradient(
+    to right,
+    #ff9999 0%,
+    /* Very Low */ #ffb366 20%,
+    /* Low */ #90ee90 40%,
+    /* Healthy */ #90ee90 70%,
+    /* Healthy */ #90ee90 100% /* Healthy */
+  );
 }
 
 .waist-ratio-gradient {
-    background: linear-gradient(
-        to right,
-        #90EE90 0%,      /* In Range start */
-        #90EE90 30%,     /* In Range end */
-        #FFB366 40%,     /* Blend into High */
-        #FFB366 60%,     /* High */
-        #FF9999 70%,     /* Blend into Very High */
-        #FF9999 100%     /* Very High */
-    );
+  background: linear-gradient(
+    to right,
+    #90ee90 0%,
+    /* In Range start */ #90ee90 30%,
+    /* In Range end */ #ffb366 40%,
+    /* Blend into High */ #ffb366 60%,
+    /* High */ #ff9999 70%,
+    /* Blend into Very High */ #ff9999 100% /* Very High */
+  );
 }
 
 /* Percentile bar styling */
 .percentile-container {
-    margin-top: 25px;
-    padding: 0 2px;
+  margin-top: 25px;
+  padding: 0 2px;
 }
 
 .percentile-bar {
-    position: relative;
-    width: 100%;
-    height: 20px;
-    background: #f0f0f0;
-    border-radius: 10px;
-    margin: 10px 0;
-    overflow: hidden;
-    display: flex;
+  position: relative;
+  height: 20px;
+  width: 100%;
+  border-radius: 10px;
+  margin: 10px 0;
+  /* Create a smooth gradient from red (low) through green (middle) to red (high) */
+  background: linear-gradient(
+    to right,
+    #ff9999 0%,
+    /* Very Low - Light Red */ #ffcc99 10%,
+    /* Low - Light Orange */ #ffeb99 20%,
+    /* Below Average - Light Yellow */ #e8ffe8 30%,
+    /* Lower Normal - Very Light Green */ #90ee90 50%,
+    /* Normal - Light Green */ #e8ffe8 70%,
+    /* Upper Normal - Very Light Green */ #ffcc99 85%,
+    /* High - Light Orange */ #ff9999 100% /* Very High - Light Red */
+  );
+  overflow: hidden;
 }
 
-.percentile-segments {
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
+/* Remove the individual segment styles since we're using a gradient */
 .percentile-segment {
-    height: 100%;
-    transition: width 0.3s ease;
+  display: none;
 }
 
-.percentile-segment.p5 { background: #FF9999; }  /* Very Low - Light Red */
-.percentile-segment.p10 { background: #FFCC99; } /* Low - Light Orange */
-.percentile-segment.p15 { background: #FFEB99; } /* Below Average - Light Yellow */
-.percentile-segment.p25 { background: #E8FFE8; } /* Lower Normal - Very Light Green */
-.percentile-segment.p50 { background: #90EE90; } /* Normal - Light Green */
-.percentile-segment.p75 { background: #E8FFE8; } /* Upper Normal - Very Light Green */
-.percentile-segment.p90 { background: #FFCC99; } /* High - Light Orange */
-.percentile-segment.p95 { background: #FFAD99; } /* Very High - Orange Red */
-.percentile-segment.p100 { background: #FF9999; } /* Extremely High - Light Red */
-
+/* Keep the marker and labels */
 .percentile-marker {
-    position: absolute;
-    top: -5px;
-    width: 4px;
-    height: 30px;
-    background: #333;
-    transform: translateX(-50%);
-    z-index: 2;
+  position: absolute;
+  top: -5px;
+  width: 4px;
+  height: 30px;
+  background: #333;
+  transform: translateX(-50%);
+  z-index: 2;
 }
 
 .percentile-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5px;
-    padding: 0 2%;
-    font-size: 12px;
-    color: #666;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  padding: 0 2%;
+  font-size: 12px;
+  color: #666;
 }
 
 .age-range {
-    font-size: 14px;
-    color: #666;
-    margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
 }
 
 .measurements-section {
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #eeeeee;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
 }
 
 .data-grid {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 12px 24px;
-    align-items: center;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 24px;
+  align-items: center;
 }
 
 .data-label {
-    font-weight: 500;
-    font-size: 16px;
-    color: #666666;
+  font-weight: 500;
+  font-size: 16px;
+  color: #666666;
 }
 
 .data-value {
-    font-size: 16px;
-    color: #333333;
-    text-align: right;
-    font-weight: 600;
+  font-size: 16px;
+  color: #333333;
+  text-align: right;
+  font-weight: 600;
 }
 
 /* Add a subtle hover effect */
 .data-grid > span {
-    padding: 8px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
-.data-grid > span:nth-child(4n+1),
-.data-grid > span:nth-child(4n+2) {
-    background-color: rgba(0,0,0,0.02);
+/* Remove the alternating background colors */
+.data-grid > span:nth-child(4n + 1),
+.data-grid > span:nth-child(4n + 2) {
+  background-color: transparent;
 }
 
+/* Keep the hover effect */
 .data-grid > span:hover {
-    background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.debug-info {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+  font-family: monospace;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.debug-text {
+  font-weight: bold;
+  color: #333;
 }
