@@ -266,6 +266,10 @@ target 'EmbraceHealth' do
   core_pods
 end
 
+target 'SymliphyNutrition' do
+  core_pods
+end
+
 
 
 
