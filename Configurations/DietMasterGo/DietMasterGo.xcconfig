@@ -44,8 +44,18 @@ DMG_APPLE_TEAM_PREFIX = 7NH27AHXU3
 DMG_PRODUCT_NAME = DietMasterGo
 // Enable MyMoves or not for the user. YES = Add it, NO = Don't!
 DMG_MYMOVES_ENABLED = NO
+
+// ******************************************
+// ********* BODY SCANNING DEFAULTS *********
+// ******************************************
+
+// IMPORTANT: In "Other Swift Flags, add -D BODYSCANNING_ENABLED"
+//            Also, in "Preprocessor Macros", add BODYSCANNING_ENABLED=1"
+//            This MUST be set on the target you're installing ONLY.
 // Enable or disable body scanning. For Embrace Health only. YES = Add.
 DMG_BODYSCANNING_ENABLED = NO
+DMG_BODYSCANNING_DEV_APIKEY = TBD
+DMG_BODYSCANNING_PROD_APIKEY = TBD
 
 // ************************************
 // ********* REPLICA DEFAULTS *********

@@ -49,10 +49,13 @@ DMG_MYMOVES_ENABLED = YES
 // ********* BODY SCANNING DEFAULTS *********
 // ******************************************
 
+// IMPORTANT: In "Other Swift Flags, add -D BODYSCANNING_ENABLED"
+//            Also, in "Preprocessor Macros", add BODYSCANNING_ENABLED=1"
+//            This MUST be set on the target you're installing ONLY.
 // Enable or disable body scanning. For Embrace Health only. YES = Add.
-DMG_BODYSCANNING_ENABLED = NO
-DMG_BODYSCANNING_DEV_APIKEY = TBD
-DMG_BODYSCANNING_PROD_APIKEY = TBD
+DMG_BODYSCANNING_ENABLED = YES
+DMG_BODYSCANNING_DEV_APIKEY = I7M^#k4Fgr6f7wxz44*iSdp@
+DMG_BODYSCANNING_PROD_APIKEY = 1!G*nCB20Jamc^ECXraRP8oS
 
 // ************************************
 // ********* REPLICA DEFAULTS *********
