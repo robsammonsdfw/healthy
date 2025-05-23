@@ -2,6 +2,7 @@
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import <SafariServices/SafariServices.h>
 
 #import "DietmasterEngine.h"
 #import "MCPieChartView.h"
@@ -239,6 +240,12 @@
     self.entireViewDefaultHeight = 950;
     self.entireViewHeightConstraint.constant = self.entireViewDefaultHeight;
   }
+#ifdef BODYSCANNING_ENABLED
+  if (AppConfiguration.enableBodyScanning) {
+    self.entireViewDefaultHeight = self.entireViewDefaultHeight + 50;
+    self.entireViewHeightConstraint.constant = self.entireViewDefaultHeight;
+  }
+#endif
   [self.entireViewHeightConstraint setActive:YES];
   UIEdgeInsets layoutGuide = self.view.safeAreaInsets;
   self.scrollView.contentOffset = CGPointMake(0, -layoutGuide.top);
@@ -495,6 +502,50 @@
   NSLog(@"Tapped Body Scanning Button!");
 
 #ifdef BODYSCANNING_ENABLED
+  // Check if user has already consented
+  if ([PrismScannerManager shared].hasPrivacyConsent) {
+    [self startBodyScanning];
+    return;
+  }
+  
+  // Show consent dialog
+  UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Privacy Policy"
+                                                               message:@"To continue, you must agree to the following: I agree to sharing my data with Prism Labs Inc. for the sole purpose of improving its products and services."
+                                                        preferredStyle:UIAlertControllerStyleAlert];
+  
+  // Add checkbox action
+  UIAlertAction *agreeAction = [UIAlertAction actionWithTitle:@"Agree & Continue"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * _Nonnull action) {
+    // Save consent
+    [[PrismScannerManager shared] savePrivacyConsent:YES];
+    [self startBodyScanning];
+  }];
+  
+  // Add view privacy policy action
+  UIAlertAction *viewPolicyAction = [UIAlertAction actionWithTitle:@"View Privacy Policy"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+    // Open privacy policy in SafariViewController
+    SFSafariViewController *safariVC = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://www.prismlabs.tech/privacy"]];
+    [self presentViewController:safariVC animated:YES completion:nil];
+  }];
+  
+  // Add cancel action
+  UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:nil];
+  
+  [alert addAction:viewPolicyAction];
+  [alert addAction:agreeAction];
+  [alert addAction:cancelAction];
+  
+  [self presentViewController:alert animated:YES completion:nil];
+#endif
+}
+
+// Helper method to start body scanning
+- (void)startBodyScanning {
   NSLog(@"Starting Body Scanning!");
   [[PrismScannerManager shared] startScanWithCompletion:^(NSError * _Nullable error) {
     if (error) {
@@ -508,7 +559,6 @@
                            message:@"Body scan completed successfully!"
                   inViewController:nil];
   }];
-#endif
 }
 
 - (void)userTappedScanResultsButton:(id)sender {
