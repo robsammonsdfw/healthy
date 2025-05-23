@@ -154,8 +154,7 @@ import WebKit
             action: #selector(show3DView)
         )
 
-        // Set both buttons
-        navigationItem.rightBarButtonItems = [exportButton, threeDButton]
+        navigationItem.rightBarButtonItems = [threeDButton]
 
         // Add subviews
         view.addSubview(webView)
@@ -199,6 +198,10 @@ import WebKit
     }
 
     private func loadReportTemplate() {
+      guard let currentProfile = PrismScannerManager.shared.currentProfile else {
+        handleError("Could not load current user")
+        return
+      }
         guard let reportURL = Bundle.main.url(forResource: "index", withExtension: "html"),
             let templateString = try? String(contentsOf: reportURL, encoding: .utf8)
         else {
@@ -232,10 +235,11 @@ import WebKit
         dateFormatter.timeStyle = .short
         let formattedDate = dateFormatter.string(from: scanResult.createdAt)
 
+
         // Create replacements dictionary
         var replacements: [String: String] = [
             // Demographics
-            "{{USER_NAME}}": report?.user.token ?? "--",
+            "{{USER_NAME}}": currentProfile.firstName + " " + currentProfile.lastName,
             "{{SCAN_DATE}}": formattedDate,
             "{{USER_AGE}}": "\(report?.user.age ?? 0) years",
             "{{USER_GENDER}}": report?.user.sex ?? "--",
