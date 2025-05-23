@@ -13,6 +13,20 @@ import SwiftUI
         return instance
     }()
     
+    /// Key for storing privacy consent in UserDefaults
+    private static let privacyConsentKey = "com.dmg.bodyscanning.privacyConsent"
+    
+    /// Returns whether the user has consented to privacy policy
+    public var hasPrivacyConsent: Bool {
+        UserDefaults.standard.bool(forKey: Self.privacyConsentKey)
+    }
+    
+    /// Saves the user's privacy consent
+    /// - Parameter consented: Whether the user has consented
+    public func savePrivacyConsent(_ consented: Bool) {
+        UserDefaults.standard.set(consented, forKey: Self.privacyConsentKey)
+    }
+    
     /// Holds reference to the current scanning session view controller
     private var sessionViewController: PrismSessionViewController?
     /// Completion handler for the current scanning session
@@ -38,19 +52,20 @@ import SwiftUI
     
     /// Environment-specific configuration
     private enum Environment {
-        #if DEBUG
-        static let apiURL = "https://sandbox-api.hosted.prismlabs.tech"
-        static var apiKey: String { 
-            debugPrint("[PrismScanner] Using DEBUG environment")
-            return AppConfiguration.bodyScanningDevKey 
-        }
-        #else
+      // The Prism Sandbox Key just won't work, so defaulting to production.
+//        #if DEBUG
+//        static let apiURL = "https://sandbox-api.hosted.prismlabs.tech"
+//        static var apiKey: String { 
+//            debugPrint("[PrismScanner] Using DEBUG environment")
+//            return AppConfiguration.bodyScanningDevKey 
+//        }
+//        #else
         static let apiURL = "https://api.hosted.prismlabs.tech"
         static var apiKey: String { 
             debugPrint("[PrismScanner] Using PRODUCTION environment")
             return AppConfiguration.bodyScanningProdKey 
         }
-        #endif
+  //      #endif
     }
     
     // MARK: - Properties
