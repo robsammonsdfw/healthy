@@ -533,25 +533,81 @@
 		0E1A3B3B2A3B66AC004C6033 /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
 		0E1A3B3E2A3B6DAE004C6033 /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
 		0E1A3B412A3B9E68004C6033 /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
+		0E29754F2D94625C001A9677 /* BodyScanResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29754B2D94625C001A9677 /* BodyScanResultsViewController.swift */; };
+		0E2975502D94625C001A9677 /* BodyScanResultListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975492D94625C001A9677 /* BodyScanResultListViewController.swift */; };
+		0E2975512D94625C001A9677 /* BodyScanResultsPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29754A2D94625C001A9677 /* BodyScanResultsPDF.swift */; };
+		0E2975522D94625C001A9677 /* HealthReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29753C2D94625C001A9677 /* HealthReport.swift */; };
+		0E2975532D94625C001A9677 /* BodyScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29753B2D94625C001A9677 /* BodyScan.swift */; };
+		0E2975542D94625C001A9677 /* PrismScannerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29754C2D94625C001A9677 /* PrismScannerManager.swift */; };
+		0E2975552D94625C001A9677 /* BodyScan3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975472D94625C001A9677 /* BodyScan3DViewController.swift */; };
+		0E2975562D94625C001A9677 /* page1.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E29753E2D94625C001A9677 /* page1.html */; };
+		0E2975572D94625C001A9677 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975442D94625C001A9677 /* main.js */; };
+		0E2975582D94625C001A9677 /* page3.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975402D94625C001A9677 /* page3.html */; };
+		0E2975592D94625C001A9677 /* SampleCode.md in Resources */ = {isa = PBXBuildFile; fileRef = 0E29754D2D94625C001A9677 /* SampleCode.md */; };
+		0E29755A2D94625C001A9677 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975452D94625C001A9677 /* styles.css */; };
+		0E29755B2D94625C001A9677 /* page2.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E29753F2D94625C001A9677 /* page2.html */; };
+		0E29755C2D94625C001A9677 /* pdf_styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975412D94625C001A9677 /* pdf_styles.css */; };
+		0E29755D2D94625C001A9677 /* BodyScanningPRD.md in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975482D94625C001A9677 /* BodyScanningPRD.md */; };
+		0E29755E2D94625C001A9677 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975432D94625C001A9677 /* index.html */; };
 		0E2975612D9469A1001A9677 /* PrismSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 0E2975602D9469A1001A9677 /* PrismSDK */; };
-		0E29759D2D94B4CA001A9677 /* BodyScan3DViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975472D94625C001A9677 /* BodyScan3DViewController.swift */; };
-		0E29759E2D94B4CA001A9677 /* BodyScanResultListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975492D94625C001A9677 /* BodyScanResultListViewController.swift */; };
-		0E29759F2D94B4CA001A9677 /* BodyScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29753B2D94625C001A9677 /* BodyScan.swift */; };
-		0E2975A02D94B4CA001A9677 /* PrismScannerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29754C2D94625C001A9677 /* PrismScannerManager.swift */; };
-		0E2975A12D94B4CA001A9677 /* BodyScanResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29754B2D94625C001A9677 /* BodyScanResultsViewController.swift */; };
-		0E2975A22D94B4CA001A9677 /* BodyScanResultsPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29754A2D94625C001A9677 /* BodyScanResultsPDF.swift */; };
-		0E2975A32D94B4CA001A9677 /* HealthReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29753C2D94625C001A9677 /* HealthReport.swift */; };
-		0E2975A42D94B4CA001A9677 /* page2.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E29753F2D94625C001A9677 /* page2.html */; };
-		0E2975A52D94B4CA001A9677 /* page3.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975402D94625C001A9677 /* page3.html */; };
-		0E2975A62D94B4CA001A9677 /* pdf_styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975412D94625C001A9677 /* pdf_styles.css */; };
-		0E2975A72D94B4CA001A9677 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975442D94625C001A9677 /* main.js */; };
-		0E2975A82D94B4CA001A9677 /* SampleCode.md in Resources */ = {isa = PBXBuildFile; fileRef = 0E29754D2D94625C001A9677 /* SampleCode.md */; };
-		0E2975A92D94B4CA001A9677 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975452D94625C001A9677 /* styles.css */; };
-		0E2975AA2D94B4CA001A9677 /* page1.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E29753E2D94625C001A9677 /* page1.html */; };
-		0E2975AB2D94B4CA001A9677 /* BodyScanningPRD.md in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975482D94625C001A9677 /* BodyScanningPRD.md */; };
-		0E2975AC2D94B4CA001A9677 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E2975432D94625C001A9677 /* index.html */; };
-		0E2975AE2D94B4E2001A9677 /* PrismSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 0E2975AD2D94B4E2001A9677 /* PrismSDK */; };
-		0E2975AF2D94B508001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975632D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975642D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975652D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975662D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975672D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975682D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975692D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29756A2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29756B2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29756C2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29756D2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29756E2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29756F2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975702D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975712D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975722D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975732D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975742D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975752D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975762D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975772D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975782D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975792D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29757A2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29757B2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29757C2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29757D2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29757E2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29757F2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975802D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975812D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975822D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975832D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975842D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975852D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975862D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975872D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975882D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975892D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29758A2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29758B2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29758C2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29758D2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29758E2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29758F2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975902D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975912D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975922D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975932D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975942D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975952D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975962D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975972D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975982D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E2975992D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29759A2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29759B2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		0E29759C2D947E56001A9677 /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
 		0E29C9D52A503C8600D9884F /* DMMessagesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */; };
 		0E29C9DB2A503DCE00D9884F /* DMDatabaseUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */; };
 		0E4409732A49427400AF5BAD /* DMMyLogDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */; };
@@ -1630,7 +1686,7 @@
 		1A7F47BD83FD14EE262B4CA6 /* Pods_HCFDiet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD25231CB5F39726BC81372 /* Pods_HCFDiet.framework */; };
 		210CDE593E0EEE5DEFFE4CE6 /* Pods_LightOfTheWhirl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8886BFA3A51B24E45F4BAAF /* Pods_LightOfTheWhirl.framework */; };
 		22C5AB1C1717CD39F8ECE1C2 /* Pods_SoarWell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8542ED72934FB6DAD04821D3 /* Pods_SoarWell.framework */; };
-		2344157806B0FFA685CF41C8 /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA61B00CBD1A3E5C4D69BF6 /* Pods_ReplicaTemplate.framework */; };
+		2344157806B0FFA685CF41C8 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		28BA0944ACEAB6FE1A45046D /* Pods_NVPEatSmart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 671044B5FB80B2B33F4EF832 /* Pods_NVPEatSmart.framework */; };
 		327ACE6A3B6B1808C4CA32C6 /* Pods_RGH_P4YH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9363B5B0DB65D211A516761E /* Pods_RGH_P4YH.framework */; };
 		344D04E0062B1EF17D26813E /* Pods_DietMasterGoPlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B488B5092C0776AE999195E4 /* Pods_DietMasterGoPlus.framework */; };
@@ -9196,6 +9252,178 @@
 		BFD457A42B17AFD500AB2E40 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		BFD457BE2B17AFF700AB2E40 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFD456F02B17AE4000AB2E40 /* GoogleService-Info.plist */; };
 		BFD457BF2B17AFFB00AB2E40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFD456EF2B17AE4000AB2E40 /* Assets.xcassets */; };
+		BFD562392DD3A480001E276F /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
+		BFD5623A2DD3A480001E276F /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
+		BFD5623B2DD3A480001E276F /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
+		BFD5623C2DD3A480001E276F /* UserMealType.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1A26BD1D82004D1654 /* UserMealType.xib */; };
+		BFD5623D2DD3A480001E276F /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2467EC6912D5749600B5591E /* DetailViewController.xib */; };
+		BFD5623E2DD3A480001E276F /* Log_Add.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2409564F12D749660065548F /* Log_Add.xib */; };
+		BFD5623F2DD3A480001E276F /* RecordWeightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FF54FD12D781D900E81066 /* RecordWeightView.xib */; };
+		BFD562402DD3A480001E276F /* FoodsHome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2417DD7F131D942200346132 /* FoodsHome.xib */; };
+		BFD562412DD3A480001E276F /* DailyActivityTypeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1F26BD1D98004D1654 /* DailyActivityTypeVC.xib */; };
+		BFD562422DD3A480001E276F /* UserGoalVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2426BD1DAE004D1654 /* UserGoalVC.xib */; };
+		BFD562432DD3A480001E276F /* ManageFoods.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247695B013FEA91000ED37E6 /* ManageFoods.xib */; };
+		BFD562442DD3A480001E276F /* FoodCategoryPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CE65382148EB2AA00A3C992 /* FoodCategoryPicker.xib */; };
+		BFD562452DD3A480001E276F /* MeasurePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC81492DB950098A0C1 /* MeasurePicker.xib */; };
+		BFD562462DD3A480001E276F /* FoodsList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B54DB14A2A72800D210CA /* FoodsList.xib */; };
+		BFD562472DD3A480001E276F /* ExercisesDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E71B79214DE157C008C9576 /* ExercisesDetailViewController.xib */; };
+		BFD562482DD3A480001E276F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5423014E2FBD60023BA4C /* Settings.bundle */; };
+		BFD562492DD3A480001E276F /* MyGoalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208FA25015A5700F412B0 /* MyGoalViewController.xib */; };
+		BFD5624A2DD3A480001E276F /* MyMovesDetailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035C021F1F29F00968755 /* MyMovesDetailCollectionViewCell.xib */; };
+		BFD5624B2DD3A480001E276F /* InAppPurchaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D9250153C300F412B0 /* InAppPurchaseViewController.xib */; };
+		BFD5624C2DD3A480001E276F /* FavoriteMealsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EB5424D14E325210023BA4C /* FavoriteMealsViewController.xib */; };
+		BFD5624D2DD3A480001E276F /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E4788B714EACC0B00B8FFE3 /* LoginViewController.xib */; };
+		BFD5624E2DD3A480001E276F /* MyLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4383249885D100583000 /* MyLogTableViewCell.xib */; };
+		BFD5624F2DD3A480001E276F /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40402831224E414C0081FFD3 /* sound.mp3 */; };
+		BFD562512DD3A480001E276F /* headerVw.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208D7250153C300F412B0 /* headerVw.xib */; };
+		BFD562532DD3A480001E276F /* measure_sql.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F907A2A43289F00956F1E /* measure_sql.sql */; };
+		BFD562542DD3A480001E276F /* LearnMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D415003DA6008413AB /* LearnMoreViewController.xib */; };
+		BFD562552DD3A480001E276F /* privacypolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D815004364008413AB /* privacypolicy.html */; };
+		BFD562562DD3A480001E276F /* termsofservice.html in Resources */ = {isa = PBXBuildFile; fileRef = 0E3F44D915004364008413AB /* termsofservice.html */; };
+		BFD562572DD3A480001E276F /* AppImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90962A43289F00956F1E /* AppImages.xcassets */; };
+		BFD562582DD3A480001E276F /* DMGO_v3.9.2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 0E6F90992A43289F00956F1E /* DMGO_v3.9.2.sqlite */; };
+		BFD562592DD3A480001E276F /* MyMovesListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2119A49224BA2210020FF5D /* MyMovesListTableViewCell.xib */; };
+		BFD5625A2DD3A480001E276F /* ProfileVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65301CC2269E50A600CA2CAA /* ProfileVC.xib */; };
+		BFD5625B2DD3A480001E276F /* MyMovesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88A821ECA95F00B2F232 /* MyMovesTableViewCell.xib */; };
+		BFD5625C2DD3A480001E276F /* MealPlanDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FF437B2497F4B900583000 /* MealPlanDetailsTableViewCell.xib */; };
+		BFD5625D2DD3A480001E276F /* ProfileAlertVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1026BD1D48004D1654 /* ProfileAlertVCViewController.xib */; };
+		BFD5625E2DD3A480001E276F /* MealPlanDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E75DDA615867E50003B1BB7 /* MealPlanDetailViewController.xib */; };
+		BFD5625F2DD3A480001E276F /* MyMovesVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C45660233E26D80085A7D8 /* MyMovesVideoPlayerViewController.xib */; };
+		BFD562602DD3A480001E276F /* MyMovesDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403D88B221ECD53200B2F232 /* MyMovesDetailsViewController.xib */; };
+		BFD562612DD3A480001E276F /* ProfileContactVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D1626BD1D6B004D1654 /* ProfileContactVC.xib */; };
+		BFD562622DD3A480001E276F /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E035BF21F1F29E00968755 /* MyMovesDetailHeaderCollectionReusableView.xib */; };
+		BFD562632DD3A480001E276F /* GroceryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF65981589365800CCE0AD /* GroceryListViewController.xib */; };
+		BFD562642DD3A480001E276F /* PlansTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208DD250153C300F412B0 /* PlansTableViewCell.xib */; };
+		BFD562652DD3A480001E276F /* OtherHealthServiceVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65462D2926BD1DC3004D1654 /* OtherHealthServiceVC.xib */; };
+		BFD562662DD3A480001E276F /* DietMasterGoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650208F5250158BC00F412B0 /* DietMasterGoViewController.xib */; };
+		BFD562672DD3A480001E276F /* MyMovesDetailFooterCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 402A3C1321F88696005DEC50 /* MyMovesDetailFooterCollectionReusableView.xib */; };
+		BFD562682DD3A480001E276F /* MyMovesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40AFA92D21FA13CD009140D9 /* MyMovesListViewController.xib */; };
+		BFD5626B2DD3A480001E276F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		BFD5626C2DD3A480001E276F /* DMDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83C4AB2A4F1EFE001DC6BD /* DMDetailTableViewCell.m */; };
+		BFD5626D2DD3A480001E276F /* DietMasterGoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DietMasterGoAppDelegate.m */; };
+		BFD5626E2DD3A480001E276F /* DMMessagesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9D42A503C8600D9884F /* DMMessagesDataProvider.m */; };
+		BFD5626F2DD3A480001E276F /* AppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D7129B928400A84340 /* AppSettings.m */; };
+		BFD562702DD3A480001E276F /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E101BA92A5626E700D8E7E2 /* BaseViewController.m */; };
+		BFD562712DD3A480001E276F /* ExchangeFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 2455070E129BA4A700A84340 /* ExchangeFood.m */; };
+		BFD562722DD3A480001E276F /* MyMovesDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C121F1F29F00968755 /* MyMovesDetailCollectionViewCell.m */; };
+		BFD562732DD3A480001E276F /* MyLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 245506D2129B926F00A84340 /* MyLogViewController.m */; };
+		BFD562742DD3A480001E276F /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2467EC6812D5749600B5591E /* DetailViewController.m */; };
+		BFD562752DD3A480001E276F /* HomeScreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2975622D947E56001A9677 /* HomeScreenButton.swift */; };
+		BFD562762DD3A480001E276F /* Log_Add.m in Sources */ = {isa = PBXBuildFile; fileRef = 2409564E12D749660065548F /* Log_Add.m */; };
+		BFD562772DD3A480001E276F /* RecordWeightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 24FF54FC12D781D900E81066 /* RecordWeightView.m */; };
+		BFD562782DD3A480001E276F /* DMMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8EA2A3DC4C70095BDEC /* DMMove.m */; };
+		BFD562792DD3A480001E276F /* FoodsHome.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DD7E131D942200346132 /* FoodsHome.m */; };
+		BFD5627A2DD3A480001E276F /* FoodsSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417DE0C131DA14E00346132 /* FoodsSearch.m */; };
+		BFD5627B2DD3A480001E276F /* ManageFoods.m in Sources */ = {isa = PBXBuildFile; fileRef = 247695AF13FEA91000ED37E6 /* ManageFoods.m */; };
+		BFD5627C2DD3A480001E276F /* FoodCategoryPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CE65381148EB2AA00A3C992 /* FoodCategoryPicker.m */; };
+		BFD5627D2DD3A480001E276F /* MeasurePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CAB4EC71492DB950098A0C1 /* MeasurePicker.m */; };
+		BFD5627E2DD3A480001E276F /* DMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E32A3CF7E50095BDEC /* DMConstants.m */; };
+		BFD5627F2DD3A480001E276F /* FoodsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C3B54DA14A2A72800D210CA /* FoodsList.m */; };
+		BFD562802DD3A480001E276F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91402A43D50C00956F1E /* UIColor+Extension.swift */; };
+		BFD562812DD3A480001E276F /* TUTSimpleScatterPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE6F4714BF4A94004DEF36 /* TUTSimpleScatterPlot.m */; };
+		BFD562822DD3A480001E276F /* MealPlanDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF437A2497F4B900583000 /* MealPlanDetailsTableViewCell.m */; };
+		BFD562832DD3A480001E276F /* DMActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E02A3CF5430095BDEC /* DMActivityIndicator.m */; };
+		BFD562842DD3A480001E276F /* MCNewCustomLayeredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F170A2A33BBE700217BF9 /* MCNewCustomLayeredView.m */; };
+		BFD562852DD3A480001E276F /* ExercisesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E81811E14D46A49002C8520 /* ExercisesViewController.m */; };
+		BFD562862DD3A480001E276F /* DMFood.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3D2A3B6DAE004C6033 /* DMFood.m */; };
+		BFD562872DD3A480001E276F /* MyMovesDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88B121ECD53200B2F232 /* MyMovesDetailsViewController.m */; };
+		BFD562882DD3A480001E276F /* ExercisesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79114DE157C008C9576 /* ExercisesDetailViewController.m */; };
+		BFD562892DD3A480001E276F /* DMMoveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBF2A4751690017D131 /* DMMoveSet.m */; };
+		BFD5628A2DD3A480001E276F /* DietmasterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E71B79714DE1AD6008C9576 /* DietmasterEngine.m */; };
+		BFD5628B2DD3A480001E276F /* FavoriteMealsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB5424C14E325210023BA4C /* FavoriteMealsViewController.m */; };
+		BFD5628C2DD3A480001E276F /* DMWeightLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B402A3B9E68004C6033 /* DMWeightLogEntry.m */; };
+		BFD5628D2DD3A480001E276F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4788B614EACC0B00B8FFE3 /* LoginViewController.m */; };
+		BFD5628E2DD3A480001E276F /* MyMovesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AFA92C21FA13CD009140D9 /* MyMovesListViewController.m */; };
+		BFD5628F2DD3A480001E276F /* LearnMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F44D315003DA6008413AB /* LearnMoreViewController.m */; };
+		BFD562902DD3A480001E276F /* NSData+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E002FF3153E19560094341F /* NSData+Blocks.m */; };
+		BFD562912DD3A480001E276F /* DMMealPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F52A50BB29000BDDF1 /* DMMealPlan.m */; };
+		BFD562922DD3A480001E276F /* DMMyLogDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409722A49427400AF5BAD /* DMMyLogDataProvider.m */; };
+		BFD562932DD3A480001E276F /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8E72A3CF9770095BDEC /* NSString+Encode.m */; };
+		BFD562942DD3A480001E276F /* MealPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */; };
+		BFD562952DD3A480001E276F /* ProfileAlertVCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D0F26BD1D48004D1654 /* ProfileAlertVCViewController.m */; };
+		BFD562962DD3A480001E276F /* DMMoveRoutine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DC22A4757010017D131 /* DMMoveRoutine.m */; };
+		BFD562972DD3A480001E276F /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E101BA42A56028900D8E7E2 /* AppConfiguration.swift */; };
+		BFD562982DD3A480001E276F /* MealPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E75DDA515867E50003B1BB7 /* MealPlanDetailViewController.m */; };
+		BFD562992DD3A480001E276F /* ExchangeFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFF65801588CA5200CCE0AD /* ExchangeFoodViewController.m */; };
+		BFD5629A2DD3A480001E276F /* CustomImageFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C621F1F2A000968755 /* CustomImageFlowLayout.m */; };
+		BFD5629B2DD3A480001E276F /* DMMoveCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8ED2A3DE56F0095BDEC /* DMMoveCategory.m */; };
+		BFD5629C2DD3A480001E276F /* ProfileContactVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1526BD1D6B004D1654 /* ProfileContactVC.m */; };
+		BFD5629D2DD3A480001E276F /* UserMealType.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1B26BD1D82004D1654 /* UserMealType.m */; };
+		BFD5629E2DD3A480001E276F /* MyMovesListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2119A48224BA2210020FF5D /* MyMovesListTableViewCell.m */; };
+		BFD5629F2DD3A480001E276F /* DMMovePickerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FB2A4635940032162E /* DMMovePickerRow.m */; };
+		BFD562A02DD3A480001E276F /* MCNewCustomLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F16FF2A33BBE700217BF9 /* MCNewCustomLayer.m */; };
+		BFD562A12DD3A480001E276F /* InAppPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D4250153C300F412B0 /* InAppPurchaseViewController.m */; };
+		BFD562A22DD3A480001E276F /* DMAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409752A49A3FF00AF5BAD /* DMAuthManager.m */; };
+		BFD562A32DD3A480001E276F /* MyMovesDetailFooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 402A3C0F21F87E59005DEC50 /* MyMovesDetailFooterCollectionReusableView.m */; };
+		BFD562A42DD3A480001E276F /* DMDatabaseUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E29C9DA2A503DCE00D9884F /* DMDatabaseUtilities.m */; };
+		BFD562A52DD3A480001E276F /* DMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A3B3A2A3B66AC004C6033 /* DMMessage.m */; };
+		BFD562A62DD3A480001E276F /* headerVw.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208D6250153C300F412B0 /* headerVw.m */; };
+		BFD562A72DD3A480001E276F /* UserDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F22A3E08E00095BDEC /* UserDataFetcher.swift */; };
+		BFD562A82DD3A480001E276F /* PlansTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208DC250153C300F412B0 /* PlansTableViewCell.m */; };
+		BFD562A92DD3A480001E276F /* DMMovePlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09FE2A4672790032162E /* DMMovePlan.m */; };
+		BFD562AA2DD3A480001E276F /* MyMovesDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097D2A4A0B5F00AF5BAD /* MyMovesDataProvider.m */; };
+		BFD562AB2DD3A480001E276F /* MyMovesVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C4565F233E26D80085A7D8 /* MyMovesVideoPlayerViewController.m */; };
+		BFD562AC2DD3A480001E276F /* UserGoalVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D2326BD1DAE004D1654 /* UserGoalVC.m */; };
+		BFD562AD2DD3A480001E276F /* MCPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17062A33BBE700217BF9 /* MCPieChartView.m */; };
+		BFD562AE2DD3A480001E276F /* DMMoveTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8EC8F02A3DE57D0095BDEC /* DMMoveTag.m */; };
+		BFD562AF2DD3A480001E276F /* BarCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E89824E2A33D47600DD7221 /* BarCodeScanner.swift */; };
+		BFD562B02DD3A480001E276F /* DMSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E013D2A4DA936005597A5 /* DMSettingsViewController.swift */; };
+		BFD562B12DD3A480001E276F /* ProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D0A26BD1D28004D1654 /* ProfileVC.m */; };
+		BFD562B22DD3A480001E276F /* OtherHealthServiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D2826BD1DC2004D1654 /* OtherHealthServiceVC.m */; };
+		BFD562B32DD3A480001E276F /* FetchUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409772A49EA6E00AF5BAD /* FetchUtilities.swift */; };
+		BFD562B42DD3A480001E276F /* SendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2B6187EDE40004A542C /* SendView.m */; };
+		BFD562B52DD3A480001E276F /* MyMovesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88A721ECA95F00B2F232 /* MyMovesTableViewCell.m */; };
+		BFD562B62DD3A480001E276F /* DMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFE7F02A41DB3900DE631E /* DMPickerViewController.swift */; };
+		BFD562B72DD3A480001E276F /* DMDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91392A4350E300956F1E /* DMDatePickerViewController.swift */; };
+		BFD562B82DD3A480001E276F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A9187EDE40004A542C /* MessageViewController.m */; };
+		BFD562B92DD3A480001E276F /* PurchaseIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CA250152FA00F412B0 /* PurchaseIAPHelper.m */; };
+		BFD562BA2DD3A480001E276F /* MCUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17002A33BBE700217BF9 /* MCUtil.m */; };
+		BFD562BB2DD3A480001E276F /* GrowingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F62A45CD1B0032162E /* GrowingTextView.swift */; };
+		BFD562BC2DD3A480001E276F /* MainMenuFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F91372A432A4B00956F1E /* MainMenuFAB.swift */; };
+		BFD562BD2DD3A480001E276F /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208CD2501531A00F412B0 /* IAPHelper.m */; };
+		BFD562BE2DD3A480001E276F /* DMMoveDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA18DBC2A4745040017D131 /* DMMoveDay.m */; };
+		BFD562BF2DD3A480001E276F /* MyMovesDetailHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E035C421F1F2A000968755 /* MyMovesDetailHeaderCollectionReusableView.m */; };
+		BFD562C02DD3A480001E276F /* UIViewController+Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913C2A43580A00956F1E /* UIViewController+Navigation.m */; };
+		BFD562C12DD3A480001E276F /* DailyActivityTypeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 65462D1E26BD1D98004D1654 /* DailyActivityTypeVC.m */; };
+		BFD562C22DD3A480001E276F /* DMMealPlanItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BF1F82A50BDCF000BDDF1 /* DMMealPlanItem.m */; };
+		BFD562C32DD3A480001E276F /* DMGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6A62A3B3A1000DB351A /* DMGUtilities.m */; };
+		BFD562C42DD3A480001E276F /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3568E2A5187EDE40004A542C /* MessageCell.m */; };
+		BFD562C52DD3A480001E276F /* NSNull+NullCategoryExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F2DE85249AE0EB00D00FF4 /* NSNull+NullCategoryExtension.m */; };
+		BFD562C62DD3A480001E276F /* MCSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9F17072A33BBE700217BF9 /* MCSliceLayer.m */; };
+		BFD562C72DD3A480001E276F /* StepData.m in Sources */ = {isa = PBXBuildFile; fileRef = 403FEB521FD149A5006D9B8F /* StepData.m */; };
+		BFD562C82DD3A480001E276F /* DMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDAB6AB2A3B4EAA00DB351A /* DMUser.m */; };
+		BFD562C92DD3A480001E276F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F8FF32A43104200956F1E /* SceneDelegate.swift */; };
+		BFD562CA2DD3A480001E276F /* DietMasterGoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208F2250158A900F412B0 /* DietMasterGoViewController.m */; };
+		BFD562CB2DD3A480001E276F /* MyLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4382249885D100583000 /* MyLogTableViewCell.m */; };
+		BFD562CC2DD3A480001E276F /* DMMealPlanDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4409802A4B13E500AF5BAD /* DMMealPlanDataProvider.m */; };
+		BFD562CD2DD3A480001E276F /* NSObject+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8588D92A41238400AAB096 /* NSObject+Description.m */; };
+		BFD562CE2DD3A480001E276F /* DayDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D09F82A45DD8E0032162E /* DayDataProvider.swift */; };
+		BFD562CF2DD3A480001E276F /* DMDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44097A2A49EFCB00AF5BAD /* DMDataFetcher.m */; };
+		BFD562D02DD3A480001E276F /* GroceryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */; };
+		BFD562D12DD3A480001E276F /* MyGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208FB25015A5700F412B0 /* MyGoalViewController.m */; };
+		BFD562D22DD3A480001E276F /* MyMovesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D88AC21ECA98600B2F232 /* MyMovesViewController.m */; };
+		BFD562D32DD3A480001E276F /* LogDaySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F913E2A43C1F500956F1E /* LogDaySummaryView.swift */; };
+		BFD562D42DD3A480001E276F /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 650208E82501552400F412B0 /* KeychainItemWrapper.m */; };
+		BFD562D62DD3A480001E276F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4318E2F38800FB97A7 /* SystemConfiguration.framework */; };
+		BFD562D72DD3A480001E276F /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402C5060221577C600259359 /* AVKit.framework */; };
+		BFD562D82DD3A480001E276F /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403FEB4E1FD1379C006D9B8F /* HealthKit.framework */; };
+		BFD562D92DD3A480001E276F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D254AD1D62F564008513A0 /* Security.framework */; };
+		BFD562DA2DD3A480001E276F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586641D59BB5F005354D2 /* WebKit.framework */; };
+		BFD562DB2DD3A480001E276F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D586621D59BB53005354D2 /* CoreTelephony.framework */; };
+		BFD562DC2DD3A480001E276F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA4118E2F37900FB97A7 /* CFNetwork.framework */; };
+		BFD562DD2DD3A480001E276F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 685DFA3F18E2F37200FB97A7 /* MobileCoreServices.framework */; };
+		BFD562DE2DD3A480001E276F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADF531718B79400628F41 /* AudioToolbox.framework */; };
+		BFD562DF2DD3A480001E276F /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADF4B1718B26800628F41 /* ImageIO.framework */; };
+		BFD562E02DD3A480001E276F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9D17174DFB00628F41 /* CoreVideo.framework */; };
+		BFD562E12DD3A480001E276F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9B17174DF600628F41 /* CoreMedia.framework */; };
+		BFD562E22DD3A480001E276F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5ADC9917174DF100628F41 /* AVFoundation.framework */; };
+		BFD562E32DD3A480001E276F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E4788C514EAD8FA00B8FFE3 /* MessageUI.framework */; };
+		BFD562E42DD3A480001E276F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECE6ED414BF3FC1004DEF36 /* QuartzCore.framework */; };
+		BFD562E52DD3A480001E276F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		BFD562E62DD3A480001E276F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		BFD562E72DD3A480001E276F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		BFD562F22DD3A4B4001E276F /* SymliphyNutrition.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BFD562342DD3A379001E276F /* SymliphyNutrition.xcconfig */; };
+		BFD562F32DD3A4C5001E276F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFD562332DD3A379001E276F /* Assets.xcassets */; };
 		BFE14B8D2B61A31F00667F29 /* MyLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D3129B926F00A84340 /* MyLogViewController.xib */; };
 		BFE14B8F2B61A31F00667F29 /* AppSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 245506D8129B928400A84340 /* AppSettings.xib */; };
 		BFE14B902B61A31F00667F29 /* ExchangeFood.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2455070F129BA4A700A84340 /* ExchangeFood.xib */; };
@@ -10227,6 +10455,7 @@
 		C3E20FD4F3707C9B2ECBA92F /* Pods_VAYDA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50875338B60E03B900504EED /* Pods_VAYDA.framework */; };
 		CB6180DD59CA1A3712DEF0F5 /* Pods_EzDietPlanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073A12D5F0290FDBC4946373 /* Pods_EzDietPlanner.framework */; };
 		D3CF66537F3F438CABE7DBAF /* Pods_SlimNation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D8CBBC5BF328AAFA1A25A9 /* Pods_SlimNation.framework */; };
+		DE3886641733026BA0526FCD /* Pods_SymliphyNutrition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 543978E05DBF313FF008AEA4 /* Pods_SymliphyNutrition.framework */; };
 		E0E37BD3DCD87F225ECA21BA /* Pods_YOUtrition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ACCA5A680989E869035C75D /* Pods_YOUtrition.framework */; };
 		E3365CC2F682358CAE43FC04 /* Pods_DietAlpha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98D95BAB35B7B71455488CA4 /* Pods_DietAlpha.framework */; };
 		E33A64837F5A5B08C09BD6AD /* Pods_TRANSFORM_by_Juliette_Wooten.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EF728307DDF00FA425B407 /* Pods_TRANSFORM_by_Juliette_Wooten.framework */; };
@@ -10759,6 +10988,16 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BFD562EA2DD3A480001E276F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFE14C512B61A31F00667F29 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -10842,6 +11081,7 @@
 		0B302F710B6713AAB989F730 /* Pods-RGH P4YH.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RGH P4YH.distribution.xcconfig"; path = "Target Support Files/Pods-RGH P4YH/Pods-RGH P4YH.distribution.xcconfig"; sourceTree = "<group>"; };
 		0BB472CC10D7906B68E10DEE /* Pods-JLNutrition.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLNutrition.release.xcconfig"; path = "Target Support Files/Pods-JLNutrition/Pods-JLNutrition.release.xcconfig"; sourceTree = "<group>"; };
 		0BD25231CB5F39726BC81372 /* Pods_HCFDiet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HCFDiet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C8F38C5632387BC07C0F0FA /* Pods-SymliphyNutrition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SymliphyNutrition.debug.xcconfig"; path = "Target Support Files/Pods-SymliphyNutrition/Pods-SymliphyNutrition.debug.xcconfig"; sourceTree = "<group>"; };
 		0E002FF2153E19550094341F /* NSData+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Blocks.h"; sourceTree = "<group>"; };
 		0E002FF3153E19560094341F /* NSData+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Blocks.m"; sourceTree = "<group>"; };
 		0E04F3202AABAC5A0068A488 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -10988,7 +11228,6 @@
 		0EA18DC72A47BD670017D131 /* DMPickerViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMPickerViewDataSource.h; sourceTree = "<group>"; };
 		0EA5C9722A4B57D100698BFE /* GroceryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroceryListViewController.m; sourceTree = "<group>"; };
 		0EA5C9732A4B57D100698BFE /* GroceryListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroceryListViewController.h; sourceTree = "<group>"; };
-		0EA61B00CBD1A3E5C4D69BF6 /* Pods_ReplicaTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReplicaTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EAD266D1578EAED008E77D7 /* MealPlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealPlanViewController.h; sourceTree = "<group>"; };
 		0EAD266E1578EAED008E77D7 /* MealPlanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealPlanViewController.m; sourceTree = "<group>"; };
 		0EB5423014E2FBD60023BA4C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -11169,7 +11408,9 @@
 		50875338B60E03B900504EED /* Pods_VAYDA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VAYDA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		509400FA49C4DA59B8C85F35 /* Pods-VAYDA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAYDA.release.xcconfig"; path = "Target Support Files/Pods-VAYDA/Pods-VAYDA.release.xcconfig"; sourceTree = "<group>"; };
 		53018DCB97F98ACD128C3660 /* Pods-MedicallyFit.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MedicallyFit.distribution.xcconfig"; path = "Target Support Files/Pods-MedicallyFit/Pods-MedicallyFit.distribution.xcconfig"; sourceTree = "<group>"; };
+		536AE63762CF6016875E5BB9 /* Pods-SymliphyNutrition.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SymliphyNutrition.release.xcconfig"; path = "Target Support Files/Pods-SymliphyNutrition/Pods-SymliphyNutrition.release.xcconfig"; sourceTree = "<group>"; };
 		53C94794EFD21C86D8174423 /* Pods_Global_Fit_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Global_Fit_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		543978E05DBF313FF008AEA4 /* Pods_SymliphyNutrition.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SymliphyNutrition.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54762E82785E1D0FC19F36FA /* Pods-Nutrishape.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutrishape.debug.xcconfig"; path = "Target Support Files/Pods-Nutrishape/Pods-Nutrishape.debug.xcconfig"; sourceTree = "<group>"; };
 		553CD8D14B7523F0D7C8857C /* Pods-BEYOND MOTION NUTRITION.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BEYOND MOTION NUTRITION.release.xcconfig"; path = "Target Support Files/Pods-BEYOND MOTION NUTRITION/Pods-BEYOND MOTION NUTRITION.release.xcconfig"; sourceTree = "<group>"; };
 		59FB124CC6B268C45D443116 /* Pods_Nutrishape.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutrishape.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -11496,6 +11737,9 @@
 		BFD456F02B17AE4000AB2E40 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BFD456F12B17AE4000AB2E40 /* UpperhandAthletics.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UpperhandAthletics.xcconfig; sourceTree = "<group>"; };
 		BFD457BB2B17AFD500AB2E40 /* UpperhandAthletics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UpperhandAthletics.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFD562332DD3A379001E276F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BFD562342DD3A379001E276F /* SymliphyNutrition.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SymliphyNutrition.xcconfig; sourceTree = "<group>"; };
+		BFD562F02DD3A480001E276F /* SymliphyNutrition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SymliphyNutrition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFE14B872B61A30A00667F29 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFE14B882B61A30A00667F29 /* VAYDA.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = VAYDA.xcconfig; sourceTree = "<group>"; };
 		BFE14B892B61A30A00667F29 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -11550,6 +11794,7 @@
 		DC1A75F0FDD506023455BEF3 /* Pods-MyKetaFit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyKetaFit.debug.xcconfig"; path = "Target Support Files/Pods-MyKetaFit/Pods-MyKetaFit.debug.xcconfig"; sourceTree = "<group>"; };
 		DCB0443B5DB886D074542886 /* Pods-VAYDA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAYDA.debug.xcconfig"; path = "Target Support Files/Pods-VAYDA/Pods-VAYDA.debug.xcconfig"; sourceTree = "<group>"; };
 		DD58308DF1A0A99800F83F70 /* Pods-GETUFIT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GETUFIT.debug.xcconfig"; path = "Target Support Files/Pods-GETUFIT/Pods-GETUFIT.debug.xcconfig"; sourceTree = "<group>"; };
+		DDDD911FE2D3EE3DF5479847 /* Pods-SymliphyNutrition.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SymliphyNutrition.distribution.xcconfig"; path = "Target Support Files/Pods-SymliphyNutrition/Pods-SymliphyNutrition.distribution.xcconfig"; sourceTree = "<group>"; };
 		DEABE5716D6404A34368CEC2 /* Pods_NutriMove.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutriMove.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF2BF55457B4118C27EC009C /* Pods-YOUTrition.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YOUTrition.release.xcconfig"; path = "Target Support Files/Pods-YOUTrition/Pods-YOUTrition.release.xcconfig"; sourceTree = "<group>"; };
 		E150F032A37EA76A7FEFDAC9 /* Pods-Horizons Burn Zone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Horizons Burn Zone.release.xcconfig"; path = "Target Support Files/Pods-Horizons Burn Zone/Pods-Horizons Burn Zone.release.xcconfig"; sourceTree = "<group>"; };
@@ -11632,7 +11877,7 @@
 				0E101C5D2A56CC7300D8E7E2 /* UIKit.framework in Frameworks */,
 				0E101C5E2A56CC7300D8E7E2 /* CoreGraphics.framework in Frameworks */,
 				37DB646CE4520B84A54A60A1 /* (null) in Frameworks */,
-				2344157806B0FFA685CF41C8 /* Pods_ReplicaTemplate.framework in Frameworks */,
+				2344157806B0FFA685CF41C8 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12409,7 +12654,6 @@
 				BF6083292D94849A004E403E /* CFNetwork.framework in Frameworks */,
 				BF60832A2D94849A004E403E /* MobileCoreServices.framework in Frameworks */,
 				BF60832B2D94849A004E403E /* AudioToolbox.framework in Frameworks */,
-				0E2975AE2D94B4E2001A9677 /* PrismSDK in Frameworks */,
 				BF60832C2D94849A004E403E /* ImageIO.framework in Frameworks */,
 				BF60832D2D94849A004E403E /* CoreVideo.framework in Frameworks */,
 				BF60832E2D94849A004E403E /* CoreMedia.framework in Frameworks */,
@@ -13022,6 +13266,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BFD562D52DD3A480001E276F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFD562D62DD3A480001E276F /* SystemConfiguration.framework in Frameworks */,
+				BFD562D72DD3A480001E276F /* AVKit.framework in Frameworks */,
+				BFD562D82DD3A480001E276F /* HealthKit.framework in Frameworks */,
+				BFD562D92DD3A480001E276F /* Security.framework in Frameworks */,
+				BFD562DA2DD3A480001E276F /* WebKit.framework in Frameworks */,
+				BFD562DB2DD3A480001E276F /* CoreTelephony.framework in Frameworks */,
+				BFD562DC2DD3A480001E276F /* CFNetwork.framework in Frameworks */,
+				BFD562DD2DD3A480001E276F /* MobileCoreServices.framework in Frameworks */,
+				BFD562DE2DD3A480001E276F /* AudioToolbox.framework in Frameworks */,
+				BFD562DF2DD3A480001E276F /* ImageIO.framework in Frameworks */,
+				BFD562E02DD3A480001E276F /* CoreVideo.framework in Frameworks */,
+				BFD562E12DD3A480001E276F /* CoreMedia.framework in Frameworks */,
+				BFD562E22DD3A480001E276F /* AVFoundation.framework in Frameworks */,
+				BFD562E32DD3A480001E276F /* MessageUI.framework in Frameworks */,
+				BFD562E42DD3A480001E276F /* QuartzCore.framework in Frameworks */,
+				BFD562E52DD3A480001E276F /* Foundation.framework in Frameworks */,
+				BFD562E62DD3A480001E276F /* UIKit.framework in Frameworks */,
+				BFD562E72DD3A480001E276F /* CoreGraphics.framework in Frameworks */,
+				DE3886641733026BA0526FCD /* Pods_SymliphyNutrition.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFE14C292B61A31F00667F29 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -13364,6 +13634,9 @@
 				678E8BBE916AEE92B5C4FCA2 /* Pods-EmbraceHealth.debug.xcconfig */,
 				245FD5E29D6EF42D3D5ED409 /* Pods-EmbraceHealth.release.xcconfig */,
 				6D45BCC91B024A5A7124CE7F /* Pods-EmbraceHealth.distribution.xcconfig */,
+				0C8F38C5632387BC07C0F0FA /* Pods-SymliphyNutrition.debug.xcconfig */,
+				536AE63762CF6016875E5BB9 /* Pods-SymliphyNutrition.release.xcconfig */,
+				DDDD911FE2D3EE3DF5479847 /* Pods-SymliphyNutrition.distribution.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -13417,6 +13690,7 @@
 		0E101C6C2A56CE4900D8E7E2 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				BFD562352DD3A379001E276F /* SymliphyNutrition */,
 				BF6082842D948340004E403E /* EmbraceHealth */,
 				BFA7501C2D55255B008ADD7A /* eMedEats */,
 				BF3FD1642D4BE97E00F00CCA /* W3FN */,
@@ -14102,6 +14376,7 @@
 				BF3FD24A2D4BE9C200F00CCA /* W3FN.app */,
 				BFA751022D552618008ADD7A /* eMedEats.app */,
 				BF60833C2D94849A004E403E /* EmbraceHealth.app */,
+				BFD562F02DD3A480001E276F /* SymliphyNutrition.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -14210,7 +14485,7 @@
 				C7E4664146BD37599C600BA5 /* Pods_W3FN.framework */,
 				C1270DE54F7FEBAB56FFC523 /* Pods_eMedEats.framework */,
 				02BA5FB21E7DFB1EBB24B5F7 /* Pods_EmbraceHealth.framework */,
-				0EA61B00CBD1A3E5C4D69BF6 /* Pods_ReplicaTemplate.framework */,
+				543978E05DBF313FF008AEA4 /* Pods_SymliphyNutrition.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -14873,6 +15148,15 @@
 				BFD456F12B17AE4000AB2E40 /* UpperhandAthletics.xcconfig */,
 			);
 			path = UpperhandAthletics;
+			sourceTree = "<group>";
+		};
+		BFD562352DD3A379001E276F /* SymliphyNutrition */ = {
+			isa = PBXGroup;
+			children = (
+				BFD562332DD3A379001E276F /* Assets.xcassets */,
+				BFD562342DD3A379001E276F /* SymliphyNutrition.xcconfig */,
+			);
+			path = SymliphyNutrition;
 			sourceTree = "<group>";
 		};
 		BFE14B862B61A30A00667F29 /* VAYDA */ = {
@@ -15997,6 +16281,26 @@
 			productReference = BFD457BB2B17AFD500AB2E40 /* UpperhandAthletics.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BFD562362DD3A480001E276F /* SymliphyNutrition */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BFD562EC2DD3A480001E276F /* Build configuration list for PBXNativeTarget "SymliphyNutrition" */;
+			buildPhases = (
+				BFD562372DD3A480001E276F /* [CP] Check Pods Manifest.lock */,
+				BFD562382DD3A480001E276F /* Resources */,
+				BFD5626A2DD3A480001E276F /* Sources */,
+				BFD562D52DD3A480001E276F /* Frameworks */,
+				BFD562EA2DD3A480001E276F /* Embed Frameworks */,
+				BFD562EB2DD3A480001E276F /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SymliphyNutrition;
+			productName = DietMasterGo;
+			productReference = BFD562F02DD3A480001E276F /* SymliphyNutrition.app */;
+			productType = "com.apple.product-type.application";
+		};
 		BFE14B8A2B61A31F00667F29 /* VAYDA */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BFE14C542B61A31F00667F29 /* Build configuration list for PBXNativeTarget "VAYDA" */;
@@ -16222,6 +16526,7 @@
 				BF3FD1652D4BE9C200F00CCA /* W3FN */,
 				BFA7501D2D552618008ADD7A /* eMedEats */,
 				BF6082852D94849A004E403E /* EmbraceHealth */,
+				BFD562362DD3A480001E276F /* SymliphyNutrition */,
 			);
 		};
 /* End PBXProject section */
@@ -16389,6 +16694,15 @@
 				0E101CB62A56D5B700D8E7E2 /* OtherHealthServiceVC.xib in Resources */,
 				0E101CB72A56D5B700D8E7E2 /* DietMasterGoViewController.xib in Resources */,
 				0E101CB82A56D5B700D8E7E2 /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
+				0E2975562D94625C001A9677 /* page1.html in Resources */,
+				0E2975572D94625C001A9677 /* main.js in Resources */,
+				0E2975582D94625C001A9677 /* page3.html in Resources */,
+				0E2975592D94625C001A9677 /* SampleCode.md in Resources */,
+				0E29755A2D94625C001A9677 /* styles.css in Resources */,
+				0E29755B2D94625C001A9677 /* page2.html in Resources */,
+				0E29755C2D94625C001A9677 /* pdf_styles.css in Resources */,
+				0E29755D2D94625C001A9677 /* BodyScanningPRD.md in Resources */,
+				0E29755E2D94625C001A9677 /* index.html in Resources */,
 				0E101CB92A56D5B700D8E7E2 /* MyMovesListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -17969,15 +18283,6 @@
 				BF6082A32D94849A004E403E /* privacypolicy.html in Resources */,
 				BF6082A42D94849A004E403E /* termsofservice.html in Resources */,
 				BF6082A52D94849A004E403E /* AppImages.xcassets in Resources */,
-				0E2975A42D94B4CA001A9677 /* page2.html in Resources */,
-				0E2975A52D94B4CA001A9677 /* page3.html in Resources */,
-				0E2975A62D94B4CA001A9677 /* pdf_styles.css in Resources */,
-				0E2975A72D94B4CA001A9677 /* main.js in Resources */,
-				0E2975A82D94B4CA001A9677 /* SampleCode.md in Resources */,
-				0E2975A92D94B4CA001A9677 /* styles.css in Resources */,
-				0E2975AA2D94B4CA001A9677 /* page1.html in Resources */,
-				0E2975AB2D94B4CA001A9677 /* BodyScanningPRD.md in Resources */,
-				0E2975AC2D94B4CA001A9677 /* index.html in Resources */,
 				BF6082A62D94849A004E403E /* DMGO_v3.9.2.sqlite in Resources */,
 				BF6082A72D94849A004E403E /* MyMovesListTableViewCell.xib in Resources */,
 				BF6082A82D94849A004E403E /* ProfileVC.xib in Resources */,
@@ -19154,6 +19459,61 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BFD562382DD3A480001E276F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFD562392DD3A480001E276F /* MyLogViewController.xib in Resources */,
+				BFD5623A2DD3A480001E276F /* AppSettings.xib in Resources */,
+				BFD5623B2DD3A480001E276F /* ExchangeFood.xib in Resources */,
+				BFD5623C2DD3A480001E276F /* UserMealType.xib in Resources */,
+				BFD5623D2DD3A480001E276F /* DetailViewController.xib in Resources */,
+				BFD5623E2DD3A480001E276F /* Log_Add.xib in Resources */,
+				BFD562F22DD3A4B4001E276F /* SymliphyNutrition.xcconfig in Resources */,
+				BFD5623F2DD3A480001E276F /* RecordWeightView.xib in Resources */,
+				BFD562402DD3A480001E276F /* FoodsHome.xib in Resources */,
+				BFD562412DD3A480001E276F /* DailyActivityTypeVC.xib in Resources */,
+				BFD562422DD3A480001E276F /* UserGoalVC.xib in Resources */,
+				BFD562432DD3A480001E276F /* ManageFoods.xib in Resources */,
+				BFD562442DD3A480001E276F /* FoodCategoryPicker.xib in Resources */,
+				BFD562452DD3A480001E276F /* MeasurePicker.xib in Resources */,
+				BFD562462DD3A480001E276F /* FoodsList.xib in Resources */,
+				BFD562472DD3A480001E276F /* ExercisesDetailViewController.xib in Resources */,
+				BFD562482DD3A480001E276F /* Settings.bundle in Resources */,
+				BFD562492DD3A480001E276F /* MyGoalViewController.xib in Resources */,
+				BFD5624A2DD3A480001E276F /* MyMovesDetailCollectionViewCell.xib in Resources */,
+				BFD5624B2DD3A480001E276F /* InAppPurchaseViewController.xib in Resources */,
+				BFD5624C2DD3A480001E276F /* FavoriteMealsViewController.xib in Resources */,
+				BFD5624D2DD3A480001E276F /* LoginViewController.xib in Resources */,
+				BFD5624E2DD3A480001E276F /* MyLogTableViewCell.xib in Resources */,
+				BFD5624F2DD3A480001E276F /* sound.mp3 in Resources */,
+				BFD562512DD3A480001E276F /* headerVw.xib in Resources */,
+				BFD562532DD3A480001E276F /* measure_sql.sql in Resources */,
+				BFD562542DD3A480001E276F /* LearnMoreViewController.xib in Resources */,
+				BFD562552DD3A480001E276F /* privacypolicy.html in Resources */,
+				BFD562562DD3A480001E276F /* termsofservice.html in Resources */,
+				BFD562572DD3A480001E276F /* AppImages.xcassets in Resources */,
+				BFD562582DD3A480001E276F /* DMGO_v3.9.2.sqlite in Resources */,
+				BFD562592DD3A480001E276F /* MyMovesListTableViewCell.xib in Resources */,
+				BFD5625A2DD3A480001E276F /* ProfileVC.xib in Resources */,
+				BFD5625B2DD3A480001E276F /* MyMovesTableViewCell.xib in Resources */,
+				BFD5625C2DD3A480001E276F /* MealPlanDetailsTableViewCell.xib in Resources */,
+				BFD5625D2DD3A480001E276F /* ProfileAlertVCViewController.xib in Resources */,
+				BFD5625E2DD3A480001E276F /* MealPlanDetailViewController.xib in Resources */,
+				BFD5625F2DD3A480001E276F /* MyMovesVideoPlayerViewController.xib in Resources */,
+				BFD562F32DD3A4C5001E276F /* Assets.xcassets in Resources */,
+				BFD562602DD3A480001E276F /* MyMovesDetailsViewController.xib in Resources */,
+				BFD562612DD3A480001E276F /* ProfileContactVC.xib in Resources */,
+				BFD562622DD3A480001E276F /* MyMovesDetailHeaderCollectionReusableView.xib in Resources */,
+				BFD562632DD3A480001E276F /* GroceryListViewController.xib in Resources */,
+				BFD562642DD3A480001E276F /* PlansTableViewCell.xib in Resources */,
+				BFD562652DD3A480001E276F /* OtherHealthServiceVC.xib in Resources */,
+				BFD562662DD3A480001E276F /* DietMasterGoViewController.xib in Resources */,
+				BFD562672DD3A480001E276F /* MyMovesDetailFooterCollectionReusableView.xib in Resources */,
+				BFD562682DD3A480001E276F /* MyMovesListViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFE14B8C2B61A31F00667F29 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -19517,9 +19877,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SlimNation/Pods-SlimNation-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SlimNation/Pods-SlimNation-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19556,9 +19920,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ReplicaTemplate/Pods-ReplicaTemplate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ReplicaTemplate/Pods-ReplicaTemplate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19595,9 +19963,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DietMasterGo/Pods-DietMasterGo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DietMasterGo/Pods-DietMasterGo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19634,9 +20006,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SweetStrength/Pods-SweetStrength-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SweetStrength/Pods-SweetStrength-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19673,9 +20049,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JLNutrition/Pods-JLNutrition-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JLNutrition/Pods-JLNutrition-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19712,9 +20092,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Quintessa/Pods-Quintessa-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Quintessa/Pods-Quintessa-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19751,9 +20135,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MyMealCoach/Pods-MyMealCoach-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MyMealCoach/Pods-MyMealCoach-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19790,9 +20178,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YOUtrition/Pods-YOUtrition-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YOUtrition/Pods-YOUtrition-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19829,9 +20221,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MedicallyFit/Pods-MedicallyFit-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MedicallyFit/Pods-MedicallyFit-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19868,9 +20264,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DietMasterGoPlus/Pods-DietMasterGoPlus-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19907,9 +20307,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SeeYouHealthy/Pods-SeeYouHealthy-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SeeYouHealthy/Pods-SeeYouHealthy-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19946,9 +20350,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BodyCompPlus/Pods-BodyCompPlus-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BodyCompPlus/Pods-BodyCompPlus-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -19985,9 +20393,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Horizons Burn Zone/Pods-Horizons Burn Zone-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Horizons Burn Zone/Pods-Horizons Burn Zone-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20024,9 +20436,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-HealthyJourneyProApp/Pods-HealthyJourneyProApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-HealthyJourneyProApp/Pods-HealthyJourneyProApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20063,9 +20479,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-feedme smart/Pods-feedme smart-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-feedme smart/Pods-feedme smart-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20102,9 +20522,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RGH P4YH/Pods-RGH P4YH-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RGH P4YH/Pods-RGH P4YH-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20141,9 +20565,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AStrongLife/Pods-AStrongLife-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AStrongLife/Pods-AStrongLife-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20180,9 +20608,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FitProComplete/Pods-FitProComplete-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FitProComplete/Pods-FitProComplete-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20219,9 +20651,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ProWeightLoss/Pods-ProWeightLoss-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ProWeightLoss/Pods-ProWeightLoss-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20258,9 +20694,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-LightOfTheWhirl/Pods-LightOfTheWhirl-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-LightOfTheWhirl/Pods-LightOfTheWhirl-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20297,9 +20737,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Metabolic Testing Center/Pods-Metabolic Testing Center-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Metabolic Testing Center/Pods-Metabolic Testing Center-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20336,9 +20780,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GOMealsPlus/Pods-GOMealsPlus-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GOMealsPlus/Pods-GOMealsPlus-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20375,9 +20823,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SuperBodyMethod/Pods-SuperBodyMethod-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SuperBodyMethod/Pods-SuperBodyMethod-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20414,9 +20866,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NVPEatSmart/Pods-NVPEatSmart-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NVPEatSmart/Pods-NVPEatSmart-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20453,9 +20909,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-W3FN/Pods-W3FN-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-W3FN/Pods-W3FN-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20492,9 +20952,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-HCFDiet/Pods-HCFDiet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-HCFDiet/Pods-HCFDiet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20531,9 +20995,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DietAlpha/Pods-DietAlpha-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DietAlpha/Pods-DietAlpha-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20570,9 +21038,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SoarWell/Pods-SoarWell-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SoarWell/Pods-SoarWell-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20609,9 +21081,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-mDiet/Pods-mDiet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-mDiet/Pods-mDiet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20648,9 +21124,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ZFitStudio/Pods-ZFitStudio-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ZFitStudio/Pods-ZFitStudio-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20687,9 +21167,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FitAndPhat/Pods-FitAndPhat-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FitAndPhat/Pods-FitAndPhat-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20726,9 +21210,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-EmbraceHealth/Pods-EmbraceHealth-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-EmbraceHealth/Pods-EmbraceHealth-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20765,9 +21253,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NutriMove/Pods-NutriMove-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NutriMove/Pods-NutriMove-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20804,9 +21296,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Global Fit App/Pods-Global Fit App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Global Fit App/Pods-Global Fit App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20843,9 +21339,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TeleDiets/Pods-TeleDiets-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TeleDiets/Pods-TeleDiets-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20882,9 +21382,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Fit2Win/Pods-Fit2Win-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Fit2Win/Pods-Fit2Win-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20921,9 +21425,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GETUFIT/Pods-GETUFIT-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GETUFIT/Pods-GETUFIT-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20960,9 +21468,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-N W Genetics/Pods-N W Genetics-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-N W Genetics/Pods-N W Genetics-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20999,9 +21511,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Forte 4Ever/Pods-Forte 4Ever-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Forte 4Ever/Pods-Forte 4Ever-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21038,9 +21554,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MyNeWeighs/Pods-MyNeWeighs-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21077,9 +21597,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MyKetaFit/Pods-MyKetaFit-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MyKetaFit/Pods-MyKetaFit-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21116,9 +21640,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AyurvedaPlus/Pods-AyurvedaPlus-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AyurvedaPlus/Pods-AyurvedaPlus-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21155,9 +21683,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-EzDietPlanner/Pods-EzDietPlanner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-EzDietPlanner/Pods-EzDietPlanner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21194,9 +21726,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CustomFit Chef/Pods-CustomFit Chef-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CustomFit Chef/Pods-CustomFit Chef-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21233,9 +21769,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RapidFit/Pods-RapidFit-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RapidFit/Pods-RapidFit-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21272,9 +21812,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-eMedEats/Pods-eMedEats-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-eMedEats/Pods-eMedEats-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21311,9 +21855,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-2FIT1/Pods-2FIT1-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-2FIT1/Pods-2FIT1-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21350,9 +21898,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BEYOND MOTION NUTRITION/Pods-BEYOND MOTION NUTRITION-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BEYOND MOTION NUTRITION/Pods-BEYOND MOTION NUTRITION-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21389,9 +21941,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TRANSFORM by Juliette Wooten/Pods-TRANSFORM by Juliette Wooten-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21428,9 +21984,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JoyfulWellness/Pods-JoyfulWellness-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-JoyfulWellness/Pods-JoyfulWellness-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21467,9 +22027,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RESHAPE/Pods-RESHAPE-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RESHAPE/Pods-RESHAPE-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21506,9 +22070,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GLPBuddy/Pods-GLPBuddy-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GLPBuddy/Pods-GLPBuddy-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21545,13 +22113,60 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-UpperhandAthletics/Pods-UpperhandAthletics-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-UpperhandAthletics/Pods-UpperhandAthletics-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UpperhandAthletics/Pods-UpperhandAthletics-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BFD562372DD3A480001E276F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SymliphyNutrition-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BFD562EB2DD3A480001E276F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SymliphyNutrition/Pods-SymliphyNutrition-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SymliphyNutrition/Pods-SymliphyNutrition-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SymliphyNutrition/Pods-SymliphyNutrition-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BFE14B8B2B61A31F00667F29 /* [CP] Check Pods Manifest.lock */ = {
@@ -21584,9 +22199,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VAYDA/Pods-VAYDA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VAYDA/Pods-VAYDA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21623,9 +22242,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MicroFit Go/Pods-MicroFit Go-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MicroFit Go/Pods-MicroFit Go-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21662,9 +22285,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Nutrishape/Pods-Nutrishape-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Nutrishape/Pods-Nutrishape-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21701,9 +22328,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NexGenFitness/Pods-NexGenFitness-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NexGenFitness/Pods-NexGenFitness-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21740,9 +22371,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GOMealPlans/Pods-GOMealPlans-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GOMealPlans/Pods-GOMealPlans-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21779,9 +22414,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-XtremeFitness/Pods-XtremeFitness-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-XtremeFitness/Pods-XtremeFitness-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -21805,6 +22444,7 @@
 				0E04F35F2AABAC6F0068A488 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0E04F3602AABAC6F0068A488 /* MyLogViewController.m in Sources */,
 				0E04F3612AABAC6F0068A488 /* DetailViewController.m in Sources */,
+				0E2975932D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0E04F3622AABAC6F0068A488 /* Log_Add.m in Sources */,
 				0E04F3632AABAC6F0068A488 /* RecordWeightView.m in Sources */,
 				0E04F3642AABAC6F0068A488 /* DMMove.m in Sources */,
@@ -21917,6 +22557,7 @@
 				0E101BE92A56CC7300D8E7E2 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0E101BEA2A56CC7300D8E7E2 /* MyLogViewController.m in Sources */,
 				0E101BEB2A56CC7300D8E7E2 /* DetailViewController.m in Sources */,
+				0E29759A2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0E101BEC2A56CC7300D8E7E2 /* Log_Add.m in Sources */,
 				0E101BED2A56CC7300D8E7E2 /* RecordWeightView.m in Sources */,
 				0E101BEE2A56CC7300D8E7E2 /* DMMove.m in Sources */,
@@ -22050,6 +22691,13 @@
 				0E101CD72A56D5B700D8E7E2 /* ExercisesDetailViewController.m in Sources */,
 				0E101CD82A56D5B700D8E7E2 /* DMMoveSet.m in Sources */,
 				0E101CD92A56D5B700D8E7E2 /* DietmasterEngine.m in Sources */,
+				0E29754F2D94625C001A9677 /* BodyScanResultsViewController.swift in Sources */,
+				0E2975502D94625C001A9677 /* BodyScanResultListViewController.swift in Sources */,
+				0E2975512D94625C001A9677 /* BodyScanResultsPDF.swift in Sources */,
+				0E2975522D94625C001A9677 /* HealthReport.swift in Sources */,
+				0E2975532D94625C001A9677 /* BodyScan.swift in Sources */,
+				0E2975542D94625C001A9677 /* PrismScannerManager.swift in Sources */,
+				0E2975552D94625C001A9677 /* BodyScan3DViewController.swift in Sources */,
 				0E101CDA2A56D5B700D8E7E2 /* FavoriteMealsViewController.m in Sources */,
 				0E101CDB2A56D5B700D8E7E2 /* DMWeightLogEntry.m in Sources */,
 				0E101CDC2A56D5B700D8E7E2 /* LoginViewController.m in Sources */,
@@ -22117,6 +22765,7 @@
 				0E101D1A2A56D5B700D8E7E2 /* MyLogTableViewCell.m in Sources */,
 				0E101D1B2A56D5B700D8E7E2 /* DMMealPlanDataProvider.m in Sources */,
 				0E101D1C2A56D5B700D8E7E2 /* NSObject+Description.m in Sources */,
+				0E2975672D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0E101D1D2A56D5B700D8E7E2 /* DayDataProvider.swift in Sources */,
 				0E101D1E2A56D5B700D8E7E2 /* DMDataFetcher.m in Sources */,
 				0E101D1F2A56D5B700D8E7E2 /* GroceryListViewController.m in Sources */,
@@ -22141,6 +22790,7 @@
 				0EE35D4F2A7026FF00019AB5 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EE35D502A7026FF00019AB5 /* MyLogViewController.m in Sources */,
 				0EE35D512A7026FF00019AB5 /* DetailViewController.m in Sources */,
+				0E2975852D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0EE35D522A7026FF00019AB5 /* Log_Add.m in Sources */,
 				0EE35D532A7026FF00019AB5 /* RecordWeightView.m in Sources */,
 				0EE35D542A7026FF00019AB5 /* DMMove.m in Sources */,
@@ -22253,6 +22903,7 @@
 				0EF135BA2A5749E10089B4FD /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF135BB2A5749E10089B4FD /* MyLogViewController.m in Sources */,
 				0EF135BC2A5749E10089B4FD /* DetailViewController.m in Sources */,
+				0E2975722D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0EF135BD2A5749E10089B4FD /* Log_Add.m in Sources */,
 				0EF135BE2A5749E10089B4FD /* RecordWeightView.m in Sources */,
 				0EF135BF2A5749E10089B4FD /* DMMove.m in Sources */,
@@ -22365,6 +23016,7 @@
 				0EF136822A575DF80089B4FD /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF136832A575DF80089B4FD /* MyLogViewController.m in Sources */,
 				0EF136842A575DF80089B4FD /* DetailViewController.m in Sources */,
+				0E29757F2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0EF136852A575DF80089B4FD /* Log_Add.m in Sources */,
 				0EF136862A575DF80089B4FD /* RecordWeightView.m in Sources */,
 				0EF136872A575DF80089B4FD /* DMMove.m in Sources */,
@@ -22477,6 +23129,7 @@
 				0EF137412A5760390089B4FD /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF137422A5760390089B4FD /* MyLogViewController.m in Sources */,
 				0EF137432A5760390089B4FD /* DetailViewController.m in Sources */,
+				0E29757C2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0EF137442A5760390089B4FD /* Log_Add.m in Sources */,
 				0EF137452A5760390089B4FD /* RecordWeightView.m in Sources */,
 				0EF137462A5760390089B4FD /* DMMove.m in Sources */,
@@ -22589,6 +23242,7 @@
 				0EF975BF2A8522810089FC8D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF975C02A8522810089FC8D /* MyLogViewController.m in Sources */,
 				0EF975C12A8522810089FC8D /* DetailViewController.m in Sources */,
+				0E2975682D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0EF975C22A8522810089FC8D /* Log_Add.m in Sources */,
 				0EF975C32A8522810089FC8D /* RecordWeightView.m in Sources */,
 				0EF975C42A8522810089FC8D /* DMMove.m in Sources */,
@@ -22701,6 +23355,7 @@
 				0EF976852A85233D0089FC8D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				0EF976862A85233D0089FC8D /* MyLogViewController.m in Sources */,
 				0EF976872A85233D0089FC8D /* DetailViewController.m in Sources */,
+				0E2975912D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				0EF976882A85233D0089FC8D /* Log_Add.m in Sources */,
 				0EF976892A85233D0089FC8D /* RecordWeightView.m in Sources */,
 				0EF9768A2A85233D0089FC8D /* DMMove.m in Sources */,
@@ -22813,6 +23468,7 @@
 				40E035C921F1F2A100968755 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				401B647620B3FC64004453E7 /* MyLogViewController.m in Sources */,
 				401B647720B3FC64004453E7 /* DetailViewController.m in Sources */,
+				0E29756B2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				401B647820B3FC64004453E7 /* Log_Add.m in Sources */,
 				401B647920B3FC64004453E7 /* RecordWeightView.m in Sources */,
 				0E8EC8EB2A3DC4C70095BDEC /* DMMove.m in Sources */,
@@ -22925,6 +23581,7 @@
 				BF0385842AFABE610049A79B /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF0385852AFABE610049A79B /* MyLogViewController.m in Sources */,
 				BF0385862AFABE610049A79B /* DetailViewController.m in Sources */,
+				0E29756D2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF0385872AFABE610049A79B /* Log_Add.m in Sources */,
 				BF0385882AFABE610049A79B /* RecordWeightView.m in Sources */,
 				BF0385892AFABE610049A79B /* DMMove.m in Sources */,
@@ -23037,6 +23694,7 @@
 				BF130D7D2C7CF08400EA978D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF130D7E2C7CF08400EA978D /* MyLogViewController.m in Sources */,
 				BF130D7F2C7CF08400EA978D /* DetailViewController.m in Sources */,
+				0E2975742D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF130D802C7CF08400EA978D /* Log_Add.m in Sources */,
 				BF130D812C7CF08400EA978D /* RecordWeightView.m in Sources */,
 				BF130D822C7CF08400EA978D /* DMMove.m in Sources */,
@@ -23149,6 +23807,7 @@
 				BF18C8A72CF1053B00C5437D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF18C8A82CF1053B00C5437D /* MyLogViewController.m in Sources */,
 				BF18C8A92CF1053B00C5437D /* DetailViewController.m in Sources */,
+				0E2975862D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF18C8AA2CF1053B00C5437D /* Log_Add.m in Sources */,
 				BF18C8AB2CF1053B00C5437D /* RecordWeightView.m in Sources */,
 				BF18C8AC2CF1053B00C5437D /* DMMove.m in Sources */,
@@ -23261,6 +23920,7 @@
 				BF1AE3E02BC9923D009F7BF5 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF1AE3E12BC9923D009F7BF5 /* MyLogViewController.m in Sources */,
 				BF1AE3E22BC9923D009F7BF5 /* DetailViewController.m in Sources */,
+				0E29756E2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF1AE3E32BC9923D009F7BF5 /* Log_Add.m in Sources */,
 				BF1AE3E42BC9923D009F7BF5 /* RecordWeightView.m in Sources */,
 				BF1AE3E52BC9923D009F7BF5 /* DMMove.m in Sources */,
@@ -23373,6 +24033,7 @@
 				BF2809D62C8F5CCE00884D6E /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF2809D72C8F5CCE00884D6E /* MyLogViewController.m in Sources */,
 				BF2809D82C8F5CCE00884D6E /* DetailViewController.m in Sources */,
+				0E29758E2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF2809D92C8F5CCE00884D6E /* Log_Add.m in Sources */,
 				BF2809DA2C8F5CCE00884D6E /* RecordWeightView.m in Sources */,
 				BF2809DB2C8F5CCE00884D6E /* DMMove.m in Sources */,
@@ -23485,6 +24146,7 @@
 				BF2B03BD2C47045E0046955E /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF2B03BE2C47045E0046955E /* MyLogViewController.m in Sources */,
 				BF2B03BF2C47045E0046955E /* DetailViewController.m in Sources */,
+				0E2975752D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF2B03C02C47045E0046955E /* Log_Add.m in Sources */,
 				BF2B03C12C47045E0046955E /* RecordWeightView.m in Sources */,
 				BF2B03C22C47045E0046955E /* DMMove.m in Sources */,
@@ -23597,6 +24259,7 @@
 				BF34CD2C2BD3026700090D1A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF34CD2D2BD3026700090D1A /* MyLogViewController.m in Sources */,
 				BF34CD2E2BD3026700090D1A /* DetailViewController.m in Sources */,
+				0E29758B2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF34CD2F2BD3026700090D1A /* Log_Add.m in Sources */,
 				BF34CD302BD3026700090D1A /* RecordWeightView.m in Sources */,
 				BF34CD312BD3026700090D1A /* DMMove.m in Sources */,
@@ -23709,6 +24372,7 @@
 				BF3CC0122B2B8C77004493C0 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3CC0132B2B8C77004493C0 /* MyLogViewController.m in Sources */,
 				BF3CC0142B2B8C77004493C0 /* DetailViewController.m in Sources */,
+				0E2975802D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3CC0152B2B8C77004493C0 /* Log_Add.m in Sources */,
 				BF3CC0162B2B8C77004493C0 /* RecordWeightView.m in Sources */,
 				BF3CC0172B2B8C77004493C0 /* DMMove.m in Sources */,
@@ -23821,6 +24485,7 @@
 				BF3CC0E42B2BA768004493C0 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3CC0E52B2BA768004493C0 /* MyLogViewController.m in Sources */,
 				BF3CC0E62B2BA768004493C0 /* DetailViewController.m in Sources */,
+				0E2975952D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3CC0E72B2BA768004493C0 /* Log_Add.m in Sources */,
 				BF3CC0E82B2BA768004493C0 /* RecordWeightView.m in Sources */,
 				BF3CC0E92B2BA768004493C0 /* DMMove.m in Sources */,
@@ -23933,6 +24598,7 @@
 				BF3CC1B72B2CD9ED004493C0 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3CC1B82B2CD9ED004493C0 /* MyLogViewController.m in Sources */,
 				BF3CC1B92B2CD9ED004493C0 /* DetailViewController.m in Sources */,
+				0E2975842D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3CC1BA2B2CD9ED004493C0 /* Log_Add.m in Sources */,
 				BF3CC1BB2B2CD9ED004493C0 /* RecordWeightView.m in Sources */,
 				BF3CC1BC2B2CD9ED004493C0 /* DMMove.m in Sources */,
@@ -24045,6 +24711,7 @@
 				BF3D05FE2CC1601F00F0473F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3D05FF2CC1601F00F0473F /* MyLogViewController.m in Sources */,
 				BF3D06002CC1601F00F0473F /* DetailViewController.m in Sources */,
+				0E29758F2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3D06012CC1601F00F0473F /* Log_Add.m in Sources */,
 				BF3D06022CC1601F00F0473F /* RecordWeightView.m in Sources */,
 				BF3D06032CC1601F00F0473F /* DMMove.m in Sources */,
@@ -24157,6 +24824,7 @@
 				BF3D3AC52B14E23F0029C30A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3D3AC62B14E23F0029C30A /* MyLogViewController.m in Sources */,
 				BF3D3AC72B14E23F0029C30A /* DetailViewController.m in Sources */,
+				0E29759C2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3D3AC82B14E23F0029C30A /* Log_Add.m in Sources */,
 				BF3D3AC92B14E23F0029C30A /* RecordWeightView.m in Sources */,
 				BF3D3ACA2B14E23F0029C30A /* DMMove.m in Sources */,
@@ -24269,6 +24937,7 @@
 				BF3D3B952B14FA1F0029C30A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3D3B962B14FA1F0029C30A /* MyLogViewController.m in Sources */,
 				BF3D3B972B14FA1F0029C30A /* DetailViewController.m in Sources */,
+				0E2975782D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3D3B982B14FA1F0029C30A /* Log_Add.m in Sources */,
 				BF3D3B992B14FA1F0029C30A /* RecordWeightView.m in Sources */,
 				BF3D3B9A2B14FA1F0029C30A /* DMMove.m in Sources */,
@@ -24381,6 +25050,7 @@
 				BF3FD0AC2D3ECCC200F00CCA /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3FD0AD2D3ECCC200F00CCA /* MyLogViewController.m in Sources */,
 				BF3FD0AE2D3ECCC200F00CCA /* DetailViewController.m in Sources */,
+				0E29756F2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3FD0AF2D3ECCC200F00CCA /* Log_Add.m in Sources */,
 				BF3FD0B02D3ECCC200F00CCA /* RecordWeightView.m in Sources */,
 				BF3FD0B12D3ECCC200F00CCA /* DMMove.m in Sources */,
@@ -24493,6 +25163,7 @@
 				BF3FD1A02D4BE9C200F00CCA /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF3FD1A12D4BE9C200F00CCA /* MyLogViewController.m in Sources */,
 				BF3FD1A22D4BE9C200F00CCA /* DetailViewController.m in Sources */,
+				0E2975942D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF3FD1A32D4BE9C200F00CCA /* Log_Add.m in Sources */,
 				BF3FD1A42D4BE9C200F00CCA /* RecordWeightView.m in Sources */,
 				BF3FD1A52D4BE9C200F00CCA /* DMMove.m in Sources */,
@@ -24605,6 +25276,7 @@
 				BF5BBB012BA0E0650090AE2F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BBB022BA0E0650090AE2F /* MyLogViewController.m in Sources */,
 				BF5BBB032BA0E0650090AE2F /* DetailViewController.m in Sources */,
+				0E29757B2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF5BBB042BA0E0650090AE2F /* Log_Add.m in Sources */,
 				BF5BBB052BA0E0650090AE2F /* RecordWeightView.m in Sources */,
 				BF5BBB062BA0E0650090AE2F /* DMMove.m in Sources */,
@@ -24717,6 +25389,7 @@
 				BF5BBBDE2BA21AD00090AE2F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BBBDF2BA21AD00090AE2F /* MyLogViewController.m in Sources */,
 				BF5BBBE02BA21AD00090AE2F /* DetailViewController.m in Sources */,
+				0E29756C2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF5BBBE12BA21AD00090AE2F /* Log_Add.m in Sources */,
 				BF5BBBE22BA21AD00090AE2F /* RecordWeightView.m in Sources */,
 				BF5BBBE32BA21AD00090AE2F /* DMMove.m in Sources */,
@@ -24829,6 +25502,7 @@
 				BF5BBCBC2BAB68F80090AE2F /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BBCBD2BAB68F80090AE2F /* MyLogViewController.m in Sources */,
 				BF5BBCBE2BAB68F80090AE2F /* DetailViewController.m in Sources */,
+				0E2975662D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF5BBCBF2BAB68F80090AE2F /* Log_Add.m in Sources */,
 				BF5BBCC02BAB68F80090AE2F /* RecordWeightView.m in Sources */,
 				BF5BBCC12BAB68F80090AE2F /* DMMove.m in Sources */,
@@ -24941,6 +25615,7 @@
 				BF5BEF942C921CDE00785B7A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5BEF952C921CDE00785B7A /* MyLogViewController.m in Sources */,
 				BF5BEF962C921CDE00785B7A /* DetailViewController.m in Sources */,
+				0E2975822D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF5BEF972C921CDE00785B7A /* Log_Add.m in Sources */,
 				BF5BEF982C921CDE00785B7A /* RecordWeightView.m in Sources */,
 				BF5BEF992C921CDE00785B7A /* DMMove.m in Sources */,
@@ -25053,6 +25728,7 @@
 				BF5CAB9E2AE1C4F800FAD555 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5CAB9F2AE1C4F800FAD555 /* MyLogViewController.m in Sources */,
 				BF5CABA02AE1C4F800FAD555 /* DetailViewController.m in Sources */,
+				0E2975702D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF5CABA12AE1C4F800FAD555 /* Log_Add.m in Sources */,
 				BF5CABA22AE1C4F800FAD555 /* RecordWeightView.m in Sources */,
 				BF5CABA32AE1C4F800FAD555 /* DMMove.m in Sources */,
@@ -25165,6 +25841,7 @@
 				BF5F20522D0CA854001B75BF /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF5F20532D0CA854001B75BF /* MyLogViewController.m in Sources */,
 				BF5F20542D0CA854001B75BF /* DetailViewController.m in Sources */,
+				0E2975962D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF5F20552D0CA854001B75BF /* Log_Add.m in Sources */,
 				BF5F20562D0CA854001B75BF /* RecordWeightView.m in Sources */,
 				BF5F20572D0CA854001B75BF /* DMMove.m in Sources */,
@@ -25300,13 +25977,6 @@
 				BF6082D72D94849A004E403E /* DietmasterEngine.m in Sources */,
 				BF6082D82D94849A004E403E /* FavoriteMealsViewController.m in Sources */,
 				BF6082D92D94849A004E403E /* DMWeightLogEntry.m in Sources */,
-				0E29759D2D94B4CA001A9677 /* BodyScan3DViewController.swift in Sources */,
-				0E29759E2D94B4CA001A9677 /* BodyScanResultListViewController.swift in Sources */,
-				0E29759F2D94B4CA001A9677 /* BodyScan.swift in Sources */,
-				0E2975A02D94B4CA001A9677 /* PrismScannerManager.swift in Sources */,
-				0E2975A12D94B4CA001A9677 /* BodyScanResultsViewController.swift in Sources */,
-				0E2975A22D94B4CA001A9677 /* BodyScanResultsPDF.swift in Sources */,
-				0E2975A32D94B4CA001A9677 /* HealthReport.swift in Sources */,
 				BF6082DA2D94849A004E403E /* LoginViewController.m in Sources */,
 				BF6082DB2D94849A004E403E /* MyMovesListViewController.m in Sources */,
 				BF6082DC2D94849A004E403E /* LearnMoreViewController.m in Sources */,
@@ -25372,7 +26042,6 @@
 				BF6083182D94849A004E403E /* MyLogTableViewCell.m in Sources */,
 				BF6083192D94849A004E403E /* DMMealPlanDataProvider.m in Sources */,
 				BF60831A2D94849A004E403E /* NSObject+Description.m in Sources */,
-				0E2975AF2D94B508001A9677 /* HomeScreenButton.swift in Sources */,
 				BF60831B2D94849A004E403E /* DayDataProvider.swift in Sources */,
 				BF60831C2D94849A004E403E /* DMDataFetcher.m in Sources */,
 				BF60831D2D94849A004E403E /* GroceryListViewController.m in Sources */,
@@ -25397,6 +26066,7 @@
 				BF66ABE72BE1995B00BE0170 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF66ABE82BE1995B00BE0170 /* MyLogViewController.m in Sources */,
 				BF66ABE92BE1995B00BE0170 /* DetailViewController.m in Sources */,
+				0E2975792D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF66ABEA2BE1995B00BE0170 /* Log_Add.m in Sources */,
 				BF66ABEB2BE1995B00BE0170 /* RecordWeightView.m in Sources */,
 				BF66ABEC2BE1995B00BE0170 /* DMMove.m in Sources */,
@@ -25509,6 +26179,7 @@
 				BF6969AD2CBDBA0800544418 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF6969AE2CBDBA0800544418 /* MyLogViewController.m in Sources */,
 				BF6969AF2CBDBA0800544418 /* DetailViewController.m in Sources */,
+				0E29759B2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF6969B02CBDBA0800544418 /* Log_Add.m in Sources */,
 				BF6969B12CBDBA0800544418 /* RecordWeightView.m in Sources */,
 				BF6969B22CBDBA0800544418 /* DMMove.m in Sources */,
@@ -25621,6 +26292,7 @@
 				BF6F245C2AD7405B003041B1 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF6F245D2AD7405B003041B1 /* MyLogViewController.m in Sources */,
 				BF6F245E2AD7405B003041B1 /* DetailViewController.m in Sources */,
+				0E29758A2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF6F245F2AD7405B003041B1 /* Log_Add.m in Sources */,
 				BF6F24602AD7405B003041B1 /* RecordWeightView.m in Sources */,
 				BF6F24612AD7405B003041B1 /* DMMove.m in Sources */,
@@ -25733,6 +26405,7 @@
 				BF75CB3D2D13827500F3179A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF75CB3E2D13827500F3179A /* MyLogViewController.m in Sources */,
 				BF75CB3F2D13827500F3179A /* DetailViewController.m in Sources */,
+				0E2975872D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF75CB402D13827500F3179A /* Log_Add.m in Sources */,
 				BF75CB412D13827500F3179A /* RecordWeightView.m in Sources */,
 				BF75CB422D13827500F3179A /* DMMove.m in Sources */,
@@ -25845,6 +26518,7 @@
 				BF7B93C82B71740A007EC568 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF7B93C92B71740A007EC568 /* MyLogViewController.m in Sources */,
 				BF7B93CA2B71740A007EC568 /* DetailViewController.m in Sources */,
+				0E29757D2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF7B93CB2B71740A007EC568 /* Log_Add.m in Sources */,
 				BF7B93CC2B71740A007EC568 /* RecordWeightView.m in Sources */,
 				BF7B93CD2B71740A007EC568 /* DMMove.m in Sources */,
@@ -25957,6 +26631,7 @@
 				BF7B94A02B75522E007EC568 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF7B94A12B75522E007EC568 /* MyLogViewController.m in Sources */,
 				BF7B94A22B75522E007EC568 /* DetailViewController.m in Sources */,
+				0E29758C2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF7B94A32B75522E007EC568 /* Log_Add.m in Sources */,
 				BF7B94A42B75522E007EC568 /* RecordWeightView.m in Sources */,
 				BF7B94A52B75522E007EC568 /* DMMove.m in Sources */,
@@ -26069,6 +26744,7 @@
 				BF7B95792B757B9E007EC568 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF7B957A2B757B9E007EC568 /* MyLogViewController.m in Sources */,
 				BF7B957B2B757B9E007EC568 /* DetailViewController.m in Sources */,
+				0E2975772D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF7B957C2B757B9E007EC568 /* Log_Add.m in Sources */,
 				BF7B957D2B757B9E007EC568 /* RecordWeightView.m in Sources */,
 				BF7B957E2B757B9E007EC568 /* DMMove.m in Sources */,
@@ -26181,6 +26857,7 @@
 				BF8680712B3F5FFF00C2ECAB /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8680722B3F5FFF00C2ECAB /* MyLogViewController.m in Sources */,
 				BF8680732B3F5FFF00C2ECAB /* DetailViewController.m in Sources */,
+				0E2975982D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF8680742B3F5FFF00C2ECAB /* Log_Add.m in Sources */,
 				BF8680752B3F5FFF00C2ECAB /* RecordWeightView.m in Sources */,
 				BF8680762B3F5FFF00C2ECAB /* DMMove.m in Sources */,
@@ -26293,6 +26970,7 @@
 				BF86FB912C88D07300C7E816 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF86FB922C88D07300C7E816 /* MyLogViewController.m in Sources */,
 				BF86FB932C88D07300C7E816 /* DetailViewController.m in Sources */,
+				0E2975732D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF86FB942C88D07300C7E816 /* Log_Add.m in Sources */,
 				BF86FB952C88D07300C7E816 /* RecordWeightView.m in Sources */,
 				BF86FB962C88D07300C7E816 /* DMMove.m in Sources */,
@@ -26405,6 +27083,7 @@
 				BF8787C42C18E34A0068E8BA /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8787C52C18E34A0068E8BA /* MyLogViewController.m in Sources */,
 				BF8787C62C18E34A0068E8BA /* DetailViewController.m in Sources */,
+				0E2975812D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF8787C72C18E34A0068E8BA /* Log_Add.m in Sources */,
 				BF8787C82C18E34A0068E8BA /* RecordWeightView.m in Sources */,
 				BF8787C92C18E34A0068E8BA /* DMMove.m in Sources */,
@@ -26517,6 +27196,7 @@
 				BF8788A62C2211810068E8BA /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8788A72C2211810068E8BA /* MyLogViewController.m in Sources */,
 				BF8788A82C2211810068E8BA /* DetailViewController.m in Sources */,
+				0E29758D2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF8788A92C2211810068E8BA /* Log_Add.m in Sources */,
 				BF8788AA2C2211810068E8BA /* RecordWeightView.m in Sources */,
 				BF8788AB2C2211810068E8BA /* DMMove.m in Sources */,
@@ -26629,6 +27309,7 @@
 				BF8E9BE02C4C3C8F0073AEB6 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF8E9BE12C4C3C8F0073AEB6 /* MyLogViewController.m in Sources */,
 				BF8E9BE22C4C3C8F0073AEB6 /* DetailViewController.m in Sources */,
+				0E2975992D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF8E9BE32C4C3C8F0073AEB6 /* Log_Add.m in Sources */,
 				BF8E9BE42C4C3C8F0073AEB6 /* RecordWeightView.m in Sources */,
 				BF8E9BE52C4C3C8F0073AEB6 /* DMMove.m in Sources */,
@@ -26741,6 +27422,7 @@
 				BF9A77162D039D660028C17C /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BF9A77172D039D660028C17C /* MyLogViewController.m in Sources */,
 				BF9A77182D039D660028C17C /* DetailViewController.m in Sources */,
+				0E29756A2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BF9A77192D039D660028C17C /* Log_Add.m in Sources */,
 				BF9A771A2D039D660028C17C /* RecordWeightView.m in Sources */,
 				BF9A771B2D039D660028C17C /* DMMove.m in Sources */,
@@ -26853,6 +27535,7 @@
 				BFA750582D552618008ADD7A /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFA750592D552618008ADD7A /* MyLogViewController.m in Sources */,
 				BFA7505A2D552618008ADD7A /* DetailViewController.m in Sources */,
+				0E2975712D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFA7505B2D552618008ADD7A /* Log_Add.m in Sources */,
 				BFA7505C2D552618008ADD7A /* RecordWeightView.m in Sources */,
 				BFA7505D2D552618008ADD7A /* DMMove.m in Sources */,
@@ -26965,6 +27648,7 @@
 				BFA93FF72B7D44F7001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFA93FF82B7D44F7001C3D48 /* MyLogViewController.m in Sources */,
 				BFA93FF92B7D44F7001C3D48 /* DetailViewController.m in Sources */,
+				0E29757E2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFA93FFA2B7D44F7001C3D48 /* Log_Add.m in Sources */,
 				BFA93FFB2B7D44F7001C3D48 /* RecordWeightView.m in Sources */,
 				BFA93FFC2B7D44F7001C3D48 /* DMMove.m in Sources */,
@@ -27077,6 +27761,7 @@
 				BFA940D22B7E9ECA001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFA940D32B7E9ECA001C3D48 /* MyLogViewController.m in Sources */,
 				BFA940D42B7E9ECA001C3D48 /* DetailViewController.m in Sources */,
+				0E2975972D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFA940D52B7E9ECA001C3D48 /* Log_Add.m in Sources */,
 				BFA940D62B7E9ECA001C3D48 /* RecordWeightView.m in Sources */,
 				BFA940D72B7E9ECA001C3D48 /* DMMove.m in Sources */,
@@ -27189,6 +27874,7 @@
 				BFA941B42B851999001C3D48 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFA941B52B851999001C3D48 /* MyLogViewController.m in Sources */,
 				BFA941B62B851999001C3D48 /* DetailViewController.m in Sources */,
+				0E2975892D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFA941B72B851999001C3D48 /* Log_Add.m in Sources */,
 				BFA941B82B851999001C3D48 /* RecordWeightView.m in Sources */,
 				BFA941B92B851999001C3D48 /* DMMove.m in Sources */,
@@ -27301,6 +27987,7 @@
 				BFB3C3DE2AF55CF900F2CFA2 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFB3C3DF2AF55CF900F2CFA2 /* MyLogViewController.m in Sources */,
 				BFB3C3E02AF55CF900F2CFA2 /* DetailViewController.m in Sources */,
+				0E2975902D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFB3C3E12AF55CF900F2CFA2 /* Log_Add.m in Sources */,
 				BFB3C3E22AF55CF900F2CFA2 /* RecordWeightView.m in Sources */,
 				BFB3C3E32AF55CF900F2CFA2 /* DMMove.m in Sources */,
@@ -27413,6 +28100,7 @@
 				BFBFB1F82B6C3B0E0094D2CB /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFBFB1F92B6C3B0E0094D2CB /* MyLogViewController.m in Sources */,
 				BFBFB1FA2B6C3B0E0094D2CB /* DetailViewController.m in Sources */,
+				0E2975832D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFBFB1FB2B6C3B0E0094D2CB /* Log_Add.m in Sources */,
 				BFBFB1FC2B6C3B0E0094D2CB /* RecordWeightView.m in Sources */,
 				BFBFB1FD2B6C3B0E0094D2CB /* DMMove.m in Sources */,
@@ -27525,6 +28213,7 @@
 				BFCAB9352D020FDA00716996 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFCAB9362D020FDA00716996 /* MyLogViewController.m in Sources */,
 				BFCAB9372D020FDA00716996 /* DetailViewController.m in Sources */,
+				0E2975642D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFCAB9382D020FDA00716996 /* Log_Add.m in Sources */,
 				BFCAB9392D020FDA00716996 /* RecordWeightView.m in Sources */,
 				BFCAB93A2D020FDA00716996 /* DMMove.m in Sources */,
@@ -27637,6 +28326,7 @@
 				BFD4572F2B17AFD500AB2E40 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFD457302B17AFD500AB2E40 /* MyLogViewController.m in Sources */,
 				BFD457312B17AFD500AB2E40 /* DetailViewController.m in Sources */,
+				0E2975632D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFD457322B17AFD500AB2E40 /* Log_Add.m in Sources */,
 				BFD457332B17AFD500AB2E40 /* RecordWeightView.m in Sources */,
 				BFD457342B17AFD500AB2E40 /* DMMove.m in Sources */,
@@ -27735,6 +28425,119 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BFD5626A2DD3A480001E276F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFD5626B2DD3A480001E276F /* main.m in Sources */,
+				BFD5626C2DD3A480001E276F /* DMDetailTableViewCell.m in Sources */,
+				BFD5626D2DD3A480001E276F /* DietMasterGoAppDelegate.m in Sources */,
+				BFD5626E2DD3A480001E276F /* DMMessagesDataProvider.m in Sources */,
+				BFD5626F2DD3A480001E276F /* AppSettings.m in Sources */,
+				BFD562702DD3A480001E276F /* BaseViewController.m in Sources */,
+				BFD562712DD3A480001E276F /* ExchangeFood.m in Sources */,
+				BFD562722DD3A480001E276F /* MyMovesDetailCollectionViewCell.m in Sources */,
+				BFD562732DD3A480001E276F /* MyLogViewController.m in Sources */,
+				BFD562742DD3A480001E276F /* DetailViewController.m in Sources */,
+				BFD562752DD3A480001E276F /* HomeScreenButton.swift in Sources */,
+				BFD562762DD3A480001E276F /* Log_Add.m in Sources */,
+				BFD562772DD3A480001E276F /* RecordWeightView.m in Sources */,
+				BFD562782DD3A480001E276F /* DMMove.m in Sources */,
+				BFD562792DD3A480001E276F /* FoodsHome.m in Sources */,
+				BFD5627A2DD3A480001E276F /* FoodsSearch.m in Sources */,
+				BFD5627B2DD3A480001E276F /* ManageFoods.m in Sources */,
+				BFD5627C2DD3A480001E276F /* FoodCategoryPicker.m in Sources */,
+				BFD5627D2DD3A480001E276F /* MeasurePicker.m in Sources */,
+				BFD5627E2DD3A480001E276F /* DMConstants.m in Sources */,
+				BFD5627F2DD3A480001E276F /* FoodsList.m in Sources */,
+				BFD562802DD3A480001E276F /* UIColor+Extension.swift in Sources */,
+				BFD562812DD3A480001E276F /* TUTSimpleScatterPlot.m in Sources */,
+				BFD562822DD3A480001E276F /* MealPlanDetailsTableViewCell.m in Sources */,
+				BFD562832DD3A480001E276F /* DMActivityIndicator.m in Sources */,
+				BFD562842DD3A480001E276F /* MCNewCustomLayeredView.m in Sources */,
+				BFD562852DD3A480001E276F /* ExercisesViewController.m in Sources */,
+				BFD562862DD3A480001E276F /* DMFood.m in Sources */,
+				BFD562872DD3A480001E276F /* MyMovesDetailsViewController.m in Sources */,
+				BFD562882DD3A480001E276F /* ExercisesDetailViewController.m in Sources */,
+				BFD562892DD3A480001E276F /* DMMoveSet.m in Sources */,
+				BFD5628A2DD3A480001E276F /* DietmasterEngine.m in Sources */,
+				BFD5628B2DD3A480001E276F /* FavoriteMealsViewController.m in Sources */,
+				BFD5628C2DD3A480001E276F /* DMWeightLogEntry.m in Sources */,
+				BFD5628D2DD3A480001E276F /* LoginViewController.m in Sources */,
+				BFD5628E2DD3A480001E276F /* MyMovesListViewController.m in Sources */,
+				BFD5628F2DD3A480001E276F /* LearnMoreViewController.m in Sources */,
+				BFD562902DD3A480001E276F /* NSData+Blocks.m in Sources */,
+				BFD562912DD3A480001E276F /* DMMealPlan.m in Sources */,
+				BFD562922DD3A480001E276F /* DMMyLogDataProvider.m in Sources */,
+				BFD562932DD3A480001E276F /* NSString+Encode.m in Sources */,
+				BFD562942DD3A480001E276F /* MealPlanViewController.m in Sources */,
+				BFD562952DD3A480001E276F /* ProfileAlertVCViewController.m in Sources */,
+				BFD562962DD3A480001E276F /* DMMoveRoutine.m in Sources */,
+				BFD562972DD3A480001E276F /* AppConfiguration.swift in Sources */,
+				BFD562982DD3A480001E276F /* MealPlanDetailViewController.m in Sources */,
+				BFD562992DD3A480001E276F /* ExchangeFoodViewController.m in Sources */,
+				BFD5629A2DD3A480001E276F /* CustomImageFlowLayout.m in Sources */,
+				BFD5629B2DD3A480001E276F /* DMMoveCategory.m in Sources */,
+				BFD5629C2DD3A480001E276F /* ProfileContactVC.m in Sources */,
+				BFD5629D2DD3A480001E276F /* UserMealType.m in Sources */,
+				BFD5629E2DD3A480001E276F /* MyMovesListTableViewCell.m in Sources */,
+				BFD5629F2DD3A480001E276F /* DMMovePickerRow.m in Sources */,
+				BFD562A02DD3A480001E276F /* MCNewCustomLayer.m in Sources */,
+				BFD562A12DD3A480001E276F /* InAppPurchaseViewController.m in Sources */,
+				BFD562A22DD3A480001E276F /* DMAuthManager.m in Sources */,
+				BFD562A32DD3A480001E276F /* MyMovesDetailFooterCollectionReusableView.m in Sources */,
+				BFD562A42DD3A480001E276F /* DMDatabaseUtilities.m in Sources */,
+				BFD562A52DD3A480001E276F /* DMMessage.m in Sources */,
+				BFD562A62DD3A480001E276F /* headerVw.m in Sources */,
+				BFD562A72DD3A480001E276F /* UserDataFetcher.swift in Sources */,
+				BFD562A82DD3A480001E276F /* PlansTableViewCell.m in Sources */,
+				BFD562A92DD3A480001E276F /* DMMovePlan.m in Sources */,
+				BFD562AA2DD3A480001E276F /* MyMovesDataProvider.m in Sources */,
+				BFD562AB2DD3A480001E276F /* MyMovesVideoPlayerViewController.m in Sources */,
+				BFD562AC2DD3A480001E276F /* UserGoalVC.m in Sources */,
+				BFD562AD2DD3A480001E276F /* MCPieChartView.m in Sources */,
+				BFD562AE2DD3A480001E276F /* DMMoveTag.m in Sources */,
+				BFD562AF2DD3A480001E276F /* BarCodeScanner.swift in Sources */,
+				BFD562B02DD3A480001E276F /* DMSettingsViewController.swift in Sources */,
+				BFD562B12DD3A480001E276F /* ProfileVC.m in Sources */,
+				BFD562B22DD3A480001E276F /* OtherHealthServiceVC.m in Sources */,
+				BFD562B32DD3A480001E276F /* FetchUtilities.swift in Sources */,
+				BFD562B42DD3A480001E276F /* SendView.m in Sources */,
+				BFD562B52DD3A480001E276F /* MyMovesTableViewCell.m in Sources */,
+				BFD562B62DD3A480001E276F /* DMPickerViewController.swift in Sources */,
+				BFD562B72DD3A480001E276F /* DMDatePickerViewController.swift in Sources */,
+				BFD562B82DD3A480001E276F /* MessageViewController.m in Sources */,
+				BFD562B92DD3A480001E276F /* PurchaseIAPHelper.m in Sources */,
+				BFD562BA2DD3A480001E276F /* MCUtil.m in Sources */,
+				BFD562BB2DD3A480001E276F /* GrowingTextView.swift in Sources */,
+				BFD562BC2DD3A480001E276F /* MainMenuFAB.swift in Sources */,
+				BFD562BD2DD3A480001E276F /* IAPHelper.m in Sources */,
+				BFD562BE2DD3A480001E276F /* DMMoveDay.m in Sources */,
+				BFD562BF2DD3A480001E276F /* MyMovesDetailHeaderCollectionReusableView.m in Sources */,
+				BFD562C02DD3A480001E276F /* UIViewController+Navigation.m in Sources */,
+				BFD562C12DD3A480001E276F /* DailyActivityTypeVC.m in Sources */,
+				BFD562C22DD3A480001E276F /* DMMealPlanItem.m in Sources */,
+				BFD562C32DD3A480001E276F /* DMGUtilities.m in Sources */,
+				BFD562C42DD3A480001E276F /* MessageCell.m in Sources */,
+				BFD562C52DD3A480001E276F /* NSNull+NullCategoryExtension.m in Sources */,
+				BFD562C62DD3A480001E276F /* MCSliceLayer.m in Sources */,
+				BFD562C72DD3A480001E276F /* StepData.m in Sources */,
+				BFD562C82DD3A480001E276F /* DMUser.m in Sources */,
+				BFD562C92DD3A480001E276F /* SceneDelegate.swift in Sources */,
+				BFD562CA2DD3A480001E276F /* DietMasterGoViewController.m in Sources */,
+				BFD562CB2DD3A480001E276F /* MyLogTableViewCell.m in Sources */,
+				BFD562CC2DD3A480001E276F /* DMMealPlanDataProvider.m in Sources */,
+				BFD562CD2DD3A480001E276F /* NSObject+Description.m in Sources */,
+				BFD562CE2DD3A480001E276F /* DayDataProvider.swift in Sources */,
+				BFD562CF2DD3A480001E276F /* DMDataFetcher.m in Sources */,
+				BFD562D02DD3A480001E276F /* GroceryListViewController.m in Sources */,
+				BFD562D12DD3A480001E276F /* MyGoalViewController.m in Sources */,
+				BFD562D22DD3A480001E276F /* MyMovesViewController.m in Sources */,
+				BFD562D32DD3A480001E276F /* LogDaySummaryView.swift in Sources */,
+				BFD562D42DD3A480001E276F /* KeychainItemWrapper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFE14BBF2B61A31F00667F29 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -27749,6 +28552,7 @@
 				BFE14BC72B61A31F00667F29 /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFE14BC82B61A31F00667F29 /* MyLogViewController.m in Sources */,
 				BFE14BC92B61A31F00667F29 /* DetailViewController.m in Sources */,
+				0E2975882D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFE14BCA2B61A31F00667F29 /* Log_Add.m in Sources */,
 				BFE14BCB2B61A31F00667F29 /* RecordWeightView.m in Sources */,
 				BFE14BCC2B61A31F00667F29 /* DMMove.m in Sources */,
@@ -27861,6 +28665,7 @@
 				BFEA6CE22C9B319100C9E1CB /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFEA6CE32C9B319100C9E1CB /* MyLogViewController.m in Sources */,
 				BFEA6CE42C9B319100C9E1CB /* DetailViewController.m in Sources */,
+				0E29757A2D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFEA6CE52C9B319100C9E1CB /* Log_Add.m in Sources */,
 				BFEA6CE62C9B319100C9E1CB /* RecordWeightView.m in Sources */,
 				BFEA6CE72C9B319100C9E1CB /* DMMove.m in Sources */,
@@ -27973,6 +28778,7 @@
 				BFF29C292B586AA10012223C /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFF29C2A2B586AA10012223C /* MyLogViewController.m in Sources */,
 				BFF29C2B2B586AA10012223C /* DetailViewController.m in Sources */,
+				0E2975922D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFF29C2C2B586AA10012223C /* Log_Add.m in Sources */,
 				BFF29C2D2B586AA10012223C /* RecordWeightView.m in Sources */,
 				BFF29C2E2B586AA10012223C /* DMMove.m in Sources */,
@@ -28085,6 +28891,7 @@
 				BFF993D02B0D27970064240D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFF993D12B0D27970064240D /* MyLogViewController.m in Sources */,
 				BFF993D22B0D27970064240D /* DetailViewController.m in Sources */,
+				0E2975692D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFF993D32B0D27970064240D /* Log_Add.m in Sources */,
 				BFF993D42B0D27970064240D /* RecordWeightView.m in Sources */,
 				BFF993D52B0D27970064240D /* DMMove.m in Sources */,
@@ -28197,6 +29004,7 @@
 				BFF994A22B0E73A90064240D /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFF994A32B0E73A90064240D /* MyLogViewController.m in Sources */,
 				BFF994A42B0E73A90064240D /* DetailViewController.m in Sources */,
+				0E2975762D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFF994A52B0E73A90064240D /* Log_Add.m in Sources */,
 				BFF994A62B0E73A90064240D /* RecordWeightView.m in Sources */,
 				BFF994A72B0E73A90064240D /* DMMove.m in Sources */,
@@ -28309,6 +29117,7 @@
 				BFFC105D2AC612950011444E /* MyMovesDetailCollectionViewCell.m in Sources */,
 				BFFC105E2AC612950011444E /* MyLogViewController.m in Sources */,
 				BFFC105F2AC612950011444E /* DetailViewController.m in Sources */,
+				0E2975652D947E56001A9677 /* HomeScreenButton.swift in Sources */,
 				BFFC10602AC612950011444E /* Log_Add.m in Sources */,
 				BFFC10612AC612950011444E /* RecordWeightView.m in Sources */,
 				BFFC10622AC612950011444E /* DMMove.m in Sources */,
@@ -28825,6 +29634,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
+					"BODYSCANNING_ENABLED=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
@@ -28848,7 +29658,7 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D BODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -28892,6 +29702,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
+					"BODYSCANNING_ENABLED=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
@@ -28915,7 +29726,7 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D BODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -28959,6 +29770,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
+					"BODYSCANNING_ENABLED=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
@@ -28982,7 +29794,7 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D BODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -34427,11 +35239,6 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"BODYSCANNING_ENABLED=1",
-				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/include/libxml2",
@@ -34454,7 +35261,6 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D BODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -34496,11 +35302,6 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"BODYSCANNING_ENABLED=1",
-				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/include/libxml2",
@@ -34523,7 +35324,6 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D BODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -34565,11 +35365,6 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"BODYSCANNING_ENABLED=1",
-				);
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/include/libxml2",
@@ -34592,7 +35387,6 @@
 					"-all_load",
 					"$(inherited)",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D BODYSCANNING_ENABLED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = DietMasterGoPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -38625,6 +39419,197 @@
 			};
 			name = Distribution;
 		};
+		BFD562ED2DD3A480001E276F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFD562342DD3A379001E276F /* SymliphyNutrition.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 53;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = 4.10.1;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Debug;
+		};
+		BFD562EE2DD3A480001E276F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFD562342DD3A379001E276F /* SymliphyNutrition.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 53;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = 4.10.1;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Release;
+		};
+		BFD562EF2DD3A480001E276F /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFD562342DD3A379001E276F /* SymliphyNutrition.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DMG_APP_ICON)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = MyMoves.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 53;
+				DEVELOPMENT_TEAM = "$(DMG_APPLE_TEAM_PREFIX)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Classes/DietmasterEngine",
+					"$(PROJECT_DIR)/Settings_Plist",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FirebaseAnalytics/Frameworks",
+					"$(PROJECT_DIR)/GoogleAppMeasurement/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DietMasterGo_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/include/libxml2",
+					"$(inherited)",
+				);
+				INFOPLIST_KEY_CFBundleDisplayName = "$(DMG_BUNDLE_DISPLAY_NAME)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = 4.10.1;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(DMG_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = DietMasterGoPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Distribution;
+		};
 		BFE14C552B61A31F00667F29 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFE14B882B61A30A00667F29 /* VAYDA.xcconfig */;
@@ -40405,6 +41390,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		BFD562EC2DD3A480001E276F /* Build configuration list for PBXNativeTarget "SymliphyNutrition" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFD562ED2DD3A480001E276F /* Debug */,
+				BFD562EE2DD3A480001E276F /* Release */,
+				BFD562EF2DD3A480001E276F /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BFE14C542B61A31F00667F29 /* Build configuration list for PBXNativeTarget "VAYDA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -40490,11 +41485,6 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		0E2975602D9469A1001A9677 /* PrismSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0E29755F2D9469A1001A9677 /* XCRemoteSwiftPackageReference "prismsdk-ios" */;
-			productName = PrismSDK;
-		};
-		0E2975AD2D94B4E2001A9677 /* PrismSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0E29755F2D9469A1001A9677 /* XCRemoteSwiftPackageReference "prismsdk-ios" */;
 			productName = PrismSDK;
