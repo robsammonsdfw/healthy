@@ -546,6 +546,7 @@
 
 // Helper method to start body scanning
 - (void)startBodyScanning {
+#ifdef BODYSCANNING_ENABLED
   NSLog(@"Starting Body Scanning!");
   [[PrismScannerManager shared] startScanWithCompletion:^(NSError * _Nullable error) {
     if (error) {
@@ -559,6 +560,7 @@
                            message:@"Body scan completed successfully!"
                   inViewController:nil];
   }];
+#endif
 }
 
 - (void)userTappedScanResultsButton:(id)sender {

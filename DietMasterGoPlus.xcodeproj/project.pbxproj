@@ -1681,6 +1681,7 @@
 		0EF9770D2A8523680089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770A2A8523650089FC8D /* Assets.xcassets */; };
 		0EF9770E2A85236D0089FC8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EF9770B2A8523650089FC8D /* GoogleService-Info.plist */; };
 		0EF9770F2A85262D0089FC8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E101C722A56CE4900D8E7E2 /* Assets.xcassets */; };
+		103EFFC45F52B5D388EE0B9A /* Pods_ReplicaTemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BAFF6D4972A7D2FE048C208 /* Pods_ReplicaTemplate.framework */; };
 		17BB8FA288899D5974007FDA /* Pods_Horizons_Burn_Zone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F973A617C7103C2F82CB19F /* Pods_Horizons_Burn_Zone.framework */; };
 		18088D8D115E9FFB0DC486B1 /* Pods_MyKetaFit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAB4E3B2AC966E2D01CA5CCF /* Pods_MyKetaFit.framework */; };
 		1A7F47BD83FD14EE262B4CA6 /* Pods_HCFDiet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD25231CB5F39726BC81372 /* Pods_HCFDiet.framework */; };
@@ -11514,6 +11515,7 @@
 		883D14F7C277220C0BEC9EAD /* Pods-BodyCompPlus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BodyCompPlus.release.xcconfig"; path = "Target Support Files/Pods-BodyCompPlus/Pods-BodyCompPlus.release.xcconfig"; sourceTree = "<group>"; };
 		89A5181498D3835D80D45B4D /* Pods-YOUTrition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YOUTrition.debug.xcconfig"; path = "Target Support Files/Pods-YOUTrition/Pods-YOUTrition.debug.xcconfig"; sourceTree = "<group>"; };
 		8B68C969F0E692DCDF0D76CB /* Pods_MyMealCoach.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyMealCoach.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BAFF6D4972A7D2FE048C208 /* Pods_ReplicaTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReplicaTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE3F3D7E3982377037BC1AB /* Pods-SweetStrength.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SweetStrength.distribution.xcconfig"; path = "Target Support Files/Pods-SweetStrength/Pods-SweetStrength.distribution.xcconfig"; sourceTree = "<group>"; };
 		8E288300E5BD0DDD06BD6B5C /* Pods-FitAndPhat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FitAndPhat.debug.xcconfig"; path = "Target Support Files/Pods-FitAndPhat/Pods-FitAndPhat.debug.xcconfig"; sourceTree = "<group>"; };
 		92DE075FA7825C168F2DD4BE /* Pods-ZFitStudio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZFitStudio.debug.xcconfig"; path = "Target Support Files/Pods-ZFitStudio/Pods-ZFitStudio.debug.xcconfig"; sourceTree = "<group>"; };
@@ -11878,6 +11880,7 @@
 				0E101C5E2A56CC7300D8E7E2 /* CoreGraphics.framework in Frameworks */,
 				37DB646CE4520B84A54A60A1 /* (null) in Frameworks */,
 				2344157806B0FFA685CF41C8 /* (null) in Frameworks */,
+				103EFFC45F52B5D388EE0B9A /* Pods_ReplicaTemplate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14486,6 +14489,7 @@
 				C1270DE54F7FEBAB56FFC523 /* Pods_eMedEats.framework */,
 				02BA5FB21E7DFB1EBB24B5F7 /* Pods_EmbraceHealth.framework */,
 				543978E05DBF313FF008AEA4 /* Pods_SymliphyNutrition.framework */,
+				8BAFF6D4972A7D2FE048C208 /* Pods_ReplicaTemplate.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
